@@ -481,7 +481,7 @@ async function buildImageDataUrl(file: File): Promise<string> {
 
 export default function Home() {
   const baseControlClassName =
-    "w-full rounded-xl border border-black/10 bg-white px-3 py-2 text-sm outline-none transition focus:border-slate-900";
+    "block w-full rounded-xl border border-black/10 bg-white px-3 py-2 text-sm outline-none transition focus:border-slate-900";
   const compactInputStyle = { width: "min(100%, 34rem)" } as const;
   const mediumInputStyle = { width: "min(100%, 26rem)" } as const;
   const smallNumberInputStyle = { width: "min(100%, 20ch)" } as const;
