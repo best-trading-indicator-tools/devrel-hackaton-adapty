@@ -14,6 +14,19 @@ import {
 
 export const runtime = "nodejs";
 
+const MEME_INPUT_TYPE_PATTERN = /\b(meme|shitpost)\b/i;
+const MEME_LINE_MAX_CHARS = 72;
+const MEME_TEMPLATES = [
+  { id: "drake", name: "Drake Hotline Bling" },
+  { id: "woman-cat", name: "Woman Yelling at Cat" },
+  { id: "spiderman", name: "Spider-Man Pointing at Spider-Man" },
+  { id: "both", name: "Why Not Both?" },
+  { id: "wonka", name: "Condescending Wonka" },
+  { id: "buzz", name: "X Everywhere" },
+  { id: "fry", name: "Futurama Fry" },
+  { id: "stonks", name: "Stonks" },
+] as const;
+
 function getOpenAIApiToken(): string | undefined {
   return process.env.OPENAI_API_KEY ?? process.env.OPENAI_ACCESS_TOKEN;
 }
@@ -87,6 +100,75 @@ function normalizeNoEmDash(value: string): string {
     .replace(/&(?:mdash|ndash);/gi, "-")
     .replace(/([^\s])[\u2012\u2013\u2014\u2015\u2212]([^\s])/g, "$1 - $2")
     .replace(/[\u2010\u2011\u2012\u2013\u2014\u2015\u2212]/g, "-");
+}
+
+function shouldGenerateMemes(inputType: string): boolean {
+  return MEME_INPUT_TYPE_PATTERN.test(inputType);
+}
+
+function normalizeMemeLine(value: string): string {
+  return normalizeNoEmDash(value)
+    .replace(/[^\x20-\x7E]/g, " ")
+    .replace(/\s+/g, " ")
+    .replace(/^["'`]+|["'`]+$/g, "")
+    .trim();
+}
+
+function clipMemeLine(value: string, maxChars: number): string {
+  const clean = normalizeMemeLine(value);
+
+  if (clean.length <= maxChars) {
+    return clean;
+  }
+
+  const clipped = clean.slice(0, maxChars + 1).replace(/\s+\S*$/, "").trim();
+  return clipped || clean.slice(0, maxChars).trim();
+}
+
+function pickMemeBottomLine(body: string): string {
+  const candidates = body
+    .split(/\n+/)
+    .map((line) => normalizeMemeLine(line))
+    .filter((line) => line.length >= 12 && !/^https?:\/\//i.test(line));
+
+  if (candidates.length) {
+    return candidates[0];
+  }
+
+  return "Still shipping and iterating";
+}
+
+function encodeMemegenPathSegment(value: string): string {
+  const clean = normalizeMemeLine(value);
+
+  if (!clean) {
+    return "_";
+  }
+
+  return clean
+    .replace(/-/g, "--")
+    .replace(/_/g, "__")
+    .replace(/\?/g, "~q")
+    .replace(/%/g, "~p")
+    .replace(/#/g, "~h")
+    .replace(/\//g, "~s")
+    .replace(/"/g, "''")
+    .replace(/\s+/g, "_");
+}
+
+function buildMemeCompanion(params: { hook: string; body: string; index: number }) {
+  const template = MEME_TEMPLATES[params.index % MEME_TEMPLATES.length];
+  const topText = clipMemeLine(params.hook, MEME_LINE_MAX_CHARS);
+  const bottomText = clipMemeLine(pickMemeBottomLine(params.body), MEME_LINE_MAX_CHARS);
+  const url = `https://api.memegen.link/images/${template.id}/${encodeMemegenPathSegment(topText)}/${encodeMemegenPathSegment(bottomText)}.jpg`;
+
+  return {
+    templateId: template.id,
+    templateName: template.name,
+    topText,
+    bottomText,
+    url,
+  };
 }
 
 function formatExampleMetrics(entry: LibraryEntry): string {
@@ -271,6 +353,9 @@ export async function POST(request: Request) {
       input.goal === "virality"
         ? "For virality, say the uncomfortable obvious truth your audience already suspects but rarely says out loud. Make it specific, defensible, and useful."
         : "Prioritize the selected goal while staying concrete, credible, and practical.";
+    const memeExecutionDirective = shouldGenerateMemes(input.inputType)
+      ? "This is a meme-focused request. Keep hooks and first body lines short, punchy, and caption-friendly."
+      : "Not a meme-focused request.";
 
     const responseSchema = makeGeneratePostsResponseSchema(input.numberOfPosts);
 
@@ -308,6 +393,7 @@ Generation request:
 - Hook style directive: ${hookStyleDirective}
 - Goal: ${GOAL_LABELS[input.goal]} (${GOAL_DESCRIPTIONS[input.goal]})
 - Goal execution directive: ${goalExecutionDirective}
+- Meme execution directive: ${memeExecutionDirective}
 - Post type: ${input.inputType}
 - Event time: ${input.time || "(not provided)"}
 - Event place: ${input.place || "(not provided)"}
@@ -374,14 +460,24 @@ Also generate a list of hook suggestions inspired by this style and request.
       fallbackUsed = true;
     }
 
+    const includeMemeCompanion = shouldGenerateMemes(input.inputType);
+
     const response: GeneratePostsResponse = {
       hooks: parsed.hooks.map((hook) => normalizeNoEmDash(hook)),
-      posts: parsed.posts.map((post, index) => ({
-        length: lengthPlan[index] ?? post.length,
-        hook: normalizeNoEmDash(post.hook),
-        body: normalizeNoEmDash(post.body),
-        cta: normalizeNoEmDash(ensureFinalCta(post.cta, input.ctaLink)),
-      })),
+      posts: parsed.posts.map((post, index) => {
+        const hook = normalizeNoEmDash(post.hook);
+        const body = normalizeNoEmDash(post.body);
+        const cta = normalizeNoEmDash(ensureFinalCta(post.cta, input.ctaLink));
+        const meme = includeMemeCompanion ? buildMemeCompanion({ hook, body, index }) : undefined;
+
+        return {
+          length: lengthPlan[index] ?? post.length,
+          hook,
+          body,
+          cta,
+          meme,
+        };
+      }),
       generation: {
         modelRequested: requestedModel,
         modelUsed,

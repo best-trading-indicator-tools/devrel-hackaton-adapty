@@ -80,6 +80,14 @@ function sanitizeGenerationResult(result: GeneratePostsResponse): GeneratePostsR
       hook: normalizeNoEmDash(post.hook),
       body: normalizeNoEmDash(post.body),
       cta: normalizeNoEmDash(post.cta),
+      meme: post.meme
+        ? {
+            ...post.meme,
+            topText: normalizeNoEmDash(post.meme.topText),
+            bottomText: normalizeNoEmDash(post.meme.bottomText),
+            url: post.meme.url.trim(),
+          }
+        : undefined,
     })),
   };
 }
@@ -180,6 +188,10 @@ export default function Home() {
   const [isImageProcessing, setIsImageProcessing] = useState(false);
   const imageInputRef = useRef<HTMLInputElement>(null);
   const showEventFields = useMemo(() => needsEventDetails(form.inputType), [form.inputType]);
+  const showCustomBrandVoiceInput = brandVoiceSelection === CUSTOM_BRAND_VOICE;
+  const showCustomHookStyleInput = hookStyleSelection === CUSTOM_HOOK_STYLE;
+  const customInputsGridClass =
+    showCustomBrandVoiceInput && showCustomHookStyleInput ? "grid gap-3 sm:grid-cols-2" : "grid gap-3";
 
   const subtitle = useMemo(() => {
     if (form.inputLength !== "mix") {
@@ -317,16 +329,6 @@ export default function Home() {
                 ))}
                 <option value={CUSTOM_BRAND_VOICE}>Custom</option>
               </select>
-
-              {brandVoiceSelection === CUSTOM_BRAND_VOICE ? (
-                <input
-                  placeholder="Describe your custom brand voice..."
-                  className="w-full rounded-xl border border-black/10 bg-white px-3 py-2 text-sm outline-none transition focus:border-slate-900"
-                  value={form.style}
-                  required
-                  onChange={(event) => setForm((prev) => ({ ...prev, style: event.target.value }))}
-                />
-              ) : null}
             </label>
 
             <label className="space-y-1">
@@ -359,16 +361,6 @@ export default function Home() {
                 ))}
                 <option value={CUSTOM_HOOK_STYLE}>Custom</option>
               </select>
-
-              {hookStyleSelection === CUSTOM_HOOK_STYLE ? (
-                <input
-                  placeholder="Describe your hook style..."
-                  className="w-full rounded-xl border border-black/10 bg-white px-3 py-2 text-sm outline-none transition focus:border-slate-900"
-                  value={form.hookStyle}
-                  required
-                  onChange={(event) => setForm((prev) => ({ ...prev, hookStyle: event.target.value }))}
-                />
-              ) : null}
             </label>
 
             <label className="space-y-1">
@@ -386,6 +378,38 @@ export default function Home() {
               </select>
             </label>
           </div>
+
+          {showCustomBrandVoiceInput || showCustomHookStyleInput ? (
+            <div className={customInputsGridClass}>
+              {showCustomBrandVoiceInput ? (
+                <label className="space-y-1">
+                  <span className="text-sm font-medium">Custom Brand Voice</span>
+                  <textarea
+                    rows={3}
+                    placeholder="Describe your custom brand voice..."
+                    className="w-full rounded-xl border border-black/10 bg-white px-3 py-2 text-sm outline-none transition focus:border-slate-900"
+                    value={form.style}
+                    required
+                    onChange={(event) => setForm((prev) => ({ ...prev, style: event.target.value }))}
+                  />
+                </label>
+              ) : null}
+
+              {showCustomHookStyleInput ? (
+                <label className="space-y-1">
+                  <span className="text-sm font-medium">Custom Hook Style</span>
+                  <textarea
+                    rows={3}
+                    placeholder="Describe your hook style..."
+                    className="w-full rounded-xl border border-black/10 bg-white px-3 py-2 text-sm outline-none transition focus:border-slate-900"
+                    value={form.hookStyle}
+                    required
+                    onChange={(event) => setForm((prev) => ({ ...prev, hookStyle: event.target.value }))}
+                  />
+                </label>
+              ) : null}
+            </div>
+          ) : null}
 
           <div className="space-y-1">
             <label className="space-y-1">
@@ -584,6 +608,49 @@ export default function Home() {
                 <p className="mb-3 text-lg font-semibold leading-snug">{post.hook}</p>
                 <p className="whitespace-pre-wrap text-sm leading-relaxed text-slate-700">{post.body}</p>
                 <p className="mt-4 whitespace-pre-wrap text-sm font-medium text-slate-900">{post.cta}</p>
+
+                {post.meme ? (
+                  <div className="mt-5 space-y-3 rounded-2xl border border-black/10 bg-slate-50 p-3">
+                    <div className="flex items-center justify-between gap-2">
+                      <p className="text-xs font-semibold uppercase tracking-wide text-slate-600">
+                        Meme Companion · {post.meme.templateName}
+                      </p>
+                      <div className="flex items-center gap-2">
+                        <button
+                          type="button"
+                          className="rounded-lg border border-black/10 bg-white px-2 py-1 text-xs text-slate-700 hover:bg-slate-100"
+                          onClick={() => {
+                            navigator.clipboard.writeText(post.meme?.url ?? "").catch(() => {});
+                          }}
+                        >
+                          Copy Meme URL
+                        </button>
+                        <a
+                          href={post.meme.url}
+                          target="_blank"
+                          rel="noreferrer"
+                          className="rounded-lg border border-black/10 bg-white px-2 py-1 text-xs text-slate-700 hover:bg-slate-100"
+                        >
+                          Open Meme
+                        </a>
+                      </div>
+                    </div>
+
+                    {/* eslint-disable-next-line @next/next/no-img-element */}
+                    <img
+                      src={post.meme.url}
+                      alt={`${post.meme.templateName} meme preview`}
+                      className="h-auto w-full rounded-xl border border-black/10 bg-white"
+                      loading="lazy"
+                    />
+
+                    <p className="text-xs text-slate-600">
+                      Top: {post.meme.topText}
+                      <br />
+                      Bottom: {post.meme.bottomText}
+                    </p>
+                  </div>
+                ) : null}
               </article>
             ))}
           </div>
