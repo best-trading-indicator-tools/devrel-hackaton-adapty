@@ -1,11 +1,21 @@
-import { ChartJSNodeCanvas } from "chartjs-node-canvas";
-import type { ChartConfiguration } from "chart.js";
+import { createCanvas } from "canvas";
+import { Chart, registerables, type ChartConfiguration } from "chart.js";
 
 import { type ChartTypeOption } from "@/lib/constants";
 
 const CHART_COLORS = ["#5B8DC8", "#B876C6", "#FF5E66", "#2BB3A3", "#FFB020", "#64748B"] as const;
 const LANDSCAPE_SIZE = { width: 1200, height: 675 } as const;
 const SQUARE_SIZE = { width: 1200, height: 1200 } as const;
+let chartModulesRegistered = false;
+
+function ensureChartModulesRegistered() {
+  if (chartModulesRegistered) {
+    return;
+  }
+
+  Chart.register(...registerables);
+  chartModulesRegistered = true;
+}
 
 type JsonRecord = Record<string, unknown>;
 
@@ -286,12 +296,11 @@ export function summarizeChartForPrompt(chartInput: PreparedChartInput): string 
 }
 
 export async function renderChartCompanion(chartInput: PreparedChartInput): Promise<RenderedChartCompanion> {
+  ensureChartModulesRegistered();
+
   const { width, height } = resolveCanvasSize(chartInput.type);
-  const canvas = new ChartJSNodeCanvas({
-    width,
-    height,
-    backgroundColour: "#FFFFFF",
-  });
+  const canvas = createCanvas(width, height);
+  const context = canvas.getContext("2d");
 
   const config: ChartConfiguration = {
     type: chartInput.type,
@@ -302,7 +311,27 @@ export async function renderChartCompanion(chartInput: PreparedChartInput): Prom
     options: chartInput.options as ChartConfiguration["options"],
   };
 
-  const buffer = await canvas.renderToBuffer(config, "image/png");
+  // Keep a white background so exported PNGs are social-ready.
+  const whiteBackgroundPlugin = {
+    id: "white-background",
+    beforeDraw(chartInstance: { ctx: CanvasRenderingContext2D; width: number; height: number }) {
+      const { ctx, width, height } = chartInstance;
+      ctx.save();
+      ctx.globalCompositeOperation = "destination-over";
+      ctx.fillStyle = "#FFFFFF";
+      ctx.fillRect(0, 0, width, height);
+      ctx.restore();
+    },
+  };
+
+  const chart = new Chart(context as unknown as CanvasRenderingContext2D, {
+    ...config,
+    plugins: [whiteBackgroundPlugin],
+  });
+
+  chart.update();
+  const buffer = canvas.toBuffer("image/png");
+  chart.destroy();
 
   return {
     type: chartInput.type,

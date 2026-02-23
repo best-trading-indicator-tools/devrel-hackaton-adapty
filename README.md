@@ -23,7 +23,7 @@ A Next.js app that generates high-performing LinkedIn posts and hook ideas from 
   - Meme tone preset dropdown for faster setup
   - Template picker with live Memegen template fetch, search, image previews, and curated fallback
   - Optional multi-template selection (choose one or many, or leave Auto)
-- Optional chart companions rendered server-side with `chartjs-node-canvas` from your chosen chart type, labels, and values
+- Optional chart companions rendered server-side with `chart.js` + `canvas` from your chosen chart type, labels, and values
 
 ## Content library format
 
