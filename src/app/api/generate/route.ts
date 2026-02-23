@@ -27,6 +27,7 @@ import { createCodexStructuredCompletion } from "@/lib/codex-responses";
 import { getCodexOAuthCredentials, type CodexOAuthCredentials } from "@/lib/codex-oauth";
 import { runWebFactCheck } from "@/lib/fact-check";
 import { retrieveLibraryContext, type LibraryEntry } from "@/lib/library-retrieval";
+import { getPromptGuides } from "@/lib/prompt-guides";
 import {
   generatePostsRequestSchema,
   makeGeneratePostsResponseSchema,
@@ -39,7 +40,7 @@ const MEME_INPUT_TYPE_PATTERN = /\b(meme|shitpost)\b/i;
 const MEME_LINE_MAX_CHARS = 72;
 const DEFAULT_MEME_TONE = "clever, funny, and relevant to B2C mobile app growth";
 const DEFAULT_MEMEGEN_BASE_URL = "https://api.memegen.link";
-const FACT_CHECK_EVIDENCE_PROMPT_LIMIT = 10;
+const FACT_CHECK_EVIDENCE_PROMPT_LIMIT = 4;
 
 const GOAL_PLAYBOOKS: Record<ContentGoal, string> = {
   virality:
@@ -528,6 +529,10 @@ function resolvePostTypeDirective(inputType: string): string {
   return "Respect the requested post type with concrete context, practical value, and clear reader payoff.";
 }
 
+function looksLikeSaucePostType(inputType: string): boolean {
+  return /\bsauce\b/i.test(inputType);
+}
+
 async function runOpenAiChatGeneration(params: {
   token: string;
   model: string;
@@ -816,6 +821,10 @@ export async function POST(request: Request) {
       : "No live web evidence available for this request.";
 
     const responseSchema = makeGeneratePostsResponseSchema(input.numberOfPosts);
+    const promptGuides = await getPromptGuides();
+    const sauceGuideSection = looksLikeSaucePostType(input.inputType)
+      ? `\nSauce guide from repository prompt file:\n${promptGuides.sauce}\n`
+      : "";
 
     const systemPrompt = `
 You create LinkedIn content at scale for Adapty.
@@ -827,6 +836,12 @@ Mission:
 
 Global writing contract:
 ${toBulletedSection(LINKEDIN_WRITING_CONTRACT)}
+
+Repository writing guide:
+${promptGuides.writing}
+${sauceGuideSection}
+Repository fact-check guide:
+${promptGuides.factCheck}
 
 Output contract:
 - Tone must follow requested brand voice.

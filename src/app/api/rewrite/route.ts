@@ -6,6 +6,7 @@ import { z } from "zod";
 import { BRAND_VOICE_PROFILES, GOAL_DESCRIPTIONS, GOAL_LABELS, GOAL_OPTIONS, isBrandVoicePreset } from "@/lib/constants";
 import { createCodexStructuredCompletion } from "@/lib/codex-responses";
 import { getCodexOAuthCredentials, type CodexOAuthCredentials } from "@/lib/codex-oauth";
+import { getPromptGuides } from "@/lib/prompt-guides";
 
 export const runtime = "nodejs";
 
@@ -81,6 +82,10 @@ function resolveBrandVoiceDirective(style: string): string {
   }
 
   return `Follow custom brand voice exactly as requested: "${style.trim()}". Keep the output coherent, practical, and human sounding.`;
+}
+
+function looksLikeSaucePostType(inputType: string): boolean {
+  return /\bsauce\b/i.test(inputType);
 }
 
 async function runOpenAiRewrite<T>(params: {
@@ -186,6 +191,10 @@ export async function POST(request: Request) {
     }
 
     const brandVoiceDirective = resolveBrandVoiceDirective(input.style);
+    const promptGuides = await getPromptGuides();
+    const sauceGuideSection = looksLikeSaucePostType(input.inputType)
+      ? `\nSauce guide from repository prompt file:\n${promptGuides.sauce}\n`
+      : "";
     const promptDirective = input.prompt.trim()
       ? input.prompt.trim()
       : input.mode === "line"
@@ -203,6 +212,12 @@ Rules:
 - Never use em dash or en dash punctuation.
 - Avoid generic AI-like cadence and buzzword filler.
 - Keep claims concrete and defensible.
+
+Repository writing guide:
+${promptGuides.writing}
+${sauceGuideSection}
+Repository fact-check guide:
+${promptGuides.factCheck}
 `;
 
     const runRewrite = async (model: string) => {

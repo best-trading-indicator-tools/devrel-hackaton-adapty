@@ -143,6 +143,10 @@ These are implemented in `src/lib/library-retrieval.ts`.
   - Post type playbook
   - Goal playbook
   - Hard self-check gate (regenerate if rules fail)
+- Prompt also loads repository guides:
+  - `prompts/linkedin/WRITING.md`
+  - `prompts/linkedin/SAUCE.md` (applied for Sauce post type)
+  - `prompts/linkedin/FACT_CHECK.md`
 - If Brand Voice is `adapty`, prompt treats `linkedin-adapty-library` as canonical style source
 - If Hook Style is `clickbait`, prompt applies curiosity-gap style while requiring truthful claims
 - If Goal is `virality`, prompt emphasizes uncomfortable obvious truths with practical utility
@@ -200,7 +204,7 @@ Use `.env` (local) and set same keys in Vercel project settings.
 
 - `ENABLE_WEB_FACT_CHECK=true|false` (default: auto-enabled when Brave key is present)
 - `BRAVE_SEARCH_API_KEY` (required to run live web evidence lookup)
-- `WEB_FACT_CHECK_MAX_RESULTS` (optional, default `8`)
+- `WEB_FACT_CHECK_MAX_RESULTS` (optional, default `4`)
 
 ## Why `text-embedding-3-small` by default
 

@@ -1,7 +1,7 @@
 import { type ContentGoal } from "@/lib/constants";
 
 const BRAVE_SEARCH_URL = "https://api.search.brave.com/res/v1/web/search";
-const DEFAULT_MAX_RESULTS = 8;
+const DEFAULT_MAX_RESULTS = 4;
 const DEFAULT_QUERY_LIMIT = 4;
 
 export type WebFactCheckRequest = {
