@@ -2,7 +2,7 @@ import { NextResponse } from "next/server";
 import OpenAI from "openai";
 import { zodResponseFormat } from "openai/helpers/zod";
 
-import { buildLengthPlan, lengthGuide } from "@/lib/constants";
+import { buildLengthPlan, GOAL_DESCRIPTIONS, GOAL_LABELS, lengthGuide } from "@/lib/constants";
 import { createCodexStructuredCompletion } from "@/lib/codex-responses";
 import { getCodexOAuthCredentials, type CodexOAuthCredentials } from "@/lib/codex-oauth";
 import { retrieveLibraryContext, type LibraryEntry } from "@/lib/library-retrieval";
@@ -97,6 +97,15 @@ function formatExampleMetrics(entry: LibraryEntry): string {
   }
   if (typeof entry.performance.comments === "number") {
     parts.push(`comments: ${entry.performance.comments.toLocaleString("en-US")}`);
+  }
+  if (typeof entry.performance.reposts === "number") {
+    parts.push(`reposts: ${entry.performance.reposts.toLocaleString("en-US")}`);
+  }
+  if (typeof entry.performance.clicks === "number") {
+    parts.push(`clicks: ${entry.performance.clicks.toLocaleString("en-US")}`);
+  }
+  if (typeof entry.performance.ctr === "number") {
+    parts.push(`ctr: ${(entry.performance.ctr * 100).toFixed(2)}%`);
   }
   if (typeof entry.performance.engagementRate === "number") {
     parts.push(`engagement: ${(entry.performance.engagementRate * 100).toFixed(2)}%`);
@@ -222,7 +231,7 @@ export async function POST(request: Request) {
     }
 
     const lengthPlan = buildLengthPlan(input.inputLength, input.numberOfPosts);
-    const retrievalQuery = [input.style, input.inputType, input.time, input.place, input.details]
+    const retrievalQuery = [input.goal, input.style, input.inputType, input.time, input.place, input.details]
       .filter(Boolean)
       .join(" | ");
 
@@ -230,6 +239,7 @@ export async function POST(request: Request) {
       client: getEmbeddingClient(),
       query: retrievalQuery,
       limit: Math.min(12, Math.max(6, input.numberOfPosts * 3)),
+      goal: input.goal,
     });
 
     const examplesForPrompt = retrieval.entries
@@ -244,27 +254,31 @@ export async function POST(request: Request) {
     const responseSchema = makeGeneratePostsResponseSchema(input.numberOfPosts);
 
     const systemPrompt = `
+You create LinkedIn content at scale for Adapty.
+Adapty enables app makers to monetize their mobile apps with subscription growth, paywall optimization, experimentation, and analytics.
 You write high-performing LinkedIn content for B2B SaaS growth teams.
 The voice must feel sharp, clear, and practical, with strong hooks and concise storytelling.
 Never use generic fluff.
 
 Rules:
-1. Keep the tone aligned with the requested brand style.
-2. Respect requested post type and input details.
-3. Create hook suggestions that are punchy, specific, and scroll-stopping.
-4. For each post, produce:
+1. Keep the tone aligned with the requested brand voice.
+2. Optimize for the requested goal.
+3. Respect requested post type and input details.
+4. Create hook suggestions that are punchy, specific, and scroll-stopping.
+5. For each post, produce:
    - hook: the first line
    - body: the full post content excluding the final CTA line
    - cta: final line for action
-5. Use line breaks to improve readability.
-6. Avoid overusing emojis and hashtags.
-7. If a CTA link is provided, include it in the CTA line.
-8. Use the performance insights and recurring winning patterns when available.
+6. Use line breaks to improve readability.
+7. Avoid overusing emojis and hashtags.
+8. If a CTA link is provided, include it in the CTA line.
+9. Use the performance insights and recurring winning patterns when available.
 `;
 
     const userPrompt = `
 Generation request:
-- Brand style: ${input.style}
+- Brand voice: ${input.style}
+- Goal: ${GOAL_LABELS[input.goal]} (${GOAL_DESCRIPTIONS[input.goal]})
 - Post type: ${input.inputType}
 - Event time: ${input.time || "(not provided)"}
 - Event place: ${input.place || "(not provided)"}
@@ -349,6 +363,7 @@ Also generate a list of hook suggestions inspired by this style and request.
       },
       retrieval: {
         method: retrieval.method,
+        goalUsed: retrieval.goalUsed,
         examplesUsed: retrieval.entries.length,
         performancePostsAnalyzed: retrieval.performanceInsights?.analyzedPosts ?? 0,
         performanceInsightsUsed: retrieval.performanceInsights?.summaryLines.length ?? 0,

@@ -1,70 +1,82 @@
 # Paste your best-performing LinkedIn posts here.
 # Keep each entry separated by a line with exactly ---
-# Optional per-entry metrics (at top of each block): Impressions:, Likes:, Comments:
+# Optional per-entry metrics (at top of each block): Impressions:, Likes:, Comments:, Repost:, Clicks:, CTR:
 # The API will retrieve the most relevant entries as context before generation.
+# Goal profiles available in the app input: virality, engagement, traffic, awareness, balanced.
+# Metric weights are adjusted by goal in src/lib/library-retrieval.ts.
+# Virality weights: impressions log x32, likes x1.2, comments x3.2, reposts x6.2, clicks x0.8, engagementRate x220, ctr x45.
+# Engagement weights: impressions log x14, likes x1.8, comments x6.5, reposts x3.4, clicks x0.9, engagementRate x300, ctr x45.
+# Traffic weights: impressions log x10, likes x1.0, comments x2.4, reposts x2.1, clicks x3.8, engagementRate x110, ctr x320.
+# Awareness weights: impressions log x52, likes x1.1, comments x2.2, reposts x3.8, clicks x0.6, engagementRate x130, ctr x35.
+# Balanced weights: impressions log x22, likes x1.5, comments x3.5, reposts x3.8, clicks x2.0, engagementRate x180, ctr x140.
 
-You asked, we built it.
-[Feature] is live.
 
-What changed:
-- [Benefit 1]
-- [Benefit 2]
-- [Benefit 3]
+Impressions: 1511
+Likes: 52
+Comments: 2
+Repost: 1
+Clicks: 83
+CTR: 5.49%
 
-If you asked for this, it's ready. Details: [CTA LINK]
+We're heading to Apps Forum Lisbon on March 4, and bringing the full crew.
+
+If you're building or scaling a subscription app, this is where the real conversations happen. Not the polished keynote version — the honest ones about what's actually working in monetization, where onboarding breaks, and the experiments worth running right now.
+
+You'll find us there:
+Andrey Shakhtin — CEO, FunnelFox
+Marina Trypolskaya — Global Head of Sales
+Anna Suvorova — Account Executive, EMEA 
+Alexandra Subach — Account Executive 
+
+Whether you want to talk paywall optimization, A/B testing strategy, or just grab a coffee between sessions — come say hi.
+
+📍 Lisbon · 📅 March 4
+👉 See you there: https://lnkd.in/eNxJuWVb
+
 ---
-We reviewed 300 paywalls.
-Here is what the top 1% do differently.
 
-1) Lead with outcome, not feature list.
-2) Keep trial messaging concrete.
-3) Remove price anxiety in the first screen.
+Impressions: 1099
+Likes: 20
+Comments: 0
+Repost: 4
+Clicks: 35
+CTR: 3.18%
 
-Full teardown in comments.
+We’ve rolled out major Apple Ads improvements inside Adapty — introducing deeper ad-level insights, advanced CPP mapping, and a fully unified optimization workflow built for subscription revenue teams.
+
+Here’s what’s new:
+• Map Custom Product Pages directly to ad groups
+ • Access ad-level attribution to understand performance drivers
+ • Analyze Campaign, Ad Group, and Keyword data in a single unified view
+ • Build user segments from Apple Ads data for smarter paywall targeting
+
+These updates connect acquisition data with monetization insights inside one optimization framework, making it easier to evaluate traffic quality based on actual revenue outcomes, not just installs.
+
+If Apple Ads is part of your growth strategy, this unlocks a much more precise way to scale.
+
+Explore the update → https://lnkd.in/d9PYDYcW
+
 ---
-68% of apps lose subscribers in month 2.
-Here is the fix.
 
-Most teams over-focus on acquisition and under-invest in early retention loops.
+Impressions: 819
+Likes: 14
+Comments: 1
+Repost: 0
+Clicks: 14
+CTR: 1.71
 
-The first 14 days decide everything:
-- onboarding moment of value
-- lifecycle messaging
-- paywall timing
+95% of your users will never pay you.
 
-Want our benchmark checklist? [CTA LINK]
----
-Apple changed the rules again.
-Here is what it means for your subscriptions.
+Most subscription apps monetize only ~5%.
+The remaining 95% generate zero revenue.
 
-The update affects compliance, billing edge cases, and update cadence.
-If your team is shipping this week, you need a playbook, not a panic.
+Hybrid monetization lets you capture value from non-subscribers — without hurting subscriptions.
 
-I broke down the practical actions in plain English.
-Read it here: [CTA LINK]
----
-How [App] went from $2K to $18K MRR in four months.
+But ad quality matters.
+One bad ad can cause 6–7% churn.
 
-No hacks.
-Just positioning, experimentation cadence, and onboarding cleanup.
+If you're running a subscription app, you're probably leaving revenue on the table.
 
-Before:
-- noisy offer architecture
-- weak renewal signals
+👉 Read the full breakdown below.
 
-After:
-- narrowed segmentation
-- stronger activation flow
-- clear win-back loop
-
-Case study: [CTA LINK]
----
-Top 5 paywalls we saw this week (and why they work)
-
-1) Clear value stack
-2) Smart annual anchoring
-3) Better trial framing
-4) Contextual timing
-5) Lower cognitive load
-
-If you want this as a swipe file, comment "paywall".
+https://lnkd.in/dcxeFa5F

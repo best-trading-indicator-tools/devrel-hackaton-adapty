@@ -18,6 +18,25 @@ export const INPUT_LENGTH_OPTIONS = ["short", "standard", "long", "mix"] as cons
 export type InputLength = (typeof INPUT_LENGTH_OPTIONS)[number];
 export type OutputLength = Exclude<InputLength, "mix">;
 
+export const GOAL_OPTIONS = ["virality", "engagement", "traffic", "awareness", "balanced"] as const;
+export type ContentGoal = (typeof GOAL_OPTIONS)[number];
+
+export const GOAL_LABELS: Record<ContentGoal, string> = {
+  virality: "Virality",
+  engagement: "Engagement",
+  traffic: "Traffic",
+  awareness: "Awareness",
+  balanced: "Balanced",
+};
+
+export const GOAL_DESCRIPTIONS: Record<ContentGoal, string> = {
+  virality: "maximize reach, reposts, and conversation velocity",
+  engagement: "maximize quality discussion and comments",
+  traffic: "maximize click-throughs and CTR",
+  awareness: "maximize impressions and broad visibility",
+  balanced: "optimize across reach, engagement, and clicks evenly",
+};
+
 const LENGTH_SEQUENCE: OutputLength[] = ["short", "standard", "long"];
 
 export function buildLengthPlan(inputLength: InputLength, count: number): OutputLength[] {

@@ -3,6 +3,7 @@ import fs from "node:fs/promises";
 import path from "node:path";
 
 import OpenAI from "openai";
+import { GOAL_LABELS, type ContentGoal } from "@/lib/constants";
 
 const LIBRARY_PATH = path.join(process.cwd(), "content", "linkedin-library.txt");
 const LANCEDB_PATH = path.join(process.cwd(), ".lancedb");
@@ -13,10 +14,71 @@ type RetrievalMethod = "lexical" | "lancedb";
 
 type LanceDbConnection = import("@lancedb/lancedb").Connection;
 
+type MetricWeights = {
+  impressionsLog: number;
+  likes: number;
+  comments: number;
+  reposts: number;
+  clicks: number;
+  engagementRate: number;
+  ctr: number;
+};
+
+const GOAL_METRIC_WEIGHTS: Record<ContentGoal, MetricWeights> = {
+  virality: {
+    impressionsLog: 32,
+    likes: 1.2,
+    comments: 3.2,
+    reposts: 6.2,
+    clicks: 0.8,
+    engagementRate: 220,
+    ctr: 45,
+  },
+  engagement: {
+    impressionsLog: 14,
+    likes: 1.8,
+    comments: 6.5,
+    reposts: 3.4,
+    clicks: 0.9,
+    engagementRate: 300,
+    ctr: 45,
+  },
+  traffic: {
+    impressionsLog: 10,
+    likes: 1,
+    comments: 2.4,
+    reposts: 2.1,
+    clicks: 3.8,
+    engagementRate: 110,
+    ctr: 320,
+  },
+  awareness: {
+    impressionsLog: 52,
+    likes: 1.1,
+    comments: 2.2,
+    reposts: 3.8,
+    clicks: 0.6,
+    engagementRate: 130,
+    ctr: 35,
+  },
+  balanced: {
+    impressionsLog: 22,
+    likes: 1.5,
+    comments: 3.5,
+    reposts: 3.8,
+    clicks: 2,
+    engagementRate: 180,
+    ctr: 140,
+  },
+};
+
 type RawPerformanceMetrics = {
   impressions?: number;
   likes?: number;
   comments?: number;
+  reposts?: number;
+  clicks?: number;
+  ctr?: number;
 };
 
 export type LibraryPerformance = RawPerformanceMetrics & {
@@ -79,6 +141,51 @@ function parseMetricValue(rawValue: string): number | undefined {
   return Math.round(base);
 }
 
+function parsePercentageValue(rawValue: string): number | undefined {
+  const cleaned = rawValue
+    .trim()
+    .toLowerCase()
+    .replace(/\s+/g, "")
+    .replace(/,/g, ".")
+    .replace(/%$/, "");
+
+  const value = Number(cleaned);
+  if (!Number.isFinite(value)) {
+    return undefined;
+  }
+
+  if (value < 0) {
+    return undefined;
+  }
+
+  return value > 1 ? value / 100 : value;
+}
+
+function getGoalMetricWeights(goal: ContentGoal): MetricWeights {
+  return GOAL_METRIC_WEIGHTS[goal];
+}
+
+function computeWeightedScoreFromMetrics(params: {
+  impressions: number;
+  likes: number;
+  comments: number;
+  reposts: number;
+  clicks: number;
+  engagementRate?: number;
+  ctr?: number;
+  weights: MetricWeights;
+}): number {
+  return (
+    params.likes * params.weights.likes +
+    params.comments * params.weights.comments +
+    params.reposts * params.weights.reposts +
+    params.clicks * params.weights.clicks +
+    (params.impressions > 0 ? Math.log10(params.impressions + 1) * params.weights.impressionsLog : 0) +
+    (typeof params.engagementRate === "number" ? params.engagementRate * params.weights.engagementRate : 0) +
+    (typeof params.ctr === "number" ? params.ctr * params.weights.ctr : 0)
+  );
+}
+
 function normalizeMetricKey(rawKey: string): keyof RawPerformanceMetrics | null {
   const normalized = rawKey.toLowerCase().replace(/[\s_-]/g, "");
 
@@ -91,6 +198,15 @@ function normalizeMetricKey(rawKey: string): keyof RawPerformanceMetrics | null 
   if (normalized === "comments" || normalized === "comment") {
     return "comments";
   }
+  if (normalized === "repost" || normalized === "reposts" || normalized === "share" || normalized === "shares") {
+    return "reposts";
+  }
+  if (normalized === "click" || normalized === "clicks") {
+    return "clicks";
+  }
+  if (normalized === "ctr") {
+    return "ctr";
+  }
 
   return null;
 }
@@ -99,7 +215,10 @@ function computePerformance(metrics: RawPerformanceMetrics): LibraryPerformance 
   const hasAnyMetrics =
     typeof metrics.impressions === "number" ||
     typeof metrics.likes === "number" ||
-    typeof metrics.comments === "number";
+    typeof metrics.comments === "number" ||
+    typeof metrics.reposts === "number" ||
+    typeof metrics.clicks === "number" ||
+    typeof metrics.ctr === "number";
 
   if (!hasAnyMetrics) {
     return undefined;
@@ -107,17 +226,28 @@ function computePerformance(metrics: RawPerformanceMetrics): LibraryPerformance 
 
   const likes = metrics.likes ?? 0;
   const comments = metrics.comments ?? 0;
+  const reposts = metrics.reposts ?? 0;
+  const clicks = metrics.clicks ?? 0;
   const impressions = metrics.impressions ?? 0;
-  const interactions = likes + comments * 3;
-  const engagementRate = impressions > 0 ? interactions / impressions : undefined;
+  const interactions = likes + comments + reposts + clicks;
+  const engagementRate = impressions > 0 ? (likes + comments + reposts) / impressions : undefined;
+  const ctr = typeof metrics.ctr === "number" ? metrics.ctr : impressions > 0 ? clicks / impressions : undefined;
+  const baselineWeights = getGoalMetricWeights("virality");
 
-  const weightedScore =
-    interactions +
-    (impressions > 0 ? Math.log10(impressions + 1) * 8 : 0) +
-    (typeof engagementRate === "number" ? engagementRate * 180 : 0);
+  const weightedScore = computeWeightedScoreFromMetrics({
+    impressions,
+    likes,
+    comments,
+    reposts,
+    clicks,
+    engagementRate,
+    ctr,
+    weights: baselineWeights,
+  });
 
   return {
     ...metrics,
+    ctr,
     interactions,
     engagementRate,
     weightedScore,
@@ -133,8 +263,24 @@ function extractHook(text: string): string {
   return hook ? hook.slice(0, 110) : "(no hook)";
 }
 
-function getPerformanceScore(entry: LibraryEntry): number {
-  return entry.performance?.weightedScore ?? 0;
+function getPerformanceScore(entry: LibraryEntry, goal: ContentGoal): number {
+  const performance = entry.performance;
+  if (!performance) {
+    return 0;
+  }
+
+  const weights = getGoalMetricWeights(goal);
+
+  return computeWeightedScoreFromMetrics({
+    impressions: performance.impressions ?? 0,
+    likes: performance.likes ?? 0,
+    comments: performance.comments ?? 0,
+    reposts: performance.reposts ?? 0,
+    clicks: performance.clicks ?? 0,
+    engagementRate: performance.engagementRate,
+    ctr: performance.ctr,
+    weights,
+  });
 }
 
 function formatCompactNumber(value: number): string {
@@ -163,7 +309,8 @@ function parseEntryBlock(block: string, index: number): LibraryEntry | null {
       if (metricMatch) {
         const key = normalizeMetricKey(metricMatch[1]);
         if (key) {
-          const parsedValue = parseMetricValue(metricMatch[2]);
+          const parsedValue =
+            key === "ctr" ? parsePercentageValue(metricMatch[2]) : parseMetricValue(metricMatch[2]);
           if (typeof parsedValue === "number") {
             metrics[key] = parsedValue;
             continue;
@@ -192,14 +339,14 @@ function parseEntryBlock(block: string, index: number): LibraryEntry | null {
   };
 }
 
-function buildPerformanceInsights(entries: LibraryEntry[]): LibraryPerformanceInsights | undefined {
+function buildPerformanceInsights(entries: LibraryEntry[], goal: ContentGoal): LibraryPerformanceInsights | undefined {
   const withMetrics = entries.filter((entry) => entry.performance);
 
   if (!withMetrics.length) {
     return undefined;
   }
 
-  const byScore = [...withMetrics].sort((a, b) => getPerformanceScore(b) - getPerformanceScore(a));
+  const byScore = [...withMetrics].sort((a, b) => getPerformanceScore(b, goal) - getPerformanceScore(a, goal));
   const winners = byScore.slice(0, Math.min(8, byScore.length));
 
   const byLikes = [...withMetrics]
@@ -210,6 +357,14 @@ function buildPerformanceInsights(entries: LibraryEntry[]): LibraryPerformanceIn
     .filter((entry) => typeof entry.performance?.comments === "number")
     .sort((a, b) => (b.performance?.comments ?? 0) - (a.performance?.comments ?? 0));
 
+  const byReposts = [...withMetrics]
+    .filter((entry) => typeof entry.performance?.reposts === "number")
+    .sort((a, b) => (b.performance?.reposts ?? 0) - (a.performance?.reposts ?? 0));
+
+  const byClicks = [...withMetrics]
+    .filter((entry) => typeof entry.performance?.clicks === "number")
+    .sort((a, b) => (b.performance?.clicks ?? 0) - (a.performance?.clicks ?? 0));
+
   const byImpressions = [...withMetrics]
     .filter((entry) => typeof entry.performance?.impressions === "number")
     .sort((a, b) => (b.performance?.impressions ?? 0) - (a.performance?.impressions ?? 0));
@@ -218,7 +373,16 @@ function buildPerformanceInsights(entries: LibraryEntry[]): LibraryPerformanceIn
     .filter((entry) => typeof entry.performance?.engagementRate === "number")
     .sort((a, b) => (b.performance?.engagementRate ?? 0) - (a.performance?.engagementRate ?? 0));
 
+  const byCtr = [...withMetrics]
+    .filter((entry) => typeof entry.performance?.ctr === "number")
+    .sort((a, b) => (b.performance?.ctr ?? 0) - (a.performance?.ctr ?? 0));
+
   const summaryLines: string[] = [];
+  const weights = getGoalMetricWeights(goal);
+
+  summaryLines.push(
+    `Goal profile "${GOAL_LABELS[goal]}": reposts x${weights.reposts}, comments x${weights.comments}, likes x${weights.likes}, clicks x${weights.clicks}, impressions log x${weights.impressionsLog}.`,
+  );
 
   if (byLikes[0]?.performance?.likes) {
     summaryLines.push(
@@ -232,6 +396,18 @@ function buildPerformanceInsights(entries: LibraryEntry[]): LibraryPerformanceIn
     );
   }
 
+  if (byReposts[0]?.performance?.reposts) {
+    summaryLines.push(
+      `Top reposts: ${formatCompactNumber(byReposts[0].performance.reposts)} on "${extractHook(byReposts[0].text)}".`,
+    );
+  }
+
+  if (byClicks[0]?.performance?.clicks) {
+    summaryLines.push(
+      `Top clicks: ${formatCompactNumber(byClicks[0].performance.clicks)} on "${extractHook(byClicks[0].text)}".`,
+    );
+  }
+
   if (byImpressions[0]?.performance?.impressions) {
     summaryLines.push(
       `Top impressions: ${formatCompactNumber(byImpressions[0].performance.impressions)} on "${extractHook(byImpressions[0].text)}".`,
@@ -242,6 +418,10 @@ function buildPerformanceInsights(entries: LibraryEntry[]): LibraryPerformanceIn
     summaryLines.push(
       `Best engagement rate: ${(byEngagementRate[0].performance.engagementRate * 100).toFixed(2)}% on "${extractHook(byEngagementRate[0].text)}".`,
     );
+  }
+
+  if (typeof byCtr[0]?.performance?.ctr === "number") {
+    summaryLines.push(`Best CTR: ${(byCtr[0].performance.ctr * 100).toFixed(2)}% on "${extractHook(byCtr[0].text)}".`);
   }
 
   const patterns = [
@@ -337,7 +517,7 @@ async function readLibrary(): Promise<LibraryData> {
   }
 }
 
-function lexicalSearch(entries: LibraryEntry[], query: string, limit: number): LibraryEntry[] {
+function lexicalSearch(entries: LibraryEntry[], query: string, limit: number, goal: ContentGoal): LibraryEntry[] {
   if (!entries.length) {
     return [];
   }
@@ -345,7 +525,7 @@ function lexicalSearch(entries: LibraryEntry[], query: string, limit: number): L
   const queryTokens = tokenize(query);
   if (!queryTokens.length) {
     return [...entries]
-      .sort((a, b) => getPerformanceScore(b) - getPerformanceScore(a))
+      .sort((a, b) => getPerformanceScore(b, goal) - getPerformanceScore(a, goal))
       .slice(0, limit);
   }
 
@@ -358,7 +538,7 @@ function lexicalSearch(entries: LibraryEntry[], query: string, limit: number): L
       const overlap = queryTokens.reduce((score, token) => score + Number(tokenSet.has(token)), 0);
       const phraseBonus = querySet.has("webinar") && entry.text.toLowerCase().includes("webinar") ? 2 : 0;
       const normalizedScore = overlap / Math.max(6, Math.sqrt(entryTokens.length));
-      const performanceBonus = Math.min(3, Math.log10(getPerformanceScore(entry) + 1));
+      const performanceBonus = Math.min(3, Math.log10(getPerformanceScore(entry, goal) + 1));
 
       return {
         entry,
@@ -472,6 +652,7 @@ async function lanceSearch(
   data: LibraryData,
   query: string,
   limit: number,
+  goal: ContentGoal,
 ): Promise<LibraryEntry[]> {
   await ensureLanceTable(client, data);
   const db = await connectLanceDb();
@@ -499,7 +680,8 @@ async function lanceSearch(
       .map((item) => ({
         entry: item.entry,
         score:
-          (1 - item.rank / Math.max(2, resolved.length + 1)) + Math.min(0.35, Math.log10(getPerformanceScore(item.entry) + 1) * 0.08),
+          (1 - item.rank / Math.max(2, resolved.length + 1)) +
+          Math.min(0.35, Math.log10(getPerformanceScore(item.entry, goal) + 1) * 0.08),
       }))
       .sort((a, b) => b.score - a.score)
       .map((item) => item.entry);
@@ -512,18 +694,26 @@ export async function retrieveLibraryContext({
   client,
   query,
   limit,
+  goal = "virality",
 }: {
   client?: OpenAI;
   query: string;
   limit: number;
-}): Promise<{ method: RetrievalMethod; entries: LibraryEntry[]; performanceInsights?: LibraryPerformanceInsights }> {
+  goal?: ContentGoal;
+}): Promise<{
+  method: RetrievalMethod;
+  entries: LibraryEntry[];
+  goalUsed: ContentGoal;
+  performanceInsights?: LibraryPerformanceInsights;
+}> {
   const data = await readLibrary();
-  const performanceInsights = buildPerformanceInsights(data.entries);
+  const performanceInsights = buildPerformanceInsights(data.entries, goal);
 
   if (!data.entries.length) {
     return {
       method: "lexical",
       entries: [],
+      goalUsed: goal,
       performanceInsights,
     };
   }
@@ -532,11 +722,12 @@ export async function retrieveLibraryContext({
 
   if (useLanceDb && client) {
     try {
-      const entries = await lanceSearch(client, data, query, limit);
+      const entries = await lanceSearch(client, data, query, limit, goal);
       if (entries.length) {
         return {
           method: "lancedb",
           entries,
+          goalUsed: goal,
           performanceInsights,
         };
       }
@@ -547,7 +738,8 @@ export async function retrieveLibraryContext({
 
   return {
     method: "lexical",
-    entries: lexicalSearch(data.entries, query, limit),
+    entries: lexicalSearch(data.entries, query, limit, goal),
+    goalUsed: goal,
     performanceInsights,
   };
 }

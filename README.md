@@ -5,7 +5,8 @@ A Next.js app that generates high-performing LinkedIn posts and hook ideas from 
 ## What this app includes
 
 - Web UI with inputs for:
-  - style (default `adapty`)
+  - brand voice (`adapty`, `founder personal`, `bold / contrarian`, `technical breakdown`, `playful meme tone`, or custom)
+  - goal (`virality`, `engagement`, `traffic`, `awareness`, `balanced`) with automatic metric-weight profile
   - post type
   - time
   - place
@@ -29,6 +30,9 @@ Edit `content/linkedin-library.txt`.
   - `Impressions: 12000`
   - `Likes: 340`
   - `Comments: 42`
+  - `Repost: 15`
+  - `Clicks: 180`
+  - `CTR: 5.49%`
 - Metadata lines must appear before the post text in that block.
 
 Example:
@@ -79,6 +83,7 @@ curl -X POST http://localhost:3000/api/generate \
   -H "Content-Type: application/json" \
   -d '{
     "style":"adapty",
+    "goal":"virality",
     "inputType":"Event / webinar promo",
     "time":"March 5, 2026 at 6pm CET",
     "place":"Online",
@@ -121,6 +126,7 @@ The script returns:
 
 - If `ENABLE_LANCEDB=true`, the app builds/uses a local `.lancedb` index for retrieval.
 - If LanceDB retrieval fails, the API falls back to lexical retrieval from the `.txt` library.
+- Retrieval scoring weights auto-switch by selected goal; exact weight profiles are documented at the top of `content/linkedin-library.txt`.
 - Vercel/serverless builds run a prebuild prune step to keep only one Linux LanceDB native package (`gnu` or `musl`) so `api/generate` stays under function size limits.
 - `OPENAI_EMBEDDING_MODEL=text-embedding-3-small` is the default for speed and lower cost when indexing large libraries.
 - If you want higher semantic precision and accept higher cost/latency, switch to `text-embedding-3-large`.
