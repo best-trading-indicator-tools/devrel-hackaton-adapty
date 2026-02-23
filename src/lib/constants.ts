@@ -21,6 +21,18 @@ export type OutputLength = Exclude<InputLength, "mix">;
 export const GOAL_OPTIONS = ["virality", "engagement", "traffic", "awareness", "balanced"] as const;
 export type ContentGoal = (typeof GOAL_OPTIONS)[number];
 
+export const CHART_TYPE_OPTIONS = ["bar", "line", "doughnut", "pie", "polarArea", "radar"] as const;
+export type ChartTypeOption = (typeof CHART_TYPE_OPTIONS)[number];
+
+export const CHART_TYPE_LABELS: Record<ChartTypeOption, string> = {
+  bar: "Bar",
+  line: "Line",
+  doughnut: "Doughnut",
+  pie: "Pie",
+  polarArea: "Polar Area",
+  radar: "Radar",
+};
+
 export const GOAL_LABELS: Record<ContentGoal, string> = {
   virality: "Virality",
   engagement: "Engagement",

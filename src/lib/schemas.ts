@@ -1,12 +1,17 @@
 import { z } from "zod";
 
-import { GOAL_OPTIONS, INPUT_LENGTH_OPTIONS, type ContentGoal } from "@/lib/constants";
+import { CHART_TYPE_OPTIONS, GOAL_OPTIONS, INPUT_LENGTH_OPTIONS, type ChartTypeOption, type ContentGoal } from "@/lib/constants";
 
 export const generatePostsRequestSchema = z.object({
   style: z.string().trim().min(1).max(260).default("adapty"),
   hookStyle: z.string().trim().min(1).max(260).default("balanced"),
   goal: z.enum(GOAL_OPTIONS).default("virality"),
   inputType: z.string().trim().min(1).max(120),
+  chartEnabled: z.coerce.boolean().default(false),
+  chartType: z.enum(CHART_TYPE_OPTIONS).default("doughnut"),
+  chartTitle: z.string().trim().max(140).default(""),
+  chartData: z.string().trim().max(20_000).default(""),
+  chartOptions: z.string().trim().max(20_000).default(""),
   memeTone: z.string().trim().max(120).default(""),
   memeBrief: z.string().trim().max(400).default(""),
   memeVariantCount: z.coerce.number().int().min(1).max(6).default(3),
@@ -46,6 +51,15 @@ export function makeGeneratePostsResponseSchema(postCount: number) {
 
 export type GeneratePostsResponse = {
   hooks: string[];
+  chart?: {
+    type: ChartTypeOption;
+    title: string;
+    imageDataUrl: string;
+    width: number;
+    height: number;
+    labelsCount: number;
+    datasetCount: number;
+  };
   posts: Array<{
     length: "short" | "standard" | "long";
     hook: string;

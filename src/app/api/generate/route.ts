@@ -3,6 +3,13 @@ import OpenAI from "openai";
 import { zodResponseFormat } from "openai/helpers/zod";
 import { z } from "zod";
 
+import {
+  ChartInputError,
+  prepareChartInputFromRequest,
+  renderChartCompanion,
+  summarizeChartForPrompt,
+  type PreparedChartInput,
+} from "@/lib/chart-render";
 import { buildLengthPlan, GOAL_DESCRIPTIONS, GOAL_LABELS, lengthGuide } from "@/lib/constants";
 import { createCodexStructuredCompletion } from "@/lib/codex-responses";
 import { getCodexOAuthCredentials, type CodexOAuthCredentials } from "@/lib/codex-oauth";
@@ -435,6 +442,30 @@ export async function POST(request: Request) {
     }
 
     const input = parsedInput.data;
+    let preparedChartInput: PreparedChartInput | null = null;
+
+    try {
+      preparedChartInput = prepareChartInputFromRequest({
+        enabled: input.chartEnabled,
+        type: input.chartType,
+        title: input.chartTitle,
+        dataJson: input.chartData,
+        optionsJson: input.chartOptions,
+      });
+    } catch (chartError) {
+      if (chartError instanceof ChartInputError) {
+        return NextResponse.json(
+          {
+            error: "Invalid chart input",
+            message: chartError.message,
+          },
+          { status: 400 },
+        );
+      }
+
+      throw chartError;
+    }
+
     const requestedModel = process.env.OPENAI_MODEL ?? "gpt-5.3-codex";
     const fallbackModel = process.env.OPENAI_MODEL_FALLBACK ?? "gpt-5.2";
 
@@ -470,6 +501,8 @@ export async function POST(request: Request) {
       input.style,
       input.hookStyle,
       input.inputType,
+      preparedChartInput ? `chart:${preparedChartInput.type}` : "",
+      preparedChartInput?.title ?? "",
       input.memeTone,
       input.memeBrief,
       input.time,
@@ -512,6 +545,10 @@ export async function POST(request: Request) {
       input.goal === "virality"
         ? "For virality, say the uncomfortable obvious truth your audience already suspects but rarely says out loud. Make it specific, defensible, and useful."
         : "Prioritize the selected goal while staying concrete, credible, and practical.";
+    const chartExecutionDirective = preparedChartInput
+      ? "Chart companion is enabled. Ground the narrative in the provided chart values and call out one or two concrete numbers naturally."
+      : "No chart companion requested.";
+    const chartPromptSummary = preparedChartInput ? summarizeChartForPrompt(preparedChartInput) : "(not provided)";
     const memeTonePreference = input.memeTone.trim() || DEFAULT_MEME_TONE;
     const memeBriefPreference = input.memeBrief.trim();
     const memeVariantTarget = input.memeVariantCount;
@@ -555,6 +592,8 @@ Generation request:
 - Hook style directive: ${hookStyleDirective}
 - Goal: ${GOAL_LABELS[input.goal]} (${GOAL_DESCRIPTIONS[input.goal]})
 - Goal execution directive: ${goalExecutionDirective}
+- Chart execution directive: ${chartExecutionDirective}
+- Chart summary: ${chartPromptSummary}
 - Meme execution directive: ${memeExecutionDirective}
 - Meme tone preference: ${memeTonePreference}
 - Meme brief: ${memeBriefPreference || "(not provided, use clever/funny defaults)"}
@@ -736,8 +775,30 @@ For each post:
       });
     }
 
+    let chartCompanion: GeneratePostsResponse["chart"] | undefined;
+
+    if (preparedChartInput) {
+      try {
+        chartCompanion = await renderChartCompanion(preparedChartInput);
+      } catch (chartRenderError) {
+        const message =
+          chartRenderError instanceof Error
+            ? chartRenderError.message
+            : "Chart rendering failed for the provided chart data/options.";
+
+        return NextResponse.json(
+          {
+            error: "Chart rendering failed",
+            message,
+          },
+          { status: 400 },
+        );
+      }
+    }
+
     const response: GeneratePostsResponse = {
       hooks: parsed.hooks.map((hook) => normalizeNoEmDash(hook)),
+      chart: chartCompanion,
       posts: postsWithMemes,
       generation: {
         modelRequested: requestedModel,

@@ -20,6 +20,7 @@ A Next.js app that generates high-performing LinkedIn posts and hook ideas from 
 - Optional embeddings retrieval with OpenAI embeddings + LanceDB (`ENABLE_LANCEDB=true`)
 - Automatic Memegen companions for `Meme / shitpost` post type with ranked variants
   - `Meme Variants Per Post` x `Number of Posts` = total meme images generated
+- Optional chart companions rendered server-side with `chartjs-node-canvas` from your chosen chart type + JSON data
 
 ## Content library format
 
@@ -90,6 +91,11 @@ curl -X POST http://localhost:3000/api/generate \
     "style":"adapty",
     "goal":"virality",
     "inputType":"Event / webinar promo",
+    "chartEnabled": true,
+    "chartType":"doughnut",
+    "chartTitle":"Trial strategy split",
+    "chartData":"{\"labels\":[\"Without trial\",\"Paid trial\",\"Free trial\"],\"datasets\":[{\"label\":\"Share %\",\"data\":[56.9,28.9,14.3]}]}",
+    "chartOptions":"{\"plugins\":{\"legend\":{\"position\":\"right\"}}}",
     "time":"March 5, 2026 at 6pm CET",
     "place":"Online",
     "ctaLink":"https://adapty.io/webinar",

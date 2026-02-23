@@ -4,10 +4,13 @@ import { ChangeEvent, FormEvent, useMemo, useRef, useState } from "react";
 import NextImage from "next/image";
 
 import {
+  CHART_TYPE_LABELS,
+  CHART_TYPE_OPTIONS,
   GOAL_LABELS,
   GOAL_OPTIONS,
   INPUT_LENGTH_OPTIONS,
   POST_TYPE_OPTIONS,
+  type ChartTypeOption,
   type ContentGoal,
   type InputLength,
 } from "@/lib/constants";
@@ -18,6 +21,11 @@ type FormState = {
   hookStyle: string;
   goal: ContentGoal;
   inputType: string;
+  chartEnabled: boolean;
+  chartType: ChartTypeOption;
+  chartTitle: string;
+  chartData: string;
+  chartOptions: string;
   memeTone: string;
   memeBrief: string;
   memeVariantCount: number;
@@ -35,6 +43,11 @@ const defaultForm: FormState = {
   hookStyle: "balanced",
   goal: "virality",
   inputType: POST_TYPE_OPTIONS[1],
+  chartEnabled: false,
+  chartType: "doughnut",
+  chartTitle: "",
+  chartData: "",
+  chartOptions: "",
   memeTone: "",
   memeBrief: "",
   memeVariantCount: 3,
@@ -71,6 +84,56 @@ const HOOK_STYLE_PRESETS = [
   "story-led",
 ] as const;
 
+function getDefaultChartData(chartType: ChartTypeOption): string {
+  if (chartType === "doughnut" || chartType === "pie" || chartType === "polarArea") {
+    return JSON.stringify(
+      {
+        labels: ["Without trial", "With paid trial", "With free trial"],
+        datasets: [
+          {
+            label: "Share %",
+            data: [56.9, 28.9, 14.3],
+          },
+        ],
+      },
+      null,
+      2,
+    );
+  }
+
+  return JSON.stringify(
+    {
+      labels: ["Week 1", "Week 2", "Week 3", "Week 4"],
+      datasets: [
+        {
+          label: "Trial starts",
+          data: [180, 220, 260, 310],
+        },
+        {
+          label: "Paid conversions",
+          data: [82, 94, 118, 142],
+        },
+      ],
+    },
+    null,
+    2,
+  );
+}
+
+function getDefaultChartOptions(): string {
+  return JSON.stringify(
+    {
+      plugins: {
+        legend: {
+          position: "right",
+        },
+      },
+    },
+    null,
+    2,
+  );
+}
+
 function normalizeNoEmDash(value: string): string {
   return value
     .replace(/&(?:mdash|ndash);/gi, "-")
@@ -81,6 +144,13 @@ function normalizeNoEmDash(value: string): string {
 function sanitizeGenerationResult(result: GeneratePostsResponse): GeneratePostsResponse {
   return {
     ...result,
+    chart: result.chart
+      ? {
+          ...result.chart,
+          title: normalizeNoEmDash(result.chart.title),
+          imageDataUrl: result.chart.imageDataUrl.trim(),
+        }
+      : undefined,
     hooks: result.hooks.map((hook) => normalizeNoEmDash(hook)),
     posts: result.posts.map((post) => ({
       ...post,
@@ -241,6 +311,11 @@ export default function Home() {
     try {
       const requestPayload = {
         ...form,
+        chartEnabled: form.chartEnabled,
+        chartType: form.chartEnabled ? form.chartType : defaultForm.chartType,
+        chartTitle: form.chartEnabled ? form.chartTitle : "",
+        chartData: form.chartEnabled ? form.chartData : "",
+        chartOptions: form.chartEnabled ? form.chartOptions : "",
         time: showEventFields ? form.time : "",
         place: showEventFields ? form.place : "",
         memeTone: showMemeFields ? form.memeTone : "",
@@ -524,6 +599,127 @@ export default function Home() {
             </div>
           ) : null}
 
+          <div className="space-y-3 rounded-2xl border border-black/10 bg-slate-50 p-3">
+            <label className="flex items-center gap-2">
+              <input
+                type="checkbox"
+                className="h-4 w-4 rounded border-black/20"
+                checked={form.chartEnabled}
+                onChange={(event) =>
+                  setForm((prev) => ({
+                    ...prev,
+                    chartEnabled: event.target.checked,
+                    chartData:
+                      event.target.checked && !prev.chartData.trim()
+                        ? getDefaultChartData(prev.chartType)
+                        : prev.chartData,
+                    chartOptions:
+                      event.target.checked && !prev.chartOptions.trim()
+                        ? getDefaultChartOptions()
+                        : prev.chartOptions,
+                  }))
+                }
+              />
+              <span className="text-sm font-medium">Add Chart Companion</span>
+            </label>
+
+            {form.chartEnabled ? (
+              <div className="space-y-3">
+                <div className="grid gap-3 sm:grid-cols-2">
+                  <label className="space-y-1">
+                    <span className="text-sm font-medium">Chart Type</span>
+                    <select
+                      className="w-full rounded-xl border border-black/10 bg-white px-3 py-2 text-sm outline-none transition focus:border-slate-900"
+                      value={form.chartType}
+                      onChange={(event) => {
+                        const nextType = event.target.value as ChartTypeOption;
+
+                        setForm((prev) => ({
+                          ...prev,
+                          chartType: nextType,
+                          chartData: prev.chartData.trim() ? prev.chartData : getDefaultChartData(nextType),
+                        }));
+                      }}
+                    >
+                      {CHART_TYPE_OPTIONS.map((chartType) => (
+                        <option key={chartType} value={chartType}>
+                          {CHART_TYPE_LABELS[chartType]}
+                        </option>
+                      ))}
+                    </select>
+                  </label>
+
+                  <label className="space-y-1">
+                    <span className="text-sm font-medium">Chart Title (optional)</span>
+                    <input
+                      placeholder="Trial strategy split by app sample"
+                      className="w-full rounded-xl border border-black/10 bg-white px-3 py-2 text-sm outline-none transition focus:border-slate-900"
+                      value={form.chartTitle}
+                      onChange={(event) => setForm((prev) => ({ ...prev, chartTitle: event.target.value }))}
+                    />
+                  </label>
+                </div>
+
+                <label className="space-y-1">
+                  <span className="text-sm font-medium">Chart Data (JSON)</span>
+                  <textarea
+                    rows={7}
+                    placeholder='{"labels":["A","B"],"datasets":[{"label":"Share %","data":[60,40]}]}'
+                    className="w-full rounded-xl border border-black/10 bg-white px-3 py-2 font-mono text-xs outline-none transition focus:border-slate-900"
+                    value={form.chartData}
+                    onChange={(event) => setForm((prev) => ({ ...prev, chartData: event.target.value }))}
+                  />
+                </label>
+
+                <label className="space-y-1">
+                  <span className="text-sm font-medium">Chart Options (JSON, optional)</span>
+                  <textarea
+                    rows={4}
+                    placeholder='{"plugins":{"legend":{"position":"right"}}}'
+                    className="w-full rounded-xl border border-black/10 bg-white px-3 py-2 font-mono text-xs outline-none transition focus:border-slate-900"
+                    value={form.chartOptions}
+                    onChange={(event) => setForm((prev) => ({ ...prev, chartOptions: event.target.value }))}
+                  />
+                </label>
+
+                <div className="flex flex-wrap items-center gap-2">
+                  <button
+                    type="button"
+                    className="rounded-lg border border-black/10 bg-white px-2 py-1 text-xs text-slate-700 hover:bg-slate-100"
+                    onClick={() =>
+                      setForm((prev) => ({
+                        ...prev,
+                        chartData: getDefaultChartData(prev.chartType),
+                      }))
+                    }
+                  >
+                    Use Example Data
+                  </button>
+                  <button
+                    type="button"
+                    className="rounded-lg border border-black/10 bg-white px-2 py-1 text-xs text-slate-700 hover:bg-slate-100"
+                    onClick={() =>
+                      setForm((prev) => ({
+                        ...prev,
+                        chartOptions: getDefaultChartOptions(),
+                      }))
+                    }
+                  >
+                    Use Example Options
+                  </button>
+                </div>
+
+                <p className="text-xs text-slate-600">
+                  Chart image is rendered server-side with chartjs-node-canvas and returned in the generation result.
+                </p>
+              </div>
+            ) : (
+              <p className="text-xs text-slate-600">
+                Enable this to generate one chart image per run and reuse it alongside the generated posts.
+              </p>
+            )}
+          </div>
+
           {showEventFields ? (
             <div className="grid gap-3 sm:grid-cols-2">
               <label className="space-y-1">
@@ -664,6 +860,48 @@ export default function Home() {
               <p className="mt-3 text-sm text-slate-500">Generate posts to see hook ideas here.</p>
             )}
           </div>
+
+          {result?.chart ? (
+            <div className="rounded-3xl border border-black/10 bg-white/90 p-5 shadow-[0_12px_30px_rgba(0,0,0,0.06)] backdrop-blur">
+              <div className="flex flex-wrap items-center justify-between gap-2">
+                <div>
+                  <h2 className="text-lg font-semibold">Chart Companion</h2>
+                  <p className="text-xs uppercase tracking-wide text-slate-600">
+                    {CHART_TYPE_LABELS[result.chart.type]} · {result.chart.labelsCount} labels · {result.chart.datasetCount} dataset
+                    {result.chart.datasetCount > 1 ? "s" : ""}
+                  </p>
+                </div>
+                <div className="flex items-center gap-2">
+                  <a
+                    href={result.chart.imageDataUrl}
+                    download={`chart-${result.chart.type}.png`}
+                    className="rounded-lg border border-black/10 bg-white px-2 py-1 text-xs text-slate-700 hover:bg-slate-100"
+                  >
+                    Download PNG
+                  </a>
+                  <button
+                    type="button"
+                    className="rounded-lg border border-black/10 bg-white px-2 py-1 text-xs text-slate-700 hover:bg-slate-100"
+                    onClick={() => {
+                      navigator.clipboard.writeText(result.chart?.imageDataUrl ?? "").catch(() => {});
+                    }}
+                  >
+                    Copy Data URL
+                  </button>
+                </div>
+              </div>
+
+              {result.chart.title ? <p className="mt-2 text-sm text-slate-700">{result.chart.title}</p> : null}
+
+              {/* eslint-disable-next-line @next/next/no-img-element */}
+              <img
+                src={result.chart.imageDataUrl}
+                alt={result.chart.title || `${CHART_TYPE_LABELS[result.chart.type]} chart`}
+                className="mt-3 h-auto w-full rounded-xl border border-black/10 bg-white"
+                loading="lazy"
+              />
+            </div>
+          ) : null}
 
           <div className="space-y-4">
             {result?.posts.map((post, index) => (
