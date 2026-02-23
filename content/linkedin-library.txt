@@ -80,3 +80,52 @@ If you're running a subscription app, you're probably leaving revenue on the tab
 👉 Read the full breakdown below.
 
 https://lnkd.in/dcxeFa5F
+
+---
+
+Impressions: 1819
+Likes: 25
+Comments: 1
+Repost: 1
+Clicks: 24
+CTR: 1.32%
+
+As of January 2026, Apple has started rejecting paywall designs that include a toggle element.
+
+Rejections are being issued under Guideline 3.1.2. In particular, paywalls where a free trial is presented via a toggle (on/off switch) are now considered high risk.
+
+No official announcement has been made, but multiple recent cases suggest that this enforcement is becoming systematic.
+
+If your app allows users to add or remove a trial using a switch-based structure, you may encounter issues in your next update.
+
+At the moment, this appears to affect iOS only. There are no reported changes on the Android side.
+
+For more details -> https://lnkd.in/datx4KWE
+
+---
+
+Impressions: 1430
+Likes: 36
+Comments: 3
+Repost: 16
+Clicks: 64
+CTR: 4.48%
+
+Developer ecosystems don’t scale on their own.
+
+They’re built by people who organize meetups, share real-world experience, and bring others together.
+
+That’s why we’re launching the Adapty Developer Partner Program to support the mobile ecosystem across the world.
+
+This program is for developers and founders who want to:
+- Build or expand local mobile developer communities
+- Create meaningful educational events
+- Connect local ecosystems with a global audience
+
+As a partner, you’ll receive:
+- Funding for meetups and workshops
+- Early access to exclusive Adapty reports
+- Support to grow your app
+- Access to a worldwide network of community leaders
+If you’re building or planning to build a developer community, this is your invitation.
+👉 Apply today -> go.adapty.io/dev-partner

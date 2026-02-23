@@ -251,6 +251,11 @@ export async function POST(request: Request) {
       ? retrieval.performanceInsights.summaryLines.map((line, index) => `${index + 1}. ${line}`).join("\n")
       : "No performance metrics were provided in the content library.";
 
+    const isAdaptyVoice = input.style.trim().toLowerCase() === "adapty";
+    const brandVoiceDirective = isAdaptyVoice
+      ? "Selected brand voice is Adapty. Treat the provided linkedin-library examples as the canonical style guide and mirror their tone, rhythm, formatting, and storytelling style as closely as possible while keeping copy original."
+      : `Selected brand voice is "${input.style}". Follow that voice while still leveraging the winning structures from the provided library examples.`;
+
     const responseSchema = makeGeneratePostsResponseSchema(input.numberOfPosts);
 
     const systemPrompt = `
@@ -273,11 +278,13 @@ Rules:
 7. Avoid overusing emojis and hashtags.
 8. If a CTA link is provided, include it in the CTA line.
 9. Use the performance insights and recurring winning patterns when available.
+10. If the selected brand voice is "Adapty", closely imitate the exact style and tone from the provided linkedin-library examples.
 `;
 
     const userPrompt = `
 Generation request:
 - Brand voice: ${input.style}
+- Brand voice directive: ${brandVoiceDirective}
 - Goal: ${GOAL_LABELS[input.goal]} (${GOAL_DESCRIPTIONS[input.goal]})
 - Post type: ${input.inputType}
 - Event time: ${input.time || "(not provided)"}
