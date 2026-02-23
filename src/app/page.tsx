@@ -18,6 +18,9 @@ type FormState = {
   hookStyle: string;
   goal: ContentGoal;
   inputType: string;
+  memeTone: string;
+  memeBrief: string;
+  memeVariantCount: number;
   time: string;
   place: string;
   ctaLink: string;
@@ -32,6 +35,9 @@ const defaultForm: FormState = {
   hookStyle: "balanced",
   goal: "virality",
   inputType: POST_TYPE_OPTIONS[1],
+  memeTone: "",
+  memeBrief: "",
+  memeVariantCount: 3,
   time: "",
   place: "",
   ctaLink: "",
@@ -45,6 +51,7 @@ const MAX_IMAGE_EDGE_PX = 1400;
 const MAX_IMAGE_DATA_URL_CHARS = 4_500_000;
 const IMAGE_EXPORT_QUALITY = 0.82;
 const EVENT_TOPIC_PATTERN = /\b(event|webinar)\b/i;
+const MEME_TOPIC_PATTERN = /\b(meme|shitpost)\b/i;
 const CUSTOM_BRAND_VOICE = "__custom__";
 const CUSTOM_HOOK_STYLE = "__custom_hook_style__";
 const BRAND_VOICE_PRESETS = [
@@ -86,8 +93,16 @@ function sanitizeGenerationResult(result: GeneratePostsResponse): GeneratePostsR
             topText: normalizeNoEmDash(post.meme.topText),
             bottomText: normalizeNoEmDash(post.meme.bottomText),
             url: post.meme.url.trim(),
+            toneFitReason: post.meme.toneFitReason ? normalizeNoEmDash(post.meme.toneFitReason) : post.meme.toneFitReason,
           }
         : undefined,
+      memeVariants: post.memeVariants?.map((variant) => ({
+        ...variant,
+        topText: normalizeNoEmDash(variant.topText),
+        bottomText: normalizeNoEmDash(variant.bottomText),
+        toneFitReason: variant.toneFitReason ? normalizeNoEmDash(variant.toneFitReason) : variant.toneFitReason,
+        url: variant.url.trim(),
+      })),
     })),
   };
 }
@@ -102,6 +117,10 @@ function formatLengthLabel(value: string): string {
 
 function needsEventDetails(inputType: string): boolean {
   return EVENT_TOPIC_PATTERN.test(inputType);
+}
+
+function needsMemeDetails(inputType: string): boolean {
+  return MEME_TOPIC_PATTERN.test(inputType);
 }
 
 function isBrandVoicePreset(value: string): value is (typeof BRAND_VOICE_PRESETS)[number] {
@@ -188,6 +207,7 @@ export default function Home() {
   const [isImageProcessing, setIsImageProcessing] = useState(false);
   const imageInputRef = useRef<HTMLInputElement>(null);
   const showEventFields = useMemo(() => needsEventDetails(form.inputType), [form.inputType]);
+  const showMemeFields = useMemo(() => needsMemeDetails(form.inputType), [form.inputType]);
   const showCustomBrandVoiceInput = brandVoiceSelection === CUSTOM_BRAND_VOICE;
   const showCustomHookStyleInput = hookStyleSelection === CUSTOM_HOOK_STYLE;
   const customInputsGridClass =
@@ -214,13 +234,14 @@ export default function Home() {
     }
 
     try {
-      const requestPayload = showEventFields
-        ? form
-        : {
-            ...form,
-            time: "",
-            place: "",
-          };
+      const requestPayload = {
+        ...form,
+        time: showEventFields ? form.time : "",
+        place: showEventFields ? form.place : "",
+        memeTone: showMemeFields ? form.memeTone : "",
+        memeBrief: showMemeFields ? form.memeBrief : "",
+        memeVariantCount: showMemeFields ? form.memeVariantCount : defaultForm.memeVariantCount,
+      };
 
       const response = await fetch("/api/generate", {
         method: "POST",
@@ -420,18 +441,14 @@ export default function Home() {
                 onChange={(event) =>
                   setForm((prev) => {
                     const nextType = event.target.value;
-                    if (needsEventDetails(nextType)) {
-                      return {
-                        ...prev,
-                        inputType: nextType,
-                      };
-                    }
-
                     return {
                       ...prev,
                       inputType: nextType,
-                      time: "",
-                      place: "",
+                      time: needsEventDetails(nextType) ? prev.time : "",
+                      place: needsEventDetails(nextType) ? prev.place : "",
+                      memeTone: needsMemeDetails(nextType) ? prev.memeTone : "",
+                      memeBrief: needsMemeDetails(nextType) ? prev.memeBrief : "",
+                      memeVariantCount: needsMemeDetails(nextType) ? prev.memeVariantCount : defaultForm.memeVariantCount,
                     };
                   })
                 }
@@ -444,6 +461,55 @@ export default function Home() {
               </select>
             </label>
           </div>
+
+          {showMemeFields ? (
+            <div className="space-y-3 rounded-2xl border border-black/10 bg-slate-50 p-3">
+              <p className="text-xs font-semibold uppercase tracking-wide text-slate-600">Meme Options (optional)</p>
+              <div className="grid gap-3 sm:grid-cols-2">
+                <label className="space-y-1">
+                  <span className="text-sm font-medium">Meme Tone</span>
+                  <input
+                    placeholder="playful, contrarian, absurd, deadpan..."
+                    className="w-full rounded-xl border border-black/10 bg-white px-3 py-2 text-sm outline-none transition focus:border-slate-900"
+                    value={form.memeTone}
+                    onChange={(event) => setForm((prev) => ({ ...prev, memeTone: event.target.value }))}
+                  />
+                </label>
+
+                <label className="space-y-1">
+                  <span className="text-sm font-medium">Meme Variants Per Post</span>
+                  <input
+                    type="number"
+                    min={1}
+                    max={6}
+                    className="w-full rounded-xl border border-black/10 bg-white px-3 py-2 text-sm outline-none transition focus:border-slate-900"
+                    value={form.memeVariantCount}
+                    onChange={(event) =>
+                      setForm((prev) => ({
+                        ...prev,
+                        memeVariantCount: Math.min(6, Math.max(1, Number(event.target.value || defaultForm.memeVariantCount))),
+                      }))
+                    }
+                  />
+                </label>
+              </div>
+
+              <label className="space-y-1">
+                <span className="text-sm font-medium">Meme Prompt</span>
+                <textarea
+                  rows={3}
+                  placeholder="Any specific angle, joke format, or comparison to include..."
+                  className="w-full rounded-xl border border-black/10 bg-white px-3 py-2 text-sm outline-none transition focus:border-slate-900"
+                  value={form.memeBrief}
+                  onChange={(event) => setForm((prev) => ({ ...prev, memeBrief: event.target.value }))}
+                />
+              </label>
+
+              <p className="text-xs text-slate-600">
+                Leave these blank to let AI come up with clever and funny meme variants automatically.
+              </p>
+            </div>
+          ) : null}
 
           {showEventFields ? (
             <div className="grid gap-3 sm:grid-cols-2">
@@ -609,48 +675,102 @@ export default function Home() {
                 <p className="whitespace-pre-wrap text-sm leading-relaxed text-slate-700">{post.body}</p>
                 <p className="mt-4 whitespace-pre-wrap text-sm font-medium text-slate-900">{post.cta}</p>
 
-                {post.meme ? (
-                  <div className="mt-5 space-y-3 rounded-2xl border border-black/10 bg-slate-50 p-3">
-                    <div className="flex items-center justify-between gap-2">
-                      <p className="text-xs font-semibold uppercase tracking-wide text-slate-600">
-                        Meme Companion · {post.meme.templateName}
-                      </p>
-                      <div className="flex items-center gap-2">
-                        <button
-                          type="button"
-                          className="rounded-lg border border-black/10 bg-white px-2 py-1 text-xs text-slate-700 hover:bg-slate-100"
-                          onClick={() => {
-                            navigator.clipboard.writeText(post.meme?.url ?? "").catch(() => {});
-                          }}
-                        >
-                          Copy Meme URL
-                        </button>
-                        <a
-                          href={post.meme.url}
-                          target="_blank"
-                          rel="noreferrer"
-                          className="rounded-lg border border-black/10 bg-white px-2 py-1 text-xs text-slate-700 hover:bg-slate-100"
-                        >
-                          Open Meme
-                        </a>
+                {(() => {
+                  const memeVariants = post.memeVariants?.length ? post.memeVariants : post.meme ? [post.meme] : [];
+                  const primaryMeme = memeVariants[0];
+
+                  if (!primaryMeme) {
+                    return null;
+                  }
+
+                  return (
+                    <div className="mt-5 space-y-3 rounded-2xl border border-black/10 bg-slate-50 p-3">
+                      <div className="flex items-center justify-between gap-2">
+                        <p className="text-xs font-semibold uppercase tracking-wide text-slate-600">
+                          Meme Companion · {primaryMeme.templateName} · Rank #{primaryMeme.rank}
+                        </p>
+                        <div className="flex items-center gap-2">
+                          <button
+                            type="button"
+                            className="rounded-lg border border-black/10 bg-white px-2 py-1 text-xs text-slate-700 hover:bg-slate-100"
+                            onClick={() => {
+                              navigator.clipboard.writeText(primaryMeme.url).catch(() => {});
+                            }}
+                          >
+                            Copy Meme URL
+                          </button>
+                          <a
+                            href={primaryMeme.url}
+                            target="_blank"
+                            rel="noreferrer"
+                            className="rounded-lg border border-black/10 bg-white px-2 py-1 text-xs text-slate-700 hover:bg-slate-100"
+                          >
+                            Open Meme
+                          </a>
+                        </div>
                       </div>
+
+                      {/* eslint-disable-next-line @next/next/no-img-element */}
+                      <img
+                        src={primaryMeme.url}
+                        alt={`${primaryMeme.templateName} meme preview`}
+                        className="h-auto w-full rounded-xl border border-black/10 bg-white"
+                        loading="lazy"
+                      />
+
+                      <p className="text-xs text-slate-600">
+                        Top: {primaryMeme.topText}
+                        <br />
+                        Bottom: {primaryMeme.bottomText}
+                      </p>
+
+                      {typeof primaryMeme.toneFitScore === "number" ? (
+                        <p className="text-xs text-slate-600">
+                          Tone fit: {primaryMeme.toneFitScore}
+                          {primaryMeme.toneFitReason ? ` · ${primaryMeme.toneFitReason}` : ""}
+                        </p>
+                      ) : null}
+
+                      {memeVariants.length > 1 ? (
+                        <div className="space-y-2 rounded-xl border border-black/10 bg-white p-2">
+                          <p className="text-xs font-semibold uppercase tracking-wide text-slate-600">More Variants</p>
+                          <ul className="space-y-2">
+                            {memeVariants.slice(1).map((variant) => (
+                              <li key={`${variant.rank}-${variant.templateId}-${variant.url}`} className="rounded-lg border border-black/10 px-2 py-2 text-xs text-slate-700">
+                                <p className="font-medium">
+                                  #{variant.rank} · {variant.templateName}
+                                  {typeof variant.toneFitScore === "number" ? ` · score ${variant.toneFitScore}` : ""}
+                                </p>
+                                <p className="mt-1">Top: {variant.topText}</p>
+                                <p>Bottom: {variant.bottomText}</p>
+                                {variant.toneFitReason ? <p className="mt-1 text-slate-600">{variant.toneFitReason}</p> : null}
+                                <div className="mt-2 flex items-center gap-2">
+                                  <a
+                                    href={variant.url}
+                                    target="_blank"
+                                    rel="noreferrer"
+                                    className="rounded-md border border-black/10 bg-white px-2 py-1 text-xs text-slate-700 hover:bg-slate-100"
+                                  >
+                                    Open
+                                  </a>
+                                  <button
+                                    type="button"
+                                    className="rounded-md border border-black/10 bg-white px-2 py-1 text-xs text-slate-700 hover:bg-slate-100"
+                                    onClick={() => {
+                                      navigator.clipboard.writeText(variant.url).catch(() => {});
+                                    }}
+                                  >
+                                    Copy URL
+                                  </button>
+                                </div>
+                              </li>
+                            ))}
+                          </ul>
+                        </div>
+                      ) : null}
                     </div>
-
-                    {/* eslint-disable-next-line @next/next/no-img-element */}
-                    <img
-                      src={post.meme.url}
-                      alt={`${post.meme.templateName} meme preview`}
-                      className="h-auto w-full rounded-xl border border-black/10 bg-white"
-                      loading="lazy"
-                    />
-
-                    <p className="text-xs text-slate-600">
-                      Top: {post.meme.topText}
-                      <br />
-                      Bottom: {post.meme.bottomText}
-                    </p>
-                  </div>
-                ) : null}
+                  );
+                })()}
               </article>
             ))}
           </div>

@@ -18,7 +18,7 @@ A Next.js app that generates high-performing LinkedIn posts and hook ideas from 
 - API route: `POST /api/generate`
 - Local `.txt` library retrieval (default)
 - Optional embeddings retrieval with OpenAI embeddings + LanceDB (`ENABLE_LANCEDB=true`)
-- Automatic Memegen companion URLs for `Meme / shitpost` post type
+- Automatic Memegen companions for `Meme / shitpost` post type with ranked variants
 
 ## Content library format
 

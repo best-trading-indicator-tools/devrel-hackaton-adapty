@@ -7,6 +7,9 @@ export const generatePostsRequestSchema = z.object({
   hookStyle: z.string().trim().min(1).max(260).default("balanced"),
   goal: z.enum(GOAL_OPTIONS).default("virality"),
   inputType: z.string().trim().min(1).max(120),
+  memeTone: z.string().trim().max(120).default(""),
+  memeBrief: z.string().trim().max(400).default(""),
+  memeVariantCount: z.coerce.number().int().min(1).max(6).default(3),
   time: z.string().trim().max(120).default(""),
   place: z.string().trim().max(120).default(""),
   ctaLink: z.string().trim().max(500).default(""),
@@ -49,12 +52,25 @@ export type GeneratePostsResponse = {
     body: string;
     cta: string;
     meme?: {
+      rank: number;
       templateId: string;
       templateName: string;
       topText: string;
       bottomText: string;
       url: string;
+      toneFitScore?: number;
+      toneFitReason?: string;
     };
+    memeVariants?: Array<{
+      rank: number;
+      templateId: string;
+      templateName: string;
+      topText: string;
+      bottomText: string;
+      url: string;
+      toneFitScore?: number;
+      toneFitReason?: string;
+    }>;
   }>;
   generation: {
     modelRequested: string;

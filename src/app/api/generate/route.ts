@@ -1,6 +1,7 @@
 import { NextResponse } from "next/server";
 import OpenAI from "openai";
 import { zodResponseFormat } from "openai/helpers/zod";
+import { z } from "zod";
 
 import { buildLengthPlan, GOAL_DESCRIPTIONS, GOAL_LABELS, lengthGuide } from "@/lib/constants";
 import { createCodexStructuredCompletion } from "@/lib/codex-responses";
@@ -16,6 +17,7 @@ export const runtime = "nodejs";
 
 const MEME_INPUT_TYPE_PATTERN = /\b(meme|shitpost)\b/i;
 const MEME_LINE_MAX_CHARS = 72;
+const DEFAULT_MEME_TONE = "clever, funny, and relevant to B2C mobile app growth";
 const MEME_TEMPLATES = [
   { id: "drake", name: "Drake Hotline Bling" },
   { id: "woman-cat", name: "Woman Yelling at Cat" },
@@ -26,6 +28,18 @@ const MEME_TEMPLATES = [
   { id: "fry", name: "Futurama Fry" },
   { id: "stonks", name: "Stonks" },
 ] as const;
+const MEME_TEMPLATE_IDS = MEME_TEMPLATES.map((template) => template.id) as [
+  (typeof MEME_TEMPLATES)[number]["id"],
+  ...(typeof MEME_TEMPLATES)[number]["id"][],
+];
+type MemeTemplateId = (typeof MEME_TEMPLATES)[number]["id"];
+const MEME_TEMPLATE_NAME_BY_ID: Record<MemeTemplateId, string> = MEME_TEMPLATES.reduce(
+  (acc, template) => {
+    acc[template.id] = template.name;
+    return acc;
+  },
+  {} as Record<MemeTemplateId, string>,
+);
 
 function getOpenAIApiToken(): string | undefined {
   return process.env.OPENAI_API_KEY ?? process.env.OPENAI_ACCESS_TOKEN;
@@ -156,19 +170,88 @@ function encodeMemegenPathSegment(value: string): string {
     .replace(/\s+/g, "_");
 }
 
-function buildMemeCompanion(params: { hook: string; body: string; index: number }) {
-  const template = MEME_TEMPLATES[params.index % MEME_TEMPLATES.length];
-  const topText = clipMemeLine(params.hook, MEME_LINE_MAX_CHARS);
-  const bottomText = clipMemeLine(pickMemeBottomLine(params.body), MEME_LINE_MAX_CHARS);
-  const url = `https://api.memegen.link/images/${template.id}/${encodeMemegenPathSegment(topText)}/${encodeMemegenPathSegment(bottomText)}.jpg`;
+type MemeVariantCandidate = {
+  templateId: MemeTemplateId;
+  topText: string;
+  bottomText: string;
+  toneFitScore: number;
+  toneFitReason: string;
+};
+
+function makeMemeSelectionResponseSchema(postCount: number, variantCount: number) {
+  return z.object({
+    selections: z
+      .array(
+        z.object({
+          postIndex: z.number().int().min(1).max(postCount),
+          variants: z
+            .array(
+              z.object({
+                templateId: z.enum(MEME_TEMPLATE_IDS),
+                topText: z.string().min(4).max(120),
+                bottomText: z.string().min(4).max(120),
+                toneFitScore: z.number().int().min(0).max(100),
+                toneFitReason: z.string().min(8).max(220),
+              }),
+            )
+            .length(variantCount),
+        }),
+      )
+      .length(postCount),
+  });
+}
+
+function buildMemeCompanionFromVariant(params: { variant: MemeVariantCandidate; rank: number }) {
+  const templateName = MEME_TEMPLATE_NAME_BY_ID[params.variant.templateId] ?? params.variant.templateId;
+  const topText = clipMemeLine(params.variant.topText, MEME_LINE_MAX_CHARS) || "App teams shipping fast";
+  const bottomText = clipMemeLine(params.variant.bottomText, MEME_LINE_MAX_CHARS) || "Growth teams in 2026";
+  const url = `https://api.memegen.link/images/${params.variant.templateId}/${encodeMemegenPathSegment(topText)}/${encodeMemegenPathSegment(bottomText)}.jpg`;
 
   return {
-    templateId: template.id,
-    templateName: template.name,
+    rank: params.rank,
+    templateId: params.variant.templateId,
+    templateName,
     topText,
     bottomText,
     url,
+    toneFitScore: Math.max(0, Math.min(100, Math.round(params.variant.toneFitScore))),
+    toneFitReason: normalizeNoEmDash(params.variant.toneFitReason),
   };
+}
+
+function buildHeuristicMemeVariants(params: {
+  hook: string;
+  body: string;
+  index: number;
+  variantCount: number;
+  tone: string;
+}) {
+  const fallbackTop = clipMemeLine(params.hook, MEME_LINE_MAX_CHARS) || "App growth team update";
+  const fallbackBottom = clipMemeLine(pickMemeBottomLine(params.body), MEME_LINE_MAX_CHARS) || "Still iterating";
+  const compactTone = clipMemeLine(params.tone, 48) || "clever";
+
+  return Array.from({ length: params.variantCount }, (_, variantIndex) => {
+    const template = MEME_TEMPLATES[(params.index + variantIndex) % MEME_TEMPLATES.length];
+    const topText =
+      variantIndex === 0
+        ? fallbackTop
+        : clipMemeLine(`${compactTone}: ${fallbackTop}`, MEME_LINE_MAX_CHARS) || fallbackTop;
+    const bottomText =
+      variantIndex === 0
+        ? fallbackBottom
+        : clipMemeLine(`${fallbackBottom} (${variantIndex + 1})`, MEME_LINE_MAX_CHARS) || fallbackBottom;
+
+    return buildMemeCompanionFromVariant({
+      rank: variantIndex + 1,
+      variant: {
+        templateId: template.id,
+        topText,
+        bottomText,
+        toneFitScore: Math.max(35, 82 - variantIndex * 7),
+        toneFitReason: variantIndex === 0 ? "Fallback best-fit based on hook and body." : "Fallback alternative variant.",
+      },
+    });
+  });
 }
 
 function formatExampleMetrics(entry: LibraryEntry): string {
@@ -270,6 +353,61 @@ async function runCodexOauthGeneration(params: {
   return params.responseSchema.parse(parsedJson);
 }
 
+async function runOpenAiChatMemeSelection(params: {
+  token: string;
+  model: string;
+  systemPrompt: string;
+  userPrompt: string;
+  responseSchema: ReturnType<typeof makeMemeSelectionResponseSchema>;
+}) {
+  const { client } = getOpenAIClient(params.token);
+  const completion = await client.chat.completions.parse({
+    model: params.model,
+    temperature: 0.9,
+    messages: [
+      { role: "system", content: params.systemPrompt },
+      { role: "user", content: params.userPrompt },
+    ],
+    response_format: zodResponseFormat(params.responseSchema, "meme_variants_batch"),
+  });
+
+  const parsed = completion.choices[0]?.message.parsed;
+
+  if (!parsed) {
+    throw new Error("Model returned no parsable meme output.");
+  }
+
+  return parsed;
+}
+
+async function runCodexOauthMemeSelection(params: {
+  oauth: CodexOAuthCredentials;
+  model: string;
+  systemPrompt: string;
+  userPrompt: string;
+  responseSchema: ReturnType<typeof makeMemeSelectionResponseSchema>;
+}) {
+  const responseFormat = zodResponseFormat(params.responseSchema, "meme_variants_batch");
+  const jsonSchema = responseFormat.json_schema?.schema;
+
+  if (!jsonSchema || typeof jsonSchema !== "object") {
+    throw new Error("Failed to derive JSON schema for Codex meme structured output");
+  }
+
+  const parsedJson = await createCodexStructuredCompletion<unknown>({
+    accessToken: params.oauth.accessToken,
+    accountId: params.oauth.accountId,
+    model: params.model,
+    instructions: params.systemPrompt,
+    userInput: params.userPrompt,
+    schemaName: "meme_variants_batch",
+    jsonSchema: jsonSchema as Record<string, unknown>,
+    baseUrl: process.env.OPENAI_CODEX_BASE_URL,
+  });
+
+  return params.responseSchema.parse(parsedJson);
+}
+
 export async function POST(request: Request) {
   try {
     const body = await request.json();
@@ -316,7 +454,17 @@ export async function POST(request: Request) {
     }
 
     const lengthPlan = buildLengthPlan(input.inputLength, input.numberOfPosts);
-    const retrievalQuery = [input.goal, input.style, input.hookStyle, input.inputType, input.time, input.place, input.details]
+    const retrievalQuery = [
+      input.goal,
+      input.style,
+      input.hookStyle,
+      input.inputType,
+      input.memeTone,
+      input.memeBrief,
+      input.time,
+      input.place,
+      input.details,
+    ]
       .filter(Boolean)
       .join(" | ");
 
@@ -353,8 +501,11 @@ export async function POST(request: Request) {
       input.goal === "virality"
         ? "For virality, say the uncomfortable obvious truth your audience already suspects but rarely says out loud. Make it specific, defensible, and useful."
         : "Prioritize the selected goal while staying concrete, credible, and practical.";
+    const memeTonePreference = input.memeTone.trim() || DEFAULT_MEME_TONE;
+    const memeBriefPreference = input.memeBrief.trim();
+    const memeVariantTarget = input.memeVariantCount;
     const memeExecutionDirective = shouldGenerateMemes(input.inputType)
-      ? "This is a meme-focused request. Keep hooks and first body lines short, punchy, and caption-friendly."
+      ? "This is a meme-focused request. Keep hooks and first body lines short, punchy, and caption-friendly. If no meme brief is provided, come up with clever and funny angles automatically."
       : "Not a meme-focused request.";
 
     const responseSchema = makeGeneratePostsResponseSchema(input.numberOfPosts);
@@ -394,6 +545,9 @@ Generation request:
 - Goal: ${GOAL_LABELS[input.goal]} (${GOAL_DESCRIPTIONS[input.goal]})
 - Goal execution directive: ${goalExecutionDirective}
 - Meme execution directive: ${memeExecutionDirective}
+- Meme tone preference: ${memeTonePreference}
+- Meme brief: ${memeBriefPreference || "(not provided, use clever/funny defaults)"}
+- Meme variants per post target: ${memeVariantTarget}
 - Post type: ${input.inputType}
 - Event time: ${input.time || "(not provided)"}
 - Event place: ${input.place || "(not provided)"}
@@ -461,23 +615,119 @@ Also generate a list of hook suggestions inspired by this style and request.
     }
 
     const includeMemeCompanion = shouldGenerateMemes(input.inputType);
+    const normalizedPosts = parsed.posts.map((post, index) => ({
+      length: lengthPlan[index] ?? post.length,
+      hook: normalizeNoEmDash(post.hook),
+      body: normalizeNoEmDash(post.body),
+      cta: normalizeNoEmDash(ensureFinalCta(post.cta, input.ctaLink)),
+    }));
+
+    let postsWithMemes: GeneratePostsResponse["posts"] = normalizedPosts;
+
+    if (includeMemeCompanion) {
+      const memeSelectionSchema = makeMemeSelectionResponseSchema(normalizedPosts.length, memeVariantTarget);
+      const memeTemplateCatalog = MEME_TEMPLATES.map((template) => `- ${template.id}: ${template.name}`).join("\n");
+      const memeSelectionSystemPrompt = `
+You are selecting meme templates and caption lines for LinkedIn meme posts.
+You must choose only from the provided template IDs and produce ranked variants.
+Optimize for tone fit and humor quality while staying relevant to B2C mobile apps and monetization.
+Never use em dash punctuation. Use standard hyphen if needed.
+`;
+      const memeSelectionUserPrompt = `
+Meme selection request:
+- Tone preference: ${memeTonePreference}
+- Meme brief: ${memeBriefPreference || "(none provided - come up with a clever and funny angle automatically)"}
+- Variants required per post: ${memeVariantTarget}
+
+Allowed Memegen templates:
+${memeTemplateCatalog}
+
+Posts to adapt into meme captions:
+${normalizedPosts
+  .map(
+    (post, index) => `Post ${index + 1}
+Hook: ${post.hook}
+Body excerpt: ${post.body.slice(0, 450)}
+`,
+  )
+  .join("\n")}
+
+For each post:
+1. Return exactly ${memeVariantTarget} ranked variants.
+2. Vary templates across variants when possible.
+3. Keep top and bottom lines concise and readable on image memes.
+4. Score tone fit from 0 to 100 and explain briefly.
+`;
+
+      const runMemeSelection = (model: string) => {
+        if (oauthCredentials) {
+          return runCodexOauthMemeSelection({
+            oauth: oauthCredentials,
+            model,
+            systemPrompt: memeSelectionSystemPrompt,
+            userPrompt: memeSelectionUserPrompt,
+            responseSchema: memeSelectionSchema,
+          });
+        }
+
+        if (!openAiApiToken) {
+          throw new Error("OpenAI API token is missing");
+        }
+
+        return runOpenAiChatMemeSelection({
+          token: openAiApiToken,
+          model,
+          systemPrompt: memeSelectionSystemPrompt,
+          userPrompt: memeSelectionUserPrompt,
+          responseSchema: memeSelectionSchema,
+        });
+      };
+
+      let parsedMemeSelection: z.infer<typeof memeSelectionSchema> | null = null;
+
+      try {
+        parsedMemeSelection = await runMemeSelection(modelUsed);
+      } catch (memeError) {
+        console.error("Meme variant generation failed, using heuristic fallback", memeError);
+      }
+
+      const selectionsByPostIndex = new Map<number, { variants: MemeVariantCandidate[] }>();
+
+      for (const selection of parsedMemeSelection?.selections ?? []) {
+        selectionsByPostIndex.set(selection.postIndex - 1, {
+          variants: selection.variants,
+        });
+      }
+
+      postsWithMemes = normalizedPosts.map((post, index) => {
+        const modelVariants = selectionsByPostIndex.get(index)?.variants;
+        const variants =
+          modelVariants?.length === memeVariantTarget
+            ? modelVariants.map((variant, variantIndex) =>
+                buildMemeCompanionFromVariant({
+                  rank: variantIndex + 1,
+                  variant,
+                }),
+              )
+            : buildHeuristicMemeVariants({
+                hook: post.hook,
+                body: post.body,
+                index,
+                variantCount: memeVariantTarget,
+                tone: memeTonePreference,
+              });
+
+        return {
+          ...post,
+          meme: variants[0],
+          memeVariants: variants,
+        };
+      });
+    }
 
     const response: GeneratePostsResponse = {
       hooks: parsed.hooks.map((hook) => normalizeNoEmDash(hook)),
-      posts: parsed.posts.map((post, index) => {
-        const hook = normalizeNoEmDash(post.hook);
-        const body = normalizeNoEmDash(post.body);
-        const cta = normalizeNoEmDash(ensureFinalCta(post.cta, input.ctaLink));
-        const meme = includeMemeCompanion ? buildMemeCompanion({ hook, body, index }) : undefined;
-
-        return {
-          length: lengthPlan[index] ?? post.length,
-          hook,
-          body,
-          cta,
-          meme,
-        };
-      }),
+      posts: postsWithMemes,
       generation: {
         modelRequested: requestedModel,
         modelUsed,
