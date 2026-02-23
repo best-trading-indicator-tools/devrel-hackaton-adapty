@@ -576,6 +576,9 @@ async function copyTextToClipboard(value: string): Promise<boolean> {
 export default function Home() {
   const baseControlClassName =
     "block w-full rounded-xl border border-black/10 bg-white px-3 py-2 text-sm outline-none transition focus:border-slate-900";
+  const selectableCardSelectedClass =
+    "border-sky-500 bg-sky-50 shadow-[0_0_0_1px_rgba(56,189,248,0.22)]";
+  const selectableCardUnselectedClass = "border-black/10 bg-white hover:border-slate-400 hover:bg-slate-50";
   const compactInputStyle = { width: "min(100%, 34rem)" } as const;
   const mediumInputStyle = { width: "min(100%, 26rem)" } as const;
   const smallNumberInputStyle = { width: "min(100%, 20ch)" } as const;
@@ -1650,9 +1653,7 @@ export default function Home() {
                     key={voice}
                     type="button"
                     className={`rounded-xl border p-3 text-left transition ${
-                      isSelected
-                        ? "border-slate-900 bg-white shadow-[0_0_0_1px_rgba(15,23,42,0.08)]"
-                        : "border-black/10 bg-white hover:border-slate-400"
+                      isSelected ? selectableCardSelectedClass : selectableCardUnselectedClass
                     }`}
                     onClick={() => applyBrandVoiceSelection(voice)}
                   >
@@ -1664,9 +1665,7 @@ export default function Home() {
               <button
                 type="button"
                 className={`rounded-xl border p-3 text-left transition ${
-                  showCustomBrandVoiceInput
-                    ? "border-slate-900 bg-white shadow-[0_0_0_1px_rgba(15,23,42,0.08)]"
-                    : "border-black/10 bg-white hover:border-slate-400"
+                  showCustomBrandVoiceInput ? selectableCardSelectedClass : selectableCardUnselectedClass
                 }`}
                 onClick={() => applyBrandVoiceSelection(CUSTOM_BRAND_VOICE)}
               >
@@ -1707,9 +1706,7 @@ export default function Home() {
                     key={goal}
                     type="button"
                     className={`rounded-xl border p-3 text-left transition ${
-                      isSelected
-                        ? "border-slate-900 bg-white shadow-[0_0_0_1px_rgba(15,23,42,0.08)]"
-                        : "border-black/10 bg-white hover:border-slate-400"
+                      isSelected ? selectableCardSelectedClass : selectableCardUnselectedClass
                     }`}
                     onClick={() => applyGoalSelection(goal)}
                   >
@@ -1737,9 +1734,7 @@ export default function Home() {
                     key={type}
                     type="button"
                     className={`rounded-xl border p-3 text-left transition ${
-                      isSelected
-                        ? "border-slate-900 bg-white shadow-[0_0_0_1px_rgba(15,23,42,0.08)]"
-                        : "border-black/10 bg-white hover:border-slate-400"
+                      isSelected ? selectableCardSelectedClass : selectableCardUnselectedClass
                     }`}
                     onClick={() => applyPostTypeSelection(type)}
                   >
@@ -1804,9 +1799,7 @@ export default function Home() {
                   <button
                     type="button"
                     className={`min-h-40 rounded-xl border p-2 text-left transition ${
-                      form.memeTemplateIds.length === 0
-                        ? "border-slate-900 bg-slate-50"
-                        : "border-black/10 bg-white hover:bg-slate-50"
+                      form.memeTemplateIds.length === 0 ? selectableCardSelectedClass : selectableCardUnselectedClass
                     }`}
                     onClick={() => setForm((prev) => ({ ...prev, memeTemplateIds: [] }))}
                   >
@@ -1819,9 +1812,7 @@ export default function Home() {
                       key={template.id}
                       type="button"
                       className={`rounded-xl border p-2 text-left transition ${
-                        form.memeTemplateIds.includes(template.id)
-                          ? "border-slate-900 bg-slate-50"
-                          : "border-black/10 bg-white hover:bg-slate-50"
+                        form.memeTemplateIds.includes(template.id) ? selectableCardSelectedClass : selectableCardUnselectedClass
                       }`}
                       onClick={() =>
                         setForm((prev) => {
