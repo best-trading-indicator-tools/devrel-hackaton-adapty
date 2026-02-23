@@ -21,9 +21,6 @@ Everything below is already implemented in this repo on `main`.
   - Presets: `adapty`, `clickbait`, `founder personal`, `bold / contrarian`, `technical breakdown`, `playful meme tone`
   - Custom option with free text field
   - In-UI "Brand Voice Guide" that explains each preset
-- Hook Style
-  - Presets: `balanced`, `clickbait`, `data-driven`, `question-led`, `contrarian`, `story-led`
-  - Custom option with free text field
 - Goal
   - `virality`, `engagement`, `traffic`, `awareness`, `balanced`
 - Post Type
@@ -148,7 +145,7 @@ These are implemented in `src/lib/library-retrieval.ts`.
   - `prompts/linkedin/SAUCE.md` (applied for Sauce post type)
   - `prompts/linkedin/FACT_CHECK.md`
 - If Brand Voice is `adapty`, prompt treats `linkedin-adapty-library` as canonical style source
-- If Hook Style is `clickbait`, prompt applies curiosity-gap style while requiring truthful claims
+- Hook strategy is auto-derived from Brand Voice + Post Type + Goal
 - If Goal is `virality`, prompt emphasizes uncomfortable obvious truths with practical utility
 - Optional web fact-check context is injected when configured (Brave Search)
 - If CTA link is provided, API ensures it is included in final CTA line
@@ -252,7 +249,6 @@ We're heading to Apps Forum Lisbon on March 4, and bringing the full crew.
 ### Request body (high level)
 
 - `style`
-- `hookStyle`
 - `goal`
 - `inputType`
 - `time` (optional/conditional)

@@ -509,14 +509,65 @@ function resolveBrandVoiceDirective(style: string): string {
   return `Follow custom brand voice exactly as requested: "${style.trim()}". Keep the output coherent, practical, and human sounding.`;
 }
 
-function resolveHookStyleDirective(hookStyle: string): string {
-  const normalizedHookStyle = hookStyle.trim().toLowerCase();
+function resolveAutoHookDirective(params: { style: string; inputType: string; goal: ContentGoal }): string {
+  const styleKey = params.style.trim().toLowerCase();
+  const typeKey = params.inputType.trim().toLowerCase();
 
-  if (normalizedHookStyle === "clickbait") {
-    return "Use clickbait-style hooks with curiosity gaps and tension, while keeping all claims truthful and specific.";
-  }
+  const styleDirective = (() => {
+    if (styleKey === "clickbait") {
+      return "Use high-curiosity hook framing with clear stakes, while keeping claims truthful and specific.";
+    }
+    if (styleKey === "founder personal") {
+      return "Use founder-style hooks that sound lived, practical, and grounded in real operating pain.";
+    }
+    if (styleKey === "bold / contrarian") {
+      return "Use contrarian hooks that challenge common assumptions, then make them defensible.";
+    }
+    if (styleKey === "technical breakdown") {
+      return "Use mechanism-first hooks with concrete signal words like conversion, retention, paywall, trial, and revenue.";
+    }
+    if (styleKey === "playful meme tone") {
+      return "Use witty, internet-native hooks with clear product-growth relevance.";
+    }
+    return "Use hooks aligned with the selected brand voice and grounded in concrete operator pain points.";
+  })();
 
-  return `Use "${hookStyle}" as the hook style for hook suggestions and for each post opening line.`;
+  const postTypeDirective = (() => {
+    if (/event|webinar/.test(typeKey)) {
+      return "For event or webinar posts, hooks should connect a real market pain to why attending is worth the time now.";
+    }
+    if (/sauce/.test(typeKey)) {
+      return "For Sauce posts, hooks should open with a hard question, friction point, or surprising operating truth.";
+    }
+    if (/meme|shitpost/.test(typeKey)) {
+      return "For meme posts, hooks should be short, punchy, and caption-friendly.";
+    }
+    if (/case study|social proof/.test(typeKey)) {
+      return "For case study posts, hooks should tease a specific before-after outcome.";
+    }
+    if (/poll|quiz|engagement farming/.test(typeKey)) {
+      return "For poll or quiz posts, hooks should ask a concrete, vote-worthy question.";
+    }
+    return "Hooks should match the requested post type and be immediately clear to the target audience.";
+  })();
+
+  const goalDirective = (() => {
+    if (params.goal === "virality") {
+      return "Prioritize scroll-stopping hooks that say the uncomfortable obvious truth in a useful way.";
+    }
+    if (params.goal === "engagement") {
+      return "Prioritize discussion-driving hooks that invite thoughtful replies.";
+    }
+    if (params.goal === "traffic") {
+      return "Prioritize value-tease hooks that naturally motivate qualified clicks.";
+    }
+    if (params.goal === "awareness") {
+      return "Prioritize clear, memorable hooks for broad audience recall.";
+    }
+    return "Balance reach, clarity, and action intent in hook phrasing.";
+  })();
+
+  return `${styleDirective} ${postTypeDirective} ${goalDirective}`;
 }
 
 function resolvePostTypeDirective(inputType: string): string {
@@ -737,7 +788,6 @@ export async function POST(request: Request) {
     const retrievalQuery = [
       input.goal,
       input.style,
-      input.hookStyle,
       input.inputType,
       preparedChartInput ? `chart:${preparedChartInput.type}` : "",
       preparedChartInput?.title ?? "",
@@ -773,7 +823,11 @@ export async function POST(request: Request) {
       : "No performance metrics were provided in the content library.";
 
     const brandVoiceDirective = resolveBrandVoiceDirective(input.style);
-    const hookStyleDirective = resolveHookStyleDirective(input.hookStyle);
+    const autoHookDirective = resolveAutoHookDirective({
+      style: input.style,
+      inputType: input.inputType,
+      goal: input.goal,
+    });
     const goalExecutionDirective = GOAL_PLAYBOOKS[input.goal];
     const postTypeDirective = resolvePostTypeDirective(input.inputType);
     const chartExecutionDirective = preparedChartInput
@@ -865,8 +919,7 @@ ${toBulletedSection(HARD_QUALITY_GATE)}
 Generation request:
 - Brand voice: ${input.style}
 - Brand voice directive: ${brandVoiceDirective}
-- Hook style: ${input.hookStyle}
-- Hook style directive: ${hookStyleDirective}
+- Hook directive: ${autoHookDirective}
 - Goal: ${GOAL_LABELS[input.goal]} (${GOAL_DESCRIPTIONS[input.goal]})
 - Goal execution directive: ${goalExecutionDirective}
 - Post type execution directive: ${postTypeDirective}

@@ -27,7 +27,6 @@ type ChartLegendPosition = "top" | "right" | "bottom" | "left";
 
 type FormState = {
   style: string;
-  hookStyle: string;
   goal: ContentGoal;
   inputType: string;
   chartEnabled: boolean;
@@ -54,7 +53,6 @@ type FormState = {
 
 const defaultForm: FormState = {
   style: "adapty",
-  hookStyle: "balanced",
   goal: "virality",
   inputType: POST_TYPE_OPTIONS[1],
   chartEnabled: false,
@@ -85,15 +83,6 @@ const IMAGE_EXPORT_QUALITY = 0.82;
 const EVENT_TOPIC_PATTERN = /\b(event|webinar)\b/i;
 const MEME_TOPIC_PATTERN = /\b(meme|shitpost)\b/i;
 const CUSTOM_BRAND_VOICE = "__custom__";
-const CUSTOM_HOOK_STYLE = "__custom_hook_style__";
-const HOOK_STYLE_PRESETS = [
-  "balanced",
-  "clickbait",
-  "data-driven",
-  "question-led",
-  "contrarian",
-  "story-led",
-] as const;
 const CHART_LEGEND_POSITIONS: ChartLegendPosition[] = ["top", "right", "bottom", "left"];
 const MAX_TEMPLATE_RESULTS = 80;
 
@@ -116,7 +105,7 @@ type EditableBodyLine = {
   label: string;
 };
 
-type RewriteContext = Pick<FormState, "style" | "hookStyle" | "goal" | "inputType" | "ctaLink" | "details">;
+type RewriteContext = Pick<FormState, "style" | "goal" | "inputType" | "ctaLink" | "details">;
 
 function isRadialChartType(chartType: ChartTypeOption): boolean {
   return chartType === "doughnut" || chartType === "pie" || chartType === "polarArea";
@@ -388,10 +377,6 @@ function needsChartDetails(inputType: string): boolean {
   return !MEME_TOPIC_PATTERN.test(inputType);
 }
 
-function isHookStylePreset(value: string): value is (typeof HOOK_STYLE_PRESETS)[number] {
-  return (HOOK_STYLE_PRESETS as readonly string[]).includes(value);
-}
-
 function buildEditableBodyLines(body: string): EditableBodyLine[] {
   const rawLines = body.split("\n");
   const nonEmpty = rawLines
@@ -495,7 +480,6 @@ async function buildImageDataUrl(file: File): Promise<string> {
 export default function Home() {
   const defaultRewriteContext: RewriteContext = {
     style: defaultForm.style,
-    hookStyle: defaultForm.hookStyle,
     goal: defaultForm.goal,
     inputType: defaultForm.inputType,
     ctaLink: defaultForm.ctaLink,
@@ -504,9 +488,6 @@ export default function Home() {
   const [form, setForm] = useState<FormState>(defaultForm);
   const [brandVoiceSelection, setBrandVoiceSelection] = useState<string>(() =>
     isBrandVoicePreset(defaultForm.style) ? defaultForm.style : CUSTOM_BRAND_VOICE,
-  );
-  const [hookStyleSelection, setHookStyleSelection] = useState<string>(() =>
-    isHookStylePreset(defaultForm.hookStyle) ? defaultForm.hookStyle : CUSTOM_HOOK_STYLE,
   );
   const [result, setResult] = useState<GeneratePostsResponse | null>(null);
   const [rewriteContext, setRewriteContext] = useState<RewriteContext>(defaultRewriteContext);
@@ -528,9 +509,6 @@ export default function Home() {
   const showMemeFields = useMemo(() => needsMemeDetails(form.inputType), [form.inputType]);
   const showChartFields = useMemo(() => needsChartDetails(form.inputType), [form.inputType]);
   const showCustomBrandVoiceInput = brandVoiceSelection === CUSTOM_BRAND_VOICE;
-  const showCustomHookStyleInput = hookStyleSelection === CUSTOM_HOOK_STYLE;
-  const customInputsGridClass =
-    showCustomBrandVoiceInput && showCustomHookStyleInput ? "grid gap-3 sm:grid-cols-2" : "grid gap-3";
   const selectedBrandVoiceDescription = useMemo(() => {
     if (brandVoiceSelection === CUSTOM_BRAND_VOICE) {
       return "Custom lets you define your own brand persona, writing style, and tone rules.";
@@ -731,7 +709,6 @@ export default function Home() {
       };
       const nextRewriteContext: RewriteContext = {
         style: requestPayload.style,
-        hookStyle: requestPayload.hookStyle,
         goal: requestPayload.goal,
         inputType: requestPayload.inputType,
         ctaLink: requestPayload.ctaLink,
@@ -988,7 +965,7 @@ export default function Home() {
             <p className="text-sm text-slate-600">Generate multiple post variants with hook suggestions, based on your own winning library.</p>
           </header>
 
-          <div className="grid gap-3 sm:grid-cols-2 lg:grid-cols-3">
+          <div className="grid gap-3 sm:grid-cols-2">
             <label className="space-y-1">
               <span className="text-sm font-medium">Brand Voice</span>
               <select
@@ -1023,38 +1000,6 @@ export default function Home() {
             </label>
 
             <label className="space-y-1">
-              <span className="text-sm font-medium">Hook Style</span>
-              <select
-                className="w-full rounded-xl border border-black/10 bg-white px-3 py-2 text-sm outline-none transition focus:border-slate-900"
-                value={hookStyleSelection}
-                onChange={(event) => {
-                  const nextValue = event.target.value;
-                  setHookStyleSelection(nextValue);
-
-                  if (nextValue === CUSTOM_HOOK_STYLE) {
-                    setForm((prev) => ({
-                      ...prev,
-                      hookStyle: isHookStylePreset(prev.hookStyle) ? "" : prev.hookStyle,
-                    }));
-                    return;
-                  }
-
-                  setForm((prev) => ({
-                    ...prev,
-                    hookStyle: nextValue,
-                  }));
-                }}
-              >
-                {HOOK_STYLE_PRESETS.map((hookStyle) => (
-                  <option key={hookStyle} value={hookStyle}>
-                    {formatLengthLabel(hookStyle)}
-                  </option>
-                ))}
-                <option value={CUSTOM_HOOK_STYLE}>Custom</option>
-              </select>
-            </label>
-
-            <label className="space-y-1">
               <span className="text-sm font-medium">Goal</span>
               <select
                 className="w-full rounded-xl border border-black/10 bg-white px-3 py-2 text-sm outline-none transition focus:border-slate-900"
@@ -1070,35 +1015,19 @@ export default function Home() {
             </label>
           </div>
 
-          {showCustomBrandVoiceInput || showCustomHookStyleInput ? (
-            <div className={customInputsGridClass}>
-              {showCustomBrandVoiceInput ? (
-                <label className="space-y-1">
-                  <span className="text-sm font-medium">Custom Brand Voice</span>
-                  <textarea
-                    rows={3}
-                    placeholder="Describe your custom brand voice..."
-                    className="w-full rounded-xl border border-black/10 bg-white px-3 py-2 text-sm outline-none transition focus:border-slate-900"
-                    value={form.style}
-                    required
-                    onChange={(event) => setForm((prev) => ({ ...prev, style: event.target.value }))}
-                  />
-                </label>
-              ) : null}
-
-              {showCustomHookStyleInput ? (
-                <label className="space-y-1">
-                  <span className="text-sm font-medium">Custom Hook Style</span>
-                  <textarea
-                    rows={3}
-                    placeholder="Describe your hook style..."
-                    className="w-full rounded-xl border border-black/10 bg-white px-3 py-2 text-sm outline-none transition focus:border-slate-900"
-                    value={form.hookStyle}
-                    required
-                    onChange={(event) => setForm((prev) => ({ ...prev, hookStyle: event.target.value }))}
-                  />
-                </label>
-              ) : null}
+          {showCustomBrandVoiceInput ? (
+            <div className="grid gap-3">
+              <label className="space-y-1">
+                <span className="text-sm font-medium">Custom Brand Voice</span>
+                <textarea
+                  rows={3}
+                  placeholder="Describe your custom brand voice..."
+                  className="w-full rounded-xl border border-black/10 bg-white px-3 py-2 text-sm outline-none transition focus:border-slate-900"
+                  value={form.style}
+                  required
+                  onChange={(event) => setForm((prev) => ({ ...prev, style: event.target.value }))}
+                />
+              </label>
             </div>
           ) : null}
 

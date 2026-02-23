@@ -11,7 +11,6 @@ import {
 
 export const generatePostsRequestSchema = z.object({
   style: z.string().trim().min(1).max(260).default("adapty"),
-  hookStyle: z.string().trim().min(1).max(260).default("balanced"),
   goal: z.enum(GOAL_OPTIONS).default("virality"),
   inputType: z.string().trim().min(1).max(120),
   chartEnabled: z.coerce.boolean().default(false),

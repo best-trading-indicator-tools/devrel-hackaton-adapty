@@ -13,7 +13,6 @@ export const runtime = "nodejs";
 const rewriteRequestSchema = z.object({
   mode: z.enum(["post", "line"]),
   style: z.string().trim().min(1).max(260),
-  hookStyle: z.string().trim().min(1).max(260),
   goal: z.enum(GOAL_OPTIONS),
   inputType: z.string().trim().min(1).max(120),
   ctaLink: z.string().trim().max(500).default(""),
@@ -206,7 +205,7 @@ You rewrite LinkedIn content for Adapty.
 Adapty helps app makers monetize mobile apps with subscription growth, paywall optimization, experimentation, and analytics.
 
 Rules:
-- Keep the requested brand voice, hook style, goal, and post type.
+- Keep the requested brand voice, goal, and post type.
 - Keep copy practical, specific, and human sounding.
 - Preserve core meaning unless explicit rewrite prompt asks to change it.
 - Never use em dash or en dash punctuation.
@@ -228,7 +227,6 @@ Rewrite the full LinkedIn post.
 Context:
 - Brand voice: ${input.style}
 - Brand voice directive: ${brandVoiceDirective}
-- Hook style: ${input.hookStyle}
 - Goal: ${GOAL_LABELS[input.goal]} (${GOAL_DESCRIPTIONS[input.goal]})
 - Post type: ${input.inputType}
 - Length bucket: ${input.post.length}
@@ -295,7 +293,6 @@ Regenerate one body line of a LinkedIn post.
 Context:
 - Brand voice: ${input.style}
 - Brand voice directive: ${brandVoiceDirective}
-- Hook style: ${input.hookStyle}
 - Goal: ${GOAL_LABELS[input.goal]} (${GOAL_DESCRIPTIONS[input.goal]})
 - Post type: ${input.inputType}
 - Length bucket: ${input.post.length}
