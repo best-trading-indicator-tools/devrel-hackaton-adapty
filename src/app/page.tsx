@@ -372,6 +372,11 @@ export default function Home() {
                 Retrieval method: {result.retrieval.method} ({result.retrieval.examplesUsed} examples)
               </p>
               <p>
+                Library performance analyzed: {result.retrieval.performancePostsAnalyzed} post
+                {result.retrieval.performancePostsAnalyzed === 1 ? "" : "s"}
+              </p>
+              <p>Performance patterns used: {result.retrieval.performanceInsightsUsed}</p>
+              <p>
                 Model: {result.generation.modelUsed}
                 {result.generation.fallbackUsed ? ` (fallback from ${result.generation.modelRequested})` : ""}
               </p>

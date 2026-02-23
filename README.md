@@ -25,6 +25,25 @@ Edit `content/linkedin-library.txt`.
 - Put one example post per block
 - Separate blocks with a line containing `---`
 - Add as many examples as you want
+- Optional: add performance metadata at the top of a block:
+  - `Impressions: 12000`
+  - `Likes: 340`
+  - `Comments: 42`
+- Metadata lines must appear before the post text in that block.
+
+Example:
+
+```txt
+Impressions: 24.5k
+Likes: 690
+Comments: 81
+You asked, we built it.
+[Feature] is live.
+
+What changed:
+- ...
+---
+```
 
 ## Local setup
 

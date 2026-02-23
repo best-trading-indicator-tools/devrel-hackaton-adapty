@@ -58,5 +58,7 @@ export type GeneratePostsResponse = {
   retrieval: {
     method: "lexical" | "lancedb";
     examplesUsed: number;
+    performancePostsAnalyzed: number;
+    performanceInsightsUsed: number;
   };
 };

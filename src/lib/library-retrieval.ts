@@ -13,9 +13,27 @@ type RetrievalMethod = "lexical" | "lancedb";
 
 type LanceDbConnection = import("@lancedb/lancedb").Connection;
 
+type RawPerformanceMetrics = {
+  impressions?: number;
+  likes?: number;
+  comments?: number;
+};
+
+export type LibraryPerformance = RawPerformanceMetrics & {
+  interactions: number;
+  engagementRate?: number;
+  weightedScore: number;
+};
+
 export type LibraryEntry = {
   id: string;
   text: string;
+  performance?: LibraryPerformance;
+};
+
+export type LibraryPerformanceInsights = {
+  analyzedPosts: number;
+  summaryLines: string[];
 };
 
 type LibraryData = {
@@ -37,6 +55,243 @@ function tokenize(value: string): string[] {
     .filter((part) => part.length > 2);
 }
 
+function parseMetricValue(rawValue: string): number | undefined {
+  const cleaned = rawValue.trim().toLowerCase().replace(/,/g, "").replace(/\s+/g, "");
+  const match = cleaned.match(/^(\d+(?:\.\d+)?)([km])?$/i);
+
+  if (!match) {
+    return undefined;
+  }
+
+  const base = Number(match[1]);
+  if (!Number.isFinite(base)) {
+    return undefined;
+  }
+
+  const suffix = match[2]?.toLowerCase();
+  if (suffix === "k") {
+    return Math.round(base * 1_000);
+  }
+  if (suffix === "m") {
+    return Math.round(base * 1_000_000);
+  }
+
+  return Math.round(base);
+}
+
+function normalizeMetricKey(rawKey: string): keyof RawPerformanceMetrics | null {
+  const normalized = rawKey.toLowerCase().replace(/[\s_-]/g, "");
+
+  if (normalized === "impressions" || normalized === "impression") {
+    return "impressions";
+  }
+  if (normalized === "likes" || normalized === "like") {
+    return "likes";
+  }
+  if (normalized === "comments" || normalized === "comment") {
+    return "comments";
+  }
+
+  return null;
+}
+
+function computePerformance(metrics: RawPerformanceMetrics): LibraryPerformance | undefined {
+  const hasAnyMetrics =
+    typeof metrics.impressions === "number" ||
+    typeof metrics.likes === "number" ||
+    typeof metrics.comments === "number";
+
+  if (!hasAnyMetrics) {
+    return undefined;
+  }
+
+  const likes = metrics.likes ?? 0;
+  const comments = metrics.comments ?? 0;
+  const impressions = metrics.impressions ?? 0;
+  const interactions = likes + comments * 3;
+  const engagementRate = impressions > 0 ? interactions / impressions : undefined;
+
+  const weightedScore =
+    interactions +
+    (impressions > 0 ? Math.log10(impressions + 1) * 8 : 0) +
+    (typeof engagementRate === "number" ? engagementRate * 180 : 0);
+
+  return {
+    ...metrics,
+    interactions,
+    engagementRate,
+    weightedScore,
+  };
+}
+
+function extractHook(text: string): string {
+  const hook = text
+    .split("\n")
+    .map((line) => line.trim())
+    .find(Boolean);
+
+  return hook ? hook.slice(0, 110) : "(no hook)";
+}
+
+function getPerformanceScore(entry: LibraryEntry): number {
+  return entry.performance?.weightedScore ?? 0;
+}
+
+function formatCompactNumber(value: number): string {
+  return new Intl.NumberFormat("en-US", { notation: "compact", maximumFractionDigits: 1 }).format(value);
+}
+
+function parseEntryBlock(block: string, index: number): LibraryEntry | null {
+  const lines = block.split(/\r?\n/);
+  const bodyLines: string[] = [];
+  const metrics: RawPerformanceMetrics = {};
+  let inBody = false;
+
+  for (const rawLine of lines) {
+    const trimmed = rawLine.trim();
+
+    if (!inBody) {
+      if (!trimmed) {
+        continue;
+      }
+
+      if (trimmed.startsWith("#")) {
+        continue;
+      }
+
+      const metricMatch = trimmed.match(/^([^:]+):\s*(.+)$/);
+      if (metricMatch) {
+        const key = normalizeMetricKey(metricMatch[1]);
+        if (key) {
+          const parsedValue = parseMetricValue(metricMatch[2]);
+          if (typeof parsedValue === "number") {
+            metrics[key] = parsedValue;
+            continue;
+          }
+        }
+      }
+
+      inBody = true;
+      bodyLines.push(rawLine);
+      continue;
+    }
+
+    bodyLines.push(rawLine);
+  }
+
+  const text = bodyLines.join("\n").trim();
+
+  if (!text) {
+    return null;
+  }
+
+  return {
+    id: `entry-${index + 1}`,
+    text,
+    performance: computePerformance(metrics),
+  };
+}
+
+function buildPerformanceInsights(entries: LibraryEntry[]): LibraryPerformanceInsights | undefined {
+  const withMetrics = entries.filter((entry) => entry.performance);
+
+  if (!withMetrics.length) {
+    return undefined;
+  }
+
+  const byScore = [...withMetrics].sort((a, b) => getPerformanceScore(b) - getPerformanceScore(a));
+  const winners = byScore.slice(0, Math.min(8, byScore.length));
+
+  const byLikes = [...withMetrics]
+    .filter((entry) => typeof entry.performance?.likes === "number")
+    .sort((a, b) => (b.performance?.likes ?? 0) - (a.performance?.likes ?? 0));
+
+  const byComments = [...withMetrics]
+    .filter((entry) => typeof entry.performance?.comments === "number")
+    .sort((a, b) => (b.performance?.comments ?? 0) - (a.performance?.comments ?? 0));
+
+  const byImpressions = [...withMetrics]
+    .filter((entry) => typeof entry.performance?.impressions === "number")
+    .sort((a, b) => (b.performance?.impressions ?? 0) - (a.performance?.impressions ?? 0));
+
+  const byEngagementRate = [...withMetrics]
+    .filter((entry) => typeof entry.performance?.engagementRate === "number")
+    .sort((a, b) => (b.performance?.engagementRate ?? 0) - (a.performance?.engagementRate ?? 0));
+
+  const summaryLines: string[] = [];
+
+  if (byLikes[0]?.performance?.likes) {
+    summaryLines.push(
+      `Top likes: ${formatCompactNumber(byLikes[0].performance.likes)} on "${extractHook(byLikes[0].text)}".`,
+    );
+  }
+
+  if (byComments[0]?.performance?.comments) {
+    summaryLines.push(
+      `Top comments: ${formatCompactNumber(byComments[0].performance.comments)} on "${extractHook(byComments[0].text)}".`,
+    );
+  }
+
+  if (byImpressions[0]?.performance?.impressions) {
+    summaryLines.push(
+      `Top impressions: ${formatCompactNumber(byImpressions[0].performance.impressions)} on "${extractHook(byImpressions[0].text)}".`,
+    );
+  }
+
+  if (typeof byEngagementRate[0]?.performance?.engagementRate === "number") {
+    summaryLines.push(
+      `Best engagement rate: ${(byEngagementRate[0].performance.engagementRate * 100).toFixed(2)}% on "${extractHook(byEngagementRate[0].text)}".`,
+    );
+  }
+
+  const patterns = [
+    {
+      label: "Short, punchy first-line hooks",
+      count: winners.filter((entry) => extractHook(entry.text).length <= 90).length,
+    },
+    {
+      label: "Hooks that use specific numbers",
+      count: winners.filter((entry) => /\d/.test(extractHook(entry.text))).length,
+    },
+    {
+      label: "Hooks phrased as a question or challenge",
+      count: winners.filter((entry) => /[?]/.test(extractHook(entry.text))).length,
+    },
+    {
+      label: "Body copy structured with bullets/lists",
+      count: winners.filter((entry) => /^\s*([-*]|\d+[.)])\s+/m.test(entry.text)).length,
+    },
+    {
+      label: "Direct second-person language (you/your)",
+      count: winners.filter((entry) => /\b(you|your)\b/i.test(entry.text)).length,
+    },
+    {
+      label: "Clear CTA line with link or explicit action",
+      count: winners.filter((entry) => /(https?:\/\/|\[CTA LINK\]|\b(comment|save|join|read)\b)/i.test(entry.text)).length,
+    },
+  ]
+    .map((pattern) => ({
+      ...pattern,
+      ratio: winners.length ? pattern.count / winners.length : 0,
+    }))
+    .filter((pattern) => pattern.ratio >= 0.4)
+    .sort((a, b) => b.ratio - a.ratio)
+    .slice(0, 4);
+
+  for (const pattern of patterns) {
+    summaryLines.push(`${Math.round(pattern.ratio * 100)}% of top posts use: ${pattern.label}.`);
+  }
+
+  if (!summaryLines.length) {
+    return undefined;
+  }
+
+  return {
+    analyzedPosts: withMetrics.length,
+    summaryLines,
+  };
+}
+
 async function connectLanceDb(): Promise<LanceDbConnection> {
   const lancedb = await import("@lancedb/lancedb");
   return lancedb.connect(LANCEDB_PATH);
@@ -56,12 +311,20 @@ async function readLibrary(): Promise<LibraryData> {
       .map((block) => block.trim())
       .filter(Boolean);
 
-    const entries = blocks.map((text, index) => ({
-      id: `entry-${index + 1}`,
-      text,
-    }));
+    const entries = blocks
+      .map((block, index) => parseEntryBlock(block, index))
+      .filter((entry): entry is LibraryEntry => Boolean(entry));
 
-    const libraryHash = toHash(entries.map((entry) => entry.text).join("\n---\n"));
+    const libraryHash = toHash(
+      entries
+        .map((entry) =>
+          JSON.stringify({
+            text: entry.text,
+            performance: entry.performance ?? null,
+          }),
+        )
+        .join("\n---\n"),
+    );
     const data = { entries, libraryHash };
 
     libraryCache = { mtimeMs: stat.mtimeMs, data };
@@ -81,7 +344,9 @@ function lexicalSearch(entries: LibraryEntry[], query: string, limit: number): L
 
   const queryTokens = tokenize(query);
   if (!queryTokens.length) {
-    return entries.slice(0, limit);
+    return [...entries]
+      .sort((a, b) => getPerformanceScore(b) - getPerformanceScore(a))
+      .slice(0, limit);
   }
 
   const querySet = new Set(queryTokens);
@@ -93,10 +358,11 @@ function lexicalSearch(entries: LibraryEntry[], query: string, limit: number): L
       const overlap = queryTokens.reduce((score, token) => score + Number(tokenSet.has(token)), 0);
       const phraseBonus = querySet.has("webinar") && entry.text.toLowerCase().includes("webinar") ? 2 : 0;
       const normalizedScore = overlap / Math.max(6, Math.sqrt(entryTokens.length));
+      const performanceBonus = Math.min(3, Math.log10(getPerformanceScore(entry) + 1));
 
       return {
         entry,
-        score: normalizedScore + phraseBonus,
+        score: normalizedScore + phraseBonus + performanceBonus,
       };
     })
     .sort((a, b) => b.score - a.score)
@@ -216,17 +482,27 @@ async function lanceSearch(
 
     const rows = await table.vectorSearch(queryVector).limit(limit).toArray();
     const byId = new Map(data.entries.map((entry) => [entry.id, entry]));
-    const resolved: LibraryEntry[] = [];
+    const resolved: Array<{ entry: LibraryEntry; rank: number }> = [];
 
-    for (const row of rows as Array<Record<string, unknown>>) {
+    for (const [index, row] of (rows as Array<Record<string, unknown>>).entries()) {
       const entryId = typeof row.entryId === "string" ? row.entryId : "";
       const found = byId.get(entryId);
       if (found) {
-        resolved.push(found);
+        resolved.push({
+          entry: found,
+          rank: index,
+        });
       }
     }
 
-    return resolved;
+    return resolved
+      .map((item) => ({
+        entry: item.entry,
+        score:
+          (1 - item.rank / Math.max(2, resolved.length + 1)) + Math.min(0.35, Math.log10(getPerformanceScore(item.entry) + 1) * 0.08),
+      }))
+      .sort((a, b) => b.score - a.score)
+      .map((item) => item.entry);
   } finally {
     db.close();
   }
@@ -240,13 +516,15 @@ export async function retrieveLibraryContext({
   client?: OpenAI;
   query: string;
   limit: number;
-}): Promise<{ method: RetrievalMethod; entries: LibraryEntry[] }> {
+}): Promise<{ method: RetrievalMethod; entries: LibraryEntry[]; performanceInsights?: LibraryPerformanceInsights }> {
   const data = await readLibrary();
+  const performanceInsights = buildPerformanceInsights(data.entries);
 
   if (!data.entries.length) {
     return {
       method: "lexical",
       entries: [],
+      performanceInsights,
     };
   }
 
@@ -259,6 +537,7 @@ export async function retrieveLibraryContext({
         return {
           method: "lancedb",
           entries,
+          performanceInsights,
         };
       }
     } catch (error) {
@@ -269,5 +548,6 @@ export async function retrieveLibraryContext({
   return {
     method: "lexical",
     entries: lexicalSearch(data.entries, query, limit),
+    performanceInsights,
   };
 }

@@ -5,7 +5,7 @@ import { zodResponseFormat } from "openai/helpers/zod";
 import { buildLengthPlan, lengthGuide } from "@/lib/constants";
 import { createCodexStructuredCompletion } from "@/lib/codex-responses";
 import { getCodexOAuthCredentials, type CodexOAuthCredentials } from "@/lib/codex-oauth";
-import { retrieveLibraryContext } from "@/lib/library-retrieval";
+import { retrieveLibraryContext, type LibraryEntry } from "@/lib/library-retrieval";
 import {
   generatePostsRequestSchema,
   makeGeneratePostsResponseSchema,
@@ -80,6 +80,29 @@ function ensureFinalCta(cta: string, ctaLink: string): string {
   }
 
   return `${cleanCta.replace(/[.\s]+$/g, "")}. ${cleanLink}`;
+}
+
+function formatExampleMetrics(entry: LibraryEntry): string {
+  if (!entry.performance) {
+    return "";
+  }
+
+  const parts: string[] = [];
+
+  if (typeof entry.performance.impressions === "number") {
+    parts.push(`impressions: ${entry.performance.impressions.toLocaleString("en-US")}`);
+  }
+  if (typeof entry.performance.likes === "number") {
+    parts.push(`likes: ${entry.performance.likes.toLocaleString("en-US")}`);
+  }
+  if (typeof entry.performance.comments === "number") {
+    parts.push(`comments: ${entry.performance.comments.toLocaleString("en-US")}`);
+  }
+  if (typeof entry.performance.engagementRate === "number") {
+    parts.push(`engagement: ${(entry.performance.engagementRate * 100).toFixed(2)}%`);
+  }
+
+  return parts.length ? ` [${parts.join(" | ")}]` : "";
 }
 
 async function runOpenAiChatGeneration(params: {
@@ -211,8 +234,12 @@ export async function POST(request: Request) {
 
     const examplesForPrompt = retrieval.entries
       .slice(0, 10)
-      .map((entry, index) => `Example ${index + 1}:\n${entry.text.slice(0, 1600)}`)
+      .map((entry, index) => `Example ${index + 1}${formatExampleMetrics(entry)}:\n${entry.text.slice(0, 1600)}`)
       .join("\n\n---\n\n");
+
+    const performanceInsightsForPrompt = retrieval.performanceInsights?.summaryLines?.length
+      ? retrieval.performanceInsights.summaryLines.map((line, index) => `${index + 1}. ${line}`).join("\n")
+      : "No performance metrics were provided in the content library.";
 
     const responseSchema = makeGeneratePostsResponseSchema(input.numberOfPosts);
 
@@ -232,6 +259,7 @@ Rules:
 5. Use line breaks to improve readability.
 6. Avoid overusing emojis and hashtags.
 7. If a CTA link is provided, include it in the CTA line.
+8. Use the performance insights and recurring winning patterns when available.
 `;
 
     const userPrompt = `
@@ -250,6 +278,9 @@ ${lengthPlan.map((length, index) => `${index + 1}. ${length} -> ${lengthGuide(le
 
 Use the following high-performing library examples as stylistic inspiration:
 ${examplesForPrompt || "No library examples available."}
+
+Performance insights extracted from your historical posts:
+${performanceInsightsForPrompt}
 
 Also generate a list of hook suggestions inspired by this style and request.
 `;
@@ -319,6 +350,8 @@ Also generate a list of hook suggestions inspired by this style and request.
       retrieval: {
         method: retrieval.method,
         examplesUsed: retrieval.entries.length,
+        performancePostsAnalyzed: retrieval.performanceInsights?.analyzedPosts ?? 0,
+        performanceInsightsUsed: retrieval.performanceInsights?.summaryLines.length ?? 0,
       },
     };
 

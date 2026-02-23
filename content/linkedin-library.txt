@@ -1,5 +1,6 @@
 # Paste your best-performing LinkedIn posts here.
 # Keep each entry separated by a line with exactly ---
+# Optional per-entry metrics (at top of each block): Impressions:, Likes:, Comments:
 # The API will retrieve the most relevant entries as context before generation.
 
 You asked, we built it.
