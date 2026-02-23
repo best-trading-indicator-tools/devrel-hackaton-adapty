@@ -21,7 +21,9 @@ A Next.js app that generates high-performing LinkedIn posts and hook ideas from 
 
 ## Content library format
 
-Edit `content/linkedin-adapty-library.txt`.
+Edit both:
+- `content/linkedin-adapty-library.txt` for your own Adapty posts
+- `content/linkedin-others-library.txt` for competitor/market posts
 
 - Put one example post per block
 - Separate blocks with a line containing `---`
@@ -34,6 +36,7 @@ Edit `content/linkedin-adapty-library.txt`.
   - `Clicks: 180`
   - `CTR: 5.49%`
 - Metadata lines must appear before the post text in that block.
+- In `content/linkedin-others-library.txt`, `Likes`, `Comments`, and `Reposts` are enough. `Impressions`, `Clicks`, and `CTR` are optional.
 
 Example:
 
@@ -127,6 +130,7 @@ The script returns:
 - If `ENABLE_LANCEDB=true`, the app builds/uses a local `.lancedb` index for retrieval.
 - If LanceDB retrieval fails, the API falls back to lexical retrieval from the `.txt` library.
 - Retrieval scoring weights auto-switch by selected goal; exact weight profiles are documented at the top of `content/linkedin-adapty-library.txt`.
+- Retrieval combines both Adapty and Others libraries, and each example is tagged by source in prompt context.
 - Vercel/serverless builds run a prebuild prune step to keep only one Linux LanceDB native package (`gnu` or `musl`) so `api/generate` stays under function size limits.
 - `OPENAI_EMBEDDING_MODEL=text-embedding-3-small` is the default for speed and lower cost when indexing large libraries.
 - If you want higher semantic precision and accept higher cost/latency, switch to `text-embedding-3-large`.

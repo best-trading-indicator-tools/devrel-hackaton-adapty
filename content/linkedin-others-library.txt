@@ -1,0 +1,21 @@
+# LinkedIn Others Library
+# Use this file for competitor or market posts.
+# One post block per section, separated by a line containing ---
+#
+# Expected metrics here:
+# Likes: <number>
+# Comments: <number>
+# Reposts: <number>
+#
+# You can still add Impressions, Clicks, or CTR when available, but they are optional.
+# Metric lines must appear before the post text in each block.
+
+Likes: 0
+Comments: 0
+Reposts: 0
+Paste competitor post text here.
+---
+Likes: 0
+Comments: 0
+Reposts: 0
+Paste another competitor post text here.

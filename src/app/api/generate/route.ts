@@ -90,35 +90,31 @@ function normalizeNoEmDash(value: string): string {
 }
 
 function formatExampleMetrics(entry: LibraryEntry): string {
-  if (!entry.performance) {
-    return "";
-  }
+  const parts: string[] = [`source: ${entry.source}`];
 
-  const parts: string[] = [];
-
-  if (typeof entry.performance.impressions === "number") {
+  if (typeof entry.performance?.impressions === "number") {
     parts.push(`impressions: ${entry.performance.impressions.toLocaleString("en-US")}`);
   }
-  if (typeof entry.performance.likes === "number") {
+  if (typeof entry.performance?.likes === "number") {
     parts.push(`likes: ${entry.performance.likes.toLocaleString("en-US")}`);
   }
-  if (typeof entry.performance.comments === "number") {
+  if (typeof entry.performance?.comments === "number") {
     parts.push(`comments: ${entry.performance.comments.toLocaleString("en-US")}`);
   }
-  if (typeof entry.performance.reposts === "number") {
+  if (typeof entry.performance?.reposts === "number") {
     parts.push(`reposts: ${entry.performance.reposts.toLocaleString("en-US")}`);
   }
-  if (typeof entry.performance.clicks === "number") {
+  if (typeof entry.performance?.clicks === "number") {
     parts.push(`clicks: ${entry.performance.clicks.toLocaleString("en-US")}`);
   }
-  if (typeof entry.performance.ctr === "number") {
+  if (typeof entry.performance?.ctr === "number") {
     parts.push(`ctr: ${(entry.performance.ctr * 100).toFixed(2)}%`);
   }
-  if (typeof entry.performance.engagementRate === "number") {
+  if (typeof entry.performance?.engagementRate === "number") {
     parts.push(`engagement: ${(entry.performance.engagementRate * 100).toFixed(2)}%`);
   }
 
-  return parts.length ? ` [${parts.join(" | ")}]` : "";
+  return ` [${parts.join(" | ")}]`;
 }
 
 async function runOpenAiChatGeneration(params: {
@@ -301,6 +297,7 @@ Rules:
 10. If the selected brand voice is "Adapty", closely imitate the exact style and tone from the provided linkedin-adapty-library examples.
 11. Never use em dash or en dash punctuation. Use commas, periods, colons, semicolons, or normal hyphen instead.
 12. Apply the requested hook style to the hook suggestion list and to each post hook line.
+13. Examples are tagged with source metadata. If source is "others", use them for topic angles and winning structures, not for final brand tone.
 `;
 
     const userPrompt = `

@@ -5,12 +5,18 @@ import path from "node:path";
 import OpenAI from "openai";
 import { GOAL_LABELS, type ContentGoal } from "@/lib/constants";
 
-const LIBRARY_PATH = path.join(process.cwd(), "content", "linkedin-adapty-library.txt");
+const ADAPTY_LIBRARY_PATH = path.join(process.cwd(), "content", "linkedin-adapty-library.txt");
+const OTHERS_LIBRARY_PATH = path.join(process.cwd(), "content", "linkedin-others-library.txt");
+const LIBRARY_SOURCES = [
+  { source: "adapty", filePath: ADAPTY_LIBRARY_PATH },
+  { source: "others", filePath: OTHERS_LIBRARY_PATH },
+] as const;
 const LANCEDB_PATH = path.join(process.cwd(), ".lancedb");
 const LANCEDB_META_PATH = path.join(LANCEDB_PATH, "linkedin_library_meta.json");
 const LANCEDB_TABLE_NAME = "linkedin_library_examples";
 
 type RetrievalMethod = "lexical" | "lancedb";
+type LibrarySource = (typeof LIBRARY_SOURCES)[number]["source"];
 
 type LanceDbConnection = import("@lancedb/lancedb").Connection;
 
@@ -89,6 +95,7 @@ export type LibraryPerformance = RawPerformanceMetrics & {
 
 export type LibraryEntry = {
   id: string;
+  source: LibrarySource;
   text: string;
   performance?: LibraryPerformance;
 };
@@ -103,7 +110,7 @@ type LibraryData = {
   libraryHash: string;
 };
 
-let libraryCache: { mtimeMs: number; data: LibraryData } | null = null;
+let libraryCache: { signature: string; data: LibraryData } | null = null;
 
 function toHash(value: string): string {
   return crypto.createHash("sha256").update(value, "utf8").digest("hex");
@@ -287,7 +294,7 @@ function formatCompactNumber(value: number): string {
   return new Intl.NumberFormat("en-US", { notation: "compact", maximumFractionDigits: 1 }).format(value);
 }
 
-function parseEntryBlock(block: string, index: number): LibraryEntry | null {
+function parseEntryBlock(block: string, index: number, source: LibrarySource): LibraryEntry | null {
   const lines = block.split(/\r?\n/);
   const bodyLines: string[] = [];
   const metrics: RawPerformanceMetrics = {};
@@ -333,7 +340,8 @@ function parseEntryBlock(block: string, index: number): LibraryEntry | null {
   }
 
   return {
-    id: `entry-${index + 1}`,
+    id: `${source}-entry-${index + 1}`,
+    source,
     text,
     performance: computePerformance(metrics),
   };
@@ -479,26 +487,46 @@ async function connectLanceDb(): Promise<LanceDbConnection> {
 
 async function readLibrary(): Promise<LibraryData> {
   try {
-    const stat = await fs.stat(LIBRARY_PATH);
+    const filePayloads: Array<{ source: LibrarySource; raw: string }> = [];
+    const signatureParts: string[] = [];
 
-    if (libraryCache && libraryCache.mtimeMs === stat.mtimeMs) {
+    for (const librarySource of LIBRARY_SOURCES) {
+      try {
+        const stat = await fs.stat(librarySource.filePath);
+        const raw = await fs.readFile(librarySource.filePath, "utf8");
+
+        signatureParts.push(`${librarySource.source}:${stat.mtimeMs}:${stat.size}`);
+        filePayloads.push({
+          source: librarySource.source,
+          raw,
+        });
+      } catch {
+        signatureParts.push(`${librarySource.source}:missing`);
+      }
+    }
+
+    const signature = signatureParts.join("|");
+
+    if (libraryCache && libraryCache.signature === signature) {
       return libraryCache.data;
     }
 
-    const raw = await fs.readFile(LIBRARY_PATH, "utf8");
-    const blocks = raw
-      .split(/\n-{3,}\n/g)
-      .map((block) => block.trim())
-      .filter(Boolean);
+    const entries = filePayloads.flatMap((filePayload) => {
+      const blocks = filePayload.raw
+        .split(/\n-{3,}\n/g)
+        .map((block) => block.trim())
+        .filter(Boolean);
 
-    const entries = blocks
-      .map((block, index) => parseEntryBlock(block, index))
-      .filter((entry): entry is LibraryEntry => Boolean(entry));
+      return blocks
+        .map((block, index) => parseEntryBlock(block, index, filePayload.source))
+        .filter((entry): entry is LibraryEntry => Boolean(entry));
+    });
 
     const libraryHash = toHash(
       entries
         .map((entry) =>
           JSON.stringify({
+            source: entry.source,
             text: entry.text,
             performance: entry.performance ?? null,
           }),
@@ -507,7 +535,7 @@ async function readLibrary(): Promise<LibraryData> {
     );
     const data = { entries, libraryHash };
 
-    libraryCache = { mtimeMs: stat.mtimeMs, data };
+    libraryCache = { signature, data };
     return data;
   } catch {
     return {
