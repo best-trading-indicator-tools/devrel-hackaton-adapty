@@ -261,6 +261,10 @@ function needsMemeDetails(inputType: string): boolean {
   return MEME_TOPIC_PATTERN.test(inputType);
 }
 
+function needsChartDetails(inputType: string): boolean {
+  return !MEME_TOPIC_PATTERN.test(inputType);
+}
+
 function isBrandVoicePreset(value: string): value is (typeof BRAND_VOICE_PRESETS)[number] {
   return (BRAND_VOICE_PRESETS as readonly string[]).includes(value);
 }
@@ -346,6 +350,7 @@ export default function Home() {
   const imageInputRef = useRef<HTMLInputElement>(null);
   const showEventFields = useMemo(() => needsEventDetails(form.inputType), [form.inputType]);
   const showMemeFields = useMemo(() => needsMemeDetails(form.inputType), [form.inputType]);
+  const showChartFields = useMemo(() => needsChartDetails(form.inputType), [form.inputType]);
   const showCustomBrandVoiceInput = brandVoiceSelection === CUSTOM_BRAND_VOICE;
   const showCustomHookStyleInput = hookStyleSelection === CUSTOM_HOOK_STYLE;
   const customInputsGridClass =
@@ -380,7 +385,7 @@ export default function Home() {
       let chartDataPayload = "";
       let chartOptionsPayload = "";
 
-      if (form.chartEnabled) {
+      if (showChartFields && form.chartEnabled) {
         const chartPayload = buildChartPayload(form);
         if ("error" in chartPayload) {
           setError(chartPayload.error);
@@ -394,11 +399,11 @@ export default function Home() {
 
       const requestPayload = {
         ...form,
-        chartEnabled: form.chartEnabled,
-        chartType: form.chartEnabled ? form.chartType : defaultForm.chartType,
-        chartTitle: form.chartEnabled ? form.chartTitle : "",
-        chartData: form.chartEnabled ? chartDataPayload : "",
-        chartOptions: form.chartEnabled ? chartOptionsPayload : "",
+        chartEnabled: showChartFields ? form.chartEnabled : false,
+        chartType: showChartFields && form.chartEnabled ? form.chartType : defaultForm.chartType,
+        chartTitle: showChartFields && form.chartEnabled ? form.chartTitle : "",
+        chartData: showChartFields && form.chartEnabled ? chartDataPayload : "",
+        chartOptions: showChartFields && form.chartEnabled ? chartOptionsPayload : "",
         time: showEventFields ? form.time : "",
         place: showEventFields ? form.place : "",
         memeTone: showMemeFields ? form.memeTone : "",
@@ -610,6 +615,7 @@ export default function Home() {
                       inputType: nextType,
                       time: needsEventDetails(nextType) ? prev.time : "",
                       place: needsEventDetails(nextType) ? prev.place : "",
+                      chartEnabled: needsChartDetails(nextType) ? prev.chartEnabled : false,
                       memeTone: needsMemeDetails(nextType) ? prev.memeTone : "",
                       memeBrief: needsMemeDetails(nextType) ? prev.memeBrief : "",
                       memeTemplateId: needsMemeDetails(nextType) ? prev.memeTemplateId : "",
@@ -708,27 +714,28 @@ export default function Home() {
             </div>
           ) : null}
 
-          <div className="space-y-3 rounded-2xl border border-black/10 bg-slate-50 p-3">
-            <label className="flex items-center gap-2">
-              <input
-                type="checkbox"
-                className="h-4 w-4 rounded border-black/20"
-                checked={form.chartEnabled}
-                onChange={(event) =>
-                  setForm((prev) => ({
-                    ...prev,
-                    chartEnabled: event.target.checked,
-                    ...(event.target.checked && !prev.chartLabels.trim() && !prev.chartSeriesOneValues.trim()
-                      ? getDefaultChartFields(prev.chartType)
-                      : {}),
-                  }))
-                }
-              />
-              <span className="text-sm font-medium">Add Chart Companion</span>
-            </label>
+          {showChartFields ? (
+            <div className="space-y-3 rounded-2xl border border-black/10 bg-slate-50 p-3">
+              <label className="flex items-center gap-2">
+                <input
+                  type="checkbox"
+                  className="h-4 w-4 rounded border-black/20"
+                  checked={form.chartEnabled}
+                  onChange={(event) =>
+                    setForm((prev) => ({
+                      ...prev,
+                      chartEnabled: event.target.checked,
+                      ...(event.target.checked && !prev.chartLabels.trim() && !prev.chartSeriesOneValues.trim()
+                        ? getDefaultChartFields(prev.chartType)
+                        : {}),
+                    }))
+                  }
+                />
+                <span className="text-sm font-medium">Add Chart Companion</span>
+              </label>
 
-            {form.chartEnabled ? (
-              <div className="space-y-3">
+              {form.chartEnabled ? (
+                <div className="space-y-3">
                 <div className="grid gap-3 sm:grid-cols-2 lg:grid-cols-3">
                   <label className="space-y-1">
                     <span className="text-sm font-medium">Chart Type</span>
@@ -876,13 +883,14 @@ export default function Home() {
                 <p className="text-xs text-slate-600">
                   Chart image is rendered automatically server-side and returned in your results.
                 </p>
-              </div>
-            ) : (
-              <p className="text-xs text-slate-600">
-                Enable this to generate one chart image per run and reuse it alongside the generated posts.
-              </p>
-            )}
-          </div>
+                </div>
+              ) : (
+                <p className="text-xs text-slate-600">
+                  Enable this to generate one chart image per run and reuse it alongside the generated posts.
+                </p>
+              )}
+            </div>
+          ) : null}
 
           {showEventFields ? (
             <div className="grid gap-3 sm:grid-cols-2">
