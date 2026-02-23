@@ -19,6 +19,7 @@ A Next.js app that generates high-performing LinkedIn posts and hook ideas from 
 - Local `.txt` library retrieval (default)
 - Optional embeddings retrieval with OpenAI embeddings + LanceDB (`ENABLE_LANCEDB=true`)
 - Automatic Memegen companions for `Meme / shitpost` post type with ranked variants
+  - `Meme Variants Per Post` x `Number of Posts` = total meme images generated
 
 ## Content library format
 
@@ -136,3 +137,4 @@ The script returns:
 - `OPENAI_EMBEDDING_MODEL=text-embedding-3-small` is the default for speed and lower cost when indexing large libraries.
 - If you want higher semantic precision and accept higher cost/latency, switch to `text-embedding-3-large`.
 - OAuth-only setups can still generate posts, but may fall back to lexical retrieval because embeddings usually require API-key scopes.
+- Memegen URLs default to `https://api.memegen.link`; set `MEMEGEN_BASE_URL` to your own Memegen host if you self-host.

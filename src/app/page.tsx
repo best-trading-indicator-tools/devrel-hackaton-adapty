@@ -220,6 +220,11 @@ export default function Home() {
 
     return `${form.numberOfPosts} post${form.numberOfPosts > 1 ? "s" : ""} with mixed lengths (Short, Standard, Long)`;
   }, [form.inputLength, form.numberOfPosts]);
+  const totalMemeVariants = useMemo(() => {
+    const posts = Math.max(1, Number(form.numberOfPosts) || 1);
+    const perPost = Math.max(1, Number(form.memeVariantCount) || defaultForm.memeVariantCount);
+    return posts * perPost;
+  }, [form.numberOfPosts, form.memeVariantCount]);
 
   async function onSubmit(event: FormEvent<HTMLFormElement>) {
     event.preventDefault();
@@ -491,6 +496,9 @@ export default function Home() {
                       }))
                     }
                   />
+                  <p className="text-xs text-slate-600">
+                    Generates {form.memeVariantCount} meme variant{form.memeVariantCount > 1 ? "s" : ""} for each post.
+                  </p>
                 </label>
               </div>
 
@@ -507,6 +515,11 @@ export default function Home() {
 
               <p className="text-xs text-slate-600">
                 Leave these blank to let AI come up with clever and funny meme variants automatically.
+              </p>
+              <p className="text-xs text-slate-600">
+                Total meme images for this run: {totalMemeVariants} ({form.numberOfPosts} post
+                {form.numberOfPosts > 1 ? "s" : ""} x {form.memeVariantCount} variant
+                {form.memeVariantCount > 1 ? "s" : ""} each).
               </p>
             </div>
           ) : null}

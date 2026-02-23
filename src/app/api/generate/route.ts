@@ -18,6 +18,7 @@ export const runtime = "nodejs";
 const MEME_INPUT_TYPE_PATTERN = /\b(meme|shitpost)\b/i;
 const MEME_LINE_MAX_CHARS = 72;
 const DEFAULT_MEME_TONE = "clever, funny, and relevant to B2C mobile app growth";
+const DEFAULT_MEMEGEN_BASE_URL = "https://api.memegen.link";
 const MEME_TEMPLATES = [
   { id: "drake", name: "Drake Hotline Bling" },
   { id: "woman-cat", name: "Woman Yelling at Cat" },
@@ -170,6 +171,16 @@ function encodeMemegenPathSegment(value: string): string {
     .replace(/\s+/g, "_");
 }
 
+function getMemegenBaseUrl(): string {
+  const custom = process.env.MEMEGEN_BASE_URL?.trim();
+
+  if (!custom) {
+    return DEFAULT_MEMEGEN_BASE_URL;
+  }
+
+  return custom.replace(/\/+$/g, "");
+}
+
 type MemeVariantCandidate = {
   templateId: MemeTemplateId;
   topText: string;
@@ -205,7 +216,7 @@ function buildMemeCompanionFromVariant(params: { variant: MemeVariantCandidate; 
   const templateName = MEME_TEMPLATE_NAME_BY_ID[params.variant.templateId] ?? params.variant.templateId;
   const topText = clipMemeLine(params.variant.topText, MEME_LINE_MAX_CHARS) || "App teams shipping fast";
   const bottomText = clipMemeLine(params.variant.bottomText, MEME_LINE_MAX_CHARS) || "Growth teams in 2026";
-  const url = `https://api.memegen.link/images/${params.variant.templateId}/${encodeMemegenPathSegment(topText)}/${encodeMemegenPathSegment(bottomText)}.jpg`;
+  const url = `${getMemegenBaseUrl()}/images/${params.variant.templateId}/${encodeMemegenPathSegment(topText)}/${encodeMemegenPathSegment(bottomText)}.jpg`;
 
   return {
     rank: params.rank,
