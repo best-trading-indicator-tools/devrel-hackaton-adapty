@@ -109,6 +109,39 @@ type EditableBodyLine = {
 
 type RewriteContext = Pick<FormState, "style" | "goal" | "inputType" | "ctaLink" | "details">;
 
+function IconPencil({ className }: { className?: string }) {
+  return (
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8" className={className} aria-hidden>
+      <path d="M12 20h9" />
+      <path d="M16.5 3.5a2.1 2.1 0 0 1 3 3L7 19l-4 1 1-4 12.5-12.5Z" />
+    </svg>
+  );
+}
+
+function IconCheck({ className }: { className?: string }) {
+  return (
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" className={className} aria-hidden>
+      <path d="m5 13 4 4L19 7" />
+    </svg>
+  );
+}
+
+function IconSpark({ className }: { className?: string }) {
+  return (
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8" className={className} aria-hidden>
+      <path d="M12 3l2.2 4.8L19 10l-4.8 2.2L12 17l-2.2-4.8L5 10l4.8-2.2L12 3Z" />
+    </svg>
+  );
+}
+
+function IconClose({ className }: { className?: string }) {
+  return (
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" className={className} aria-hidden>
+      <path d="m6 6 12 12M18 6 6 18" />
+    </svg>
+  );
+}
+
 function isRadialChartType(chartType: ChartTypeOption): boolean {
   return chartType === "doughnut" || chartType === "pie" || chartType === "polarArea";
 }
@@ -506,6 +539,7 @@ export default function Home() {
   const [manualLineDraftByPost, setManualLineDraftByPost] = useState<Record<number, string>>({});
   const [selectedLineByPost, setSelectedLineByPost] = useState<Record<number, number>>({});
   const [rewriteErrorByPost, setRewriteErrorByPost] = useState<Record<number, string>>({});
+  const [lineFeedbackByPost, setLineFeedbackByPost] = useState<Record<number, string>>({});
   const [imageName, setImageName] = useState<string>("");
   const [isImageProcessing, setIsImageProcessing] = useState(false);
   const fallbackMemeTemplates = useMemo(() => buildFallbackMemeTemplates(), []);
@@ -741,6 +775,7 @@ export default function Home() {
     setManualLineDraftByPost({});
     setSelectedLineByPost({});
     setRewriteErrorByPost({});
+    setLineFeedbackByPost({});
     setRewriteLoadingKey(null);
 
     if (isImageProcessing) {
@@ -841,6 +876,10 @@ export default function Home() {
       ...prev,
       [postIndex]: "",
     }));
+    setLineFeedbackByPost((prev) => ({
+      ...prev,
+      [postIndex]: "",
+    }));
   }
 
   function applyManualBodyLineEdit(postIndex: number, lineIndex: number) {
@@ -872,9 +911,23 @@ export default function Home() {
         memeVariants: undefined,
       };
     });
-    setManualLineDraftByPost((prev) => ({
+    setSelectedLineByPost((prev) => {
+      const next = { ...prev };
+      delete next[postIndex];
+      return next;
+    });
+    setManualLineDraftByPost((prev) => {
+      const next = { ...prev };
+      delete next[postIndex];
+      return next;
+    });
+    setRewriteErrorByPost((prev) => ({
       ...prev,
-      [postIndex]: normalizedDraft,
+      [postIndex]: "",
+    }));
+    setLineFeedbackByPost((prev) => ({
+      ...prev,
+      [postIndex]: "Line saved.",
     }));
   }
 
@@ -890,6 +943,10 @@ export default function Home() {
       return next;
     });
     setRewriteErrorByPost((prev) => ({
+      ...prev,
+      [postIndex]: "",
+    }));
+    setLineFeedbackByPost((prev) => ({
       ...prev,
       [postIndex]: "",
     }));
@@ -965,6 +1022,10 @@ export default function Home() {
         delete next[postIndex];
         return next;
       });
+      setLineFeedbackByPost((prev) => ({
+        ...prev,
+        [postIndex]: "",
+      }));
       setSelectedLineByPost((prev) => {
         const next = { ...prev };
         delete next[postIndex];
@@ -987,6 +1048,10 @@ export default function Home() {
     }
 
     setRewriteErrorByPost((prev) => ({
+      ...prev,
+      [postIndex]: "",
+    }));
+    setLineFeedbackByPost((prev) => ({
       ...prev,
       [postIndex]: "",
     }));
@@ -1052,9 +1117,19 @@ export default function Home() {
           memeVariants: undefined,
         };
       });
-      setManualLineDraftByPost((prev) => ({
+      setSelectedLineByPost((prev) => {
+        const next = { ...prev };
+        delete next[postIndex];
+        return next;
+      });
+      setManualLineDraftByPost((prev) => {
+        const next = { ...prev };
+        delete next[postIndex];
+        return next;
+      });
+      setLineFeedbackByPost((prev) => ({
         ...prev,
-        [postIndex]: normalizeNoEmDash(nextLine.trim()),
+        [postIndex]: "Line rewritten with AI.",
       }));
     } catch {
       setRewriteErrorByPost((prev) => ({
@@ -1887,8 +1962,11 @@ export default function Home() {
                   </div>
 
                   <p className="mb-3 text-lg font-semibold leading-snug">{post.hook}</p>
-                  <div className="space-y-1 rounded-xl border border-black/10 bg-slate-50/70 p-2">
-                    <p className="px-1 text-xs text-slate-500">Click a body line to edit it inline.</p>
+                  <div className="space-y-1 rounded-xl border border-sky-200 bg-gradient-to-b from-sky-50/80 to-white p-2.5">
+                    <p className="flex items-center gap-1.5 px-1 text-xs font-medium text-sky-700">
+                      <IconPencil className="h-3.5 w-3.5" />
+                      Click a body line to edit inline.
+                    </p>
                     {bodyLineOptions.map((lineOption) => {
                       if (lineOption.isBlank) {
                         return <div key={`${index}-${lineOption.lineIndex}`} className="h-2" />;
@@ -1898,14 +1976,18 @@ export default function Home() {
 
                       if (isSelected) {
                         return (
-                          <div key={`${index}-${lineOption.lineIndex}`} className="rounded-lg border border-slate-900 bg-white p-2">
-                            <p className="mb-1 text-[11px] font-semibold uppercase tracking-wide text-slate-500">
-                              L{lineOption.lineIndex + 1} editing
+                          <div
+                            key={`${index}-${lineOption.lineIndex}`}
+                            className="rounded-lg border border-sky-300 bg-white p-2 shadow-[0_0_0_1px_rgba(56,189,248,0.08)]"
+                          >
+                            <p className="mb-1 flex items-center gap-1.5 text-[11px] font-semibold uppercase tracking-wide text-sky-700">
+                              <IconPencil className="h-3 w-3" />
+                              L{lineOption.lineIndex + 1} Editing
                             </p>
                             <textarea
                               rows={2}
                               autoFocus
-                              className="w-full rounded-lg border border-black/10 bg-white px-2 py-2 text-sm text-slate-700 outline-none transition focus:border-slate-900"
+                              className="w-full rounded-lg border border-sky-200 bg-white px-2 py-2 text-sm text-slate-700 outline-none transition focus:border-sky-500"
                               value={manualLineDraft}
                               onChange={(event) =>
                                 setManualLineDraftByPost((prev) => ({
@@ -1917,26 +1999,29 @@ export default function Home() {
                             <div className="mt-2 flex flex-wrap gap-2">
                               <button
                                 type="button"
-                                className="rounded-lg border border-black/10 bg-white px-2 py-1 text-xs text-slate-700 hover:bg-slate-100 disabled:cursor-not-allowed disabled:opacity-60"
+                                className="inline-flex items-center gap-1.5 rounded-lg border border-emerald-200 bg-emerald-50 px-2.5 py-1.5 text-xs font-medium text-emerald-700 hover:bg-emerald-100 disabled:cursor-not-allowed disabled:opacity-60"
                                 disabled={isLoading || Boolean(rewriteLoadingKey) || !manualLineDraft.trim()}
                                 onClick={() => applyManualBodyLineEdit(index, lineOption.lineIndex)}
                               >
+                                <IconCheck className="h-3.5 w-3.5" />
                                 Save Line
                               </button>
                               <button
                                 type="button"
-                                className="rounded-lg border border-black/10 bg-white px-2 py-1 text-xs text-slate-700 hover:bg-slate-100 disabled:cursor-not-allowed disabled:opacity-60"
+                                className="inline-flex items-center gap-1.5 rounded-lg border border-indigo-200 bg-indigo-50 px-2.5 py-1.5 text-xs font-medium text-indigo-700 hover:bg-indigo-100 disabled:cursor-not-allowed disabled:opacity-60"
                                 disabled={isLoading || isLineRewriteLoading || Boolean(rewriteLoadingKey)}
                                 onClick={() => regenerateBodyLine(index, lineOption.lineIndex)}
                               >
+                                <IconSpark className="h-3.5 w-3.5" />
                                 {isLineRewriteLoading ? "AI Rewriting..." : "AI Rewrite Line"}
                               </button>
                               <button
                                 type="button"
-                                className="rounded-lg border border-black/10 bg-white px-2 py-1 text-xs text-slate-700 hover:bg-slate-100 disabled:cursor-not-allowed disabled:opacity-60"
+                                className="inline-flex items-center gap-1.5 rounded-lg border border-slate-300 bg-white px-2.5 py-1.5 text-xs font-medium text-slate-700 hover:bg-slate-100 disabled:cursor-not-allowed disabled:opacity-60"
                                 disabled={isLoading || Boolean(rewriteLoadingKey)}
                                 onClick={() => cancelBodyLineEdit(index)}
                               >
+                                <IconClose className="h-3.5 w-3.5" />
                                 Cancel
                               </button>
                             </div>
@@ -1948,15 +2033,19 @@ export default function Home() {
                         <button
                           key={`${index}-${lineOption.lineIndex}`}
                           type="button"
-                          className="w-full rounded-md border border-transparent px-1 py-0.5 text-left text-sm leading-relaxed text-slate-700 transition hover:border-black/10 hover:bg-white"
+                          className="w-full rounded-md border border-transparent px-2 py-1 text-left text-sm leading-relaxed text-slate-700 transition hover:border-sky-200 hover:bg-white"
                           onClick={() => selectBodyLineForEditing(index, lineOption.lineIndex, lineOption.text)}
                         >
                           {lineOption.text}
                         </button>
                       );
                     })}
+
+                    <div className="mt-2 rounded-md border border-slate-200 bg-white px-2 py-1.5">
+                      <p className="mb-0.5 text-[11px] font-semibold uppercase tracking-wide text-slate-500">CTA</p>
+                      <p className="whitespace-pre-wrap text-sm font-medium text-slate-900">{post.cta}</p>
+                    </div>
                   </div>
-                  <p className="mt-4 whitespace-pre-wrap text-sm font-medium text-slate-900">{post.cta}</p>
 
                   <div className="mt-5 space-y-3 rounded-2xl border border-black/10 bg-slate-50 p-3">
                     <p className="text-xs font-semibold uppercase tracking-wide text-slate-600">Rewrite Entire Post</p>
@@ -1986,6 +2075,12 @@ export default function Home() {
                       {isPostRewriteLoading ? "Rewriting post..." : "Rewrite Post"}
                     </button>
                   </div>
+
+                  {lineFeedbackByPost[index] ? (
+                    <p className="mt-3 rounded-xl border border-emerald-200 bg-emerald-50 px-3 py-2 text-xs font-medium text-emerald-700">
+                      {lineFeedbackByPost[index]}
+                    </p>
+                  ) : null}
 
                   {rewriteErrorByPost[index] ? (
                     <p className="mt-3 rounded-xl bg-red-50 px-3 py-2 text-xs text-red-700">{rewriteErrorByPost[index]}</p>
