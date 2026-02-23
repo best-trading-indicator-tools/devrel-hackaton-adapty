@@ -1788,14 +1788,18 @@ export default function Home() {
                           >
                             i
                           </span>
-                          <span className="invisible pointer-events-none absolute left-1/2 top-full z-20 mt-2 w-[min(90vw,30rem)] -translate-x-1/2 rounded-xl border border-sky-200 bg-white p-3 text-left opacity-0 shadow-xl transition group-hover/industry-rss:visible group-hover/industry-rss:opacity-100">
+                          <span
+                            className="invisible pointer-events-auto absolute bottom-full left-1/2 z-20 mb-2 w-[min(90vw,30rem)] -translate-x-1/2 rounded-xl border border-sky-200 bg-white p-3 text-left opacity-0 shadow-xl transition group-hover/industry-rss:visible group-hover/industry-rss:opacity-100"
+                            onClick={(event) => event.stopPropagation()}
+                            onMouseDown={(event) => event.stopPropagation()}
+                          >
                             <p className="text-xs font-semibold text-slate-900">
                               RSS feeds used for Industry news reaction posts
                             </p>
                             <p className="mt-1 text-[11px] text-slate-600">
                               {enabledIndustryRssCount} enabled feeds, grouped by category.
                             </p>
-                            <div className="mt-2 max-h-56 space-y-2 overflow-y-auto pr-1">
+                            <div className="mt-2 max-h-56 space-y-2 overflow-y-auto overscroll-contain pr-1">
                               {(Object.keys(groupedIndustryRssFeeds) as FeedCategory[]).map((category) => {
                                 const feeds = groupedIndustryRssFeeds[category];
                                 if (!feeds.length) {
