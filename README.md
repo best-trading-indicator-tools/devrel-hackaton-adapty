@@ -85,3 +85,5 @@ The script returns:
 
 - If `ENABLE_LANCEDB=true`, the app builds/uses a local `.lancedb` index for retrieval.
 - If LanceDB retrieval fails, the API falls back to lexical retrieval from the `.txt` library.
+- `OPENAI_EMBEDDING_MODEL=text-embedding-3-small` is the default for speed and lower cost when indexing large libraries.
+- If you want higher semantic precision and accept higher cost/latency, switch to `text-embedding-3-large`.
