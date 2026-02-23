@@ -2121,6 +2121,7 @@ export default function Home() {
         </form>
 
         <section className="min-w-0 space-y-5">
+          {/* Hook Suggestions section intentionally commented out by request. Keep for easy restore later.
           <div className="rounded-3xl border border-black/10 bg-white/85 p-5 shadow-[0_12px_30px_rgba(0,0,0,0.06)] backdrop-blur">
             <h2 className="text-lg font-semibold">Hook Suggestions</h2>
             {result?.hooks?.length ? (
@@ -2135,6 +2136,7 @@ export default function Home() {
               <p className="mt-3 text-sm text-slate-500">Generate posts to see hook ideas here.</p>
             )}
           </div>
+          */}
 
           {result?.chart ? (
             <div className="rounded-3xl border border-black/10 bg-white/90 p-5 shadow-[0_12px_30px_rgba(0,0,0,0.06)] backdrop-blur">
