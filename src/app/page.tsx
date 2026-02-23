@@ -109,8 +109,10 @@ type EditableBodyLine = {
 
 type RewriteContext = Pick<FormState, "style" | "goal" | "inputType" | "ctaLink" | "details">;
 
-type PostTypeAllocation = {
+type GenerationAllocation = {
   inputType: string;
+  style: string;
+  goal: ContentGoal;
   count: number;
 };
 
@@ -433,30 +435,73 @@ function formatFeedCategoryLabel(category: FeedCategory): string {
   }
 }
 
-function buildPostTypeAllocations(inputTypes: string[], totalPosts: number): PostTypeAllocation[] {
-  const uniqueTypes = Array.from(new Set(inputTypes)).filter((type) => POST_TYPE_OPTIONS.includes(type as (typeof POST_TYPE_OPTIONS)[number]));
-  const safeTypes = uniqueTypes.length ? uniqueTypes : [defaultForm.inputType];
-  const safeTotal = Math.max(1, Math.trunc(totalPosts));
-  const base = Math.floor(safeTotal / safeTypes.length);
-  const remainder = safeTotal % safeTypes.length;
+function uniqueNonEmptyStrings(values: readonly string[]): string[] {
+  const seen = new Set<string>();
+  const result: string[] = [];
 
-  return safeTypes
-    .map((inputType, index) => ({
-      inputType,
-      count: base + (index < remainder ? 1 : 0),
-    }))
-    .filter((allocation) => allocation.count > 0);
+  for (const rawValue of values) {
+    const value = rawValue.trim();
+    if (!value || seen.has(value)) {
+      continue;
+    }
+    seen.add(value);
+    result.push(value);
+  }
+
+  return result;
 }
 
-function summarizeSelectedPostTypes(inputTypes: string[]): string {
-  if (!inputTypes.length) {
-    return defaultForm.inputType;
-  }
-  if (inputTypes.length <= 2) {
-    return inputTypes.join(", ");
+function buildGenerationAllocations(params: {
+  inputTypes: string[];
+  styles: string[];
+  goals: ContentGoal[];
+  totalPosts: number;
+}): GenerationAllocation[] {
+  const safeTypes = uniqueNonEmptyStrings(params.inputTypes).filter((type) =>
+    POST_TYPE_OPTIONS.includes(type as (typeof POST_TYPE_OPTIONS)[number]),
+  );
+  const safeStyles = uniqueNonEmptyStrings(params.styles);
+  const safeGoals = Array.from(new Set(params.goals));
+
+  if (!safeTypes.length || !safeStyles.length || !safeGoals.length) {
+    return [];
   }
 
-  return `${inputTypes.slice(0, 2).join(", ")} +${inputTypes.length - 2} more`;
+  const voiceGoalCombos = safeStyles.flatMap((style) => safeGoals.map((goal) => ({ style, goal })));
+  const safeTotal = Math.max(1, Math.trunc(params.totalPosts));
+  const allocationByKey = new Map<string, GenerationAllocation>();
+
+  for (let index = 0; index < safeTotal; index += 1) {
+    const inputType = safeTypes[index % safeTypes.length] ?? safeTypes[0];
+    const voiceGoalCombo = voiceGoalCombos[index % voiceGoalCombos.length] ?? voiceGoalCombos[0];
+    const key = `${inputType}|||${voiceGoalCombo.style}|||${voiceGoalCombo.goal}`;
+    const existing = allocationByKey.get(key);
+
+    if (existing) {
+      existing.count += 1;
+      continue;
+    }
+
+    allocationByKey.set(key, {
+      inputType,
+      style: voiceGoalCombo.style,
+      goal: voiceGoalCombo.goal,
+      count: 1,
+    });
+  }
+
+  return Array.from(allocationByKey.values());
+}
+
+function summarizeSelectedItems(items: string[], fallback: string): string {
+  if (!items.length) {
+    return fallback;
+  }
+  if (items.length <= 2) {
+    return items.join(", ");
+  }
+
+  return `${items.slice(0, 2).join(", ")} +${items.length - 2} more`;
 }
 
 function buildEditableBodyLines(body: string): EditableBodyLine[] {
@@ -610,11 +655,14 @@ export default function Home() {
   };
   const [form, setForm] = useState<FormState>(defaultForm);
   const [selectedPostTypes, setSelectedPostTypes] = useState<string[]>(() => [defaultForm.inputType]);
-  const [postTypeByPostIndex, setPostTypeByPostIndex] = useState<Record<number, string>>({});
-  const [numberOfPostsInput, setNumberOfPostsInput] = useState<string>(() => String(defaultForm.numberOfPosts));
-  const [brandVoiceSelection, setBrandVoiceSelection] = useState<string>(() =>
+  const [selectedBrandVoices, setSelectedBrandVoices] = useState<string[]>(() => [
     isBrandVoicePreset(defaultForm.style) ? defaultForm.style : CUSTOM_BRAND_VOICE,
-  );
+  ]);
+  const [selectedGoals, setSelectedGoals] = useState<ContentGoal[]>(() => [defaultForm.goal]);
+  const [postTypeByPostIndex, setPostTypeByPostIndex] = useState<Record<number, string>>({});
+  const [brandVoiceByPostIndex, setBrandVoiceByPostIndex] = useState<Record<number, string>>({});
+  const [goalByPostIndex, setGoalByPostIndex] = useState<Record<number, ContentGoal>>({});
+  const [numberOfPostsInput, setNumberOfPostsInput] = useState<string>(() => String(defaultForm.numberOfPosts));
   const [result, setResult] = useState<GeneratePostsResponse | null>(null);
   const [rewriteContext, setRewriteContext] = useState<RewriteContext>(defaultRewriteContext);
   const [error, setError] = useState<string>("");
@@ -638,6 +686,17 @@ export default function Home() {
   const normalizedSelectedPostTypes = useMemo(
     () => (selectedPostTypes.length ? selectedPostTypes : [defaultForm.inputType]),
     [selectedPostTypes],
+  );
+  const normalizedSelectedBrandVoices = useMemo(
+    () =>
+      selectedBrandVoices.length
+        ? selectedBrandVoices
+        : [isBrandVoicePreset(defaultForm.style) ? defaultForm.style : CUSTOM_BRAND_VOICE],
+    [selectedBrandVoices],
+  );
+  const normalizedSelectedGoals = useMemo(
+    () => (selectedGoals.length ? selectedGoals : [defaultForm.goal]),
+    [selectedGoals],
   );
   const showEventFields = useMemo(
     () => normalizedSelectedPostTypes.some((type) => needsEventDetails(type)),
@@ -672,16 +731,27 @@ export default function Home() {
     [],
   );
   const selectedPostTypeSummary = useMemo(
-    () => summarizeSelectedPostTypes(normalizedSelectedPostTypes),
+    () => summarizeSelectedItems(normalizedSelectedPostTypes, defaultForm.inputType),
     [normalizedSelectedPostTypes],
   );
-  const showCustomBrandVoiceInput = brandVoiceSelection === CUSTOM_BRAND_VOICE;
-  const selectedBrandVoiceLabel =
-    brandVoiceSelection === CUSTOM_BRAND_VOICE
-      ? "Custom"
-      : isBrandVoicePreset(brandVoiceSelection)
-        ? BRAND_VOICE_PROFILES[brandVoiceSelection].label
-        : "Custom";
+  const showCustomBrandVoiceInput = normalizedSelectedBrandVoices.includes(CUSTOM_BRAND_VOICE);
+  const selectedBrandVoiceSummary = useMemo(
+    () =>
+      summarizeSelectedItems(
+        normalizedSelectedBrandVoices.map((voice) => {
+          if (voice === CUSTOM_BRAND_VOICE) {
+            return "Custom";
+          }
+          return isBrandVoicePreset(voice) ? BRAND_VOICE_PROFILES[voice].label : voice;
+        }),
+        "Custom",
+      ),
+    [normalizedSelectedBrandVoices],
+  );
+  const selectedGoalSummary = useMemo(
+    () => summarizeSelectedItems(normalizedSelectedGoals.map((goal) => GOAL_LABELS[goal]), GOAL_LABELS[defaultForm.goal]),
+    [normalizedSelectedGoals],
+  );
   const chartTypeSelectWidth = useMemo(
     () =>
       getSelectWidthFromOptions(CHART_TYPE_OPTIONS.map((chartType) => CHART_TYPE_LABELS[chartType]), {
@@ -711,17 +781,24 @@ export default function Home() {
   );
 
   const subtitle = useMemo(() => {
-    const typeScope =
-      normalizedSelectedPostTypes.length > 1
-        ? ` across ${normalizedSelectedPostTypes.length} post types`
-        : "";
+    const scopeParts: string[] = [];
+    if (normalizedSelectedPostTypes.length > 1) {
+      scopeParts.push(`${normalizedSelectedPostTypes.length} post types`);
+    }
+    if (normalizedSelectedBrandVoices.length > 1) {
+      scopeParts.push(`${normalizedSelectedBrandVoices.length} brand voices`);
+    }
+    if (normalizedSelectedGoals.length > 1) {
+      scopeParts.push(`${normalizedSelectedGoals.length} goals`);
+    }
+    const scopeSuffix = scopeParts.length ? ` across ${scopeParts.join(", ")}` : "";
 
     if (form.inputLength !== "mix") {
-      return `${form.numberOfPosts} post${form.numberOfPosts > 1 ? "s" : ""}${typeScope} in ${formatLengthLabel(form.inputLength)} format`;
+      return `${form.numberOfPosts} post${form.numberOfPosts > 1 ? "s" : ""}${scopeSuffix} in ${formatLengthLabel(form.inputLength)} format`;
     }
 
-    return `${form.numberOfPosts} post${form.numberOfPosts > 1 ? "s" : ""}${typeScope} with mixed lengths (Short, Standard, Long)`;
-  }, [form.inputLength, form.numberOfPosts, normalizedSelectedPostTypes.length]);
+    return `${form.numberOfPosts} post${form.numberOfPosts > 1 ? "s" : ""}${scopeSuffix} with mixed lengths (Short, Standard, Long)`;
+  }, [form.inputLength, form.numberOfPosts, normalizedSelectedBrandVoices.length, normalizedSelectedGoals.length, normalizedSelectedPostTypes.length]);
   const totalMemeVariants = useMemo(() => {
     const posts = Math.max(1, Number(form.numberOfPosts) || 1);
     const perPost = Math.max(1, Number(form.memeVariantCount) || defaultForm.memeVariantCount);
@@ -770,26 +847,53 @@ export default function Home() {
   }, [memeTemplateOptions, memeTemplateSearch]);
 
   function applyBrandVoiceSelection(nextValue: string) {
-    setBrandVoiceSelection(nextValue);
+    const isSelected = selectedBrandVoices.includes(nextValue);
 
-    if (nextValue === CUSTOM_BRAND_VOICE) {
-      setForm((prev) => ({
-        ...prev,
-        style: isBrandVoicePreset(prev.style) ? "" : prev.style,
-      }));
+    if (isSelected && selectedBrandVoices.length === 1) {
       return;
     }
 
-    setForm((prev) => ({
-      ...prev,
-      style: nextValue,
-    }));
+    const nextSelected = isSelected
+      ? selectedBrandVoices.filter((voice) => voice !== nextValue)
+      : [...selectedBrandVoices, nextValue];
+    const effectiveSelected = nextSelected.length ? nextSelected : [nextValue];
+
+    setSelectedBrandVoices(effectiveSelected);
+
+    setForm((prev) => {
+      const hasCustom = effectiveSelected.includes(CUSTOM_BRAND_VOICE);
+      const firstPreset = effectiveSelected.find((voice): voice is (typeof BRAND_VOICE_PRESETS)[number] =>
+        isBrandVoicePreset(voice),
+      );
+
+      if (hasCustom) {
+        return {
+          ...prev,
+          style: isBrandVoicePreset(prev.style) ? "" : prev.style,
+        };
+      }
+
+      return {
+        ...prev,
+        style: firstPreset ?? prev.style,
+      };
+    });
   }
 
   function applyGoalSelection(nextGoal: ContentGoal) {
+    const isSelected = selectedGoals.includes(nextGoal);
+
+    if (isSelected && selectedGoals.length === 1) {
+      return;
+    }
+
+    const nextSelected = isSelected ? selectedGoals.filter((goal) => goal !== nextGoal) : [...selectedGoals, nextGoal];
+    const effectiveSelected = nextSelected.length ? nextSelected : [nextGoal];
+    setSelectedGoals(effectiveSelected);
+
     setForm((prev) => ({
       ...prev,
-      goal: nextGoal,
+      goal: effectiveSelected[0] ?? prev.goal,
     }));
   }
 
@@ -943,6 +1047,8 @@ export default function Home() {
     setCopyFeedbackByPost({});
     setRewriteLoadingKey(null);
     setPostTypeByPostIndex({});
+    setBrandVoiceByPostIndex({});
+    setGoalByPostIndex({});
 
     if (isImageProcessing) {
       setError("Image is still processing. Please wait a second and retry.");
@@ -951,8 +1057,27 @@ export default function Home() {
     }
 
     try {
-      const postTypeAllocations = buildPostTypeAllocations(normalizedSelectedPostTypes, committedNumberOfPosts);
-      if (!postTypeAllocations.length) {
+      const customBrandVoiceText = form.style.trim();
+      if (normalizedSelectedBrandVoices.includes(CUSTOM_BRAND_VOICE) && !customBrandVoiceText) {
+        setError("Custom Brand Voice is selected. Add custom voice instructions or deselect Custom.");
+        setIsLoading(false);
+        return;
+      }
+
+      const selectedStylesForGeneration = Array.from(
+        new Set(
+          normalizedSelectedBrandVoices
+            .map((voice) => (voice === CUSTOM_BRAND_VOICE ? customBrandVoiceText : voice.trim()))
+            .filter(Boolean),
+        ),
+      );
+      const generationAllocations = buildGenerationAllocations({
+        inputTypes: normalizedSelectedPostTypes,
+        styles: selectedStylesForGeneration,
+        goals: normalizedSelectedGoals,
+        totalPosts: committedNumberOfPosts,
+      });
+      if (!generationAllocations.length) {
         setError("Please select at least one post type.");
         setIsLoading(false);
         return;
@@ -961,7 +1086,7 @@ export default function Home() {
       let chartDataPayload = "";
       let chartOptionsPayload = "";
       const shouldValidateChart =
-        form.chartEnabled && postTypeAllocations.some((allocation) => needsChartDetails(allocation.inputType));
+        form.chartEnabled && generationAllocations.some((allocation) => needsChartDetails(allocation.inputType));
 
       if (shouldValidateChart) {
         const chartPayload = buildChartPayload(form);
@@ -975,15 +1100,17 @@ export default function Home() {
         chartOptionsPayload = chartPayload.chartOptions;
       }
 
-      const generationChunks: Array<{ inputType: string; response: GeneratePostsResponse }> = [];
+      const generationChunks: Array<{ allocation: GenerationAllocation; response: GeneratePostsResponse }> = [];
 
-      for (const allocation of postTypeAllocations) {
+      for (const allocation of generationAllocations) {
         const typeNeedsChart = needsChartDetails(allocation.inputType);
         const typeNeedsEvent = needsEventDetails(allocation.inputType);
         const typeNeedsMeme = needsMemeDetails(allocation.inputType);
 
         const requestPayload = {
           ...form,
+          style: allocation.style,
+          goal: allocation.goal,
           inputType: allocation.inputType,
           numberOfPosts: allocation.count,
           chartEnabled: typeNeedsChart ? form.chartEnabled : false,
@@ -1009,12 +1136,14 @@ export default function Home() {
         const responsePayload = await response.json();
 
         if (!response.ok) {
-          setError(`[${allocation.inputType}] ${extractApiErrorMessage(responsePayload, response.status)}`);
+          setError(
+            `[${allocation.inputType} | ${allocation.style} | ${GOAL_LABELS[allocation.goal]}] ${extractApiErrorMessage(responsePayload, response.status)}`,
+          );
           return;
         }
 
         generationChunks.push({
-          inputType: allocation.inputType,
+          allocation,
           response: sanitizeGenerationResult(responsePayload as GeneratePostsResponse),
         });
       }
@@ -1025,12 +1154,16 @@ export default function Home() {
       }
 
       const nextPostTypeByIndex: Record<number, string> = {};
+      const nextBrandVoiceByIndex: Record<number, string> = {};
+      const nextGoalByIndex: Record<number, ContentGoal> = {};
       const mergedPosts: GeneratePostsResponse["posts"] = [];
       let postCursor = 0;
 
       for (const chunk of generationChunks) {
         for (const post of chunk.response.posts) {
-          nextPostTypeByIndex[postCursor] = chunk.inputType;
+          nextPostTypeByIndex[postCursor] = chunk.allocation.inputType;
+          nextBrandVoiceByIndex[postCursor] = chunk.allocation.style;
+          nextGoalByIndex[postCursor] = chunk.allocation.goal;
           mergedPosts.push(post);
           postCursor += 1;
         }
@@ -1071,7 +1204,7 @@ export default function Home() {
         },
         retrieval: {
           method: generationChunks.some((chunk) => chunk.response.retrieval.method === "lancedb") ? "lancedb" : "lexical",
-          goalUsed: form.goal,
+          goalUsed: generationAllocations[0]?.goal ?? form.goal,
           examplesUsed: generationChunks.reduce((sum, chunk) => sum + chunk.response.retrieval.examplesUsed, 0),
           performancePostsAnalyzed: generationChunks.reduce(
             (sum, chunk) => sum + chunk.response.retrieval.performancePostsAnalyzed,
@@ -1085,13 +1218,15 @@ export default function Home() {
       };
 
       const nextRewriteContext: RewriteContext = {
-        style: form.style,
-        goal: form.goal,
-        inputType: postTypeAllocations[0]?.inputType ?? form.inputType,
+        style: generationAllocations[0]?.style ?? form.style,
+        goal: generationAllocations[0]?.goal ?? form.goal,
+        inputType: generationAllocations[0]?.inputType ?? form.inputType,
         ctaLink: form.ctaLink,
         details: form.details,
       };
       setPostTypeByPostIndex(nextPostTypeByIndex);
+      setBrandVoiceByPostIndex(nextBrandVoiceByIndex);
+      setGoalByPostIndex(nextGoalByIndex);
       setResult(mergedResult);
       setRewriteContext(nextRewriteContext);
     } catch {
@@ -1307,6 +1442,14 @@ export default function Home() {
     return postTypeByPostIndex[postIndex] || rewriteContext.inputType;
   }
 
+  function getRewriteStyle(postIndex: number): string {
+    return brandVoiceByPostIndex[postIndex] || rewriteContext.style;
+  }
+
+  function getRewriteGoal(postIndex: number): ContentGoal {
+    return goalByPostIndex[postIndex] || rewriteContext.goal;
+  }
+
   async function rewriteEntirePost(postIndex: number) {
     const post = result?.posts[postIndex];
     if (!post) {
@@ -1328,6 +1471,8 @@ export default function Home() {
         body: JSON.stringify({
           mode: "post",
           ...rewriteContext,
+          style: getRewriteStyle(postIndex),
+          goal: getRewriteGoal(postIndex),
           inputType: getRewriteInputType(postIndex),
           prompt: rewritePromptByPost[postIndex] ?? "",
           post: {
@@ -1432,6 +1577,8 @@ export default function Home() {
         body: JSON.stringify({
           mode: "line",
           ...rewriteContext,
+          style: getRewriteStyle(postIndex),
+          goal: getRewriteGoal(postIndex),
           inputType: getRewriteInputType(postIndex),
           prompt: "",
           lineIndex,
@@ -1534,6 +1681,8 @@ export default function Home() {
           mode: "line",
           lineTarget: "cta",
           ...rewriteContext,
+          style: getRewriteStyle(postIndex),
+          goal: getRewriteGoal(postIndex),
           inputType: getRewriteInputType(postIndex),
           prompt: "",
           post: {
@@ -1670,23 +1819,23 @@ export default function Home() {
           <div className="grid gap-3 sm:grid-cols-2">
             <div className="space-y-1">
               <span className="text-sm font-medium">Brand Voice</span>
-              <p className="text-xs text-slate-500">Answers: &quot;How should it sound?&quot; Click one voice card below to select it.</p>
+              <p className="text-xs text-slate-500">Answers: &quot;How should it sound?&quot; Select one or more voice cards below.</p>
             </div>
 
             <div className="space-y-1">
               <span className="text-sm font-medium">Goal</span>
-              <p className="text-xs text-slate-500">Answers: &quot;What outcome should it optimize for?&quot; Click one goal card below to select it.</p>
+              <p className="text-xs text-slate-500">Answers: &quot;What outcome should it optimize for?&quot; Select one or more goal cards below.</p>
             </div>
           </div>
 
           <div className="space-y-3 rounded-2xl border border-black/10 bg-slate-50 p-3">
             <div className="flex flex-wrap items-center justify-between gap-2">
               <p className="text-sm font-medium text-slate-900">Brand Voice Guide</p>
-              <p className="text-xs text-slate-600">Selected: {selectedBrandVoiceLabel}</p>
+              <p className="text-xs text-slate-600">Selected: {selectedBrandVoiceSummary}</p>
             </div>
             <div className="grid gap-2 sm:grid-cols-2 lg:grid-cols-3">
               {BRAND_VOICE_PRESETS.map((voice) => {
-                const isSelected = brandVoiceSelection === voice;
+                const isSelected = normalizedSelectedBrandVoices.includes(voice);
                 return (
                   <button
                     key={voice}
@@ -1704,7 +1853,9 @@ export default function Home() {
               <button
                 type="button"
                 className={`rounded-xl border p-3 text-left transition ${
-                  showCustomBrandVoiceInput ? selectableCardSelectedClass : selectableCardUnselectedClass
+                  normalizedSelectedBrandVoices.includes(CUSTOM_BRAND_VOICE)
+                    ? selectableCardSelectedClass
+                    : selectableCardUnselectedClass
                 }`}
                 onClick={() => applyBrandVoiceSelection(CUSTOM_BRAND_VOICE)}
               >
@@ -1735,11 +1886,11 @@ export default function Home() {
           <div className="space-y-3 rounded-2xl border border-black/10 bg-slate-50 p-3">
             <div className="flex flex-wrap items-center justify-between gap-2">
               <p className="text-sm font-medium text-slate-900">Goal Guide</p>
-              <p className="text-xs text-slate-600">Selected: {GOAL_LABELS[form.goal]}</p>
+              <p className="text-xs text-slate-600">Selected: {selectedGoalSummary}</p>
             </div>
             <div className="grid gap-2 sm:grid-cols-2 lg:grid-cols-3">
               {GOAL_OPTIONS.map((goal) => {
-                const isSelected = form.goal === goal;
+                const isSelected = normalizedSelectedGoals.includes(goal);
                 return (
                   <button
                     key={goal}
@@ -1763,7 +1914,7 @@ export default function Home() {
               <p className="text-xs text-slate-600">Selected: {selectedPostTypeSummary}</p>
             </div>
             <p className="text-xs text-slate-600">
-              Select one or more post types. Total posts are distributed across selected types.
+              Select one or more post types. Total posts are distributed across selected post types, brand voices, and goals.
             </p>
             <div className="grid gap-2 sm:grid-cols-2 lg:grid-cols-3">
               {POST_TYPE_OPTIONS.map((type) => {
@@ -2431,6 +2582,8 @@ export default function Home() {
             {result?.posts.map((post, index) => {
               const bodyLineOptions = buildEditableBodyLines(post.body);
               const generatedPostType = postTypeByPostIndex[index];
+              const generatedStyle = brandVoiceByPostIndex[index];
+              const generatedGoal = goalByPostIndex[index];
               const selectedLine = bodyLineOptions.find(
                 (lineOption) => lineOption.lineIndex === selectedLineByPost[index] && !lineOption.isBlank,
               );
@@ -2449,6 +2602,8 @@ export default function Home() {
                     <p className="rounded-full bg-slate-100 px-3 py-1 text-xs uppercase tracking-wide text-slate-700">
                       Post {index + 1}
                       {generatedPostType ? ` · ${generatedPostType}` : ""}
+                      {generatedStyle ? ` · ${generatedStyle}` : ""}
+                      {generatedGoal ? ` · ${GOAL_LABELS[generatedGoal]}` : ""}
                       {" · "}
                       {formatLengthLabel(post.length)}
                     </p>
