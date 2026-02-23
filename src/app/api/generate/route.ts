@@ -183,9 +183,7 @@ type MemeVariantCandidate = {
   toneFitReason: string;
 };
 
-function makeMemeSelectionResponseSchema(postCount: number, variantCount: number, allowedTemplateIds: MemeTemplateId[]) {
-  const allowedTemplateSet = new Set<MemeTemplateId>(allowedTemplateIds);
-
+function makeMemeSelectionResponseSchema(postCount: number, variantCount: number) {
   return z.object({
     selections: z
       .array(
@@ -196,10 +194,10 @@ function makeMemeSelectionResponseSchema(postCount: number, variantCount: number
               z.object({
                 templateId: z
                   .string()
-                  .refine((value): value is MemeTemplateId => allowedTemplateSet.has(value as MemeTemplateId), {
-                    message: `templateId must be one of: ${allowedTemplateIds.join(", ")}`,
-                  })
-                  .transform((value) => value as MemeTemplateId),
+                  .trim()
+                  .min(1)
+                  .max(120)
+                  .regex(/^[a-z0-9-]+$/i, "templateId must use letters, numbers, and hyphen only"),
                 topText: z.string().min(4).max(120),
                 bottomText: z.string().min(4).max(120),
                 toneFitScore: z.number().int().min(0).max(100),
@@ -210,6 +208,37 @@ function makeMemeSelectionResponseSchema(postCount: number, variantCount: number
         }),
       )
       .length(postCount),
+  });
+}
+
+function sanitizeModelMemeVariants(params: {
+  variants: Array<{
+    templateId: string;
+    topText: string;
+    bottomText: string;
+    toneFitScore: number;
+    toneFitReason: string;
+  }>;
+  allowedTemplateIds: MemeTemplateId[];
+  postIndex: number;
+}): MemeVariantCandidate[] {
+  const allowedTemplateSet = new Set(params.allowedTemplateIds);
+  const fallbackTemplateId =
+    params.allowedTemplateIds[params.postIndex % params.allowedTemplateIds.length] ?? MEME_TEMPLATE_IDS[0];
+
+  return params.variants.map((variant) => {
+    const normalizedTemplateId = variant.templateId.trim().toLowerCase();
+    const templateId = allowedTemplateSet.has(normalizedTemplateId as MemeTemplateId)
+      ? (normalizedTemplateId as MemeTemplateId)
+      : fallbackTemplateId;
+
+    return {
+      templateId,
+      topText: normalizeNoEmDash(variant.topText),
+      bottomText: normalizeNoEmDash(variant.bottomText),
+      toneFitScore: variant.toneFitScore,
+      toneFitReason: normalizeNoEmDash(variant.toneFitReason),
+    };
   });
 }
 
@@ -686,7 +715,6 @@ Also generate a list of hook suggestions inspired by this style and request.
       const memeSelectionSchema = makeMemeSelectionResponseSchema(
         normalizedPosts.length,
         memeVariantTarget,
-        allowedTemplateIds,
       );
       const memeTemplateCatalog = MEME_TEMPLATE_OPTIONS.filter((template) =>
         allowedTemplateIds.includes(template.id),
@@ -772,9 +800,17 @@ For each post:
 
       postsWithMemes = normalizedPosts.map((post, index) => {
         const modelVariants = selectionsByPostIndex.get(index)?.variants;
-        const variants =
+        const normalizedModelVariants =
           modelVariants?.length === memeVariantTarget
-            ? modelVariants.map((variant, variantIndex) =>
+            ? sanitizeModelMemeVariants({
+                variants: modelVariants,
+                allowedTemplateIds,
+                postIndex: index,
+              })
+            : null;
+        const variants =
+          normalizedModelVariants?.length === memeVariantTarget
+            ? normalizedModelVariants.map((variant, variantIndex) =>
                 buildMemeCompanionFromVariant({
                   rank: variantIndex + 1,
                   variant,
