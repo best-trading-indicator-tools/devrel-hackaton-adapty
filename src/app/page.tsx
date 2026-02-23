@@ -172,6 +172,25 @@ function getLegendLabel(position: ChartLegendPosition): string {
   return position.charAt(0).toUpperCase() + position.slice(1);
 }
 
+function formatEventTimeForPrompt(value: string): string {
+  const trimmed = value.trim();
+  if (!trimmed) {
+    return "";
+  }
+
+  const parsed = new Date(trimmed);
+  if (Number.isNaN(parsed.getTime())) {
+    return trimmed;
+  }
+
+  const formatted = new Intl.DateTimeFormat("en-US", {
+    dateStyle: "medium",
+    timeStyle: "short",
+  }).format(parsed);
+
+  return `${formatted} (local time)`;
+}
+
 function getMemeToneLabel(tone: string): string {
   if (tone === "auto") {
     return "Auto";
@@ -644,7 +663,7 @@ export default function Home() {
         chartTitle: showChartFields && form.chartEnabled ? form.chartTitle : "",
         chartData: showChartFields && form.chartEnabled ? chartDataPayload : "",
         chartOptions: showChartFields && form.chartEnabled ? chartOptionsPayload : "",
-        time: showEventFields ? form.time : "",
+        time: showEventFields ? formatEventTimeForPrompt(form.time) : "",
         place: showEventFields ? form.place : "",
         memeTone: showMemeFields ? form.memeTone : "",
         memeBrief: showMemeFields ? form.memeBrief : "",
@@ -1283,11 +1302,13 @@ export default function Home() {
               <label className="space-y-1">
                 <span className="text-sm font-medium">Time</span>
                 <input
-                  placeholder="May 17, 5pm CET"
+                  type="datetime-local"
+                  step={300}
                   className="w-full rounded-xl border border-black/10 bg-white px-3 py-2 text-sm outline-none transition focus:border-slate-900"
                   value={form.time}
                   onChange={(event) => setForm((prev) => ({ ...prev, time: event.target.value }))}
                 />
+                <p className="text-xs text-slate-600">Click to pick date and time from calendar/time selector.</p>
               </label>
 
               <label className="space-y-1">
