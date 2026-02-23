@@ -18,7 +18,6 @@ export const generatePostsRequestSchema = z.object({
   chartTitle: z.string().trim().max(140).default(""),
   chartData: z.string().trim().max(20_000).default(""),
   chartOptions: z.string().trim().max(20_000).default(""),
-  memeTone: z.string().trim().max(120).default(""),
   memeBrief: z.string().trim().max(400).default(""),
   memeTemplateIds: z
     .array(

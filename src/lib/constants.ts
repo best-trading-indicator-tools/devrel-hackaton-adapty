@@ -140,18 +140,6 @@ export const MEME_TEMPLATE_LABELS: Record<string, string> = MEME_TEMPLATE_OPTION
   {} as Record<string, string>,
 );
 
-export const MEME_TONE_OPTIONS = [
-  "auto",
-  "playful",
-  "contrarian",
-  "clickbait",
-  "absurd",
-  "deadpan",
-  "sarcastic",
-  "dramatic",
-  "wholesome",
-] as const;
-
 export const GOAL_LABELS: Record<ContentGoal, string> = {
   virality: "Virality",
   engagement: "Engagement",

@@ -12,7 +12,6 @@ import {
   GOAL_UI_DESCRIPTIONS,
   GOAL_OPTIONS,
   INPUT_LENGTH_OPTIONS,
-  MEME_TONE_OPTIONS,
   MEME_TEMPLATE_LABELS,
   MEME_TEMPLATE_OPTIONS,
   POST_TYPE_UI_DESCRIPTIONS,
@@ -40,7 +39,6 @@ type FormState = {
   chartSeriesTwoLabel: string;
   chartSeriesTwoValues: string;
   chartLegendPosition: ChartLegendPosition;
-  memeTone: string;
   memeBrief: string;
   memeTemplateIds: MemeTemplateId[];
   memeVariantCount: number;
@@ -66,7 +64,6 @@ const defaultForm: FormState = {
   chartSeriesTwoLabel: "",
   chartSeriesTwoValues: "",
   chartLegendPosition: "right",
-  memeTone: "",
   memeBrief: "",
   memeTemplateIds: [],
   memeVariantCount: 3,
@@ -218,17 +215,6 @@ function formatEventTimeForPrompt(value: string): string {
   }).format(parsed);
 
   return `${formatted} (local time)`;
-}
-
-function getMemeToneLabel(tone: string): string {
-  if (tone === "auto") {
-    return "Auto";
-  }
-
-  return tone
-    .split("-")
-    .map((chunk) => chunk.charAt(0).toUpperCase() + chunk.slice(1))
-    .join(" ");
 }
 
 function formatTemplateIdLabel(templateId: string): string {
@@ -604,15 +590,6 @@ export default function Home() {
       : isBrandVoicePreset(brandVoiceSelection)
         ? BRAND_VOICE_PROFILES[brandVoiceSelection].label
         : "Custom";
-  const memeToneSelectWidth = useMemo(
-    () =>
-      getSelectWidthFromOptions(MEME_TONE_OPTIONS.map((tone) => getMemeToneLabel(tone)), {
-        minCh: 12,
-        maxCh: 24,
-        paddingCh: 5,
-      }),
-    [],
-  );
   const chartTypeSelectWidth = useMemo(
     () =>
       getSelectWidthFromOptions(CHART_TYPE_OPTIONS.map((chartType) => CHART_TYPE_LABELS[chartType]), {
@@ -663,14 +640,6 @@ export default function Home() {
       }),
     [form.chartType, form.chartLabels, form.chartSeriesOneValues, form.chartSeriesTwoValues],
   );
-  const memeToneSelection = useMemo(() => {
-    const current = form.memeTone.trim().toLowerCase();
-    if (!current) {
-      return "auto";
-    }
-
-    return (MEME_TONE_OPTIONS as readonly string[]).includes(current) ? current : "auto";
-  }, [form.memeTone]);
   const memeTemplateNameById = useMemo(() => {
     const map: Record<string, string> = { ...MEME_TEMPLATE_LABELS };
     for (const template of memeTemplateOptions) {
@@ -734,7 +703,6 @@ export default function Home() {
       time: needsEventDetails(nextType) ? prev.time : "",
       place: needsEventDetails(nextType) ? prev.place : "",
       chartEnabled: needsChartDetails(nextType) ? prev.chartEnabled : false,
-      memeTone: needsMemeDetails(nextType) ? prev.memeTone : "",
       memeBrief: needsMemeDetails(nextType) ? prev.memeBrief : "",
       memeTemplateIds: needsMemeDetails(nextType) ? prev.memeTemplateIds : [],
       memeVariantCount: needsMemeDetails(nextType) ? prev.memeVariantCount : defaultForm.memeVariantCount,
@@ -896,7 +864,6 @@ export default function Home() {
         chartOptions: showChartFields && form.chartEnabled ? chartOptionsPayload : "",
         time: showEventFields ? formatEventTimeForPrompt(form.time) : "",
         place: showEventFields ? form.place : "",
-        memeTone: showMemeFields ? form.memeTone : "",
         memeBrief: showMemeFields ? form.memeBrief : "",
         memeTemplateIds: showMemeFields ? form.memeTemplateIds : [],
         memeVariantCount: showMemeFields ? form.memeVariantCount : defaultForm.memeVariantCount,
@@ -1620,27 +1587,6 @@ export default function Home() {
               <p className="text-xs font-semibold uppercase tracking-wide text-slate-600">Meme Options (optional)</p>
               <div className="grid gap-3 sm:grid-cols-2">
                 <label className="flex h-full flex-col">
-                  <span className="text-sm font-medium sm:min-h-[2.75rem]">Meme Tone</span>
-                  <select
-                    className={baseControlClassName}
-                    style={{ width: memeToneSelectWidth }}
-                    value={memeToneSelection}
-                    onChange={(event) =>
-                      setForm((prev) => ({
-                        ...prev,
-                        memeTone: event.target.value === "auto" ? "" : event.target.value,
-                      }))
-                    }
-                  >
-                    {MEME_TONE_OPTIONS.map((tone) => (
-                      <option key={tone} value={tone}>
-                        {getMemeToneLabel(tone)}
-                      </option>
-                    ))}
-                  </select>
-                </label>
-
-                <label className="flex h-full flex-col">
                   <span className="text-sm font-medium sm:min-h-[2.75rem]">Variants Per Post</span>
                   <input
                     type="number"
@@ -1764,7 +1710,7 @@ export default function Home() {
               </label>
 
               <p className="text-xs text-slate-600">
-                Leave tone and prompt blank to let AI come up with clever and funny meme variants automatically.
+                Meme style is inferred automatically from Brand Voice, Goal, Post Type, and your prompt details.
               </p>
               <p className="text-xs text-slate-600">
                 Total meme images for this run: {totalMemeVariants} ({form.numberOfPosts} post
@@ -2520,6 +2466,29 @@ export default function Home() {
           </div>
         </section>
       </section>
+
+      {isLoading ? (
+        <div className="generation-overlay" role="status" aria-live="polite" aria-busy="true">
+          <div className="generation-overlay__grain" />
+          <div className="generation-overlay__grid" />
+          <div className="generation-overlay__orb generation-overlay__orb--one" />
+          <div className="generation-overlay__orb generation-overlay__orb--two" />
+
+          <div className="generation-overlay__card">
+            <p className="generation-overlay__kicker">Adapty Content Studio</p>
+            <h2 className="generation-overlay__title">Generating your post set</h2>
+            <p className="generation-overlay__subtitle">
+              Running retrieval, writing, and quality pass.
+            </p>
+            <div className="generation-overlay__progress" aria-hidden>
+              <span className="generation-overlay__progress-bar" />
+            </div>
+            <p className="generation-overlay__meta">
+              This can take up to a few seconds for multi-post runs with meme and chart companions.
+            </p>
+          </div>
+        </div>
+      ) : null}
     </main>
   );
 }

@@ -25,3 +25,147 @@ body {
     radial-gradient(800px 380px at 105% 0%, #e6f5ff 0%, transparent 60%),
     linear-gradient(180deg, var(--background), var(--background-alt));
 }
+
+@keyframes generation-pan {
+  0% {
+    transform: translateX(-60%);
+  }
+  100% {
+    transform: translateX(160%);
+  }
+}
+
+@keyframes generation-float {
+  0%,
+  100% {
+    transform: translate3d(0, 0, 0) scale(1);
+  }
+  50% {
+    transform: translate3d(0, -18px, 0) scale(1.05);
+  }
+}
+
+@keyframes generation-pulse {
+  0%,
+  100% {
+    opacity: 0.32;
+  }
+  50% {
+    opacity: 0.65;
+  }
+}
+
+.generation-overlay {
+  position: fixed;
+  inset: 0;
+  z-index: 70;
+  display: grid;
+  place-items: center;
+  padding: 1.5rem;
+  background: linear-gradient(145deg, rgba(8, 14, 28, 0.9), rgba(11, 27, 44, 0.88));
+  backdrop-filter: blur(10px);
+}
+
+.generation-overlay__grain {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  background-image: radial-gradient(rgba(255, 255, 255, 0.14) 0.5px, transparent 0.5px);
+  background-size: 3px 3px;
+  opacity: 0.08;
+}
+
+.generation-overlay__grid {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  background-image: linear-gradient(rgba(79, 196, 255, 0.2) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(79, 196, 255, 0.16) 1px, transparent 1px);
+  background-size: 72px 72px;
+  mask-image: radial-gradient(circle at center, rgba(0, 0, 0, 0.9), transparent 80%);
+  animation: generation-pulse 3.2s ease-in-out infinite;
+}
+
+.generation-overlay__orb {
+  position: absolute;
+  border-radius: 9999px;
+  filter: blur(30px);
+  pointer-events: none;
+}
+
+.generation-overlay__orb--one {
+  width: min(42vw, 380px);
+  height: min(42vw, 380px);
+  top: 12%;
+  left: 10%;
+  background: rgba(78, 167, 255, 0.28);
+  animation: generation-float 5.4s ease-in-out infinite;
+}
+
+.generation-overlay__orb--two {
+  width: min(36vw, 320px);
+  height: min(36vw, 320px);
+  right: 8%;
+  bottom: 10%;
+  background: rgba(66, 236, 203, 0.24);
+  animation: generation-float 4.8s ease-in-out infinite reverse;
+}
+
+.generation-overlay__card {
+  position: relative;
+  width: min(92vw, 680px);
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  border-radius: 22px;
+  background: linear-gradient(160deg, rgba(255, 255, 255, 0.1), rgba(255, 255, 255, 0.06));
+  box-shadow: 0 30px 120px rgba(0, 0, 0, 0.45), inset 0 1px 0 rgba(255, 255, 255, 0.24);
+  padding: clamp(1.1rem, 2.5vw, 2rem);
+  color: #e8f2ff;
+  backdrop-filter: blur(7px);
+}
+
+.generation-overlay__kicker {
+  margin: 0;
+  font-size: 0.72rem;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+  color: rgba(195, 218, 255, 0.92);
+}
+
+.generation-overlay__title {
+  margin: 0.45rem 0 0;
+  font-size: clamp(1.25rem, 2.3vw, 2rem);
+  line-height: 1.15;
+  font-weight: 600;
+}
+
+.generation-overlay__subtitle {
+  margin: 0.6rem 0 0;
+  color: rgba(224, 235, 255, 0.88);
+  font-size: clamp(0.9rem, 1.6vw, 1.03rem);
+}
+
+.generation-overlay__progress {
+  position: relative;
+  overflow: hidden;
+  margin-top: 1.1rem;
+  height: 10px;
+  border-radius: 999px;
+  border: 1px solid rgba(255, 255, 255, 0.22);
+  background: rgba(255, 255, 255, 0.08);
+}
+
+.generation-overlay__progress-bar {
+  position: absolute;
+  inset: 0;
+  width: 42%;
+  border-radius: inherit;
+  background: linear-gradient(90deg, rgba(71, 171, 255, 0.5), rgba(82, 239, 207, 0.9), rgba(71, 171, 255, 0.5));
+  animation: generation-pan 1.2s linear infinite;
+}
+
+.generation-overlay__meta {
+  margin: 0.75rem 0 0;
+  color: rgba(198, 216, 245, 0.82);
+  font-size: 0.8rem;
+  line-height: 1.45;
+}

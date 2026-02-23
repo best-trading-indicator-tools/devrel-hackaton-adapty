@@ -38,7 +38,6 @@ export const runtime = "nodejs";
 
 const MEME_INPUT_TYPE_PATTERN = /\b(meme|shitpost)\b/i;
 const MEME_LINE_MAX_CHARS = 72;
-const DEFAULT_MEME_TONE = "clever, funny, and relevant to B2C mobile app growth";
 const DEFAULT_MEMEGEN_BASE_URL = "https://api.memegen.link";
 const FACT_CHECK_EVIDENCE_PROMPT_LIMIT = 4;
 
@@ -433,13 +432,13 @@ function buildHeuristicMemeVariants(params: {
   body: string;
   index: number;
   variantCount: number;
-  tone: string;
+  toneProfile: string;
   preferredTemplateIds: MemeTemplateId[];
   allowedTemplateIds: MemeTemplateId[];
 }) {
   const fallbackTop = clipMemeLine(params.hook, MEME_LINE_MAX_CHARS) || "App growth team update";
   const fallbackBottom = clipMemeLine(pickMemeBottomLine(params.body), MEME_LINE_MAX_CHARS) || "Still iterating";
-  const compactTone = clipMemeLine(params.tone, 48) || "clever";
+  const compactTone = clipMemeLine(params.toneProfile, 48) || "clever";
   const preferredTemplates = params.preferredTemplateIds.length ? params.preferredTemplateIds : params.allowedTemplateIds;
   const allowedTemplates = preferredTemplates.length ? preferredTemplates : MEME_TEMPLATE_IDS;
 
@@ -578,6 +577,61 @@ function resolvePostTypeDirective(inputType: string): string {
   }
 
   return "Respect the requested post type with concrete context, practical value, and clear reader payoff.";
+}
+
+function resolveMemeToneProfile(params: {
+  style: string;
+  goal: ContentGoal;
+  inputType: string;
+  memeBrief: string;
+}): string {
+  const styleKey = params.style.trim().toLowerCase();
+  const typeKey = params.inputType.trim().toLowerCase();
+
+  const styleProfile = (() => {
+    if (styleKey === "clickbait") {
+      return "high-contrast curiosity, punchy lines, and sharp payoff";
+    }
+    if (styleKey === "founder personal") {
+      return "lived operator pain, practical and self-aware humor";
+    }
+    if (styleKey === "bold / contrarian") {
+      return "provocative contrarian framing with strong but useful punchlines";
+    }
+    if (styleKey === "technical breakdown") {
+      return "builder-grade jokes tied to mechanics, metrics, and workflows";
+    }
+    if (styleKey === "playful meme tone") {
+      return "internet-native humor with clever and playful caption style";
+    }
+    return "Adapty-style sharp practical humor grounded in growth reality";
+  })();
+
+  const goalProfile = (() => {
+    if (params.goal === "virality") {
+      return "optimize for shareability and quote-worthy contrast";
+    }
+    if (params.goal === "engagement") {
+      return "optimize for comments and debate without losing clarity";
+    }
+    if (params.goal === "traffic") {
+      return "optimize for curiosity that leads to qualified clicks";
+    }
+    if (params.goal === "awareness") {
+      return "optimize for broad clarity and memorable framing";
+    }
+    return "balance reach, comments, and click intent";
+  })();
+
+  const postTypeProfile = /meme|shitpost/.test(typeKey)
+    ? "keep captions short, visual, and directly relatable to mobile app monetization pain"
+    : "keep humor useful and tied to the post context";
+
+  const briefProfile = params.memeBrief.trim()
+    ? `honor user brief: "${normalizeNoEmDash(params.memeBrief.trim())}"`
+    : "no custom brief provided, invent a clever and funny angle automatically";
+
+  return `${styleProfile}; ${goalProfile}; ${postTypeProfile}; ${briefProfile}.`;
 }
 
 function looksLikeSaucePostType(inputType: string): boolean {
@@ -791,7 +845,6 @@ export async function POST(request: Request) {
       input.inputType,
       preparedChartInput ? `chart:${preparedChartInput.type}` : "",
       preparedChartInput?.title ?? "",
-      input.memeTone,
       input.memeBrief,
       input.memeTemplateIds.length ? `templates:${input.memeTemplateIds.join(",")}` : "",
       input.time,
@@ -834,7 +887,12 @@ export async function POST(request: Request) {
       ? "Chart companion is enabled. Ground the narrative in the provided chart values and call out one or two concrete numbers naturally."
       : "No chart companion requested.";
     const chartPromptSummary = preparedChartInput ? summarizeChartForPrompt(preparedChartInput) : "(not provided)";
-    const memeTonePreference = input.memeTone.trim() || DEFAULT_MEME_TONE;
+    const memeToneProfile = resolveMemeToneProfile({
+      style: input.style,
+      goal: input.goal,
+      inputType: input.inputType,
+      memeBrief: input.memeBrief,
+    });
     const memeBriefPreference = input.memeBrief.trim();
     const memeTemplatePreferences = Array.from(
       new Set(
@@ -935,7 +993,7 @@ Generation request:
 - Chart execution directive: ${chartExecutionDirective}
 - Chart summary: ${chartPromptSummary}
 - Meme execution directive: ${memeExecutionDirective}
-- Meme tone preference: ${memeTonePreference}
+- Meme tone profile (auto-inferred): ${memeToneProfile}
 - Meme brief: ${memeBriefPreference || "(not provided, use clever/funny defaults)"}
 - Meme template preferences: ${memeTemplatePreferences.length ? memeTemplatePreferences.join(", ") : "auto"}
 - Meme variants per post target: ${memeVariantTarget}
@@ -1045,7 +1103,7 @@ Never use em dash punctuation. Use standard hyphen if needed.
 `;
       const memeSelectionUserPrompt = `
 Meme selection request:
-- Tone preference: ${memeTonePreference}
+- Tone profile (inferred): ${memeToneProfile}
 - Meme brief: ${memeBriefPreference || "(none provided - come up with a clever and funny angle automatically)"}
 - Template preferences: ${memeTemplatePreferences.length ? memeTemplatePreferences.join(", ") : "(auto choose from allowed templates)"}
 - Variants required per post: ${memeVariantTarget}
@@ -1138,7 +1196,7 @@ For each post:
                 body: post.body,
                 index,
                 variantCount: memeVariantTarget,
-                tone: memeTonePreference,
+                toneProfile: memeToneProfile,
                 preferredTemplateIds: memeTemplatePreferences,
                 allowedTemplateIds,
               });
