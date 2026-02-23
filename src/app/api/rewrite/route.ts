@@ -12,6 +12,7 @@ export const runtime = "nodejs";
 
 const rewriteRequestSchema = z.object({
   mode: z.enum(["post", "line"]),
+  lineTarget: z.enum(["body", "cta"]).default("body"),
   style: z.string().trim().min(1).max(260),
   goal: z.enum(GOAL_OPTIONS),
   inputType: z.string().trim().min(1).max(120),
@@ -287,17 +288,32 @@ Output requirements:
       }
 
       const bodyLines = input.post.body.split("\n");
+      const lineTarget = input.lineTarget;
       const lineIndex = input.lineIndex ?? 0;
-      if (lineIndex < 0 || lineIndex >= bodyLines.length) {
-        throw new Error("Selected line index is out of range.");
+      let selectedLine = "";
+      let previousLine = "";
+      let nextLine = "";
+      let lineLabel = "";
+
+      if (lineTarget === "cta") {
+        selectedLine = input.post.cta;
+        const previousBodyLine = [...bodyLines].reverse().find((line) => line.trim().length > 0) ?? "";
+        previousLine = previousBodyLine;
+        nextLine = "";
+        lineLabel = "CTA line";
+      } else {
+        if (lineIndex < 0 || lineIndex >= bodyLines.length) {
+          throw new Error("Selected line index is out of range.");
+        }
+
+        selectedLine = bodyLines[lineIndex] ?? "";
+        previousLine = lineIndex > 0 ? bodyLines[lineIndex - 1] ?? "" : "";
+        nextLine = lineIndex < bodyLines.length - 1 ? bodyLines[lineIndex + 1] ?? "" : "";
+        lineLabel = `Body line ${lineIndex + 1}`;
       }
 
-      const selectedLine = bodyLines[lineIndex] ?? "";
-      const previousLine = lineIndex > 0 ? bodyLines[lineIndex - 1] ?? "" : "";
-      const nextLine = lineIndex < bodyLines.length - 1 ? bodyLines[lineIndex + 1] ?? "" : "";
-
       const userPrompt = `
-Regenerate one body line of a LinkedIn post.
+Regenerate one line of a LinkedIn post.
 
 Context:
 - Brand voice: ${input.style}
@@ -310,7 +326,7 @@ Context:
 Post hook:
 ${input.post.hook}
 
-Current line number: ${lineIndex + 1}
+Line target: ${lineLabel}
 Current line text:
 ${selectedLine}
 
@@ -325,8 +341,8 @@ ${promptDirective}
 
 Output requirements:
 - Return JSON with one field: line
-- Rewrite only the selected line
-- Keep line style coherent with adjacent lines
+- Rewrite only the selected target line
+- Keep line style coherent with adjacent lines and overall post direction
 - Do not include numbering, bullets, or quotes
 `;
 

@@ -537,7 +537,9 @@ export default function Home() {
   const [rewriteLoadingKey, setRewriteLoadingKey] = useState<string | null>(null);
   const [rewritePromptByPost, setRewritePromptByPost] = useState<Record<number, string>>({});
   const [manualLineDraftByPost, setManualLineDraftByPost] = useState<Record<number, string>>({});
+  const [manualCtaDraftByPost, setManualCtaDraftByPost] = useState<Record<number, string>>({});
   const [selectedLineByPost, setSelectedLineByPost] = useState<Record<number, number>>({});
+  const [selectedCtaByPost, setSelectedCtaByPost] = useState<Record<number, boolean>>({});
   const [rewriteErrorByPost, setRewriteErrorByPost] = useState<Record<number, string>>({});
   const [lineFeedbackByPost, setLineFeedbackByPost] = useState<Record<number, string>>({});
   const [imageName, setImageName] = useState<string>("");
@@ -773,7 +775,9 @@ export default function Home() {
     setIsLoading(true);
     setRewritePromptByPost({});
     setManualLineDraftByPost({});
+    setManualCtaDraftByPost({});
     setSelectedLineByPost({});
+    setSelectedCtaByPost({});
     setRewriteErrorByPost({});
     setLineFeedbackByPost({});
     setRewriteLoadingKey(null);
@@ -872,6 +876,16 @@ export default function Home() {
       ...prev,
       [postIndex]: lineText,
     }));
+    setSelectedCtaByPost((prev) => {
+      const next = { ...prev };
+      delete next[postIndex];
+      return next;
+    });
+    setManualCtaDraftByPost((prev) => {
+      const next = { ...prev };
+      delete next[postIndex];
+      return next;
+    });
     setRewriteErrorByPost((prev) => ({
       ...prev,
       [postIndex]: "",
@@ -931,6 +945,75 @@ export default function Home() {
     }));
   }
 
+  function selectCtaForEditing(postIndex: number, ctaText: string) {
+    setSelectedCtaByPost((prev) => ({
+      ...prev,
+      [postIndex]: true,
+    }));
+    setManualCtaDraftByPost((prev) => ({
+      ...prev,
+      [postIndex]: ctaText,
+    }));
+    setSelectedLineByPost((prev) => {
+      const next = { ...prev };
+      delete next[postIndex];
+      return next;
+    });
+    setManualLineDraftByPost((prev) => {
+      const next = { ...prev };
+      delete next[postIndex];
+      return next;
+    });
+    setRewriteErrorByPost((prev) => ({
+      ...prev,
+      [postIndex]: "",
+    }));
+    setLineFeedbackByPost((prev) => ({
+      ...prev,
+      [postIndex]: "",
+    }));
+  }
+
+  function applyManualCtaEdit(postIndex: number) {
+    const post = result?.posts[postIndex];
+    if (!post) {
+      return;
+    }
+
+    const draft = manualCtaDraftByPost[postIndex];
+    if (typeof draft !== "string") {
+      return;
+    }
+
+    const normalizedDraft = normalizeNoEmDash(draft);
+
+    updateResultPost(postIndex, (currentPost) => ({
+      ...currentPost,
+      cta: normalizedDraft,
+      meme: undefined,
+      memeVariants: undefined,
+    }));
+
+    setSelectedCtaByPost((prev) => {
+      const next = { ...prev };
+      delete next[postIndex];
+      return next;
+    });
+    setManualCtaDraftByPost((prev) => {
+      const next = { ...prev };
+      delete next[postIndex];
+      return next;
+    });
+    setRewriteErrorByPost((prev) => ({
+      ...prev,
+      [postIndex]: "",
+    }));
+    setLineFeedbackByPost((prev) => ({
+      ...prev,
+      [postIndex]: "CTA saved.",
+    }));
+  }
+
   function cancelBodyLineEdit(postIndex: number) {
     setSelectedLineByPost((prev) => {
       const next = { ...prev };
@@ -947,6 +1030,23 @@ export default function Home() {
       [postIndex]: "",
     }));
     setLineFeedbackByPost((prev) => ({
+      ...prev,
+      [postIndex]: "",
+    }));
+  }
+
+  function cancelCtaEdit(postIndex: number) {
+    setSelectedCtaByPost((prev) => {
+      const next = { ...prev };
+      delete next[postIndex];
+      return next;
+    });
+    setManualCtaDraftByPost((prev) => {
+      const next = { ...prev };
+      delete next[postIndex];
+      return next;
+    });
+    setRewriteErrorByPost((prev) => ({
       ...prev,
       [postIndex]: "",
     }));
@@ -1026,6 +1126,16 @@ export default function Home() {
         ...prev,
         [postIndex]: "",
       }));
+      setSelectedCtaByPost((prev) => {
+        const next = { ...prev };
+        delete next[postIndex];
+        return next;
+      });
+      setManualCtaDraftByPost((prev) => {
+        const next = { ...prev };
+        delete next[postIndex];
+        return next;
+      });
       setSelectedLineByPost((prev) => {
         const next = { ...prev };
         delete next[postIndex];
@@ -1130,6 +1240,96 @@ export default function Home() {
       setLineFeedbackByPost((prev) => ({
         ...prev,
         [postIndex]: "Line rewritten with AI.",
+      }));
+    } catch {
+      setRewriteErrorByPost((prev) => ({
+        ...prev,
+        [postIndex]: "Could not reach the rewrite API route.",
+      }));
+    } finally {
+      setRewriteLoadingKey(null);
+    }
+  }
+
+  async function regenerateCtaLine(postIndex: number) {
+    const post = result?.posts[postIndex];
+    if (!post) {
+      return;
+    }
+
+    setRewriteErrorByPost((prev) => ({
+      ...prev,
+      [postIndex]: "",
+    }));
+    setLineFeedbackByPost((prev) => ({
+      ...prev,
+      [postIndex]: "",
+    }));
+    setRewriteLoadingKey(`cta-${postIndex}`);
+
+    try {
+      const response = await fetch("/api/rewrite", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+          mode: "line",
+          lineTarget: "cta",
+          ...rewriteContext,
+          prompt: "",
+          post: {
+            length: post.length,
+            hook: post.hook,
+            body: post.body,
+            cta: post.cta,
+          },
+        }),
+      });
+
+      const responsePayload = await response.json();
+
+      if (!response.ok) {
+        setRewriteErrorByPost((prev) => ({
+          ...prev,
+          [postIndex]: extractApiErrorMessage(responsePayload, response.status),
+        }));
+        return;
+      }
+
+      const nextLine =
+        responsePayload && typeof responsePayload === "object" && "line" in responsePayload
+          ? String((responsePayload as { line?: unknown }).line ?? "")
+          : "";
+
+      if (!nextLine.trim()) {
+        setRewriteErrorByPost((prev) => ({
+          ...prev,
+          [postIndex]: "Rewrite API returned an empty CTA line.",
+        }));
+        return;
+      }
+
+      updateResultPost(postIndex, (currentPost) => ({
+        ...currentPost,
+        cta: normalizeNoEmDash(nextLine.trim()),
+        meme: undefined,
+        memeVariants: undefined,
+      }));
+
+      setSelectedCtaByPost((prev) => {
+        const next = { ...prev };
+        delete next[postIndex];
+        return next;
+      });
+      setManualCtaDraftByPost((prev) => {
+        const next = { ...prev };
+        delete next[postIndex];
+        return next;
+      });
+      setLineFeedbackByPost((prev) => ({
+        ...prev,
+        [postIndex]: "CTA rewritten with AI.",
       }));
     } catch {
       setRewriteErrorByPost((prev) => ({
@@ -1937,11 +2137,14 @@ export default function Home() {
               const selectedLine = bodyLineOptions.find(
                 (lineOption) => lineOption.lineIndex === selectedLineByPost[index] && !lineOption.isBlank,
               );
+              const isCtaEditing = Boolean(selectedCtaByPost[index]);
               const manualLineDraft = manualLineDraftByPost[index] ?? selectedLine?.text ?? "";
+              const manualCtaDraft = manualCtaDraftByPost[index] ?? post.cta;
               const isPostRewriteLoading = rewriteLoadingKey === `post-${index}`;
               const isLineRewriteLoading = selectedLine
                 ? rewriteLoadingKey === `line-${index}-${selectedLine.lineIndex}`
                 : false;
+              const isCtaRewriteLoading = rewriteLoadingKey === `cta-${index}`;
 
               return (
                 <article key={`${post.hook}-${index}`} className="rounded-3xl border border-black/10 bg-white p-4 shadow-[0_10px_24px_rgba(0,0,0,0.07)] sm:p-5">
@@ -2043,7 +2246,59 @@ export default function Home() {
 
                     <div className="mt-2 rounded-md border border-slate-200 bg-white px-2 py-1.5">
                       <p className="mb-0.5 text-[11px] font-semibold uppercase tracking-wide text-slate-500">CTA</p>
-                      <p className="whitespace-pre-wrap text-sm font-medium text-slate-900">{post.cta}</p>
+                      {isCtaEditing ? (
+                        <div className="rounded-md border border-emerald-200 bg-emerald-50/40 p-2">
+                          <textarea
+                            rows={2}
+                            autoFocus
+                            className="w-full rounded-lg border border-emerald-200 bg-white px-2 py-2 text-sm font-medium text-slate-900 outline-none transition focus:border-emerald-500"
+                            value={manualCtaDraft}
+                            onChange={(event) =>
+                              setManualCtaDraftByPost((prev) => ({
+                                ...prev,
+                                [index]: event.target.value,
+                              }))
+                            }
+                          />
+                          <div className="mt-2 flex flex-wrap gap-2">
+                            <button
+                              type="button"
+                              className="inline-flex items-center gap-1.5 rounded-lg border border-emerald-200 bg-emerald-50 px-2.5 py-1.5 text-xs font-medium text-emerald-700 hover:bg-emerald-100 disabled:cursor-not-allowed disabled:opacity-60"
+                              disabled={isLoading || Boolean(rewriteLoadingKey) || !manualCtaDraft.trim()}
+                              onClick={() => applyManualCtaEdit(index)}
+                            >
+                              <IconCheck className="h-3.5 w-3.5" />
+                              Save CTA
+                            </button>
+                            <button
+                              type="button"
+                              className="inline-flex items-center gap-1.5 rounded-lg border border-indigo-200 bg-indigo-50 px-2.5 py-1.5 text-xs font-medium text-indigo-700 hover:bg-indigo-100 disabled:cursor-not-allowed disabled:opacity-60"
+                              disabled={isLoading || isCtaRewriteLoading || Boolean(rewriteLoadingKey)}
+                              onClick={() => regenerateCtaLine(index)}
+                            >
+                              <IconSpark className="h-3.5 w-3.5" />
+                              {isCtaRewriteLoading ? "AI Rewriting..." : "AI Rewrite CTA"}
+                            </button>
+                            <button
+                              type="button"
+                              className="inline-flex items-center gap-1.5 rounded-lg border border-slate-300 bg-white px-2.5 py-1.5 text-xs font-medium text-slate-700 hover:bg-slate-100 disabled:cursor-not-allowed disabled:opacity-60"
+                              disabled={isLoading || Boolean(rewriteLoadingKey)}
+                              onClick={() => cancelCtaEdit(index)}
+                            >
+                              <IconClose className="h-3.5 w-3.5" />
+                              Cancel
+                            </button>
+                          </div>
+                        </div>
+                      ) : (
+                        <button
+                          type="button"
+                          className="w-full rounded-md border border-transparent px-1 py-0.5 text-left text-sm font-medium text-slate-900 transition hover:border-emerald-200 hover:bg-emerald-50/60"
+                          onClick={() => selectCtaForEditing(index, post.cta)}
+                        >
+                          {post.cta}
+                        </button>
+                      )}
                     </div>
                   </div>
 
