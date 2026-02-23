@@ -145,6 +145,8 @@ These are implemented in `src/lib/library-retrieval.ts`.
 - Prompt also loads repository guides:
   - `prompts/linkedin/WRITING.md`
   - `prompts/linkedin/SAUCE.md` (applied for Sauce post type)
+  - `prompts/linkedin/ASO.md` (applied for Sauce post type)
+  - `prompts/linkedin/PAYWALL.md` (applied for Sauce post type)
   - `prompts/linkedin/FACT_CHECK.md`
 - If Brand Voice is `adapty`, prompt treats `linkedin-adapty-library` as canonical style source
 - Hook strategy is auto-derived from Brand Voice + Post Type + Goal
@@ -192,7 +194,7 @@ Use `.env` (local) and set same keys in Vercel project settings.
 ### Retrieval
 
 - `ENABLE_LANCEDB=true|false`
-- `OPENAI_EMBEDDING_MODEL` (default `text-embedding-3-small`)
+- `OPENAI_EMBEDDING_MODEL` (default `text-embedding-3-small`, recommended `text-embedding-3-large` for quality-first retrieval)
 - `OPENAI_EMBEDDING_BASE_URL` (optional)
 
 ### Memes
@@ -205,13 +207,19 @@ Use `.env` (local) and set same keys in Vercel project settings.
 - `BRAVE_SEARCH_API_KEY` (required to run live web evidence lookup)
 - `WEB_FACT_CHECK_MAX_RESULTS` (optional, default `4`)
 
-## Why `text-embedding-3-small` by default
+## Embedding model choice
 
-- Lower cost
-- Faster indexing and retrieval
-- Good quality for this library-matching use case
+- `text-embedding-3-small`:
+  - Lower cost
+  - Faster indexing and retrieval
+  - Good default when iterating often
+- `text-embedding-3-large`:
+  - Better semantic precision and ranking quality
+  - Better for nuanced style matching and mixed-topic libraries
+  - Higher cost and a bit slower
 
-If you want more semantic precision, switch to `text-embedding-3-large`.
+Recommendation:
+- Use `text-embedding-3-large` in production when output quality is the priority and library updates are not extremely frequent.
 
 ## Content library format
 

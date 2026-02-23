@@ -876,8 +876,17 @@ export async function POST(request: Request) {
 
     const responseSchema = makeGeneratePostsResponseSchema(input.numberOfPosts);
     const promptGuides = await getPromptGuides();
-    const sauceGuideSection = looksLikeSaucePostType(input.inputType)
-      ? `\nSauce guide from repository prompt file:\n${promptGuides.sauce}\n`
+    const sauceDomainGuideSection = looksLikeSaucePostType(input.inputType)
+      ? `
+Sauce guide from repository prompt file:
+${promptGuides.sauce}
+
+ASO guide from repository prompt file:
+${promptGuides.aso}
+
+Paywall guide from repository prompt file:
+${promptGuides.paywall}
+`
       : "";
 
     const systemPrompt = `
@@ -893,7 +902,7 @@ ${toBulletedSection(LINKEDIN_WRITING_CONTRACT)}
 
 Repository writing guide:
 ${promptGuides.writing}
-${sauceGuideSection}
+${sauceDomainGuideSection}
 Repository fact-check guide:
 ${promptGuides.factCheck}
 

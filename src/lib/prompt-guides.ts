@@ -1,13 +1,15 @@
 import { readFile } from "node:fs/promises";
 import path from "node:path";
 
-type PromptGuideKey = "writing" | "sauce" | "factCheck";
+type PromptGuideKey = "writing" | "sauce" | "aso" | "paywall" | "factCheck";
 
 export type PromptGuides = Record<PromptGuideKey, string>;
 
 const GUIDE_PATHS: Record<PromptGuideKey, string> = {
   writing: path.join(process.cwd(), "prompts", "linkedin", "WRITING.md"),
   sauce: path.join(process.cwd(), "prompts", "linkedin", "SAUCE.md"),
+  aso: path.join(process.cwd(), "prompts", "linkedin", "ASO.md"),
+  paywall: path.join(process.cwd(), "prompts", "linkedin", "PAYWALL.md"),
   factCheck: path.join(process.cwd(), "prompts", "linkedin", "FACT_CHECK.md"),
 };
 
@@ -24,6 +26,14 @@ const DEFAULT_GUIDES: PromptGuides = {
     "For Sauce posts, combine practical breakdown and data insight.",
     "Lead with a hard question, explain mechanism, add concrete evidence, give actions, include caveats.",
     "Keep concrete density high and include at least one lived observation line.",
+  ].join("\n"),
+  aso: [
+    "For ASO topics, focus on intent fit, conversion levers, and practical diagnostics before tool chatter.",
+    "Use concrete metrics and caveats by geo, app category, and traffic source.",
+  ].join("\n"),
+  paywall: [
+    "For paywall topics, prioritize sequence, offer clarity, and traffic quality before micro-copy tweaks.",
+    "Use concrete diagnostics and one practical experiment the team can run quickly.",
   ].join("\n"),
   factCheck: [
     "For factual claims, prefer web-verified evidence.",
@@ -54,15 +64,19 @@ export async function getPromptGuides(): Promise<PromptGuides> {
     return guideCache;
   }
 
-  const [writing, sauce, factCheck] = await Promise.all([
+  const [writing, sauce, aso, paywall, factCheck] = await Promise.all([
     loadGuide("writing"),
     loadGuide("sauce"),
+    loadGuide("aso"),
+    loadGuide("paywall"),
     loadGuide("factCheck"),
   ]);
 
   guideCache = {
     writing,
     sauce,
+    aso,
+    paywall,
     factCheck,
   };
 
