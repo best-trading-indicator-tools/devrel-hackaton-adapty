@@ -3,6 +3,7 @@
 import { ChangeEvent, FormEvent, useEffect, useMemo, useRef, useState } from "react";
 import NextImage from "next/image";
 
+import { RSS_FEEDS, type FeedCategory, type RssFeed } from "@/config/rss-feeds";
 import {
   BRAND_VOICE_PRESETS,
   BRAND_VOICE_PROFILES,
@@ -84,6 +85,7 @@ const MEME_TOPIC_PATTERN = /\b(meme|shitpost)\b/i;
 const CUSTOM_BRAND_VOICE = "__custom__";
 const CHART_LEGEND_POSITIONS: ChartLegendPosition[] = ["top", "right", "bottom", "left"];
 const MAX_TEMPLATE_RESULTS = 80;
+const INDUSTRY_NEWS_REACTION_PATTERN = /\bindustry news reaction\b/i;
 
 type MemeTemplateOption = {
   id: string;
@@ -414,6 +416,23 @@ function needsChartDetails(inputType: string): boolean {
   return !MEME_TOPIC_PATTERN.test(inputType);
 }
 
+function needsIndustryNewsRssGuide(inputType: string): boolean {
+  return INDUSTRY_NEWS_REACTION_PATTERN.test(inputType);
+}
+
+function formatFeedCategoryLabel(category: FeedCategory): string {
+  switch (category) {
+    case "platform":
+      return "Platform";
+    case "monetization":
+      return "Monetization";
+    case "growth":
+      return "Growth";
+    default:
+      return category;
+  }
+}
+
 function buildPostTypeAllocations(inputTypes: string[], totalPosts: number): PostTypeAllocation[] {
   const uniqueTypes = Array.from(new Set(inputTypes)).filter((type) => POST_TYPE_OPTIONS.includes(type as (typeof POST_TYPE_OPTIONS)[number]));
   const safeTypes = uniqueTypes.length ? uniqueTypes : [defaultForm.inputType];
@@ -631,6 +650,30 @@ export default function Home() {
   const showChartFields = useMemo(
     () => normalizedSelectedPostTypes.some((type) => needsChartDetails(type)),
     [normalizedSelectedPostTypes],
+  );
+  const showIndustryNewsRssFeeds = useMemo(
+    () => normalizedSelectedPostTypes.some((type) => needsIndustryNewsRssGuide(type)),
+    [normalizedSelectedPostTypes],
+  );
+  const groupedIndustryRssFeeds = useMemo(() => {
+    const grouped: Record<FeedCategory, RssFeed[]> = {
+      platform: [],
+      monetization: [],
+      growth: [],
+    };
+
+    for (const feed of RSS_FEEDS) {
+      if (!feed.enabled) {
+        continue;
+      }
+      grouped[feed.category].push(feed);
+    }
+
+    return grouped;
+  }, []);
+  const enabledIndustryRssCount = useMemo(
+    () => RSS_FEEDS.filter((feed) => feed.enabled).length,
+    [],
   );
   const selectedPostTypeSummary = useMemo(
     () => summarizeSelectedPostTypes(normalizedSelectedPostTypes),
@@ -1745,6 +1788,59 @@ export default function Home() {
               })}
             </div>
           </div>
+
+          {showIndustryNewsRssFeeds ? (
+            <div className="space-y-3 rounded-2xl border border-sky-200 bg-sky-50/70 p-3">
+              <div className="flex flex-wrap items-center justify-between gap-2">
+                <p className="text-sm font-medium text-slate-900">Industry News RSS Sources</p>
+                <p className="text-xs text-slate-600">{enabledIndustryRssCount} enabled feeds</p>
+              </div>
+              <p className="text-xs text-slate-600">
+                These sources are used to build ranked news context for Industry news reaction posts.
+              </p>
+              <div className="grid gap-3 lg:grid-cols-3">
+                {(Object.keys(groupedIndustryRssFeeds) as FeedCategory[]).map((category) => {
+                  const feeds = groupedIndustryRssFeeds[category];
+                  if (!feeds.length) {
+                    return null;
+                  }
+
+                  return (
+                    <div key={category} className="space-y-2 rounded-xl border border-sky-200 bg-white p-3">
+                      <div className="flex items-center justify-between gap-2">
+                        <p className="text-xs font-semibold uppercase tracking-wide text-slate-700">
+                          {formatFeedCategoryLabel(category)}
+                        </p>
+                        <span className="rounded-full bg-slate-100 px-2 py-0.5 text-[11px] text-slate-600">
+                          {feeds.length}
+                        </span>
+                      </div>
+                      <ul className="space-y-2">
+                        {feeds.map((feed) => (
+                          <li key={feed.id} className="rounded-lg border border-black/10 bg-slate-50 p-2">
+                            <div className="mb-1 flex flex-wrap items-center gap-1.5">
+                              <a
+                                href={feed.url}
+                                target="_blank"
+                                rel="noreferrer"
+                                className="text-xs font-medium text-slate-900 underline decoration-slate-300 underline-offset-2 hover:text-sky-700"
+                              >
+                                {feed.name}
+                              </a>
+                              <span className="rounded-full bg-white px-1.5 py-0.5 text-[10px] text-slate-600">
+                                P{feed.priority}
+                              </span>
+                            </div>
+                            <p className="break-all font-mono text-[10px] text-slate-500">{feed.url}</p>
+                          </li>
+                        ))}
+                      </ul>
+                    </div>
+                  );
+                })}
+              </div>
+            </div>
+          ) : null}
 
           {showMemeFields ? (
             <div className="space-y-3 rounded-2xl border border-black/10 bg-slate-50 p-3">
