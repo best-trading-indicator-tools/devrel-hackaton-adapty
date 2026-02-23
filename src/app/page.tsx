@@ -19,6 +19,8 @@ import {
 } from "@/lib/constants";
 import type { GeneratePostsResponse } from "@/lib/schemas";
 
+type ChartLegendPosition = "top" | "right" | "bottom" | "left";
+
 type FormState = {
   style: string;
   hookStyle: string;
@@ -27,8 +29,12 @@ type FormState = {
   chartEnabled: boolean;
   chartType: ChartTypeOption;
   chartTitle: string;
-  chartData: string;
-  chartOptions: string;
+  chartLabels: string;
+  chartSeriesOneLabel: string;
+  chartSeriesOneValues: string;
+  chartSeriesTwoLabel: string;
+  chartSeriesTwoValues: string;
+  chartLegendPosition: ChartLegendPosition;
   memeTone: string;
   memeBrief: string;
   memeTemplateId: MemeTemplateId | "";
@@ -50,8 +56,12 @@ const defaultForm: FormState = {
   chartEnabled: false,
   chartType: "doughnut",
   chartTitle: "",
-  chartData: "",
-  chartOptions: "",
+  chartLabels: "Without trial, With paid trial, With free trial",
+  chartSeriesOneLabel: "Share %",
+  chartSeriesOneValues: "56.9, 28.9, 14.3",
+  chartSeriesTwoLabel: "",
+  chartSeriesTwoValues: "",
+  chartLegendPosition: "right",
   memeTone: "",
   memeBrief: "",
   memeTemplateId: "",
@@ -88,55 +98,108 @@ const HOOK_STYLE_PRESETS = [
   "contrarian",
   "story-led",
 ] as const;
+const CHART_LEGEND_POSITIONS: ChartLegendPosition[] = ["top", "right", "bottom", "left"];
 
-function getDefaultChartData(chartType: ChartTypeOption): string {
-  if (chartType === "doughnut" || chartType === "pie" || chartType === "polarArea") {
-    return JSON.stringify(
-      {
-        labels: ["Without trial", "With paid trial", "With free trial"],
-        datasets: [
-          {
-            label: "Share %",
-            data: [56.9, 28.9, 14.3],
-          },
-        ],
-      },
-      null,
-      2,
-    );
-  }
-
-  return JSON.stringify(
-    {
-      labels: ["Week 1", "Week 2", "Week 3", "Week 4"],
-      datasets: [
-        {
-          label: "Trial starts",
-          data: [180, 220, 260, 310],
-        },
-        {
-          label: "Paid conversions",
-          data: [82, 94, 118, 142],
-        },
-      ],
-    },
-    null,
-    2,
-  );
+function isRadialChartType(chartType: ChartTypeOption): boolean {
+  return chartType === "doughnut" || chartType === "pie" || chartType === "polarArea";
 }
 
-function getDefaultChartOptions(): string {
-  return JSON.stringify(
+function getDefaultChartFields(chartType: ChartTypeOption) {
+  if (isRadialChartType(chartType)) {
+    return {
+      chartLabels: "Without trial, With paid trial, With free trial",
+      chartSeriesOneLabel: "Share %",
+      chartSeriesOneValues: "56.9, 28.9, 14.3",
+      chartSeriesTwoLabel: "",
+      chartSeriesTwoValues: "",
+      chartLegendPosition: "right" as ChartLegendPosition,
+    };
+  }
+
+  return {
+    chartLabels: "Week 1, Week 2, Week 3, Week 4",
+    chartSeriesOneLabel: "Trial starts",
+    chartSeriesOneValues: "180, 220, 260, 310",
+    chartSeriesTwoLabel: "Paid conversions",
+    chartSeriesTwoValues: "82, 94, 118, 142",
+    chartLegendPosition: "top" as ChartLegendPosition,
+  };
+}
+
+function splitCsvText(value: string): string[] {
+  return value
+    .split(",")
+    .map((part) => part.trim())
+    .filter(Boolean);
+}
+
+function splitCsvNumbers(value: string): number[] {
+  return splitCsvText(value).map((part) => Number(part));
+}
+
+function getLegendLabel(position: ChartLegendPosition): string {
+  return position.charAt(0).toUpperCase() + position.slice(1);
+}
+
+function buildChartPayload(form: FormState): { chartData: string; chartOptions: string } | { error: string } {
+  const labels = splitCsvText(form.chartLabels);
+  if (!labels.length) {
+    return { error: "Chart labels are required. Use comma-separated labels." };
+  }
+
+  const seriesOneValues = splitCsvNumbers(form.chartSeriesOneValues);
+  if (!seriesOneValues.length) {
+    return { error: "Primary chart values are required. Use comma-separated numbers." };
+  }
+
+  if (seriesOneValues.some((value) => !Number.isFinite(value))) {
+    return { error: "Primary chart values must be numeric." };
+  }
+
+  if (seriesOneValues.length !== labels.length) {
+    return { error: "Primary chart values count must match labels count." };
+  }
+
+  const datasets: Array<{ label: string; data: number[] }> = [
     {
-      plugins: {
-        legend: {
-          position: "right",
-        },
+      label: form.chartSeriesOneLabel.trim() || "Series 1",
+      data: seriesOneValues,
+    },
+  ];
+
+  const radialChart = isRadialChartType(form.chartType);
+  if (!radialChart) {
+    const seriesTwoValuesText = form.chartSeriesTwoValues.trim();
+    const seriesTwoLabelText = form.chartSeriesTwoLabel.trim();
+    if (seriesTwoValuesText || seriesTwoLabelText) {
+      const seriesTwoValues = splitCsvNumbers(seriesTwoValuesText);
+      if (!seriesTwoValues.length) {
+        return { error: "Secondary values are empty. Add numbers or clear the secondary fields." };
+      }
+      if (seriesTwoValues.some((value) => !Number.isFinite(value))) {
+        return { error: "Secondary chart values must be numeric." };
+      }
+      if (seriesTwoValues.length !== labels.length) {
+        return { error: "Secondary chart values count must match labels count." };
+      }
+
+      datasets.push({
+        label: seriesTwoLabelText || "Series 2",
+        data: seriesTwoValues,
+      });
+    }
+  }
+
+  const chartData = JSON.stringify({ labels, datasets });
+  const chartOptions = JSON.stringify({
+    plugins: {
+      legend: {
+        position: form.chartLegendPosition,
       },
     },
-    null,
-    2,
-  );
+  });
+
+  return { chartData, chartOptions };
 }
 
 function normalizeNoEmDash(value: string): string {
@@ -314,13 +377,28 @@ export default function Home() {
     }
 
     try {
+      let chartDataPayload = "";
+      let chartOptionsPayload = "";
+
+      if (form.chartEnabled) {
+        const chartPayload = buildChartPayload(form);
+        if ("error" in chartPayload) {
+          setError(chartPayload.error);
+          setIsLoading(false);
+          return;
+        }
+
+        chartDataPayload = chartPayload.chartData;
+        chartOptionsPayload = chartPayload.chartOptions;
+      }
+
       const requestPayload = {
         ...form,
         chartEnabled: form.chartEnabled,
         chartType: form.chartEnabled ? form.chartType : defaultForm.chartType,
         chartTitle: form.chartEnabled ? form.chartTitle : "",
-        chartData: form.chartEnabled ? form.chartData : "",
-        chartOptions: form.chartEnabled ? form.chartOptions : "",
+        chartData: form.chartEnabled ? chartDataPayload : "",
+        chartOptions: form.chartEnabled ? chartOptionsPayload : "",
         time: showEventFields ? form.time : "",
         place: showEventFields ? form.place : "",
         memeTone: showMemeFields ? form.memeTone : "",
@@ -640,14 +718,9 @@ export default function Home() {
                   setForm((prev) => ({
                     ...prev,
                     chartEnabled: event.target.checked,
-                    chartData:
-                      event.target.checked && !prev.chartData.trim()
-                        ? getDefaultChartData(prev.chartType)
-                        : prev.chartData,
-                    chartOptions:
-                      event.target.checked && !prev.chartOptions.trim()
-                        ? getDefaultChartOptions()
-                        : prev.chartOptions,
+                    ...(event.target.checked && !prev.chartLabels.trim() && !prev.chartSeriesOneValues.trim()
+                      ? getDefaultChartFields(prev.chartType)
+                      : {}),
                   }))
                 }
               />
@@ -656,7 +729,7 @@ export default function Home() {
 
             {form.chartEnabled ? (
               <div className="space-y-3">
-                <div className="grid gap-3 sm:grid-cols-2">
+                <div className="grid gap-3 sm:grid-cols-2 lg:grid-cols-3">
                   <label className="space-y-1">
                     <span className="text-sm font-medium">Chart Type</span>
                     <select
@@ -664,11 +737,26 @@ export default function Home() {
                       value={form.chartType}
                       onChange={(event) => {
                         const nextType = event.target.value as ChartTypeOption;
+                        const defaults = getDefaultChartFields(nextType);
+                        const shouldSeedDefaults = !form.chartLabels.trim() && !form.chartSeriesOneValues.trim();
 
                         setForm((prev) => ({
                           ...prev,
                           chartType: nextType,
-                          chartData: prev.chartData.trim() ? prev.chartData : getDefaultChartData(nextType),
+                          chartLegendPosition: shouldSeedDefaults ? defaults.chartLegendPosition : prev.chartLegendPosition,
+                          chartLabels: shouldSeedDefaults ? defaults.chartLabels : prev.chartLabels,
+                          chartSeriesOneLabel: shouldSeedDefaults ? defaults.chartSeriesOneLabel : prev.chartSeriesOneLabel,
+                          chartSeriesOneValues: shouldSeedDefaults ? defaults.chartSeriesOneValues : prev.chartSeriesOneValues,
+                          chartSeriesTwoLabel: isRadialChartType(nextType)
+                            ? ""
+                            : shouldSeedDefaults
+                              ? defaults.chartSeriesTwoLabel
+                              : prev.chartSeriesTwoLabel,
+                          chartSeriesTwoValues: isRadialChartType(nextType)
+                            ? ""
+                            : shouldSeedDefaults
+                              ? defaults.chartSeriesTwoValues
+                              : prev.chartSeriesTwoValues,
                         }));
                       }}
                     >
@@ -689,29 +777,83 @@ export default function Home() {
                       onChange={(event) => setForm((prev) => ({ ...prev, chartTitle: event.target.value }))}
                     />
                   </label>
+
+                  <label className="space-y-1">
+                    <span className="text-sm font-medium">Legend Position</span>
+                    <select
+                      className="w-full rounded-xl border border-black/10 bg-white px-3 py-2 text-sm outline-none transition focus:border-slate-900"
+                      value={form.chartLegendPosition}
+                      onChange={(event) =>
+                        setForm((prev) => ({
+                          ...prev,
+                          chartLegendPosition: event.target.value as ChartLegendPosition,
+                        }))
+                      }
+                    >
+                      {CHART_LEGEND_POSITIONS.map((position) => (
+                        <option key={position} value={position}>
+                          {getLegendLabel(position)}
+                        </option>
+                      ))}
+                    </select>
+                  </label>
                 </div>
 
                 <label className="space-y-1">
-                  <span className="text-sm font-medium">Chart Data (JSON)</span>
-                  <textarea
-                    rows={7}
-                    placeholder='{"labels":["A","B"],"datasets":[{"label":"Share %","data":[60,40]}]}'
-                    className="w-full rounded-xl border border-black/10 bg-white px-3 py-2 font-mono text-xs outline-none transition focus:border-slate-900"
-                    value={form.chartData}
-                    onChange={(event) => setForm((prev) => ({ ...prev, chartData: event.target.value }))}
+                  <span className="text-sm font-medium">Labels (comma separated)</span>
+                  <input
+                    placeholder="Without trial, With paid trial, With free trial"
+                    className="w-full rounded-xl border border-black/10 bg-white px-3 py-2 text-sm outline-none transition focus:border-slate-900"
+                    value={form.chartLabels}
+                    onChange={(event) => setForm((prev) => ({ ...prev, chartLabels: event.target.value }))}
                   />
                 </label>
 
-                <label className="space-y-1">
-                  <span className="text-sm font-medium">Chart Options (JSON, optional)</span>
-                  <textarea
-                    rows={4}
-                    placeholder='{"plugins":{"legend":{"position":"right"}}}'
-                    className="w-full rounded-xl border border-black/10 bg-white px-3 py-2 font-mono text-xs outline-none transition focus:border-slate-900"
-                    value={form.chartOptions}
-                    onChange={(event) => setForm((prev) => ({ ...prev, chartOptions: event.target.value }))}
-                  />
-                </label>
+                <div className="grid gap-3 sm:grid-cols-2">
+                  <label className="space-y-1">
+                    <span className="text-sm font-medium">Primary Series Name</span>
+                    <input
+                      placeholder="Share %"
+                      className="w-full rounded-xl border border-black/10 bg-white px-3 py-2 text-sm outline-none transition focus:border-slate-900"
+                      value={form.chartSeriesOneLabel}
+                      onChange={(event) => setForm((prev) => ({ ...prev, chartSeriesOneLabel: event.target.value }))}
+                    />
+                  </label>
+
+                  <label className="space-y-1">
+                    <span className="text-sm font-medium">Primary Values (comma separated)</span>
+                    <input
+                      placeholder="56.9, 28.9, 14.3"
+                      className="w-full rounded-xl border border-black/10 bg-white px-3 py-2 text-sm outline-none transition focus:border-slate-900"
+                      value={form.chartSeriesOneValues}
+                      onChange={(event) => setForm((prev) => ({ ...prev, chartSeriesOneValues: event.target.value }))}
+                    />
+                  </label>
+                </div>
+
+                {!isRadialChartType(form.chartType) ? (
+                  <div className="grid gap-3 sm:grid-cols-2">
+                    <label className="space-y-1">
+                      <span className="text-sm font-medium">Secondary Series Name (optional)</span>
+                      <input
+                        placeholder="Paid conversions"
+                        className="w-full rounded-xl border border-black/10 bg-white px-3 py-2 text-sm outline-none transition focus:border-slate-900"
+                        value={form.chartSeriesTwoLabel}
+                        onChange={(event) => setForm((prev) => ({ ...prev, chartSeriesTwoLabel: event.target.value }))}
+                      />
+                    </label>
+
+                    <label className="space-y-1">
+                      <span className="text-sm font-medium">Secondary Values (comma separated)</span>
+                      <input
+                        placeholder="82, 94, 118, 142"
+                        className="w-full rounded-xl border border-black/10 bg-white px-3 py-2 text-sm outline-none transition focus:border-slate-900"
+                        value={form.chartSeriesTwoValues}
+                        onChange={(event) => setForm((prev) => ({ ...prev, chartSeriesTwoValues: event.target.value }))}
+                      />
+                    </label>
+                  </div>
+                ) : null}
 
                 <div className="flex flex-wrap items-center gap-2">
                   <button
@@ -720,28 +862,19 @@ export default function Home() {
                     onClick={() =>
                       setForm((prev) => ({
                         ...prev,
-                        chartData: getDefaultChartData(prev.chartType),
+                        ...getDefaultChartFields(prev.chartType),
                       }))
                     }
                   >
-                    Use Example Data
-                  </button>
-                  <button
-                    type="button"
-                    className="rounded-lg border border-black/10 bg-white px-2 py-1 text-xs text-slate-700 hover:bg-slate-100"
-                    onClick={() =>
-                      setForm((prev) => ({
-                        ...prev,
-                        chartOptions: getDefaultChartOptions(),
-                      }))
-                    }
-                  >
-                    Use Example Options
+                    Use Example Values
                   </button>
                 </div>
 
                 <p className="text-xs text-slate-600">
-                  Chart image is rendered server-side with chartjs-node-canvas and returned in the generation result.
+                  No JSON required. Use simple comma-separated labels and numbers.
+                </p>
+                <p className="text-xs text-slate-600">
+                  Chart image is rendered automatically server-side and returned in your results.
                 </p>
               </div>
             ) : (
