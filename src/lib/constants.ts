@@ -154,6 +154,19 @@ export const GOAL_DESCRIPTIONS: Record<ContentGoal, string> = {
   balanced: "optimize across reach, engagement, and clicks evenly",
 };
 
+export const GOAL_UI_DESCRIPTIONS: Record<ContentGoal, string> = {
+  virality:
+    "Maximize shareability and repost momentum with bold hooks and high-contrast takes people want to forward.",
+  engagement:
+    "Optimize for quality comments and debate by using nuanced prompts, opinion triggers, and discussion-friendly framing.",
+  traffic:
+    "Drive qualified clicks with clear value framing, concrete promise lines, and CTA-first narrative structure.",
+  awareness:
+    "Maximize broad reach and brand recall with clear positioning, repeated key message, and easy-to-scan structure.",
+  balanced:
+    "Balance reach, comments, and clicks without over-optimizing one metric; prioritize practical clarity across all.",
+};
+
 const LENGTH_SEQUENCE: OutputLength[] = ["short", "standard", "long"];
 
 export function buildLengthPlan(inputLength: InputLength, count: number): OutputLength[] {

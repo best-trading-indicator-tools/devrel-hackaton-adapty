@@ -9,6 +9,7 @@ import {
   CHART_TYPE_LABELS,
   CHART_TYPE_OPTIONS,
   GOAL_LABELS,
+  GOAL_UI_DESCRIPTIONS,
   GOAL_OPTIONS,
   INPUT_LENGTH_OPTIONS,
   MEME_TONE_OPTIONS,
@@ -523,15 +524,6 @@ export default function Home() {
       : isBrandVoicePreset(brandVoiceSelection)
         ? BRAND_VOICE_PROFILES[brandVoiceSelection].label
         : "Custom";
-  const goalSelectWidth = useMemo(
-    () =>
-      getSelectWidthFromOptions(GOAL_OPTIONS.map((goal) => GOAL_LABELS[goal]), {
-        minCh: 12,
-        maxCh: 20,
-        paddingCh: 5,
-      }),
-    [],
-  );
   const postTypeSelectWidth = useMemo(
     () =>
       getSelectWidthFromOptions(POST_TYPE_OPTIONS, {
@@ -654,6 +646,13 @@ export default function Home() {
     setForm((prev) => ({
       ...prev,
       style: nextValue,
+    }));
+  }
+
+  function applyGoalSelection(nextGoal: ContentGoal) {
+    setForm((prev) => ({
+      ...prev,
+      goal: nextGoal,
     }));
   }
 
@@ -1102,21 +1101,10 @@ export default function Home() {
               <p className="text-xs text-slate-500">Click one voice card below to select it.</p>
             </div>
 
-            <label className="space-y-1">
+            <div className="space-y-1">
               <span className="text-sm font-medium">Goal</span>
-              <select
-                className={baseControlClassName}
-                style={{ width: goalSelectWidth }}
-                value={form.goal}
-                onChange={(event) => setForm((prev) => ({ ...prev, goal: event.target.value as ContentGoal }))}
-              >
-                {GOAL_OPTIONS.map((goal) => (
-                  <option key={goal} value={goal}>
-                    {GOAL_LABELS[goal]}
-                  </option>
-                ))}
-              </select>
-            </label>
+              <p className="text-xs text-slate-500">Click one goal card below to select it.</p>
+            </div>
           </div>
 
           <div className="space-y-3 rounded-2xl border border-black/10 bg-slate-50 p-3">
@@ -1175,6 +1163,33 @@ export default function Home() {
               </label>
             </div>
           ) : null}
+
+          <div className="space-y-3 rounded-2xl border border-black/10 bg-slate-50 p-3">
+            <div className="flex flex-wrap items-center justify-between gap-2">
+              <p className="text-sm font-medium text-slate-900">Goal Guide</p>
+              <p className="text-xs text-slate-600">Selected: {GOAL_LABELS[form.goal]}</p>
+            </div>
+            <div className="grid gap-2 sm:grid-cols-2 lg:grid-cols-3">
+              {GOAL_OPTIONS.map((goal) => {
+                const isSelected = form.goal === goal;
+                return (
+                  <button
+                    key={goal}
+                    type="button"
+                    className={`rounded-xl border p-3 text-left transition ${
+                      isSelected
+                        ? "border-slate-900 bg-white shadow-[0_0_0_1px_rgba(15,23,42,0.08)]"
+                        : "border-black/10 bg-white hover:border-slate-400"
+                    }`}
+                    onClick={() => applyGoalSelection(goal)}
+                  >
+                    <p className="text-sm font-semibold text-slate-900">{GOAL_LABELS[goal]}</p>
+                    <p className="mt-1 text-xs text-slate-600">{GOAL_UI_DESCRIPTIONS[goal]}</p>
+                  </button>
+                );
+              })}
+            </div>
+          </div>
 
           <div className="space-y-1">
             <label className="space-y-1">
