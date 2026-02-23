@@ -28,8 +28,7 @@ Everything below is already implemented in this repo on `main`.
 - Post Type
   - Product feature launch
   - Event / webinar promo
-  - Sauce: breakdown / guide
-  - Sauce: data insight
+  - Sauce
   - Meme / shitpost
   - Industry news reaction
   - Engagement farming: poll/quiz

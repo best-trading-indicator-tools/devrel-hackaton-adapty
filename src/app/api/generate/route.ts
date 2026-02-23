@@ -83,14 +83,9 @@ const POST_TYPE_PLAYBOOKS: Array<{ pattern: RegExp; directive: string }> = [
       "Frame the user pain first, then explain what changed, why it matters, and one concrete outcome or use case.",
   },
   {
-    pattern: /sauce:\s*breakdown|guide/i,
+    pattern: /sauce/i,
     directive:
-      "Deliver a practical breakdown with clear steps, crisp transitions, and implementation detail teams can apply immediately.",
-  },
-  {
-    pattern: /sauce:\s*data insight/i,
-    directive:
-      "Lead with a surprising number, explain the mechanism behind it, and include at least one caveat or segmentation note.",
+      "For Sauce posts, combine clear practical breakdown with data-backed insight. Use concrete numbers, explain the mechanism, and include caveats or segmentation when relevant.",
   },
   {
     pattern: /meme|shitpost/i,

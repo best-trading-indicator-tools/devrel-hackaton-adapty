@@ -68,8 +68,7 @@ export function isBrandVoicePreset(value: string): value is BrandVoicePreset {
 export const POST_TYPE_OPTIONS = [
   "Product feature launch",
   "Event / webinar promo",
-  "Sauce: breakdown / guide",
-  "Sauce: data insight",
+  "Sauce",
   "Meme / shitpost",
   "Industry news reaction",
   "Engagement farming: poll/quiz",
