@@ -10,6 +10,7 @@ Everything below is already implemented in this repo on `main`.
 
 - Web UI for marketers at `src/app/page.tsx`
 - API endpoint at `POST /api/generate`
+- Rewrite API endpoint at `POST /api/rewrite`
 - Generation with `gpt-5.3-codex` by default
 - Strong formatting guardrails for LinkedIn readability
 - No em dash output normalization for hooks, posts, meme text, and chart title
@@ -52,6 +53,13 @@ Everything below is already implemented in this repo on `main`.
   - 1 to 12
 - Extra Prompt Details
   - Free text instruction field
+
+### Post editing after generation
+
+- Rewrite entire post with an optional prompt
+- Regenerate one selected body line with an optional line-specific prompt
+- Rewrites happen in place in the results view
+- Meme companions are cleared when a post is rewritten so visuals do not drift from updated copy
 
 ### Conditional UI behavior
 

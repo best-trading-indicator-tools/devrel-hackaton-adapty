@@ -109,6 +109,15 @@ type MemegenTemplateApiItem = {
   blank?: string;
 };
 
+type GeneratedPost = GeneratePostsResponse["posts"][number];
+
+type EditableBodyLine = {
+  lineIndex: number;
+  label: string;
+};
+
+type RewriteContext = Pick<FormState, "style" | "hookStyle" | "goal" | "inputType" | "ctaLink" | "details">;
+
 function isRadialChartType(chartType: ChartTypeOption): boolean {
   return chartType === "doughnut" || chartType === "pie" || chartType === "polarArea";
 }
@@ -383,6 +392,45 @@ function isHookStylePreset(value: string): value is (typeof HOOK_STYLE_PRESETS)[
   return (HOOK_STYLE_PRESETS as readonly string[]).includes(value);
 }
 
+function buildEditableBodyLines(body: string): EditableBodyLine[] {
+  const rawLines = body.split("\n");
+  const nonEmpty = rawLines
+    .map((line, lineIndex) => ({
+      lineIndex,
+      line,
+    }))
+    .filter((item) => item.line.trim().length > 0);
+
+  const sourceLines = nonEmpty.length ? nonEmpty : rawLines.map((line, lineIndex) => ({ lineIndex, line }));
+
+  return sourceLines.map((item) => {
+    const compact = item.line.trim().replace(/\s+/g, " ");
+    const preview = compact.length > 90 ? `${compact.slice(0, 90)}...` : compact;
+
+    return {
+      lineIndex: item.lineIndex,
+      label: `L${item.lineIndex + 1}: ${preview || "(blank line)"}`,
+    };
+  });
+}
+
+function extractApiErrorMessage(responsePayload: unknown, status: number): string {
+  const apiError =
+    responsePayload && typeof responsePayload === "object" && "error" in responsePayload
+      ? String((responsePayload as { error?: unknown }).error ?? "")
+      : "";
+  const apiMessage =
+    responsePayload && typeof responsePayload === "object" && "message" in responsePayload
+      ? String((responsePayload as { message?: unknown }).message ?? "")
+      : "";
+
+  if (apiError && apiMessage && apiError !== apiMessage) {
+    return `${apiError}: ${apiMessage}`;
+  }
+
+  return apiMessage || apiError || `Request failed (${status})`;
+}
+
 function readFileAsDataUrl(file: File): Promise<string> {
   return new Promise((resolve, reject) => {
     const reader = new FileReader();
@@ -445,6 +493,14 @@ async function buildImageDataUrl(file: File): Promise<string> {
 }
 
 export default function Home() {
+  const defaultRewriteContext: RewriteContext = {
+    style: defaultForm.style,
+    hookStyle: defaultForm.hookStyle,
+    goal: defaultForm.goal,
+    inputType: defaultForm.inputType,
+    ctaLink: defaultForm.ctaLink,
+    details: defaultForm.details,
+  };
   const [form, setForm] = useState<FormState>(defaultForm);
   const [brandVoiceSelection, setBrandVoiceSelection] = useState<string>(() =>
     isBrandVoicePreset(defaultForm.style) ? defaultForm.style : CUSTOM_BRAND_VOICE,
@@ -453,8 +509,14 @@ export default function Home() {
     isHookStylePreset(defaultForm.hookStyle) ? defaultForm.hookStyle : CUSTOM_HOOK_STYLE,
   );
   const [result, setResult] = useState<GeneratePostsResponse | null>(null);
+  const [rewriteContext, setRewriteContext] = useState<RewriteContext>(defaultRewriteContext);
   const [error, setError] = useState<string>("");
   const [isLoading, setIsLoading] = useState(false);
+  const [rewriteLoadingKey, setRewriteLoadingKey] = useState<string | null>(null);
+  const [rewritePromptByPost, setRewritePromptByPost] = useState<Record<number, string>>({});
+  const [linePromptByPost, setLinePromptByPost] = useState<Record<number, string>>({});
+  const [selectedLineByPost, setSelectedLineByPost] = useState<Record<number, number>>({});
+  const [rewriteErrorByPost, setRewriteErrorByPost] = useState<Record<number, string>>({});
   const [imageName, setImageName] = useState<string>("");
   const [isImageProcessing, setIsImageProcessing] = useState(false);
   const fallbackMemeTemplates = useMemo(() => buildFallbackMemeTemplates(), []);
@@ -625,6 +687,11 @@ export default function Home() {
     setError("");
     setResult(null);
     setIsLoading(true);
+    setRewritePromptByPost({});
+    setLinePromptByPost({});
+    setSelectedLineByPost({});
+    setRewriteErrorByPost({});
+    setRewriteLoadingKey(null);
 
     if (isImageProcessing) {
       setError("Image is still processing. Please wait a second and retry.");
@@ -662,6 +729,14 @@ export default function Home() {
         memeTemplateIds: showMemeFields ? form.memeTemplateIds : [],
         memeVariantCount: showMemeFields ? form.memeVariantCount : defaultForm.memeVariantCount,
       };
+      const nextRewriteContext: RewriteContext = {
+        style: requestPayload.style,
+        hookStyle: requestPayload.hookStyle,
+        goal: requestPayload.goal,
+        inputType: requestPayload.inputType,
+        ctaLink: requestPayload.ctaLink,
+        details: requestPayload.details,
+      };
 
       const response = await fetch("/api/generate", {
         method: "POST",
@@ -674,28 +749,189 @@ export default function Home() {
       const responsePayload = await response.json();
 
       if (!response.ok) {
-        const apiError =
-          responsePayload && typeof responsePayload === "object" && "error" in responsePayload
-            ? String((responsePayload as { error?: unknown }).error ?? "")
-            : "";
-        const apiMessage =
-          responsePayload && typeof responsePayload === "object" && "message" in responsePayload
-            ? String((responsePayload as { message?: unknown }).message ?? "")
-            : "";
-
-        if (apiError && apiMessage && apiError !== apiMessage) {
-          setError(`${apiError}: ${apiMessage}`);
-        } else {
-          setError(apiMessage || apiError || `Request failed (${response.status})`);
-        }
+        setError(extractApiErrorMessage(responsePayload, response.status));
         return;
       }
 
       setResult(sanitizeGenerationResult(responsePayload as GeneratePostsResponse));
+      setRewriteContext(nextRewriteContext);
     } catch {
       setError("Could not reach the API route.");
     } finally {
       setIsLoading(false);
+    }
+  }
+
+  function updateResultPost(postIndex: number, updater: (post: GeneratedPost) => GeneratedPost) {
+    setResult((prev) => {
+      if (!prev) {
+        return prev;
+      }
+
+      if (!prev.posts[postIndex]) {
+        return prev;
+      }
+
+      return {
+        ...prev,
+        posts: prev.posts.map((post, index) => (index === postIndex ? updater(post) : post)),
+      };
+    });
+  }
+
+  async function rewriteEntirePost(postIndex: number) {
+    const post = result?.posts[postIndex];
+    if (!post) {
+      return;
+    }
+
+    setRewriteErrorByPost((prev) => ({
+      ...prev,
+      [postIndex]: "",
+    }));
+    setRewriteLoadingKey(`post-${postIndex}`);
+
+    try {
+      const response = await fetch("/api/rewrite", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+          mode: "post",
+          ...rewriteContext,
+          prompt: rewritePromptByPost[postIndex] ?? "",
+          post: {
+            length: post.length,
+            hook: post.hook,
+            body: post.body,
+            cta: post.cta,
+          },
+        }),
+      });
+
+      const responsePayload = await response.json();
+
+      if (!response.ok) {
+        setRewriteErrorByPost((prev) => ({
+          ...prev,
+          [postIndex]: extractApiErrorMessage(responsePayload, response.status),
+        }));
+        return;
+      }
+
+      const nextPost =
+        responsePayload &&
+        typeof responsePayload === "object" &&
+        "post" in responsePayload &&
+        typeof (responsePayload as { post?: unknown }).post === "object"
+          ? ((responsePayload as { post: { hook?: unknown; body?: unknown; cta?: unknown } }).post ?? null)
+          : null;
+
+      if (!nextPost) {
+        setRewriteErrorByPost((prev) => ({
+          ...prev,
+          [postIndex]: "Rewrite API returned invalid post payload.",
+        }));
+        return;
+      }
+
+      updateResultPost(postIndex, (currentPost) => ({
+        ...currentPost,
+        hook: normalizeNoEmDash(String(nextPost.hook ?? currentPost.hook)),
+        body: normalizeNoEmDash(String(nextPost.body ?? currentPost.body)),
+        cta: normalizeNoEmDash(String(nextPost.cta ?? currentPost.cta)),
+        meme: undefined,
+        memeVariants: undefined,
+      }));
+    } catch {
+      setRewriteErrorByPost((prev) => ({
+        ...prev,
+        [postIndex]: "Could not reach the rewrite API route.",
+      }));
+    } finally {
+      setRewriteLoadingKey(null);
+    }
+  }
+
+  async function regenerateBodyLine(postIndex: number, lineIndex: number) {
+    const post = result?.posts[postIndex];
+    if (!post) {
+      return;
+    }
+
+    setRewriteErrorByPost((prev) => ({
+      ...prev,
+      [postIndex]: "",
+    }));
+    setRewriteLoadingKey(`line-${postIndex}-${lineIndex}`);
+
+    try {
+      const response = await fetch("/api/rewrite", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+          mode: "line",
+          ...rewriteContext,
+          prompt: linePromptByPost[postIndex] ?? "",
+          lineIndex,
+          post: {
+            length: post.length,
+            hook: post.hook,
+            body: post.body,
+            cta: post.cta,
+          },
+        }),
+      });
+
+      const responsePayload = await response.json();
+
+      if (!response.ok) {
+        setRewriteErrorByPost((prev) => ({
+          ...prev,
+          [postIndex]: extractApiErrorMessage(responsePayload, response.status),
+        }));
+        return;
+      }
+
+      const nextLine =
+        responsePayload && typeof responsePayload === "object" && "line" in responsePayload
+          ? String((responsePayload as { line?: unknown }).line ?? "")
+          : "";
+
+      if (!nextLine.trim()) {
+        setRewriteErrorByPost((prev) => ({
+          ...prev,
+          [postIndex]: "Rewrite API returned an empty line.",
+        }));
+        return;
+      }
+
+      updateResultPost(postIndex, (currentPost) => {
+        const lines = currentPost.body.split("\n");
+        if (lineIndex < 0 || lineIndex >= lines.length) {
+          return currentPost;
+        }
+
+        lines[lineIndex] = normalizeNoEmDash(nextLine.trim());
+        const rebuiltBody = lines.join("\n").replace(/\n{3,}/g, "\n\n");
+
+        return {
+          ...currentPost,
+          body: rebuiltBody,
+          meme: undefined,
+          memeVariants: undefined,
+        };
+      });
+    } catch {
+      setRewriteErrorByPost((prev) => ({
+        ...prev,
+        [postIndex]: "Could not reach the rewrite API route.",
+      }));
+    } finally {
+      setRewriteLoadingKey(null);
     }
   }
 
@@ -1505,97 +1741,188 @@ export default function Home() {
           ) : null}
 
           <div className="space-y-4">
-            {result?.posts.map((post, index) => (
-              <article key={`${post.hook}-${index}`} className="rounded-3xl border border-black/10 bg-white p-4 shadow-[0_10px_24px_rgba(0,0,0,0.07)] sm:p-5">
-                <div className="mb-3 flex flex-wrap items-center justify-between gap-2">
-                  <p className="rounded-full bg-slate-100 px-3 py-1 text-xs uppercase tracking-wide text-slate-700">
-                    Post {index + 1} · {formatLengthLabel(post.length)}
-                  </p>
-                  <button
-                    type="button"
-                    className="shrink-0 rounded-lg border border-black/10 px-2 py-1 text-xs text-slate-600 hover:bg-slate-50"
-                    onClick={() => {
-                      const text = `${post.hook}\n\n${post.body}\n\n${post.cta}`;
-                      navigator.clipboard.writeText(text).catch(() => {});
-                    }}
-                  >
-                    Copy
-                  </button>
-                </div>
+            {result?.posts.map((post, index) => {
+              const bodyLineOptions = buildEditableBodyLines(post.body);
+              const selectedLineIndex = bodyLineOptions.some(
+                (lineOption) => lineOption.lineIndex === selectedLineByPost[index],
+              )
+                ? selectedLineByPost[index]
+                : (bodyLineOptions[0]?.lineIndex ?? 0);
+              const isPostRewriteLoading = rewriteLoadingKey === `post-${index}`;
+              const isLineRewriteLoading = rewriteLoadingKey === `line-${index}-${selectedLineIndex}`;
 
-                <p className="mb-3 text-lg font-semibold leading-snug">{post.hook}</p>
-                <p className="whitespace-pre-wrap text-sm leading-relaxed text-slate-700">{post.body}</p>
-                <p className="mt-4 whitespace-pre-wrap text-sm font-medium text-slate-900">{post.cta}</p>
+              return (
+                <article key={`${post.hook}-${index}`} className="rounded-3xl border border-black/10 bg-white p-4 shadow-[0_10px_24px_rgba(0,0,0,0.07)] sm:p-5">
+                  <div className="mb-3 flex flex-wrap items-center justify-between gap-2">
+                    <p className="rounded-full bg-slate-100 px-3 py-1 text-xs uppercase tracking-wide text-slate-700">
+                      Post {index + 1} · {formatLengthLabel(post.length)}
+                    </p>
+                    <button
+                      type="button"
+                      className="shrink-0 rounded-lg border border-black/10 px-2 py-1 text-xs text-slate-600 hover:bg-slate-50"
+                      onClick={() => {
+                        const text = `${post.hook}\n\n${post.body}\n\n${post.cta}`;
+                        navigator.clipboard.writeText(text).catch(() => {});
+                      }}
+                    >
+                      Copy
+                    </button>
+                  </div>
 
-                {(() => {
-                  const memeVariants = post.memeVariants?.length ? post.memeVariants : post.meme ? [post.meme] : [];
-                  if (!memeVariants.length) {
-                    return null;
-                  }
+                  <p className="mb-3 text-lg font-semibold leading-snug">{post.hook}</p>
+                  <p className="whitespace-pre-wrap text-sm leading-relaxed text-slate-700">{post.body}</p>
+                  <p className="mt-4 whitespace-pre-wrap text-sm font-medium text-slate-900">{post.cta}</p>
 
-                  return (
-                    <div className="mt-5 space-y-3 rounded-2xl border border-black/10 bg-slate-50 p-3">
-                      <div className="flex items-center justify-between gap-2">
-                        <p className="text-xs font-semibold uppercase tracking-wide text-slate-600">
-                          Meme Companions · {memeVariants.length} variant{memeVariants.length > 1 ? "s" : ""}
-                        </p>
-                      </div>
+                  <div className="mt-5 space-y-3 rounded-2xl border border-black/10 bg-slate-50 p-3">
+                    <p className="text-xs font-semibold uppercase tracking-wide text-slate-600">Edit and Regenerate</p>
 
-                      <div className="grid gap-3 lg:grid-cols-2">
-                        {memeVariants.map((variant) => (
-                          <div
-                            key={`${variant.rank}-${variant.templateId}-${variant.url}`}
-                            className="space-y-2 rounded-xl border border-black/10 bg-white p-2"
-                          >
-                            <div className="flex items-start justify-between gap-2">
-                              <p className="text-xs font-semibold uppercase tracking-wide text-slate-600">
-                                #{variant.rank} · {variant.templateName}
-                                {typeof variant.toneFitScore === "number" ? ` · score ${variant.toneFitScore}` : ""}
-                              </p>
-                              <div className="flex items-center gap-2">
-                                <a
-                                  href={variant.url}
-                                  target="_blank"
-                                  rel="noreferrer"
-                                  className="rounded-md border border-black/10 bg-white px-2 py-1 text-xs text-slate-700 hover:bg-slate-100"
-                                >
-                                  Open
-                                </a>
-                                <button
-                                  type="button"
-                                  className="rounded-md border border-black/10 bg-white px-2 py-1 text-xs text-slate-700 hover:bg-slate-100"
-                                  onClick={() => {
-                                    navigator.clipboard.writeText(variant.url).catch(() => {});
-                                  }}
-                                >
-                                  Copy URL
-                                </button>
-                              </div>
-                            </div>
+                    <label className="space-y-1">
+                      <span className="text-sm font-medium">Rewrite Entire Post</span>
+                      <textarea
+                        rows={2}
+                        placeholder="Optional rewrite prompt, e.g. make it punchier for founders and add one concrete metric."
+                        className="w-full rounded-xl border border-black/10 bg-white px-3 py-2 text-sm outline-none transition focus:border-slate-900"
+                        value={rewritePromptByPost[index] ?? ""}
+                        onChange={(event) =>
+                          setRewritePromptByPost((prev) => ({
+                            ...prev,
+                            [index]: event.target.value,
+                          }))
+                        }
+                      />
+                    </label>
 
-                            {/* eslint-disable-next-line @next/next/no-img-element */}
-                            <img
-                              src={variant.url}
-                              alt={`${variant.templateName} meme variant ${variant.rank}`}
-                              className="h-auto w-full rounded-xl border border-black/10 bg-white"
-                              loading="lazy"
-                            />
+                    <button
+                      type="button"
+                      className="rounded-lg border border-black/10 bg-white px-3 py-2 text-sm text-slate-700 hover:bg-slate-100 disabled:cursor-not-allowed disabled:opacity-60"
+                      disabled={isLoading || isPostRewriteLoading || Boolean(rewriteLoadingKey)}
+                      onClick={() => rewriteEntirePost(index)}
+                    >
+                      {isPostRewriteLoading ? "Rewriting post..." : "Rewrite Post"}
+                    </button>
 
-                            <p className="text-xs text-slate-600">
-                              Top: {variant.topText}
-                              <br />
-                              Bottom: {variant.bottomText}
-                            </p>
+                    <div className="grid gap-3 sm:grid-cols-[minmax(0,1.4fr)_minmax(0,2fr)]">
+                      <label className="space-y-1">
+                        <span className="text-sm font-medium">Select Line</span>
+                        <select
+                          className="w-full rounded-xl border border-black/10 bg-white px-3 py-2 text-sm outline-none transition focus:border-slate-900"
+                          value={selectedLineIndex}
+                          onChange={(event) =>
+                            setSelectedLineByPost((prev) => ({
+                              ...prev,
+                              [index]: Number(event.target.value),
+                            }))
+                          }
+                        >
+                          {bodyLineOptions.map((lineOption) => (
+                            <option key={`${index}-${lineOption.lineIndex}`} value={lineOption.lineIndex}>
+                              {lineOption.label}
+                            </option>
+                          ))}
+                        </select>
+                      </label>
 
-                            {variant.toneFitReason ? <p className="text-xs text-slate-600">{variant.toneFitReason}</p> : null}
-                          </div>
-                        ))}
-                      </div>
+                      <label className="space-y-1">
+                        <span className="text-sm font-medium">Regenerate Selected Line</span>
+                        <textarea
+                          rows={2}
+                          placeholder="Optional line prompt, e.g. make this line more contrarian with a stronger data point."
+                          className="w-full rounded-xl border border-black/10 bg-white px-3 py-2 text-sm outline-none transition focus:border-slate-900"
+                          value={linePromptByPost[index] ?? ""}
+                          onChange={(event) =>
+                            setLinePromptByPost((prev) => ({
+                              ...prev,
+                              [index]: event.target.value,
+                            }))
+                          }
+                        />
+                      </label>
                     </div>
-                  );
-                })()}
-              </article>
-            ))}
+
+                    <button
+                      type="button"
+                      className="rounded-lg border border-black/10 bg-white px-3 py-2 text-sm text-slate-700 hover:bg-slate-100 disabled:cursor-not-allowed disabled:opacity-60"
+                      disabled={isLoading || isLineRewriteLoading || Boolean(rewriteLoadingKey)}
+                      onClick={() => regenerateBodyLine(index, selectedLineIndex)}
+                    >
+                      {isLineRewriteLoading ? "Regenerating line..." : "Regenerate Line"}
+                    </button>
+
+                    {rewriteErrorByPost[index] ? (
+                      <p className="rounded-xl bg-red-50 px-3 py-2 text-xs text-red-700">{rewriteErrorByPost[index]}</p>
+                    ) : null}
+                  </div>
+
+                  {(() => {
+                    const memeVariants = post.memeVariants?.length ? post.memeVariants : post.meme ? [post.meme] : [];
+                    if (!memeVariants.length) {
+                      return null;
+                    }
+
+                    return (
+                      <div className="mt-5 space-y-3 rounded-2xl border border-black/10 bg-slate-50 p-3">
+                        <div className="flex items-center justify-between gap-2">
+                          <p className="text-xs font-semibold uppercase tracking-wide text-slate-600">
+                            Meme Companions · {memeVariants.length} variant{memeVariants.length > 1 ? "s" : ""}
+                          </p>
+                        </div>
+
+                        <div className="grid gap-3 lg:grid-cols-2">
+                          {memeVariants.map((variant) => (
+                            <div
+                              key={`${variant.rank}-${variant.templateId}-${variant.url}`}
+                              className="space-y-2 rounded-xl border border-black/10 bg-white p-2"
+                            >
+                              <div className="flex items-start justify-between gap-2">
+                                <p className="text-xs font-semibold uppercase tracking-wide text-slate-600">
+                                  #{variant.rank} · {variant.templateName}
+                                  {typeof variant.toneFitScore === "number" ? ` · score ${variant.toneFitScore}` : ""}
+                                </p>
+                                <div className="flex items-center gap-2">
+                                  <a
+                                    href={variant.url}
+                                    target="_blank"
+                                    rel="noreferrer"
+                                    className="rounded-md border border-black/10 bg-white px-2 py-1 text-xs text-slate-700 hover:bg-slate-100"
+                                  >
+                                    Open
+                                  </a>
+                                  <button
+                                    type="button"
+                                    className="rounded-md border border-black/10 bg-white px-2 py-1 text-xs text-slate-700 hover:bg-slate-100"
+                                    onClick={() => {
+                                      navigator.clipboard.writeText(variant.url).catch(() => {});
+                                    }}
+                                  >
+                                    Copy URL
+                                  </button>
+                                </div>
+                              </div>
+
+                              {/* eslint-disable-next-line @next/next/no-img-element */}
+                              <img
+                                src={variant.url}
+                                alt={`${variant.templateName} meme variant ${variant.rank}`}
+                                className="h-auto w-full rounded-xl border border-black/10 bg-white"
+                                loading="lazy"
+                              />
+
+                              <p className="text-xs text-slate-600">
+                                Top: {variant.topText}
+                                <br />
+                                Bottom: {variant.bottomText}
+                              </p>
+
+                              {variant.toneFitReason ? <p className="text-xs text-slate-600">{variant.toneFitReason}</p> : null}
+                            </div>
+                          ))}
+                        </div>
+                      </div>
+                    );
+                  })()}
+                </article>
+              );
+            })}
           </div>
         </section>
       </section>
