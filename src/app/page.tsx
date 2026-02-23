@@ -514,6 +514,48 @@ async function buildImageDataUrl(file: File): Promise<string> {
   return optimizedDataUrl.length <= originalDataUrl.length ? optimizedDataUrl : originalDataUrl;
 }
 
+async function copyTextToClipboard(value: string): Promise<boolean> {
+  const text = value.trim();
+  if (!text) {
+    return false;
+  }
+
+  if (typeof navigator !== "undefined" && navigator.clipboard?.writeText) {
+    try {
+      await navigator.clipboard.writeText(text);
+      return true;
+    } catch {
+      // fall through to legacy copy path
+    }
+  }
+
+  if (typeof document === "undefined") {
+    return false;
+  }
+
+  try {
+    const textarea = document.createElement("textarea");
+    textarea.value = text;
+    textarea.setAttribute("readonly", "true");
+    textarea.style.position = "fixed";
+    textarea.style.opacity = "0";
+    textarea.style.pointerEvents = "none";
+    textarea.style.left = "-9999px";
+    textarea.style.top = "0";
+
+    document.body.appendChild(textarea);
+    textarea.focus();
+    textarea.select();
+    textarea.setSelectionRange(0, textarea.value.length);
+
+    const copied = document.execCommand("copy");
+    document.body.removeChild(textarea);
+    return copied;
+  } catch {
+    return false;
+  }
+}
+
 export default function Home() {
   const baseControlClassName =
     "block w-full rounded-xl border border-black/10 bg-white px-3 py-2 text-sm outline-none transition focus:border-slate-900";
@@ -543,6 +585,7 @@ export default function Home() {
   const [selectedCtaByPost, setSelectedCtaByPost] = useState<Record<number, boolean>>({});
   const [rewriteErrorByPost, setRewriteErrorByPost] = useState<Record<number, string>>({});
   const [lineFeedbackByPost, setLineFeedbackByPost] = useState<Record<number, string>>({});
+  const [copyFeedbackByPost, setCopyFeedbackByPost] = useState<Record<number, "copied" | "failed">>({});
   const [imageName, setImageName] = useState<string>("");
   const [isImageProcessing, setIsImageProcessing] = useState(false);
   const fallbackMemeTemplates = useMemo(() => buildFallbackMemeTemplates(), []);
@@ -786,6 +829,7 @@ export default function Home() {
     setSelectedCtaByPost({});
     setRewriteErrorByPost({});
     setLineFeedbackByPost({});
+    setCopyFeedbackByPost({});
     setRewriteLoadingKey(null);
 
     if (isImageProcessing) {
@@ -1345,6 +1389,21 @@ export default function Home() {
     } finally {
       setRewriteLoadingKey(null);
     }
+  }
+
+  function showCopyFeedback(postIndex: number, status: "copied" | "failed") {
+    setCopyFeedbackByPost((prev) => ({
+      ...prev,
+      [postIndex]: status,
+    }));
+
+    setTimeout(() => {
+      setCopyFeedbackByPost((prev) => {
+        const next = { ...prev };
+        delete next[postIndex];
+        return next;
+      });
+    }, 1500);
   }
 
   async function onImageChange(event: ChangeEvent<HTMLInputElement>) {
@@ -2155,12 +2214,17 @@ export default function Home() {
                     <button
                       type="button"
                       className="shrink-0 rounded-lg border border-black/10 px-2 py-1 text-xs text-slate-600 hover:bg-slate-50"
-                      onClick={() => {
+                      onClick={async () => {
                         const text = `${post.hook}\n\n${post.body}\n\n${post.cta}`;
-                        navigator.clipboard.writeText(text).catch(() => {});
+                        const copied = await copyTextToClipboard(text);
+                        showCopyFeedback(index, copied ? "copied" : "failed");
                       }}
                     >
-                      Copy
+                      {copyFeedbackByPost[index] === "copied"
+                        ? "Copied"
+                        : copyFeedbackByPost[index] === "failed"
+                          ? "Retry copy"
+                          : "Copy"}
                     </button>
                   </div>
 
