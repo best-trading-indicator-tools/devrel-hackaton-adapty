@@ -1,6 +1,6 @@
 "use client";
 
-import { ChangeEvent, FormEvent, useMemo, useRef, useState } from "react";
+import { ChangeEvent, FormEvent, useEffect, useMemo, useRef, useState } from "react";
 import NextImage from "next/image";
 
 import {
@@ -9,6 +9,7 @@ import {
   GOAL_LABELS,
   GOAL_OPTIONS,
   INPUT_LENGTH_OPTIONS,
+  MEME_TONE_OPTIONS,
   MEME_TEMPLATE_LABELS,
   MEME_TEMPLATE_OPTIONS,
   POST_TYPE_OPTIONS,
@@ -99,6 +100,19 @@ const HOOK_STYLE_PRESETS = [
   "story-led",
 ] as const;
 const CHART_LEGEND_POSITIONS: ChartLegendPosition[] = ["top", "right", "bottom", "left"];
+const MAX_TEMPLATE_RESULTS = 80;
+
+type MemeTemplateOption = {
+  id: string;
+  name: string;
+  previewUrl: string;
+};
+
+type MemegenTemplateApiItem = {
+  id?: string;
+  name?: string;
+  blank?: string;
+};
 
 function isRadialChartType(chartType: ChartTypeOption): boolean {
   return chartType === "doughnut" || chartType === "pie" || chartType === "polarArea";
@@ -156,6 +170,61 @@ function splitCsvNumbers(value: string): number[] {
 
 function getLegendLabel(position: ChartLegendPosition): string {
   return position.charAt(0).toUpperCase() + position.slice(1);
+}
+
+function getMemeToneLabel(tone: string): string {
+  if (tone === "auto") {
+    return "Auto";
+  }
+
+  return tone
+    .split("-")
+    .map((chunk) => chunk.charAt(0).toUpperCase() + chunk.slice(1))
+    .join(" ");
+}
+
+function formatTemplateIdLabel(templateId: string): string {
+  return templateId
+    .split("-")
+    .map((part) => part.charAt(0).toUpperCase() + part.slice(1))
+    .join(" ");
+}
+
+function buildFallbackMemeTemplates(): MemeTemplateOption[] {
+  return MEME_TEMPLATE_OPTIONS.map((template) => ({
+    id: template.id,
+    name: template.name,
+    previewUrl: `https://api.memegen.link/images/${template.id}.jpg`,
+  }));
+}
+
+function normalizeMemegenTemplateId(value: string): string {
+  return value.trim().toLowerCase().replace(/[^a-z0-9-]/g, "");
+}
+
+function mapMemegenTemplateItems(items: MemegenTemplateApiItem[]): MemeTemplateOption[] {
+  const deduped = new Map<string, MemeTemplateOption>();
+
+  for (const item of items) {
+    const id = typeof item.id === "string" ? normalizeMemegenTemplateId(item.id) : "";
+    if (!id) {
+      continue;
+    }
+
+    const name = typeof item.name === "string" && item.name.trim() ? item.name.trim() : formatTemplateIdLabel(id);
+    const previewUrl =
+      typeof item.blank === "string" && item.blank.trim()
+        ? item.blank.trim()
+        : `https://api.memegen.link/images/${id}.jpg`;
+
+    deduped.set(id, {
+      id,
+      name,
+      previewUrl,
+    });
+  }
+
+  return Array.from(deduped.values()).sort((a, b) => a.name.localeCompare(b.name));
 }
 
 function buildChartRows(form: Pick<FormState, "chartType" | "chartLabels" | "chartSeriesOneValues" | "chartSeriesTwoValues">) {
@@ -378,6 +447,12 @@ export default function Home() {
   const [isLoading, setIsLoading] = useState(false);
   const [imageName, setImageName] = useState<string>("");
   const [isImageProcessing, setIsImageProcessing] = useState(false);
+  const fallbackMemeTemplates = useMemo(() => buildFallbackMemeTemplates(), []);
+  const [memeTemplateOptions, setMemeTemplateOptions] = useState<MemeTemplateOption[]>(fallbackMemeTemplates);
+  const [memeTemplateSearch, setMemeTemplateSearch] = useState("");
+  const [isMemeTemplateLoading, setIsMemeTemplateLoading] = useState(false);
+  const [memeTemplateSource, setMemeTemplateSource] = useState<"api" | "fallback">("fallback");
+  const [memeTemplateLoadError, setMemeTemplateLoadError] = useState("");
   const imageInputRef = useRef<HTMLInputElement>(null);
   const showEventFields = useMemo(() => needsEventDetails(form.inputType), [form.inputType]);
   const showMemeFields = useMemo(() => needsMemeDetails(form.inputType), [form.inputType]);
@@ -409,6 +484,101 @@ export default function Home() {
       }),
     [form.chartType, form.chartLabels, form.chartSeriesOneValues, form.chartSeriesTwoValues],
   );
+  const memeToneSelection = useMemo(() => {
+    const current = form.memeTone.trim().toLowerCase();
+    if (!current) {
+      return "auto";
+    }
+
+    return (MEME_TONE_OPTIONS as readonly string[]).includes(current) ? current : "auto";
+  }, [form.memeTone]);
+  const memeTemplateNameById = useMemo(() => {
+    const map: Record<string, string> = { ...MEME_TEMPLATE_LABELS };
+    for (const template of memeTemplateOptions) {
+      map[template.id] = template.name;
+    }
+    return map;
+  }, [memeTemplateOptions]);
+  const filteredMemeTemplates = useMemo(() => {
+    const query = memeTemplateSearch.trim().toLowerCase();
+    const filtered = query
+      ? memeTemplateOptions.filter(
+          (template) =>
+            template.name.toLowerCase().includes(query) ||
+            template.id.toLowerCase().includes(query),
+        )
+      : memeTemplateOptions;
+
+    return filtered.slice(0, MAX_TEMPLATE_RESULTS);
+  }, [memeTemplateOptions, memeTemplateSearch]);
+  const totalMemeTemplateMatches = useMemo(() => {
+    const query = memeTemplateSearch.trim().toLowerCase();
+    if (!query) {
+      return memeTemplateOptions.length;
+    }
+
+    return memeTemplateOptions.filter(
+      (template) =>
+        template.name.toLowerCase().includes(query) ||
+        template.id.toLowerCase().includes(query),
+    ).length;
+  }, [memeTemplateOptions, memeTemplateSearch]);
+
+  useEffect(() => {
+    let isCancelled = false;
+
+    async function loadMemegenTemplates() {
+      setIsMemeTemplateLoading(true);
+
+      try {
+        const response = await fetch("https://api.memegen.link/templates/");
+
+        if (!response.ok) {
+          throw new Error(`template fetch failed with status ${response.status}`);
+        }
+
+        const payload = (await response.json()) as unknown;
+        if (!Array.isArray(payload)) {
+          throw new Error("template payload is not an array");
+        }
+
+        const mappedTemplates = mapMemegenTemplateItems(payload as MemegenTemplateApiItem[]);
+        if (!mappedTemplates.length) {
+          throw new Error("template payload is empty");
+        }
+
+        if (isCancelled) {
+          return;
+        }
+
+        setMemeTemplateOptions(mappedTemplates);
+        setMemeTemplateSource("api");
+        setMemeTemplateLoadError("");
+      } catch (loadError) {
+        if (isCancelled) {
+          return;
+        }
+
+        setMemeTemplateOptions(fallbackMemeTemplates);
+        setMemeTemplateSource("fallback");
+        setMemeTemplateLoadError(
+          loadError instanceof Error
+            ? "Using fallback template list because Memegen template fetch failed."
+            : "Using fallback template list.",
+        );
+      } finally {
+        if (!isCancelled) {
+          setIsMemeTemplateLoading(false);
+        }
+      }
+    }
+
+    loadMemegenTemplates();
+
+    return () => {
+      isCancelled = true;
+    };
+  }, [fallbackMemeTemplates]);
 
   function updateChartRows(
     updater: (rows: Array<{ label: string; primary: string; secondary: string }>) => Array<{
@@ -709,30 +879,19 @@ export default function Home() {
               <div className="grid gap-3 sm:grid-cols-2 lg:grid-cols-3">
                 <label className="flex h-full flex-col">
                   <span className="text-sm font-medium sm:min-h-[2.75rem]">Meme Tone</span>
-                  <input
-                    placeholder="playful, contrarian, absurd, deadpan..."
-                    className="w-full rounded-xl border border-black/10 bg-white px-3 py-2 text-sm outline-none transition focus:border-slate-900"
-                    value={form.memeTone}
-                    onChange={(event) => setForm((prev) => ({ ...prev, memeTone: event.target.value }))}
-                  />
-                </label>
-
-                <label className="flex h-full flex-col">
-                  <span className="text-sm font-medium sm:min-h-[2.75rem]">Meme Template</span>
                   <select
                     className="w-full rounded-xl border border-black/10 bg-white px-3 py-2 text-sm outline-none transition focus:border-slate-900"
-                    value={form.memeTemplateId}
+                    value={memeToneSelection}
                     onChange={(event) =>
                       setForm((prev) => ({
                         ...prev,
-                        memeTemplateId: event.target.value as MemeTemplateId | "",
+                        memeTone: event.target.value === "auto" ? "" : event.target.value,
                       }))
                     }
                   >
-                    <option value="">Auto</option>
-                    {MEME_TEMPLATE_OPTIONS.map((template) => (
-                      <option key={template.id} value={template.id}>
-                        {MEME_TEMPLATE_LABELS[template.id]}
+                    {MEME_TONE_OPTIONS.map((tone) => (
+                      <option key={tone} value={tone}>
+                        {getMemeToneLabel(tone)}
                       </option>
                     ))}
                   </select>
@@ -757,6 +916,91 @@ export default function Home() {
                     Generates {form.memeVariantCount} meme variant{form.memeVariantCount > 1 ? "s" : ""} for each post.
                   </p>
                 </label>
+
+                <div className="rounded-xl border border-black/10 bg-white px-3 py-2">
+                  <p className="text-xs font-semibold uppercase tracking-wide text-slate-600">Template Source</p>
+                  <p className="text-sm text-slate-800">
+                    {memeTemplateSource === "api" ? "Memegen Live List" : "Curated Fallback List"}
+                  </p>
+                  <p className="text-xs text-slate-600">
+                    {isMemeTemplateLoading
+                      ? "Loading templates..."
+                      : `${memeTemplateOptions.length} template${memeTemplateOptions.length > 1 ? "s" : ""} available`}
+                  </p>
+                </div>
+              </div>
+
+              <div className="space-y-2 rounded-xl border border-black/10 bg-white p-3">
+                <div className="flex flex-wrap items-center justify-between gap-2">
+                  <p className="text-sm font-medium">Template Picker (optional)</p>
+                  <button
+                    type="button"
+                    className="rounded-lg border border-black/10 bg-white px-2 py-1 text-xs text-slate-700 hover:bg-slate-100"
+                    onClick={() => setForm((prev) => ({ ...prev, memeTemplateId: "" }))}
+                  >
+                    Use Auto Template
+                  </button>
+                </div>
+
+                <input
+                  placeholder="Search templates by name or id..."
+                  className="w-full rounded-xl border border-black/10 bg-white px-3 py-2 text-sm outline-none transition focus:border-slate-900"
+                  value={memeTemplateSearch}
+                  onChange={(event) => setMemeTemplateSearch(event.target.value)}
+                />
+
+                <div className="grid max-h-[20rem] gap-2 overflow-y-auto pr-1 sm:grid-cols-2 lg:grid-cols-3">
+                  <button
+                    type="button"
+                    className={`rounded-xl border p-2 text-left transition ${
+                      !form.memeTemplateId
+                        ? "border-slate-900 bg-slate-50"
+                        : "border-black/10 bg-white hover:bg-slate-50"
+                    }`}
+                    onClick={() => setForm((prev) => ({ ...prev, memeTemplateId: "" }))}
+                  >
+                    <p className="text-sm font-medium text-slate-900">Auto</p>
+                    <p className="text-xs text-slate-600">Model picks best template per variant.</p>
+                  </button>
+
+                  {filteredMemeTemplates.map((template) => (
+                    <button
+                      key={template.id}
+                      type="button"
+                      className={`rounded-xl border p-2 text-left transition ${
+                        form.memeTemplateId === template.id
+                          ? "border-slate-900 bg-slate-50"
+                          : "border-black/10 bg-white hover:bg-slate-50"
+                      }`}
+                      onClick={() => setForm((prev) => ({ ...prev, memeTemplateId: template.id }))}
+                    >
+                      {/* eslint-disable-next-line @next/next/no-img-element */}
+                      <img
+                        src={template.previewUrl}
+                        alt={template.name}
+                        className="h-20 w-full rounded-md border border-black/10 object-cover"
+                        loading="lazy"
+                      />
+                      <p className="mt-2 text-xs font-medium text-slate-900">{template.name}</p>
+                      <p className="mt-0.5 text-[11px] text-slate-600">@{template.id}</p>
+                    </button>
+                  ))}
+                </div>
+
+                {totalMemeTemplateMatches > filteredMemeTemplates.length ? (
+                  <p className="text-xs text-slate-600">
+                    Showing first {filteredMemeTemplates.length} matches out of {totalMemeTemplateMatches}. Refine search to narrow further.
+                  </p>
+                ) : null}
+
+                {memeTemplateLoadError ? <p className="text-xs text-slate-600">{memeTemplateLoadError}</p> : null}
+
+                <p className="text-xs text-slate-600">
+                  Selected template:{" "}
+                  {form.memeTemplateId
+                    ? (memeTemplateNameById[form.memeTemplateId] ?? formatTemplateIdLabel(form.memeTemplateId))
+                    : "Auto"}
+                </p>
               </div>
 
               <label className="space-y-1">
@@ -771,10 +1015,7 @@ export default function Home() {
               </label>
 
               <p className="text-xs text-slate-600">
-                Leave these blank to let AI come up with clever and funny meme variants automatically.
-              </p>
-              <p className="text-xs text-slate-600">
-                Template set to Auto means the model picks the best template per variant.
+                Leave tone and prompt blank to let AI come up with clever and funny meme variants automatically.
               </p>
               <p className="text-xs text-slate-600">
                 Total meme images for this run: {totalMemeVariants} ({form.numberOfPosts} post

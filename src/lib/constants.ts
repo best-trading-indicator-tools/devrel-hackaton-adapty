@@ -44,20 +44,33 @@ export const MEME_TEMPLATE_OPTIONS = [
   { id: "stonks", name: "Stonks" },
 ] as const;
 
-export type MemeTemplateId = (typeof MEME_TEMPLATE_OPTIONS)[number]["id"];
+export type CuratedMemeTemplateId = (typeof MEME_TEMPLATE_OPTIONS)[number]["id"];
+export type MemeTemplateId = string;
 
 export const MEME_TEMPLATE_IDS = MEME_TEMPLATE_OPTIONS.map((template) => template.id) as [
   (typeof MEME_TEMPLATE_OPTIONS)[number]["id"],
   ...(typeof MEME_TEMPLATE_OPTIONS)[number]["id"][],
 ];
 
-export const MEME_TEMPLATE_LABELS: Record<MemeTemplateId, string> = MEME_TEMPLATE_OPTIONS.reduce(
+export const MEME_TEMPLATE_LABELS: Record<string, string> = MEME_TEMPLATE_OPTIONS.reduce(
   (acc, template) => {
     acc[template.id] = template.name;
     return acc;
   },
-  {} as Record<MemeTemplateId, string>,
+  {} as Record<string, string>,
 );
+
+export const MEME_TONE_OPTIONS = [
+  "auto",
+  "playful",
+  "contrarian",
+  "clickbait",
+  "absurd",
+  "deadpan",
+  "sarcastic",
+  "dramatic",
+  "wholesome",
+] as const;
 
 export const GOAL_LABELS: Record<ContentGoal, string> = {
   virality: "Virality",
