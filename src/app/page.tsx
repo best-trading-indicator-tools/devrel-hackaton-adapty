@@ -570,6 +570,7 @@ export default function Home() {
     details: defaultForm.details,
   };
   const [form, setForm] = useState<FormState>(defaultForm);
+  const [numberOfPostsInput, setNumberOfPostsInput] = useState<string>(() => String(defaultForm.numberOfPosts));
   const [brandVoiceSelection, setBrandVoiceSelection] = useState<string>(() =>
     isBrandVoicePreset(defaultForm.style) ? defaultForm.style : CUSTOM_BRAND_VOICE,
   );
@@ -740,6 +741,36 @@ export default function Home() {
     }));
   }
 
+  function commitNumberOfPostsInput(): number {
+    const raw = numberOfPostsInput.trim();
+    if (!raw) {
+      setNumberOfPostsInput(String(form.numberOfPosts));
+      return form.numberOfPosts;
+    }
+
+    const parsed = Number(raw);
+    if (!Number.isFinite(parsed)) {
+      setNumberOfPostsInput(String(form.numberOfPosts));
+      return form.numberOfPosts;
+    }
+
+    const normalized = Math.min(12, Math.max(1, Math.trunc(parsed)));
+
+    setNumberOfPostsInput(String(normalized));
+    setForm((prev) => {
+      if (prev.numberOfPosts === normalized) {
+        return prev;
+      }
+
+      return {
+        ...prev,
+        numberOfPosts: normalized,
+      };
+    });
+
+    return normalized;
+  }
+
   useEffect(() => {
     let isCancelled = false;
 
@@ -819,6 +850,7 @@ export default function Home() {
 
   async function onSubmit(event: FormEvent<HTMLFormElement>) {
     event.preventDefault();
+    const committedNumberOfPosts = commitNumberOfPostsInput();
     setError("");
     setResult(null);
     setIsLoading(true);
@@ -856,6 +888,7 @@ export default function Home() {
 
       const requestPayload = {
         ...form,
+        numberOfPosts: committedNumberOfPosts,
         chartEnabled: showChartFields ? form.chartEnabled : false,
         chartType: showChartFields && form.chartEnabled ? form.chartType : defaultForm.chartType,
         chartTitle: showChartFields && form.chartEnabled ? form.chartTitle : "",
@@ -2103,8 +2136,17 @@ export default function Home() {
                 max={12}
                 className={baseControlClassName}
                 style={smallNumberInputStyle}
-                value={form.numberOfPosts}
-                onChange={(event) => setForm((prev) => ({ ...prev, numberOfPosts: Number(event.target.value || 1) }))}
+                value={numberOfPostsInput}
+                onChange={(event) => {
+                  const next = event.target.value;
+                  if (!/^\d*$/.test(next)) {
+                    return;
+                  }
+                  setNumberOfPostsInput(next);
+                }}
+                onBlur={() => {
+                  commitNumberOfPostsInput();
+                }}
               />
             </label>
           </div>
