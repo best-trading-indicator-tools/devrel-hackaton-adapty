@@ -1403,12 +1403,12 @@ export default function Home() {
           <div className="grid gap-3 sm:grid-cols-2">
             <div className="space-y-1">
               <span className="text-sm font-medium">Brand Voice</span>
-              <p className="text-xs text-slate-500">Click one voice card below to select it.</p>
+              <p className="text-xs text-slate-500">Answers: &quot;How should it sound?&quot; Click one voice card below to select it.</p>
             </div>
 
             <div className="space-y-1">
               <span className="text-sm font-medium">Goal</span>
-              <p className="text-xs text-slate-500">Click one goal card below to select it.</p>
+              <p className="text-xs text-slate-500">Answers: &quot;What outcome should it optimize for?&quot; Click one goal card below to select it.</p>
             </div>
           </div>
 
