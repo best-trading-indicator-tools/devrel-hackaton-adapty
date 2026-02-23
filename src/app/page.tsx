@@ -962,10 +962,10 @@ export default function Home() {
                   Click one or more templates to include them. Leave all unselected for Auto.
                 </p>
 
-                <div className="grid max-h-[20rem] gap-2 overflow-y-auto pr-1 sm:grid-cols-2 lg:grid-cols-3">
+                <div className="grid max-h-[26rem] grid-cols-[repeat(auto-fill,minmax(13rem,1fr))] gap-2 overflow-y-auto pr-1">
                   <button
                     type="button"
-                    className={`rounded-xl border p-2 text-left transition ${
+                    className={`min-h-40 rounded-xl border p-2 text-left transition ${
                       form.memeTemplateIds.length === 0
                         ? "border-slate-900 bg-slate-50"
                         : "border-black/10 bg-white hover:bg-slate-50"
@@ -1001,7 +1001,7 @@ export default function Home() {
                       <img
                         src={template.previewUrl}
                         alt={template.name}
-                        className="h-20 w-full rounded-md border border-black/10 object-cover"
+                        className="aspect-video w-full rounded-md border border-black/10 bg-slate-100 object-cover object-center"
                         loading="lazy"
                       />
                       <p className="mt-2 text-xs font-medium text-slate-900">{template.name}</p>
