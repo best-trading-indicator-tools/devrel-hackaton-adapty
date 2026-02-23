@@ -82,6 +82,13 @@ function ensureFinalCta(cta: string, ctaLink: string): string {
   return `${cleanCta.replace(/[.\s]+$/g, "")}. ${cleanLink}`;
 }
 
+function normalizeNoEmDash(value: string): string {
+  return value
+    .replace(/&(?:mdash|ndash);/gi, "-")
+    .replace(/([^\s])[\u2012\u2013\u2014\u2015\u2212]([^\s])/g, "$1 - $2")
+    .replace(/[\u2010\u2011\u2012\u2013\u2014\u2015\u2212]/g, "-");
+}
+
 function formatExampleMetrics(entry: LibraryEntry): string {
   if (!entry.performance) {
     return "";
@@ -231,7 +238,7 @@ export async function POST(request: Request) {
     }
 
     const lengthPlan = buildLengthPlan(input.inputLength, input.numberOfPosts);
-    const retrievalQuery = [input.goal, input.style, input.inputType, input.time, input.place, input.details]
+    const retrievalQuery = [input.goal, input.style, input.hookStyle, input.inputType, input.time, input.place, input.details]
       .filter(Boolean)
       .join(" | ");
 
@@ -244,17 +251,30 @@ export async function POST(request: Request) {
 
     const examplesForPrompt = retrieval.entries
       .slice(0, 10)
-      .map((entry, index) => `Example ${index + 1}${formatExampleMetrics(entry)}:\n${entry.text.slice(0, 1600)}`)
+      .map(
+        (entry, index) =>
+          `Example ${index + 1}${formatExampleMetrics(entry)}:\n${normalizeNoEmDash(entry.text.slice(0, 1600))}`,
+      )
       .join("\n\n---\n\n");
 
     const performanceInsightsForPrompt = retrieval.performanceInsights?.summaryLines?.length
-      ? retrieval.performanceInsights.summaryLines.map((line, index) => `${index + 1}. ${line}`).join("\n")
+      ? retrieval.performanceInsights.summaryLines
+          .map((line, index) => `${index + 1}. ${normalizeNoEmDash(line)}`)
+          .join("\n")
       : "No performance metrics were provided in the content library.";
 
     const isAdaptyVoice = input.style.trim().toLowerCase() === "adapty";
     const brandVoiceDirective = isAdaptyVoice
-      ? "Selected brand voice is Adapty. Treat the provided linkedin-library examples as the canonical style guide and mirror their tone, rhythm, formatting, and storytelling style as closely as possible while keeping copy original."
+      ? "Selected brand voice is Adapty. Treat the provided linkedin-adapty-library examples as the canonical style guide and mirror their tone, rhythm, formatting, and storytelling style as closely as possible while keeping copy original."
       : `Selected brand voice is "${input.style}". Follow that voice while still leveraging the winning structures from the provided library examples.`;
+    const isClickbaitHookStyle = input.hookStyle.trim().toLowerCase() === "clickbait";
+    const hookStyleDirective = isClickbaitHookStyle
+      ? 'Use clickbait-style hooks with curiosity gaps and tension, while keeping all claims truthful and specific.'
+      : `Use "${input.hookStyle}" as the hook style for both hook suggestions and each post opening line.`;
+    const goalExecutionDirective =
+      input.goal === "virality"
+        ? "For virality, say the uncomfortable obvious truth your audience already suspects but rarely says out loud. Make it specific, defensible, and useful."
+        : "Prioritize the selected goal while staying concrete, credible, and practical.";
 
     const responseSchema = makeGeneratePostsResponseSchema(input.numberOfPosts);
 
@@ -278,14 +298,19 @@ Rules:
 7. Avoid overusing emojis and hashtags.
 8. If a CTA link is provided, include it in the CTA line.
 9. Use the performance insights and recurring winning patterns when available.
-10. If the selected brand voice is "Adapty", closely imitate the exact style and tone from the provided linkedin-library examples.
+10. If the selected brand voice is "Adapty", closely imitate the exact style and tone from the provided linkedin-adapty-library examples.
+11. Never use em dash or en dash punctuation. Use commas, periods, colons, semicolons, or normal hyphen instead.
+12. Apply the requested hook style to the hook suggestion list and to each post hook line.
 `;
 
     const userPrompt = `
 Generation request:
 - Brand voice: ${input.style}
 - Brand voice directive: ${brandVoiceDirective}
+- Hook style: ${input.hookStyle}
+- Hook style directive: ${hookStyleDirective}
 - Goal: ${GOAL_LABELS[input.goal]} (${GOAL_DESCRIPTIONS[input.goal]})
+- Goal execution directive: ${goalExecutionDirective}
 - Post type: ${input.inputType}
 - Event time: ${input.time || "(not provided)"}
 - Event place: ${input.place || "(not provided)"}
@@ -353,12 +378,12 @@ Also generate a list of hook suggestions inspired by this style and request.
     }
 
     const response: GeneratePostsResponse = {
-      hooks: parsed.hooks,
+      hooks: parsed.hooks.map((hook) => normalizeNoEmDash(hook)),
       posts: parsed.posts.map((post, index) => ({
         length: lengthPlan[index] ?? post.length,
-        hook: post.hook,
-        body: post.body,
-        cta: ensureFinalCta(post.cta, input.ctaLink),
+        hook: normalizeNoEmDash(post.hook),
+        body: normalizeNoEmDash(post.body),
+        cta: normalizeNoEmDash(ensureFinalCta(post.cta, input.ctaLink)),
       })),
       generation: {
         modelRequested: requestedModel,

@@ -5,7 +5,7 @@ import path from "node:path";
 import OpenAI from "openai";
 import { GOAL_LABELS, type ContentGoal } from "@/lib/constants";
 
-const LIBRARY_PATH = path.join(process.cwd(), "content", "linkedin-library.txt");
+const LIBRARY_PATH = path.join(process.cwd(), "content", "linkedin-adapty-library.txt");
 const LANCEDB_PATH = path.join(process.cwd(), ".lancedb");
 const LANCEDB_META_PATH = path.join(LANCEDB_PATH, "linkedin_library_meta.json");
 const LANCEDB_TABLE_NAME = "linkedin_library_examples";

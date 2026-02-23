@@ -15,6 +15,7 @@ import type { GeneratePostsResponse } from "@/lib/schemas";
 
 type FormState = {
   style: string;
+  hookStyle: string;
   goal: ContentGoal;
   inputType: string;
   time: string;
@@ -28,6 +29,7 @@ type FormState = {
 
 const defaultForm: FormState = {
   style: "adapty",
+  hookStyle: "balanced",
   goal: "virality",
   inputType: POST_TYPE_OPTIONS[1],
   time: "",
@@ -44,13 +46,43 @@ const MAX_IMAGE_DATA_URL_CHARS = 4_500_000;
 const IMAGE_EXPORT_QUALITY = 0.82;
 const EVENT_TOPIC_PATTERN = /\b(event|webinar)\b/i;
 const CUSTOM_BRAND_VOICE = "__custom__";
+const CUSTOM_HOOK_STYLE = "__custom_hook_style__";
 const BRAND_VOICE_PRESETS = [
   "adapty",
+  "clickbait",
   "founder personal",
   "bold / contrarian",
   "technical breakdown",
   "playful meme tone",
 ] as const;
+const HOOK_STYLE_PRESETS = [
+  "balanced",
+  "clickbait",
+  "data-driven",
+  "question-led",
+  "contrarian",
+  "story-led",
+] as const;
+
+function normalizeNoEmDash(value: string): string {
+  return value
+    .replace(/&(?:mdash|ndash);/gi, "-")
+    .replace(/([^\s])[\u2012\u2013\u2014\u2015\u2212]([^\s])/g, "$1 - $2")
+    .replace(/[\u2010\u2011\u2012\u2013\u2014\u2015\u2212]/g, "-");
+}
+
+function sanitizeGenerationResult(result: GeneratePostsResponse): GeneratePostsResponse {
+  return {
+    ...result,
+    hooks: result.hooks.map((hook) => normalizeNoEmDash(hook)),
+    posts: result.posts.map((post) => ({
+      ...post,
+      hook: normalizeNoEmDash(post.hook),
+      body: normalizeNoEmDash(post.body),
+      cta: normalizeNoEmDash(post.cta),
+    })),
+  };
+}
 
 function formatLengthLabel(value: string): string {
   if (!value) {
@@ -66,6 +98,10 @@ function needsEventDetails(inputType: string): boolean {
 
 function isBrandVoicePreset(value: string): value is (typeof BRAND_VOICE_PRESETS)[number] {
   return (BRAND_VOICE_PRESETS as readonly string[]).includes(value);
+}
+
+function isHookStylePreset(value: string): value is (typeof HOOK_STYLE_PRESETS)[number] {
+  return (HOOK_STYLE_PRESETS as readonly string[]).includes(value);
 }
 
 function readFileAsDataUrl(file: File): Promise<string> {
@@ -134,6 +170,9 @@ export default function Home() {
   const [brandVoiceSelection, setBrandVoiceSelection] = useState<string>(() =>
     isBrandVoicePreset(defaultForm.style) ? defaultForm.style : CUSTOM_BRAND_VOICE,
   );
+  const [hookStyleSelection, setHookStyleSelection] = useState<string>(() =>
+    isHookStylePreset(defaultForm.hookStyle) ? defaultForm.hookStyle : CUSTOM_HOOK_STYLE,
+  );
   const [result, setResult] = useState<GeneratePostsResponse | null>(null);
   const [error, setError] = useState<string>("");
   const [isLoading, setIsLoading] = useState(false);
@@ -186,7 +225,7 @@ export default function Home() {
         return;
       }
 
-      setResult(responsePayload as GeneratePostsResponse);
+      setResult(sanitizeGenerationResult(responsePayload as GeneratePostsResponse));
     } catch {
       setError("Could not reach the API route.");
     } finally {
@@ -247,7 +286,7 @@ export default function Home() {
             <p className="text-sm text-slate-600">Generate multiple post variants with hook suggestions, based on your own winning library.</p>
           </header>
 
-          <div className="grid gap-3 sm:grid-cols-2">
+          <div className="grid gap-3 sm:grid-cols-2 lg:grid-cols-3">
             <label className="space-y-1">
               <span className="text-sm font-medium">Brand Voice</span>
               <select
@@ -286,6 +325,48 @@ export default function Home() {
                   value={form.style}
                   required
                   onChange={(event) => setForm((prev) => ({ ...prev, style: event.target.value }))}
+                />
+              ) : null}
+            </label>
+
+            <label className="space-y-1">
+              <span className="text-sm font-medium">Hook Style</span>
+              <select
+                className="w-full rounded-xl border border-black/10 bg-white px-3 py-2 text-sm outline-none transition focus:border-slate-900"
+                value={hookStyleSelection}
+                onChange={(event) => {
+                  const nextValue = event.target.value;
+                  setHookStyleSelection(nextValue);
+
+                  if (nextValue === CUSTOM_HOOK_STYLE) {
+                    setForm((prev) => ({
+                      ...prev,
+                      hookStyle: isHookStylePreset(prev.hookStyle) ? "" : prev.hookStyle,
+                    }));
+                    return;
+                  }
+
+                  setForm((prev) => ({
+                    ...prev,
+                    hookStyle: nextValue,
+                  }));
+                }}
+              >
+                {HOOK_STYLE_PRESETS.map((hookStyle) => (
+                  <option key={hookStyle} value={hookStyle}>
+                    {formatLengthLabel(hookStyle)}
+                  </option>
+                ))}
+                <option value={CUSTOM_HOOK_STYLE}>Custom</option>
+              </select>
+
+              {hookStyleSelection === CUSTOM_HOOK_STYLE ? (
+                <input
+                  placeholder="Describe your hook style..."
+                  className="w-full rounded-xl border border-black/10 bg-white px-3 py-2 text-sm outline-none transition focus:border-slate-900"
+                  value={form.hookStyle}
+                  required
+                  onChange={(event) => setForm((prev) => ({ ...prev, hookStyle: event.target.value }))}
                 />
               ) : null}
             </label>
@@ -365,7 +446,7 @@ export default function Home() {
           ) : null}
 
           <label className="space-y-1">
-            <span className="text-sm font-medium">CTA Link</span>
+            <span className="text-sm font-medium">CTA Link (optional)</span>
             <input
               placeholder="https://adapty.io/webinar"
               className="w-full rounded-xl border border-black/10 bg-white px-3 py-2 text-sm outline-none transition focus:border-slate-900"
@@ -480,30 +561,6 @@ export default function Home() {
               <p className="mt-3 text-sm text-slate-500">Generate posts to see hook ideas here.</p>
             )}
           </div>
-
-          {result ? (
-            <div className="space-y-1 text-xs uppercase tracking-wide text-slate-500">
-              <p>
-                Retrieval method: {result.retrieval.method} ({result.retrieval.examplesUsed} examples)
-              </p>
-              <p>
-                Goal profile: {GOAL_LABELS[result.retrieval.goalUsed]}
-              </p>
-              <p>
-                Library performance analyzed: {result.retrieval.performancePostsAnalyzed} post
-                {result.retrieval.performancePostsAnalyzed === 1 ? "" : "s"}
-              </p>
-              <p>Performance patterns used: {result.retrieval.performanceInsightsUsed}</p>
-              <p>
-                Model: {result.generation.modelUsed}
-                {result.generation.fallbackUsed ? ` (fallback from ${result.generation.modelRequested})` : ""}
-              </p>
-              <p>
-                Auth: {result.generation.authMode}
-                {result.generation.oauthSource ? ` (${result.generation.oauthSource})` : ""}
-              </p>
-            </div>
-          ) : null}
 
           <div className="space-y-4">
             {result?.posts.map((post, index) => (

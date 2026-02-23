@@ -4,6 +4,7 @@ import { GOAL_OPTIONS, INPUT_LENGTH_OPTIONS, type ContentGoal } from "@/lib/cons
 
 export const generatePostsRequestSchema = z.object({
   style: z.string().trim().min(1).max(80).default("adapty"),
+  hookStyle: z.string().trim().min(1).max(80).default("balanced"),
   goal: z.enum(GOAL_OPTIONS).default("virality"),
   inputType: z.string().trim().min(1).max(120),
   time: z.string().trim().max(120).default(""),
