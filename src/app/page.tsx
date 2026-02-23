@@ -517,18 +517,12 @@ export default function Home() {
   const showMemeFields = useMemo(() => needsMemeDetails(form.inputType), [form.inputType]);
   const showChartFields = useMemo(() => needsChartDetails(form.inputType), [form.inputType]);
   const showCustomBrandVoiceInput = brandVoiceSelection === CUSTOM_BRAND_VOICE;
-  const brandVoiceSelectWidth = useMemo(
-    () =>
-      getSelectWidthFromOptions(
-        [...BRAND_VOICE_PRESETS.map((voice) => BRAND_VOICE_PROFILES[voice].label), "Custom"] as const,
-        {
-          minCh: 14,
-          maxCh: 34,
-          paddingCh: 5,
-        },
-      ),
-    [],
-  );
+  const selectedBrandVoiceLabel =
+    brandVoiceSelection === CUSTOM_BRAND_VOICE
+      ? "Custom"
+      : isBrandVoicePreset(brandVoiceSelection)
+        ? BRAND_VOICE_PROFILES[brandVoiceSelection].label
+        : "Custom";
   const goalSelectWidth = useMemo(
     () =>
       getSelectWidthFromOptions(GOAL_OPTIONS.map((goal) => GOAL_LABELS[goal]), {
@@ -583,17 +577,6 @@ export default function Home() {
       }),
     [],
   );
-  const selectedBrandVoiceDescription = useMemo(() => {
-    if (brandVoiceSelection === CUSTOM_BRAND_VOICE) {
-      return "Custom lets you define your own brand persona, writing style, and tone rules.";
-    }
-
-    if (isBrandVoicePreset(brandVoiceSelection)) {
-      return BRAND_VOICE_PROFILES[brandVoiceSelection].uiDescription;
-    }
-
-    return "";
-  }, [brandVoiceSelection]);
 
   const subtitle = useMemo(() => {
     if (form.inputLength !== "mix") {
@@ -656,6 +639,23 @@ export default function Home() {
         template.id.toLowerCase().includes(query),
     ).length;
   }, [memeTemplateOptions, memeTemplateSearch]);
+
+  function applyBrandVoiceSelection(nextValue: string) {
+    setBrandVoiceSelection(nextValue);
+
+    if (nextValue === CUSTOM_BRAND_VOICE) {
+      setForm((prev) => ({
+        ...prev,
+        style: isBrandVoicePreset(prev.style) ? "" : prev.style,
+      }));
+      return;
+    }
+
+    setForm((prev) => ({
+      ...prev,
+      style: nextValue,
+    }));
+  }
 
   useEffect(() => {
     let isCancelled = false;
@@ -1097,39 +1097,10 @@ export default function Home() {
           </header>
 
           <div className="grid gap-3 sm:grid-cols-2">
-            <label className="space-y-1">
+            <div className="space-y-1">
               <span className="text-sm font-medium">Brand Voice</span>
-              <select
-                className={baseControlClassName}
-                style={{ width: brandVoiceSelectWidth }}
-                value={brandVoiceSelection}
-                onChange={(event) => {
-                  const nextValue = event.target.value;
-                  setBrandVoiceSelection(nextValue);
-
-                  if (nextValue === CUSTOM_BRAND_VOICE) {
-                    setForm((prev) => ({
-                      ...prev,
-                      style: isBrandVoicePreset(prev.style) ? "" : prev.style,
-                    }));
-                    return;
-                  }
-
-                  setForm((prev) => ({
-                    ...prev,
-                    style: nextValue,
-                  }));
-                }}
-              >
-                {BRAND_VOICE_PRESETS.map((voice) => (
-                  <option key={voice} value={voice}>
-                    {BRAND_VOICE_PROFILES[voice].label}
-                  </option>
-                ))}
-                <option value={CUSTOM_BRAND_VOICE}>Custom</option>
-              </select>
-              <p className="text-xs text-slate-500">{selectedBrandVoiceDescription}</p>
-            </label>
+              <p className="text-xs text-slate-500">Click one voice card below to select it.</p>
+            </div>
 
             <label className="space-y-1">
               <span className="text-sm font-medium">Goal</span>
@@ -1148,6 +1119,47 @@ export default function Home() {
             </label>
           </div>
 
+          <div className="space-y-3 rounded-2xl border border-black/10 bg-slate-50 p-3">
+            <div className="flex flex-wrap items-center justify-between gap-2">
+              <p className="text-sm font-medium text-slate-900">Brand Voice Guide</p>
+              <p className="text-xs text-slate-600">Selected: {selectedBrandVoiceLabel}</p>
+            </div>
+            <div className="grid gap-2 sm:grid-cols-2 lg:grid-cols-3">
+              {BRAND_VOICE_PRESETS.map((voice) => {
+                const isSelected = brandVoiceSelection === voice;
+                return (
+                  <button
+                    key={voice}
+                    type="button"
+                    className={`rounded-xl border p-3 text-left transition ${
+                      isSelected
+                        ? "border-slate-900 bg-white shadow-[0_0_0_1px_rgba(15,23,42,0.08)]"
+                        : "border-black/10 bg-white hover:border-slate-400"
+                    }`}
+                    onClick={() => applyBrandVoiceSelection(voice)}
+                  >
+                    <p className="text-sm font-semibold text-slate-900">{BRAND_VOICE_PROFILES[voice].label}</p>
+                    <p className="mt-1 text-xs text-slate-600">{BRAND_VOICE_PROFILES[voice].uiDescription}</p>
+                  </button>
+                );
+              })}
+              <button
+                type="button"
+                className={`rounded-xl border p-3 text-left transition ${
+                  showCustomBrandVoiceInput
+                    ? "border-slate-900 bg-white shadow-[0_0_0_1px_rgba(15,23,42,0.08)]"
+                    : "border-black/10 bg-white hover:border-slate-400"
+                }`}
+                onClick={() => applyBrandVoiceSelection(CUSTOM_BRAND_VOICE)}
+              >
+                <p className="text-sm font-semibold text-slate-900">Custom</p>
+                <p className="mt-1 text-xs text-slate-600">
+                  Define your own brand persona, tone rules, and writing style.
+                </p>
+              </button>
+            </div>
+          </div>
+
           {showCustomBrandVoiceInput ? (
             <div className="grid gap-3">
               <label className="space-y-1">
@@ -1163,18 +1175,6 @@ export default function Home() {
               </label>
             </div>
           ) : null}
-
-          <details className="rounded-2xl border border-black/10 bg-slate-50 p-3">
-            <summary className="cursor-pointer text-sm font-medium text-slate-800">Brand Voice Guide</summary>
-            <div className="mt-3 grid gap-2 sm:grid-cols-2 lg:grid-cols-3">
-              {BRAND_VOICE_PRESETS.map((voice) => (
-                <article key={voice} className="rounded-xl border border-black/10 bg-white p-3">
-                  <p className="text-sm font-semibold text-slate-900">{BRAND_VOICE_PROFILES[voice].label}</p>
-                  <p className="mt-1 text-xs text-slate-600">{BRAND_VOICE_PROFILES[voice].uiDescription}</p>
-                </article>
-              ))}
-            </div>
-          </details>
 
           <div className="space-y-1">
             <label className="space-y-1">
