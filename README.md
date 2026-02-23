@@ -68,6 +68,15 @@ curl -X POST http://localhost:3000/api/generate \
 
 Select **Next.js** (correct choice).
 
+## Model routing
+
+- Default model is `OPENAI_MODEL=gpt-5.3-codex`.
+- If that model is not available for your token, the API auto-retries with `OPENAI_MODEL_FALLBACK` (default `gpt-5.2`).
+- For OpenClaw/OpenAI-compatible gateways, set:
+  - `OPENAI_BASE_URL` (for example `http://127.0.0.1:18789/v1`)
+  - `OPENAI_API_KEY` to your gateway bearer token
+  - `OPENAI_MODEL` to the model your gateway accepts
+
 ## Deploy (claimable preview)
 
 This project can be deployed with the `vercel-deploy` skill script:

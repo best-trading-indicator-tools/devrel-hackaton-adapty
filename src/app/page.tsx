@@ -208,9 +208,15 @@ export default function Home() {
           </div>
 
           {result ? (
-            <p className="text-xs uppercase tracking-wide text-slate-500">
-              Retrieval method: {result.retrieval.method} ({result.retrieval.examplesUsed} examples)
-            </p>
+            <div className="space-y-1 text-xs uppercase tracking-wide text-slate-500">
+              <p>
+                Retrieval method: {result.retrieval.method} ({result.retrieval.examplesUsed} examples)
+              </p>
+              <p>
+                Model: {result.generation.modelUsed}
+                {result.generation.fallbackUsed ? ` (fallback from ${result.generation.modelRequested})` : ""}
+              </p>
+            </div>
           ) : null}
 
           <div className="space-y-4">

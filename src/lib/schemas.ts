@@ -39,6 +39,12 @@ export type GeneratePostsResponse = {
     body: string;
     cta: string;
   }>;
+  generation: {
+    modelRequested: string;
+    modelUsed: string;
+    fallbackUsed: boolean;
+    baseUrlType: "openai" | "custom";
+  };
   retrieval: {
     method: "lexical" | "lancedb";
     examplesUsed: number;

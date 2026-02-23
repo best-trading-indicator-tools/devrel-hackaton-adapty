@@ -16,6 +16,36 @@ function getApiToken(): string | undefined {
   return process.env.OPENAI_API_KEY ?? process.env.OPENAI_OAUTH_TOKEN ?? process.env.OPENAI_ACCESS_TOKEN;
 }
 
+function getOpenAIClient(token: string): { client: OpenAI; usingCustomBaseUrl: boolean } {
+  const baseURL = process.env.OPENAI_BASE_URL?.trim();
+
+  if (baseURL) {
+    return {
+      client: new OpenAI({
+        apiKey: token,
+        baseURL,
+      }),
+      usingCustomBaseUrl: true,
+    };
+  }
+
+  return {
+    client: new OpenAI({ apiKey: token }),
+    usingCustomBaseUrl: false,
+  };
+}
+
+function isModelAccessError(error: unknown): boolean {
+  const message = error instanceof Error ? error.message.toLowerCase() : String(error).toLowerCase();
+
+  return (
+    message.includes("does not exist") ||
+    message.includes("do not have access") ||
+    message.includes("unknown model") ||
+    message.includes("invalid model")
+  );
+}
+
 function ensureFinalCta(cta: string, ctaLink: string): string {
   const cleanCta = cta.trim();
   const cleanLink = ctaLink.trim();
@@ -58,8 +88,9 @@ export async function POST(request: Request) {
     }
 
     const input = parsedInput.data;
-    const model = process.env.OPENAI_MODEL ?? "gpt-5.3-codex";
-    const client = new OpenAI({ apiKey: token });
+    const requestedModel = process.env.OPENAI_MODEL ?? "gpt-5.3-codex";
+    const fallbackModel = process.env.OPENAI_MODEL_FALLBACK ?? "gpt-5.2";
+    const { client, usingCustomBaseUrl } = getOpenAIClient(token);
 
     const lengthPlan = buildLengthPlan(input.inputLength, input.numberOfPosts);
     const retrievalQuery = [input.style, input.inputType, input.time, input.place, input.details]
@@ -116,15 +147,36 @@ ${examplesForPrompt || "No library examples available."}
 Also generate a list of hook suggestions inspired by this style and request.
 `;
 
-    const completion = await client.chat.completions.parse({
-      model,
-      temperature: 0.8,
-      messages: [
-        { role: "system", content: systemPrompt },
-        { role: "user", content: userPrompt },
-      ],
-      response_format: zodResponseFormat(responseSchema, "linkedin_post_batch"),
-    });
+    const runGeneration = async (model: string) =>
+      client.chat.completions.parse({
+        model,
+        temperature: 0.8,
+        messages: [
+          { role: "system", content: systemPrompt },
+          { role: "user", content: userPrompt },
+        ],
+        response_format: zodResponseFormat(responseSchema, "linkedin_post_batch"),
+      });
+
+    let modelUsed = requestedModel;
+    let fallbackUsed = false;
+
+    let completion;
+
+    try {
+      completion = await runGeneration(requestedModel);
+    } catch (primaryError) {
+      const canFallback =
+        fallbackModel.trim().length > 0 && fallbackModel !== requestedModel && isModelAccessError(primaryError);
+
+      if (!canFallback) {
+        throw primaryError;
+      }
+
+      completion = await runGeneration(fallbackModel);
+      modelUsed = fallbackModel;
+      fallbackUsed = true;
+    }
 
     const parsed = completion.choices[0]?.message.parsed;
 
@@ -145,6 +197,12 @@ Also generate a list of hook suggestions inspired by this style and request.
         body: post.body,
         cta: ensureFinalCta(post.cta, input.ctaLink),
       })),
+      generation: {
+        modelRequested: requestedModel,
+        modelUsed,
+        fallbackUsed,
+        baseUrlType: usingCustomBaseUrl ? "custom" : "openai",
+      },
       retrieval: {
         method: retrieval.method,
         examplesUsed: retrieval.entries.length,
