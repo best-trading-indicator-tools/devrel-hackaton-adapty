@@ -44,6 +44,8 @@ export type GeneratePostsResponse = {
     modelUsed: string;
     fallbackUsed: boolean;
     baseUrlType: "openai" | "custom";
+    authMode: "oauth" | "api_key";
+    oauthSource?: "env" | "codex-auth-json";
   };
   retrieval: {
     method: "lexical" | "lancedb";

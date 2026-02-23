@@ -216,6 +216,10 @@ export default function Home() {
                 Model: {result.generation.modelUsed}
                 {result.generation.fallbackUsed ? ` (fallback from ${result.generation.modelRequested})` : ""}
               </p>
+              <p>
+                Auth: {result.generation.authMode}
+                {result.generation.oauthSource ? ` (${result.generation.oauthSource})` : ""}
+              </p>
             </div>
           ) : null}
 

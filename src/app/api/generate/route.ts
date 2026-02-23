@@ -3,6 +3,8 @@ import OpenAI from "openai";
 import { zodResponseFormat } from "openai/helpers/zod";
 
 import { buildLengthPlan, lengthGuide } from "@/lib/constants";
+import { createCodexStructuredCompletion } from "@/lib/codex-responses";
+import { getCodexOAuthCredentials, type CodexOAuthCredentials } from "@/lib/codex-oauth";
 import { retrieveLibraryContext } from "@/lib/library-retrieval";
 import {
   generatePostsRequestSchema,
@@ -12,8 +14,8 @@ import {
 
 export const runtime = "nodejs";
 
-function getApiToken(): string | undefined {
-  return process.env.OPENAI_API_KEY ?? process.env.OPENAI_OAUTH_TOKEN ?? process.env.OPENAI_ACCESS_TOKEN;
+function getOpenAIApiToken(): string | undefined {
+  return process.env.OPENAI_API_KEY ?? process.env.OPENAI_ACCESS_TOKEN;
 }
 
 function getOpenAIClient(token: string): { client: OpenAI; usingCustomBaseUrl: boolean } {
@@ -35,6 +37,24 @@ function getOpenAIClient(token: string): { client: OpenAI; usingCustomBaseUrl: b
   };
 }
 
+function getEmbeddingClient(): OpenAI | undefined {
+  const token = getOpenAIApiToken();
+  if (!token) {
+    return undefined;
+  }
+
+  const embeddingBaseUrl = process.env.OPENAI_EMBEDDING_BASE_URL?.trim();
+
+  if (embeddingBaseUrl) {
+    return new OpenAI({
+      apiKey: token,
+      baseURL: embeddingBaseUrl,
+    });
+  }
+
+  return new OpenAI({ apiKey: token });
+}
+
 function isModelAccessError(error: unknown): boolean {
   const message = error instanceof Error ? error.message.toLowerCase() : String(error).toLowerCase();
 
@@ -42,7 +62,8 @@ function isModelAccessError(error: unknown): boolean {
     message.includes("does not exist") ||
     message.includes("do not have access") ||
     message.includes("unknown model") ||
-    message.includes("invalid model")
+    message.includes("invalid model") ||
+    message.includes("model not found")
   );
 }
 
@@ -61,19 +82,64 @@ function ensureFinalCta(cta: string, ctaLink: string): string {
   return `${cleanCta.replace(/[.\s]+$/g, "")}. ${cleanLink}`;
 }
 
+async function runOpenAiChatGeneration(params: {
+  token: string;
+  model: string;
+  systemPrompt: string;
+  userPrompt: string;
+  responseSchema: ReturnType<typeof makeGeneratePostsResponseSchema>;
+}) {
+  const { client } = getOpenAIClient(params.token);
+
+  const completion = await client.chat.completions.parse({
+    model: params.model,
+    temperature: 0.8,
+    messages: [
+      { role: "system", content: params.systemPrompt },
+      { role: "user", content: params.userPrompt },
+    ],
+    response_format: zodResponseFormat(params.responseSchema, "linkedin_post_batch"),
+  });
+
+  const parsed = completion.choices[0]?.message.parsed;
+
+  if (!parsed) {
+    throw new Error("Model returned no parsable output.");
+  }
+
+  return parsed;
+}
+
+async function runCodexOauthGeneration(params: {
+  oauth: CodexOAuthCredentials;
+  model: string;
+  systemPrompt: string;
+  userPrompt: string;
+  responseSchema: ReturnType<typeof makeGeneratePostsResponseSchema>;
+}) {
+  const responseFormat = zodResponseFormat(params.responseSchema, "linkedin_post_batch");
+  const jsonSchema = responseFormat.json_schema?.schema;
+
+  if (!jsonSchema || typeof jsonSchema !== "object") {
+    throw new Error("Failed to derive JSON schema for Codex structured output");
+  }
+
+  const parsedJson = await createCodexStructuredCompletion<unknown>({
+    accessToken: params.oauth.accessToken,
+    accountId: params.oauth.accountId,
+    model: params.model,
+    instructions: params.systemPrompt,
+    userInput: params.userPrompt,
+    schemaName: "linkedin_post_batch",
+    jsonSchema: jsonSchema as Record<string, unknown>,
+    baseUrl: process.env.OPENAI_CODEX_BASE_URL,
+  });
+
+  return params.responseSchema.parse(parsedJson);
+}
+
 export async function POST(request: Request) {
   try {
-    const token = getApiToken();
-    if (!token) {
-      return NextResponse.json(
-        {
-          error:
-            "Missing OpenAI credentials. Set OPENAI_API_KEY (or OPENAI_OAUTH_TOKEN / OPENAI_ACCESS_TOKEN).",
-        },
-        { status: 500 },
-      );
-    }
-
     const body = await request.json();
     const parsedInput = generatePostsRequestSchema.safeParse(body);
 
@@ -90,7 +156,32 @@ export async function POST(request: Request) {
     const input = parsedInput.data;
     const requestedModel = process.env.OPENAI_MODEL ?? "gpt-5.3-codex";
     const fallbackModel = process.env.OPENAI_MODEL_FALLBACK ?? "gpt-5.2";
-    const { client, usingCustomBaseUrl } = getOpenAIClient(token);
+
+    let oauthCredentials: CodexOAuthCredentials | null = null;
+
+    try {
+      oauthCredentials = await getCodexOAuthCredentials();
+    } catch (oauthError) {
+      return NextResponse.json(
+        {
+          error: "Failed to resolve OpenAI Codex OAuth credentials",
+          message: oauthError instanceof Error ? oauthError.message : String(oauthError),
+        },
+        { status: 500 },
+      );
+    }
+
+    const openAiApiToken = getOpenAIApiToken();
+
+    if (!oauthCredentials && !openAiApiToken) {
+      return NextResponse.json(
+        {
+          error:
+            "Missing credentials. Set OPENAI_OAUTH_TOKEN (recommended) or OPENAI_API_KEY / OPENAI_ACCESS_TOKEN.",
+        },
+        { status: 500 },
+      );
+    }
 
     const lengthPlan = buildLengthPlan(input.inputLength, input.numberOfPosts);
     const retrievalQuery = [input.style, input.inputType, input.time, input.place, input.details]
@@ -98,7 +189,7 @@ export async function POST(request: Request) {
       .join(" | ");
 
     const retrieval = await retrieveLibraryContext({
-      client,
+      client: getEmbeddingClient(),
       query: retrievalQuery,
       limit: Math.min(12, Math.max(6, input.numberOfPosts * 3)),
     });
@@ -147,24 +238,37 @@ ${examplesForPrompt || "No library examples available."}
 Also generate a list of hook suggestions inspired by this style and request.
 `;
 
-    const runGeneration = async (model: string) =>
-      client.chat.completions.parse({
+    const runGeneration = (model: string) => {
+      if (oauthCredentials) {
+        return runCodexOauthGeneration({
+          oauth: oauthCredentials,
+          model,
+          systemPrompt,
+          userPrompt,
+          responseSchema,
+        });
+      }
+
+      if (!openAiApiToken) {
+        throw new Error("OpenAI API token is missing");
+      }
+
+      return runOpenAiChatGeneration({
+        token: openAiApiToken,
         model,
-        temperature: 0.8,
-        messages: [
-          { role: "system", content: systemPrompt },
-          { role: "user", content: userPrompt },
-        ],
-        response_format: zodResponseFormat(responseSchema, "linkedin_post_batch"),
+        systemPrompt,
+        userPrompt,
+        responseSchema,
       });
+    };
 
     let modelUsed = requestedModel;
     let fallbackUsed = false;
 
-    let completion;
+    let parsed;
 
     try {
-      completion = await runGeneration(requestedModel);
+      parsed = await runGeneration(requestedModel);
     } catch (primaryError) {
       const canFallback =
         fallbackModel.trim().length > 0 && fallbackModel !== requestedModel && isModelAccessError(primaryError);
@@ -173,20 +277,9 @@ Also generate a list of hook suggestions inspired by this style and request.
         throw primaryError;
       }
 
-      completion = await runGeneration(fallbackModel);
+      parsed = await runGeneration(fallbackModel);
       modelUsed = fallbackModel;
       fallbackUsed = true;
-    }
-
-    const parsed = completion.choices[0]?.message.parsed;
-
-    if (!parsed) {
-      return NextResponse.json(
-        {
-          error: "Model returned no parsable output.",
-        },
-        { status: 502 },
-      );
     }
 
     const response: GeneratePostsResponse = {
@@ -201,7 +294,9 @@ Also generate a list of hook suggestions inspired by this style and request.
         modelRequested: requestedModel,
         modelUsed,
         fallbackUsed,
-        baseUrlType: usingCustomBaseUrl ? "custom" : "openai",
+        baseUrlType: oauthCredentials || process.env.OPENAI_BASE_URL ? "custom" : "openai",
+        authMode: oauthCredentials ? "oauth" : "api_key",
+        oauthSource: oauthCredentials?.source,
       },
       retrieval: {
         method: retrieval.method,

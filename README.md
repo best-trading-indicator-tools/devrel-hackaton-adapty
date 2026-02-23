@@ -39,7 +39,12 @@ npm install
 cp .env.example .env.local
 ```
 
-Then set at least `OPENAI_API_KEY` (or `OPENAI_OAUTH_TOKEN` / `OPENAI_ACCESS_TOKEN`).
+For generation, OAuth is preferred:
+
+- Set `OPENAI_OAUTH_TOKEN` (+ `OPENAI_OAUTH_ACCOUNT_ID`, optional refresh vars), or
+- On local macOS/Linux with Codex CLI installed, the app auto-reads `~/.codex/auth.json`.
+
+For embeddings/LanceDB, set `OPENAI_API_KEY` (OAuth tokens usually do not have embeddings scope).
 
 3. Run:
 
@@ -71,11 +76,12 @@ Select **Next.js** (correct choice).
 ## Model routing
 
 - Default model is `OPENAI_MODEL=gpt-5.3-codex`.
-- If that model is not available for your token, the API auto-retries with `OPENAI_MODEL_FALLBACK` (default `gpt-5.2`).
-- For OpenClaw/OpenAI-compatible gateways, set:
-  - `OPENAI_BASE_URL` (for example `http://127.0.0.1:18789/v1`)
-  - `OPENAI_API_KEY` to your gateway bearer token
-  - `OPENAI_MODEL` to the model your gateway accepts
+- Generation auth priority:
+  1. Codex OAuth (`OPENAI_OAUTH_TOKEN` or `~/.codex/auth.json`)
+  2. API key (`OPENAI_API_KEY` / `OPENAI_ACCESS_TOKEN`)
+- If the requested model is unavailable, the API auto-retries with `OPENAI_MODEL_FALLBACK` (default `gpt-5.2`).
+- Codex OAuth calls `https://chatgpt.com/backend-api/codex/responses` by default (override with `OPENAI_CODEX_BASE_URL`).
+- API-key mode uses Chat Completions and supports `OPENAI_BASE_URL` for OpenAI-compatible gateways.
 
 ## Deploy (claimable preview)
 
@@ -96,3 +102,4 @@ The script returns:
 - If LanceDB retrieval fails, the API falls back to lexical retrieval from the `.txt` library.
 - `OPENAI_EMBEDDING_MODEL=text-embedding-3-small` is the default for speed and lower cost when indexing large libraries.
 - If you want higher semantic precision and accept higher cost/latency, switch to `text-embedding-3-large`.
+- OAuth-only setups can still generate posts, but may fall back to lexical retrieval because embeddings usually require API-key scopes.
