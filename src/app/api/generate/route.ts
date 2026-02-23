@@ -28,6 +28,7 @@ import { getCodexOAuthCredentials, type CodexOAuthCredentials } from "@/lib/code
 import { runWebFactCheck } from "@/lib/fact-check";
 import { retrieveLibraryContext, type LibraryEntry } from "@/lib/library-retrieval";
 import { getPromptGuides } from "@/lib/prompt-guides";
+import { runIndustryNewsContext } from "@/lib/rss-news";
 import {
   generatePostsRequestSchema,
   makeGeneratePostsResponseSchema,
@@ -40,6 +41,7 @@ const MEME_INPUT_TYPE_PATTERN = /\b(meme|shitpost)\b/i;
 const MEME_LINE_MAX_CHARS = 72;
 const DEFAULT_MEMEGEN_BASE_URL = "https://api.memegen.link";
 const FACT_CHECK_EVIDENCE_PROMPT_LIMIT = 4;
+const INDUSTRY_NEWS_REACTION_PATTERN = /\bindustry news reaction\b/i;
 
 const GOAL_PLAYBOOKS: Record<ContentGoal, string> = {
   virality:
@@ -638,6 +640,10 @@ function looksLikeSaucePostType(inputType: string): boolean {
   return /\bsauce\b/i.test(inputType);
 }
 
+function looksLikeIndustryNewsReactionPostType(inputType: string): boolean {
+  return INDUSTRY_NEWS_REACTION_PATTERN.test(inputType);
+}
+
 async function runOpenAiChatGeneration(params: {
   token: string;
   model: string;
@@ -914,6 +920,33 @@ export async function POST(request: Request) {
       place: input.place,
       ctaLink: input.ctaLink,
     });
+    const industryNewsContext = await runIndustryNewsContext({
+      style: input.style,
+      goal: input.goal,
+      inputType: input.inputType,
+      details: input.details,
+    });
+    const industryNewsPromptLines = industryNewsContext.items.map((item, index) => {
+      const keywordPart = item.matchedKeywords.length ? ` | matched keywords: ${item.matchedKeywords.join(", ")}` : "";
+      return `${index + 1}. [${item.sourceName}] ${normalizeNoEmDash(item.title)}
+- URL: ${item.url}
+- Published: ${item.publishedAtIso}
+- Summary: ${normalizeNoEmDash(item.summary)}
+- Score: ${item.score}${keywordPart}`;
+    });
+    const industryNewsExecutionDirective = looksLikeIndustryNewsReactionPostType(input.inputType)
+      ? industryNewsPromptLines.length
+        ? "Industry news context is available. Anchor each post to one relevant recent news item and explain practical implications for app teams."
+        : "Industry news context is empty. Do not pretend there is breaking news; provide an opinionated reaction format without fabricated details."
+      : "No industry news reaction context required.";
+    const industryNewsContextSummary = industryNewsPromptLines.length
+      ? industryNewsPromptLines.join("\n\n")
+      : "No ranked RSS items available within recency window.";
+    const industryNewsStatusSummary = industryNewsContext.enabled
+      ? industryNewsContext.warning
+        ? `enabled with warning: ${industryNewsContext.warning} (feeds ok: ${industryNewsContext.feedsSucceeded}/${industryNewsContext.feedsAttempted})`
+        : `enabled (feeds ok: ${industryNewsContext.feedsSucceeded}/${industryNewsContext.feedsAttempted})`
+      : "disabled";
     const webEvidenceLines = webFactCheck.evidenceLines
       .slice(0, FACT_CHECK_EVIDENCE_PROMPT_LIMIT)
       .map((line) => normalizeNoEmDash(line));
@@ -990,6 +1023,8 @@ Generation request:
 - Goal: ${GOAL_LABELS[input.goal]} (${GOAL_DESCRIPTIONS[input.goal]})
 - Goal execution directive: ${goalExecutionDirective}
 - Post type execution directive: ${postTypeDirective}
+- Industry news execution directive: ${industryNewsExecutionDirective}
+- Industry news status: ${industryNewsStatusSummary}
 - Chart execution directive: ${chartExecutionDirective}
 - Chart summary: ${chartPromptSummary}
 - Meme execution directive: ${memeExecutionDirective}
@@ -1020,6 +1055,9 @@ ${performanceInsightsForPrompt}
 
 Web fact-check evidence context:
 ${factCheckEvidenceForPrompt}
+
+Ranked RSS context for industry news reactions:
+${industryNewsContextSummary}
 
 Also generate a list of hook suggestions inspired by this style and request.
 `;
