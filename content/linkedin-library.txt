@@ -1,0 +1,69 @@
+# Paste your best-performing LinkedIn posts here.
+# Keep each entry separated by a line with exactly ---
+# The API will retrieve the most relevant entries as context before generation.
+
+You asked, we built it.
+[Feature] is live.
+
+What changed:
+- [Benefit 1]
+- [Benefit 2]
+- [Benefit 3]
+
+If you asked for this, it's ready. Details: [CTA LINK]
+---
+We reviewed 300 paywalls.
+Here is what the top 1% do differently.
+
+1) Lead with outcome, not feature list.
+2) Keep trial messaging concrete.
+3) Remove price anxiety in the first screen.
+
+Full teardown in comments.
+---
+68% of apps lose subscribers in month 2.
+Here is the fix.
+
+Most teams over-focus on acquisition and under-invest in early retention loops.
+
+The first 14 days decide everything:
+- onboarding moment of value
+- lifecycle messaging
+- paywall timing
+
+Want our benchmark checklist? [CTA LINK]
+---
+Apple changed the rules again.
+Here is what it means for your subscriptions.
+
+The update affects compliance, billing edge cases, and update cadence.
+If your team is shipping this week, you need a playbook, not a panic.
+
+I broke down the practical actions in plain English.
+Read it here: [CTA LINK]
+---
+How [App] went from $2K to $18K MRR in four months.
+
+No hacks.
+Just positioning, experimentation cadence, and onboarding cleanup.
+
+Before:
+- noisy offer architecture
+- weak renewal signals
+
+After:
+- narrowed segmentation
+- stronger activation flow
+- clear win-back loop
+
+Case study: [CTA LINK]
+---
+Top 5 paywalls we saw this week (and why they work)
+
+1) Clear value stack
+2) Smart annual anchoring
+3) Better trial framing
+4) Contextual timing
+5) Lower cognitive load
+
+If you want this as a swipe file, comment "paywall".
