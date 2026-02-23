@@ -366,6 +366,16 @@ function formatLengthLabel(value: string): string {
   return value.charAt(0).toUpperCase() + value.slice(1);
 }
 
+function getSelectWidthFromOptions(
+  options: readonly string[],
+  config: { minCh?: number; maxCh?: number; paddingCh?: number } = {},
+): string {
+  const { minCh = 12, maxCh = 40, paddingCh = 5 } = config;
+  const longest = options.reduce((max, option) => Math.max(max, option.length), 0);
+  const widthInCh = Math.max(minCh, Math.min(maxCh, longest + paddingCh));
+  return `min(100%, ${widthInCh}ch)`;
+}
+
 function needsEventDetails(inputType: string): boolean {
   return EVENT_TOPIC_PATTERN.test(inputType);
 }
@@ -470,6 +480,11 @@ async function buildImageDataUrl(file: File): Promise<string> {
 }
 
 export default function Home() {
+  const baseControlClassName =
+    "w-full rounded-xl border border-black/10 bg-white px-3 py-2 text-sm outline-none transition focus:border-slate-900";
+  const compactInputStyle = { width: "min(100%, 34rem)" } as const;
+  const mediumInputStyle = { width: "min(100%, 26rem)" } as const;
+  const smallNumberInputStyle = { width: "min(100%, 20ch)" } as const;
   const defaultRewriteContext: RewriteContext = {
     style: defaultForm.style,
     goal: defaultForm.goal,
@@ -502,6 +517,72 @@ export default function Home() {
   const showMemeFields = useMemo(() => needsMemeDetails(form.inputType), [form.inputType]);
   const showChartFields = useMemo(() => needsChartDetails(form.inputType), [form.inputType]);
   const showCustomBrandVoiceInput = brandVoiceSelection === CUSTOM_BRAND_VOICE;
+  const brandVoiceSelectWidth = useMemo(
+    () =>
+      getSelectWidthFromOptions(
+        [...BRAND_VOICE_PRESETS.map((voice) => BRAND_VOICE_PROFILES[voice].label), "Custom"] as const,
+        {
+          minCh: 14,
+          maxCh: 34,
+          paddingCh: 5,
+        },
+      ),
+    [],
+  );
+  const goalSelectWidth = useMemo(
+    () =>
+      getSelectWidthFromOptions(GOAL_OPTIONS.map((goal) => GOAL_LABELS[goal]), {
+        minCh: 12,
+        maxCh: 20,
+        paddingCh: 5,
+      }),
+    [],
+  );
+  const postTypeSelectWidth = useMemo(
+    () =>
+      getSelectWidthFromOptions(POST_TYPE_OPTIONS, {
+        minCh: 18,
+        maxCh: 40,
+        paddingCh: 5,
+      }),
+    [],
+  );
+  const memeToneSelectWidth = useMemo(
+    () =>
+      getSelectWidthFromOptions(MEME_TONE_OPTIONS.map((tone) => getMemeToneLabel(tone)), {
+        minCh: 12,
+        maxCh: 24,
+        paddingCh: 5,
+      }),
+    [],
+  );
+  const chartTypeSelectWidth = useMemo(
+    () =>
+      getSelectWidthFromOptions(CHART_TYPE_OPTIONS.map((chartType) => CHART_TYPE_LABELS[chartType]), {
+        minCh: 12,
+        maxCh: 22,
+        paddingCh: 5,
+      }),
+    [],
+  );
+  const chartLegendSelectWidth = useMemo(
+    () =>
+      getSelectWidthFromOptions(CHART_LEGEND_POSITIONS.map((position) => getLegendLabel(position)), {
+        minCh: 12,
+        maxCh: 20,
+        paddingCh: 5,
+      }),
+    [],
+  );
+  const inputLengthSelectWidth = useMemo(
+    () =>
+      getSelectWidthFromOptions(INPUT_LENGTH_OPTIONS.map((length) => formatLengthLabel(length)), {
+        minCh: 12,
+        maxCh: 20,
+        paddingCh: 5,
+      }),
+    [],
+  );
   const selectedBrandVoiceDescription = useMemo(() => {
     if (brandVoiceSelection === CUSTOM_BRAND_VOICE) {
       return "Custom lets you define your own brand persona, writing style, and tone rules.";
@@ -1019,7 +1100,8 @@ export default function Home() {
             <label className="space-y-1">
               <span className="text-sm font-medium">Brand Voice</span>
               <select
-                className="w-full rounded-xl border border-black/10 bg-white px-3 py-2 text-sm outline-none transition focus:border-slate-900"
+                className={baseControlClassName}
+                style={{ width: brandVoiceSelectWidth }}
                 value={brandVoiceSelection}
                 onChange={(event) => {
                   const nextValue = event.target.value;
@@ -1052,7 +1134,8 @@ export default function Home() {
             <label className="space-y-1">
               <span className="text-sm font-medium">Goal</span>
               <select
-                className="w-full rounded-xl border border-black/10 bg-white px-3 py-2 text-sm outline-none transition focus:border-slate-900"
+                className={baseControlClassName}
+                style={{ width: goalSelectWidth }}
                 value={form.goal}
                 onChange={(event) => setForm((prev) => ({ ...prev, goal: event.target.value as ContentGoal }))}
               >
@@ -1072,7 +1155,7 @@ export default function Home() {
                 <textarea
                   rows={3}
                   placeholder="Describe your custom brand voice..."
-                  className="w-full rounded-xl border border-black/10 bg-white px-3 py-2 text-sm outline-none transition focus:border-slate-900"
+                  className={baseControlClassName}
                   value={form.style}
                   required
                   onChange={(event) => setForm((prev) => ({ ...prev, style: event.target.value }))}
@@ -1097,7 +1180,8 @@ export default function Home() {
             <label className="space-y-1">
               <span className="text-sm font-medium">Post Type</span>
               <select
-                className="w-full rounded-xl border border-black/10 bg-white px-3 py-2 text-sm outline-none transition focus:border-slate-900"
+                className={baseControlClassName}
+                style={{ width: postTypeSelectWidth }}
                 value={form.inputType}
                 onChange={(event) =>
                   setForm((prev) => {
@@ -1132,7 +1216,8 @@ export default function Home() {
                 <label className="flex h-full flex-col">
                   <span className="text-sm font-medium sm:min-h-[2.75rem]">Meme Tone</span>
                   <select
-                    className="w-full rounded-xl border border-black/10 bg-white px-3 py-2 text-sm outline-none transition focus:border-slate-900"
+                    className={baseControlClassName}
+                    style={{ width: memeToneSelectWidth }}
                     value={memeToneSelection}
                     onChange={(event) =>
                       setForm((prev) => ({
@@ -1155,7 +1240,8 @@ export default function Home() {
                     type="number"
                     min={1}
                     max={6}
-                    className="w-full rounded-xl border border-black/10 bg-white px-3 py-2 text-sm outline-none transition focus:border-slate-900"
+                    className={baseControlClassName}
+                    style={smallNumberInputStyle}
                     value={form.memeVariantCount}
                     onChange={(event) =>
                       setForm((prev) => ({
@@ -1184,7 +1270,8 @@ export default function Home() {
 
                 <input
                   placeholder="Search templates by name or id..."
-                  className="w-full rounded-xl border border-black/10 bg-white px-3 py-2 text-sm outline-none transition focus:border-slate-900"
+                  className={baseControlClassName}
+                  style={compactInputStyle}
                   value={memeTemplateSearch}
                   onChange={(event) => setMemeTemplateSearch(event.target.value)}
                 />
@@ -1264,7 +1351,7 @@ export default function Home() {
                 <textarea
                   rows={3}
                   placeholder="Any specific angle, joke format, or comparison to include..."
-                  className="w-full rounded-xl border border-black/10 bg-white px-3 py-2 text-sm outline-none transition focus:border-slate-900"
+                  className={baseControlClassName}
                   value={form.memeBrief}
                   onChange={(event) => setForm((prev) => ({ ...prev, memeBrief: event.target.value }))}
                 />
@@ -1307,7 +1394,8 @@ export default function Home() {
                     <label className="flex h-full flex-col">
                       <span className="text-sm font-medium sm:min-h-[2.75rem]">Chart Type</span>
                       <select
-                        className="w-full rounded-xl border border-black/10 bg-white px-3 py-2 text-sm outline-none transition focus:border-slate-900"
+                        className={baseControlClassName}
+                        style={{ width: chartTypeSelectWidth }}
                         value={form.chartType}
                         onChange={(event) => {
                           const nextType = event.target.value as ChartTypeOption;
@@ -1346,7 +1434,8 @@ export default function Home() {
                       <span className="text-sm font-medium sm:min-h-[2.75rem]">Chart Title</span>
                       <input
                         placeholder="Trial strategy split by app sample"
-                        className="w-full rounded-xl border border-black/10 bg-white px-3 py-2 text-sm outline-none transition focus:border-slate-900"
+                        className={baseControlClassName}
+                        style={mediumInputStyle}
                         value={form.chartTitle}
                         onChange={(event) => setForm((prev) => ({ ...prev, chartTitle: event.target.value }))}
                       />
@@ -1355,7 +1444,8 @@ export default function Home() {
                     <label className="flex h-full flex-col">
                       <span className="text-sm font-medium sm:min-h-[2.75rem]">Legend Position</span>
                       <select
-                        className="w-full rounded-xl border border-black/10 bg-white px-3 py-2 text-sm outline-none transition focus:border-slate-900"
+                        className={baseControlClassName}
+                        style={{ width: chartLegendSelectWidth }}
                         value={form.chartLegendPosition}
                         onChange={(event) =>
                           setForm((prev) => ({
@@ -1378,7 +1468,8 @@ export default function Home() {
                       <span className="text-sm font-medium">Primary Series Name</span>
                       <input
                         placeholder="Share %"
-                        className="w-full rounded-xl border border-black/10 bg-white px-3 py-2 text-sm outline-none transition focus:border-slate-900"
+                        className={baseControlClassName}
+                        style={mediumInputStyle}
                         value={form.chartSeriesOneLabel}
                         onChange={(event) => setForm((prev) => ({ ...prev, chartSeriesOneLabel: event.target.value }))}
                       />
@@ -1389,7 +1480,8 @@ export default function Home() {
                         <span className="text-sm font-medium">Secondary Series Name (optional)</span>
                         <input
                           placeholder="Paid conversions"
-                          className="w-full rounded-xl border border-black/10 bg-white px-3 py-2 text-sm outline-none transition focus:border-slate-900"
+                          className={baseControlClassName}
+                          style={mediumInputStyle}
                           value={form.chartSeriesTwoLabel}
                           onChange={(event) => setForm((prev) => ({ ...prev, chartSeriesTwoLabel: event.target.value }))}
                         />
@@ -1438,7 +1530,7 @@ export default function Home() {
                         >
                           <input
                             placeholder={`Label ${rowIndex + 1}`}
-                            className="w-full rounded-xl border border-black/10 bg-white px-3 py-2 text-sm outline-none transition focus:border-slate-900"
+                            className={baseControlClassName}
                             value={row.label}
                             onChange={(event) =>
                               updateChartRows((rows) =>
@@ -1455,7 +1547,7 @@ export default function Home() {
                           />
                           <input
                             placeholder={`${form.chartSeriesOneLabel.trim() || "Primary"} value`}
-                            className="w-full rounded-xl border border-black/10 bg-white px-3 py-2 text-sm outline-none transition focus:border-slate-900"
+                            className={baseControlClassName}
                             value={row.primary}
                             onChange={(event) =>
                               updateChartRows((rows) =>
@@ -1473,7 +1565,7 @@ export default function Home() {
                           {!isRadialChartType(form.chartType) ? (
                             <input
                               placeholder={`${form.chartSeriesTwoLabel.trim() || "Secondary"} value`}
-                              className="w-full rounded-xl border border-black/10 bg-white px-3 py-2 text-sm outline-none transition focus:border-slate-900"
+                              className={baseControlClassName}
                               value={row.secondary}
                               onChange={(event) =>
                                 updateChartRows((rows) =>
@@ -1541,7 +1633,8 @@ export default function Home() {
                 <input
                   type="datetime-local"
                   step={300}
-                  className="w-full rounded-xl border border-black/10 bg-white px-3 py-2 text-sm outline-none transition focus:border-slate-900"
+                  className={baseControlClassName}
+                  style={mediumInputStyle}
                   value={form.time}
                   onChange={(event) => setForm((prev) => ({ ...prev, time: event.target.value }))}
                 />
@@ -1552,7 +1645,8 @@ export default function Home() {
                 <span className="text-sm font-medium">Place</span>
                 <input
                   placeholder="Paris / Online / Booth B12"
-                  className="w-full rounded-xl border border-black/10 bg-white px-3 py-2 text-sm outline-none transition focus:border-slate-900"
+                  className={baseControlClassName}
+                  style={mediumInputStyle}
                   value={form.place}
                   onChange={(event) => setForm((prev) => ({ ...prev, place: event.target.value }))}
                 />
@@ -1564,7 +1658,8 @@ export default function Home() {
             <span className="text-sm font-medium">CTA Link (optional)</span>
             <input
               placeholder="https://adapty.io/webinar"
-              className="w-full rounded-xl border border-black/10 bg-white px-3 py-2 text-sm outline-none transition focus:border-slate-900"
+              className={baseControlClassName}
+              style={compactInputStyle}
               value={form.ctaLink}
               onChange={(event) => setForm((prev) => ({ ...prev, ctaLink: event.target.value }))}
             />
@@ -1576,7 +1671,8 @@ export default function Home() {
               ref={imageInputRef}
               type="file"
               accept="image/*"
-              className="w-full cursor-pointer rounded-xl border border-black/10 bg-white px-3 py-2 text-sm outline-none transition focus:border-slate-900"
+              className={`${baseControlClassName} cursor-pointer`}
+              style={compactInputStyle}
               onChange={onImageChange}
             />
             <p className="text-xs text-slate-600">Attached image will be analyzed as additional context for hooks and post copy.</p>
@@ -1613,7 +1709,8 @@ export default function Home() {
             <label className="space-y-1">
               <span className="text-sm font-medium">Input Length</span>
               <select
-                className="w-full rounded-xl border border-black/10 bg-white px-3 py-2 text-sm outline-none transition focus:border-slate-900"
+                className={baseControlClassName}
+                style={{ width: inputLengthSelectWidth }}
                 value={form.inputLength}
                 onChange={(event) => setForm((prev) => ({ ...prev, inputLength: event.target.value as InputLength }))}
               >
@@ -1631,7 +1728,8 @@ export default function Home() {
                 type="number"
                 min={1}
                 max={12}
-                className="w-full rounded-xl border border-black/10 bg-white px-3 py-2 text-sm outline-none transition focus:border-slate-900"
+                className={baseControlClassName}
+                style={smallNumberInputStyle}
                 value={form.numberOfPosts}
                 onChange={(event) => setForm((prev) => ({ ...prev, numberOfPosts: Number(event.target.value || 1) }))}
               />
@@ -1643,7 +1741,7 @@ export default function Home() {
             <textarea
               rows={5}
               placeholder="Audience, feature details, angle, constraints, examples to imitate..."
-              className="w-full rounded-xl border border-black/10 bg-white px-3 py-2 text-sm outline-none transition focus:border-slate-900"
+              className={baseControlClassName}
               value={form.details}
               onChange={(event) => setForm((prev) => ({ ...prev, details: event.target.value }))}
             />
