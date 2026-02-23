@@ -21,12 +21,17 @@ export const generatePostsRequestSchema = z.object({
   chartOptions: z.string().trim().max(20_000).default(""),
   memeTone: z.string().trim().max(120).default(""),
   memeBrief: z.string().trim().max(400).default(""),
-  memeTemplateId: z
-    .string()
-    .trim()
-    .max(120)
-    .regex(/^[a-z0-9-]*$/i, "memeTemplateId must use letters, numbers, and hyphen only")
-    .default(""),
+  memeTemplateIds: z
+    .array(
+      z
+        .string()
+        .trim()
+        .min(1)
+        .max(120)
+        .regex(/^[a-z0-9-]+$/i, "memeTemplateIds entries must use letters, numbers, and hyphen only"),
+    )
+    .max(30)
+    .default([]),
   memeVariantCount: z.coerce.number().int().min(1).max(6).default(3),
   time: z.string().trim().max(120).default(""),
   place: z.string().trim().max(120).default(""),

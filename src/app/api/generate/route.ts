@@ -237,16 +237,17 @@ function buildHeuristicMemeVariants(params: {
   index: number;
   variantCount: number;
   tone: string;
-  preferredTemplateId: MemeTemplateId | "";
+  preferredTemplateIds: MemeTemplateId[];
   allowedTemplateIds: MemeTemplateId[];
 }) {
   const fallbackTop = clipMemeLine(params.hook, MEME_LINE_MAX_CHARS) || "App growth team update";
   const fallbackBottom = clipMemeLine(pickMemeBottomLine(params.body), MEME_LINE_MAX_CHARS) || "Still iterating";
   const compactTone = clipMemeLine(params.tone, 48) || "clever";
-  const allowedTemplates = params.allowedTemplateIds.length ? params.allowedTemplateIds : MEME_TEMPLATE_IDS;
+  const preferredTemplates = params.preferredTemplateIds.length ? params.preferredTemplateIds : params.allowedTemplateIds;
+  const allowedTemplates = preferredTemplates.length ? preferredTemplates : MEME_TEMPLATE_IDS;
 
   return Array.from({ length: params.variantCount }, (_, variantIndex) => {
-    const templateId = params.preferredTemplateId || allowedTemplates[(params.index + variantIndex) % allowedTemplates.length];
+    const templateId = allowedTemplates[(params.index + variantIndex) % allowedTemplates.length];
     const topText =
       variantIndex === 0
         ? fallbackTop
@@ -502,7 +503,7 @@ export async function POST(request: Request) {
       preparedChartInput?.title ?? "",
       input.memeTone,
       input.memeBrief,
-      input.memeTemplateId ? `template:${input.memeTemplateId}` : "",
+      input.memeTemplateIds.length ? `templates:${input.memeTemplateIds.join(",")}` : "",
       input.time,
       input.place,
       input.details,
@@ -549,7 +550,13 @@ export async function POST(request: Request) {
     const chartPromptSummary = preparedChartInput ? summarizeChartForPrompt(preparedChartInput) : "(not provided)";
     const memeTonePreference = input.memeTone.trim() || DEFAULT_MEME_TONE;
     const memeBriefPreference = input.memeBrief.trim();
-    const memeTemplatePreference = input.memeTemplateId;
+    const memeTemplatePreferences = Array.from(
+      new Set(
+        input.memeTemplateIds
+          .map((id) => id.trim().toLowerCase())
+          .filter((id): id is MemeTemplateId => Boolean(id)),
+      ),
+    );
     const memeVariantTarget = input.memeVariantCount;
     const memeExecutionDirective = shouldGenerateMemes(input.inputType)
       ? "This is a meme-focused request. Keep hooks and first body lines short, punchy, and caption-friendly. If no meme brief is provided, come up with clever and funny angles automatically."
@@ -596,7 +603,7 @@ Generation request:
 - Meme execution directive: ${memeExecutionDirective}
 - Meme tone preference: ${memeTonePreference}
 - Meme brief: ${memeBriefPreference || "(not provided, use clever/funny defaults)"}
-- Meme template preference: ${memeTemplatePreference || "auto"}
+- Meme template preferences: ${memeTemplatePreferences.length ? memeTemplatePreferences.join(", ") : "auto"}
 - Meme variants per post target: ${memeVariantTarget}
 - Post type: ${input.inputType}
 - Event time: ${input.time || "(not provided)"}
@@ -675,7 +682,7 @@ Also generate a list of hook suggestions inspired by this style and request.
     let postsWithMemes: GeneratePostsResponse["posts"] = normalizedPosts;
 
     if (includeMemeCompanion) {
-      const allowedTemplateIds: MemeTemplateId[] = memeTemplatePreference ? [memeTemplatePreference] : [...MEME_TEMPLATE_IDS];
+      const allowedTemplateIds: MemeTemplateId[] = memeTemplatePreferences.length ? memeTemplatePreferences : [...MEME_TEMPLATE_IDS];
       const memeSelectionSchema = makeMemeSelectionResponseSchema(
         normalizedPosts.length,
         memeVariantTarget,
@@ -696,7 +703,7 @@ Never use em dash punctuation. Use standard hyphen if needed.
 Meme selection request:
 - Tone preference: ${memeTonePreference}
 - Meme brief: ${memeBriefPreference || "(none provided - come up with a clever and funny angle automatically)"}
-- Template preference: ${memeTemplatePreference || "(auto choose from allowed templates)"}
+- Template preferences: ${memeTemplatePreferences.length ? memeTemplatePreferences.join(", ") : "(auto choose from allowed templates)"}
 - Variants required per post: ${memeVariantTarget}
 
 Allowed Memegen templates:
@@ -715,8 +722,8 @@ Body excerpt: ${post.body.slice(0, 450)}
 For each post:
 1. Return exactly ${memeVariantTarget} ranked variants.
 2. ${
-   memeTemplatePreference
-     ? `Use template "${memeTemplatePreference}" for all variants.`
+   memeTemplatePreferences.length
+     ? `Use only these templates: ${memeTemplatePreferences.join(", ")}. Vary between them across variants.`
      : "Vary templates across variants when possible."
  }
 3. Keep top and bottom lines concise and readable on image memes.
@@ -779,7 +786,7 @@ For each post:
                 index,
                 variantCount: memeVariantTarget,
                 tone: memeTonePreference,
-                preferredTemplateId: memeTemplatePreference,
+                preferredTemplateIds: memeTemplatePreferences,
                 allowedTemplateIds,
               });
 

@@ -38,7 +38,7 @@ type FormState = {
   chartLegendPosition: ChartLegendPosition;
   memeTone: string;
   memeBrief: string;
-  memeTemplateId: MemeTemplateId | "";
+  memeTemplateIds: MemeTemplateId[];
   memeVariantCount: number;
   time: string;
   place: string;
@@ -65,7 +65,7 @@ const defaultForm: FormState = {
   chartLegendPosition: "right",
   memeTone: "",
   memeBrief: "",
-  memeTemplateId: "",
+  memeTemplateIds: [],
   memeVariantCount: 3,
   time: "",
   place: "",
@@ -657,7 +657,7 @@ export default function Home() {
         place: showEventFields ? form.place : "",
         memeTone: showMemeFields ? form.memeTone : "",
         memeBrief: showMemeFields ? form.memeBrief : "",
-        memeTemplateId: showMemeFields ? form.memeTemplateId : "",
+        memeTemplateIds: showMemeFields ? form.memeTemplateIds : [],
         memeVariantCount: showMemeFields ? form.memeVariantCount : defaultForm.memeVariantCount,
       };
 
@@ -880,7 +880,7 @@ export default function Home() {
                       chartEnabled: needsChartDetails(nextType) ? prev.chartEnabled : false,
                       memeTone: needsMemeDetails(nextType) ? prev.memeTone : "",
                       memeBrief: needsMemeDetails(nextType) ? prev.memeBrief : "",
-                      memeTemplateId: needsMemeDetails(nextType) ? prev.memeTemplateId : "",
+                      memeTemplateIds: needsMemeDetails(nextType) ? prev.memeTemplateIds : [],
                       memeVariantCount: needsMemeDetails(nextType) ? prev.memeVariantCount : defaultForm.memeVariantCount,
                     };
                   })
@@ -946,7 +946,7 @@ export default function Home() {
                   <button
                     type="button"
                     className="rounded-lg border border-black/10 bg-white px-2 py-1 text-xs text-slate-700 hover:bg-slate-100"
-                    onClick={() => setForm((prev) => ({ ...prev, memeTemplateId: "" }))}
+                    onClick={() => setForm((prev) => ({ ...prev, memeTemplateIds: [] }))}
                   >
                     Use Auto Template
                   </button>
@@ -958,16 +958,19 @@ export default function Home() {
                   value={memeTemplateSearch}
                   onChange={(event) => setMemeTemplateSearch(event.target.value)}
                 />
+                <p className="text-xs text-slate-600">
+                  Click one or more templates to include them. Leave all unselected for Auto.
+                </p>
 
                 <div className="grid max-h-[20rem] gap-2 overflow-y-auto pr-1 sm:grid-cols-2 lg:grid-cols-3">
                   <button
                     type="button"
                     className={`rounded-xl border p-2 text-left transition ${
-                      !form.memeTemplateId
+                      form.memeTemplateIds.length === 0
                         ? "border-slate-900 bg-slate-50"
                         : "border-black/10 bg-white hover:bg-slate-50"
                     }`}
-                    onClick={() => setForm((prev) => ({ ...prev, memeTemplateId: "" }))}
+                    onClick={() => setForm((prev) => ({ ...prev, memeTemplateIds: [] }))}
                   >
                     <p className="text-sm font-medium text-slate-900">Auto</p>
                     <p className="text-xs text-slate-600">Model picks best template per variant.</p>
@@ -978,11 +981,21 @@ export default function Home() {
                       key={template.id}
                       type="button"
                       className={`rounded-xl border p-2 text-left transition ${
-                        form.memeTemplateId === template.id
+                        form.memeTemplateIds.includes(template.id)
                           ? "border-slate-900 bg-slate-50"
                           : "border-black/10 bg-white hover:bg-slate-50"
                       }`}
-                      onClick={() => setForm((prev) => ({ ...prev, memeTemplateId: template.id }))}
+                      onClick={() =>
+                        setForm((prev) => {
+                          const isSelected = prev.memeTemplateIds.includes(template.id);
+                          return {
+                            ...prev,
+                            memeTemplateIds: isSelected
+                              ? prev.memeTemplateIds.filter((id) => id !== template.id)
+                              : [...prev.memeTemplateIds, template.id],
+                          };
+                        })
+                      }
                     >
                       {/* eslint-disable-next-line @next/next/no-img-element */}
                       <img
@@ -1006,9 +1019,12 @@ export default function Home() {
                 {memeTemplateLoadError ? <p className="text-xs text-slate-600">{memeTemplateLoadError}</p> : null}
 
                 <p className="text-xs text-slate-600">
-                  Selected template:{" "}
-                  {form.memeTemplateId
-                    ? (memeTemplateNameById[form.memeTemplateId] ?? formatTemplateIdLabel(form.memeTemplateId))
+                  Selected templates:{" "}
+                  {form.memeTemplateIds.length
+                    ? form.memeTemplateIds
+                        .slice(0, 6)
+                        .map((id) => memeTemplateNameById[id] ?? formatTemplateIdLabel(id))
+                        .join(", ") + (form.memeTemplateIds.length > 6 ? ` +${form.memeTemplateIds.length - 6} more` : "")
                     : "Auto"}
                 </p>
               </div>
