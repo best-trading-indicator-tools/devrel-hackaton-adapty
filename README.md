@@ -54,7 +54,9 @@ Everything below is already implemented in this repo on `main`.
 ### Post editing after generation
 
 - Rewrite entire post with an optional prompt
-- Regenerate one selected body line with an optional line-specific prompt
+- Click any body line to select it, then either:
+  - edit it manually and apply changes
+  - regenerate it with AI using an optional line-specific prompt
 - Rewrites happen in place in the results view
 - Meme companions are cleared when a post is rewritten so visuals do not drift from updated copy
 

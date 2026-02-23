@@ -102,7 +102,8 @@ type GeneratedPost = GeneratePostsResponse["posts"][number];
 
 type EditableBodyLine = {
   lineIndex: number;
-  label: string;
+  text: string;
+  isBlank: boolean;
 };
 
 type RewriteContext = Pick<FormState, "style" | "goal" | "inputType" | "ctaLink" | "details">;
@@ -379,24 +380,15 @@ function needsChartDetails(inputType: string): boolean {
 
 function buildEditableBodyLines(body: string): EditableBodyLine[] {
   const rawLines = body.split("\n");
-  const nonEmpty = rawLines
-    .map((line, lineIndex) => ({
-      lineIndex,
-      line,
-    }))
-    .filter((item) => item.line.trim().length > 0);
+  if (!rawLines.length) {
+    return [{ lineIndex: 0, text: "", isBlank: true }];
+  }
 
-  const sourceLines = nonEmpty.length ? nonEmpty : rawLines.map((line, lineIndex) => ({ lineIndex, line }));
-
-  return sourceLines.map((item) => {
-    const compact = item.line.trim().replace(/\s+/g, " ");
-    const preview = compact.length > 90 ? `${compact.slice(0, 90)}...` : compact;
-
-    return {
-      lineIndex: item.lineIndex,
-      label: `L${item.lineIndex + 1}: ${preview || "(blank line)"}`,
-    };
-  });
+  return rawLines.map((line, lineIndex) => ({
+    lineIndex,
+    text: line,
+    isBlank: line.trim().length === 0,
+  }));
 }
 
 function extractApiErrorMessage(responsePayload: unknown, status: number): string {
@@ -496,6 +488,7 @@ export default function Home() {
   const [rewriteLoadingKey, setRewriteLoadingKey] = useState<string | null>(null);
   const [rewritePromptByPost, setRewritePromptByPost] = useState<Record<number, string>>({});
   const [linePromptByPost, setLinePromptByPost] = useState<Record<number, string>>({});
+  const [manualLineDraftByPost, setManualLineDraftByPost] = useState<Record<number, string>>({});
   const [selectedLineByPost, setSelectedLineByPost] = useState<Record<number, number>>({});
   const [rewriteErrorByPost, setRewriteErrorByPost] = useState<Record<number, string>>({});
   const [imageName, setImageName] = useState<string>("");
@@ -667,6 +660,7 @@ export default function Home() {
     setIsLoading(true);
     setRewritePromptByPost({});
     setLinePromptByPost({});
+    setManualLineDraftByPost({});
     setSelectedLineByPost({});
     setRewriteErrorByPost({});
     setRewriteLoadingKey(null);
@@ -756,6 +750,52 @@ export default function Home() {
     });
   }
 
+  function selectBodyLineForEditing(postIndex: number, lineIndex: number, lineText: string) {
+    setSelectedLineByPost((prev) => ({
+      ...prev,
+      [postIndex]: lineIndex,
+    }));
+    setManualLineDraftByPost((prev) => ({
+      ...prev,
+      [postIndex]: lineText,
+    }));
+    setRewriteErrorByPost((prev) => ({
+      ...prev,
+      [postIndex]: "",
+    }));
+  }
+
+  function applyManualBodyLineEdit(postIndex: number, lineIndex: number) {
+    const post = result?.posts[postIndex];
+    if (!post) {
+      return;
+    }
+
+    const draft = manualLineDraftByPost[postIndex];
+    if (typeof draft !== "string") {
+      return;
+    }
+
+    const normalizedDraft = normalizeNoEmDash(draft);
+
+    updateResultPost(postIndex, (currentPost) => {
+      const lines = currentPost.body.split("\n");
+      if (lineIndex < 0 || lineIndex >= lines.length) {
+        return currentPost;
+      }
+
+      lines[lineIndex] = normalizedDraft;
+      const rebuiltBody = lines.join("\n").replace(/\n{3,}/g, "\n\n");
+
+      return {
+        ...currentPost,
+        body: rebuiltBody,
+        meme: undefined,
+        memeVariants: undefined,
+      };
+    });
+  }
+
   async function rewriteEntirePost(postIndex: number) {
     const post = result?.posts[postIndex];
     if (!post) {
@@ -821,6 +861,11 @@ export default function Home() {
         meme: undefined,
         memeVariants: undefined,
       }));
+      setManualLineDraftByPost((prev) => {
+        const next = { ...prev };
+        delete next[postIndex];
+        return next;
+      });
     } catch {
       setRewriteErrorByPost((prev) => ({
         ...prev,
@@ -892,7 +937,8 @@ export default function Home() {
           return currentPost;
         }
 
-        lines[lineIndex] = normalizeNoEmDash(nextLine.trim());
+        const normalizedLine = normalizeNoEmDash(nextLine.trim());
+        lines[lineIndex] = normalizedLine;
         const rebuiltBody = lines.join("\n").replace(/\n{3,}/g, "\n\n");
 
         return {
@@ -902,6 +948,10 @@ export default function Home() {
           memeVariants: undefined,
         };
       });
+      setManualLineDraftByPost((prev) => ({
+        ...prev,
+        [postIndex]: normalizeNoEmDash(nextLine.trim()),
+      }));
     } catch {
       setRewriteErrorByPost((prev) => ({
         ...prev,
@@ -1672,11 +1722,14 @@ export default function Home() {
           <div className="space-y-4">
             {result?.posts.map((post, index) => {
               const bodyLineOptions = buildEditableBodyLines(post.body);
-              const selectedLineIndex = bodyLineOptions.some(
+              const selectableBodyLines = bodyLineOptions.filter((lineOption) => !lineOption.isBlank);
+              const selectedLineIndex = selectableBodyLines.some(
                 (lineOption) => lineOption.lineIndex === selectedLineByPost[index],
               )
                 ? selectedLineByPost[index]
-                : (bodyLineOptions[0]?.lineIndex ?? 0);
+                : (selectableBodyLines[0]?.lineIndex ?? bodyLineOptions[0]?.lineIndex ?? 0);
+              const selectedLine = bodyLineOptions.find((lineOption) => lineOption.lineIndex === selectedLineIndex);
+              const manualLineDraft = manualLineDraftByPost[index] ?? selectedLine?.text ?? "";
               const isPostRewriteLoading = rewriteLoadingKey === `post-${index}`;
               const isLineRewriteLoading = rewriteLoadingKey === `line-${index}-${selectedLineIndex}`;
 
@@ -1730,52 +1783,88 @@ export default function Home() {
                       {isPostRewriteLoading ? "Rewriting post..." : "Rewrite Post"}
                     </button>
 
-                    <div className="grid gap-3 sm:grid-cols-[minmax(0,1.4fr)_minmax(0,2fr)]">
-                      <label className="space-y-1">
-                        <span className="text-sm font-medium">Select Line</span>
-                        <select
-                          className="w-full rounded-xl border border-black/10 bg-white px-3 py-2 text-sm outline-none transition focus:border-slate-900"
-                          value={selectedLineIndex}
-                          onChange={(event) =>
-                            setSelectedLineByPost((prev) => ({
-                              ...prev,
-                              [index]: Number(event.target.value),
-                            }))
+                    <div className="space-y-2">
+                      <p className="text-sm font-medium">Click A Body Line To Edit</p>
+                      <div className="space-y-1 rounded-xl border border-black/10 bg-white p-2">
+                        {bodyLineOptions.map((lineOption) => {
+                          if (lineOption.isBlank) {
+                            return <div key={`${index}-${lineOption.lineIndex}`} className="h-2" />;
                           }
-                        >
-                          {bodyLineOptions.map((lineOption) => (
-                            <option key={`${index}-${lineOption.lineIndex}`} value={lineOption.lineIndex}>
-                              {lineOption.label}
-                            </option>
-                          ))}
-                        </select>
-                      </label>
 
-                      <label className="space-y-1">
-                        <span className="text-sm font-medium">Regenerate Selected Line</span>
-                        <textarea
-                          rows={2}
-                          placeholder="Optional line prompt, e.g. make this line more contrarian with a stronger data point."
-                          className="w-full rounded-xl border border-black/10 bg-white px-3 py-2 text-sm outline-none transition focus:border-slate-900"
-                          value={linePromptByPost[index] ?? ""}
-                          onChange={(event) =>
-                            setLinePromptByPost((prev) => ({
-                              ...prev,
-                              [index]: event.target.value,
-                            }))
-                          }
-                        />
-                      </label>
+                          const isSelected = selectedLineIndex === lineOption.lineIndex;
+                          const compact = lineOption.text.trim().replace(/\s+/g, " ");
+                          const preview = compact.length > 180 ? `${compact.slice(0, 180)}...` : compact;
+
+                          return (
+                            <button
+                              key={`${index}-${lineOption.lineIndex}`}
+                              type="button"
+                              className={`w-full rounded-lg border px-2 py-2 text-left text-sm transition ${
+                                isSelected
+                                  ? "border-slate-900 bg-slate-50 text-slate-900"
+                                  : "border-transparent bg-white text-slate-700 hover:border-black/10 hover:bg-slate-50"
+                              }`}
+                              onClick={() => selectBodyLineForEditing(index, lineOption.lineIndex, lineOption.text)}
+                            >
+                              <span className="mr-2 text-xs font-semibold text-slate-500">L{lineOption.lineIndex + 1}</span>
+                              {preview}
+                            </button>
+                          );
+                        })}
+                      </div>
                     </div>
 
-                    <button
-                      type="button"
-                      className="rounded-lg border border-black/10 bg-white px-3 py-2 text-sm text-slate-700 hover:bg-slate-100 disabled:cursor-not-allowed disabled:opacity-60"
-                      disabled={isLoading || isLineRewriteLoading || Boolean(rewriteLoadingKey)}
-                      onClick={() => regenerateBodyLine(index, selectedLineIndex)}
-                    >
-                      {isLineRewriteLoading ? "Regenerating line..." : "Regenerate Line"}
-                    </button>
+                    <label className="space-y-1">
+                      <span className="text-sm font-medium">Manual Edit For Selected Line</span>
+                      <textarea
+                        rows={2}
+                        placeholder="Edit the selected line manually..."
+                        className="w-full rounded-xl border border-black/10 bg-white px-3 py-2 text-sm outline-none transition focus:border-slate-900"
+                        value={manualLineDraft}
+                        onChange={(event) =>
+                          setManualLineDraftByPost((prev) => ({
+                            ...prev,
+                            [index]: event.target.value,
+                          }))
+                        }
+                      />
+                    </label>
+
+                    <div className="grid gap-2 sm:grid-cols-2">
+                      <button
+                        type="button"
+                        className="rounded-lg border border-black/10 bg-white px-3 py-2 text-sm text-slate-700 hover:bg-slate-100 disabled:cursor-not-allowed disabled:opacity-60"
+                        disabled={isLoading || Boolean(rewriteLoadingKey) || !selectedLine}
+                        onClick={() => applyManualBodyLineEdit(index, selectedLineIndex)}
+                      >
+                        Apply Manual Edit
+                      </button>
+
+                      <button
+                        type="button"
+                        className="rounded-lg border border-black/10 bg-white px-3 py-2 text-sm text-slate-700 hover:bg-slate-100 disabled:cursor-not-allowed disabled:opacity-60"
+                        disabled={isLoading || isLineRewriteLoading || Boolean(rewriteLoadingKey) || !selectedLine}
+                        onClick={() => regenerateBodyLine(index, selectedLineIndex)}
+                      >
+                        {isLineRewriteLoading ? "Regenerating line..." : "Regenerate Selected Line"}
+                      </button>
+                    </div>
+
+                    <label className="space-y-1">
+                      <span className="text-sm font-medium">AI Prompt For Selected Line</span>
+                      <textarea
+                        rows={2}
+                        placeholder="Optional line prompt, e.g. make this line more contrarian with a stronger data point."
+                        className="w-full rounded-xl border border-black/10 bg-white px-3 py-2 text-sm outline-none transition focus:border-slate-900"
+                        value={linePromptByPost[index] ?? ""}
+                        onChange={(event) =>
+                          setLinePromptByPost((prev) => ({
+                            ...prev,
+                            [index]: event.target.value,
+                          }))
+                        }
+                      />
+                    </label>
 
                     {rewriteErrorByPost[index] ? (
                       <p className="rounded-xl bg-red-50 px-3 py-2 text-xs text-red-700">{rewriteErrorByPost[index]}</p>
