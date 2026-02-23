@@ -10,6 +10,7 @@ A Next.js app that generates high-performing LinkedIn posts and hook ideas from 
   - time
   - place
   - CTA link
+  - optional image attachment (model vision context)
   - length (`short`, `standard`, `long`, `mix`)
   - number of posts
   - extra prompt details
@@ -63,6 +64,7 @@ curl -X POST http://localhost:3000/api/generate \
     "time":"March 5, 2026 at 6pm CET",
     "place":"Online",
     "ctaLink":"https://adapty.io/webinar",
+    "imageDataUrl":"data:image/jpeg;base64,...",
     "inputLength":"mix",
     "numberOfPosts":4,
     "details":"Focus on practical mobile subscription wins and urgency."

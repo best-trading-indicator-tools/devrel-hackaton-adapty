@@ -8,6 +8,14 @@ export const generatePostsRequestSchema = z.object({
   time: z.string().trim().max(120).default(""),
   place: z.string().trim().max(120).default(""),
   ctaLink: z.string().trim().max(500).default(""),
+  imageDataUrl: z
+    .string()
+    .trim()
+    .max(4_500_000)
+    .default("")
+    .refine((value) => !value || /^data:image\/[a-zA-Z0-9.+-]+;base64,/.test(value), {
+      message: "imageDataUrl must be a base64 data URL for an image",
+    }),
   inputLength: z.enum(INPUT_LENGTH_OPTIONS).default("standard"),
   numberOfPosts: z.coerce.number().int().min(1).max(12).default(3),
   details: z.string().trim().max(3000).default(""),

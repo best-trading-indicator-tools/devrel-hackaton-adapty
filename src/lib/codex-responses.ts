@@ -6,6 +6,7 @@ type CodexResponsesOptions = {
   model: string;
   instructions: string;
   userInput: string;
+  imageDataUrl?: string;
   schemaName: string;
   jsonSchema: Record<string, unknown>;
   baseUrl?: string;
@@ -133,6 +134,23 @@ function extractResponseText(response: CodexResponseEnvelope): string {
 }
 
 export async function createCodexStructuredCompletion<T>(options: CodexResponsesOptions): Promise<T> {
+  const contentParts: Array<
+    { type: "input_text"; text: string } | { type: "input_image"; image_url: string; detail: "auto" }
+  > = [
+    {
+      type: "input_text",
+      text: options.userInput,
+    },
+  ];
+
+  if (options.imageDataUrl) {
+    contentParts.push({
+      type: "input_image",
+      image_url: options.imageDataUrl,
+      detail: "auto",
+    });
+  }
+
   const response = await fetch(resolveCodexUrl(options.baseUrl), {
     method: "POST",
     headers: {
@@ -152,12 +170,7 @@ export async function createCodexStructuredCompletion<T>(options: CodexResponses
       input: [
         {
           role: "user",
-          content: [
-            {
-              type: "input_text",
-              text: options.userInput,
-            },
-          ],
+          content: contentParts,
         },
       ],
       text: {

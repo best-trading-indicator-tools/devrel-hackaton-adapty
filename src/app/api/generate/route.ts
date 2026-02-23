@@ -87,16 +87,29 @@ async function runOpenAiChatGeneration(params: {
   model: string;
   systemPrompt: string;
   userPrompt: string;
+  imageDataUrl?: string;
   responseSchema: ReturnType<typeof makeGeneratePostsResponseSchema>;
 }) {
   const { client } = getOpenAIClient(params.token);
+  const userContent: OpenAI.Chat.Completions.ChatCompletionUserMessageParam["content"] = params.imageDataUrl
+    ? [
+        { type: "text", text: params.userPrompt },
+        {
+          type: "image_url",
+          image_url: {
+            url: params.imageDataUrl,
+            detail: "auto",
+          },
+        },
+      ]
+    : params.userPrompt;
 
   const completion = await client.chat.completions.parse({
     model: params.model,
     temperature: 0.8,
     messages: [
       { role: "system", content: params.systemPrompt },
-      { role: "user", content: params.userPrompt },
+      { role: "user", content: userContent },
     ],
     response_format: zodResponseFormat(params.responseSchema, "linkedin_post_batch"),
   });
@@ -115,6 +128,7 @@ async function runCodexOauthGeneration(params: {
   model: string;
   systemPrompt: string;
   userPrompt: string;
+  imageDataUrl?: string;
   responseSchema: ReturnType<typeof makeGeneratePostsResponseSchema>;
 }) {
   const responseFormat = zodResponseFormat(params.responseSchema, "linkedin_post_batch");
@@ -130,6 +144,7 @@ async function runCodexOauthGeneration(params: {
     model: params.model,
     instructions: params.systemPrompt,
     userInput: params.userPrompt,
+    imageDataUrl: params.imageDataUrl,
     schemaName: "linkedin_post_batch",
     jsonSchema: jsonSchema as Record<string, unknown>,
     baseUrl: process.env.OPENAI_CODEX_BASE_URL,
@@ -226,6 +241,7 @@ Generation request:
 - Event time: ${input.time || "(not provided)"}
 - Event place: ${input.place || "(not provided)"}
 - CTA link: ${input.ctaLink || "(not provided)"}
+- Attached image context: ${input.imageDataUrl ? "provided" : "(none)"}
 - Number of posts: ${input.numberOfPosts}
 - Additional details: ${input.details || "(none)"}
 
@@ -245,6 +261,7 @@ Also generate a list of hook suggestions inspired by this style and request.
           model,
           systemPrompt,
           userPrompt,
+          imageDataUrl: input.imageDataUrl || undefined,
           responseSchema,
         });
       }
@@ -258,6 +275,7 @@ Also generate a list of hook suggestions inspired by this style and request.
         model,
         systemPrompt,
         userPrompt,
+        imageDataUrl: input.imageDataUrl || undefined,
         responseSchema,
       });
     };

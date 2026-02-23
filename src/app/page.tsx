@@ -1,6 +1,7 @@
 "use client";
 
-import { FormEvent, useMemo, useState } from "react";
+import { ChangeEvent, FormEvent, useMemo, useRef, useState } from "react";
+import NextImage from "next/image";
 
 import { INPUT_LENGTH_OPTIONS, POST_TYPE_OPTIONS, type InputLength } from "@/lib/constants";
 import type { GeneratePostsResponse } from "@/lib/schemas";
@@ -11,6 +12,7 @@ type FormState = {
   time: string;
   place: string;
   ctaLink: string;
+  imageDataUrl: string;
   inputLength: InputLength;
   numberOfPosts: number;
   details: string;
@@ -22,16 +24,85 @@ const defaultForm: FormState = {
   time: "",
   place: "",
   ctaLink: "",
+  imageDataUrl: "",
   inputLength: "standard",
   numberOfPosts: 3,
   details: "",
 };
+
+const MAX_IMAGE_EDGE_PX = 1400;
+const MAX_IMAGE_DATA_URL_CHARS = 4_500_000;
+const IMAGE_EXPORT_QUALITY = 0.82;
+
+function readFileAsDataUrl(file: File): Promise<string> {
+  return new Promise((resolve, reject) => {
+    const reader = new FileReader();
+    reader.onerror = () => reject(new Error("Could not read the selected image file."));
+    reader.onload = () => {
+      const value = reader.result;
+      if (typeof value !== "string") {
+        reject(new Error("Unexpected image file format."));
+        return;
+      }
+      resolve(value);
+    };
+    reader.readAsDataURL(file);
+  });
+}
+
+function loadImage(dataUrl: string): Promise<HTMLImageElement> {
+  return new Promise((resolve, reject) => {
+    const image = new Image();
+    image.onerror = () => reject(new Error("Could not decode the selected image."));
+    image.onload = () => resolve(image);
+    image.src = dataUrl;
+  });
+}
+
+async function buildImageDataUrl(file: File): Promise<string> {
+  if (!file.type.startsWith("image/")) {
+    throw new Error("Please attach an image file.");
+  }
+
+  const originalDataUrl = await readFileAsDataUrl(file);
+  const image = await loadImage(originalDataUrl);
+
+  const sourceWidth = image.naturalWidth || image.width;
+  const sourceHeight = image.naturalHeight || image.height;
+  const largestEdge = Math.max(sourceWidth, sourceHeight);
+  const scale = largestEdge > MAX_IMAGE_EDGE_PX ? MAX_IMAGE_EDGE_PX / largestEdge : 1;
+
+  const width = Math.max(1, Math.round(sourceWidth * scale));
+  const height = Math.max(1, Math.round(sourceHeight * scale));
+
+  const canvas = document.createElement("canvas");
+  canvas.width = width;
+  canvas.height = height;
+
+  const context = canvas.getContext("2d");
+  if (!context) {
+    return originalDataUrl;
+  }
+
+  context.drawImage(image, 0, 0, width, height);
+
+  const outputType = file.type === "image/png" ? "image/png" : "image/jpeg";
+  const optimizedDataUrl =
+    outputType === "image/jpeg"
+      ? canvas.toDataURL(outputType, IMAGE_EXPORT_QUALITY)
+      : canvas.toDataURL(outputType);
+
+  return optimizedDataUrl.length <= originalDataUrl.length ? optimizedDataUrl : originalDataUrl;
+}
 
 export default function Home() {
   const [form, setForm] = useState<FormState>(defaultForm);
   const [result, setResult] = useState<GeneratePostsResponse | null>(null);
   const [error, setError] = useState<string>("");
   const [isLoading, setIsLoading] = useState(false);
+  const [imageName, setImageName] = useState<string>("");
+  const [isImageProcessing, setIsImageProcessing] = useState(false);
+  const imageInputRef = useRef<HTMLInputElement>(null);
 
   const subtitle = useMemo(() => {
     if (form.inputLength !== "mix") {
@@ -46,6 +117,12 @@ export default function Home() {
     setError("");
     setResult(null);
     setIsLoading(true);
+
+    if (isImageProcessing) {
+      setError("Image is still processing. Please wait a second and retry.");
+      setIsLoading(false);
+      return;
+    }
 
     try {
       const response = await fetch("/api/generate", {
@@ -68,6 +145,49 @@ export default function Home() {
       setError("Could not reach the API route.");
     } finally {
       setIsLoading(false);
+    }
+  }
+
+  async function onImageChange(event: ChangeEvent<HTMLInputElement>) {
+    const file = event.target.files?.[0];
+
+    if (!file) {
+      setForm((prev) => ({ ...prev, imageDataUrl: "" }));
+      setImageName("");
+      return;
+    }
+
+    setError("");
+    setIsImageProcessing(true);
+
+    try {
+      const dataUrl = await buildImageDataUrl(file);
+
+      if (dataUrl.length > MAX_IMAGE_DATA_URL_CHARS) {
+        throw new Error("Image is too large. Please use a smaller file.");
+      }
+
+      setForm((prev) => ({ ...prev, imageDataUrl: dataUrl }));
+      setImageName(file.name);
+    } catch (imageError) {
+      setForm((prev) => ({ ...prev, imageDataUrl: "" }));
+      setImageName("");
+
+      if (imageInputRef.current) {
+        imageInputRef.current.value = "";
+      }
+
+      setError(imageError instanceof Error ? imageError.message : "Failed to process image.");
+    } finally {
+      setIsImageProcessing(false);
+    }
+  }
+
+  function removeImage() {
+    setForm((prev) => ({ ...prev, imageDataUrl: "" }));
+    setImageName("");
+    if (imageInputRef.current) {
+      imageInputRef.current.value = "";
     }
   }
 
@@ -139,6 +259,45 @@ export default function Home() {
             />
           </label>
 
+          <div className="space-y-2">
+            <span className="text-sm font-medium">Attach Image (optional)</span>
+            <input
+              ref={imageInputRef}
+              type="file"
+              accept="image/*"
+              className="w-full cursor-pointer rounded-xl border border-black/10 bg-white px-3 py-2 text-sm outline-none transition focus:border-slate-900"
+              onChange={onImageChange}
+            />
+            <p className="text-xs text-slate-600">Attached image will be analyzed as additional context for hooks and post copy.</p>
+
+            {isImageProcessing ? (
+              <p className="rounded-xl bg-amber-50 px-3 py-2 text-xs text-amber-700">Processing image...</p>
+            ) : null}
+
+            {form.imageDataUrl ? (
+              <div className="rounded-2xl border border-black/10 bg-white p-3">
+                <NextImage
+                  src={form.imageDataUrl}
+                  alt={imageName || "Attached context image"}
+                  width={1200}
+                  height={480}
+                  unoptimized
+                  className="h-36 w-full rounded-xl object-cover"
+                />
+                <div className="mt-2 flex items-center justify-between gap-2 text-xs text-slate-600">
+                  <span className="truncate">{imageName || "Attached image"}</span>
+                  <button
+                    type="button"
+                    className="rounded-lg border border-black/10 px-2 py-1 text-xs text-slate-700 hover:bg-slate-50"
+                    onClick={removeImage}
+                  >
+                    Remove
+                  </button>
+                </div>
+              </div>
+            ) : null}
+          </div>
+
           <div className="grid gap-3 md:grid-cols-[1fr_1fr]">
             <label className="space-y-1">
               <span className="text-sm font-medium">Input Length</span>
@@ -182,10 +341,10 @@ export default function Home() {
           <div className="rounded-xl bg-slate-900/5 px-3 py-2 text-xs text-slate-600">{subtitle}</div>
 
           <button
-            disabled={isLoading}
+            disabled={isLoading || isImageProcessing}
             className="w-full rounded-xl bg-slate-900 px-4 py-3 text-sm font-medium text-white transition hover:bg-black disabled:cursor-not-allowed disabled:opacity-70"
           >
-            {isLoading ? "Generating..." : "Generate Posts"}
+            {isLoading ? "Generating..." : isImageProcessing ? "Processing image..." : "Generate Posts"}
           </button>
 
           {error ? <p className="rounded-xl bg-red-50 px-3 py-2 text-sm text-red-700">{error}</p> : null}
