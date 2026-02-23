@@ -631,8 +631,8 @@ export default function Home() {
             <div className="space-y-3 rounded-2xl border border-black/10 bg-slate-50 p-3">
               <p className="text-xs font-semibold uppercase tracking-wide text-slate-600">Meme Options (optional)</p>
               <div className="grid gap-3 sm:grid-cols-2 lg:grid-cols-3">
-                <label className="space-y-1">
-                  <span className="text-sm font-medium">Meme Tone</span>
+                <label className="flex h-full flex-col">
+                  <span className="text-sm font-medium sm:min-h-[2.75rem]">Meme Tone</span>
                   <input
                     placeholder="playful, contrarian, absurd, deadpan..."
                     className="w-full rounded-xl border border-black/10 bg-white px-3 py-2 text-sm outline-none transition focus:border-slate-900"
@@ -641,8 +641,8 @@ export default function Home() {
                   />
                 </label>
 
-                <label className="space-y-1">
-                  <span className="text-sm font-medium">Meme Template (optional)</span>
+                <label className="flex h-full flex-col">
+                  <span className="text-sm font-medium sm:min-h-[2.75rem]">Meme Template</span>
                   <select
                     className="w-full rounded-xl border border-black/10 bg-white px-3 py-2 text-sm outline-none transition focus:border-slate-900"
                     value={form.memeTemplateId}
@@ -662,8 +662,8 @@ export default function Home() {
                   </select>
                 </label>
 
-                <label className="space-y-1">
-                  <span className="text-sm font-medium">Meme Variants Per Post</span>
+                <label className="flex h-full flex-col">
+                  <span className="text-sm font-medium sm:min-h-[2.75rem]">Variants Per Post</span>
                   <input
                     type="number"
                     min={1}
@@ -677,7 +677,7 @@ export default function Home() {
                       }))
                     }
                   />
-                  <p className="text-xs text-slate-600">
+                  <p className="mt-1 text-xs text-slate-600">
                     Generates {form.memeVariantCount} meme variant{form.memeVariantCount > 1 ? "s" : ""} for each post.
                   </p>
                 </label>
