@@ -133,12 +133,43 @@ function splitCsvText(value: string): string[] {
     .filter(Boolean);
 }
 
+function splitCsvLoose(value: string): string[] {
+  const trimmed = value.trim();
+  if (!trimmed) {
+    return [];
+  }
+
+  return value.split(",").map((part) => part.trim());
+}
+
+function trimTrailingEmpty(values: string[]): string[] {
+  const next = [...values];
+  while (next.length && !next[next.length - 1].trim()) {
+    next.pop();
+  }
+  return next;
+}
+
 function splitCsvNumbers(value: string): number[] {
   return splitCsvText(value).map((part) => Number(part));
 }
 
 function getLegendLabel(position: ChartLegendPosition): string {
   return position.charAt(0).toUpperCase() + position.slice(1);
+}
+
+function buildChartRows(form: Pick<FormState, "chartType" | "chartLabels" | "chartSeriesOneValues" | "chartSeriesTwoValues">) {
+  const labels = splitCsvLoose(form.chartLabels);
+  const primaryValues = splitCsvLoose(form.chartSeriesOneValues);
+  const secondaryValues = splitCsvLoose(form.chartSeriesTwoValues);
+  const minRows = isRadialChartType(form.chartType) ? 3 : 4;
+  const rowCount = Math.max(minRows, labels.length, primaryValues.length, secondaryValues.length, 1);
+
+  return Array.from({ length: rowCount }, (_, index) => ({
+    label: labels[index] ?? "",
+    primary: primaryValues[index] ?? "",
+    secondary: secondaryValues[index] ?? "",
+  }));
 }
 
 function buildChartPayload(form: FormState): { chartData: string; chartOptions: string } | { error: string } {
@@ -368,6 +399,45 @@ export default function Home() {
     const perPost = Math.max(1, Number(form.memeVariantCount) || defaultForm.memeVariantCount);
     return posts * perPost;
   }, [form.numberOfPosts, form.memeVariantCount]);
+  const chartRows = useMemo(
+    () =>
+      buildChartRows({
+        chartType: form.chartType,
+        chartLabels: form.chartLabels,
+        chartSeriesOneValues: form.chartSeriesOneValues,
+        chartSeriesTwoValues: form.chartSeriesTwoValues,
+      }),
+    [form.chartType, form.chartLabels, form.chartSeriesOneValues, form.chartSeriesTwoValues],
+  );
+
+  function updateChartRows(
+    updater: (rows: Array<{ label: string; primary: string; secondary: string }>) => Array<{
+      label: string;
+      primary: string;
+      secondary: string;
+    }>,
+  ) {
+    setForm((prev) => {
+      const currentRows = buildChartRows({
+        chartType: prev.chartType,
+        chartLabels: prev.chartLabels,
+        chartSeriesOneValues: prev.chartSeriesOneValues,
+        chartSeriesTwoValues: prev.chartSeriesTwoValues,
+      });
+
+      const nextRows = updater(currentRows);
+      const nextLabels = trimTrailingEmpty(nextRows.map((row) => row.label));
+      const nextPrimary = trimTrailingEmpty(nextRows.map((row) => row.primary));
+      const nextSecondary = trimTrailingEmpty(nextRows.map((row) => row.secondary));
+
+      return {
+        ...prev,
+        chartLabels: nextLabels.join(", "),
+        chartSeriesOneValues: nextPrimary.join(", "),
+        chartSeriesTwoValues: nextSecondary.join(", "),
+      };
+    });
+  }
 
   async function onSubmit(event: FormEvent<HTMLFormElement>) {
     event.preventDefault();
@@ -736,153 +806,228 @@ export default function Home() {
 
               {form.chartEnabled ? (
                 <div className="space-y-3">
-                <div className="grid gap-3 sm:grid-cols-2 lg:grid-cols-3">
-                  <label className="space-y-1">
-                    <span className="text-sm font-medium">Chart Type</span>
-                    <select
-                      className="w-full rounded-xl border border-black/10 bg-white px-3 py-2 text-sm outline-none transition focus:border-slate-900"
-                      value={form.chartType}
-                      onChange={(event) => {
-                        const nextType = event.target.value as ChartTypeOption;
-                        const defaults = getDefaultChartFields(nextType);
-                        const shouldSeedDefaults = !form.chartLabels.trim() && !form.chartSeriesOneValues.trim();
+                  <div className="grid gap-3 sm:grid-cols-2 lg:grid-cols-3">
+                    <label className="flex h-full flex-col">
+                      <span className="text-sm font-medium sm:min-h-[2.75rem]">Chart Type</span>
+                      <select
+                        className="w-full rounded-xl border border-black/10 bg-white px-3 py-2 text-sm outline-none transition focus:border-slate-900"
+                        value={form.chartType}
+                        onChange={(event) => {
+                          const nextType = event.target.value as ChartTypeOption;
+                          const defaults = getDefaultChartFields(nextType);
+                          const shouldSeedDefaults = !form.chartLabels.trim() && !form.chartSeriesOneValues.trim();
 
-                        setForm((prev) => ({
-                          ...prev,
-                          chartType: nextType,
-                          chartLegendPosition: shouldSeedDefaults ? defaults.chartLegendPosition : prev.chartLegendPosition,
-                          chartLabels: shouldSeedDefaults ? defaults.chartLabels : prev.chartLabels,
-                          chartSeriesOneLabel: shouldSeedDefaults ? defaults.chartSeriesOneLabel : prev.chartSeriesOneLabel,
-                          chartSeriesOneValues: shouldSeedDefaults ? defaults.chartSeriesOneValues : prev.chartSeriesOneValues,
-                          chartSeriesTwoLabel: isRadialChartType(nextType)
-                            ? ""
-                            : shouldSeedDefaults
-                              ? defaults.chartSeriesTwoLabel
-                              : prev.chartSeriesTwoLabel,
-                          chartSeriesTwoValues: isRadialChartType(nextType)
-                            ? ""
-                            : shouldSeedDefaults
-                              ? defaults.chartSeriesTwoValues
-                              : prev.chartSeriesTwoValues,
-                        }));
-                      }}
+                          setForm((prev) => ({
+                            ...prev,
+                            chartType: nextType,
+                            chartLegendPosition: shouldSeedDefaults ? defaults.chartLegendPosition : prev.chartLegendPosition,
+                            chartLabels: shouldSeedDefaults ? defaults.chartLabels : prev.chartLabels,
+                            chartSeriesOneLabel: shouldSeedDefaults ? defaults.chartSeriesOneLabel : prev.chartSeriesOneLabel,
+                            chartSeriesOneValues: shouldSeedDefaults ? defaults.chartSeriesOneValues : prev.chartSeriesOneValues,
+                            chartSeriesTwoLabel: isRadialChartType(nextType)
+                              ? ""
+                              : shouldSeedDefaults
+                                ? defaults.chartSeriesTwoLabel
+                                : prev.chartSeriesTwoLabel,
+                            chartSeriesTwoValues: isRadialChartType(nextType)
+                              ? ""
+                              : shouldSeedDefaults
+                                ? defaults.chartSeriesTwoValues
+                                : prev.chartSeriesTwoValues,
+                          }));
+                        }}
+                      >
+                        {CHART_TYPE_OPTIONS.map((chartType) => (
+                          <option key={chartType} value={chartType}>
+                            {CHART_TYPE_LABELS[chartType]}
+                          </option>
+                        ))}
+                      </select>
+                    </label>
+
+                    <label className="flex h-full flex-col">
+                      <span className="text-sm font-medium sm:min-h-[2.75rem]">Chart Title</span>
+                      <input
+                        placeholder="Trial strategy split by app sample"
+                        className="w-full rounded-xl border border-black/10 bg-white px-3 py-2 text-sm outline-none transition focus:border-slate-900"
+                        value={form.chartTitle}
+                        onChange={(event) => setForm((prev) => ({ ...prev, chartTitle: event.target.value }))}
+                      />
+                    </label>
+
+                    <label className="flex h-full flex-col">
+                      <span className="text-sm font-medium sm:min-h-[2.75rem]">Legend Position</span>
+                      <select
+                        className="w-full rounded-xl border border-black/10 bg-white px-3 py-2 text-sm outline-none transition focus:border-slate-900"
+                        value={form.chartLegendPosition}
+                        onChange={(event) =>
+                          setForm((prev) => ({
+                            ...prev,
+                            chartLegendPosition: event.target.value as ChartLegendPosition,
+                          }))
+                        }
+                      >
+                        {CHART_LEGEND_POSITIONS.map((position) => (
+                          <option key={position} value={position}>
+                            {getLegendLabel(position)}
+                          </option>
+                        ))}
+                      </select>
+                    </label>
+                  </div>
+
+                  <div className="grid gap-3 sm:grid-cols-2">
+                    <label className="space-y-1">
+                      <span className="text-sm font-medium">Primary Series Name</span>
+                      <input
+                        placeholder="Share %"
+                        className="w-full rounded-xl border border-black/10 bg-white px-3 py-2 text-sm outline-none transition focus:border-slate-900"
+                        value={form.chartSeriesOneLabel}
+                        onChange={(event) => setForm((prev) => ({ ...prev, chartSeriesOneLabel: event.target.value }))}
+                      />
+                    </label>
+
+                    {!isRadialChartType(form.chartType) ? (
+                      <label className="space-y-1">
+                        <span className="text-sm font-medium">Secondary Series Name (optional)</span>
+                        <input
+                          placeholder="Paid conversions"
+                          className="w-full rounded-xl border border-black/10 bg-white px-3 py-2 text-sm outline-none transition focus:border-slate-900"
+                          value={form.chartSeriesTwoLabel}
+                          onChange={(event) => setForm((prev) => ({ ...prev, chartSeriesTwoLabel: event.target.value }))}
+                        />
+                      </label>
+                    ) : (
+                      <div className="hidden sm:block" aria-hidden />
+                    )}
+                  </div>
+
+                  <div className="space-y-2 rounded-xl border border-black/10 bg-white p-3">
+                    <div className="flex items-center justify-between gap-2">
+                      <p className="text-xs font-semibold uppercase tracking-wide text-slate-600">Data Points</p>
+                      <button
+                        type="button"
+                        className="rounded-lg border border-black/10 bg-white px-2 py-1 text-xs text-slate-700 hover:bg-slate-100"
+                        onClick={() =>
+                          updateChartRows((rows) => [...rows, { label: "", primary: "", secondary: "" }])
+                        }
+                      >
+                        Add Row
+                      </button>
+                    </div>
+
+                    <div
+                      className={`hidden gap-2 px-1 text-[11px] font-semibold uppercase tracking-wide text-slate-500 sm:grid ${
+                        isRadialChartType(form.chartType)
+                          ? "sm:grid-cols-[minmax(0,1.4fr)_minmax(0,1fr)_auto]"
+                          : "sm:grid-cols-[minmax(0,1.2fr)_minmax(0,1fr)_minmax(0,1fr)_auto]"
+                      }`}
                     >
-                      {CHART_TYPE_OPTIONS.map((chartType) => (
-                        <option key={chartType} value={chartType}>
-                          {CHART_TYPE_LABELS[chartType]}
-                        </option>
+                      <span>Label</span>
+                      <span>{form.chartSeriesOneLabel.trim() || "Primary Value"}</span>
+                      {!isRadialChartType(form.chartType) ? <span>{form.chartSeriesTwoLabel.trim() || "Secondary Value"}</span> : null}
+                      <span className="text-right">Row</span>
+                    </div>
+
+                    <div className="space-y-2">
+                      {chartRows.map((row, rowIndex) => (
+                        <div
+                          key={`chart-row-${rowIndex}`}
+                          className={`grid gap-2 ${
+                            isRadialChartType(form.chartType)
+                              ? "sm:grid-cols-[minmax(0,1.4fr)_minmax(0,1fr)_auto]"
+                              : "sm:grid-cols-[minmax(0,1.2fr)_minmax(0,1fr)_minmax(0,1fr)_auto]"
+                          }`}
+                        >
+                          <input
+                            placeholder={`Label ${rowIndex + 1}`}
+                            className="w-full rounded-xl border border-black/10 bg-white px-3 py-2 text-sm outline-none transition focus:border-slate-900"
+                            value={row.label}
+                            onChange={(event) =>
+                              updateChartRows((rows) =>
+                                rows.map((item, index) =>
+                                  index === rowIndex
+                                    ? {
+                                        ...item,
+                                        label: event.target.value,
+                                      }
+                                    : item,
+                                ),
+                              )
+                            }
+                          />
+                          <input
+                            placeholder={`${form.chartSeriesOneLabel.trim() || "Primary"} value`}
+                            className="w-full rounded-xl border border-black/10 bg-white px-3 py-2 text-sm outline-none transition focus:border-slate-900"
+                            value={row.primary}
+                            onChange={(event) =>
+                              updateChartRows((rows) =>
+                                rows.map((item, index) =>
+                                  index === rowIndex
+                                    ? {
+                                        ...item,
+                                        primary: event.target.value,
+                                      }
+                                    : item,
+                                ),
+                              )
+                            }
+                          />
+                          {!isRadialChartType(form.chartType) ? (
+                            <input
+                              placeholder={`${form.chartSeriesTwoLabel.trim() || "Secondary"} value`}
+                              className="w-full rounded-xl border border-black/10 bg-white px-3 py-2 text-sm outline-none transition focus:border-slate-900"
+                              value={row.secondary}
+                              onChange={(event) =>
+                                updateChartRows((rows) =>
+                                  rows.map((item, index) =>
+                                    index === rowIndex
+                                      ? {
+                                          ...item,
+                                          secondary: event.target.value,
+                                        }
+                                      : item,
+                                  ),
+                                )
+                              }
+                            />
+                          ) : null}
+                          <button
+                            type="button"
+                            className="rounded-xl border border-black/10 px-2 py-2 text-xs text-slate-600 hover:bg-slate-50 disabled:cursor-not-allowed disabled:opacity-50"
+                            disabled={chartRows.length <= 1}
+                            onClick={() =>
+                              updateChartRows((rows) => (rows.length <= 1 ? rows : rows.filter((_, index) => index !== rowIndex)))
+                            }
+                          >
+                            Remove
+                          </button>
+                        </div>
                       ))}
-                    </select>
-                  </label>
+                    </div>
+                  </div>
 
-                  <label className="space-y-1">
-                    <span className="text-sm font-medium">Chart Title (optional)</span>
-                    <input
-                      placeholder="Trial strategy split by app sample"
-                      className="w-full rounded-xl border border-black/10 bg-white px-3 py-2 text-sm outline-none transition focus:border-slate-900"
-                      value={form.chartTitle}
-                      onChange={(event) => setForm((prev) => ({ ...prev, chartTitle: event.target.value }))}
-                    />
-                  </label>
-
-                  <label className="space-y-1">
-                    <span className="text-sm font-medium">Legend Position</span>
-                    <select
-                      className="w-full rounded-xl border border-black/10 bg-white px-3 py-2 text-sm outline-none transition focus:border-slate-900"
-                      value={form.chartLegendPosition}
-                      onChange={(event) =>
+                  <div className="flex flex-wrap items-center gap-2">
+                    <button
+                      type="button"
+                      className="rounded-lg border border-black/10 bg-white px-2 py-1 text-xs text-slate-700 hover:bg-slate-100"
+                      onClick={() =>
                         setForm((prev) => ({
                           ...prev,
-                          chartLegendPosition: event.target.value as ChartLegendPosition,
+                          ...getDefaultChartFields(prev.chartType),
                         }))
                       }
                     >
-                      {CHART_LEGEND_POSITIONS.map((position) => (
-                        <option key={position} value={position}>
-                          {getLegendLabel(position)}
-                        </option>
-                      ))}
-                    </select>
-                  </label>
-                </div>
-
-                <label className="space-y-1">
-                  <span className="text-sm font-medium">Labels (comma separated)</span>
-                  <input
-                    placeholder="Without trial, With paid trial, With free trial"
-                    className="w-full rounded-xl border border-black/10 bg-white px-3 py-2 text-sm outline-none transition focus:border-slate-900"
-                    value={form.chartLabels}
-                    onChange={(event) => setForm((prev) => ({ ...prev, chartLabels: event.target.value }))}
-                  />
-                </label>
-
-                <div className="grid gap-3 sm:grid-cols-2">
-                  <label className="space-y-1">
-                    <span className="text-sm font-medium">Primary Series Name</span>
-                    <input
-                      placeholder="Share %"
-                      className="w-full rounded-xl border border-black/10 bg-white px-3 py-2 text-sm outline-none transition focus:border-slate-900"
-                      value={form.chartSeriesOneLabel}
-                      onChange={(event) => setForm((prev) => ({ ...prev, chartSeriesOneLabel: event.target.value }))}
-                    />
-                  </label>
-
-                  <label className="space-y-1">
-                    <span className="text-sm font-medium">Primary Values (comma separated)</span>
-                    <input
-                      placeholder="56.9, 28.9, 14.3"
-                      className="w-full rounded-xl border border-black/10 bg-white px-3 py-2 text-sm outline-none transition focus:border-slate-900"
-                      value={form.chartSeriesOneValues}
-                      onChange={(event) => setForm((prev) => ({ ...prev, chartSeriesOneValues: event.target.value }))}
-                    />
-                  </label>
-                </div>
-
-                {!isRadialChartType(form.chartType) ? (
-                  <div className="grid gap-3 sm:grid-cols-2">
-                    <label className="space-y-1">
-                      <span className="text-sm font-medium">Secondary Series Name (optional)</span>
-                      <input
-                        placeholder="Paid conversions"
-                        className="w-full rounded-xl border border-black/10 bg-white px-3 py-2 text-sm outline-none transition focus:border-slate-900"
-                        value={form.chartSeriesTwoLabel}
-                        onChange={(event) => setForm((prev) => ({ ...prev, chartSeriesTwoLabel: event.target.value }))}
-                      />
-                    </label>
-
-                    <label className="space-y-1">
-                      <span className="text-sm font-medium">Secondary Values (comma separated)</span>
-                      <input
-                        placeholder="82, 94, 118, 142"
-                        className="w-full rounded-xl border border-black/10 bg-white px-3 py-2 text-sm outline-none transition focus:border-slate-900"
-                        value={form.chartSeriesTwoValues}
-                        onChange={(event) => setForm((prev) => ({ ...prev, chartSeriesTwoValues: event.target.value }))}
-                      />
-                    </label>
+                      Use Example Values
+                    </button>
                   </div>
-                ) : null}
 
-                <div className="flex flex-wrap items-center gap-2">
-                  <button
-                    type="button"
-                    className="rounded-lg border border-black/10 bg-white px-2 py-1 text-xs text-slate-700 hover:bg-slate-100"
-                    onClick={() =>
-                      setForm((prev) => ({
-                        ...prev,
-                        ...getDefaultChartFields(prev.chartType),
-                      }))
-                    }
-                  >
-                    Use Example Values
-                  </button>
-                </div>
-
-                <p className="text-xs text-slate-600">
-                  No JSON required. Use simple comma-separated labels and numbers.
-                </p>
-                <p className="text-xs text-slate-600">
-                  Chart image is rendered automatically server-side and returned in your results.
-                </p>
+                  <p className="text-xs text-slate-600">
+                    Each row links one chart label directly to its value(s). No JSON and no comma juggling.
+                  </p>
+                  <p className="text-xs text-slate-600">
+                    Chart image is rendered automatically server-side and returned in your results.
+                  </p>
                 </div>
               ) : (
                 <p className="text-xs text-slate-600">
