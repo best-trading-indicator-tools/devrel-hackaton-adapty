@@ -1,3 +1,70 @@
+export const BRAND_VOICE_PRESETS = [
+  "adapty",
+  "clickbait",
+  "founder personal",
+  "bold / contrarian",
+  "technical breakdown",
+  "playful meme tone",
+] as const;
+
+export type BrandVoicePreset = (typeof BRAND_VOICE_PRESETS)[number];
+
+export const BRAND_VOICE_PROFILES: Record<
+  BrandVoicePreset,
+  {
+    label: string;
+    uiDescription: string;
+    promptDirective: string;
+  }
+> = {
+  adapty: {
+    label: "Adapty",
+    uiDescription:
+      "Mirror the proven Adapty LinkedIn voice from your internal library: sharp, practical, data-aware, and actionable.",
+    promptDirective:
+      "Treat the linkedin-adapty-library examples as canonical style anchors. Mirror their rhythm, formatting, tone, and storytelling style closely while keeping all copy original.",
+  },
+  clickbait: {
+    label: "Clickbait",
+    uiDescription:
+      "Use curiosity-heavy hooks and tension that invite clicks, while keeping every claim truthful and specific.",
+    promptDirective:
+      "Lead with high-curiosity hooks and clear stakes, but keep claims factual, specific, and defensible. No fake urgency and no misleading claims.",
+  },
+  "founder personal": {
+    label: "Founder Personal",
+    uiDescription:
+      "Write like a founder sharing learned lessons from the field, with first-person insight and concrete examples.",
+    promptDirective:
+      "Use a founder-first perspective with lived observations, trade-offs, and practical lessons. Prefer first-person framing and concrete examples over abstract advice.",
+  },
+  "bold / contrarian": {
+    label: "Bold / Contrarian",
+    uiDescription:
+      "Challenge common growth assumptions directly, then back the take with mechanics, caveats, and practical alternatives.",
+    promptDirective:
+      "Take a strong contrarian angle on common growth beliefs, then support it with mechanics, caveats, and clear alternatives. Critique systems and decisions, not people.",
+  },
+  "technical breakdown": {
+    label: "Technical Breakdown",
+    uiDescription:
+      "Use a clear, step-by-step analytical style with concrete metrics, framework clarity, and implementation detail.",
+    promptDirective:
+      "Write in analytical builder mode. Explain the mechanism, include concrete numbers or steps, and keep language precise and practical.",
+  },
+  "playful meme tone": {
+    label: "Playful Meme Tone",
+    uiDescription:
+      "Keep the tone witty and internet-native while staying relevant to mobile app growth and monetization realities.",
+    promptDirective:
+      "Use playful, witty language and meme-aware phrasing while staying useful and on-topic for B2C mobile app monetization operators.",
+  },
+};
+
+export function isBrandVoicePreset(value: string): value is BrandVoicePreset {
+  return (BRAND_VOICE_PRESETS as readonly string[]).includes(value);
+}
+
 export const POST_TYPE_OPTIONS = [
   "Product feature launch",
   "Event / webinar promo",

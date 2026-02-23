@@ -19,6 +19,7 @@ Everything below is already implemented in this repo on `main`.
 - Brand Voice
   - Presets: `adapty`, `clickbait`, `founder personal`, `bold / contrarian`, `technical breakdown`, `playful meme tone`
   - Custom option with free text field
+  - In-UI "Brand Voice Guide" that explains each preset
 - Hook Style
   - Presets: `balanced`, `clickbait`, `data-driven`, `question-led`, `contrarian`, `story-led`
   - Custom option with free text field
@@ -129,9 +130,16 @@ These are implemented in `src/lib/library-retrieval.ts`.
 - System prompt is explicitly anchored to Adapty business context:
   - "You create LinkedIn content at scale for Adapty"
   - Adapty described as helping app makers monetize mobile apps
-- If Brand Voice is `adapty`, prompt instructs model to mirror `linkedin-adapty-library` tone closely
+- Prompt is modular:
+  - Global anti-slop writing contract
+  - Brand voice playbook
+  - Post type playbook
+  - Goal playbook
+  - Hard self-check gate (regenerate if rules fail)
+- If Brand Voice is `adapty`, prompt treats `linkedin-adapty-library` as canonical style source
 - If Hook Style is `clickbait`, prompt applies curiosity-gap style while requiring truthful claims
-- If Goal is `virality`, prompt applies explicit contrarian truth directive
+- If Goal is `virality`, prompt emphasizes uncomfortable obvious truths with practical utility
+- Optional web fact-check context is injected when configured (Brave Search)
 - If CTA link is provided, API ensures it is included in final CTA line
 - Image context is passed to model when attached
 
@@ -180,6 +188,12 @@ Use `.env` (local) and set same keys in Vercel project settings.
 ### Memes
 
 - `MEMEGEN_BASE_URL` (optional, defaults to `https://api.memegen.link`)
+
+### Optional web fact-check
+
+- `ENABLE_WEB_FACT_CHECK=true|false` (default: auto-enabled when Brave key is present)
+- `BRAVE_SEARCH_API_KEY` (required to run live web evidence lookup)
+- `WEB_FACT_CHECK_MAX_RESULTS` (optional, default `8`)
 
 ## Why `text-embedding-3-small` by default
 
@@ -302,4 +316,3 @@ If you get a lock error like `.next/dev/lock`, stop other running `next dev` pro
 
 - Never commit OAuth tokens or API keys
 - Keep secrets only in local `.env` and Vercel environment variables
-

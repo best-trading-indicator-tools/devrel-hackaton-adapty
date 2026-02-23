@@ -4,6 +4,8 @@ import { ChangeEvent, FormEvent, useEffect, useMemo, useRef, useState } from "re
 import NextImage from "next/image";
 
 import {
+  BRAND_VOICE_PRESETS,
+  BRAND_VOICE_PROFILES,
   CHART_TYPE_LABELS,
   CHART_TYPE_OPTIONS,
   GOAL_LABELS,
@@ -13,6 +15,7 @@ import {
   MEME_TEMPLATE_LABELS,
   MEME_TEMPLATE_OPTIONS,
   POST_TYPE_OPTIONS,
+  isBrandVoicePreset,
   type ChartTypeOption,
   type ContentGoal,
   type InputLength,
@@ -83,14 +86,6 @@ const EVENT_TOPIC_PATTERN = /\b(event|webinar)\b/i;
 const MEME_TOPIC_PATTERN = /\b(meme|shitpost)\b/i;
 const CUSTOM_BRAND_VOICE = "__custom__";
 const CUSTOM_HOOK_STYLE = "__custom_hook_style__";
-const BRAND_VOICE_PRESETS = [
-  "adapty",
-  "clickbait",
-  "founder personal",
-  "bold / contrarian",
-  "technical breakdown",
-  "playful meme tone",
-] as const;
 const HOOK_STYLE_PRESETS = [
   "balanced",
   "clickbait",
@@ -384,10 +379,6 @@ function needsChartDetails(inputType: string): boolean {
   return !MEME_TOPIC_PATTERN.test(inputType);
 }
 
-function isBrandVoicePreset(value: string): value is (typeof BRAND_VOICE_PRESETS)[number] {
-  return (BRAND_VOICE_PRESETS as readonly string[]).includes(value);
-}
-
 function isHookStylePreset(value: string): value is (typeof HOOK_STYLE_PRESETS)[number] {
   return (HOOK_STYLE_PRESETS as readonly string[]).includes(value);
 }
@@ -478,6 +469,17 @@ export default function Home() {
   const showCustomHookStyleInput = hookStyleSelection === CUSTOM_HOOK_STYLE;
   const customInputsGridClass =
     showCustomBrandVoiceInput && showCustomHookStyleInput ? "grid gap-3 sm:grid-cols-2" : "grid gap-3";
+  const selectedBrandVoiceDescription = useMemo(() => {
+    if (brandVoiceSelection === CUSTOM_BRAND_VOICE) {
+      return "Custom lets you define your own brand persona, writing style, and tone rules.";
+    }
+
+    if (isBrandVoicePreset(brandVoiceSelection)) {
+      return BRAND_VOICE_PROFILES[brandVoiceSelection].uiDescription;
+    }
+
+    return "";
+  }, [brandVoiceSelection]);
 
   const subtitle = useMemo(() => {
     if (form.inputLength !== "mix") {
@@ -776,11 +778,12 @@ export default function Home() {
               >
                 {BRAND_VOICE_PRESETS.map((voice) => (
                   <option key={voice} value={voice}>
-                    {formatLengthLabel(voice)}
+                    {BRAND_VOICE_PROFILES[voice].label}
                   </option>
                 ))}
                 <option value={CUSTOM_BRAND_VOICE}>Custom</option>
               </select>
+              <p className="text-xs text-slate-500">{selectedBrandVoiceDescription}</p>
             </label>
 
             <label className="space-y-1">
@@ -862,6 +865,18 @@ export default function Home() {
               ) : null}
             </div>
           ) : null}
+
+          <details className="rounded-2xl border border-black/10 bg-slate-50 p-3">
+            <summary className="cursor-pointer text-sm font-medium text-slate-800">Brand Voice Guide</summary>
+            <div className="mt-3 grid gap-2 sm:grid-cols-2 lg:grid-cols-3">
+              {BRAND_VOICE_PRESETS.map((voice) => (
+                <article key={voice} className="rounded-xl border border-black/10 bg-white p-3">
+                  <p className="text-sm font-semibold text-slate-900">{BRAND_VOICE_PROFILES[voice].label}</p>
+                  <p className="mt-1 text-xs text-slate-600">{BRAND_VOICE_PROFILES[voice].uiDescription}</p>
+                </article>
+              ))}
+            </div>
+          </details>
 
           <div className="space-y-1">
             <label className="space-y-1">

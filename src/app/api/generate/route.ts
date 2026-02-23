@@ -11,17 +11,21 @@ import {
   type PreparedChartInput,
 } from "@/lib/chart-render";
 import {
+  BRAND_VOICE_PROFILES,
   MEME_TEMPLATE_IDS,
   MEME_TEMPLATE_LABELS,
   MEME_TEMPLATE_OPTIONS,
   buildLengthPlan,
   GOAL_DESCRIPTIONS,
   GOAL_LABELS,
+  isBrandVoicePreset,
   lengthGuide,
+  type ContentGoal,
   type MemeTemplateId,
 } from "@/lib/constants";
 import { createCodexStructuredCompletion } from "@/lib/codex-responses";
 import { getCodexOAuthCredentials, type CodexOAuthCredentials } from "@/lib/codex-oauth";
+import { runWebFactCheck } from "@/lib/fact-check";
 import { retrieveLibraryContext, type LibraryEntry } from "@/lib/library-retrieval";
 import {
   generatePostsRequestSchema,
@@ -35,6 +39,109 @@ const MEME_INPUT_TYPE_PATTERN = /\b(meme|shitpost)\b/i;
 const MEME_LINE_MAX_CHARS = 72;
 const DEFAULT_MEME_TONE = "clever, funny, and relevant to B2C mobile app growth";
 const DEFAULT_MEMEGEN_BASE_URL = "https://api.memegen.link";
+const FACT_CHECK_EVIDENCE_PROMPT_LIMIT = 10;
+
+const GOAL_PLAYBOOKS: Record<ContentGoal, string> = {
+  virality:
+    "Say the uncomfortable obvious truth your audience already suspects but rarely says out loud. Keep it specific, useful, and defensible.",
+  engagement:
+    "Optimize for replies and conversation quality. End with a concrete question that invites expert opinions, not generic agreement.",
+  traffic:
+    "Drive qualified clicks by making the promise of the linked resource concrete. Make the value of clicking immediately clear.",
+  awareness:
+    "Maximize clarity and recall for broad audiences. Keep positioning crisp and repeat one memorable brand-level message.",
+  balanced:
+    "Balance reach, comments, and clicks without over-optimizing a single metric. Prioritize clarity and practical value.",
+};
+
+const LINKEDIN_WRITING_CONTRACT = [
+  "Write like a cohesive mini-article, not stacked slogans.",
+  "Use line breaks for readability. One sentence per line when practical, and add blank lines between subtopics.",
+  "Keep paragraph rhythm human, usually 2 to 5 sentences before a blank line.",
+  "Do not stack ultra-short lines back-to-back. Avoid rap or poem cadence.",
+  "Mix short, medium, and long sentence lengths so rhythm feels human.",
+  "Avoid internet template cadence and motivational filler patterns.",
+  "Avoid MBA buzzword fog. Prefer concrete verbs, nouns, and mechanics.",
+  "Include at least one concrete proof unit per post, such as a number, metric, micro-example, or specific scenario.",
+  "Include caveats and boundary conditions like most, unless, in practice, or for this category.",
+  "Prefer lived perspective lines where relevant, such as I saw, from what I see, or we tested.",
+  "Occasional ellipses are acceptable as human texture, but keep them rare and clear.",
+  "No separator lines like _____, ---, or ***.",
+  "Never leak meta text such as assistant, final, json, or planning notes.",
+  "Never use em dash or en dash punctuation. Use commas, periods, colons, semicolons, or normal hyphen.",
+] as const;
+
+const POST_TYPE_PLAYBOOKS: Array<{ pattern: RegExp; directive: string }> = [
+  {
+    pattern: /event|webinar/i,
+    directive:
+      "Lead with why this event matters now, then provide concrete logistics, who should attend, and what they will learn.",
+  },
+  {
+    pattern: /product feature launch/i,
+    directive:
+      "Frame the user pain first, then explain what changed, why it matters, and one concrete outcome or use case.",
+  },
+  {
+    pattern: /sauce:\s*breakdown|guide/i,
+    directive:
+      "Deliver a practical breakdown with clear steps, crisp transitions, and implementation detail teams can apply immediately.",
+  },
+  {
+    pattern: /sauce:\s*data insight/i,
+    directive:
+      "Lead with a surprising number, explain the mechanism behind it, and include at least one caveat or segmentation note.",
+  },
+  {
+    pattern: /meme|shitpost/i,
+    directive:
+      "Keep copy punchy and caption-friendly while still grounded in real B2C mobile app monetization pain points.",
+  },
+  {
+    pattern: /industry news reaction/i,
+    directive:
+      "React quickly to the news with a clear stance, concrete implication for app teams, and a practical next move.",
+  },
+  {
+    pattern: /poll|quiz|engagement farming/i,
+    directive:
+      "Ask a specific high-signal question with clear options and a short context block that makes voting easy and meaningful.",
+  },
+  {
+    pattern: /case study|social proof/i,
+    directive:
+      "Use before and after framing with baseline, intervention, and measurable result. Keep claims concrete and scoped.",
+  },
+  {
+    pattern: /hiring|team culture/i,
+    directive:
+      "Highlight role context, ownership, and why this team environment is compelling. Keep tone human and specific.",
+  },
+  {
+    pattern: /milestone|company update/i,
+    directive:
+      "Share the milestone, why it matters, and what changed operationally to get there. Prefer specific numbers over hype.",
+  },
+  {
+    pattern: /controversial hot take/i,
+    directive:
+      "Take a strong stance on a real industry habit, then back it with mechanics, caveats, and a practical alternative.",
+  },
+  {
+    pattern: /curated roundup/i,
+    directive:
+      "Organize items into a clear digest with one practical takeaway per item and a short recommendation on what to read first.",
+  },
+];
+
+const HARD_QUALITY_GATE = [
+  "Silently self-check every output before finalizing.",
+  "If any rule fails, rewrite and self-check again before returning.",
+  "Reject generic template cadence, staccato short-line stacks, and abstract filler.",
+  "Reject outputs without concrete proof units and without caveats.",
+  "Reject any sentence containing em dash or en dash punctuation.",
+  "For factual claims: if web evidence is available, align to it. If evidence is missing, rewrite as opinion or observation and avoid unsupported hard facts.",
+] as const;
 
 function getOpenAIApiToken(): string | undefined {
   return process.env.OPENAI_API_KEY ?? process.env.OPENAI_ACCESS_TOKEN;
@@ -211,6 +318,71 @@ function makeMemeSelectionResponseSchema(postCount: number, variantCount: number
   });
 }
 
+function makeMemeSelectionJsonSchema(postCount: number, variantCount: number): Record<string, unknown> {
+  return {
+    type: "object",
+    additionalProperties: false,
+    required: ["selections"],
+    properties: {
+      selections: {
+        type: "array",
+        minItems: postCount,
+        maxItems: postCount,
+        items: {
+          type: "object",
+          additionalProperties: false,
+          required: ["postIndex", "variants"],
+          properties: {
+            postIndex: {
+              type: "integer",
+              minimum: 1,
+              maximum: postCount,
+            },
+            variants: {
+              type: "array",
+              minItems: variantCount,
+              maxItems: variantCount,
+              items: {
+                type: "object",
+                additionalProperties: false,
+                required: ["templateId", "topText", "bottomText", "toneFitScore", "toneFitReason"],
+                properties: {
+                  templateId: {
+                    type: "string",
+                    minLength: 1,
+                    maxLength: 120,
+                    pattern: "^[a-zA-Z0-9-]+$",
+                  },
+                  topText: {
+                    type: "string",
+                    minLength: 4,
+                    maxLength: 120,
+                  },
+                  bottomText: {
+                    type: "string",
+                    minLength: 4,
+                    maxLength: 120,
+                  },
+                  toneFitScore: {
+                    type: "integer",
+                    minimum: 0,
+                    maximum: 100,
+                  },
+                  toneFitReason: {
+                    type: "string",
+                    minLength: 8,
+                    maxLength: 220,
+                  },
+                },
+              },
+            },
+          },
+        },
+      },
+    },
+  };
+}
+
 function sanitizeModelMemeVariants(params: {
   variants: Array<{
     templateId: string;
@@ -327,6 +499,40 @@ function formatExampleMetrics(entry: LibraryEntry): string {
   return ` [${parts.join(" | ")}]`;
 }
 
+function toBulletedSection(lines: readonly string[]): string {
+  return lines.map((line) => `- ${line}`).join("\n");
+}
+
+function resolveBrandVoiceDirective(style: string): string {
+  const normalizedStyle = style.trim().toLowerCase();
+
+  if (isBrandVoicePreset(normalizedStyle)) {
+    return BRAND_VOICE_PROFILES[normalizedStyle].promptDirective;
+  }
+
+  return `Follow custom brand voice exactly as requested: "${style.trim()}". Keep the output coherent, practical, and human sounding.`;
+}
+
+function resolveHookStyleDirective(hookStyle: string): string {
+  const normalizedHookStyle = hookStyle.trim().toLowerCase();
+
+  if (normalizedHookStyle === "clickbait") {
+    return "Use clickbait-style hooks with curiosity gaps and tension, while keeping all claims truthful and specific.";
+  }
+
+  return `Use "${hookStyle}" as the hook style for hook suggestions and for each post opening line.`;
+}
+
+function resolvePostTypeDirective(inputType: string): string {
+  for (const entry of POST_TYPE_PLAYBOOKS) {
+    if (entry.pattern.test(inputType)) {
+      return entry.directive;
+    }
+  }
+
+  return "Respect the requested post type with concrete context, practical value, and clear reader payoff.";
+}
+
 async function runOpenAiChatGeneration(params: {
   token: string;
   model: string;
@@ -431,9 +637,14 @@ async function runCodexOauthMemeSelection(params: {
   systemPrompt: string;
   userPrompt: string;
   responseSchema: ReturnType<typeof makeMemeSelectionResponseSchema>;
+  jsonSchema?: Record<string, unknown>;
 }) {
-  const responseFormat = zodResponseFormat(params.responseSchema, "meme_variants_batch");
-  const jsonSchema = responseFormat.json_schema?.schema;
+  const jsonSchema =
+    params.jsonSchema ??
+    (() => {
+      const responseFormat = zodResponseFormat(params.responseSchema, "meme_variants_batch");
+      return responseFormat.json_schema?.schema;
+    })();
 
   if (!jsonSchema || typeof jsonSchema !== "object") {
     throw new Error("Failed to derive JSON schema for Codex meme structured output");
@@ -561,18 +772,10 @@ export async function POST(request: Request) {
           .join("\n")
       : "No performance metrics were provided in the content library.";
 
-    const isAdaptyVoice = input.style.trim().toLowerCase() === "adapty";
-    const brandVoiceDirective = isAdaptyVoice
-      ? "Selected brand voice is Adapty. Treat the provided linkedin-adapty-library examples as the canonical style guide and mirror their tone, rhythm, formatting, and storytelling style as closely as possible while keeping copy original."
-      : `Selected brand voice is "${input.style}". Follow that voice while still leveraging the winning structures from the provided library examples.`;
-    const isClickbaitHookStyle = input.hookStyle.trim().toLowerCase() === "clickbait";
-    const hookStyleDirective = isClickbaitHookStyle
-      ? 'Use clickbait-style hooks with curiosity gaps and tension, while keeping all claims truthful and specific.'
-      : `Use "${input.hookStyle}" as the hook style for both hook suggestions and each post opening line.`;
-    const goalExecutionDirective =
-      input.goal === "virality"
-        ? "For virality, say the uncomfortable obvious truth your audience already suspects but rarely says out loud. Make it specific, defensible, and useful."
-        : "Prioritize the selected goal while staying concrete, credible, and practical.";
+    const brandVoiceDirective = resolveBrandVoiceDirective(input.style);
+    const hookStyleDirective = resolveHookStyleDirective(input.hookStyle);
+    const goalExecutionDirective = GOAL_PLAYBOOKS[input.goal];
+    const postTypeDirective = resolvePostTypeDirective(input.inputType);
     const chartExecutionDirective = preparedChartInput
       ? "Chart companion is enabled. Ground the narrative in the provided chart values and call out one or two concrete numbers naturally."
       : "No chart companion requested.";
@@ -590,33 +793,62 @@ export async function POST(request: Request) {
     const memeExecutionDirective = shouldGenerateMemes(input.inputType)
       ? "This is a meme-focused request. Keep hooks and first body lines short, punchy, and caption-friendly. If no meme brief is provided, come up with clever and funny angles automatically."
       : "Not a meme-focused request.";
+    const webFactCheck = await runWebFactCheck({
+      style: input.style,
+      goal: input.goal,
+      inputType: input.inputType,
+      details: input.details,
+      time: input.time,
+      place: input.place,
+      ctaLink: input.ctaLink,
+    });
+    const webEvidenceLines = webFactCheck.evidenceLines
+      .slice(0, FACT_CHECK_EVIDENCE_PROMPT_LIMIT)
+      .map((line) => normalizeNoEmDash(line));
+    const factCheckDirective = webEvidenceLines.length
+      ? "Web evidence is available. For factual claims, stay consistent with the evidence context and avoid unsupported new hard facts."
+      : "Web evidence is unavailable or empty. Do not invent hard facts. Rewrite uncertain factual claims as opinion, observation, or hypothesis.";
+    const factCheckStatusSummary = webFactCheck.enabled
+      ? webFactCheck.warning
+        ? `enabled (${webFactCheck.provider}) with warning: ${webFactCheck.warning}`
+        : `enabled (${webFactCheck.provider})`
+      : webFactCheck.warning || "disabled";
+    const factCheckQueriesSummary = webFactCheck.queries.length
+      ? webFactCheck.queries.map((query, index) => `${index + 1}. ${normalizeNoEmDash(query)}`).join("\n")
+      : "(none)";
+    const factCheckEvidenceForPrompt = webEvidenceLines.length
+      ? webEvidenceLines.join("\n")
+      : "No live web evidence available for this request.";
 
     const responseSchema = makeGeneratePostsResponseSchema(input.numberOfPosts);
 
     const systemPrompt = `
 You create LinkedIn content at scale for Adapty.
 Adapty enables app makers to monetize their mobile apps with subscription growth, paywall optimization, experimentation, and analytics.
-You write high-performing LinkedIn content for B2B SaaS growth teams.
-The voice must feel sharp, clear, and practical, with strong hooks and concise storytelling.
-Never use generic fluff.
+Mission:
+- Create high-performing LinkedIn posts for B2B SaaS growth teams.
+- Keep voice sharp, clear, practical, and human sounding.
+- Never output generic fluff.
 
-Rules:
-1. Keep the tone aligned with the requested brand voice.
-2. Optimize for the requested goal.
-3. Respect requested post type and input details.
-4. Create hook suggestions that are punchy, specific, and scroll-stopping.
-5. For each post, produce:
-   - hook: the first line
-   - body: the full post content excluding the final CTA line
-   - cta: final line for action
-6. Use line breaks to improve readability.
-7. Avoid overusing emojis and hashtags.
-8. If a CTA link is provided, include it in the CTA line.
-9. Use the performance insights and recurring winning patterns when available.
-10. If the selected brand voice is "Adapty", closely imitate the exact style and tone from the provided linkedin-adapty-library examples.
-11. Never use em dash or en dash punctuation. Use commas, periods, colons, semicolons, or normal hyphen instead.
-12. Apply the requested hook style to the hook suggestion list and to each post hook line.
-13. Examples are tagged with source metadata. If source is "others", use them for topic angles and winning structures, not for final brand tone.
+Global writing contract:
+${toBulletedSection(LINKEDIN_WRITING_CONTRACT)}
+
+Output contract:
+- Tone must follow requested brand voice.
+- Execution must follow requested goal and post type.
+- Hook suggestions must be punchy, specific, and scroll-stopping.
+- For each post return:
+  - hook: first line
+  - body: full post text excluding final CTA line
+  - cta: final action line
+- Use line breaks for readability.
+- Avoid overusing emojis and hashtags.
+- If CTA link is provided, include it naturally in the CTA line.
+- Use performance insights and recurring winning patterns when available.
+- Examples are tagged with source metadata. If source is "others", use for angle discovery and winning structures, not final Adapty voice imitation.
+
+Quality gate before final answer:
+${toBulletedSection(HARD_QUALITY_GATE)}
 `;
 
     const userPrompt = `
@@ -627,6 +859,7 @@ Generation request:
 - Hook style directive: ${hookStyleDirective}
 - Goal: ${GOAL_LABELS[input.goal]} (${GOAL_DESCRIPTIONS[input.goal]})
 - Goal execution directive: ${goalExecutionDirective}
+- Post type execution directive: ${postTypeDirective}
 - Chart execution directive: ${chartExecutionDirective}
 - Chart summary: ${chartPromptSummary}
 - Meme execution directive: ${memeExecutionDirective}
@@ -634,6 +867,10 @@ Generation request:
 - Meme brief: ${memeBriefPreference || "(not provided, use clever/funny defaults)"}
 - Meme template preferences: ${memeTemplatePreferences.length ? memeTemplatePreferences.join(", ") : "auto"}
 - Meme variants per post target: ${memeVariantTarget}
+- Fact-check policy: ${factCheckDirective}
+- Fact-check status: ${factCheckStatusSummary}
+- Fact-check queries:
+${factCheckQueriesSummary}
 - Post type: ${input.inputType}
 - Event time: ${input.time || "(not provided)"}
 - Event place: ${input.place || "(not provided)"}
@@ -650,6 +887,9 @@ ${examplesForPrompt || "No library examples available."}
 
 Performance insights extracted from your historical posts:
 ${performanceInsightsForPrompt}
+
+Web fact-check evidence context:
+${factCheckEvidenceForPrompt}
 
 Also generate a list of hook suggestions inspired by this style and request.
 `;
@@ -716,6 +956,10 @@ Also generate a list of hook suggestions inspired by this style and request.
         normalizedPosts.length,
         memeVariantTarget,
       );
+      const memeSelectionJsonSchema = makeMemeSelectionJsonSchema(
+        normalizedPosts.length,
+        memeVariantTarget,
+      );
       const memeTemplateCatalog = MEME_TEMPLATE_OPTIONS.filter((template) =>
         allowedTemplateIds.includes(template.id),
       )
@@ -766,6 +1010,7 @@ For each post:
             systemPrompt: memeSelectionSystemPrompt,
             userPrompt: memeSelectionUserPrompt,
             responseSchema: memeSelectionSchema,
+            jsonSchema: memeSelectionJsonSchema,
           });
         }
 
