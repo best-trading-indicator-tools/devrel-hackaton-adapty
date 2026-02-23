@@ -651,10 +651,6 @@ export default function Home() {
     () => normalizedSelectedPostTypes.some((type) => needsChartDetails(type)),
     [normalizedSelectedPostTypes],
   );
-  const showIndustryNewsRssFeeds = useMemo(
-    () => normalizedSelectedPostTypes.some((type) => needsIndustryNewsRssGuide(type)),
-    [normalizedSelectedPostTypes],
-  );
   const groupedIndustryRssFeeds = useMemo(() => {
     const grouped: Record<FeedCategory, RssFeed[]> = {
       platform: [],
@@ -1772,6 +1768,7 @@ export default function Home() {
             <div className="grid gap-2 sm:grid-cols-2 lg:grid-cols-3">
               {POST_TYPE_OPTIONS.map((type) => {
                 const isSelected = normalizedSelectedPostTypes.includes(type);
+                const isIndustryNewsType = needsIndustryNewsRssGuide(type);
                 return (
                   <button
                     key={type}
@@ -1781,66 +1778,56 @@ export default function Home() {
                     }`}
                     onClick={() => applyPostTypeSelection(type)}
                   >
-                    <p className="text-sm font-semibold text-slate-900">{type}</p>
+                    <p className="flex items-center gap-1.5 text-sm font-semibold text-slate-900">
+                      <span>{type}</span>
+                      {isIndustryNewsType ? (
+                        <span className="group/industry-rss relative inline-flex items-center">
+                          <span
+                            aria-label="Industry news RSS sources"
+                            className="inline-flex h-5 w-5 items-center justify-center rounded-full border border-slate-300 bg-white text-[11px] font-semibold text-slate-600"
+                          >
+                            i
+                          </span>
+                          <span className="invisible pointer-events-none absolute left-1/2 top-full z-20 mt-2 w-[min(90vw,30rem)] -translate-x-1/2 rounded-xl border border-sky-200 bg-white p-3 text-left opacity-0 shadow-xl transition group-hover/industry-rss:visible group-hover/industry-rss:opacity-100">
+                            <p className="text-xs font-semibold text-slate-900">
+                              RSS feeds used for Industry news reaction posts
+                            </p>
+                            <p className="mt-1 text-[11px] text-slate-600">
+                              {enabledIndustryRssCount} enabled feeds, grouped by category.
+                            </p>
+                            <div className="mt-2 max-h-56 space-y-2 overflow-y-auto pr-1">
+                              {(Object.keys(groupedIndustryRssFeeds) as FeedCategory[]).map((category) => {
+                                const feeds = groupedIndustryRssFeeds[category];
+                                if (!feeds.length) {
+                                  return null;
+                                }
+                                return (
+                                  <div key={category} className="rounded-lg border border-slate-200 bg-slate-50 p-2">
+                                    <p className="mb-1 text-[11px] font-semibold uppercase tracking-wide text-slate-700">
+                                      {formatFeedCategoryLabel(category)} ({feeds.length})
+                                    </p>
+                                    <ul className="space-y-1.5">
+                                      {feeds.map((feed) => (
+                                        <li key={feed.id} className="text-[11px] text-slate-600">
+                                          <p className="font-medium text-slate-800">{feed.name}</p>
+                                          <p className="break-all font-mono text-[10px] text-slate-500">{feed.url}</p>
+                                        </li>
+                                      ))}
+                                    </ul>
+                                  </div>
+                                );
+                              })}
+                            </div>
+                          </span>
+                        </span>
+                      ) : null}
+                    </p>
                     <p className="mt-1 text-xs text-slate-600">{POST_TYPE_UI_DESCRIPTIONS[type]}</p>
                   </button>
                 );
               })}
             </div>
           </div>
-
-          {showIndustryNewsRssFeeds ? (
-            <div className="space-y-3 rounded-2xl border border-sky-200 bg-sky-50/70 p-3">
-              <div className="flex flex-wrap items-center justify-between gap-2">
-                <p className="text-sm font-medium text-slate-900">Industry News RSS Sources</p>
-                <p className="text-xs text-slate-600">{enabledIndustryRssCount} enabled feeds</p>
-              </div>
-              <p className="text-xs text-slate-600">
-                These sources are used to build ranked news context for Industry news reaction posts.
-              </p>
-              <div className="grid gap-3 lg:grid-cols-3">
-                {(Object.keys(groupedIndustryRssFeeds) as FeedCategory[]).map((category) => {
-                  const feeds = groupedIndustryRssFeeds[category];
-                  if (!feeds.length) {
-                    return null;
-                  }
-
-                  return (
-                    <div key={category} className="space-y-2 rounded-xl border border-sky-200 bg-white p-3">
-                      <div className="flex items-center justify-between gap-2">
-                        <p className="text-xs font-semibold uppercase tracking-wide text-slate-700">
-                          {formatFeedCategoryLabel(category)}
-                        </p>
-                        <span className="rounded-full bg-slate-100 px-2 py-0.5 text-[11px] text-slate-600">
-                          {feeds.length}
-                        </span>
-                      </div>
-                      <ul className="space-y-2">
-                        {feeds.map((feed) => (
-                          <li key={feed.id} className="rounded-lg border border-black/10 bg-slate-50 p-2">
-                            <div className="mb-1 flex flex-wrap items-center gap-1.5">
-                              <a
-                                href={feed.url}
-                                target="_blank"
-                                rel="noreferrer"
-                                className="text-xs font-medium text-slate-900 underline decoration-slate-300 underline-offset-2 hover:text-sky-700"
-                              >
-                                {feed.name}
-                              </a>
-                              <span className="rounded-full bg-white px-1.5 py-0.5 text-[10px] text-slate-600">
-                                P{feed.priority}
-                              </span>
-                            </div>
-                            <p className="break-all font-mono text-[10px] text-slate-500">{feed.url}</p>
-                          </li>
-                        ))}
-                      </ul>
-                    </div>
-                  );
-                })}
-              </div>
-            </div>
-          ) : null}
 
           {showMemeFields ? (
             <div className="space-y-3 rounded-2xl border border-black/10 bg-slate-50 p-3">
