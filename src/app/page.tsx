@@ -503,7 +503,6 @@ export default function Home() {
   const [isLoading, setIsLoading] = useState(false);
   const [rewriteLoadingKey, setRewriteLoadingKey] = useState<string | null>(null);
   const [rewritePromptByPost, setRewritePromptByPost] = useState<Record<number, string>>({});
-  const [linePromptByPost, setLinePromptByPost] = useState<Record<number, string>>({});
   const [manualLineDraftByPost, setManualLineDraftByPost] = useState<Record<number, string>>({});
   const [selectedLineByPost, setSelectedLineByPost] = useState<Record<number, number>>({});
   const [rewriteErrorByPost, setRewriteErrorByPost] = useState<Record<number, string>>({});
@@ -739,7 +738,6 @@ export default function Home() {
     setResult(null);
     setIsLoading(true);
     setRewritePromptByPost({});
-    setLinePromptByPost({});
     setManualLineDraftByPost({});
     setSelectedLineByPost({});
     setRewriteErrorByPost({});
@@ -874,6 +872,27 @@ export default function Home() {
         memeVariants: undefined,
       };
     });
+    setManualLineDraftByPost((prev) => ({
+      ...prev,
+      [postIndex]: normalizedDraft,
+    }));
+  }
+
+  function cancelBodyLineEdit(postIndex: number) {
+    setSelectedLineByPost((prev) => {
+      const next = { ...prev };
+      delete next[postIndex];
+      return next;
+    });
+    setManualLineDraftByPost((prev) => {
+      const next = { ...prev };
+      delete next[postIndex];
+      return next;
+    });
+    setRewriteErrorByPost((prev) => ({
+      ...prev,
+      [postIndex]: "",
+    }));
   }
 
   async function rewriteEntirePost(postIndex: number) {
@@ -946,6 +965,11 @@ export default function Home() {
         delete next[postIndex];
         return next;
       });
+      setSelectedLineByPost((prev) => {
+        const next = { ...prev };
+        delete next[postIndex];
+        return next;
+      });
     } catch {
       setRewriteErrorByPost((prev) => ({
         ...prev,
@@ -977,7 +1001,7 @@ export default function Home() {
         body: JSON.stringify({
           mode: "line",
           ...rewriteContext,
-          prompt: linePromptByPost[postIndex] ?? "",
+          prompt: "",
           lineIndex,
           post: {
             length: post.length,
@@ -1835,16 +1859,14 @@ export default function Home() {
           <div className="space-y-4">
             {result?.posts.map((post, index) => {
               const bodyLineOptions = buildEditableBodyLines(post.body);
-              const selectableBodyLines = bodyLineOptions.filter((lineOption) => !lineOption.isBlank);
-              const selectedLineIndex = selectableBodyLines.some(
-                (lineOption) => lineOption.lineIndex === selectedLineByPost[index],
-              )
-                ? selectedLineByPost[index]
-                : (selectableBodyLines[0]?.lineIndex ?? bodyLineOptions[0]?.lineIndex ?? 0);
-              const selectedLine = bodyLineOptions.find((lineOption) => lineOption.lineIndex === selectedLineIndex);
+              const selectedLine = bodyLineOptions.find(
+                (lineOption) => lineOption.lineIndex === selectedLineByPost[index] && !lineOption.isBlank,
+              );
               const manualLineDraft = manualLineDraftByPost[index] ?? selectedLine?.text ?? "";
               const isPostRewriteLoading = rewriteLoadingKey === `post-${index}`;
-              const isLineRewriteLoading = rewriteLoadingKey === `line-${index}-${selectedLineIndex}`;
+              const isLineRewriteLoading = selectedLine
+                ? rewriteLoadingKey === `line-${index}-${selectedLine.lineIndex}`
+                : false;
 
               return (
                 <article key={`${post.hook}-${index}`} className="rounded-3xl border border-black/10 bg-white p-4 shadow-[0_10px_24px_rgba(0,0,0,0.07)] sm:p-5">
@@ -1865,14 +1887,82 @@ export default function Home() {
                   </div>
 
                   <p className="mb-3 text-lg font-semibold leading-snug">{post.hook}</p>
-                  <p className="whitespace-pre-wrap text-sm leading-relaxed text-slate-700">{post.body}</p>
+                  <div className="space-y-1 rounded-xl border border-black/10 bg-slate-50/70 p-2">
+                    <p className="px-1 text-xs text-slate-500">Click a body line to edit it inline.</p>
+                    {bodyLineOptions.map((lineOption) => {
+                      if (lineOption.isBlank) {
+                        return <div key={`${index}-${lineOption.lineIndex}`} className="h-2" />;
+                      }
+
+                      const isSelected = selectedLine?.lineIndex === lineOption.lineIndex;
+
+                      if (isSelected) {
+                        return (
+                          <div key={`${index}-${lineOption.lineIndex}`} className="rounded-lg border border-slate-900 bg-white p-2">
+                            <p className="mb-1 text-[11px] font-semibold uppercase tracking-wide text-slate-500">
+                              L{lineOption.lineIndex + 1} editing
+                            </p>
+                            <textarea
+                              rows={2}
+                              autoFocus
+                              className="w-full rounded-lg border border-black/10 bg-white px-2 py-2 text-sm text-slate-700 outline-none transition focus:border-slate-900"
+                              value={manualLineDraft}
+                              onChange={(event) =>
+                                setManualLineDraftByPost((prev) => ({
+                                  ...prev,
+                                  [index]: event.target.value,
+                                }))
+                              }
+                            />
+                            <div className="mt-2 flex flex-wrap gap-2">
+                              <button
+                                type="button"
+                                className="rounded-lg border border-black/10 bg-white px-2 py-1 text-xs text-slate-700 hover:bg-slate-100 disabled:cursor-not-allowed disabled:opacity-60"
+                                disabled={isLoading || Boolean(rewriteLoadingKey) || !manualLineDraft.trim()}
+                                onClick={() => applyManualBodyLineEdit(index, lineOption.lineIndex)}
+                              >
+                                Save Line
+                              </button>
+                              <button
+                                type="button"
+                                className="rounded-lg border border-black/10 bg-white px-2 py-1 text-xs text-slate-700 hover:bg-slate-100 disabled:cursor-not-allowed disabled:opacity-60"
+                                disabled={isLoading || isLineRewriteLoading || Boolean(rewriteLoadingKey)}
+                                onClick={() => regenerateBodyLine(index, lineOption.lineIndex)}
+                              >
+                                {isLineRewriteLoading ? "AI Rewriting..." : "AI Rewrite Line"}
+                              </button>
+                              <button
+                                type="button"
+                                className="rounded-lg border border-black/10 bg-white px-2 py-1 text-xs text-slate-700 hover:bg-slate-100 disabled:cursor-not-allowed disabled:opacity-60"
+                                disabled={isLoading || Boolean(rewriteLoadingKey)}
+                                onClick={() => cancelBodyLineEdit(index)}
+                              >
+                                Cancel
+                              </button>
+                            </div>
+                          </div>
+                        );
+                      }
+
+                      return (
+                        <button
+                          key={`${index}-${lineOption.lineIndex}`}
+                          type="button"
+                          className="w-full rounded-md border border-transparent px-1 py-0.5 text-left text-sm leading-relaxed text-slate-700 transition hover:border-black/10 hover:bg-white"
+                          onClick={() => selectBodyLineForEditing(index, lineOption.lineIndex, lineOption.text)}
+                        >
+                          {lineOption.text}
+                        </button>
+                      );
+                    })}
+                  </div>
                   <p className="mt-4 whitespace-pre-wrap text-sm font-medium text-slate-900">{post.cta}</p>
 
                   <div className="mt-5 space-y-3 rounded-2xl border border-black/10 bg-slate-50 p-3">
-                    <p className="text-xs font-semibold uppercase tracking-wide text-slate-600">Edit and Regenerate</p>
+                    <p className="text-xs font-semibold uppercase tracking-wide text-slate-600">Rewrite Entire Post</p>
 
                     <label className="space-y-1">
-                      <span className="text-sm font-medium">Rewrite Entire Post</span>
+                      <span className="text-sm font-medium">AI Rewrite Prompt (optional)</span>
                       <textarea
                         rows={2}
                         placeholder="Optional rewrite prompt, e.g. make it punchier for founders and add one concrete metric."
@@ -1895,94 +1985,11 @@ export default function Home() {
                     >
                       {isPostRewriteLoading ? "Rewriting post..." : "Rewrite Post"}
                     </button>
-
-                    <div className="space-y-2">
-                      <p className="text-sm font-medium">Click A Body Line To Edit</p>
-                      <div className="space-y-1 rounded-xl border border-black/10 bg-white p-2">
-                        {bodyLineOptions.map((lineOption) => {
-                          if (lineOption.isBlank) {
-                            return <div key={`${index}-${lineOption.lineIndex}`} className="h-2" />;
-                          }
-
-                          const isSelected = selectedLineIndex === lineOption.lineIndex;
-                          const compact = lineOption.text.trim().replace(/\s+/g, " ");
-                          const preview = compact.length > 180 ? `${compact.slice(0, 180)}...` : compact;
-
-                          return (
-                            <button
-                              key={`${index}-${lineOption.lineIndex}`}
-                              type="button"
-                              className={`w-full rounded-lg border px-2 py-2 text-left text-sm transition ${
-                                isSelected
-                                  ? "border-slate-900 bg-slate-50 text-slate-900"
-                                  : "border-transparent bg-white text-slate-700 hover:border-black/10 hover:bg-slate-50"
-                              }`}
-                              onClick={() => selectBodyLineForEditing(index, lineOption.lineIndex, lineOption.text)}
-                            >
-                              <span className="mr-2 text-xs font-semibold text-slate-500">L{lineOption.lineIndex + 1}</span>
-                              {preview}
-                            </button>
-                          );
-                        })}
-                      </div>
-                    </div>
-
-                    <label className="space-y-1">
-                      <span className="text-sm font-medium">Manual Edit For Selected Line</span>
-                      <textarea
-                        rows={2}
-                        placeholder="Edit the selected line manually..."
-                        className="w-full rounded-xl border border-black/10 bg-white px-3 py-2 text-sm outline-none transition focus:border-slate-900"
-                        value={manualLineDraft}
-                        onChange={(event) =>
-                          setManualLineDraftByPost((prev) => ({
-                            ...prev,
-                            [index]: event.target.value,
-                          }))
-                        }
-                      />
-                    </label>
-
-                    <div className="grid gap-2 sm:grid-cols-2">
-                      <button
-                        type="button"
-                        className="rounded-lg border border-black/10 bg-white px-3 py-2 text-sm text-slate-700 hover:bg-slate-100 disabled:cursor-not-allowed disabled:opacity-60"
-                        disabled={isLoading || Boolean(rewriteLoadingKey) || !selectedLine}
-                        onClick={() => applyManualBodyLineEdit(index, selectedLineIndex)}
-                      >
-                        Apply Manual Edit
-                      </button>
-
-                      <button
-                        type="button"
-                        className="rounded-lg border border-black/10 bg-white px-3 py-2 text-sm text-slate-700 hover:bg-slate-100 disabled:cursor-not-allowed disabled:opacity-60"
-                        disabled={isLoading || isLineRewriteLoading || Boolean(rewriteLoadingKey) || !selectedLine}
-                        onClick={() => regenerateBodyLine(index, selectedLineIndex)}
-                      >
-                        {isLineRewriteLoading ? "Regenerating line..." : "Regenerate Selected Line"}
-                      </button>
-                    </div>
-
-                    <label className="space-y-1">
-                      <span className="text-sm font-medium">AI Prompt For Selected Line</span>
-                      <textarea
-                        rows={2}
-                        placeholder="Optional line prompt, e.g. make this line more contrarian with a stronger data point."
-                        className="w-full rounded-xl border border-black/10 bg-white px-3 py-2 text-sm outline-none transition focus:border-slate-900"
-                        value={linePromptByPost[index] ?? ""}
-                        onChange={(event) =>
-                          setLinePromptByPost((prev) => ({
-                            ...prev,
-                            [index]: event.target.value,
-                          }))
-                        }
-                      />
-                    </label>
-
-                    {rewriteErrorByPost[index] ? (
-                      <p className="rounded-xl bg-red-50 px-3 py-2 text-xs text-red-700">{rewriteErrorByPost[index]}</p>
-                    ) : null}
                   </div>
+
+                  {rewriteErrorByPost[index] ? (
+                    <p className="mt-3 rounded-xl bg-red-50 px-3 py-2 text-xs text-red-700">{rewriteErrorByPost[index]}</p>
+                  ) : null}
 
                   {(() => {
                     const memeVariants = post.memeVariants?.length ? post.memeVariants : post.meme ? [post.meme] : [];
