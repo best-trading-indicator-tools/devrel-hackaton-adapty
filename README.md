@@ -1,149 +1,305 @@
-# Adapty LinkedIn Content Generator
+# Adapty LinkedIn Content Studio
 
-A Next.js app that generates high-performing LinkedIn posts and hook ideas from your own content library.
+Next.js app that generates LinkedIn posts, hooks, meme companions, and optional chart companions from your historical content libraries.
 
-## What this app includes
+## Current implementation status
 
-- Web UI with inputs for:
-  - brand voice (`adapty`, `founder personal`, `bold / contrarian`, `technical breakdown`, `playful meme tone`, or custom)
-  - goal (`virality`, `engagement`, `traffic`, `awareness`, `balanced`) with automatic metric-weight profile
-  - post type
-  - time
-  - place
-  - CTA link
-  - optional image attachment (model vision context)
-  - length (`short`, `standard`, `long`, `mix`)
-  - number of posts
-  - extra prompt details
-- API route: `POST /api/generate`
-- Local `.txt` library retrieval (default)
-- Optional embeddings retrieval with OpenAI embeddings + LanceDB (`ENABLE_LANCEDB=true`)
-- Automatic Memegen companions for `Meme / shitpost` post type with ranked variants
-  - `Meme Variants Per Post` x `Number of Posts` = total meme images generated
-  - Meme tone preset dropdown for faster setup
-  - Template picker with live Memegen template fetch, search, image previews, and curated fallback
-  - Optional multi-template selection (choose one or many, or leave Auto)
-- Optional chart companions rendered server-side with `chart.js` + `canvas` from your chosen chart type, labels, and values
+Everything below is already implemented in this repo on `main`.
+
+### Core product
+
+- Web UI for marketers at `src/app/page.tsx`
+- API endpoint at `POST /api/generate`
+- Generation with `gpt-5.3-codex` by default
+- Strong formatting guardrails for LinkedIn readability
+- No em dash output normalization for hooks, posts, meme text, and chart title
+
+### Inputs supported
+
+- Brand Voice
+  - Presets: `adapty`, `clickbait`, `founder personal`, `bold / contrarian`, `technical breakdown`, `playful meme tone`
+  - Custom option with free text field
+- Hook Style
+  - Presets: `balanced`, `clickbait`, `data-driven`, `question-led`, `contrarian`, `story-led`
+  - Custom option with free text field
+- Goal
+  - `virality`, `engagement`, `traffic`, `awareness`, `balanced`
+- Post Type
+  - Product feature launch
+  - Event / webinar promo
+  - Sauce: breakdown / guide
+  - Sauce: data insight
+  - Meme / shitpost
+  - Industry news reaction
+  - Engagement farming: poll/quiz
+  - Case study / social proof
+  - Hiring / team culture
+  - Milestone / company update
+  - Controversial hot take
+  - Curated roundup
+- Time and Place
+  - Time uses `datetime-local` picker
+  - Only shown when post type implies event/webinar
+- CTA Link
+  - Optional
+  - If provided, appended into final CTA line in generated post
+- Attach Image
+  - Optional
+  - Image is resized/compressed client-side, sent as data URL, and used as extra model context
+- Input Length
+  - `short`, `standard`, `long`, `mix`
+- Number of Posts
+  - 1 to 12
+- Extra Prompt Details
+  - Free text instruction field
+
+### Conditional UI behavior
+
+- Event fields (`Time`, `Place`) only appear for event/webinar post types
+- Meme options only appear for meme/shitpost post type
+- Chart options are hidden for meme/shitpost post type
+- CTA link is optional
+
+### Meme companion system
+
+- Enabled only for meme/shitpost post type
+- Meme tone dropdown:
+  - `auto`, `playful`, `contrarian`, `clickbait`, `absurd`, `deadpan`, `sarcastic`, `dramatic`, `wholesome`
+- Variants per post (1 to 6)
+- Total generated meme images = `numberOfPosts x memeVariantCount`
+- Template picker:
+  - Fetches live templates from `https://api.memegen.link/templates/`
+  - Searchable
+  - Shows template preview images
+  - Multi-select template support
+  - Auto mode when nothing is selected
+  - Fallback to curated local list if live template fetch fails
+- Meme output rendering:
+  - Top variant + additional variants per post
+  - Each variant includes image URL, top text, bottom text, score, and short reason
+
+### Chart companion system
+
+- Optional checkbox: `Add Chart Companion`
+- No JSON required in UI
+- Chart data entry is row-based:
+  - Label
+  - Primary value
+  - Optional secondary value for non-radial charts
+- Supported chart types:
+  - `bar`, `line`, `doughnut`, `pie`, `polarArea`, `radar`
+- Rendered server-side with `chart.js + canvas`
+- Returns one PNG chart per generation run
+- Included in UI result with preview + Download PNG + Copy Data URL
+
+### Retrieval and library intelligence
+
+- Two libraries are read and merged for context:
+  - `content/linkedin-adapty-library.txt`
+  - `content/linkedin-others-library.txt`
+- Block separator: line containing `---`
+- Optional performance metadata per block:
+  - `Impressions`, `Likes`, `Comments`, `Repost/Reposts`, `Clicks`, `CTR`
+- Source-aware behavior:
+  - `adapty` source examples are canonical tone when Brand Voice is `adapty`
+  - `others` source examples are used for angle/pattern inspiration, not final brand tone
+- Retrieval methods:
+  - Lexical retrieval (default)
+  - LanceDB retrieval with embeddings (optional)
+- Automatic fallback:
+  - If LanceDB fails, lexical retrieval is used
+- Performance pattern extraction:
+  - Analyzes metrics and pattern frequency to enrich prompt context
+  - Goal-aware weighting profile changes by selected goal
+
+### Goal weighting profiles used in retrieval scoring
+
+These are implemented in `src/lib/library-retrieval.ts`.
+
+| Goal | impressionsLog | likes | comments | reposts | clicks | engagementRate | ctr |
+|---|---:|---:|---:|---:|---:|---:|---:|
+| virality | 32 | 1.2 | 3.2 | 6.2 | 0.8 | 220 | 45 |
+| engagement | 14 | 1.8 | 6.5 | 3.4 | 0.9 | 300 | 45 |
+| traffic | 10 | 1.0 | 2.4 | 2.1 | 3.8 | 110 | 320 |
+| awareness | 52 | 1.1 | 2.2 | 3.8 | 0.6 | 130 | 35 |
+| balanced | 22 | 1.5 | 3.5 | 3.8 | 2.0 | 180 | 140 |
+
+## Generation behavior and prompt policy
+
+- System prompt is explicitly anchored to Adapty business context:
+  - "You create LinkedIn content at scale for Adapty"
+  - Adapty described as helping app makers monetize mobile apps
+- If Brand Voice is `adapty`, prompt instructs model to mirror `linkedin-adapty-library` tone closely
+- If Hook Style is `clickbait`, prompt applies curiosity-gap style while requiring truthful claims
+- If Goal is `virality`, prompt applies explicit contrarian truth directive
+- If CTA link is provided, API ensures it is included in final CTA line
+- Image context is passed to model when attached
+
+## Auth and model routing
+
+- Preferred auth path: Codex OAuth
+- API key path supported as fallback
+- Model fallback supported for unavailable model access
+
+Priority order:
+
+1. Codex OAuth credentials (`OPENAI_OAUTH_TOKEN` or `~/.codex/auth.json`)
+2. API key (`OPENAI_API_KEY` or `OPENAI_ACCESS_TOKEN`)
+
+Codex OAuth path details:
+
+- Uses Codex Responses endpoint (`/codex/responses`)
+- Supports image input
+- Supports strict JSON schema outputs
+- Reads from env or `~/.codex/auth.json`
+- Can auto-refresh OAuth token when refresh token is available
+
+## Environment variables
+
+Use `.env` (local) and set same keys in Vercel project settings.
+
+### Generation/auth
+
+- `OPENAI_MODEL` (default `gpt-5.3-codex`)
+- `OPENAI_MODEL_FALLBACK` (default `gpt-5.2`)
+- `OPENAI_OAUTH_TOKEN`
+- `OPENAI_OAUTH_REFRESH_TOKEN` (optional)
+- `OPENAI_OAUTH_ACCOUNT_ID` (optional if derivable)
+- `OPENAI_OAUTH_EXPIRES_AT` (optional)
+- `OPENAI_API_KEY` (API key mode and embeddings)
+- `OPENAI_ACCESS_TOKEN` (alternative API key var)
+- `OPENAI_BASE_URL` (optional OpenAI-compatible endpoint for API-key mode)
+- `OPENAI_CODEX_BASE_URL` (optional Codex backend override)
+
+### Retrieval
+
+- `ENABLE_LANCEDB=true|false`
+- `OPENAI_EMBEDDING_MODEL` (default `text-embedding-3-small`)
+- `OPENAI_EMBEDDING_BASE_URL` (optional)
+
+### Memes
+
+- `MEMEGEN_BASE_URL` (optional, defaults to `https://api.memegen.link`)
+
+## Why `text-embedding-3-small` by default
+
+- Lower cost
+- Faster indexing and retrieval
+- Good quality for this library-matching use case
+
+If you want more semantic precision, switch to `text-embedding-3-large`.
 
 ## Content library format
 
-Edit both:
-- `content/linkedin-adapty-library.txt` for your own Adapty posts
-- `content/linkedin-others-library.txt` for competitor/market posts
+Use these two files only:
 
-- Put one example post per block
-- Separate blocks with a line containing `---`
-- Add as many examples as you want
-- Optional: add performance metadata at the top of a block:
-  - `Impressions: 12000`
-  - `Likes: 340`
-  - `Comments: 42`
-  - `Repost: 15`
-  - `Clicks: 180`
-  - `CTR: 5.49%`
-- Metadata lines must appear before the post text in that block.
-- In `content/linkedin-others-library.txt`, `Likes`, `Comments`, and `Reposts` are enough. `Impressions`, `Clicks`, and `CTR` are optional.
+- `content/linkedin-adapty-library.txt`
+- `content/linkedin-others-library.txt`
 
-Example:
+Formatting rules:
+
+- One post block per example
+- Separate blocks with `---`
+- Metric lines go at the top of block, before post text
+- `linkedin-others-library.txt` can omit `Impressions`, `Clicks`, `CTR`
+
+Example block:
 
 ```txt
-Impressions: 24.5k
-Likes: 690
-Comments: 81
-You asked, we built it.
-[Feature] is live.
+Impressions: 1511
+Likes: 52
+Comments: 2
+Repost: 1
+Clicks: 83
+CTR: 5.49%
 
-What changed:
-- ...
+We're heading to Apps Forum Lisbon on March 4, and bringing the full crew.
+...
 ---
 ```
 
-## Local setup
+## API contract
 
-1. Install dependencies:
+### Endpoint
+
+- `POST /api/generate`
+
+### Request body (high level)
+
+- `style`
+- `hookStyle`
+- `goal`
+- `inputType`
+- `time` (optional/conditional)
+- `place` (optional/conditional)
+- `ctaLink` (optional)
+- `imageDataUrl` (optional)
+- `inputLength`
+- `numberOfPosts`
+- `details`
+- `memeTone` / `memeBrief` / `memeTemplateIds[]` / `memeVariantCount` (meme mode)
+- `chartEnabled` / `chartType` / `chartTitle` / `chartData` / `chartOptions` (chart mode)
+
+### Response body (high level)
+
+- `hooks[]`
+- `posts[]`
+  - `hook`, `body`, `cta`, `length`
+  - optional `meme` and `memeVariants[]`
+- optional `chart`
+- `generation` metadata
+- `retrieval` metadata
+
+Note: generation/retrieval metadata is returned by API but intentionally not shown in UI.
+
+## Local development
 
 ```bash
 npm install
-```
-
-2. Configure env vars:
-
-```bash
-cp .env.example .env.local
-```
-
-For generation, OAuth is preferred:
-
-- Set `OPENAI_OAUTH_TOKEN` (+ `OPENAI_OAUTH_ACCOUNT_ID`, optional refresh vars), or
-- On local macOS/Linux with Codex CLI installed, the app auto-reads `~/.codex/auth.json`.
-
-For embeddings/LanceDB, set `OPENAI_API_KEY` (OAuth tokens usually do not have embeddings scope).
-
-3. Run:
-
-```bash
+cp .env.example .env
 npm run dev
 ```
 
-## API request example
+If you get a lock error like `.next/dev/lock`, stop other running `next dev` process first, then restart.
 
-```bash
-curl -X POST http://localhost:3000/api/generate \
-  -H "Content-Type: application/json" \
-  -d '{
-    "style":"adapty",
-    "goal":"virality",
-    "inputType":"Event / webinar promo",
-    "chartEnabled": true,
-    "chartType":"doughnut",
-    "chartTitle":"Trial strategy split",
-    "chartData":"{\"labels\":[\"Without trial\",\"Paid trial\",\"Free trial\"],\"datasets\":[{\"label\":\"Share %\",\"data\":[56.9,28.9,14.3]}]}",
-    "chartOptions":"{\"plugins\":{\"legend\":{\"position\":\"right\"}}}",
-    "time":"March 5, 2026 at 6pm CET",
-    "place":"Online",
-    "ctaLink":"https://adapty.io/webinar",
-    "imageDataUrl":"data:image/jpeg;base64,...",
-    "inputLength":"mix",
-    "numberOfPosts":4,
-    "details":"Focus on practical mobile subscription wins and urgency."
-  }'
-```
+## Build and deployment
 
-## Vercel preset
+### Vercel preset
 
-Select **Next.js** (correct choice).
+- Use `Next.js` preset
 
-## Model routing
+### Auto deploy on push
 
-- Default model is `OPENAI_MODEL=gpt-5.3-codex`.
-- Generation auth priority:
-  1. Codex OAuth (`OPENAI_OAUTH_TOKEN` or `~/.codex/auth.json`)
-  2. API key (`OPENAI_API_KEY` / `OPENAI_ACCESS_TOKEN`)
-- If the requested model is unavailable, the API auto-retries with `OPENAI_MODEL_FALLBACK` (default `gpt-5.2`).
-- Codex OAuth calls `https://chatgpt.com/backend-api/codex/responses` by default (override with `OPENAI_CODEX_BASE_URL`).
-- API-key mode uses Chat Completions and supports `OPENAI_BASE_URL` for OpenAI-compatible gateways.
+- Connect the correct GitHub repo to your Vercel project
+- Ensure production branch is `main`
+- Push commits to `main`
 
-## Deploy (claimable preview)
+### Serverless size handling
 
-This project can be deployed with the `vercel-deploy` skill script:
+- `prebuild` runs `scripts/prune-lancedb-binaries.mjs`
+- On Linux builds it keeps only one LanceDB native binary variant (glibc or musl)
 
-```bash
-bash /Users/dave/.codex/skills/vercel-deploy/scripts/deploy.sh .
-```
+## Troubleshooting
 
-The script returns:
+### Chart rendering failed
 
-- `Preview URL` (live immediately)
-- `Claim URL` (attach deployment to your Vercel account/project)
+- Validate chart rows have matching label/value counts
+- Ensure numeric fields are valid numbers
+- API returns detailed chart error message in response `message`
 
-## Notes
+### Memegen template list fails to load
 
-- If `ENABLE_LANCEDB=true`, the app builds/uses a local `.lancedb` index for retrieval.
-- If LanceDB retrieval fails, the API falls back to lexical retrieval from the `.txt` library.
-- Retrieval scoring weights auto-switch by selected goal; exact weight profiles are documented at the top of `content/linkedin-adapty-library.txt`.
-- Retrieval combines both Adapty and Others libraries, and each example is tagged by source in prompt context.
-- Vercel/serverless builds run a prebuild prune step to keep only one Linux LanceDB native package (`gnu` or `musl`) so `api/generate` stays under function size limits.
-- `OPENAI_EMBEDDING_MODEL=text-embedding-3-small` is the default for speed and lower cost when indexing large libraries.
-- If you want higher semantic precision and accept higher cost/latency, switch to `text-embedding-3-large`.
-- OAuth-only setups can still generate posts, but may fall back to lexical retrieval because embeddings usually require API-key scopes.
-- Memegen URLs default to `https://api.memegen.link`; set `MEMEGEN_BASE_URL` to your own Memegen host if you self-host.
+- UI automatically falls back to curated local template list
+- Generation still works
+
+### No Vercel deploy after push
+
+- Confirm Vercel project Git integration points to this repo:
+  - `best-trading-indicator-tools/devrel-hackaton-adapty`
+- Confirm push landed on tracked branch (`main`)
+
+## Security notes
+
+- Never commit OAuth tokens or API keys
+- Keep secrets only in local `.env` and Vercel environment variables
+
