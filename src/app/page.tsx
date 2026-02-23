@@ -741,9 +741,9 @@ export default function Home() {
   }
 
   return (
-    <main className="mx-auto min-h-screen max-w-6xl px-4 py-6 text-slate-900 sm:px-6 sm:py-8 md:px-8 md:py-10">
-      <section className="grid items-start gap-6 lg:grid-cols-[minmax(0,1.05fr)_minmax(0,1.2fr)] lg:gap-8">
-        <form onSubmit={onSubmit} className="min-w-0 space-y-5 rounded-3xl border border-black/10 bg-white/90 p-4 shadow-[0_12px_40px_rgba(0,0,0,0.08)] backdrop-blur sm:p-6">
+    <main className="mx-auto min-h-screen max-w-[96rem] px-4 py-6 text-slate-900 sm:px-6 sm:py-8 md:px-8 md:py-10">
+      <section className="space-y-6 lg:space-y-8">
+        <form onSubmit={onSubmit} className="w-full min-w-0 space-y-5 rounded-3xl border border-black/10 bg-white/90 p-4 shadow-[0_12px_40px_rgba(0,0,0,0.08)] backdrop-blur sm:p-6">
           <header className="space-y-2">
             <p className="inline-block rounded-full bg-slate-900 px-3 py-1 text-xs tracking-wide text-white">LinkedIn Generator</p>
             <h1 className="text-3xl font-semibold leading-tight md:text-4xl">Adapty Content Studio</h1>
