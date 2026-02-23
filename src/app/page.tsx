@@ -107,6 +107,11 @@ type EditableBodyLine = {
 
 type RewriteContext = Pick<FormState, "style" | "goal" | "inputType" | "ctaLink" | "details">;
 
+type PostTypeAllocation = {
+  inputType: string;
+  count: number;
+};
+
 function IconPencil({ className }: { className?: string }) {
   return (
     <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8" className={className} aria-hidden>
@@ -409,6 +414,32 @@ function needsChartDetails(inputType: string): boolean {
   return !MEME_TOPIC_PATTERN.test(inputType);
 }
 
+function buildPostTypeAllocations(inputTypes: string[], totalPosts: number): PostTypeAllocation[] {
+  const uniqueTypes = Array.from(new Set(inputTypes)).filter((type) => POST_TYPE_OPTIONS.includes(type as (typeof POST_TYPE_OPTIONS)[number]));
+  const safeTypes = uniqueTypes.length ? uniqueTypes : [defaultForm.inputType];
+  const safeTotal = Math.max(1, Math.trunc(totalPosts));
+  const base = Math.floor(safeTotal / safeTypes.length);
+  const remainder = safeTotal % safeTypes.length;
+
+  return safeTypes
+    .map((inputType, index) => ({
+      inputType,
+      count: base + (index < remainder ? 1 : 0),
+    }))
+    .filter((allocation) => allocation.count > 0);
+}
+
+function summarizeSelectedPostTypes(inputTypes: string[]): string {
+  if (!inputTypes.length) {
+    return defaultForm.inputType;
+  }
+  if (inputTypes.length <= 2) {
+    return inputTypes.join(", ");
+  }
+
+  return `${inputTypes.slice(0, 2).join(", ")} +${inputTypes.length - 2} more`;
+}
+
 function buildEditableBodyLines(body: string): EditableBodyLine[] {
   const rawLines = body.split("\n");
   if (!rawLines.length) {
@@ -556,6 +587,8 @@ export default function Home() {
     details: defaultForm.details,
   };
   const [form, setForm] = useState<FormState>(defaultForm);
+  const [selectedPostTypes, setSelectedPostTypes] = useState<string[]>(() => [defaultForm.inputType]);
+  const [postTypeByPostIndex, setPostTypeByPostIndex] = useState<Record<number, string>>({});
   const [numberOfPostsInput, setNumberOfPostsInput] = useState<string>(() => String(defaultForm.numberOfPosts));
   const [brandVoiceSelection, setBrandVoiceSelection] = useState<string>(() =>
     isBrandVoicePreset(defaultForm.style) ? defaultForm.style : CUSTOM_BRAND_VOICE,
@@ -580,9 +613,26 @@ export default function Home() {
   const [memeTemplateSearch, setMemeTemplateSearch] = useState("");
   const [memeTemplateLoadError, setMemeTemplateLoadError] = useState("");
   const imageInputRef = useRef<HTMLInputElement>(null);
-  const showEventFields = useMemo(() => needsEventDetails(form.inputType), [form.inputType]);
-  const showMemeFields = useMemo(() => needsMemeDetails(form.inputType), [form.inputType]);
-  const showChartFields = useMemo(() => needsChartDetails(form.inputType), [form.inputType]);
+  const normalizedSelectedPostTypes = useMemo(
+    () => (selectedPostTypes.length ? selectedPostTypes : [defaultForm.inputType]),
+    [selectedPostTypes],
+  );
+  const showEventFields = useMemo(
+    () => normalizedSelectedPostTypes.some((type) => needsEventDetails(type)),
+    [normalizedSelectedPostTypes],
+  );
+  const showMemeFields = useMemo(
+    () => normalizedSelectedPostTypes.some((type) => needsMemeDetails(type)),
+    [normalizedSelectedPostTypes],
+  );
+  const showChartFields = useMemo(
+    () => normalizedSelectedPostTypes.some((type) => needsChartDetails(type)),
+    [normalizedSelectedPostTypes],
+  );
+  const selectedPostTypeSummary = useMemo(
+    () => summarizeSelectedPostTypes(normalizedSelectedPostTypes),
+    [normalizedSelectedPostTypes],
+  );
   const showCustomBrandVoiceInput = brandVoiceSelection === CUSTOM_BRAND_VOICE;
   const selectedBrandVoiceLabel =
     brandVoiceSelection === CUSTOM_BRAND_VOICE
@@ -619,12 +669,17 @@ export default function Home() {
   );
 
   const subtitle = useMemo(() => {
+    const typeScope =
+      normalizedSelectedPostTypes.length > 1
+        ? ` across ${normalizedSelectedPostTypes.length} post types`
+        : "";
+
     if (form.inputLength !== "mix") {
-      return `${form.numberOfPosts} post${form.numberOfPosts > 1 ? "s" : ""} in ${formatLengthLabel(form.inputLength)} format`;
+      return `${form.numberOfPosts} post${form.numberOfPosts > 1 ? "s" : ""}${typeScope} in ${formatLengthLabel(form.inputLength)} format`;
     }
 
-    return `${form.numberOfPosts} post${form.numberOfPosts > 1 ? "s" : ""} with mixed lengths (Short, Standard, Long)`;
-  }, [form.inputLength, form.numberOfPosts]);
+    return `${form.numberOfPosts} post${form.numberOfPosts > 1 ? "s" : ""}${typeScope} with mixed lengths (Short, Standard, Long)`;
+  }, [form.inputLength, form.numberOfPosts, normalizedSelectedPostTypes.length]);
   const totalMemeVariants = useMemo(() => {
     const posts = Math.max(1, Number(form.numberOfPosts) || 1);
     const perPost = Math.max(1, Number(form.memeVariantCount) || defaultForm.memeVariantCount);
@@ -697,15 +752,29 @@ export default function Home() {
   }
 
   function applyPostTypeSelection(nextType: string) {
+    const isSelected = selectedPostTypes.includes(nextType);
+
+    if (isSelected && selectedPostTypes.length === 1) {
+      return;
+    }
+
+    const nextSelected = isSelected
+      ? selectedPostTypes.filter((type) => type !== nextType)
+      : [...selectedPostTypes, nextType];
+    const effectiveSelected = nextSelected.length ? nextSelected : [nextType];
+
+    setSelectedPostTypes(effectiveSelected);
     setForm((prev) => ({
       ...prev,
-      inputType: nextType,
-      time: needsEventDetails(nextType) ? prev.time : "",
-      place: needsEventDetails(nextType) ? prev.place : "",
-      chartEnabled: needsChartDetails(nextType) ? prev.chartEnabled : false,
-      memeBrief: needsMemeDetails(nextType) ? prev.memeBrief : "",
-      memeTemplateIds: needsMemeDetails(nextType) ? prev.memeTemplateIds : [],
-      memeVariantCount: needsMemeDetails(nextType) ? prev.memeVariantCount : defaultForm.memeVariantCount,
+      inputType: effectiveSelected[0] ?? prev.inputType,
+      time: effectiveSelected.some((type) => needsEventDetails(type)) ? prev.time : "",
+      place: effectiveSelected.some((type) => needsEventDetails(type)) ? prev.place : "",
+      chartEnabled: effectiveSelected.some((type) => needsChartDetails(type)) ? prev.chartEnabled : false,
+      memeBrief: effectiveSelected.some((type) => needsMemeDetails(type)) ? prev.memeBrief : "",
+      memeTemplateIds: effectiveSelected.some((type) => needsMemeDetails(type)) ? prev.memeTemplateIds : [],
+      memeVariantCount: effectiveSelected.some((type) => needsMemeDetails(type))
+        ? prev.memeVariantCount
+        : defaultForm.memeVariantCount,
     }));
   }
 
@@ -831,6 +900,7 @@ export default function Home() {
     setLineFeedbackByPost({});
     setCopyFeedbackByPost({});
     setRewriteLoadingKey(null);
+    setPostTypeByPostIndex({});
 
     if (isImageProcessing) {
       setError("Image is still processing. Please wait a second and retry.");
@@ -839,10 +909,19 @@ export default function Home() {
     }
 
     try {
+      const postTypeAllocations = buildPostTypeAllocations(normalizedSelectedPostTypes, committedNumberOfPosts);
+      if (!postTypeAllocations.length) {
+        setError("Please select at least one post type.");
+        setIsLoading(false);
+        return;
+      }
+
       let chartDataPayload = "";
       let chartOptionsPayload = "";
+      const shouldValidateChart =
+        form.chartEnabled && postTypeAllocations.some((allocation) => needsChartDetails(allocation.inputType));
 
-      if (showChartFields && form.chartEnabled) {
+      if (shouldValidateChart) {
         const chartPayload = buildChartPayload(form);
         if ("error" in chartPayload) {
           setError(chartPayload.error);
@@ -854,44 +933,124 @@ export default function Home() {
         chartOptionsPayload = chartPayload.chartOptions;
       }
 
-      const requestPayload = {
-        ...form,
-        numberOfPosts: committedNumberOfPosts,
-        chartEnabled: showChartFields ? form.chartEnabled : false,
-        chartType: showChartFields && form.chartEnabled ? form.chartType : defaultForm.chartType,
-        chartTitle: showChartFields && form.chartEnabled ? form.chartTitle : "",
-        chartData: showChartFields && form.chartEnabled ? chartDataPayload : "",
-        chartOptions: showChartFields && form.chartEnabled ? chartOptionsPayload : "",
-        time: showEventFields ? formatEventTimeForPrompt(form.time) : "",
-        place: showEventFields ? form.place : "",
-        memeBrief: showMemeFields ? form.memeBrief : "",
-        memeTemplateIds: showMemeFields ? form.memeTemplateIds : [],
-        memeVariantCount: showMemeFields ? form.memeVariantCount : defaultForm.memeVariantCount,
-      };
-      const nextRewriteContext: RewriteContext = {
-        style: requestPayload.style,
-        goal: requestPayload.goal,
-        inputType: requestPayload.inputType,
-        ctaLink: requestPayload.ctaLink,
-        details: requestPayload.details,
-      };
+      const generationChunks: Array<{ inputType: string; response: GeneratePostsResponse }> = [];
 
-      const response = await fetch("/api/generate", {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify(requestPayload),
-      });
+      for (const allocation of postTypeAllocations) {
+        const typeNeedsChart = needsChartDetails(allocation.inputType);
+        const typeNeedsEvent = needsEventDetails(allocation.inputType);
+        const typeNeedsMeme = needsMemeDetails(allocation.inputType);
 
-      const responsePayload = await response.json();
+        const requestPayload = {
+          ...form,
+          inputType: allocation.inputType,
+          numberOfPosts: allocation.count,
+          chartEnabled: typeNeedsChart ? form.chartEnabled : false,
+          chartType: typeNeedsChart && form.chartEnabled ? form.chartType : defaultForm.chartType,
+          chartTitle: typeNeedsChart && form.chartEnabled ? form.chartTitle : "",
+          chartData: typeNeedsChart && form.chartEnabled ? chartDataPayload : "",
+          chartOptions: typeNeedsChart && form.chartEnabled ? chartOptionsPayload : "",
+          time: typeNeedsEvent ? formatEventTimeForPrompt(form.time) : "",
+          place: typeNeedsEvent ? form.place : "",
+          memeBrief: typeNeedsMeme ? form.memeBrief : "",
+          memeTemplateIds: typeNeedsMeme ? form.memeTemplateIds : [],
+          memeVariantCount: typeNeedsMeme ? form.memeVariantCount : defaultForm.memeVariantCount,
+        };
 
-      if (!response.ok) {
-        setError(extractApiErrorMessage(responsePayload, response.status));
+        const response = await fetch("/api/generate", {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify(requestPayload),
+        });
+
+        const responsePayload = await response.json();
+
+        if (!response.ok) {
+          setError(`[${allocation.inputType}] ${extractApiErrorMessage(responsePayload, response.status)}`);
+          return;
+        }
+
+        generationChunks.push({
+          inputType: allocation.inputType,
+          response: sanitizeGenerationResult(responsePayload as GeneratePostsResponse),
+        });
+      }
+
+      if (!generationChunks.length) {
+        setError("No posts were generated.");
         return;
       }
 
-      setResult(sanitizeGenerationResult(responsePayload as GeneratePostsResponse));
+      const nextPostTypeByIndex: Record<number, string> = {};
+      const mergedPosts: GeneratePostsResponse["posts"] = [];
+      let postCursor = 0;
+
+      for (const chunk of generationChunks) {
+        for (const post of chunk.response.posts) {
+          nextPostTypeByIndex[postCursor] = chunk.inputType;
+          mergedPosts.push(post);
+          postCursor += 1;
+        }
+      }
+
+      const trimmedPosts = mergedPosts.slice(0, committedNumberOfPosts);
+      const mergedHooks = Array.from(
+        new Set(
+          generationChunks
+            .flatMap((chunk) => chunk.response.hooks)
+            .map((hook) => hook.trim())
+            .filter(Boolean),
+        ),
+      ).slice(0, 20);
+      const firstChunk = generationChunks[0].response;
+      const generationModelSet = new Set(generationChunks.map((chunk) => chunk.response.generation.modelUsed));
+      const oauthSourceSet = new Set(
+        generationChunks
+          .map((chunk) => chunk.response.generation.oauthSource)
+          .filter((value): value is "env" | "codex-auth-json" => Boolean(value)),
+      );
+      const mergedResult: GeneratePostsResponse = {
+        ...firstChunk,
+        hooks: mergedHooks,
+        chart: generationChunks.map((chunk) => chunk.response.chart).find(Boolean),
+        posts: trimmedPosts,
+        generation: {
+          modelRequested: firstChunk.generation.modelRequested,
+          modelUsed: generationModelSet.size === 1 ? firstChunk.generation.modelUsed : "mixed",
+          fallbackUsed: generationChunks.some((chunk) => chunk.response.generation.fallbackUsed),
+          baseUrlType: generationChunks.some((chunk) => chunk.response.generation.baseUrlType === "custom")
+            ? "custom"
+            : "openai",
+          authMode: generationChunks.some((chunk) => chunk.response.generation.authMode === "oauth")
+            ? "oauth"
+            : "api_key",
+          oauthSource: oauthSourceSet.size === 1 ? Array.from(oauthSourceSet)[0] : undefined,
+        },
+        retrieval: {
+          method: generationChunks.some((chunk) => chunk.response.retrieval.method === "lancedb") ? "lancedb" : "lexical",
+          goalUsed: form.goal,
+          examplesUsed: generationChunks.reduce((sum, chunk) => sum + chunk.response.retrieval.examplesUsed, 0),
+          performancePostsAnalyzed: generationChunks.reduce(
+            (sum, chunk) => sum + chunk.response.retrieval.performancePostsAnalyzed,
+            0,
+          ),
+          performanceInsightsUsed: generationChunks.reduce(
+            (sum, chunk) => sum + chunk.response.retrieval.performanceInsightsUsed,
+            0,
+          ),
+        },
+      };
+
+      const nextRewriteContext: RewriteContext = {
+        style: form.style,
+        goal: form.goal,
+        inputType: postTypeAllocations[0]?.inputType ?? form.inputType,
+        ctaLink: form.ctaLink,
+        details: form.details,
+      };
+      setPostTypeByPostIndex(nextPostTypeByIndex);
+      setResult(mergedResult);
       setRewriteContext(nextRewriteContext);
     } catch {
       setError("Could not reach the API route.");
@@ -1102,6 +1261,10 @@ export default function Home() {
     }));
   }
 
+  function getRewriteInputType(postIndex: number): string {
+    return postTypeByPostIndex[postIndex] || rewriteContext.inputType;
+  }
+
   async function rewriteEntirePost(postIndex: number) {
     const post = result?.posts[postIndex];
     if (!post) {
@@ -1123,6 +1286,7 @@ export default function Home() {
         body: JSON.stringify({
           mode: "post",
           ...rewriteContext,
+          inputType: getRewriteInputType(postIndex),
           prompt: rewritePromptByPost[postIndex] ?? "",
           post: {
             length: post.length,
@@ -1226,6 +1390,7 @@ export default function Home() {
         body: JSON.stringify({
           mode: "line",
           ...rewriteContext,
+          inputType: getRewriteInputType(postIndex),
           prompt: "",
           lineIndex,
           post: {
@@ -1327,6 +1492,7 @@ export default function Home() {
           mode: "line",
           lineTarget: "cta",
           ...rewriteContext,
+          inputType: getRewriteInputType(postIndex),
           prompt: "",
           post: {
             length: post.length,
@@ -1558,11 +1724,14 @@ export default function Home() {
           <div className="space-y-3 rounded-2xl border border-black/10 bg-slate-50 p-3">
             <div className="flex flex-wrap items-center justify-between gap-2">
               <p className="text-sm font-medium text-slate-900">Post Type Guide</p>
-              <p className="text-xs text-slate-600">Selected: {form.inputType}</p>
+              <p className="text-xs text-slate-600">Selected: {selectedPostTypeSummary}</p>
             </div>
+            <p className="text-xs text-slate-600">
+              Select one or more post types. Total posts are distributed across selected types.
+            </p>
             <div className="grid gap-2 sm:grid-cols-2 lg:grid-cols-3">
               {POST_TYPE_OPTIONS.map((type) => {
-                const isSelected = form.inputType === type;
+                const isSelected = normalizedSelectedPostTypes.includes(type);
                 return (
                   <button
                     key={type}
@@ -2183,6 +2352,7 @@ export default function Home() {
           <div className="space-y-4">
             {result?.posts.map((post, index) => {
               const bodyLineOptions = buildEditableBodyLines(post.body);
+              const generatedPostType = postTypeByPostIndex[index];
               const selectedLine = bodyLineOptions.find(
                 (lineOption) => lineOption.lineIndex === selectedLineByPost[index] && !lineOption.isBlank,
               );
@@ -2199,7 +2369,10 @@ export default function Home() {
                 <article key={`${post.hook}-${index}`} className="rounded-3xl border border-black/10 bg-white p-4 shadow-[0_10px_24px_rgba(0,0,0,0.07)] sm:p-5">
                   <div className="mb-3 flex flex-wrap items-center justify-between gap-2">
                     <p className="rounded-full bg-slate-100 px-3 py-1 text-xs uppercase tracking-wide text-slate-700">
-                      Post {index + 1} · {formatLengthLabel(post.length)}
+                      Post {index + 1}
+                      {generatedPostType ? ` · ${generatedPostType}` : ""}
+                      {" · "}
+                      {formatLengthLabel(post.length)}
                     </p>
                     <button
                       type="button"
