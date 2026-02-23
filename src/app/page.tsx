@@ -9,10 +9,13 @@ import {
   GOAL_LABELS,
   GOAL_OPTIONS,
   INPUT_LENGTH_OPTIONS,
+  MEME_TEMPLATE_LABELS,
+  MEME_TEMPLATE_OPTIONS,
   POST_TYPE_OPTIONS,
   type ChartTypeOption,
   type ContentGoal,
   type InputLength,
+  type MemeTemplateId,
 } from "@/lib/constants";
 import type { GeneratePostsResponse } from "@/lib/schemas";
 
@@ -28,6 +31,7 @@ type FormState = {
   chartOptions: string;
   memeTone: string;
   memeBrief: string;
+  memeTemplateId: MemeTemplateId | "";
   memeVariantCount: number;
   time: string;
   place: string;
@@ -50,6 +54,7 @@ const defaultForm: FormState = {
   chartOptions: "",
   memeTone: "",
   memeBrief: "",
+  memeTemplateId: "",
   memeVariantCount: 3,
   time: "",
   place: "",
@@ -320,6 +325,7 @@ export default function Home() {
         place: showEventFields ? form.place : "",
         memeTone: showMemeFields ? form.memeTone : "",
         memeBrief: showMemeFields ? form.memeBrief : "",
+        memeTemplateId: showMemeFields ? form.memeTemplateId : "",
         memeVariantCount: showMemeFields ? form.memeVariantCount : defaultForm.memeVariantCount,
       };
 
@@ -528,6 +534,7 @@ export default function Home() {
                       place: needsEventDetails(nextType) ? prev.place : "",
                       memeTone: needsMemeDetails(nextType) ? prev.memeTone : "",
                       memeBrief: needsMemeDetails(nextType) ? prev.memeBrief : "",
+                      memeTemplateId: needsMemeDetails(nextType) ? prev.memeTemplateId : "",
                       memeVariantCount: needsMemeDetails(nextType) ? prev.memeVariantCount : defaultForm.memeVariantCount,
                     };
                   })
@@ -545,7 +552,7 @@ export default function Home() {
           {showMemeFields ? (
             <div className="space-y-3 rounded-2xl border border-black/10 bg-slate-50 p-3">
               <p className="text-xs font-semibold uppercase tracking-wide text-slate-600">Meme Options (optional)</p>
-              <div className="grid gap-3 sm:grid-cols-2">
+              <div className="grid gap-3 sm:grid-cols-2 lg:grid-cols-3">
                 <label className="space-y-1">
                   <span className="text-sm font-medium">Meme Tone</span>
                   <input
@@ -554,6 +561,27 @@ export default function Home() {
                     value={form.memeTone}
                     onChange={(event) => setForm((prev) => ({ ...prev, memeTone: event.target.value }))}
                   />
+                </label>
+
+                <label className="space-y-1">
+                  <span className="text-sm font-medium">Meme Template (optional)</span>
+                  <select
+                    className="w-full rounded-xl border border-black/10 bg-white px-3 py-2 text-sm outline-none transition focus:border-slate-900"
+                    value={form.memeTemplateId}
+                    onChange={(event) =>
+                      setForm((prev) => ({
+                        ...prev,
+                        memeTemplateId: event.target.value as MemeTemplateId | "",
+                      }))
+                    }
+                  >
+                    <option value="">Auto</option>
+                    {MEME_TEMPLATE_OPTIONS.map((template) => (
+                      <option key={template.id} value={template.id}>
+                        {MEME_TEMPLATE_LABELS[template.id]}
+                      </option>
+                    ))}
+                  </select>
                 </label>
 
                 <label className="space-y-1">
@@ -590,6 +618,9 @@ export default function Home() {
 
               <p className="text-xs text-slate-600">
                 Leave these blank to let AI come up with clever and funny meme variants automatically.
+              </p>
+              <p className="text-xs text-slate-600">
+                Template set to Auto means the model picks the best template per variant.
               </p>
               <p className="text-xs text-slate-600">
                 Total meme images for this run: {totalMemeVariants} ({form.numberOfPosts} post
@@ -928,9 +959,7 @@ export default function Home() {
 
                 {(() => {
                   const memeVariants = post.memeVariants?.length ? post.memeVariants : post.meme ? [post.meme] : [];
-                  const primaryMeme = memeVariants[0];
-
-                  if (!primaryMeme) {
+                  if (!memeVariants.length) {
                     return null;
                   }
 
@@ -938,87 +967,60 @@ export default function Home() {
                     <div className="mt-5 space-y-3 rounded-2xl border border-black/10 bg-slate-50 p-3">
                       <div className="flex items-center justify-between gap-2">
                         <p className="text-xs font-semibold uppercase tracking-wide text-slate-600">
-                          Meme Companion · {primaryMeme.templateName} · Rank #{primaryMeme.rank}
+                          Meme Companions · {memeVariants.length} variant{memeVariants.length > 1 ? "s" : ""}
                         </p>
-                        <div className="flex items-center gap-2">
-                          <button
-                            type="button"
-                            className="rounded-lg border border-black/10 bg-white px-2 py-1 text-xs text-slate-700 hover:bg-slate-100"
-                            onClick={() => {
-                              navigator.clipboard.writeText(primaryMeme.url).catch(() => {});
-                            }}
-                          >
-                            Copy Meme URL
-                          </button>
-                          <a
-                            href={primaryMeme.url}
-                            target="_blank"
-                            rel="noreferrer"
-                            className="rounded-lg border border-black/10 bg-white px-2 py-1 text-xs text-slate-700 hover:bg-slate-100"
-                          >
-                            Open Meme
-                          </a>
-                        </div>
                       </div>
 
-                      {/* eslint-disable-next-line @next/next/no-img-element */}
-                      <img
-                        src={primaryMeme.url}
-                        alt={`${primaryMeme.templateName} meme preview`}
-                        className="h-auto w-full rounded-xl border border-black/10 bg-white"
-                        loading="lazy"
-                      />
+                      <div className="grid gap-3 lg:grid-cols-2">
+                        {memeVariants.map((variant) => (
+                          <div
+                            key={`${variant.rank}-${variant.templateId}-${variant.url}`}
+                            className="space-y-2 rounded-xl border border-black/10 bg-white p-2"
+                          >
+                            <div className="flex items-start justify-between gap-2">
+                              <p className="text-xs font-semibold uppercase tracking-wide text-slate-600">
+                                #{variant.rank} · {variant.templateName}
+                                {typeof variant.toneFitScore === "number" ? ` · score ${variant.toneFitScore}` : ""}
+                              </p>
+                              <div className="flex items-center gap-2">
+                                <a
+                                  href={variant.url}
+                                  target="_blank"
+                                  rel="noreferrer"
+                                  className="rounded-md border border-black/10 bg-white px-2 py-1 text-xs text-slate-700 hover:bg-slate-100"
+                                >
+                                  Open
+                                </a>
+                                <button
+                                  type="button"
+                                  className="rounded-md border border-black/10 bg-white px-2 py-1 text-xs text-slate-700 hover:bg-slate-100"
+                                  onClick={() => {
+                                    navigator.clipboard.writeText(variant.url).catch(() => {});
+                                  }}
+                                >
+                                  Copy URL
+                                </button>
+                              </div>
+                            </div>
 
-                      <p className="text-xs text-slate-600">
-                        Top: {primaryMeme.topText}
-                        <br />
-                        Bottom: {primaryMeme.bottomText}
-                      </p>
+                            {/* eslint-disable-next-line @next/next/no-img-element */}
+                            <img
+                              src={variant.url}
+                              alt={`${variant.templateName} meme variant ${variant.rank}`}
+                              className="h-auto w-full rounded-xl border border-black/10 bg-white"
+                              loading="lazy"
+                            />
 
-                      {typeof primaryMeme.toneFitScore === "number" ? (
-                        <p className="text-xs text-slate-600">
-                          Tone fit: {primaryMeme.toneFitScore}
-                          {primaryMeme.toneFitReason ? ` · ${primaryMeme.toneFitReason}` : ""}
-                        </p>
-                      ) : null}
+                            <p className="text-xs text-slate-600">
+                              Top: {variant.topText}
+                              <br />
+                              Bottom: {variant.bottomText}
+                            </p>
 
-                      {memeVariants.length > 1 ? (
-                        <div className="space-y-2 rounded-xl border border-black/10 bg-white p-2">
-                          <p className="text-xs font-semibold uppercase tracking-wide text-slate-600">More Variants</p>
-                          <ul className="space-y-2">
-                            {memeVariants.slice(1).map((variant) => (
-                              <li key={`${variant.rank}-${variant.templateId}-${variant.url}`} className="rounded-lg border border-black/10 px-2 py-2 text-xs text-slate-700">
-                                <p className="font-medium">
-                                  #{variant.rank} · {variant.templateName}
-                                  {typeof variant.toneFitScore === "number" ? ` · score ${variant.toneFitScore}` : ""}
-                                </p>
-                                <p className="mt-1">Top: {variant.topText}</p>
-                                <p>Bottom: {variant.bottomText}</p>
-                                {variant.toneFitReason ? <p className="mt-1 text-slate-600">{variant.toneFitReason}</p> : null}
-                                <div className="mt-2 flex items-center gap-2">
-                                  <a
-                                    href={variant.url}
-                                    target="_blank"
-                                    rel="noreferrer"
-                                    className="rounded-md border border-black/10 bg-white px-2 py-1 text-xs text-slate-700 hover:bg-slate-100"
-                                  >
-                                    Open
-                                  </a>
-                                  <button
-                                    type="button"
-                                    className="rounded-md border border-black/10 bg-white px-2 py-1 text-xs text-slate-700 hover:bg-slate-100"
-                                    onClick={() => {
-                                      navigator.clipboard.writeText(variant.url).catch(() => {});
-                                    }}
-                                  >
-                                    Copy URL
-                                  </button>
-                                </div>
-                              </li>
-                            ))}
-                          </ul>
-                        </div>
-                      ) : null}
+                            {variant.toneFitReason ? <p className="text-xs text-slate-600">{variant.toneFitReason}</p> : null}
+                          </div>
+                        ))}
+                      </div>
                     </div>
                   );
                 })()}

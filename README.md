@@ -20,6 +20,7 @@ A Next.js app that generates high-performing LinkedIn posts and hook ideas from 
 - Optional embeddings retrieval with OpenAI embeddings + LanceDB (`ENABLE_LANCEDB=true`)
 - Automatic Memegen companions for `Meme / shitpost` post type with ranked variants
   - `Meme Variants Per Post` x `Number of Posts` = total meme images generated
+  - Optional `memeTemplateId` to force a specific template, otherwise template selection is automatic
 - Optional chart companions rendered server-side with `chartjs-node-canvas` from your chosen chart type + JSON data
 
 ## Content library format

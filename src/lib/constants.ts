@@ -33,6 +33,32 @@ export const CHART_TYPE_LABELS: Record<ChartTypeOption, string> = {
   radar: "Radar",
 };
 
+export const MEME_TEMPLATE_OPTIONS = [
+  { id: "drake", name: "Drake Hotline Bling" },
+  { id: "woman-cat", name: "Woman Yelling at Cat" },
+  { id: "spiderman", name: "Spider-Man Pointing at Spider-Man" },
+  { id: "both", name: "Why Not Both?" },
+  { id: "wonka", name: "Condescending Wonka" },
+  { id: "buzz", name: "X Everywhere" },
+  { id: "fry", name: "Futurama Fry" },
+  { id: "stonks", name: "Stonks" },
+] as const;
+
+export type MemeTemplateId = (typeof MEME_TEMPLATE_OPTIONS)[number]["id"];
+
+export const MEME_TEMPLATE_IDS = MEME_TEMPLATE_OPTIONS.map((template) => template.id) as [
+  (typeof MEME_TEMPLATE_OPTIONS)[number]["id"],
+  ...(typeof MEME_TEMPLATE_OPTIONS)[number]["id"][],
+];
+
+export const MEME_TEMPLATE_LABELS: Record<MemeTemplateId, string> = MEME_TEMPLATE_OPTIONS.reduce(
+  (acc, template) => {
+    acc[template.id] = template.name;
+    return acc;
+  },
+  {} as Record<MemeTemplateId, string>,
+);
+
 export const GOAL_LABELS: Record<ContentGoal, string> = {
   virality: "Virality",
   engagement: "Engagement",

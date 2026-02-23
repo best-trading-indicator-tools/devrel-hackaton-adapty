@@ -1,6 +1,14 @@
 import { z } from "zod";
 
-import { CHART_TYPE_OPTIONS, GOAL_OPTIONS, INPUT_LENGTH_OPTIONS, type ChartTypeOption, type ContentGoal } from "@/lib/constants";
+import {
+  CHART_TYPE_OPTIONS,
+  GOAL_OPTIONS,
+  INPUT_LENGTH_OPTIONS,
+  MEME_TEMPLATE_IDS,
+  type ChartTypeOption,
+  type ContentGoal,
+  type MemeTemplateId,
+} from "@/lib/constants";
 
 export const generatePostsRequestSchema = z.object({
   style: z.string().trim().min(1).max(260).default("adapty"),
@@ -14,6 +22,7 @@ export const generatePostsRequestSchema = z.object({
   chartOptions: z.string().trim().max(20_000).default(""),
   memeTone: z.string().trim().max(120).default(""),
   memeBrief: z.string().trim().max(400).default(""),
+  memeTemplateId: z.union([z.literal(""), z.enum(MEME_TEMPLATE_IDS)]).default(""),
   memeVariantCount: z.coerce.number().int().min(1).max(6).default(3),
   time: z.string().trim().max(120).default(""),
   place: z.string().trim().max(120).default(""),
@@ -67,7 +76,7 @@ export type GeneratePostsResponse = {
     cta: string;
     meme?: {
       rank: number;
-      templateId: string;
+      templateId: MemeTemplateId;
       templateName: string;
       topText: string;
       bottomText: string;
@@ -77,7 +86,7 @@ export type GeneratePostsResponse = {
     };
     memeVariants?: Array<{
       rank: number;
-      templateId: string;
+      templateId: MemeTemplateId;
       templateName: string;
       topText: string;
       bottomText: string;
