@@ -79,6 +79,20 @@ export const POST_TYPE_OPTIONS = [
   "Curated roundup",
 ] as const;
 
+export const POST_TYPE_UI_DESCRIPTIONS: Record<(typeof POST_TYPE_OPTIONS)[number], string> = {
+  "Product feature launch": "Announce a new feature or major update with user pain, solution, and concrete impact.",
+  "Event / webinar promo": "Promote an upcoming event with clear why-now, logistics, and who should attend.",
+  Sauce: "Share tactical insights, data-backed mechanics, and practical steps teams can apply this week.",
+  "Meme / shitpost": "Use humorous, relatable takes tied to real B2C app monetization or growth pain points.",
+  "Industry news reaction": "Give a sharp take on recent industry news with clear implications and next moves.",
+  "Engagement farming: poll/quiz": "Ask high-signal questions that invite comments, votes, and operator viewpoints.",
+  "Case study / social proof": "Show before/after outcomes with context, intervention, and measurable result.",
+  "Hiring / team culture": "Share role opportunities, team values, and what working style looks like in practice.",
+  "Milestone / company update": "Communicate progress milestones and what changed operationally to reach them.",
+  "Controversial hot take": "Challenge accepted habits with a strong stance, caveats, and practical alternative.",
+  "Curated roundup": "Publish a digest of top resources, examples, or observations with quick takeaways.",
+};
+
 export const INPUT_LENGTH_OPTIONS = ["short", "standard", "long", "mix"] as const;
 
 export type InputLength = (typeof INPUT_LENGTH_OPTIONS)[number];

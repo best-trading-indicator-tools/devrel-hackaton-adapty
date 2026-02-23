@@ -15,6 +15,7 @@ import {
   MEME_TONE_OPTIONS,
   MEME_TEMPLATE_LABELS,
   MEME_TEMPLATE_OPTIONS,
+  POST_TYPE_UI_DESCRIPTIONS,
   POST_TYPE_OPTIONS,
   isBrandVoicePreset,
   type ChartTypeOption,
@@ -559,15 +560,6 @@ export default function Home() {
       : isBrandVoicePreset(brandVoiceSelection)
         ? BRAND_VOICE_PROFILES[brandVoiceSelection].label
         : "Custom";
-  const postTypeSelectWidth = useMemo(
-    () =>
-      getSelectWidthFromOptions(POST_TYPE_OPTIONS, {
-        minCh: 18,
-        maxCh: 40,
-        paddingCh: 5,
-      }),
-    [],
-  );
   const memeToneSelectWidth = useMemo(
     () =>
       getSelectWidthFromOptions(MEME_TONE_OPTIONS.map((tone) => getMemeToneLabel(tone)), {
@@ -688,6 +680,20 @@ export default function Home() {
     setForm((prev) => ({
       ...prev,
       goal: nextGoal,
+    }));
+  }
+
+  function applyPostTypeSelection(nextType: string) {
+    setForm((prev) => ({
+      ...prev,
+      inputType: nextType,
+      time: needsEventDetails(nextType) ? prev.time : "",
+      place: needsEventDetails(nextType) ? prev.place : "",
+      chartEnabled: needsChartDetails(nextType) ? prev.chartEnabled : false,
+      memeTone: needsMemeDetails(nextType) ? prev.memeTone : "",
+      memeBrief: needsMemeDetails(nextType) ? prev.memeBrief : "",
+      memeTemplateIds: needsMemeDetails(nextType) ? prev.memeTemplateIds : [],
+      memeVariantCount: needsMemeDetails(nextType) ? prev.memeVariantCount : defaultForm.memeVariantCount,
     }));
   }
 
@@ -1490,37 +1496,31 @@ export default function Home() {
             </div>
           </div>
 
-          <div className="space-y-1">
-            <label className="space-y-1">
-              <span className="text-sm font-medium">Post Type</span>
-              <select
-                className={baseControlClassName}
-                style={{ width: postTypeSelectWidth }}
-                value={form.inputType}
-                onChange={(event) =>
-                  setForm((prev) => {
-                    const nextType = event.target.value;
-                    return {
-                      ...prev,
-                      inputType: nextType,
-                      time: needsEventDetails(nextType) ? prev.time : "",
-                      place: needsEventDetails(nextType) ? prev.place : "",
-                      chartEnabled: needsChartDetails(nextType) ? prev.chartEnabled : false,
-                      memeTone: needsMemeDetails(nextType) ? prev.memeTone : "",
-                      memeBrief: needsMemeDetails(nextType) ? prev.memeBrief : "",
-                      memeTemplateIds: needsMemeDetails(nextType) ? prev.memeTemplateIds : [],
-                      memeVariantCount: needsMemeDetails(nextType) ? prev.memeVariantCount : defaultForm.memeVariantCount,
-                    };
-                  })
-                }
-              >
-                {POST_TYPE_OPTIONS.map((type) => (
-                  <option key={type} value={type}>
-                    {type}
-                  </option>
-                ))}
-              </select>
-            </label>
+          <div className="space-y-3 rounded-2xl border border-black/10 bg-slate-50 p-3">
+            <div className="flex flex-wrap items-center justify-between gap-2">
+              <p className="text-sm font-medium text-slate-900">Post Type Guide</p>
+              <p className="text-xs text-slate-600">Selected: {form.inputType}</p>
+            </div>
+            <div className="grid gap-2 sm:grid-cols-2 lg:grid-cols-3">
+              {POST_TYPE_OPTIONS.map((type) => {
+                const isSelected = form.inputType === type;
+                return (
+                  <button
+                    key={type}
+                    type="button"
+                    className={`rounded-xl border p-3 text-left transition ${
+                      isSelected
+                        ? "border-slate-900 bg-white shadow-[0_0_0_1px_rgba(15,23,42,0.08)]"
+                        : "border-black/10 bg-white hover:border-slate-400"
+                    }`}
+                    onClick={() => applyPostTypeSelection(type)}
+                  >
+                    <p className="text-sm font-semibold text-slate-900">{type}</p>
+                    <p className="mt-1 text-xs text-slate-600">{POST_TYPE_UI_DESCRIPTIONS[type]}</p>
+                  </button>
+                );
+              })}
+            </div>
           </div>
 
           {showMemeFields ? (
