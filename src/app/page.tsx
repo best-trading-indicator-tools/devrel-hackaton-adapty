@@ -682,7 +682,20 @@ export default function Home() {
       const responsePayload = await response.json();
 
       if (!response.ok) {
-        setError(responsePayload?.error ?? responsePayload?.message ?? "Request failed");
+        const apiError =
+          responsePayload && typeof responsePayload === "object" && "error" in responsePayload
+            ? String((responsePayload as { error?: unknown }).error ?? "")
+            : "";
+        const apiMessage =
+          responsePayload && typeof responsePayload === "object" && "message" in responsePayload
+            ? String((responsePayload as { message?: unknown }).message ?? "")
+            : "";
+
+        if (apiError && apiMessage && apiError !== apiMessage) {
+          setError(`${apiError}: ${apiMessage}`);
+        } else {
+          setError(apiMessage || apiError || `Request failed (${response.status})`);
+        }
         return;
       }
 
