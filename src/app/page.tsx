@@ -469,8 +469,6 @@ export default function Home() {
   const fallbackMemeTemplates = useMemo(() => buildFallbackMemeTemplates(), []);
   const [memeTemplateOptions, setMemeTemplateOptions] = useState<MemeTemplateOption[]>(fallbackMemeTemplates);
   const [memeTemplateSearch, setMemeTemplateSearch] = useState("");
-  const [isMemeTemplateLoading, setIsMemeTemplateLoading] = useState(false);
-  const [memeTemplateSource, setMemeTemplateSource] = useState<"api" | "fallback">("fallback");
   const [memeTemplateLoadError, setMemeTemplateLoadError] = useState("");
   const imageInputRef = useRef<HTMLInputElement>(null);
   const showEventFields = useMemo(() => needsEventDetails(form.inputType), [form.inputType]);
@@ -547,8 +545,6 @@ export default function Home() {
     let isCancelled = false;
 
     async function loadMemegenTemplates() {
-      setIsMemeTemplateLoading(true);
-
       try {
         const response = await fetch("https://api.memegen.link/templates/");
 
@@ -571,7 +567,6 @@ export default function Home() {
         }
 
         setMemeTemplateOptions(mappedTemplates);
-        setMemeTemplateSource("api");
         setMemeTemplateLoadError("");
       } catch (loadError) {
         if (isCancelled) {
@@ -579,16 +574,11 @@ export default function Home() {
         }
 
         setMemeTemplateOptions(fallbackMemeTemplates);
-        setMemeTemplateSource("fallback");
         setMemeTemplateLoadError(
           loadError instanceof Error
             ? "Using fallback template list because Memegen template fetch failed."
             : "Using fallback template list.",
         );
-      } finally {
-        if (!isCancelled) {
-          setIsMemeTemplateLoading(false);
-        }
       }
     }
 
@@ -908,7 +898,7 @@ export default function Home() {
           {showMemeFields ? (
             <div className="space-y-3 rounded-2xl border border-black/10 bg-slate-50 p-3">
               <p className="text-xs font-semibold uppercase tracking-wide text-slate-600">Meme Options (optional)</p>
-              <div className="grid gap-3 sm:grid-cols-2 lg:grid-cols-3">
+              <div className="grid gap-3 sm:grid-cols-2">
                 <label className="flex h-full flex-col">
                   <span className="text-sm font-medium sm:min-h-[2.75rem]">Meme Tone</span>
                   <select
@@ -948,18 +938,6 @@ export default function Home() {
                     Generates {form.memeVariantCount} meme variant{form.memeVariantCount > 1 ? "s" : ""} for each post.
                   </p>
                 </label>
-
-                <div className="rounded-xl border border-black/10 bg-white px-3 py-2">
-                  <p className="text-xs font-semibold uppercase tracking-wide text-slate-600">Template Source</p>
-                  <p className="text-sm text-slate-800">
-                    {memeTemplateSource === "api" ? "Memegen Live List" : "Curated Fallback List"}
-                  </p>
-                  <p className="text-xs text-slate-600">
-                    {isMemeTemplateLoading
-                      ? "Loading templates..."
-                      : `${memeTemplateOptions.length} template${memeTemplateOptions.length > 1 ? "s" : ""} available`}
-                  </p>
-                </div>
               </div>
 
               <div className="space-y-2 rounded-xl border border-black/10 bg-white p-3">
