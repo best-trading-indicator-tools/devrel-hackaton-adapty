@@ -92,7 +92,6 @@ const MAX_IMAGE_DATA_URL_CHARS = 4_500_000;
 const IMAGE_EXPORT_QUALITY = 0.82;
 const MAX_CONCURRENT_GENERATION_REQUESTS = 3;
 const EVENT_TOPIC_PATTERN = /\b(event|webinar)\b/i;
-const MEME_TOPIC_PATTERN = /\b(meme|shitpost)\b/i;
 const CUSTOM_BRAND_VOICE = "__custom__";
 const CHART_LEGEND_POSITIONS: ChartLegendPosition[] = ["top", "right", "bottom", "left"];
 const CHART_VISUAL_STYLE_OPTIONS = [
@@ -567,8 +566,8 @@ function needsEventDetails(inputType: string): boolean {
   return EVENT_TOPIC_PATTERN.test(inputType);
 }
 
-function needsChartDetails(inputType: string): boolean {
-  return !MEME_TOPIC_PATTERN.test(inputType);
+function needsChartDetails(_inputType: string): boolean {
+  return true;
 }
 
 function needsIndustryNewsRssGuide(inputType: string): boolean {

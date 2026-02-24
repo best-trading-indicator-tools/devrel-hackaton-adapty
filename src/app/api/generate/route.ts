@@ -49,7 +49,6 @@ import {
 
 export const runtime = "nodejs";
 
-const MEME_INPUT_TYPE_PATTERN = /\b(meme|shitpost)\b/i;
 const MEME_LINE_MAX_CHARS = 72;
 const DEFAULT_MEMEGEN_BASE_URL = "https://api.memegen.link";
 const DEFAULT_MEME_TEMPLATE_LINE_COUNT = 2;
@@ -117,11 +116,6 @@ const POST_TYPE_PLAYBOOKS: Array<{ pattern: RegExp; directive: string }> = [
     pattern: /sauce/i,
     directive:
       "For Sauce posts, combine clear practical breakdown with data-backed insight. Anchor with a short story when it illustrates the mechanism (e.g. a test that surprised you). Use concrete numbers, explain the mechanism, and include caveats or segmentation when relevant.",
-  },
-  {
-    pattern: /meme|shitpost/i,
-    directive:
-      "Keep copy punchy and caption-friendly while still grounded in real B2C mobile app monetization pain points.",
   },
   {
     pattern: /industry news reaction/i,
@@ -998,7 +992,6 @@ function evaluatePostQuality(params: {
   const issues: string[] = [];
   const combinedText = `${params.post.hook}\n${params.post.body}\n${params.post.cta}`;
   const lowerInputType = params.inputType.toLowerCase();
-  const isMeme = MEME_INPUT_TYPE_PATTERN.test(lowerInputType);
   const isEvent = /event|webinar/.test(lowerInputType);
   const isClickbaitVirality = shouldEnforceClickbaitViralityHook(params.style, params.goal);
   const nonEmptyBodyLines = params.post.body
@@ -1010,67 +1003,67 @@ function evaluatePostQuality(params: {
     issues.push(QUALITY_ISSUES.AI_SLOP_CLICHES);
   }
 
-  if (!isMeme && hasCondescendingReaderLanguage(combinedText)) {
+  if (hasCondescendingReaderLanguage(combinedText)) {
     issues.push(QUALITY_ISSUES.CONDESCENDING);
   }
 
-  if (!isMeme && hasUnsupportedAdaptySuperlative(combinedText)) {
+  if (hasUnsupportedAdaptySuperlative(combinedText)) {
     issues.push(QUALITY_ISSUES.UNSUPPORTED_ADAPTY_SUPERLATIVE);
   }
 
-  if (!isMeme && hasCorporateJargon(combinedText)) {
+  if (hasCorporateJargon(combinedText)) {
     issues.push(QUALITY_ISSUES.CORPORATE_JARGON);
   }
 
-  if (!isMeme && hasRoboticCorporateTone(combinedText)) {
+  if (hasRoboticCorporateTone(combinedText)) {
     issues.push(QUALITY_ISSUES.ROBOTIC_TONE);
   }
 
-  if (!isMeme && !hasDirectReaderAddress(combinedText)) {
+  if (!hasDirectReaderAddress(combinedText)) {
     issues.push(QUALITY_ISSUES.MISSING_DIRECT_READER);
   }
 
-  if (!isMeme && !hasOperatorActionLanguage(combinedText)) {
+  if (!hasOperatorActionLanguage(combinedText)) {
     issues.push(QUALITY_ISSUES.MISSING_OPERATOR_ACTION);
   }
 
-  if (!isMeme && hasUnexpandedSoisAcronym(combinedText)) {
+  if (hasUnexpandedSoisAcronym(combinedText)) {
     issues.push(QUALITY_ISSUES.UNEXPANDED_SOIS);
   }
 
-  if (!isMeme && hasLabelStyleSentenceOpener(combinedText)) {
+  if (hasLabelStyleSentenceOpener(combinedText)) {
     issues.push(QUALITY_ISSUES.LABEL_STYLE_OPENER);
   }
 
-  if (!isMeme && hasAiScaffoldOpener(params.post.body)) {
+  if (hasAiScaffoldOpener(params.post.body)) {
     issues.push(QUALITY_ISSUES.AI_SCAFFOLD_OPENER);
   }
 
-  if (!isMeme && ROBOTIC_FILLER_PATTERN.test(combinedText)) {
+  if (ROBOTIC_FILLER_PATTERN.test(combinedText)) {
     issues.push(QUALITY_ISSUES.ROBOTIC_FILLER);
   }
 
-  if (!isMeme && SNAPSHOT_JARGON_PATTERN.test(combinedText)) {
+  if (SNAPSHOT_JARGON_PATTERN.test(combinedText)) {
     issues.push(QUALITY_ISSUES.SNAPSHOT_JARGON);
   }
 
-  if (!isMeme && hasDenseMetricDump(combinedText)) {
+  if (hasDenseMetricDump(combinedText)) {
     issues.push(QUALITY_ISSUES.DENSE_METRIC_DUMP);
   }
 
-  if (!isMeme && countConcreteProofUnits(combinedText) < 1) {
+  if (countConcreteProofUnits(combinedText) < 1) {
     issues.push(QUALITY_ISSUES.MISSING_PROOF_UNIT);
   }
 
-  if (!isMeme && params.requireNumericAnchor && countNumericTokens(combinedText) < 1) {
+  if (params.requireNumericAnchor && countNumericTokens(combinedText) < 1) {
     issues.push(QUALITY_ISSUES.MISSING_NUMERIC_ANCHOR);
   }
 
-  if (!isMeme && countSpecificityAnchors(combinedText) < 1 && !SPECIFICITY_ANCHOR_PATTERN.test(combinedText)) {
+  if (countSpecificityAnchors(combinedText) < 1 && !SPECIFICITY_ANCHOR_PATTERN.test(combinedText)) {
     issues.push(QUALITY_ISSUES.MISSING_SPECIFICITY);
   }
 
-  if (!isMeme && params.post.body.length > 280 && !/\n\s*\n/.test(params.post.body)) {
+  if (params.post.body.length > 280 && !/\n\s*\n/.test(params.post.body)) {
     issues.push(QUALITY_ISSUES.MISSING_BLANK_LINES);
   }
 
@@ -1078,11 +1071,11 @@ function evaluatePostQuality(params: {
     issues.push(QUALITY_ISSUES.SHORT_LINE_STACK);
   }
 
-  if (!isMeme && hasStaccatoParagraphRhythm(params.post.body)) {
+  if (hasStaccatoParagraphRhythm(params.post.body)) {
     issues.push(QUALITY_ISSUES.STACCATO_RHYTHM);
   }
 
-  if (!isMeme && isClickbaitVirality) {
+  if (isClickbaitVirality) {
     const hook = params.post.hook.trim();
     const hookSentences = splitSentenceUnits(hook);
     const firstSentence = hookSentences[0]?.trim() ?? hook;
@@ -1216,10 +1209,6 @@ function normalizeNoEmDash(value: string): string {
     .replace(/&(?:mdash|ndash);/gi, "-")
     .replace(/([^\s])[\u2012\u2013\u2014\u2015\u2212]([^\s])/g, "$1 - $2")
     .replace(/[\u2010\u2011\u2012\u2013\u2014\u2015\u2212]/g, "-");
-}
-
-function shouldGenerateMemes(inputType: string): boolean {
-  return MEME_INPUT_TYPE_PATTERN.test(inputType);
 }
 
 function normalizeMemeLine(value: string): string {
@@ -1750,9 +1739,7 @@ function resolveMemeToneProfile(params: {
     return "balance reach, comments, and click intent";
   })();
 
-  const postTypeProfile = /meme|shitpost/.test(typeKey)
-    ? "keep captions short, visual, and directly relatable to mobile app monetization pain"
-    : "keep humor useful and tied to the post context";
+  const postTypeProfile = "keep humor useful and tied to the post context";
 
   const briefProfile = params.memeBrief.trim()
     ? `honor user brief: "${normalizeNoEmDash(params.memeBrief.trim())}"`
@@ -2224,11 +2211,9 @@ export async function POST(request: Request) {
     );
     const memeVariantTarget = input.memeVariantCount;
     const giphyVariantTarget = 1;
-    const includeMemeCompanion = input.memeEnabled || shouldGenerateMemes(input.inputType);
+    const includeMemeCompanion = input.memeEnabled;
     const memeExecutionDirective = includeMemeCompanion
-      ? shouldGenerateMemes(input.inputType)
-        ? "This is a meme-focused request. Keep hooks and first body lines short, punchy, and caption-friendly. If no meme brief is provided, come up with clever and funny angles automatically."
-        : "Meme companion is enabled. Keep post copy strong for the selected post type, and let meme captions punch up one concrete insight."
+      ? "Meme companion is enabled. Keep post copy strong for the selected post type, and let meme captions punch up one concrete insight."
       : "Meme companion is disabled for this request.";
     const industryNewsPromptLines = industryNewsContext.items.map((item, index) => {
       const keywordPart = item.matchedKeywords.length ? ` | matched keywords: ${item.matchedKeywords.join(", ")}` : "";
@@ -2611,7 +2596,7 @@ ${rankedContextLines}`;
       }
     }
 
-    const shouldEnforceParagraphNormalization = !MEME_INPUT_TYPE_PATTERN.test(input.inputType.toLowerCase());
+    const shouldEnforceParagraphNormalization = true;
     const hasNumericInputsAvailable =
       webEvidenceLines.length > 0 ||
       soisEvidenceLines.length > 0 ||

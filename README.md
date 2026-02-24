@@ -27,7 +27,6 @@ Everything below is already implemented in this repo on `main`.
   - Product feature launch
   - Event / webinar promo
   - Sauce
-  - Meme / shitpost
   - Industry news reaction
   - Engagement farming: poll/quiz
   - Case study / social proof
@@ -63,13 +62,13 @@ Everything below is already implemented in this repo on `main`.
 ### Conditional UI behavior
 
 - Event fields (`Time`, `Place`) only appear for event/webinar post types
-- Meme options only appear for meme/shitpost post type
-- Chart options are hidden for meme/shitpost post type
+- Meme options appear for all post types (optional add-on)
+- Chart options appear for all post types
 - CTA link is optional
 
 ### Meme companion system
 
-- Enabled only for meme/shitpost post type
+- Optional add-on for any post type (toggle "Add Meme Companion")
 - Meme tone dropdown:
   - `auto`, `playful`, `contrarian`, `clickbait`, `absurd`, `deadpan`, `sarcastic`, `dramatic`, `wholesome`
 - Variants per post (1 to 6)
