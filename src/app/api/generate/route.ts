@@ -64,6 +64,7 @@ const LINKEDIN_WRITING_CONTRACT = [
   "Do not stack ultra-short lines back-to-back. Avoid rap or poem cadence.",
   "Mix short, medium, and long sentence lengths so rhythm feels human.",
   "Avoid internet template cadence and motivational filler patterns.",
+  "Avoid rhetorical label openers such as Strong stance:, Hard truth:, Hot take:, or Caveat,.",
   "Avoid MBA buzzword fog. Prefer concrete verbs, nouns, and mechanics.",
   "Be specific when possible. Name exact event format, source, metric, role, date, place, or example instead of vague language.",
   "Prefer real numbers when available, but only if they are grounded in provided evidence, inputs, or chart data.",
@@ -143,6 +144,7 @@ const HARD_QUALITY_GATE = [
   "Never invent numbers, percentages, dates, or benchmarks.",
   "Reject outputs without concrete proof units and without caveats.",
   "Reject low-value opener clichés like hard truth, game changer, nobody talks about, or let that sink in.",
+  "Reject rhetorical label openers such as Strong stance:, Hard truth:, Hot take:, or Caveat,.",
   "For event and webinar posts, include explicit logistics and who should attend.",
   "Reject any sentence containing em dash or en dash punctuation.",
   "For factual claims: if web evidence is available, align to it. If evidence is missing, rewrite as opinion or observation and avoid unsupported hard facts.",
@@ -150,6 +152,9 @@ const HARD_QUALITY_GATE = [
 
 const AI_SLOP_PHRASE_PATTERN =
   /\b(hard truth|game changer|nobody talks about|let that sink in|this changes everything|stop scrolling)\b/i;
+const AI_SCAFFOLD_OPENING_PATTERN =
+  /^(?:strong stance|hard truth|hot take|reality check|bottom line|thesis|frank truth)\s*[:,-]\s*/i;
+const AI_SCAFFOLD_SOFT_OPENING_PATTERN = /^caveat\s*,\s*/i;
 const EVENT_FORMAT_PATTERN =
   /\b(webinar|roundtable|workshop|summit|conference|meetup|panel|ama|office hours|fireside|dinner|breakfast|happy hour|networking)\b/i;
 const SPECIFICITY_ANCHOR_PATTERN =
@@ -195,6 +200,17 @@ function countNumericTokens(value: string): number {
   return numericMatches?.length ?? 0;
 }
 
+function splitParagraphs(body: string): string[] {
+  return body
+    .split(/\n{2,}/)
+    .map((paragraph) => paragraph.trim())
+    .filter(Boolean);
+}
+
+function countSentencesInParagraph(paragraph: string): number {
+  return splitSentenceUnits(paragraph).length;
+}
+
 function hasShortLineStack(body: string): boolean {
   const lines = body
     .split(/\n+/)
@@ -226,24 +242,92 @@ function splitSentenceUnits(paragraph: string): string[] {
   return matches?.length ? matches : [paragraph.trim()].filter(Boolean);
 }
 
-function hasStaccatoParagraphRhythm(body: string): boolean {
-  const paragraphs = body
-    .split(/\n{2,}/)
-    .map((paragraph) => paragraph.trim())
-    .filter(Boolean);
+function stripAiScaffoldOpeners(paragraph: string): string {
+  const trimmed = paragraph.trim();
+  if (!trimmed) {
+    return "";
+  }
 
-  if (paragraphs.length < 5) {
+  const stripped = trimmed
+    .replace(AI_SCAFFOLD_OPENING_PATTERN, "")
+    .replace(AI_SCAFFOLD_SOFT_OPENING_PATTERN, "")
+    .trim();
+
+  return stripped || trimmed;
+}
+
+function normalizeBodyRhythm(body: string): string {
+  const paragraphs = splitParagraphs(body).map(stripAiScaffoldOpeners).filter(Boolean);
+  if (paragraphs.length < 4) {
+    return paragraphs.join("\n\n");
+  }
+
+  const out: string[] = [];
+  let index = 0;
+
+  while (index < paragraphs.length) {
+    const sentenceCount = countSentencesInParagraph(paragraphs[index]);
+
+    if (sentenceCount !== 1) {
+      out.push(paragraphs[index]);
+      index += 1;
+      continue;
+    }
+
+    const run: string[] = [];
+    while (index < paragraphs.length && countSentencesInParagraph(paragraphs[index]) === 1) {
+      run.push(paragraphs[index]);
+      index += 1;
+    }
+
+    if (run.length <= 1) {
+      out.push(run[0]);
+      continue;
+    }
+
+    const groupSize = run.length >= 5 ? 3 : 2;
+    for (let runIndex = 0; runIndex < run.length; runIndex += groupSize) {
+      const chunk = run.slice(runIndex, runIndex + groupSize);
+      if (!chunk.length) {
+        continue;
+      }
+      out.push(chunk.join(" ").replace(/\s+/g, " ").trim());
+    }
+  }
+
+  return out.join("\n\n");
+}
+
+function hasAiScaffoldOpener(body: string): boolean {
+  const paragraphs = splitParagraphs(body);
+  return paragraphs.some(
+    (paragraph) => AI_SCAFFOLD_OPENING_PATTERN.test(paragraph) || AI_SCAFFOLD_SOFT_OPENING_PATTERN.test(paragraph),
+  );
+}
+
+function hasStaccatoParagraphRhythm(body: string): boolean {
+  const paragraphs = splitParagraphs(body);
+
+  if (paragraphs.length < 4) {
     return false;
   }
 
   let oneSentenceParagraphs = 0;
   let totalSentences = 0;
   let shortSentences = 0;
+  let maxOneSentenceRun = 0;
+  let currentOneSentenceRun = 0;
 
   for (const paragraph of paragraphs) {
     const sentenceUnits = splitSentenceUnits(paragraph);
     if (sentenceUnits.length <= 1) {
       oneSentenceParagraphs += 1;
+      currentOneSentenceRun += 1;
+      if (currentOneSentenceRun > maxOneSentenceRun) {
+        maxOneSentenceRun = currentOneSentenceRun;
+      }
+    } else {
+      currentOneSentenceRun = 0;
     }
 
     for (const sentence of sentenceUnits) {
@@ -258,7 +342,11 @@ function hasStaccatoParagraphRhythm(body: string): boolean {
   const oneSentenceRatio = oneSentenceParagraphs / paragraphs.length;
   const shortSentenceRatio = totalSentences > 0 ? shortSentences / totalSentences : 0;
 
-  return (paragraphs.length >= 6 && oneSentenceRatio >= 0.6) || (totalSentences >= 10 && shortSentenceRatio >= 0.55);
+  return (
+    (paragraphs.length >= 5 && oneSentenceRatio >= 0.5) ||
+    (totalSentences >= 8 && shortSentenceRatio >= 0.5) ||
+    maxOneSentenceRun >= 3
+  );
 }
 
 function evaluatePostQuality(params: {
@@ -284,6 +372,10 @@ function evaluatePostQuality(params: {
 
   if (AI_SLOP_PHRASE_PATTERN.test(combinedText)) {
     issues.push("Avoid generic AI-sounding clichés in hook/body/CTA.");
+  }
+
+  if (!isMeme && hasAiScaffoldOpener(params.post.body)) {
+    issues.push("Avoid AI-style rhetorical label openers such as Strong stance:, Hard truth:, Hot take:, or Caveat,.");
   }
 
   if (!isMeme && countConcreteProofUnits(combinedText) < 1) {
@@ -1448,6 +1540,7 @@ ${rankedContextLines}`;
     }
 
     const includeMemeCompanion = shouldGenerateMemes(input.inputType);
+    const shouldEnforceParagraphNormalization = !MEME_INPUT_TYPE_PATTERN.test(input.inputType.toLowerCase());
     const hasNumericInputsAvailable =
       webEvidenceLines.length > 0 ||
       preparedChartInput !== null ||
@@ -1455,12 +1548,18 @@ ${rankedContextLines}`;
       /\d/.test(input.details) ||
       (retrieval.performanceInsights?.summaryLines?.some((line) => /\d/.test(line)) ?? false);
     const normalizeGeneratedPosts = (posts: GeneratedPost[]) =>
-      posts.map((post, index) => ({
-        length: lengthPlan[index] ?? post.length,
-        hook: normalizeNoEmDash(post.hook),
-        body: normalizeNoEmDash(post.body),
-        cta: normalizeNoEmDash(ensureFinalCta(post.cta, input.ctaLink)),
-      }));
+      posts.map((post, index) => {
+        const normalizedHook = stripAiScaffoldOpeners(normalizeNoEmDash(post.hook));
+        const normalizedBody = normalizeNoEmDash(post.body);
+        const normalizedCta = stripAiScaffoldOpeners(normalizeNoEmDash(ensureFinalCta(post.cta, input.ctaLink)));
+
+        return {
+          length: lengthPlan[index] ?? post.length,
+          hook: normalizedHook,
+          body: shouldEnforceParagraphNormalization ? normalizeBodyRhythm(normalizedBody) : normalizedBody,
+          cta: normalizedCta,
+        };
+      });
 
     let normalizedPosts = normalizeGeneratedPosts(parsed.posts);
     const qualityIssuesByPost = normalizedPosts
@@ -1510,6 +1609,7 @@ Repair requirements:
 - Add blank lines between subtopics.
 - Keep output human, concrete, and non-generic.
 - Avoid cliché opener lines.
+- Avoid rhetorical label openers such as Strong stance:, Hard truth:, Hot take:, or Caveat,.
 - Use at least one real numeric anchor if evidence or numeric context is available.
 - Never invent numbers. Only use numbers grounded in provided evidence, inputs, or chart data.
 - Never use em dash or en dash punctuation.
