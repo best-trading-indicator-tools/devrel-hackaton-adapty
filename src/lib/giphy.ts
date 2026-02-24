@@ -137,7 +137,7 @@ export function buildGiphyQuery(params: {
     return "app growth meme";
   }
 
-  return safe.length > 180 ? safe.slice(0, 180).replace(/\s+\S*$/, "").trim() : safe;
+  return safe.length > 60 ? safe.slice(0, 60).replace(/\s+\S*$/, "").trim() : safe;
 }
 
 export async function fetchGiphyVariants(params: {

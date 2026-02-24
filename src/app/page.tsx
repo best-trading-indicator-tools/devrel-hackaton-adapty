@@ -1490,6 +1490,7 @@ export default function Home() {
         hooks: mergedHooks,
         chart: generationChunks.map((chunk) => chunk.response.chart).find(Boolean),
         posts: trimmedPosts,
+        giphyRequested: generationChunks.some((chunk) => chunk.response.giphyRequested),
         generation: {
           modelRequested: firstChunk.generation.modelRequested,
           modelUsed: generationModelSet.size === 1 ? firstChunk.generation.modelUsed : "mixed",
@@ -1514,6 +1515,8 @@ export default function Home() {
             (sum, chunk) => sum + chunk.response.retrieval.performanceInsightsUsed,
             0,
           ),
+          evidenceSources:
+            firstChunk.retrieval.evidenceSources ?? generationChunks[0]?.response.retrieval.evidenceSources,
         },
       };
 
@@ -2977,6 +2980,26 @@ export default function Home() {
           </div>
           */}
 
+          {result?.retrieval?.evidenceSources ? (
+            <div className="flex flex-wrap gap-2 rounded-xl border border-slate-200 bg-slate-50/80 px-3 py-2">
+              <span className="text-[11px] font-medium uppercase tracking-wide text-slate-500">Evidence sources:</span>
+              {result.retrieval.evidenceSources.sois ? (
+                <span className="rounded-md bg-emerald-100 px-2 py-0.5 text-[11px] text-emerald-800">SOIS</span>
+              ) : null}
+              {result.retrieval.evidenceSources.revenueCat ? (
+                <span className="rounded-md bg-blue-100 px-2 py-0.5 text-[11px] text-blue-800">RevenueCat</span>
+              ) : null}
+              {result.retrieval.evidenceSources.web ? (
+                <span className="rounded-md bg-amber-100 px-2 py-0.5 text-[11px] text-amber-800">Web</span>
+              ) : null}
+              {!result.retrieval.evidenceSources.sois &&
+              !result.retrieval.evidenceSources.revenueCat &&
+              !result.retrieval.evidenceSources.web ? (
+                <span className="text-[11px] text-slate-500">None</span>
+              ) : null}
+            </div>
+          ) : null}
+
           {result?.chart ? (
             <div className="rounded-3xl border border-black/10 bg-white/90 p-5 shadow-[0_12px_30px_rgba(0,0,0,0.06)] backdrop-blur">
               <div className="flex flex-wrap items-center justify-between gap-2">
@@ -3314,11 +3337,9 @@ export default function Home() {
 
                   {(() => {
                     const giphyVariants = post.giphyVariants?.length ? post.giphyVariants : post.giphy ? [post.giphy] : [];
-                    if (!giphyVariants.length) {
-                      return null;
-                    }
-
-                    return (
+                    const giphyRequested = result?.giphyRequested ?? form.giphyEnabled;
+                    if (giphyVariants.length) {
+                      return (
                       <div className="mt-5 space-y-3 rounded-2xl border border-black/10 bg-slate-50 p-3">
                         <div className="flex items-center justify-between gap-2">
                           <p className="text-xs font-semibold uppercase tracking-wide text-slate-600">
@@ -3380,6 +3401,17 @@ export default function Home() {
                         </div>
                       </div>
                     );
+                    }
+                    if (giphyRequested) {
+                      return (
+                        <div className="mt-5 rounded-2xl border border-amber-200 bg-amber-50/60 p-3">
+                          <p className="text-xs text-amber-800">
+                            GIPHY requested but no GIFs found for this post. Check server logs for GIPHY fetch errors.
+                          </p>
+                        </div>
+                      );
+                    }
+                    return null;
                   })()}
                 </article>
               );

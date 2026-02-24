@@ -45,7 +45,7 @@ const SOIS_CATEGORY_DEFINITIONS: Record<SoisCategory, SoisCategoryDefinition> = 
     label: "LTV",
     subcategories: [
       { id: 1, label: "LTV Dashboard", enabledByDefault: false },
-      { id: 2, label: "LTV12 by Country" },
+      { id: 2, label: "LTV by Country" },
       { id: 3, label: '"Install to Paid" LTV' },
       { id: 4, label: '"Install to Trial" LTV' },
     ],
@@ -380,6 +380,74 @@ function keywordSearch(items: SoisContextItem[], query: string, details: string,
   return scored.slice(0, limit).map((entry) => entry.item);
 }
 
+function countNumericAnchors(value: string): number {
+  return value.match(/\b\d+(?:[.,]\d+)?%?\b/g)?.length ?? 0;
+}
+
+function rankItemsForQueryIntent(items: SoisContextItem[], query: string, details: string): SoisContextItem[] {
+  if (!items.length) {
+    return [];
+  }
+
+  const focusTokens = extractFocusTokens(query, details);
+  const combined = `${details} ${query}`.toLowerCase();
+  const wantsPaywall = /\b(paywall|placement|gate|onboarding)\b/.test(combined);
+  const wantsHealthFitness = /\bhealth\b.*\bfitness\b|\bfitness\b.*\bhealth\b/.test(combined);
+  const wantsTrialOrConversion = /\b(trial|conversion|install to paid|paid)\b/.test(combined);
+  const wantsRetention = /\b(retention|renewal|churn)\b/.test(combined);
+  const wantsLtvOrPricing = /\b(ltv|price|pricing|revenue|arppu)\b/.test(combined);
+
+  const scored = items.map((item, index) => {
+    const text = item.text.toLowerCase();
+    const textTokens = new Set(tokenize(item.text));
+    let tokenHits = 0;
+    let phraseHits = 0;
+
+    for (const token of focusTokens) {
+      if (textTokens.has(token)) {
+        tokenHits += 1;
+      }
+      if (text.includes(token)) {
+        phraseHits += 1;
+      }
+    }
+
+    const numericAnchors = countNumericAnchors(item.text);
+    let score = tokenHits * 3 + phraseHits * 1.5;
+
+    if (item.id.includes("-metric-")) {
+      score += 2.5;
+    }
+    if (item.id.endsWith("-overview")) {
+      score -= 0.4;
+    }
+
+    score += Math.min(2.8, numericAnchors * 0.35);
+
+    if (wantsPaywall && (item.category === "paywalls" || /paywall|placement|gate|onboarding/.test(text))) {
+      score += 4;
+    }
+    if (wantsHealthFitness && /health and fitness|health|fitness/.test(text)) {
+      score += 4;
+    }
+    if (wantsTrialOrConversion && /trial|conversion|install to paid|paid/.test(text)) {
+      score += 2;
+    }
+    if (wantsRetention && /retention|renewal|churn/.test(text)) {
+      score += 2;
+    }
+    if (wantsLtvOrPricing && /ltv|price|pricing|revenue|arppu/.test(text)) {
+      score += 2;
+    }
+
+    return { item, score, index };
+  });
+
+  return scored
+    .sort((a, b) => (b.score === a.score ? a.index - b.index : b.score - a.score))
+    .map((entry) => entry.item);
+}
+
 function compactNumber(value: number): string {
   if (!Number.isFinite(value)) {
     return "n/a";
@@ -441,6 +509,15 @@ function isScalar(value: unknown): value is string | number | boolean {
   return ["string", "number", "boolean"].includes(typeof value);
 }
 
+function toNumeric(value: unknown): number | null {
+  if (typeof value === "number" && Number.isFinite(value)) return value;
+  if (typeof value === "string" && value.trim()) {
+    const n = Number.parseFloat(value);
+    return Number.isFinite(n) ? n : null;
+  }
+  return null;
+}
+
 function collectNumericKeys(rows: Array<Record<string, unknown>>): string[] {
   const totals = new Map<string, { total: number; numeric: number }>();
 
@@ -448,7 +525,7 @@ function collectNumericKeys(rows: Array<Record<string, unknown>>): string[] {
     for (const [key, value] of Object.entries(row)) {
       const stat = totals.get(key) ?? { total: 0, numeric: 0 };
       stat.total += 1;
-      if (typeof value === "number" && Number.isFinite(value)) {
+      if (toNumeric(value) !== null) {
         stat.numeric += 1;
       }
       totals.set(key, stat);
@@ -508,6 +585,15 @@ function describeRow(row: Record<string, unknown>, dimensionKeys: string[]): str
 
 function extractRows(payload: unknown): Array<Record<string, unknown>> {
   if (Array.isArray(payload)) {
+    const rows: Array<Record<string, unknown>> = [];
+    for (const item of payload) {
+      if (isRecord(item) && Array.isArray(item.result)) {
+        rows.push(...(item.result as unknown[]).filter(isRecord));
+      } else if (isRecord(item) && !("result" in item && Array.isArray(item.result))) {
+        rows.push(item);
+      }
+    }
+    if (rows.length) return rows;
     return payload.filter(isRecord);
   }
 
@@ -576,9 +662,9 @@ function buildEvidenceChunks(params: {
 
   for (const metricKey of numericKeys) {
     const metricRows = rows
-      .map((row) => ({ row, value: row[metricKey] }))
+      .map((row) => ({ row, value: toNumeric(row[metricKey]) }))
       .filter((item): item is { row: Record<string, unknown>; value: number } =>
-        typeof item.value === "number" && Number.isFinite(item.value),
+        item.value !== null,
       );
 
     if (!metricRows.length) {
@@ -592,8 +678,14 @@ function buildEvidenceChunks(params: {
     const median = quantile(values, 0.5);
     const p90 = quantile(values, 0.9);
 
+    const unitHint =
+      /^(log_|price_|avg_ltv|median_ltv|ltv_)/i.test(metricKey) && !looksLikeRateKey(metricKey)
+        ? " (USD or log scale — not a conversion rate)"
+        : looksLikeRateKey(metricKey)
+          ? " (rate: use as % only)"
+          : "";
     const metricLines = [
-      `${params.target.categoryLabel} ${params.target.subcategoryLabel} - ${normalizeLabel(metricKey)}`,
+      `${params.target.categoryLabel} ${params.target.subcategoryLabel} - ${normalizeLabel(metricKey)}${unitHint}`,
       `Median: ${formatMetricValue(metricKey, median)} | P90: ${formatMetricValue(metricKey, p90)} | Sample size: ${values.length}`,
       `Top: ${formatMetricValue(metricKey, top.value)} (${describeRow(top.row, dimensionKeys)})`,
       `Low: ${formatMetricValue(metricKey, low.value)} (${describeRow(low.row, dimensionKeys)})`,
@@ -1042,7 +1134,7 @@ export async function retrieveSoisContext(params: {
       return {
         enabled: true,
         method: "keyword",
-        items,
+        items: rankItemsForQueryIntent(items, focusQuery, details).slice(0, params.limit),
         warning: evidenceData.warning,
         fetchedSections: evidenceData.fetchedSections,
         availableSections: evidenceData.availableSections,
@@ -1059,7 +1151,7 @@ export async function retrieveSoisContext(params: {
         return {
           enabled: true,
           method: "lancedb",
-          items,
+          items: rankItemsForQueryIntent(items, focusQuery, details).slice(0, params.limit),
           warning: evidenceData.warning,
           fetchedSections: evidenceData.fetchedSections,
           availableSections: evidenceData.availableSections,
@@ -1069,7 +1161,11 @@ export async function retrieveSoisContext(params: {
       return {
         enabled: true,
         method: "lexical",
-        items: lexicalSearch(evidenceData.items, focusQuery || params.query, params.limit),
+        items: rankItemsForQueryIntent(
+          lexicalSearch(evidenceData.items, focusQuery || params.query, params.limit),
+          focusQuery || params.query,
+          details,
+        ).slice(0, params.limit),
         warning:
           [
             evidenceData.warning,
@@ -1087,7 +1183,11 @@ export async function retrieveSoisContext(params: {
   return {
     enabled: true,
     method: "lexical",
-    items: lexicalSearch(evidenceData.items, focusQuery || params.query, params.limit),
+    items: rankItemsForQueryIntent(
+      lexicalSearch(evidenceData.items, focusQuery || params.query, params.limit),
+      focusQuery || params.query,
+      details,
+    ).slice(0, params.limit),
     warning: evidenceData.warning,
     fetchedSections: evidenceData.fetchedSections,
     availableSections: evidenceData.availableSections,

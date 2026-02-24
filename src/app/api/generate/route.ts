@@ -389,6 +389,48 @@ function buildAllowedNumericClaimSet(contexts: string[]): Set<string> {
   return allowed;
 }
 
+function countAllowedNumericClaims(value: string, allowedClaims: Set<string>): number {
+  if (!allowedClaims.size) {
+    return 0;
+  }
+
+  const claims = extractNumericClaims(value);
+  return claims.filter((claim) => allowedClaims.has(claim.canonical)).length;
+}
+
+function collectBenchmarkEvidenceSnippets(contexts: string[], maxSnippets = 60): string[] {
+  const snippets: string[] = [];
+  const seen = new Set<string>();
+
+  for (const context of contexts) {
+    const segments = context
+      .split(/\n|\|/)
+      .map((segment) => normalizeNoEmDash(segment.replace(/^[-*]\s*/, "").trim()))
+      .filter(Boolean);
+
+    for (const segment of segments) {
+      if (!/\d/.test(segment)) {
+        continue;
+      }
+
+      const compact = segment.replace(/\s+/g, " ");
+      const normalized = compact.toLowerCase();
+      if (seen.has(normalized)) {
+        continue;
+      }
+
+      seen.add(normalized);
+      snippets.push(compact);
+
+      if (snippets.length >= maxSnippets) {
+        return snippets;
+      }
+    }
+  }
+
+  return snippets;
+}
+
 function toPluralUnit(unit: string): string {
   if (unit.endsWith("s")) {
     return unit;
@@ -465,6 +507,68 @@ function rewriteUnsupportedNumericClaims(value: string, allowedClaims: Set<strin
   return {
     value: rewritten,
     unsupportedClaims,
+  };
+}
+
+function rewriteNumericClaimsWithBudget(
+  value: string,
+  allowedClaims: Set<string>,
+  maxUniqueAllowedClaims: number,
+  seenAllowedClaims: Set<string>,
+): {
+  value: string;
+  rewrittenClaims: NumericClaim[];
+} {
+  const claims = extractNumericClaims(value);
+  const rewrittenClaims: NumericClaim[] = [];
+
+  for (const claim of claims) {
+    if (!allowedClaims.has(claim.canonical)) {
+      rewrittenClaims.push(claim);
+      continue;
+    }
+
+    if (seenAllowedClaims.has(claim.canonical)) {
+      continue;
+    }
+
+    if (seenAllowedClaims.size < maxUniqueAllowedClaims) {
+      seenAllowedClaims.add(claim.canonical);
+      continue;
+    }
+
+    rewrittenClaims.push(claim);
+  }
+
+  if (!rewrittenClaims.length) {
+    return {
+      value,
+      rewrittenClaims: [],
+    };
+  }
+
+  let rewritten = value;
+  const replacements = [...rewrittenClaims].sort((a, b) => b.start - a.start);
+
+  for (const claim of replacements) {
+    rewritten =
+      rewritten.slice(0, claim.start) +
+      qualitativeReplacementForNumericClaim(claim) +
+      rewritten.slice(claim.end);
+  }
+
+  rewritten = rewritten
+    .replace(/[ \t]{2,}/g, " ")
+    .replace(/[ \t]+([,.;:!?])/g, "$1")
+    .replace(/\(\s+/g, "(")
+    .replace(/\s+\)/g, ")")
+    .replace(/[ \t]+\n/g, "\n")
+    .replace(/\n[ \t]+/g, "\n")
+    .trim();
+
+  return {
+    value: rewritten,
+    rewrittenClaims,
   };
 }
 
@@ -931,6 +1035,20 @@ function isModelAccessError(error: unknown): boolean {
   );
 }
 
+function isCodexOauthModelSupported(model: string): boolean {
+  const normalized = model.trim().toLowerCase();
+  if (!normalized) {
+    return false;
+  }
+
+  // Codex ChatGPT-account responses do not support Anthropic model IDs.
+  if (normalized.startsWith("claude")) {
+    return false;
+  }
+
+  return true;
+}
+
 function ensureFinalCta(cta: string, ctaLink: string): string {
   const cleanCta = cta.trim();
   const cleanLink = ctaLink.trim();
@@ -965,6 +1083,20 @@ function normalizeMemeLine(value: string): string {
     .trim();
 }
 
+function normalizeMemeComparisonKey(value: string): string {
+  return normalizeMemeLine(value)
+    .toLowerCase()
+    .replace(/[^a-z0-9]+/g, " ")
+    .trim();
+}
+
+function memeLinesAreEquivalent(first: string, second: string): boolean {
+  const firstKey = normalizeMemeComparisonKey(first);
+  const secondKey = normalizeMemeComparisonKey(second);
+
+  return Boolean(firstKey && secondKey && firstKey === secondKey);
+}
+
 function clipMemeLine(value: string, maxChars: number): string {
   const clean = normalizeMemeLine(value);
 
@@ -976,13 +1108,18 @@ function clipMemeLine(value: string, maxChars: number): string {
   return clipped || clean.slice(0, maxChars).trim();
 }
 
-function pickMemeBottomLine(body: string): string {
+function pickMemeBottomLine(body: string, avoidLine = ""): string {
   const candidates = body
     .split(/\n+/)
     .map((line) => normalizeMemeLine(line))
     .filter((line) => line.length >= 12 && !/^https?:\/\//i.test(line));
 
   if (candidates.length) {
+    const distinctCandidate = candidates.find((line) => !memeLinesAreEquivalent(line, avoidLine));
+    if (distinctCandidate) {
+      return distinctCandidate;
+    }
+
     return candidates[0];
   }
 
@@ -1128,6 +1265,7 @@ function sanitizeModelMemeVariants(params: {
   }>;
   allowedTemplateIds: MemeTemplateId[];
   postIndex: number;
+  postBody: string;
 }): MemeVariantCandidate[] {
   const allowedTemplateSet = new Set(params.allowedTemplateIds);
   const fallbackTemplateId =
@@ -1138,11 +1276,21 @@ function sanitizeModelMemeVariants(params: {
     const templateId = allowedTemplateSet.has(normalizedTemplateId as MemeTemplateId)
       ? (normalizedTemplateId as MemeTemplateId)
       : fallbackTemplateId;
+    const topText = normalizeNoEmDash(variant.topText);
+    let bottomText = normalizeNoEmDash(variant.bottomText);
+
+    if (memeLinesAreEquivalent(topText, bottomText)) {
+      bottomText = pickMemeBottomLine(params.postBody, topText);
+    }
+
+    if (memeLinesAreEquivalent(topText, bottomText)) {
+      bottomText = templateId === "drake" ? "Measure revenue, not installs" : "Different move, better outcome";
+    }
 
     return {
       templateId,
-      topText: normalizeNoEmDash(variant.topText),
-      bottomText: normalizeNoEmDash(variant.bottomText),
+      topText,
+      bottomText,
       toneFitScore: variant.toneFitScore,
       toneFitReason: normalizeNoEmDash(variant.toneFitReason),
     };
@@ -1152,7 +1300,14 @@ function sanitizeModelMemeVariants(params: {
 function buildMemeCompanionFromVariant(params: { variant: MemeVariantCandidate; rank: number }) {
   const templateName = MEME_TEMPLATE_LABELS[params.variant.templateId] ?? params.variant.templateId;
   const topText = clipMemeLine(params.variant.topText, MEME_LINE_MAX_CHARS) || "App teams shipping fast";
-  const bottomText = clipMemeLine(params.variant.bottomText, MEME_LINE_MAX_CHARS) || "Growth teams in 2026";
+  let bottomText = clipMemeLine(params.variant.bottomText, MEME_LINE_MAX_CHARS) || "Growth teams in 2026";
+
+  if (memeLinesAreEquivalent(topText, bottomText)) {
+    const forcedBottom =
+      params.variant.templateId === "drake" ? "Measure revenue, not installs" : "Different move, better outcome";
+    bottomText = clipMemeLine(forcedBottom, MEME_LINE_MAX_CHARS) || "Different move, better outcome";
+  }
+
   const url = `${getMemegenBaseUrl()}/images/${params.variant.templateId}/${encodeMemegenPathSegment(topText)}/${encodeMemegenPathSegment(bottomText)}.jpg`;
 
   return {
@@ -1177,7 +1332,7 @@ function buildHeuristicMemeVariants(params: {
   allowedTemplateIds: MemeTemplateId[];
 }) {
   const fallbackTop = clipMemeLine(params.hook, MEME_LINE_MAX_CHARS) || "App growth team update";
-  const fallbackBottom = clipMemeLine(pickMemeBottomLine(params.body), MEME_LINE_MAX_CHARS) || "Still iterating";
+  const fallbackBottom = clipMemeLine(pickMemeBottomLine(params.body, fallbackTop), MEME_LINE_MAX_CHARS) || "Still iterating";
   const compactTone = clipMemeLine(params.toneProfile, 48) || "clever";
   const preferredTemplates = params.preferredTemplateIds.length ? params.preferredTemplateIds : params.allowedTemplateIds;
   const allowedTemplates = preferredTemplates.length ? preferredTemplates : MEME_TEMPLATE_IDS;
@@ -1409,14 +1564,14 @@ async function runCodexOauthGeneration(params: {
 
 const CLAUDE_WRITER_MODEL = "claude-sonnet-4-5";
 
-// eslint-disable-next-line @typescript-eslint/no-unused-vars -- postCount reserved for future schema constraints
-function buildClaudePostsJsonSchema(postCount: number): Record<string, unknown> {
+function buildClaudePostsJsonSchema(): Record<string, unknown> {
   return {
     type: "object",
     properties: {
       hooks: {
         type: "array",
         items: { type: "string" },
+        // Anthropic JSON schema currently allows only minItems 0 or 1.
         minItems: 1,
       },
       posts: {
@@ -1432,6 +1587,7 @@ function buildClaudePostsJsonSchema(postCount: number): Record<string, unknown> 
           required: ["length", "hook", "body", "cta"],
           additionalProperties: false,
         },
+        // Anthropic JSON schema currently allows only minItems 0 or 1.
         minItems: 1,
       },
     },
@@ -1477,7 +1633,7 @@ async function runClaudeWriterGeneration(params: {
     output_config: {
       format: {
         type: "json_schema" as const,
-        schema: buildClaudePostsJsonSchema(params.postCount),
+        schema: buildClaudePostsJsonSchema(),
       },
     },
   });
@@ -1488,6 +1644,54 @@ async function runClaudeWriterGeneration(params: {
   }
 
   const parsed = JSON.parse(textBlock.text) as unknown;
+
+  // Claude can occasionally over-generate array items even with JSON schema guidance.
+  if (parsed && typeof parsed === "object") {
+    const normalized = parsed as { hooks?: unknown[]; posts?: unknown[] };
+    const requiredHookCount = Math.max(5, params.postCount);
+
+    if (Array.isArray(normalized.posts)) {
+      if (normalized.posts.length > params.postCount) {
+        normalized.posts = normalized.posts.slice(0, params.postCount);
+      }
+
+      if (normalized.posts.length > 0 && normalized.posts.length < params.postCount) {
+        const templatePost = normalized.posts[normalized.posts.length - 1];
+        while (normalized.posts.length < params.postCount) {
+          normalized.posts.push({ ...(templatePost as Record<string, unknown>) });
+        }
+      }
+    }
+
+    if (Array.isArray(normalized.hooks)) {
+      const hooks = normalized.hooks.filter((hook): hook is string => typeof hook === "string" && hook.trim().length > 0);
+      const postHooks =
+        Array.isArray(normalized.posts)
+          ? normalized.posts
+              .map((post) =>
+                post && typeof post === "object" && typeof (post as { hook?: unknown }).hook === "string"
+                  ? ((post as { hook: string }).hook ?? "")
+                  : "",
+              )
+              .filter(Boolean)
+          : [];
+
+      const candidateHooks = [...hooks, ...postHooks].slice(0, 20);
+      const finalizedHooks = [...candidateHooks];
+
+      if (!finalizedHooks.length) {
+        finalizedHooks.push("Operator benchmark takeaway you can act on today.");
+      }
+
+      const cycleHooks = candidateHooks.length ? candidateHooks : finalizedHooks;
+      while (finalizedHooks.length < requiredHookCount) {
+        finalizedHooks.push(cycleHooks[finalizedHooks.length % cycleHooks.length] ?? finalizedHooks[0]);
+      }
+
+      normalized.hooks = finalizedHooks.slice(0, 20);
+    }
+  }
+
   return params.responseSchema.parse(parsed);
 }
 
@@ -1666,6 +1870,10 @@ export async function POST(request: Request) {
     ]
       .filter(Boolean)
       .join(" | ");
+    const revenueCatQuery =
+      looksLikeSaucePostType(input.inputType) && (soisRetrievalQuery || retrievalQuery)
+        ? `${soisRetrievalQuery || retrievalQuery} | conversion trial paywall LTV revenue benchmark`
+        : soisRetrievalQuery || retrievalQuery;
 
     const [retrieval, soisContext, webFactCheck, industryNewsContext, revenueCatContext] = await Promise.all([
       retrieveLibraryContext({
@@ -1699,9 +1907,11 @@ export async function POST(request: Request) {
       }),
       retrieveRevenueCatContext({
         client: embeddingClient,
-        query: soisRetrievalQuery || retrievalQuery,
+        query: revenueCatQuery,
         inputType: input.inputType,
-        limit: Math.min(8, Math.max(4, input.numberOfPosts * 2)),
+        limit: looksLikeSaucePostType(input.inputType)
+          ? 24
+          : Math.min(8, Math.max(4, input.numberOfPosts * 2)),
       }),
     ]);
 
@@ -1747,7 +1957,7 @@ export async function POST(request: Request) {
       ),
     );
     const memeVariantTarget = input.memeVariantCount;
-    const giphyVariantTarget = Math.max(1, Math.min(6, input.memeVariantCount));
+    const giphyVariantTarget = 1;
     const memeExecutionDirective = shouldGenerateMemes(input.inputType)
       ? "This is a meme-focused request. Keep hooks and first body lines short, punchy, and caption-friendly. If no meme brief is provided, come up with clever and funny angles automatically."
       : "Not a meme-focused request.";
@@ -1808,6 +2018,9 @@ export async function POST(request: Request) {
       revenueCatContext.enabled && revenueCatContext.items.length
         ? revenueCatContext.items.map((item) => item.text).join("\n")
         : "";
+
+    console.log("[Evidence] SOIS lines:", soisEvidenceLines.length, "\n", soisEvidenceForPrompt.slice(0, 1500));
+    console.log("[Evidence] RevenueCat lines:", revenueCatContext.items.length, "\n", revenueCatEvidenceForPrompt.slice(0, 1500));
     const allowedNumericClaims = buildAllowedNumericClaimSet(
       [
         factCheckEvidenceForPrompt,
@@ -1822,6 +2035,17 @@ export async function POST(request: Request) {
         industryNewsTopicPlanSummary,
       ].filter(Boolean),
     );
+    const sauceBenchmarkNumericClaims = buildAllowedNumericClaimSet(
+      [
+        ...soisContext.items.map((item) => item.text),
+        ...revenueCatContext.items.map((item) => item.text),
+        input.ctaLink,
+      ].filter(Boolean),
+    );
+    const sauceBenchmarkSnippets = collectBenchmarkEvidenceSnippets([
+      ...soisContext.items.map((item) => item.text),
+      ...revenueCatContext.items.map((item) => item.text),
+    ]);
 
     const responseSchema = makeGeneratePostsResponseSchema(input.numberOfPosts);
     const promptGuides = await getPromptGuides();
@@ -1835,6 +2059,12 @@ ${promptGuides.aso}
 
 Paywall guide from repository prompt file:
 ${promptGuides.paywall}
+
+Sauce number rule:
+- Default target is 1 to 2 benchmark numbers per post, not a metric dump.
+- Prefer SOIS benchmarks first; only use RevenueCat when SOIS does not cover the specific point.
+- Every number must be copied verbatim from the SOIS or RevenueCat evidence below.
+- If relevant evidence exists, each Sauce post must include at least one benchmark number.
 `
       : "";
 
@@ -1913,12 +2143,13 @@ Generation request:
 Required length per post:
 ${lengthPlan.map((length, index) => `${index + 1}. ${length} -> ${lengthGuide(length)}`).join("\n")}
 
-Evidence context (priority order: SOIS > RevenueCat > web. ONLY use numbers that appear verbatim below — do NOT invent any statistic, percentage, sample size, or multiplier):
+Evidence context (priority order: SOIS > RevenueCat > web). Numbers from SOIS and RevenueCat are real benchmarks — USE them, they make posts more compelling. But ONLY use numbers that appear verbatim in the evidence below. CRITICAL: Use each number only for its labeled metric (e.g. install_to_paid_rate as %, avg_ltv as $, price_usd as $). Never use a log-scale, price, or LTV value as a conversion percentage. Never invent, round, or approximate. If a number is not in the evidence, write without it — never use "$several" or "X%".
+For Sauce posts, default to 1-2 benchmark numbers total per post.
 
-1. SOIS benchmark context (highest priority — Adapty State of In-App Subscriptions):
+1. SOIS (Adapty State of In-App Subscriptions) — fetched from dags.adpinfra.dev:
 ${soisEvidenceForPrompt}
 
-2. RevenueCat benchmarks (second priority — State of Subscription Apps 2025):
+2. RevenueCat (State of Subscription Apps 2025) — from revenuecat-data/*.json:
 ${revenueCatEvidenceForPrompt || "No RevenueCat data for this post type."}
 
 3. Web fact-check (third priority — use only if SOIS/RevenueCat lack the claim):
@@ -1953,6 +2184,7 @@ Also generate a list of hook suggestions inspired by this style and request.
       model: string;
       userPrompt: string;
       responseSchema: ReturnType<typeof makeGeneratePostsResponseSchema>;
+      postCount: number;
     }): Promise<GeneratedBatch> => {
       if (useClaudeWriter) {
         return runClaudeWriterGeneration({
@@ -1960,7 +2192,7 @@ Also generate a list of hook suggestions inspired by this style and request.
           userPrompt: params.userPrompt,
           imageDataUrl: input.imageDataUrl || undefined,
           responseSchema: params.responseSchema,
-          postCount: input.numberOfPosts,
+          postCount: params.postCount,
         });
       }
 
@@ -1992,12 +2224,14 @@ Also generate a list of hook suggestions inspired by this style and request.
     const runGenerationWithFallback = async (params: {
       userPrompt: string;
       responseSchema: ReturnType<typeof makeGeneratePostsResponseSchema>;
+      postCount: number;
     }) => {
       try {
         const parsed = await runGeneration({
           model: requestedModel,
           userPrompt: params.userPrompt,
           responseSchema: params.responseSchema,
+          postCount: params.postCount,
         });
         return {
           parsed,
@@ -2016,6 +2250,7 @@ Also generate a list of hook suggestions inspired by this style and request.
           model: fallbackModel,
           userPrompt: params.userPrompt,
           responseSchema: params.responseSchema,
+          postCount: params.postCount,
         });
         return {
           parsed,
@@ -2066,6 +2301,7 @@ ${rankedContextLines}`;
         const singleRun = await runGenerationWithFallback({
           userPrompt: singlePostPrompt,
           responseSchema: singlePostSchema,
+          postCount: 1,
         });
 
         if (singleRun.fallbackUsed) {
@@ -2113,6 +2349,7 @@ ${rankedContextLines}`;
       const batchRun = await runGenerationWithFallback({
         userPrompt,
         responseSchema,
+        postCount: input.numberOfPosts,
       });
       parsed = batchRun.parsed;
       if (!useClaudeWriter) {
@@ -2198,6 +2435,7 @@ ${toBulletedSection(QUALITY_REPAIR_REQUIREMENT_LINES)}
       const repairedBatchRun = await runGenerationWithFallback({
         userPrompt: qualityRepairPrompt,
         responseSchema,
+        postCount: input.numberOfPosts,
       });
 
       if (repairedBatchRun.fallbackUsed) {
@@ -2210,9 +2448,30 @@ ${toBulletedSection(QUALITY_REPAIR_REQUIREMENT_LINES)}
       qualityIssuesByPost = collectQualityIssues(normalizedPosts);
     }
 
-    const shouldRunEditorPass = qualityIssuesByPost.length > 0;
+    const shouldRunCodexReviewPass = useClaudeWriter && Boolean(oauthCredentials);
+    const shouldRunEditorPass = qualityIssuesByPost.length > 0 || shouldRunCodexReviewPass;
 
     if (shouldRunEditorPass) {
+      const editorPassGoals = [
+        qualityIssuesByPost.length > 0
+          ? "Fix the remaining quality-gate issues without changing the core argument."
+          : "",
+        shouldRunCodexReviewPass
+          ? "Run a second-pass factual QA pass: verify benchmark numbers and metric labels against evidence, and tighten weak phrasing."
+          : "",
+      ]
+        .filter(Boolean)
+        .map((line) => `- ${line}`)
+        .join("\n");
+      const editorEvidenceBlock = `Evidence context for factual QA (SOIS > RevenueCat > web):
+SOIS evidence:
+${soisEvidenceForPrompt.slice(0, 2400)}
+
+RevenueCat evidence:
+${(revenueCatEvidenceForPrompt || "No RevenueCat data for this request.").slice(0, 2400)}
+
+Web evidence:
+${factCheckEvidenceForPrompt.slice(0, 1400)}`;
       const editorSystemPrompt = `You edit LinkedIn posts to sound like a real human wrote them.
 
 Read the draft. For each sentence ask: would someone actually say this to a friend? If not, rewrite it simpler.
@@ -2227,7 +2486,12 @@ Do this:
 - Use digits for numbers ("3 things" not "three things").
 - Use hyphens, commas, and periods. No em dashes or en dashes.
 
-Keep all facts, numbers, arguments, and structure intact. Do not add new content. Only tighten what is there.
+Fact and benchmark rules:
+- Keep all facts, arguments, and structure intact. Do not add new claims.
+- Keep a number only if it appears verbatim in the provided evidence context.
+- If a numeric claim is unsupported, rewrite it qualitatively instead of inventing.
+- Never remap metric meaning (for example: conversion stays %, LTV stays currency, price stays currency).
+- For Sauce posts with benchmark evidence, keep 1-2 benchmark numbers per post, not a metric dump.
 
 Patterns to catch and fix:
 
@@ -2263,7 +2527,17 @@ CTA: ${post.cta}`,
         )
         .join("\n\n");
 
-      const editorUserPrompt = `Edit these ${normalizedPosts.length} post(s). Return the same number of posts with the same hooks array.\n\n${editorDraftPrompt}\n\nReturn ${parsed.hooks.length} hook suggestions as well (keep good ones, tighten sloppy ones).`;
+      const editorUserPrompt = `Edit these ${normalizedPosts.length} post(s). Return the same number of posts with the same hooks array.
+
+Pass goals:
+${editorPassGoals}
+
+${editorEvidenceBlock}
+
+Draft:
+${editorDraftPrompt}
+
+Return ${parsed.hooks.length} hook suggestions as well (keep good ones, tighten sloppy ones).`;
 
       const runEditorGeneration = (params: {
         model: string;
@@ -2316,8 +2590,14 @@ CTA: ${post.cta}`,
 
         parsed = editorRun;
         normalizedPosts = normalizeGeneratedPosts(editorRun.posts);
-      } catch {
+        if (shouldRunCodexReviewPass) {
+          console.info("Codex OAuth second-pass editor applied to Claude draft.");
+        }
+      } catch (editorError) {
         // Editor pass is best-effort; if it fails, keep the original posts
+        if (shouldRunCodexReviewPass) {
+          console.warn("Codex OAuth second-pass editor failed; keeping Claude draft.", editorError);
+        }
       }
     }
 
@@ -2334,6 +2614,97 @@ CTA: ${post.cta}`,
       console.warn(
         `Numeric safety pass rewrote ${numericClaimsSanitizedCount} unsupported number claim(s) to qualitative phrasing.`,
       );
+    }
+
+    if (looksLikeSaucePostType(input.inputType) && sauceBenchmarkNumericClaims.size > 0) {
+      const sauceHookSanitization = sanitizeHookSuggestionsNumericClaims(normalizedHooks, sauceBenchmarkNumericClaims);
+      normalizedHooks = sauceHookSanitization.hooks.map((hook) => normalizeNoEmDash(hook));
+
+      const saucePostSanitization = sanitizeGeneratedPostsNumericClaims(normalizedPosts, sauceBenchmarkNumericClaims);
+      normalizedPosts = saucePostSanitization.posts;
+
+      const sauceStrictSanitizedCount =
+        sauceHookSanitization.unsupportedClaims.length + saucePostSanitization.unsupportedClaims.length;
+      if (sauceStrictSanitizedCount > 0) {
+        console.warn(
+          `Sauce benchmark safety pass rewrote ${sauceStrictSanitizedCount} non-benchmark number claim(s).`,
+        );
+      }
+    }
+
+    const shouldEnforceSauceBenchmarkAnchor =
+      looksLikeSaucePostType(input.inputType) &&
+      sauceBenchmarkNumericClaims.size > 0 &&
+      sauceBenchmarkSnippets.length > 0;
+
+    if (shouldEnforceSauceBenchmarkAnchor) {
+      let injectedBenchmarkAnchors = 0;
+      normalizedPosts = normalizedPosts.map((post, index) => {
+        const combinedText = `${post.hook}\n${post.body}\n${post.cta}`;
+        if (countAllowedNumericClaims(combinedText, sauceBenchmarkNumericClaims) > 0) {
+          return post;
+        }
+
+        const rawSnippet = sauceBenchmarkSnippets[index % sauceBenchmarkSnippets.length];
+        const compactSnippet = rawSnippet.replace(/\s+/g, " ").trim();
+        const safeSnippet =
+          compactSnippet.length > 220 ? `${compactSnippet.slice(0, 217).trimEnd()}...` : compactSnippet;
+        const benchmarkSentence = safeSnippet.endsWith(".") ? safeSnippet : `${safeSnippet}.`;
+
+        injectedBenchmarkAnchors += 1;
+        return {
+          ...post,
+          body: `${post.body.trim()}\n\nBenchmark anchor: ${benchmarkSentence}`,
+        };
+      });
+
+      if (injectedBenchmarkAnchors > 0) {
+        const reSanitizedPostsResult = sanitizeGeneratedPostsNumericClaims(normalizedPosts, allowedNumericClaims);
+        normalizedPosts = reSanitizedPostsResult.posts;
+        if (reSanitizedPostsResult.unsupportedClaims.length > 0) {
+          console.warn(
+            `Numeric safety pass rewrote ${reSanitizedPostsResult.unsupportedClaims.length} unsupported number claim(s) after benchmark injection.`,
+          );
+        }
+        console.warn(
+          `Sauce benchmark guard injected evidence-backed numeric anchors into ${injectedBenchmarkAnchors} post(s).`,
+        );
+      }
+    }
+
+    if (looksLikeSaucePostType(input.inputType) && sauceBenchmarkNumericClaims.size > 0) {
+      const sauceBenchmarkMaxUniqueNumbers = 2;
+      let sauceBudgetRewriteCount = 0;
+
+      normalizedPosts = normalizedPosts.map((post) => {
+        const seenClaims = new Set<string>();
+        const hookRewrite = rewriteNumericClaimsWithBudget(
+          post.hook,
+          sauceBenchmarkNumericClaims,
+          sauceBenchmarkMaxUniqueNumbers,
+          seenClaims,
+        );
+        const bodyRewrite = rewriteNumericClaimsWithBudget(
+          post.body,
+          sauceBenchmarkNumericClaims,
+          sauceBenchmarkMaxUniqueNumbers,
+          seenClaims,
+        );
+
+        sauceBudgetRewriteCount += hookRewrite.rewrittenClaims.length + bodyRewrite.rewrittenClaims.length;
+
+        return {
+          ...post,
+          hook: hookRewrite.value,
+          body: bodyRewrite.value,
+        };
+      });
+
+      if (sauceBudgetRewriteCount > 0) {
+        console.warn(
+          `Sauce benchmark budget pass rewrote ${sauceBudgetRewriteCount} numeric claim(s) to keep each post at <=2 benchmark numbers.`,
+        );
+      }
     }
 
     let postsWithMemes: GeneratePostsResponse["posts"] = normalizedPosts;
@@ -2423,11 +2794,38 @@ For each post:
       };
 
       let parsedMemeSelection: z.infer<typeof memeSelectionSchema> | null = null;
+      const memeModelCandidates: string[] = [];
+      const pushMemeModelCandidate = (candidate: string) => {
+        const normalized = candidate.trim();
+        if (!normalized) {
+          return;
+        }
+        if (oauthCredentials && !isCodexOauthModelSupported(normalized)) {
+          return;
+        }
+        if (!memeModelCandidates.includes(normalized)) {
+          memeModelCandidates.push(normalized);
+        }
+      };
 
-      try {
-        parsedMemeSelection = await runMemeSelection(modelUsed);
-      } catch (memeError) {
-        console.error("Meme variant generation failed, using heuristic fallback", memeError);
+      pushMemeModelCandidate(oauthCredentials ? requestedModel : modelUsed);
+      pushMemeModelCandidate(fallbackModel);
+      if (oauthCredentials && memeModelCandidates.length === 0) {
+        pushMemeModelCandidate("gpt-5.2");
+      }
+
+      let memeSelectionError: unknown = null;
+      for (const candidateModel of memeModelCandidates) {
+        try {
+          parsedMemeSelection = await runMemeSelection(candidateModel);
+          break;
+        } catch (memeError) {
+          memeSelectionError = memeError;
+        }
+      }
+
+      if (!parsedMemeSelection && memeSelectionError) {
+        console.error("Meme variant generation failed, using heuristic fallback", memeSelectionError);
       }
 
       const selectionsByPostIndex = new Map<number, { variants: MemeVariantCandidate[] }>();
@@ -2446,6 +2844,7 @@ For each post:
                 variants: modelVariants,
                 allowedTemplateIds,
                 postIndex: index,
+                postBody: post.body,
               })
             : null;
         const variants =
@@ -2479,14 +2878,43 @@ For each post:
     const giphyApiKey = process.env.GIPHY_API_KEY?.trim();
 
     if (shouldGenerateGiphy && giphyApiKey) {
-      const giphyVariantsByPost = await Promise.all(
-        postsWithMemes.map(async (post) => {
-          const query = buildGiphyQuery({
-            hook: post.hook,
-            body: post.body,
-            memeBrief: memeBriefPreference,
-            giphyQuery: giphyQueryPreference,
+      // Extract one focused keyword per post via LLM for better Giphy relevance
+      let giphyKeywords: string[] = postsWithMemes.map((post) =>
+        buildGiphyQuery({ hook: post.hook, body: post.body, memeBrief: memeBriefPreference, giphyQuery: giphyQueryPreference }),
+      );
+
+      if (openAiApiToken) {
+        try {
+          const { client: kwClient } = getOpenAIClient(openAiApiToken);
+          const postSummaries = postsWithMemes
+            .map((post, i) => `Post ${i + 1}: ${post.hook.slice(0, 120)}`)
+            .join("\n");
+          const hintLine = giphyQueryPreference ? `\nUser hint: "${giphyQueryPreference}"` : "";
+          const kwResponse = await kwClient.chat.completions.create({
+            model: "gpt-4.1-mini",
+            messages: [
+              {
+                role: "user",
+                content: `For each LinkedIn post, return the single best 2-4 word Giphy search keyword that would find a funny and contextually relevant reaction GIF (e.g. "mind blown", "money printer", "facepalm").${hintLine}\n\n${postSummaries}\n\nReturn JSON: {"queries": ["...", ...]}`,
+              },
+            ],
+            response_format: { type: "json_object" },
+            max_tokens: 200,
           });
+          const parsed = JSON.parse(kwResponse.choices[0]?.message?.content ?? "{}") as { queries?: unknown };
+          if (Array.isArray(parsed.queries) && parsed.queries.length === postsWithMemes.length) {
+            giphyKeywords = (parsed.queries as unknown[]).map((q, i) =>
+              typeof q === "string" && q.trim() ? q.trim().slice(0, 60) : (giphyKeywords[i] ?? ""),
+            );
+          }
+        } catch (kwError) {
+          console.warn("Giphy keyword extraction failed, falling back to buildGiphyQuery", kwError);
+        }
+      }
+
+      const giphyVariantsByPost = await Promise.all(
+        postsWithMemes.map(async (post, index) => {
+          const query = giphyKeywords[index] ?? buildGiphyQuery({ hook: post.hook, body: post.body, memeBrief: memeBriefPreference, giphyQuery: giphyQueryPreference });
 
           try {
             const queryVariants = await fetchGiphyVariants({
@@ -2496,7 +2924,11 @@ For each post:
             });
             return ensureDistinctGiphyVariants(queryVariants, giphyVariantTarget);
           } catch (giphyError) {
-            console.error("GIPHY companion fetch failed for one post", giphyError);
+            console.error("GIPHY fetch failed", {
+              query,
+              hook: post.hook.slice(0, 60),
+              error: giphyError instanceof Error ? giphyError.message : String(giphyError),
+            });
             return [];
           }
         }),
@@ -2566,7 +2998,13 @@ For each post:
         examplesUsed: retrieval.entries.length,
         performancePostsAnalyzed: retrieval.performanceInsights?.analyzedPosts ?? 0,
         performanceInsightsUsed: retrieval.performanceInsights?.summaryLines.length ?? 0,
+        evidenceSources: {
+          sois: soisContext.enabled && soisContext.items.length > 0,
+          revenueCat: revenueCatContext.enabled && revenueCatContext.items.length > 0,
+          web: webEvidenceLines.length > 0,
+        },
       },
+      giphyRequested: input.giphyEnabled,
     };
 
     return NextResponse.json(response);
