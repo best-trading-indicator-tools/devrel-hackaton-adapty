@@ -88,6 +88,7 @@ const defaultForm: FormState = {
 const MAX_IMAGE_EDGE_PX = 1400;
 const MAX_IMAGE_DATA_URL_CHARS = 4_500_000;
 const IMAGE_EXPORT_QUALITY = 0.82;
+const MAX_CONCURRENT_GENERATION_REQUESTS = 3;
 const EVENT_TOPIC_PATTERN = /\b(event|webinar)\b/i;
 const MEME_TOPIC_PATTERN = /\b(meme|shitpost)\b/i;
 const CUSTOM_BRAND_VOICE = "__custom__";
@@ -865,6 +866,7 @@ export default function Home() {
     () => normalizedSelectedPostTypes.some((type) => needsChartDetails(type)),
     [normalizedSelectedPostTypes],
   );
+  const showGiphyFields = normalizedSelectedPostTypes.length > 0;
   const groupedIndustryRssFeeds = useMemo(() => {
     const grouped: Record<FeedCategory, RssFeed[]> = {
       platform: [],
@@ -1084,8 +1086,6 @@ export default function Home() {
       place: effectiveSelected.some((type) => needsEventDetails(type)) ? prev.place : "",
       chartEnabled: effectiveSelected.some((type) => needsChartDetails(type)) ? prev.chartEnabled : false,
       memeBrief: effectiveSelected.some((type) => needsMemeDetails(type)) ? prev.memeBrief : "",
-      giphyEnabled: effectiveSelected.some((type) => needsMemeDetails(type)) ? prev.giphyEnabled : false,
-      giphyQuery: effectiveSelected.some((type) => needsMemeDetails(type)) ? prev.giphyQuery : "",
       memeTemplateIds: effectiveSelected.some((type) => needsMemeDetails(type)) ? prev.memeTemplateIds : [],
       memeVariantCount: effectiveSelected.some((type) => needsMemeDetails(type))
         ? prev.memeVariantCount
@@ -1353,61 +1353,100 @@ export default function Home() {
         chartOptionsPayload = chartPayload.chartOptions;
       }
 
-      const generationChunks: Array<{ allocation: GenerationAllocation; response: GeneratePostsResponse }> = [];
+      const generationChunksByIndex: Array<
+        { allocation: GenerationAllocation; response: GeneratePostsResponse } | null
+      > = new Array(generationAllocations.length).fill(null);
       const firstChartAllocationIndex = form.chartEnabled
         ? generationAllocations.findIndex((allocation) => needsChartDetails(allocation.inputType))
         : -1;
 
-      for (const [allocationIndex, allocation] of generationAllocations.entries()) {
-        const typeNeedsChart = needsChartDetails(allocation.inputType);
-        const typeNeedsEvent = needsEventDetails(allocation.inputType);
-        const typeNeedsMeme = needsMemeDetails(allocation.inputType);
-        const shouldAttachChart = typeNeedsChart && form.chartEnabled && allocationIndex === firstChartAllocationIndex;
+      let allocationErrorMessage = "";
+      const concurrency = Math.max(1, Math.min(MAX_CONCURRENT_GENERATION_REQUESTS, generationAllocations.length));
 
-        const requestPayload = {
-          ...form,
-          style: allocation.style,
-          goal: allocation.goal,
-          inputType: allocation.inputType,
-          numberOfPosts: allocation.count,
-          chartEnabled: shouldAttachChart,
-          chartType: shouldAttachChart ? form.chartType : defaultForm.chartType,
-          chartTitle: shouldAttachChart ? form.chartTitle : "",
-          chartVisualStyle: shouldAttachChart ? form.chartVisualStyle : defaultForm.chartVisualStyle,
-          chartImagePrompt: shouldAttachChart ? form.chartImagePrompt : "",
-          chartData: shouldAttachChart ? chartDataPayload : "",
-          chartOptions: shouldAttachChart ? chartOptionsPayload : "",
-          time: typeNeedsEvent ? formatEventTimeForPrompt(form.time) : "",
-          place: typeNeedsEvent ? form.place : "",
-          memeBrief: typeNeedsMeme ? form.memeBrief : "",
-          giphyEnabled: typeNeedsMeme ? form.giphyEnabled : false,
-          giphyQuery: typeNeedsMeme ? form.giphyQuery : "",
-          memeTemplateIds: typeNeedsMeme ? form.memeTemplateIds : [],
-          memeVariantCount: typeNeedsMeme ? form.memeVariantCount : defaultForm.memeVariantCount,
-        };
-
-        const response = await fetch("/api/generate", {
-          method: "POST",
-          headers: {
-            "Content-Type": "application/json",
-          },
-          body: JSON.stringify(requestPayload),
-        });
-
-        const responsePayload = await response.json();
-
-        if (!response.ok) {
-          setError(
-            `[${allocation.inputType} | ${allocation.style} | ${GOAL_LABELS[allocation.goal]}] ${extractApiErrorMessage(responsePayload, response.status)}`,
-          );
-          return;
+      for (let startIndex = 0; startIndex < generationAllocations.length; startIndex += concurrency) {
+        if (allocationErrorMessage) {
+          break;
         }
 
-        generationChunks.push({
-          allocation,
-          response: sanitizeGenerationResult(responsePayload as GeneratePostsResponse),
-        });
+        const currentBatch = generationAllocations.slice(startIndex, startIndex + concurrency);
+        const settled = await Promise.allSettled(
+          currentBatch.map(async (allocation, batchOffset) => {
+            const allocationIndex = startIndex + batchOffset;
+            const typeNeedsChart = needsChartDetails(allocation.inputType);
+            const typeNeedsEvent = needsEventDetails(allocation.inputType);
+            const typeNeedsMeme = needsMemeDetails(allocation.inputType);
+            const shouldAttachChart =
+              typeNeedsChart && form.chartEnabled && allocationIndex === firstChartAllocationIndex;
+
+            const requestPayload = {
+              ...form,
+              style: allocation.style,
+              goal: allocation.goal,
+              inputType: allocation.inputType,
+              numberOfPosts: allocation.count,
+              chartEnabled: shouldAttachChart,
+              chartType: shouldAttachChart ? form.chartType : defaultForm.chartType,
+              chartTitle: shouldAttachChart ? form.chartTitle : "",
+              chartVisualStyle: shouldAttachChart ? form.chartVisualStyle : defaultForm.chartVisualStyle,
+              chartImagePrompt: shouldAttachChart ? form.chartImagePrompt : "",
+              chartData: shouldAttachChart ? chartDataPayload : "",
+              chartOptions: shouldAttachChart ? chartOptionsPayload : "",
+              time: typeNeedsEvent ? formatEventTimeForPrompt(form.time) : "",
+              place: typeNeedsEvent ? form.place : "",
+              memeBrief: typeNeedsMeme ? form.memeBrief : "",
+              giphyEnabled: form.giphyEnabled,
+              giphyQuery: form.giphyQuery,
+              memeTemplateIds: typeNeedsMeme ? form.memeTemplateIds : [],
+              memeVariantCount: typeNeedsMeme ? form.memeVariantCount : defaultForm.memeVariantCount,
+            };
+
+            const response = await fetch("/api/generate", {
+              method: "POST",
+              headers: {
+                "Content-Type": "application/json",
+              },
+              body: JSON.stringify(requestPayload),
+            });
+
+            const responsePayload = await response.json();
+
+            if (!response.ok) {
+              throw new Error(
+                `[${allocation.inputType} | ${allocation.style} | ${GOAL_LABELS[allocation.goal]}] ${extractApiErrorMessage(responsePayload, response.status)}`,
+              );
+            }
+
+            return {
+              allocationIndex,
+              allocation,
+              response: sanitizeGenerationResult(responsePayload as GeneratePostsResponse),
+            };
+          }),
+        );
+
+        for (const item of settled) {
+          if (item.status === "fulfilled") {
+            generationChunksByIndex[item.value.allocationIndex] = {
+              allocation: item.value.allocation,
+              response: item.value.response,
+            };
+            continue;
+          }
+
+          allocationErrorMessage =
+            item.reason instanceof Error ? item.reason.message : "One generation request failed.";
+          break;
+        }
       }
+
+      if (allocationErrorMessage) {
+        setError(allocationErrorMessage);
+        return;
+      }
+
+      const generationChunks = generationChunksByIndex.filter(
+        (chunk): chunk is { allocation: GenerationAllocation; response: GeneratePostsResponse } => Boolean(chunk),
+      );
 
       if (!generationChunks.length) {
         setError("No posts were generated.");
@@ -2386,41 +2425,6 @@ export default function Home() {
                 />
               </label>
 
-              <div className="mt-3 space-y-2 rounded-xl border border-black/10 bg-white p-3">
-                <label className="flex items-center gap-2">
-                  <input
-                    type="checkbox"
-                    className="h-4 w-4 rounded border-black/20"
-                    checked={form.giphyEnabled}
-                    onChange={(event) => setForm((prev) => ({ ...prev, giphyEnabled: event.target.checked }))}
-                  />
-                  <span className="text-sm font-medium">Add GIPHY GIF Companions</span>
-                </label>
-
-                {form.giphyEnabled ? (
-                  <div className="space-y-1">
-                    <label className="space-y-1">
-                      <span className="text-sm font-medium">GIPHY Query (optional)</span>
-                      <input
-                        type="text"
-                        placeholder="Optional base query, e.g. frustrated PM, growth marketing meme"
-                        className={baseControlClassName}
-                        style={compactInputStyle}
-                        value={form.giphyQuery}
-                        onChange={(event) => setForm((prev) => ({ ...prev, giphyQuery: event.target.value }))}
-                      />
-                      <p className="text-xs text-slate-600">
-                        AI chooses the best query for each generated post from its hook/body.
-                      </p>
-                      <p className="text-xs text-slate-600">
-                        Your query, if provided, is used as a hint only.
-                      </p>
-                      <p className="text-xs text-slate-600">Powered by GIPHY. Beta keys are rate-limited to 100 calls/hour.</p>
-                    </label>
-                  </div>
-                ) : null}
-              </div>
-
               <p className="text-xs text-slate-600">
                 Meme style is inferred automatically from Brand Voice, Goal, Post Type, and your prompt details.
               </p>
@@ -2429,12 +2433,45 @@ export default function Home() {
                 {form.numberOfPosts > 1 ? "s" : ""} x {form.memeVariantCount} variant
                 {form.memeVariantCount > 1 ? "s" : ""} each).
               </p>
+            </div>
+          ) : null}
+
+          {showGiphyFields ? (
+            <div className="space-y-3 rounded-2xl border border-black/10 bg-slate-50 p-3">
+              <p className="text-xs font-semibold uppercase tracking-wide text-slate-600">GIPHY GIF Companions (optional)</p>
+              <label className="flex items-center gap-2">
+                <input
+                  type="checkbox"
+                  className="h-4 w-4 rounded border-black/20"
+                  checked={form.giphyEnabled}
+                  onChange={(event) => setForm((prev) => ({ ...prev, giphyEnabled: event.target.checked }))}
+                />
+                <span className="text-sm font-medium">Add GIPHY GIF to each post</span>
+              </label>
+
               {form.giphyEnabled ? (
-                <p className="text-xs text-slate-600">
-                  Total GIPHY GIFs targeted for this run: {totalMemeVariants} ({form.numberOfPosts} post
-                  {form.numberOfPosts > 1 ? "s" : ""} x {form.memeVariantCount} variant
-                  {form.memeVariantCount > 1 ? "s" : ""} each).
-                </p>
+                <div className="space-y-1">
+                  <label className="space-y-1">
+                    <span className="text-sm font-medium">GIPHY Query (optional)</span>
+                    <input
+                      type="text"
+                      placeholder="Optional base query, e.g. frustrated PM, growth marketing"
+                      className={baseControlClassName}
+                      style={compactInputStyle}
+                      value={form.giphyQuery}
+                      onChange={(event) => setForm((prev) => ({ ...prev, giphyQuery: event.target.value }))}
+                    />
+                    <p className="text-xs text-slate-600">
+                      AI chooses the best query for each post from its hook/body. Your query, if provided, is used as a hint only.
+                    </p>
+                    <p className="text-xs text-slate-600">Powered by GIPHY. Beta keys are rate-limited to 100 calls/hour.</p>
+                  </label>
+                  <p className="text-xs text-slate-600">
+                    Total GIFs: {form.numberOfPosts * form.memeVariantCount} ({form.numberOfPosts} post
+                    {form.numberOfPosts > 1 ? "s" : ""} × {form.memeVariantCount} variant
+                    {form.memeVariantCount > 1 ? "s" : ""} each).
+                  </p>
+                </div>
               ) : null}
             </div>
           ) : null}

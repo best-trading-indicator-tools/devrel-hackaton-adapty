@@ -132,13 +132,45 @@ export const MEME_TEMPLATE_IDS = MEME_TEMPLATE_OPTIONS.map((template) => templat
   ...(typeof MEME_TEMPLATE_OPTIONS)[number]["id"][],
 ];
 
-export const MEME_TEMPLATE_LABELS: Record<string, string> = MEME_TEMPLATE_OPTIONS.reduce(
-  (acc, template) => {
-    acc[template.id] = template.name;
-    return acc;
-  },
-  {} as Record<string, string>,
-);
+export const MEME_TEMPLATE_LABELS: Record<string, string> = {
+  ...MEME_TEMPLATE_OPTIONS.reduce(
+    (acc, template) => {
+      acc[template.id] = template.name;
+      return acc;
+    },
+    {} as Record<string, string>,
+  ),
+  disastergirl: "Disaster Girl",
+  db: "Distracted Boyfriend",
+  dbg: "Expectation vs Reality",
+  pigeon: "Is This a Pigeon?",
+  spongebob: "Mocking Spongebob",
+  same: "They're The Same Picture",
+  kombucha: "Kombucha Girl",
+  harold: "Hide the Pain Harold",
+  rollsafe: "Roll Safe",
+};
+
+/** Semantic meaning of each meme template so captions match the image. */
+export const MEME_TEMPLATE_MEANINGS: Record<string, string> = {
+  drake: "Reject vs choose: top = bad option (rejected), bottom = good option (chosen)",
+  "woman-cat": "Person yelling at oblivious listener: top = accusation/frustration, bottom = clueless response",
+  spiderman: "Two identical things pointing at each other: top and bottom = the same concept from different angles",
+  both: "Why not both?: top = two options presented as either/or, bottom = 'why not both?'",
+  wonka: "Condescending sarcasm: top = setup or claim, bottom = sarcastic put-down",
+  buzz: "X everywhere: top = the thing, bottom = that thing everywhere",
+  fry: "Skeptical squint: top = first possibility, bottom = second possibility (not sure which)",
+  stonks: "Bad decision that seems smart: top = the move, bottom = the dumb outcome",
+  disastergirl: "Skeptical knowing look: bottom = punchline (obvious truth, just as planned, ironic payoff)",
+  db: "Distracted boyfriend: top = what he leaves, middle = what he looks at, bottom = girlfriend",
+  dbg: "Expectation vs reality: top = expectation, bottom = disappointing reality",
+  pigeon: "Misidentification: top = what it is, bottom = 'is this a pigeon?' style wrong guess",
+  spongebob: "Mocking: same phrase, top normal, bottom mocking caps",
+  same: "They're the same: three slots for things that are identical",
+  kombucha: "Trying then disgusted: top = first try, bottom = second try (disgusted)",
+  harold: "Hide the pain: top = situation, bottom = pained but smiling response",
+  rollsafe: "Tap head logic: top = problem, bottom = 'can't X if you don't Y' style solution",
+};
 
 export const GOAL_LABELS: Record<ContentGoal, string> = {
   virality: "Virality",

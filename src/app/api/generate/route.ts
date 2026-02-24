@@ -15,6 +15,7 @@ import {
   BRAND_VOICE_PROFILES,
   MEME_TEMPLATE_IDS,
   MEME_TEMPLATE_LABELS,
+  MEME_TEMPLATE_MEANINGS,
   MEME_TEMPLATE_OPTIONS,
   buildLengthPlan,
   GOAL_DESCRIPTIONS,
@@ -1566,7 +1567,7 @@ export async function POST(request: Request) {
     }
 
     const input = parsedInput.data;
-    if (input.giphyEnabled && shouldGenerateMemes(input.inputType) && !process.env.GIPHY_API_KEY?.trim()) {
+    if (input.giphyEnabled && !process.env.GIPHY_API_KEY?.trim()) {
       return NextResponse.json(
         {
           error: "GIPHY API key is missing",
@@ -2143,21 +2144,24 @@ ${rankedContextLines}`;
         };
       });
 
+    const collectQualityIssues = (posts: ReturnType<typeof normalizeGeneratedPosts>) =>
+      posts
+        .map((post, index) => ({
+          postIndex: index,
+          issues: evaluatePostQuality({
+            post,
+            style: input.style,
+            goal: input.goal,
+            inputType: input.inputType,
+            time: input.time,
+            place: input.place,
+            requireNumericAnchor: hasNumericInputsAvailable,
+          }),
+        }))
+        .filter((item) => item.issues.length > 0);
+
     let normalizedPosts = normalizeGeneratedPosts(parsed.posts);
-    const qualityIssuesByPost = normalizedPosts
-      .map((post, index) => ({
-        postIndex: index,
-        issues: evaluatePostQuality({
-          post,
-          style: input.style,
-          goal: input.goal,
-          inputType: input.inputType,
-          time: input.time,
-          place: input.place,
-          requireNumericAnchor: hasNumericInputsAvailable,
-        }),
-      }))
-      .filter((item) => item.issues.length > 0);
+    let qualityIssuesByPost = collectQualityIssues(normalizedPosts);
 
     if (qualityIssuesByPost.length > 0) {
       const qualityIssueSummary = qualityIssuesByPost
@@ -2203,9 +2207,13 @@ ${toBulletedSection(QUALITY_REPAIR_REQUIREMENT_LINES)}
 
       parsed = repairedBatchRun.parsed;
       normalizedPosts = normalizeGeneratedPosts(parsed.posts);
+      qualityIssuesByPost = collectQualityIssues(normalizedPosts);
     }
 
-    const editorSystemPrompt = `You edit LinkedIn posts to sound like a real human wrote them.
+    const shouldRunEditorPass = qualityIssuesByPost.length > 0;
+
+    if (shouldRunEditorPass) {
+      const editorSystemPrompt = `You edit LinkedIn posts to sound like a real human wrote them.
 
 Read the draft. For each sentence ask: would someone actually say this to a friend? If not, rewrite it simpler.
 
@@ -2245,71 +2253,72 @@ After: "Acquisition quality matters more than billing mechanics for most apps."
 Before: "If you want a simple plan this week, do three things."
 After: "If you want a simple plan this week, do these 3 things."`;
 
-    const editorDraftPrompt = normalizedPosts
-      .map(
-        (post, index) => `Post ${index + 1}:
+      const editorDraftPrompt = normalizedPosts
+        .map(
+          (post, index) => `Post ${index + 1}:
 Hook: ${post.hook}
 Body:
 ${post.body}
 CTA: ${post.cta}`,
-      )
-      .join("\n\n");
+        )
+        .join("\n\n");
 
-    const editorUserPrompt = `Edit these ${normalizedPosts.length} post(s). Return the same number of posts with the same hooks array.\n\n${editorDraftPrompt}\n\nReturn ${parsed.hooks.length} hook suggestions as well (keep good ones, tighten sloppy ones).`;
+      const editorUserPrompt = `Edit these ${normalizedPosts.length} post(s). Return the same number of posts with the same hooks array.\n\n${editorDraftPrompt}\n\nReturn ${parsed.hooks.length} hook suggestions as well (keep good ones, tighten sloppy ones).`;
 
-    const runEditorGeneration = (params: {
-      model: string;
-      userPrompt: string;
-      responseSchema: ReturnType<typeof makeGeneratePostsResponseSchema>;
-    }): Promise<GeneratedBatch> => {
-      if (oauthCredentials) {
-        return runCodexOauthGeneration({
-          oauth: oauthCredentials,
+      const runEditorGeneration = (params: {
+        model: string;
+        userPrompt: string;
+        responseSchema: ReturnType<typeof makeGeneratePostsResponseSchema>;
+      }): Promise<GeneratedBatch> => {
+        if (oauthCredentials) {
+          return runCodexOauthGeneration({
+            oauth: oauthCredentials,
+            model: params.model,
+            systemPrompt: editorSystemPrompt,
+            userPrompt: params.userPrompt,
+            responseSchema: params.responseSchema,
+          });
+        }
+
+        if (!openAiApiToken) {
+          throw new Error("OpenAI API token is missing");
+        }
+
+        return runOpenAiChatGeneration({
+          token: openAiApiToken,
           model: params.model,
           systemPrompt: editorSystemPrompt,
           userPrompt: params.userPrompt,
           responseSchema: params.responseSchema,
+          temperature: 0.4,
         });
-      }
+      };
 
-      if (!openAiApiToken) {
-        throw new Error("OpenAI API token is missing");
-      }
-
-      return runOpenAiChatGeneration({
-        token: openAiApiToken,
-        model: params.model,
-        systemPrompt: editorSystemPrompt,
-        userPrompt: params.userPrompt,
-        responseSchema: params.responseSchema,
-        temperature: 0.4,
-      });
-    };
-
-    try {
-      const editorRun = await (async () => {
-        try {
-          return await runEditorGeneration({
-            model: requestedModel,
-            userPrompt: editorUserPrompt,
-            responseSchema,
-          });
-        } catch (primaryError) {
-          if (fallbackModel.trim().length > 0 && fallbackModel !== requestedModel && isModelAccessError(primaryError)) {
-            return runEditorGeneration({
-              model: fallbackModel,
+      try {
+        const editorRun = await (async () => {
+          try {
+            return await runEditorGeneration({
+              model: requestedModel,
               userPrompt: editorUserPrompt,
               responseSchema,
             });
+          } catch (primaryError) {
+            if (fallbackModel.trim().length > 0 && fallbackModel !== requestedModel && isModelAccessError(primaryError)) {
+              return runEditorGeneration({
+                model: fallbackModel,
+                userPrompt: editorUserPrompt,
+                responseSchema,
+              });
+            }
+            throw primaryError;
           }
-          throw primaryError;
-        }
-      })();
+        })();
 
-      parsed = editorRun;
-      normalizedPosts = normalizeGeneratedPosts(editorRun.posts);
-    } catch {
-      // Editor pass is best-effort; if it fails, keep the original posts
+        parsed = editorRun;
+        normalizedPosts = normalizeGeneratedPosts(editorRun.posts);
+      } catch {
+        // Editor pass is best-effort; if it fails, keep the original posts
+      }
     }
 
     let normalizedHooks = parsed.hooks.map((hook) => normalizeNoEmDash(hook));
@@ -2339,15 +2348,20 @@ CTA: ${post.cta}`,
         normalizedPosts.length,
         memeVariantTarget,
       );
-      const memeTemplateCatalog = MEME_TEMPLATE_OPTIONS.filter((template) =>
-        allowedTemplateIds.includes(template.id),
-      )
-        .map((template) => `- ${template.id}: ${template.name}`)
+      const memeTemplateCatalog = allowedTemplateIds
+        .map((id) => {
+          const name = MEME_TEMPLATE_LABELS[id] ?? id.replace(/-/g, " ");
+          const meaning = MEME_TEMPLATE_MEANINGS[id];
+          return meaning ? `- ${id}: ${name} — ${meaning}` : `- ${id}: ${name}`;
+        })
         .join("\n");
       const memeSelectionSystemPrompt = `
 You are selecting meme templates and caption lines for LinkedIn meme posts.
 You must choose only from the provided template IDs and produce ranked variants.
-Optimize for tone fit and humor quality while staying relevant to B2C mobile apps and monetization.
+
+CRITICAL: The caption (top/bottom text) must semantically match the meme image. Each template has a specific visual meaning and format. Choose templates whose meaning fits your joke, and write captions that are the actual joke a viewer would see — not meta-commentary about the post style, tone, or "Adapty-style humor." The text overlay IS the punchline.
+
+The caption must be funny (it's a meme) and relevant to the specific post. Derive the joke from the post's hook and body — the meme should illustrate or punch up a point from that post, not generic filler. Make sense and land the joke.
 Never use em dash punctuation. Use standard hyphen if needed.
 `;
       const memeSelectionUserPrompt = `
@@ -2378,7 +2392,9 @@ For each post:
      : "Vary templates across variants when possible."
  }
 3. Keep top and bottom lines concise and readable on image memes.
-4. Score tone fit from 0 to 100 and explain briefly.
+4. Match caption to template: topText and bottomText must fit the template's format and visual meaning. Do not paste style labels or meta-commentary.
+5. Joke must be funny and relevant to the post — extract the humor from the hook/body, not generic one-liners.
+6. Score tone fit from 0 to 100 and explain briefly.
 `;
 
       const runMemeSelection = (model: string) => {
@@ -2459,7 +2475,7 @@ For each post:
     }
 
     let postsWithMedia: GeneratePostsResponse["posts"] = postsWithMemes;
-    const shouldGenerateGiphy = includeMemeCompanion && input.giphyEnabled;
+    const shouldGenerateGiphy = input.giphyEnabled;
     const giphyApiKey = process.env.GIPHY_API_KEY?.trim();
 
     if (shouldGenerateGiphy && giphyApiKey) {
