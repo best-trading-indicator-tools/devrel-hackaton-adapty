@@ -1229,11 +1229,15 @@ export default function Home() {
       }
 
       const generationChunks: Array<{ allocation: GenerationAllocation; response: GeneratePostsResponse }> = [];
+      const firstChartAllocationIndex = form.chartEnabled
+        ? generationAllocations.findIndex((allocation) => needsChartDetails(allocation.inputType))
+        : -1;
 
-      for (const allocation of generationAllocations) {
+      for (const [allocationIndex, allocation] of generationAllocations.entries()) {
         const typeNeedsChart = needsChartDetails(allocation.inputType);
         const typeNeedsEvent = needsEventDetails(allocation.inputType);
         const typeNeedsMeme = needsMemeDetails(allocation.inputType);
+        const shouldAttachChart = typeNeedsChart && form.chartEnabled && allocationIndex === firstChartAllocationIndex;
 
         const requestPayload = {
           ...form,
@@ -1241,13 +1245,13 @@ export default function Home() {
           goal: allocation.goal,
           inputType: allocation.inputType,
           numberOfPosts: allocation.count,
-          chartEnabled: typeNeedsChart ? form.chartEnabled : false,
-          chartType: typeNeedsChart && form.chartEnabled ? form.chartType : defaultForm.chartType,
-          chartTitle: typeNeedsChart && form.chartEnabled ? form.chartTitle : "",
-          chartVisualStyle: typeNeedsChart && form.chartEnabled ? form.chartVisualStyle : defaultForm.chartVisualStyle,
-          chartImagePrompt: typeNeedsChart && form.chartEnabled ? form.chartImagePrompt : "",
-          chartData: typeNeedsChart && form.chartEnabled ? chartDataPayload : "",
-          chartOptions: typeNeedsChart && form.chartEnabled ? chartOptionsPayload : "",
+          chartEnabled: shouldAttachChart,
+          chartType: shouldAttachChart ? form.chartType : defaultForm.chartType,
+          chartTitle: shouldAttachChart ? form.chartTitle : "",
+          chartVisualStyle: shouldAttachChart ? form.chartVisualStyle : defaultForm.chartVisualStyle,
+          chartImagePrompt: shouldAttachChart ? form.chartImagePrompt : "",
+          chartData: shouldAttachChart ? chartDataPayload : "",
+          chartOptions: shouldAttachChart ? chartOptionsPayload : "",
           time: typeNeedsEvent ? formatEventTimeForPrompt(form.time) : "",
           place: typeNeedsEvent ? form.place : "",
           memeBrief: typeNeedsMeme ? form.memeBrief : "",
