@@ -60,6 +60,7 @@ const LINKEDIN_WRITING_CONTRACT = [
   "Write like a cohesive mini-article, not stacked slogans.",
   "Use natural paragraph formatting. One paragraph can contain 1 to a few sentences, with blank lines between subtopics.",
   "Keep paragraph rhythm human, usually 2 to 5 sentences before a blank line.",
+  "Keep one-sentence paragraphs occasional for emphasis, not the dominant rhythm.",
   "Do not stack ultra-short lines back-to-back. Avoid rap or poem cadence.",
   "Mix short, medium, and long sentence lengths so rhythm feels human.",
   "Avoid internet template cadence and motivational filler patterns.",
@@ -216,6 +217,50 @@ function hasShortLineStack(body: string): boolean {
   return false;
 }
 
+function splitSentenceUnits(paragraph: string): string[] {
+  const matches = paragraph
+    .match(/[^.!?]+[.!?]+|[^.!?]+$/g)
+    ?.map((part) => part.trim())
+    .filter(Boolean);
+
+  return matches?.length ? matches : [paragraph.trim()].filter(Boolean);
+}
+
+function hasStaccatoParagraphRhythm(body: string): boolean {
+  const paragraphs = body
+    .split(/\n{2,}/)
+    .map((paragraph) => paragraph.trim())
+    .filter(Boolean);
+
+  if (paragraphs.length < 5) {
+    return false;
+  }
+
+  let oneSentenceParagraphs = 0;
+  let totalSentences = 0;
+  let shortSentences = 0;
+
+  for (const paragraph of paragraphs) {
+    const sentenceUnits = splitSentenceUnits(paragraph);
+    if (sentenceUnits.length <= 1) {
+      oneSentenceParagraphs += 1;
+    }
+
+    for (const sentence of sentenceUnits) {
+      const words = sentence.split(/\s+/).filter(Boolean).length;
+      totalSentences += 1;
+      if (words <= 8) {
+        shortSentences += 1;
+      }
+    }
+  }
+
+  const oneSentenceRatio = oneSentenceParagraphs / paragraphs.length;
+  const shortSentenceRatio = totalSentences > 0 ? shortSentences / totalSentences : 0;
+
+  return (paragraphs.length >= 6 && oneSentenceRatio >= 0.6) || (totalSentences >= 10 && shortSentenceRatio >= 0.55);
+}
+
 function evaluatePostQuality(params: {
   post: {
     hook: string;
@@ -259,6 +304,10 @@ function evaluatePostQuality(params: {
 
   if (hasShortLineStack(params.post.body)) {
     issues.push("Avoid stacking ultra-short lines back-to-back.");
+  }
+
+  if (!isMeme && hasStaccatoParagraphRhythm(params.post.body)) {
+    issues.push("Body rhythm is too staccato. Use fuller paragraphs with mostly 2-4 sentences and keep one-line paragraphs occasional.");
   }
 
   if (isEvent) {
@@ -1457,6 +1506,7 @@ ${draftSummary}
 
 Repair requirements:
 - Use natural paragraphs with 1 to a few sentences per paragraph.
+- Keep most paragraphs at 2-4 sentences and avoid one-line paragraph chains.
 - Add blank lines between subtopics.
 - Keep output human, concrete, and non-generic.
 - Avoid cliché opener lines.

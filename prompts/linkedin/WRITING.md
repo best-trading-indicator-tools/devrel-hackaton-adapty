@@ -7,6 +7,7 @@ Core rhythm and structure:
 - Use natural paragraphs. One paragraph can have 1 to a few sentences.
 - Use blank lines between subtopics so longer posts breathe.
 - Keep paragraph rhythm human: usually 2 to 5 sentences before a blank line.
+- Keep one-sentence paragraphs occasional for emphasis, not the default rhythm.
 - Avoid rap cadence and short-fragment stacks.
 - Never stack ultra-short lines back-to-back.
 - Mix short, medium, and long sentence lengths naturally.
