@@ -1084,7 +1084,7 @@ Also generate a list of hook suggestions inspired by this style and request.
 `;
 
     type GeneratedPost = {
-      length: "short" | "medium" | "long" | "very long";
+      length: "short" | "medium" | "long" | "very long" | "standard";
       hook: string;
       body: string;
       cta: string;

@@ -24,8 +24,7 @@ const inputLengthSchema = z
   .default("medium");
 
 const outputLengthSchema = z
-  .enum(["short", "medium", "long", "very long", "standard"])
-  .transform((value) => (value === "standard" ? "medium" : value));
+  .enum(["short", "medium", "long", "very long", "standard"]);
 
 export const generatePostsRequestSchema = z.object({
   style: z.string().trim().min(1).max(260).default("adapty"),
