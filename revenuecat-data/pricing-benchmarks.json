@@ -1,0 +1,100 @@
+{
+  "_source": "RevenueCat State of Subscription Apps 2025",
+  "_url": "https://www.revenuecat.com/pdf/state-of-subscription-apps-2025.pdf",
+  "_note": "All benchmarks North America-specific. Prices in USD. Pages 33-48.",
+  "byCategory": {
+    "Health & Fitness": {
+      "category": "Health & Fitness",
+      "medianPrices": { "weekly": 4.99, "monthly": 9.70, "annual": 39.99 },
+      "shareOfSubscriptions": { "weekly": 0.4, "monthly": 27.3, "annual": 66.6 },
+      "annualDiscount": 67,
+      "hybridMonetizationShare": 25.7
+    },
+    "Business": {
+      "category": "Business",
+      "medianPrices": { "weekly": 6.15, "monthly": 7.58, "annual": 37.50 },
+      "shareOfSubscriptions": { "weekly": 20.7, "monthly": 23.4, "annual": 51.3 },
+      "annualDiscount": 67,
+      "hybridMonetizationShare": 23.8
+    },
+    "Education": {
+      "category": "Education",
+      "medianPrices": { "weekly": 5.99, "monthly": 8.38, "annual": 44.99 },
+      "shareOfSubscriptions": { "weekly": 4.9, "monthly": 22.9, "annual": 56.5 },
+      "annualDiscount": 67,
+      "hybridMonetizationShare": 35.0
+    },
+    "Productivity": {
+      "category": "Productivity",
+      "medianPrices": { "weekly": 4.99, "monthly": 5.99, "annual": 29.99 },
+      "shareOfSubscriptions": { "weekly": 16.3, "monthly": 37.7, "annual": 40.6 },
+      "annualDiscount": 67,
+      "hybridMonetizationShare": 33.3
+    },
+    "Photo & Video": {
+      "category": "Photo & Video",
+      "medianPrices": { "weekly": 4.99, "monthly": 5.99, "annual": 29.99 },
+      "shareOfSubscriptions": { "weekly": 34.4, "monthly": 20.9, "annual": 39.7 },
+      "annualDiscount": 67,
+      "hybridMonetizationShare": 34.0
+    },
+    "Shopping": {
+      "category": "Shopping",
+      "medianPrices": { "weekly": 3.00, "monthly": 5.99, "annual": 22.24 },
+      "shareOfSubscriptions": { "weekly": 56.0, "monthly": 4.3, "annual": 34.8 },
+      "annualDiscount": 67,
+      "hybridMonetizationShare": 35.3
+    },
+    "Travel": {
+      "category": "Travel",
+      "medianPrices": { "weekly": 2.99, "monthly": 4.00, "annual": 18.67 },
+      "shareOfSubscriptions": { "weekly": 5.7, "monthly": 28.9, "annual": 65.1 },
+      "annualDiscount": 67,
+      "hybridMonetizationShare": 39.4
+    },
+    "Utilities": {
+      "category": "Utilities",
+      "medianPrices": { "weekly": 4.99, "monthly": 4.99, "annual": 26.99 },
+      "shareOfSubscriptions": { "weekly": 5.5, "monthly": 39.0, "annual": 53.8 },
+      "annualDiscount": 67,
+      "hybridMonetizationShare": 38.7
+    },
+    "Gaming": {
+      "category": "Gaming",
+      "medianPrices": { "weekly": 4.99, "monthly": 4.99, "annual": 20.55 },
+      "shareOfSubscriptions": { "weekly": 77.9, "monthly": 17.8, "annual": 4.3 },
+      "annualDiscount": 67,
+      "hybridMonetizationShare": 69.0
+    },
+    "Media & Entertainment": {
+      "category": "Media & Entertainment",
+      "medianPrices": { "weekly": 4.99, "monthly": 5.24, "annual": 29.99 },
+      "shareOfSubscriptions": { "weekly": 27.3, "monthly": 45.4, "annual": 21.9 },
+      "annualDiscount": 67,
+      "hybridMonetizationShare": 27.1
+    },
+    "Social & Lifestyle": {
+      "category": "Social & Lifestyle",
+      "medianPrices": { "weekly": 4.99, "monthly": 7.99, "annual": 29.99 },
+      "shareOfSubscriptions": { "weekly": 31.0, "monthly": 44.7, "annual": 19.1 },
+      "annualDiscount": 67,
+      "hybridMonetizationShare": 38.3
+    }
+  },
+  "byRegion": {
+    "North America": { "weekly": 5.99, "monthly": 8.99, "annual": 35.99 },
+    "Western Europe": { "weekly": 6.45, "monthly": 7.99, "annual": 33.95 },
+    "Asia-Pacific": { "weekly": 5.39, "monthly": 6.36, "annual": 32.90 },
+    "Latin America": { "weekly": 4.35, "monthly": 4.83, "annual": 19.99 },
+    "MEA": { "weekly": 4.64, "monthly": 5.44, "annual": 22.86 },
+    "IN/SEA": { "weekly": 4.40, "monthly": 4.18, "annual": 17.96 },
+    "ROW": { "weekly": 4.99, "monthly": 5.11, "annual": 24.64 }
+  },
+  "categoryMapping": {
+    "Games": "Gaming",
+    "Entertainment": "Media & Entertainment",
+    "Social Networking": "Social & Lifestyle",
+    "Lifestyle": "Social & Lifestyle",
+    "Dating": "Social & Lifestyle"
+  }
+}

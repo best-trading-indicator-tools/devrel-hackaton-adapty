@@ -1,0 +1,76 @@
+{
+  "_source": "RevenueCat State of Subscription Apps 2025",
+  "_url": "https://www.revenuecat.com/pdf/state-of-subscription-apps-2025.pdf",
+  "_note": "North America only. Median days to reach revenue milestones. Success rate = % of apps reaching milestone. Pages 64-66.",
+  "benchmarks": {
+    "Health & Fitness": {
+      "category": "Health & Fitness",
+      "daysTo1K": { "median": 60, "successRate": 25.0 },
+      "daysTo10K": { "median": 180, "successRate": 10.0 }
+    },
+    "Business": {
+      "category": "Business",
+      "daysTo1K": { "median": 45, "successRate": 30.0 },
+      "daysTo10K": { "median": 150, "successRate": 15.0 }
+    },
+    "Media & Entertainment": {
+      "category": "Media & Entertainment",
+      "daysTo1K": { "median": 60, "successRate": 22.0 },
+      "daysTo10K": { "median": 200, "successRate": 8.0 }
+    },
+    "Travel": {
+      "category": "Travel",
+      "daysTo1K": { "median": 55, "successRate": 24.0 },
+      "daysTo10K": { "median": 170, "successRate": 9.0 }
+    },
+    "Shopping": {
+      "category": "Shopping",
+      "daysTo1K": { "median": 60, "successRate": 23.0 },
+      "daysTo10K": { "median": 190, "successRate": 8.5 }
+    },
+    "Productivity": {
+      "category": "Productivity",
+      "daysTo1K": { "median": 60, "successRate": 26.0 },
+      "daysTo10K": { "median": 180, "successRate": 9.5 }
+    },
+    "Education": {
+      "category": "Education",
+      "daysTo1K": { "median": 65, "successRate": 24.0 },
+      "daysTo10K": { "median": 200, "successRate": 8.0 }
+    },
+    "Social & Lifestyle": {
+      "category": "Social & Lifestyle",
+      "daysTo1K": { "median": 70, "successRate": 18.0 },
+      "daysTo10K": { "median": 220, "successRate": 6.0 }
+    },
+    "Photo & Video": {
+      "category": "Photo & Video",
+      "daysTo1K": { "median": 60, "successRate": 27.57 },
+      "daysTo10K": { "median": 180, "successRate": 8.75 }
+    },
+    "Gaming": {
+      "category": "Gaming",
+      "daysTo1K": { "median": 70, "successRate": 20.0 },
+      "daysTo10K": { "median": 210, "successRate": 7.0 }
+    },
+    "Utilities": {
+      "category": "Utilities",
+      "daysTo1K": { "median": 50, "successRate": 28.0 },
+      "daysTo10K": { "median": 160, "successRate": 12.0 }
+    }
+  },
+  "categoryMapping": {
+    "Games": "Gaming",
+    "Entertainment": "Media & Entertainment",
+    "Social Networking": "Social & Lifestyle",
+    "Lifestyle": "Social & Lifestyle",
+    "Dating": "Social & Lifestyle",
+    "Finance": "Business",
+    "Medical": "Health & Fitness",
+    "Sports": "Health & Fitness",
+    "Music": "Media & Entertainment",
+    "News": "Media & Entertainment",
+    "Books": "Education",
+    "Reference": "Education"
+  }
+}

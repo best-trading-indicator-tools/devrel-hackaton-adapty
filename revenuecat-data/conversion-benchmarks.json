@@ -1,0 +1,212 @@
+{
+  "_source": "RevenueCat State of Subscription Apps 2025",
+  "_url": "https://www.revenuecat.com/pdf/state-of-subscription-apps-2025.pdf",
+  "_note": "All benchmarks North America-specific. Percentiles: Q1, Median, Q3, P90. Pages 8-31.",
+  "benchmarks": {
+    "Health & Fitness": {
+      "category": "Health & Fitness",
+      "trialStartRate": { "median": 3.9, "p90": 20.3 },
+      "trialToPaid": { "median": 39.9, "p90": 68.3 },
+      "downloadToPaidD35": { "median": 1.0, "p90": 5.5 },
+      "timeToTrial": { "day0Percent": 82 },
+      "timeToPaid": { "day0Percent": 80 },
+      "refundRate": { "median": 4.71 },
+      "trialDetails": {
+        "medianConversion": 39.9,
+        "durationMix": {
+          "fourDaysOrLess": 13.3,
+          "fiveToNineDays": 81.2,
+          "tenToSixteenDays": 1.6,
+          "seventeenToThirtyTwoDays": 3.9
+        }
+      }
+    },
+    "Business": {
+      "category": "Business",
+      "trialStartRate": { "median": 6.7, "p90": 20.3 },
+      "trialToPaid": { "median": 21.9, "p90": 68.3 },
+      "downloadToPaidD35": { "median": 0.7, "p90": 10.5 },
+      "timeToTrial": { "day0Percent": 82 },
+      "timeToPaid": { "day0Percent": 80 },
+      "refundRate": { "median": 2.88 },
+      "trialDetails": {
+        "medianConversion": 21.9,
+        "durationMix": {
+          "fourDaysOrLess": 15.9,
+          "fiveToNineDays": 70.4,
+          "tenToSixteenDays": 6.1,
+          "seventeenToThirtyTwoDays": 7.6
+        }
+      }
+    },
+    "Travel": {
+      "category": "Travel",
+      "trialStartRate": { "median": 7.3, "p90": 20.3 },
+      "trialToPaid": { "median": 48.7, "p90": 68.3 },
+      "downloadToPaidD35": { "median": 0.7, "p90": 5.5 },
+      "timeToTrial": { "day0Percent": 82 },
+      "timeToPaid": { "day0Percent": 80 },
+      "refundRate": { "median": 1.51 },
+      "trialDetails": {
+        "medianConversion": 48.7,
+        "durationMix": {
+          "fourDaysOrLess": 3.4,
+          "fiveToNineDays": 29.2,
+          "tenToSixteenDays": 56.3,
+          "seventeenToThirtyTwoDays": 9.3
+        }
+      }
+    },
+    "Media & Entertainment": {
+      "category": "Media & Entertainment",
+      "trialStartRate": { "median": 3.6, "p90": 20.3 },
+      "trialToPaid": { "median": 43.8, "p90": 68.3 },
+      "downloadToPaidD35": { "median": 1.0, "p90": 5.5 },
+      "timeToTrial": { "day0Percent": 82 },
+      "timeToPaid": { "day0Percent": 58.9 },
+      "refundRate": { "median": 3.07 },
+      "trialDetails": {
+        "medianConversion": 43.8,
+        "durationMix": {
+          "fourDaysOrLess": 3.7,
+          "fiveToNineDays": 55.4,
+          "tenToSixteenDays": 37.5,
+          "seventeenToThirtyTwoDays": 3.4
+        }
+      }
+    },
+    "Education": {
+      "category": "Education",
+      "trialStartRate": { "median": 2.8, "p90": 20.3 },
+      "trialToPaid": { "median": 28.6, "p90": 68.3 },
+      "downloadToPaidD35": { "median": 0.6, "p90": 5.5 },
+      "timeToTrial": { "day0Percent": 82 },
+      "timeToPaid": { "day0Percent": 80 },
+      "refundRate": { "median": 4.86 },
+      "trialDetails": {
+        "medianConversion": 28.6,
+        "durationMix": {
+          "fourDaysOrLess": 6.7,
+          "fiveToNineDays": 72.6,
+          "tenToSixteenDays": 13.7,
+          "seventeenToThirtyTwoDays": 7.0
+        }
+      }
+    },
+    "Productivity": {
+      "category": "Productivity",
+      "trialStartRate": { "median": 2.6, "p90": 20.3 },
+      "trialToPaid": { "median": 32.0, "p90": 68.3 },
+      "downloadToPaidD35": { "median": 1.0, "p90": 11.2 },
+      "timeToTrial": { "day0Percent": 82 },
+      "timeToPaid": { "day0Percent": 60 },
+      "refundRate": { "median": 2.55 },
+      "trialDetails": {
+        "medianConversion": 32.0,
+        "durationMix": {
+          "fourDaysOrLess": 15.0,
+          "fiveToNineDays": 54.2,
+          "tenToSixteenDays": 29.2,
+          "seventeenToThirtyTwoDays": 1.6
+        }
+      }
+    },
+    "Photo & Video": {
+      "category": "Photo & Video",
+      "trialStartRate": { "median": 1.2, "p90": 20.3 },
+      "trialToPaid": { "median": 26.8, "p90": 68.3 },
+      "downloadToPaidD35": { "median": 0.7, "p90": 5.5 },
+      "timeToTrial": { "day0Percent": 82 },
+      "timeToPaid": { "day0Percent": 49.6 },
+      "refundRate": { "median": 3.43 },
+      "trialDetails": {
+        "medianConversion": 26.8,
+        "durationMix": {
+          "fourDaysOrLess": 48.3,
+          "fiveToNineDays": 41.8,
+          "tenToSixteenDays": 6.1,
+          "seventeenToThirtyTwoDays": 3.8
+        }
+      }
+    },
+    "Social & Lifestyle": {
+      "category": "Social & Lifestyle",
+      "trialStartRate": { "median": 1.9, "p90": 20.3 },
+      "trialToPaid": { "median": 38.3, "p90": 68.3 },
+      "downloadToPaidD35": { "median": 0.9, "p90": 5.5 },
+      "timeToTrial": { "day0Percent": 82 },
+      "timeToPaid": { "day0Percent": 80 },
+      "refundRate": { "median": 3.34 },
+      "trialDetails": {
+        "medianConversion": 38.3,
+        "durationMix": {
+          "fourDaysOrLess": 49.2,
+          "fiveToNineDays": 43.6,
+          "tenToSixteenDays": 3.7,
+          "seventeenToThirtyTwoDays": 3.5
+        }
+      }
+    },
+    "Gaming": {
+      "category": "Gaming",
+      "trialStartRate": { "median": 1.3, "p90": 20.3 },
+      "trialToPaid": { "median": 23.6, "p90": 68.3 },
+      "downloadToPaidD35": { "median": 0.4, "p90": 5.5 },
+      "timeToTrial": { "day0Percent": 82 },
+      "timeToPaid": { "day0Percent": 57.7 },
+      "refundRate": { "median": 2.67 },
+      "trialDetails": {
+        "medianConversion": 23.6,
+        "durationMix": {
+          "fourDaysOrLess": 96.3,
+          "fiveToNineDays": 3.3,
+          "tenToSixteenDays": 0.4,
+          "seventeenToThirtyTwoDays": 0.0
+        }
+      }
+    },
+    "Shopping": {
+      "category": "Shopping",
+      "trialStartRate": { "median": 8.1, "p90": 20.3 },
+      "trialToPaid": { "median": 18.2, "p90": 68.3 },
+      "downloadToPaidD35": { "median": 0.5, "p90": 5.5 },
+      "timeToTrial": { "day0Percent": 82 },
+      "timeToPaid": { "day0Percent": 80 },
+      "refundRate": { "median": 2.24 },
+      "trialDetails": {
+        "medianConversion": 18.2,
+        "durationMix": {
+          "fourDaysOrLess": 3.7,
+          "fiveToNineDays": 49.8,
+          "tenToSixteenDays": 36.7,
+          "seventeenToThirtyTwoDays": 9.8
+        }
+      }
+    },
+    "Utilities": {
+      "category": "Utilities",
+      "trialStartRate": { "median": 3.7, "p90": 20.3 },
+      "trialToPaid": { "median": 39.1, "p90": 68.3 },
+      "downloadToPaidD35": { "median": 1.1, "p90": 5.5 },
+      "timeToTrial": { "day0Percent": 82 },
+      "timeToPaid": { "day0Percent": 35.8 },
+      "refundRate": { "median": 3.16 },
+      "trialDetails": {
+        "medianConversion": 39.1,
+        "durationMix": {
+          "fourDaysOrLess": 24.1,
+          "fiveToNineDays": 40.8,
+          "tenToSixteenDays": 31.2,
+          "seventeenToThirtyTwoDays": 3.9
+        }
+      }
+    }
+  },
+  "categoryMapping": {
+    "Games": "Gaming",
+    "Entertainment": "Media & Entertainment",
+    "Social Networking": "Social & Lifestyle",
+    "Lifestyle": "Social & Lifestyle",
+    "Dating": "Social & Lifestyle"
+  }
+}

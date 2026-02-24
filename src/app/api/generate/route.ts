@@ -25,6 +25,11 @@ import {
 } from "@/lib/constants";
 import { createCodexStructuredCompletion } from "@/lib/codex-responses";
 import { getCodexOAuthCredentials, type CodexOAuthCredentials } from "@/lib/codex-oauth";
+import {
+  QUALITY_GATE_PROMPT_LINES,
+  QUALITY_ISSUES,
+  QUALITY_REPAIR_REQUIREMENT_LINES,
+} from "@/lib/enforcement-rules";
 import { runWebFactCheck } from "@/lib/fact-check";
 import { retrieveLibraryContext, type LibraryEntry } from "@/lib/library-retrieval";
 import { getProductUpdateToneContext, getPromptGuides } from "@/lib/prompt-guides";
@@ -69,40 +74,6 @@ const GOAL_PLAYBOOKS: Record<ContentGoal, string> = {
   balanced:
     "Balance reach, comments, and clicks without over-optimizing a single metric. Prioritize clarity and practical value.",
 };
-
-const LINKEDIN_WRITING_CONTRACT = [
-  "Write like a cohesive mini-article, not stacked slogans.",
-  "For every brand voice, sound like a close, smart friend talking to app makers: direct, relatable, and practical.",
-  "Use plain spoken language app makers use in real conversations.",
-  "Use this structure by default: 1) concrete observation, 2) why it matters, 3) mechanism or example, 4) practical next move.",
-  "Address the reader directly at least once with you, your app, or your team when natural.",
-  "Include one actionable operator move with a clear verb, such as test, measure, compare, cut, fix, or ship.",
-  "Use natural paragraph formatting. One paragraph can contain 1 to a few sentences, with blank lines between subtopics.",
-  "Keep paragraph rhythm human, usually 2 to 5 sentences before a blank line.",
-  "Keep one-sentence paragraphs occasional for emphasis, not the dominant rhythm.",
-  "Do not stack ultra-short lines back-to-back. Avoid rap or poem cadence.",
-  "Mix short, medium, and long sentence lengths so rhythm feels human.",
-  "Avoid internet template cadence and motivational filler patterns.",
-  "Avoid rhetorical label openers such as Strong stance:, Hard truth:, Hot take:, or Caveat,.",
-  "Avoid sentence openings using label-plus-colon scaffolds like Uncomfortable truth:, Reality check:, or Bottom line:.",
-  "Avoid MBA buzzword fog. Prefer concrete verbs, nouns, and mechanics.",
-  "Treat readers as informed operators. Avoid condescending, patronizing, or insulting language.",
-  "Be specific when possible. Name exact event format, source, metric, role, date, place, or example instead of vague language.",
-  "If referencing SOIS data, write the first mention as State of In-App Subscriptions (SOIS), then use SOIS after that.",
-  "When style is clickbait and goal is virality, hook first sentence must be one clear factual observation people already suspect but rarely say out loud.",
-  "For clickbait plus virality hooks, prefer direct reader framing with you or your when natural.",
-  "For clickbait plus virality hooks, do not open with If ...",
-  "Prefer real numbers when available, but only if they are grounded in provided evidence, inputs, or chart data.",
-  "When citing data, keep it plain language. Avoid internal phrasing like segment snapshot, rows analyzed, or sample size.",
-  "Position Adapty as a category-leading monetization solution through concrete proof and mechanism-level explanation, not empty superlatives.",
-  "Include at least one concrete proof unit per post, such as a number, metric, micro-example, or specific scenario.",
-  "Include caveats and boundary conditions like most, unless, in practice, or for this category.",
-  "Prefer lived perspective lines where relevant, such as I saw, from what I see, or we tested.",
-  "Occasional ellipses (...) are acceptable for pause, doubt, or emphasis, but keep them rare and natural.",
-  "No separator lines like _____, ---, or ***.",
-  "Never leak meta text such as assistant, final, json, or planning notes.",
-  "Never use em dash or en dash punctuation. Use commas, periods, colons, semicolons, or normal hyphen.",
-] as const;
 
 const POST_TYPE_PLAYBOOKS: Array<{ pattern: RegExp; directive: string }> = [
   {
@@ -161,30 +132,6 @@ const POST_TYPE_PLAYBOOKS: Array<{ pattern: RegExp; directive: string }> = [
       "Organize items into a clear digest with one practical takeaway per item and a short recommendation on what to read first.",
   },
 ];
-
-const HARD_QUALITY_GATE = [
-  "Silently self-check every output before finalizing.",
-  "If any rule fails, rewrite and self-check again before returning.",
-  "Reject generic template cadence, staccato short-line stacks, and abstract filler.",
-  "Prefer specific details over vague phrasing. Name concrete event format, source, metric, date, place, or example whenever available.",
-  "If evidence or numeric inputs are available, include at least one real numeric anchor.",
-  "Never invent numbers, percentages, dates, or benchmarks.",
-  "Reject outputs without concrete proof units and without caveats.",
-  "Reject unexplained acronyms. For SOIS, first mention must be State of In-App Subscriptions (SOIS).",
-  "Reject sentence-start label scaffolds using word-plus-colon format.",
-  "Reject low-value opener clichés like hard truth, game changer, nobody talks about, or let that sink in.",
-  "Reject rhetorical label openers such as Strong stance:, Hard truth:, Hot take:, or Caveat,.",
-  "Reject robotic or corporate-lame phrasing and replace it with direct human language.",
-  "Require at least one direct reader line using you or your team when natural.",
-  "Require one practical next action sentence with an operator verb.",
-  "For clickbait plus virality, hook must be one declarative factual sentence and must not start with If ...",
-  "Reject robotic phrasing like The timing gap is real. and internal dataset wording such as segment snapshot, rows analyzed, or sample size.",
-  "Reject condescending or insulting phrasing toward the reader.",
-  "When positioning Adapty, require concrete proof or mechanism-level support instead of empty best-in-market claims.",
-  "For event and webinar posts, include explicit logistics and who should attend.",
-  "Reject any sentence containing em dash or en dash punctuation.",
-  "For factual claims: if web evidence is available, align to it. If evidence is missing, rewrite as opinion or observation and avoid unsupported hard facts.",
-] as const;
 
 const AI_SLOP_PHRASE_PATTERN =
   /\b(hard truth|game changer|nobody talks about|let that sink in|this changes everything|stop scrolling)\b/i;
@@ -471,79 +418,79 @@ function evaluatePostQuality(params: {
     .filter(Boolean);
 
   if (AI_SLOP_PHRASE_PATTERN.test(combinedText)) {
-    issues.push("Avoid generic AI-sounding clichés in hook/body/CTA.");
+    issues.push(QUALITY_ISSUES.AI_SLOP_CLICHES);
   }
 
   if (!isMeme && hasCondescendingReaderLanguage(combinedText)) {
-    issues.push("Avoid condescending or insulting phrasing. Treat readers as informed operators.");
+    issues.push(QUALITY_ISSUES.CONDESCENDING);
   }
 
   if (!isMeme && hasUnsupportedAdaptySuperlative(combinedText)) {
-    issues.push("When claiming Adapty is best-in-market, support it with concrete proof, mechanism, or evidence.");
+    issues.push(QUALITY_ISSUES.UNSUPPORTED_ADAPTY_SUPERLATIVE);
   }
 
   if (!isMeme && hasCorporateJargon(combinedText)) {
-    issues.push("Avoid corporate jargon. Use plain, direct language app makers use in real conversations.");
+    issues.push(QUALITY_ISSUES.CORPORATE_JARGON);
   }
 
   if (!isMeme && hasRoboticCorporateTone(combinedText)) {
-    issues.push("Tone sounds robotic or corporate. Rewrite to sound human, direct, and relatable.");
+    issues.push(QUALITY_ISSUES.ROBOTIC_TONE);
   }
 
   if (!isMeme && !hasDirectReaderAddress(combinedText)) {
-    issues.push("Add at least one direct reader line using you, your app, or your team.");
+    issues.push(QUALITY_ISSUES.MISSING_DIRECT_READER);
   }
 
   if (!isMeme && !hasOperatorActionLanguage(combinedText)) {
-    issues.push("Add one practical operator action sentence with a clear verb like test, measure, compare, fix, or ship.");
+    issues.push(QUALITY_ISSUES.MISSING_OPERATOR_ACTION);
   }
 
   if (!isMeme && hasUnexpandedSoisAcronym(combinedText)) {
-    issues.push("Write SOIS as State of In-App Subscriptions (SOIS) on first mention.");
+    issues.push(QUALITY_ISSUES.UNEXPANDED_SOIS);
   }
 
   if (!isMeme && hasLabelStyleSentenceOpener(combinedText)) {
-    issues.push("Avoid sentence-start label scaffolds using word-plus-colon format.");
+    issues.push(QUALITY_ISSUES.LABEL_STYLE_OPENER);
   }
 
   if (!isMeme && hasAiScaffoldOpener(params.post.body)) {
-    issues.push("Avoid AI-style rhetorical label openers such as Strong stance:, Hard truth:, Hot take:, or Caveat,.");
+    issues.push(QUALITY_ISSUES.AI_SCAFFOLD_OPENER);
   }
 
   if (!isMeme && ROBOTIC_FILLER_PATTERN.test(combinedText)) {
-    issues.push("Avoid robotic filler phrasing like The timing gap is real.");
+    issues.push(QUALITY_ISSUES.ROBOTIC_FILLER);
   }
 
   if (!isMeme && SNAPSHOT_JARGON_PATTERN.test(combinedText)) {
-    issues.push("Avoid internal dataset phrasing like segment snapshot, rows analyzed, or sample size.");
+    issues.push(QUALITY_ISSUES.SNAPSHOT_JARGON);
   }
 
   if (!isMeme && hasDenseMetricDump(combinedText)) {
-    issues.push("Avoid dense metric dumps in one sentence. Keep data phrasing plain and human.");
+    issues.push(QUALITY_ISSUES.DENSE_METRIC_DUMP);
   }
 
   if (!isMeme && countConcreteProofUnits(combinedText) < 1) {
-    issues.push("Add at least one concrete proof unit such as number, metric, or specific mechanism.");
+    issues.push(QUALITY_ISSUES.MISSING_PROOF_UNIT);
   }
 
   if (!isMeme && params.requireNumericAnchor && countNumericTokens(combinedText) < 1) {
-    issues.push("Use at least one real numeric anchor from provided evidence or input context.");
+    issues.push(QUALITY_ISSUES.MISSING_NUMERIC_ANCHOR);
   }
 
   if (!isMeme && countSpecificityAnchors(combinedText) < 1 && !SPECIFICITY_ANCHOR_PATTERN.test(combinedText)) {
-    issues.push("Be more specific. Add concrete anchors like exact event type, named source/entity, date, place, URL, or metric.");
+    issues.push(QUALITY_ISSUES.MISSING_SPECIFICITY);
   }
 
   if (!isMeme && params.post.body.length > 280 && !/\n\s*\n/.test(params.post.body)) {
-    issues.push("Add blank lines between subtopics so longer body text is readable.");
+    issues.push(QUALITY_ISSUES.MISSING_BLANK_LINES);
   }
 
   if (hasShortLineStack(params.post.body)) {
-    issues.push("Avoid stacking ultra-short lines back-to-back.");
+    issues.push(QUALITY_ISSUES.SHORT_LINE_STACK);
   }
 
   if (!isMeme && hasStaccatoParagraphRhythm(params.post.body)) {
-    issues.push("Body rhythm is too staccato. Use fuller paragraphs with mostly 2-4 sentences and keep one-line paragraphs occasional.");
+    issues.push(QUALITY_ISSUES.STACCATO_RHYTHM);
   }
 
   if (!isMeme && isClickbaitVirality) {
@@ -552,43 +499,41 @@ function evaluatePostQuality(params: {
     const firstSentence = hookSentences[0]?.trim() ?? hook;
 
     if (hookSentences.length !== 1) {
-      issues.push("For clickbait plus virality, hook must be one sentence.");
+      issues.push(QUALITY_ISSUES.CLICKBAIT_HOOK_ONE_SENTENCE);
     }
 
     if (firstSentence.endsWith("?")) {
-      issues.push("For clickbait plus virality, hook should be a declarative statement, not a question.");
+      issues.push(QUALITY_ISSUES.CLICKBAIT_HOOK_DECLARATIVE);
     }
 
     if (HOOK_IF_OPENING_PATTERN.test(firstSentence)) {
-      issues.push("For clickbait plus virality, do not open hook with If ...");
+      issues.push(QUALITY_ISSUES.CLICKBAIT_HOOK_NO_IF);
     }
 
     if (countNumericTokens(firstSentence) < 1 && !SPECIFICITY_ANCHOR_PATTERN.test(firstSentence)) {
-      issues.push(
-        "For clickbait plus virality, hook must open with one concrete factual anchor (number, named platform, date, metric, or source).",
-      );
+      issues.push(QUALITY_ISSUES.CLICKBAIT_HOOK_NEEDS_FACT_ANCHOR);
     }
 
     if (!YOU_YOUR_PATTERN.test(firstSentence)) {
-      issues.push("For clickbait plus virality, prefer direct user framing with you or your when natural.");
+      issues.push(QUALITY_ISSUES.CLICKBAIT_HOOK_DIRECT_READER);
     }
   }
 
   if (isEvent) {
     if (params.time.trim() && !looseIncludes(combinedText, params.time)) {
-      issues.push("Event post must include the provided event time.");
+      issues.push(QUALITY_ISSUES.EVENT_MISSING_TIME);
     }
 
     if (params.place.trim() && !looseIncludes(combinedText, params.place)) {
-      issues.push("Event post must include the provided event place.");
+      issues.push(QUALITY_ISSUES.EVENT_MISSING_PLACE);
     }
 
     if (nonEmptyBodyLines.length < 4) {
-      issues.push("Event post body is too thin. Add operator context, practical value, and logistics.");
+      issues.push(QUALITY_ISSUES.EVENT_BODY_THIN);
     }
 
     if (!EVENT_FORMAT_PATTERN.test(combinedText)) {
-      issues.push("Event post should name the concrete event format (for example webinar, roundtable, workshop, or dinner).");
+      issues.push(QUALITY_ISSUES.EVENT_MISSING_FORMAT);
     }
   }
 
@@ -1508,9 +1453,6 @@ Mission:
 - Treat readers as informed operators. Never sound patronizing or insulting.
 - Position Adapty as a category-leading solution by demonstrating concrete mechanisms and factual support.
 
-Global writing contract:
-${toBulletedSection(LINKEDIN_WRITING_CONTRACT)}
-
 Repository writing guide:
 ${promptGuides.writing}
 ${sauceDomainGuideSection}${productUpdateToneSection}
@@ -1534,7 +1476,7 @@ Output contract:
 - Do not use empty superlatives about Adapty. Back positioning claims with proof, mechanism, or evidence.
 
 Quality gate before final answer:
-${toBulletedSection(HARD_QUALITY_GATE)}
+${toBulletedSection(QUALITY_GATE_PROMPT_LINES)}
 `;
 
     const userPrompt = `
@@ -1833,24 +1775,7 @@ Draft to repair:
 ${draftSummary}
 
 Repair requirements:
-- Use natural paragraphs with 1 to a few sentences per paragraph.
-- Keep most paragraphs at 2-4 sentences and avoid one-line paragraph chains.
-- Add blank lines between subtopics.
-- Keep output human, concrete, and non-generic.
-- Use plain spoken language and sound like a close smart friend to app makers.
-- Include at least one direct reader line with you, your app, or your team.
-- Include one practical operator action sentence with a clear verb like test, measure, compare, fix, or ship.
-- Avoid cliché opener lines.
-- Avoid rhetorical label openers such as Strong stance:, Hard truth:, Hot take:, or Caveat,.
-- Avoid sentence-start label scaffolds using word-plus-colon format (for example Uncomfortable truth:).
-- Keep tone respectful. Do not insult or patronize the reader.
-- Use at least one real numeric anchor if evidence or numeric context is available.
-- Never invent numbers. Only use numbers grounded in provided evidence, inputs, or chart data.
-- For clickbait plus virality, hook must be one declarative factual sentence, should use you or your when natural, and must not start with If ...
-- Avoid robotic phrasing like The timing gap is real. Avoid internal dataset wording like segment snapshot, rows analyzed, or sample size.
-- If claiming Adapty is best-in-market, include mechanism-level support or concrete evidence.
-- Never use em dash or en dash punctuation.
-- If post type is event or webinar, include explicit logistics and who should attend.
+${toBulletedSection(QUALITY_REPAIR_REQUIREMENT_LINES)}
 `;
 
       const repairedBatchRun = await runGenerationWithFallback({

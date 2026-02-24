@@ -1,0 +1,242 @@
+{
+  "_source": "RevenueCat State of Subscription Apps 2025",
+  "_url": "https://www.revenuecat.com/pdf/state-of-subscription-apps-2025.pdf",
+  "_note": "North America only. Churn floors = minimum monthly churn %. LTV in USD.",
+  "benchmarks": {
+    "Health & Fitness": {
+      "category": "Health & Fitness",
+      "churnFloors": { "weekly": 15, "monthly": 5.5, "annual": 2.5 },
+      "retentionRates": {
+        "monthly": { "month6": 13.0, "year1": 11.9 },
+        "annual": { "year1": 30.2 }
+      },
+      "renewalRates": {
+        "weekly": { "first": 61.5, "second": 53.4, "third": 77.0 },
+        "monthly": { "first": 58.0, "second": 50.0, "third": 75.0 },
+        "annual": { "first": 30.2, "second": 45.0, "third": 60.0 }
+      },
+      "reactivationRates": { "weekly": 15.0, "monthly": 12.0, "annual": 8.0 },
+      "month1RenewalMedian": 61.0,
+      "month1ChurnRate": 38.7,
+      "activeRenewalRate": 74.3,
+      "ltvBenchmarks": {
+        "month1": { "median": 16.44, "p75": 31.12 },
+        "year1": { "median": 33.91, "p75": 54.22 }
+      }
+    },
+    "Business": {
+      "category": "Business",
+      "churnFloors": { "weekly": 15, "monthly": 6.5, "annual": 2.0 },
+      "retentionRates": {
+        "monthly": { "month6": 19.2, "year1": 14.2 },
+        "annual": { "year1": 41.2 }
+      },
+      "renewalRates": {
+        "weekly": { "first": 65, "second": 58.0, "third": 80.0 },
+        "monthly": { "first": 70, "second": 65.0, "third": 85.0 },
+        "annual": { "first": 88, "second": 90.0, "third": 92.0 }
+      },
+      "reactivationRates": { "weekly": 18.0, "monthly": 15.0, "annual": 10.0 },
+      "month1ChurnRate": 36.0,
+      "activeRenewalRate": 79.6,
+      "ltvBenchmarks": {
+        "month1": { "median": 14.82, "p75": 27.76 },
+        "year1": { "median": 27.24, "p75": 51.29 }
+      }
+    },
+    "Media & Entertainment": {
+      "category": "Media & Entertainment",
+      "churnFloors": { "weekly": 15, "monthly": 5.5, "annual": 2.5 },
+      "retentionRates": {
+        "monthly": { "month6": 21.9, "year1": 16.1 },
+        "annual": { "year1": 37.1 }
+      },
+      "renewalRates": {
+        "weekly": { "first": 50, "second": 55.0, "third": 80.0 },
+        "monthly": { "first": 60, "second": 70.0, "third": 81.8 },
+        "annual": { "first": 71.4, "second": 75.0, "third": 80.0 }
+      },
+      "reactivationRates": { "weekly": 12.0, "monthly": 10.0, "annual": 6.0 },
+      "month1ChurnRate": 35.5,
+      "activeRenewalRate": 31.2,
+      "ltvBenchmarks": {
+        "month1": { "median": 7.78, "p75": 18.64 },
+        "year1": { "median": 14.86, "p75": 30.37 }
+      }
+    },
+    "Travel": {
+      "category": "Travel",
+      "churnFloors": { "weekly": 15, "monthly": 5.5, "annual": 2.5 },
+      "retentionRates": {
+        "monthly": { "month6": 25.2, "year1": 21.4 },
+        "annual": { "year1": 38.5 }
+      },
+      "renewalRates": {
+        "weekly": { "first": 60, "second": 55.0, "third": 78.0 },
+        "monthly": { "first": 65, "second": 70.0, "third": 82.0 },
+        "annual": { "first": 85, "second": 88.0, "third": 90.0 }
+      },
+      "reactivationRates": { "weekly": 14.0, "monthly": 12.0, "annual": 8.0 },
+      "month1ChurnRate": 42.9,
+      "activeRenewalRate": 52.8,
+      "ltvBenchmarks": {
+        "month1": { "median": 5.08, "p75": 15.29 },
+        "year1": { "median": 13.21, "p75": 28.77 }
+      }
+    },
+    "Shopping": {
+      "category": "Shopping",
+      "churnFloors": { "weekly": 15, "monthly": 5.5, "annual": 2.5 },
+      "retentionRates": {
+        "monthly": { "month6": 23.9, "year1": 14.5 },
+        "annual": { "year1": 38.0 }
+      },
+      "renewalRates": {
+        "weekly": { "first": 60, "second": 55.0, "third": 78.0 },
+        "monthly": { "first": 65, "second": 70.0, "third": 82.0 },
+        "annual": { "first": 85, "second": 88.0, "third": 90.0 }
+      },
+      "reactivationRates": { "weekly": 18.3, "monthly": 15.0, "annual": 9.0 },
+      "month1ChurnRate": 40.0,
+      "activeRenewalRate": 95.3,
+      "ltvBenchmarks": {
+        "month1": { "median": 5.23, "p75": 10.62 },
+        "year1": { "median": 12.45, "p75": 29.38 }
+      }
+    },
+    "Productivity": {
+      "category": "Productivity",
+      "churnFloors": { "weekly": 15, "monthly": 7.0, "annual": 2.5 },
+      "retentionRates": {
+        "monthly": { "month6": 15.8, "year1": 13.0 },
+        "annual": { "year1": 34.4 }
+      },
+      "renewalRates": {
+        "weekly": { "first": 51.5, "second": 48.0, "third": 75.0 },
+        "monthly": { "first": 55.0, "second": 60.0, "third": 78.0 },
+        "annual": { "first": 34.4, "second": 50.0, "third": 65.0 }
+      },
+      "reactivationRates": { "weekly": 13.0, "monthly": 11.0, "annual": 7.0 },
+      "month1ChurnRate": 37.2,
+      "activeRenewalRate": 60.8,
+      "ltvBenchmarks": {
+        "month1": { "median": 9.37, "p75": 16.92 },
+        "year1": { "median": 16.27, "p75": 32.35 }
+      }
+    },
+    "Education": {
+      "category": "Education",
+      "churnFloors": { "weekly": 15, "monthly": 7.5, "annual": 2.5 },
+      "retentionRates": {
+        "monthly": { "month6": 11.8, "year1": 10.3 },
+        "annual": { "year1": 29.5 }
+      },
+      "renewalRates": {
+        "weekly": { "first": 60.1, "second": 55.0, "third": 76.0 },
+        "monthly": { "first": 56.0, "second": 58.0, "third": 75.0 },
+        "annual": { "first": 29.5, "second": 45.0, "third": 60.0 }
+      },
+      "reactivationRates": { "weekly": 14.0, "monthly": 12.0, "annual": 7.5 },
+      "month1ChurnRate": 40.7,
+      "activeRenewalRate": 67.1,
+      "ltvBenchmarks": {
+        "month1": { "median": 10.61, "p75": 19.54 },
+        "year1": { "median": 18.08, "p75": 32.02 }
+      }
+    },
+    "Social & Lifestyle": {
+      "category": "Social & Lifestyle",
+      "churnFloors": { "weekly": 15, "monthly": 10.5, "annual": 2.5 },
+      "retentionRates": {
+        "monthly": { "month6": 10.6, "year1": 7.7 },
+        "annual": { "year1": 40.3 }
+      },
+      "renewalRates": {
+        "weekly": { "first": 40.3, "second": 45.0, "third": 70.0 },
+        "monthly": { "first": 50, "second": 60.0, "third": 75.9 },
+        "annual": { "first": 64.1, "second": 70.0, "third": 75.0 }
+      },
+      "reactivationRates": { "weekly": 10.0, "monthly": 8.0, "annual": 5.0 },
+      "month1ChurnRate": 58.4,
+      "activeRenewalRate": 25.0,
+      "ltvBenchmarks": {
+        "month1": { "median": 6.54, "p75": 17.71 },
+        "year1": { "median": 8.62, "p75": 30.45 }
+      }
+    },
+    "Photo & Video": {
+      "category": "Photo & Video",
+      "churnFloors": { "weekly": 15, "monthly": 7.0, "annual": 2.5 },
+      "retentionRates": {
+        "monthly": { "month6": 13.7, "year1": 13.5 },
+        "annual": { "year1": 30.5 }
+      },
+      "renewalRates": {
+        "weekly": { "first": 55, "second": 60.0, "third": 81.6 },
+        "monthly": { "first": 51.9, "second": 73.2, "third": 80.0 },
+        "annual": { "first": 30.5, "second": 50.0, "third": 65.0 }
+      },
+      "reactivationRates": { "weekly": 13.5, "monthly": 11.5, "annual": 7.0 },
+      "month1ChurnRate": 36.5,
+      "activeRenewalRate": 46.4,
+      "ltvBenchmarks": {
+        "month1": { "median": 8.36, "p75": 14.37 },
+        "year1": { "median": 14.06, "p75": 28.45 }
+      }
+    },
+    "Gaming": {
+      "category": "Gaming",
+      "churnFloors": { "weekly": 15, "monthly": 8.5, "annual": 2.5 },
+      "retentionRates": {
+        "monthly": { "month6": 9.5, "year1": 9.3 },
+        "annual": { "year1": 31.6 }
+      },
+      "renewalRates": {
+        "weekly": { "first": 55.7, "second": 52.0, "third": 75.0 },
+        "monthly": { "first": 60, "second": 68.0, "third": 77.8 },
+        "annual": { "first": 31.6, "second": 48.0, "third": 62.0 }
+      },
+      "reactivationRates": { "weekly": 8.0, "monthly": 6.0, "annual": 4.0 },
+      "month1ChurnRate": 38.8,
+      "activeRenewalRate": 20.3,
+      "ltvBenchmarks": {
+        "month1": { "median": 7.45, "p75": 18.92 },
+        "year1": { "median": 11.12, "p75": 27.21 }
+      }
+    },
+    "Utilities": {
+      "category": "Utilities",
+      "churnFloors": { "weekly": 15, "monthly": 6.5, "annual": 2.0 },
+      "retentionRates": {
+        "monthly": { "month6": 19.1, "year1": 15.8 },
+        "annual": { "year1": 43.4 }
+      },
+      "renewalRates": {
+        "weekly": { "first": 53.6, "second": 50.0, "third": 75.0 },
+        "monthly": { "first": 60.0, "second": 65.0, "third": 80.0 },
+        "annual": { "first": 43.4, "second": 60.0, "third": 75.0 }
+      },
+      "reactivationRates": { "weekly": 16.0, "monthly": 14.0, "annual": 10.0 },
+      "month1ChurnRate": 44.6,
+      "activeRenewalRate": 31.3,
+      "ltvBenchmarks": {
+        "month1": { "median": 5.29, "p75": 8.98 },
+        "year1": { "median": 11.17, "p75": 24.84 }
+      }
+    }
+  },
+  "categoryMapping": {
+    "Games": "Gaming",
+    "Entertainment": "Media & Entertainment",
+    "Social Networking": "Social & Lifestyle",
+    "Lifestyle": "Social & Lifestyle",
+    "Dating": "Social & Lifestyle",
+    "Finance": "Business",
+    "Medical": "Health & Fitness",
+    "Sports": "Health & Fitness",
+    "Music": "Media & Entertainment",
+    "News": "Media & Entertainment",
+    "Books": "Education",
+    "Reference": "Education"
+  }
+}

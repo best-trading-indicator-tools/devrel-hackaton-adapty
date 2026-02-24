@@ -1,0 +1,91 @@
+{
+  "_source": "RevenueCat State of Subscription Apps 2025",
+  "_url": "https://www.revenuecat.com/pdf/state-of-subscription-apps-2025.pdf",
+  "_note": "All benchmarks North America-specific. RPI and LTV in USD. Pages 49-67.",
+  "benchmarks": {
+    "Health & Fitness": {
+      "category": "Health & Fitness",
+      "rpiD14": { "median": 0.44, "p90": 2.97 },
+      "rpiD60": { "median": 0.63, "p90": 4.19 },
+      "ltvMonth1": { "median": 16.44, "q3": 31.12 },
+      "ltvYear1": { "median": 33.91, "q3": 54.22 }
+    },
+    "Business": {
+      "category": "Business",
+      "rpiD14": { "median": 0.29, "p90": 2.97 },
+      "rpiD60": { "median": 0.40, "p90": 4.19 },
+      "ltvMonth1": { "median": 14.82, "p90": 52.41 },
+      "ltvYear1": { "median": 27.24, "q3": 51.29 }
+    },
+    "Education": {
+      "category": "Education",
+      "rpiD14": { "median": 0.27, "p90": 3.13 },
+      "rpiD60": { "median": 0.40, "p90": 3.13 },
+      "ltvMonth1": { "median": 10.61, "q3": 19.54 },
+      "ltvYear1": { "median": 18.08, "q3": 32.02 }
+    },
+    "Productivity": {
+      "category": "Productivity",
+      "rpiD14": { "median": 0.19, "p90": 1.55 },
+      "rpiD60": { "median": 0.44, "p90": 3.54 },
+      "ltvMonth1": { "median": 9.37, "q3": 16.92 },
+      "ltvYear1": { "median": 16.27, "q3": 32.35 }
+    },
+    "Photo & Video": {
+      "category": "Photo & Video",
+      "rpiD14": { "median": 0.26, "p90": 2.97 },
+      "rpiD60": { "median": 0.65, "p90": 4.19 },
+      "ltvMonth1": { "median": 8.36, "q3": 14.37 },
+      "ltvYear1": { "median": 14.06, "q3": 28.45 }
+    },
+    "Shopping": {
+      "category": "Shopping",
+      "rpiD14": { "median": 0.08, "p90": 2.97 },
+      "rpiD60": { "median": 0.20, "p90": 10.34 },
+      "ltvMonth1": { "median": 5.23, "q3": 10.62 },
+      "ltvYear1": { "median": 12.45, "q3": 29.38 }
+    },
+    "Travel": {
+      "category": "Travel",
+      "rpiD14": { "median": 0.26, "p90": 2.97 },
+      "rpiD60": { "median": 0.40, "p90": 4.19 },
+      "ltvMonth1": { "median": 5.08, "q3": 15.29 },
+      "ltvYear1": { "median": 13.21, "q3": 28.77 }
+    },
+    "Utilities": {
+      "category": "Utilities",
+      "rpiD14": { "median": 0.19, "p90": 1.55 },
+      "rpiD60": { "median": 0.27, "p90": 2.29 },
+      "ltvMonth1": { "median": 5.29, "q3": 8.98 },
+      "ltvYear1": { "median": 11.17, "q3": 24.84 }
+    },
+    "Gaming": {
+      "category": "Gaming",
+      "rpiD14": { "median": 0.08, "p90": 2.97 },
+      "rpiD60": { "median": 0.24, "p90": 18.48 },
+      "ltvMonth1": { "median": 7.45, "q3": 18.92 },
+      "ltvYear1": { "median": 11.12, "q3": 27.21 }
+    },
+    "Media & Entertainment": {
+      "category": "Media & Entertainment",
+      "rpiD14": { "median": 0.26, "p90": 2.97 },
+      "rpiD60": { "median": 0.40, "p90": 4.19 },
+      "ltvMonth1": { "median": 7.78, "q3": 18.64 },
+      "ltvYear1": { "median": 14.86, "q3": 30.37 }
+    },
+    "Social & Lifestyle": {
+      "category": "Social & Lifestyle",
+      "rpiD14": { "median": 0.29, "p90": 2.97 },
+      "rpiD60": { "median": 0.43, "p90": 4.19 },
+      "ltvMonth1": { "median": 6.54, "q3": 17.71 },
+      "ltvYear1": { "median": 8.62, "q3": 30.45 }
+    }
+  },
+  "categoryMapping": {
+    "Games": "Gaming",
+    "Entertainment": "Media & Entertainment",
+    "Social Networking": "Social & Lifestyle",
+    "Lifestyle": "Social & Lifestyle",
+    "Dating": "Social & Lifestyle"
+  }
+}

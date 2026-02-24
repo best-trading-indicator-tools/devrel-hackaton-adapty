@@ -1,0 +1,24 @@
+{
+  "_source": "RevenueCat State of Subscription Apps 2025",
+  "_url": "https://www.revenuecat.com/pdf/state-of-subscription-apps-2025.pdf",
+  "_note": "North America. Churn values are monthly churn % (used for LTV = ARPU / churn). Year-1 retention from report.",
+  "year1RetentionByPeriod": {
+    "weekly": 3.4,
+    "monthly": 17.0,
+    "annual": 44.1
+  },
+  "minChurnByPeriod": {
+    "weekly": 15,
+    "monthly": 7,
+    "annual": 2.5,
+    "lifetime": 0,
+    "unknown": 10
+  },
+  "maxMonthsByPeriod": {
+    "weekly": 8,
+    "monthly": 15,
+    "annual": 30,
+    "lifetime": 1,
+    "unknown": 12
+  }
+}
