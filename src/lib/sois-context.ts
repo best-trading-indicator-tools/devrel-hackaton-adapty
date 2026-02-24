@@ -211,12 +211,173 @@ function parseBooleanFlag(value: string | undefined, fallbackValue: boolean): bo
   return ["1", "true", "yes", "on"].includes(value.trim().toLowerCase());
 }
 
+function parsePositiveInt(value: string | undefined, fallbackValue: number, maxValue = 200): number {
+  const parsed = Number.parseInt(value ?? "", 10);
+  if (!Number.isFinite(parsed) || parsed <= 0) {
+    return fallbackValue;
+  }
+  return Math.min(maxValue, parsed);
+}
+
 function tokenize(value: string): string[] {
   return value
     .toLowerCase()
     .replace(/[^a-z0-9\s]/g, " ")
     .split(/\s+/)
     .filter((part) => part.length > 2);
+}
+
+const SOIS_QUERY_NOISE_TOKENS = new Set<string>([
+  "adapty",
+  "balanced",
+  "awareness",
+  "virality",
+  "engagement",
+  "traffic",
+  "sauce",
+  "style",
+  "goal",
+  "post",
+  "posts",
+  "input",
+  "type",
+  "chart",
+  "meme",
+  "giphy",
+  "templates",
+  "details",
+  "link",
+  "request",
+]);
+
+const SOIS_SPECIFIC_SIGNAL_PATTERN =
+  /\b(ltv|retention|renewal|churn|trial|conversion|pricing|price|paywall|placement|onboarding|country|region|category|utilities|health|fitness|productivity|entertainment|gaming|education|finance|travel|ios|android|annual|monthly|weekly|direct)\b/i;
+
+function extractFocusTokens(query: string, details: string): string[] {
+  const tokenSet = new Set<string>();
+
+  for (const token of tokenize(`${details} ${query}`)) {
+    if (SOIS_QUERY_NOISE_TOKENS.has(token)) {
+      continue;
+    }
+    tokenSet.add(token);
+  }
+
+  return [...tokenSet];
+}
+
+function hasSpecificSoisIntent(query: string, details: string): boolean {
+  const combined = `${details}\n${query}`.trim();
+  if (!combined) {
+    return false;
+  }
+
+  const focusTokens = extractFocusTokens(query, details);
+  return SOIS_SPECIFIC_SIGNAL_PATTERN.test(combined) && focusTokens.length >= 2;
+}
+
+function sectionKeyFromItemId(itemId: string): string {
+  const overviewSuffix = "-overview";
+  const metricMarker = "-metric-";
+
+  if (itemId.endsWith(overviewSuffix)) {
+    return itemId.slice(0, -overviewSuffix.length);
+  }
+
+  const markerIndex = itemId.indexOf(metricMarker);
+  if (markerIndex > 0) {
+    return itemId.slice(0, markerIndex);
+  }
+
+  return itemId;
+}
+
+function broadCoverageSearch(items: SoisContextItem[], limit: number): SoisContextItem[] {
+  if (!items.length || limit <= 0) {
+    return [];
+  }
+
+  const bySection = new Map<string, SoisContextItem[]>();
+  for (const item of items) {
+    const sectionKey = sectionKeyFromItemId(item.id);
+    const existing = bySection.get(sectionKey);
+    if (existing) {
+      existing.push(item);
+    } else {
+      bySection.set(sectionKey, [item]);
+    }
+  }
+
+  const selected: SoisContextItem[] = [];
+  const seen = new Set<string>();
+  const pushItem = (item: SoisContextItem | undefined) => {
+    if (!item || seen.has(item.id) || selected.length >= limit) {
+      return;
+    }
+    seen.add(item.id);
+    selected.push(item);
+  };
+
+  for (const sectionItems of bySection.values()) {
+    pushItem(sectionItems.find((item) => item.id.endsWith("-overview")));
+  }
+
+  for (const sectionItems of bySection.values()) {
+    pushItem(sectionItems.find((item) => !item.id.endsWith("-overview")));
+  }
+
+  for (const sectionItems of bySection.values()) {
+    for (const item of sectionItems) {
+      pushItem(item);
+      if (selected.length >= limit) {
+        break;
+      }
+    }
+    if (selected.length >= limit) {
+      break;
+    }
+  }
+
+  return selected;
+}
+
+function keywordSearch(items: SoisContextItem[], query: string, details: string, limit: number): SoisContextItem[] {
+  if (!items.length || limit <= 0) {
+    return [];
+  }
+
+  const focusTokens = extractFocusTokens(query, details);
+  if (!focusTokens.length) {
+    return [];
+  }
+
+  const scored = items
+    .map((item) => {
+      const normalizedText = item.text.toLowerCase();
+      const textTokens = new Set(tokenize(item.text));
+      let overlap = 0;
+      let phraseHits = 0;
+
+      for (const token of focusTokens) {
+        if (textTokens.has(token)) {
+          overlap += 1;
+        }
+        if (normalizedText.includes(token)) {
+          phraseHits += 1;
+        }
+      }
+
+      if (overlap === 0 && phraseHits === 0) {
+        return null;
+      }
+
+      const score = overlap * 3 + phraseHits + (item.id.endsWith("-overview") ? 0.2 : 0);
+      return { item, score };
+    })
+    .filter((entry): entry is { item: SoisContextItem; score: number } => Boolean(entry))
+    .sort((a, b) => b.score - a.score);
+
+  return scored.slice(0, limit).map((entry) => entry.item);
 }
 
 function compactNumber(value: number): string {
@@ -832,11 +993,13 @@ export function shouldUseSoisContextForPostType(inputType: string): boolean {
 export async function retrieveSoisContext(params: {
   client?: OpenAI;
   query: string;
+  details?: string;
+  preferBroadCoverage?: boolean;
   inputType: string;
   limit: number;
 }): Promise<{
   enabled: boolean;
-  method: "none" | "lexical" | "lancedb";
+  method: "none" | "lexical" | "lancedb" | "keyword" | "broad";
   items: SoisContextItem[];
   warning?: string;
   fetchedSections: number;
@@ -855,11 +1018,43 @@ export async function retrieveSoisContext(params: {
     };
   }
 
+  const details = params.details?.trim() ?? "";
+  const focusQuery = [details, params.query].filter(Boolean).join(" | ").trim();
+  const hasDetailDrivenIntent = hasSpecificSoisIntent(focusQuery, details);
+  const useBroadCoverage = params.preferBroadCoverage || !details;
+  const configuredBroadLimit = parsePositiveInt(process.env.SOIS_BROAD_CONTEXT_MAX_ITEMS, 60, 240);
+  const broadLimit = Math.max(params.limit, configuredBroadLimit);
+
+  if (useBroadCoverage) {
+    return {
+      enabled: true,
+      method: "broad",
+      items: broadCoverageSearch(evidenceData.items, broadLimit),
+      warning: evidenceData.warning,
+      fetchedSections: evidenceData.fetchedSections,
+      availableSections: evidenceData.availableSections,
+    };
+  }
+
+  if (hasDetailDrivenIntent) {
+    const items = keywordSearch(evidenceData.items, focusQuery, details, params.limit);
+    if (items.length) {
+      return {
+        enabled: true,
+        method: "keyword",
+        items,
+        warning: evidenceData.warning,
+        fetchedSections: evidenceData.fetchedSections,
+        availableSections: evidenceData.availableSections,
+      };
+    }
+  }
+
   const useLanceDb = parseBooleanFlag(process.env.ENABLE_LANCEDB, false);
 
   if (useLanceDb && params.client) {
     try {
-      const items = await lanceSearch(params.client, evidenceData, params.query, params.limit);
+      const items = await lanceSearch(params.client, evidenceData, focusQuery || params.query, params.limit);
       if (items.length) {
         return {
           enabled: true,
@@ -874,7 +1069,7 @@ export async function retrieveSoisContext(params: {
       return {
         enabled: true,
         method: "lexical",
-        items: lexicalSearch(evidenceData.items, params.query, params.limit),
+        items: lexicalSearch(evidenceData.items, focusQuery || params.query, params.limit),
         warning:
           [
             evidenceData.warning,
@@ -892,7 +1087,7 @@ export async function retrieveSoisContext(params: {
   return {
     enabled: true,
     method: "lexical",
-    items: lexicalSearch(evidenceData.items, params.query, params.limit),
+    items: lexicalSearch(evidenceData.items, focusQuery || params.query, params.limit),
     warning: evidenceData.warning,
     fetchedSections: evidenceData.fetchedSections,
     availableSections: evidenceData.availableSections,

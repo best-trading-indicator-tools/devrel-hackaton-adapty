@@ -1,6 +1,10 @@
 import { readFile } from "node:fs/promises";
 import path from "node:path";
 
+const ADAPTY_CHANGELOG_JSON_FEED = "https://changelog.adapty.io/jsonfeed.json";
+const CHANGELOG_CACHE_TTL_MS = 60 * 60 * 1000; // 1 hour
+let changelogCache: { text: string; fetchedAt: number } | null = null;
+
 type PromptGuideKey = "writing" | "sauce" | "aso" | "paywall" | "factCheck";
 
 export type PromptGuides = Record<PromptGuideKey, string>;
@@ -86,14 +90,49 @@ export async function getPromptGuides(): Promise<PromptGuides> {
   return guideCache;
 }
 
-const PRODUCT_UPDATE_TONE_PATH = path.join(process.cwd(), "content", "adapty-changelog-tone.txt");
 const PRODUCT_UPDATE_TONE_MAX_CHARS = 15_000;
+const CHANGELOG_MAX_ITEMS = 12;
 
-export async function getProductUpdateToneContext(): Promise<string> {
+type JsonFeedItem = { title?: string; summary?: string; content_html?: string; date_modified?: string };
+
+async function fetchChangelogFromJsonFeed(): Promise<string> {
+  if (changelogCache && Date.now() - changelogCache.fetchedAt < CHANGELOG_CACHE_TTL_MS) {
+    return changelogCache.text;
+  }
+
   try {
-    const raw = await readFile(PRODUCT_UPDATE_TONE_PATH, "utf8");
-    return raw.replace(/\r\n?/g, "\n").trim().slice(0, PRODUCT_UPDATE_TONE_MAX_CHARS);
+    const res = await fetch(ADAPTY_CHANGELOG_JSON_FEED, { cache: "no-store" });
+    if (!res.ok) throw new Error(`HTTP ${res.status}`);
+    const data = (await res.json()) as { items?: JsonFeedItem[] };
+    const items = data.items?.slice(0, CHANGELOG_MAX_ITEMS) ?? [];
+
+    const lines: string[] = [
+      "Adapty product updates (live from changelog.adapty.io — use for rhythm, structure, and voice):",
+      "",
+    ];
+
+    for (const item of items) {
+      const title = item.title?.trim();
+      const summary = item.summary?.trim() ?? item.content_html?.replace(/<[^>]+>/g, " ").replace(/\s+/g, " ").trim().slice(0, 400);
+      const date = item.date_modified ? new Date(item.date_modified).toLocaleDateString("en-US", { month: "short", day: "numeric", year: "numeric" }) : "";
+      if (title) {
+        lines.push(`**${title}**${date ? ` (${date})` : ""}`);
+        if (summary) lines.push(summary);
+        lines.push("");
+      }
+    }
+
+    lines.push("Tone: Lead with feature name. One sentence per feature. Be direct, practical, no hype.");
+
+    const text = lines.join("\n").slice(0, PRODUCT_UPDATE_TONE_MAX_CHARS);
+    changelogCache = { text, fetchedAt: Date.now() };
+    return text;
   } catch {
+    changelogCache = null;
     return "";
   }
+}
+
+export async function getProductUpdateToneContext(): Promise<string> {
+  return fetchChangelogFromJsonFeed();
 }

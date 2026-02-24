@@ -40,6 +40,7 @@ export const generatePostsRequestSchema = z.object({
   memeBrief: z.string().trim().max(400).default(""),
   giphyEnabled: z.coerce.boolean().default(false),
   giphyQuery: z.string().trim().max(220).default(""),
+  giphyPreferredIds: z.array(z.string().trim().max(120)).max(30).default([]),
   memeTemplateIds: z
     .array(
       z

@@ -32,9 +32,14 @@ import {
   QUALITY_REPAIR_REQUIREMENT_LINES,
 } from "@/lib/enforcement-rules";
 import { runWebFactCheck } from "@/lib/fact-check";
-import { buildGiphyQuery, ensureDistinctGiphyVariants, fetchGiphyVariants } from "@/lib/giphy";
+import {
+  buildGiphyQuery,
+  ensureDistinctGiphyVariants,
+  fetchGiphyVariants,
+} from "@/lib/giphy";
 import { retrieveLibraryContext, type LibraryEntry } from "@/lib/library-retrieval";
 import { getProductUpdateToneContext, getPromptGuides } from "@/lib/prompt-guides";
+import { retrieveRevenueCatContext } from "@/lib/revenuecat-retrieval";
 import { runIndustryNewsContext } from "@/lib/rss-news";
 import { retrieveSoisContext } from "@/lib/sois-context";
 import {
@@ -49,7 +54,8 @@ const MEME_INPUT_TYPE_PATTERN = /\b(meme|shitpost)\b/i;
 const MEME_LINE_MAX_CHARS = 72;
 const DEFAULT_MEMEGEN_BASE_URL = "https://api.memegen.link";
 const FACT_CHECK_EVIDENCE_PROMPT_LIMIT = 4;
-const SOIS_EVIDENCE_PROMPT_LIMIT = 8;
+const DEFAULT_SOIS_EVIDENCE_PROMPT_LIMIT = 8;
+const DEFAULT_SOIS_BROAD_EVIDENCE_PROMPT_LIMIT = 24;
 const INDUSTRY_NEWS_REACTION_PATTERN = /\bindustry news reaction\b/i;
 const PRODUCT_UPDATE_PATTERN = /\bproduct feature launch\b/i;
 const SOIS_ACRONYM_PATTERN = /\bsois\b/i;
@@ -174,6 +180,335 @@ function looseIncludes(haystack: string, needle: string): boolean {
   }
 
   return hay.includes(ndl) || ndl.split(" ").every((part) => part.length > 2 && hay.includes(part));
+}
+
+function parsePositiveIntEnv(value: string | undefined, fallbackValue: number, maxValue = 120): number {
+  const parsed = Number.parseInt(value ?? "", 10);
+  if (!Number.isFinite(parsed) || parsed <= 0) {
+    return fallbackValue;
+  }
+  return Math.min(maxValue, parsed);
+}
+
+type NumericClaimKind = "percent" | "multiplier" | "unit" | "number";
+
+type NumericClaim = {
+  raw: string;
+  start: number;
+  end: number;
+  kind: NumericClaimKind;
+  canonical: string;
+  unit?: string;
+};
+
+const NUMERIC_CLAIM_EXTRACTORS: Array<{ kind: NumericClaimKind; regex: RegExp }> = [
+  {
+    kind: "percent",
+    regex: /\b\d{1,3}(?:,\d{3})*(?:\.\d+)?\s*%/g,
+  },
+  {
+    kind: "multiplier",
+    regex: /\b\d{1,3}(?:,\d{3})*(?:\.\d+)?\s*x\b/gi,
+  },
+  {
+    kind: "unit",
+    regex:
+      /\b\d{1,3}(?:,\d{3})*(?:\.\d+)?\s*(?:apps?|users?|installs?|downloads?|impressions?|sessions?|trials?|tests?|experiments?|days?|weeks?|months?|years?|hours?|minutes?|countries?|markets?|segments?|cohorts?|paywalls?|placements?|regions?|categories?|million|billion|thousand|k|m|b)\b/gi,
+  },
+  {
+    kind: "number",
+    regex: /\b\d{1,3}(?:,\d{3})*(?:\.\d+)?\b/g,
+  },
+];
+
+function normalizeNumericLiteral(value: string): string {
+  const parsed = Number.parseFloat(value.replace(/,/g, ""));
+  if (!Number.isFinite(parsed)) {
+    return value.trim().toLowerCase();
+  }
+  return parsed.toString();
+}
+
+function normalizeNumericUnit(unit: string): string {
+  const normalized = unit.trim().toLowerCase();
+
+  const aliases: Record<string, string> = {
+    app: "app",
+    apps: "app",
+    user: "user",
+    users: "user",
+    install: "install",
+    installs: "install",
+    download: "download",
+    downloads: "download",
+    impression: "impression",
+    impressions: "impression",
+    session: "session",
+    sessions: "session",
+    trial: "trial",
+    trials: "trial",
+    test: "test",
+    tests: "test",
+    experiment: "experiment",
+    experiments: "experiment",
+    day: "day",
+    days: "day",
+    week: "week",
+    weeks: "week",
+    month: "month",
+    months: "month",
+    year: "year",
+    years: "year",
+    hour: "hour",
+    hours: "hour",
+    minute: "minute",
+    minutes: "minute",
+    country: "country",
+    countries: "country",
+    market: "market",
+    markets: "market",
+    segment: "segment",
+    segments: "segment",
+    cohort: "cohort",
+    cohorts: "cohort",
+    paywall: "paywall",
+    paywalls: "paywall",
+    placement: "placement",
+    placements: "placement",
+    region: "region",
+    regions: "region",
+    category: "category",
+    categories: "category",
+    million: "million",
+    billion: "billion",
+    thousand: "thousand",
+    k: "k",
+    m: "m",
+    b: "b",
+  };
+
+  return aliases[normalized] ?? normalized;
+}
+
+function canonicalizeNumericClaim(raw: string, kind: NumericClaimKind): { canonical: string; unit?: string } {
+  const token = raw.trim().toLowerCase().replace(/\s+/g, " ");
+
+  if (kind === "percent") {
+    const match = token.match(/^(\d{1,3}(?:,\d{3})*(?:\.\d+)?)\s*%$/);
+    if (match) {
+      return {
+        canonical: `${normalizeNumericLiteral(match[1])}%`,
+      };
+    }
+  }
+
+  if (kind === "multiplier") {
+    const match = token.match(/^(\d{1,3}(?:,\d{3})*(?:\.\d+)?)\s*x$/);
+    if (match) {
+      return {
+        canonical: `${normalizeNumericLiteral(match[1])}x`,
+      };
+    }
+  }
+
+  if (kind === "unit") {
+    const match = token.match(/^(\d{1,3}(?:,\d{3})*(?:\.\d+)?)\s*([a-z]+)$/);
+    if (match) {
+      const normalizedUnit = normalizeNumericUnit(match[2]);
+      return {
+        canonical: `${normalizeNumericLiteral(match[1])} ${normalizedUnit}`,
+        unit: normalizedUnit,
+      };
+    }
+  }
+
+  if (kind === "number") {
+    const match = token.match(/^(\d{1,3}(?:,\d{3})*(?:\.\d+)?)$/);
+    if (match) {
+      return {
+        canonical: normalizeNumericLiteral(match[1]),
+      };
+    }
+  }
+
+  return { canonical: token };
+}
+
+function rangesOverlap(a: { start: number; end: number }, b: { start: number; end: number }): boolean {
+  return a.start < b.end && b.start < a.end;
+}
+
+function extractNumericClaims(value: string): NumericClaim[] {
+  const claims: NumericClaim[] = [];
+  const occupiedRanges: Array<{ start: number; end: number }> = [];
+
+  for (const extractor of NUMERIC_CLAIM_EXTRACTORS) {
+    const regex = new RegExp(extractor.regex.source, extractor.regex.flags);
+    let match: RegExpExecArray | null;
+
+    while ((match = regex.exec(value)) !== null) {
+      const raw = match[0]?.trim();
+      const index = match.index;
+      if (!raw) {
+        continue;
+      }
+      const start = index;
+      const end = index + raw.length;
+      const range = { start, end };
+      if (occupiedRanges.some((existingRange) => rangesOverlap(existingRange, range))) {
+        continue;
+      }
+      occupiedRanges.push(range);
+      const { canonical, unit } = canonicalizeNumericClaim(raw, extractor.kind);
+      claims.push({
+        raw,
+        start,
+        end,
+        kind: extractor.kind,
+        canonical,
+        unit,
+      });
+    }
+  }
+
+  return claims.sort((a, b) => a.start - b.start);
+}
+
+function buildAllowedNumericClaimSet(contexts: string[]): Set<string> {
+  const allowed = new Set<string>();
+
+  for (const context of contexts) {
+    for (const claim of extractNumericClaims(context)) {
+      if (claim.canonical) {
+        allowed.add(claim.canonical);
+      }
+    }
+  }
+
+  return allowed;
+}
+
+function toPluralUnit(unit: string): string {
+  if (unit.endsWith("s")) {
+    return unit;
+  }
+
+  if (unit.endsWith("y")) {
+    return `${unit.slice(0, -1)}ies`;
+  }
+
+  return `${unit}s`;
+}
+
+function qualitativeReplacementForNumericClaim(claim: NumericClaim): string {
+  if (claim.kind === "percent") {
+    return "a meaningful share";
+  }
+
+  if (claim.kind === "multiplier") {
+    return "significantly";
+  }
+
+  if (claim.kind === "unit") {
+    const unit = claim.unit ?? "";
+    const timeUnits = new Set(["day", "week", "month", "year", "hour", "minute"]);
+    const magnitudeUnits = new Set(["million", "billion", "thousand", "k", "m", "b"]);
+    if (timeUnits.has(unit)) {
+      return "over time";
+    }
+    if (magnitudeUnits.has(unit)) {
+      return "a large amount";
+    }
+    if (unit) {
+      return `many ${toPluralUnit(unit)}`;
+    }
+    return "many";
+  }
+
+  return "several";
+}
+
+function rewriteUnsupportedNumericClaims(value: string, allowedClaims: Set<string>): {
+  value: string;
+  unsupportedClaims: NumericClaim[];
+} {
+  const claims = extractNumericClaims(value);
+  const unsupportedClaims = claims.filter((claim) => !allowedClaims.has(claim.canonical));
+
+  if (!unsupportedClaims.length) {
+    return {
+      value,
+      unsupportedClaims: [],
+    };
+  }
+
+  let rewritten = value;
+  const replacements = [...unsupportedClaims].sort((a, b) => b.start - a.start);
+
+  for (const claim of replacements) {
+    rewritten =
+      rewritten.slice(0, claim.start) +
+      qualitativeReplacementForNumericClaim(claim) +
+      rewritten.slice(claim.end);
+  }
+
+  rewritten = rewritten
+    .replace(/[ \t]{2,}/g, " ")
+    .replace(/[ \t]+([,.;:!?])/g, "$1")
+    .replace(/\(\s+/g, "(")
+    .replace(/\s+\)/g, ")")
+    .replace(/[ \t]+\n/g, "\n")
+    .replace(/\n[ \t]+/g, "\n")
+    .trim();
+
+  return {
+    value: rewritten,
+    unsupportedClaims,
+  };
+}
+
+function sanitizeHookSuggestionsNumericClaims(hooks: string[], allowedClaims: Set<string>): {
+  hooks: string[];
+  unsupportedClaims: NumericClaim[];
+} {
+  const unsupportedClaims: NumericClaim[] = [];
+  const sanitizedHooks = hooks.map((hook) => {
+    const result = rewriteUnsupportedNumericClaims(hook, allowedClaims);
+    unsupportedClaims.push(...result.unsupportedClaims);
+    return result.value;
+  });
+
+  return {
+    hooks: sanitizedHooks,
+    unsupportedClaims,
+  };
+}
+
+function sanitizeGeneratedPostsNumericClaims<T extends { hook: string; body: string; cta: string }>(
+  posts: T[],
+  allowedClaims: Set<string>,
+): {
+  posts: T[];
+  unsupportedClaims: NumericClaim[];
+} {
+  const unsupportedClaims: NumericClaim[] = [];
+  const sanitizedPosts = posts.map((post) => {
+    const hookResult = rewriteUnsupportedNumericClaims(post.hook, allowedClaims);
+    const bodyResult = rewriteUnsupportedNumericClaims(post.body, allowedClaims);
+    const ctaResult = rewriteUnsupportedNumericClaims(post.cta, allowedClaims);
+    unsupportedClaims.push(...hookResult.unsupportedClaims, ...bodyResult.unsupportedClaims, ...ctaResult.unsupportedClaims);
+    return {
+      ...post,
+      hook: hookResult.value,
+      body: bodyResult.value,
+      cta: ctaResult.value,
+    };
+  });
+
+  return {
+    posts: sanitizedPosts,
+    unsupportedClaims,
+  };
 }
 
 function countConcreteProofUnits(value: string): number {
@@ -1073,6 +1408,7 @@ async function runCodexOauthGeneration(params: {
 
 const CLAUDE_WRITER_MODEL = "claude-sonnet-4-5";
 
+// eslint-disable-next-line @typescript-eslint/no-unused-vars -- postCount reserved for future schema constraints
 function buildClaudePostsJsonSchema(postCount: number): Record<string, unknown> {
   return {
     type: "object",
@@ -1296,6 +1632,12 @@ export async function POST(request: Request) {
 
     const lengthPlan = buildLengthPlan(input.inputLength, input.numberOfPosts);
     const embeddingClient = getEmbeddingClient();
+    const hasSpecificSoisPromptDetails = Boolean(input.details.trim());
+    const soisBroadEvidencePromptLimit = parsePositiveIntEnv(
+      process.env.SOIS_BROAD_EVIDENCE_PROMPT_LIMIT,
+      DEFAULT_SOIS_BROAD_EVIDENCE_PROMPT_LIMIT,
+      80,
+    );
     const retrievalQuery = [
       input.goal,
       input.style,
@@ -1314,19 +1656,53 @@ export async function POST(request: Request) {
     ]
       .filter(Boolean)
       .join(" | ");
+    const soisRetrievalQuery = [
+      input.inputType,
+      input.details,
+      input.time,
+      input.place,
+      preparedChartInput ? summarizeChartForPrompt(preparedChartInput) : "",
+    ]
+      .filter(Boolean)
+      .join(" | ");
 
-    const retrieval = await retrieveLibraryContext({
-      client: embeddingClient,
-      query: retrievalQuery,
-      limit: Math.min(12, Math.max(6, input.numberOfPosts * 3)),
-      goal: input.goal,
-    });
-    const soisContext = await retrieveSoisContext({
-      client: embeddingClient,
-      query: retrievalQuery,
-      inputType: input.inputType,
-      limit: Math.min(12, Math.max(6, input.numberOfPosts * 2)),
-    });
+    const [retrieval, soisContext, webFactCheck, industryNewsContext, revenueCatContext] = await Promise.all([
+      retrieveLibraryContext({
+        client: embeddingClient,
+        query: retrievalQuery,
+        limit: Math.min(12, Math.max(6, input.numberOfPosts * 3)),
+        goal: input.goal,
+      }),
+      retrieveSoisContext({
+        client: embeddingClient,
+        query: soisRetrievalQuery || retrievalQuery,
+        details: input.details,
+        preferBroadCoverage: !hasSpecificSoisPromptDetails,
+        inputType: input.inputType,
+        limit: Math.min(12, Math.max(6, input.numberOfPosts * 2)),
+      }),
+      runWebFactCheck({
+        style: input.style,
+        goal: input.goal,
+        inputType: input.inputType,
+        details: input.details,
+        time: input.time,
+        place: input.place,
+        ctaLink: input.ctaLink,
+      }),
+      runIndustryNewsContext({
+        style: input.style,
+        goal: input.goal,
+        inputType: input.inputType,
+        details: input.details,
+      }),
+      retrieveRevenueCatContext({
+        client: embeddingClient,
+        query: soisRetrievalQuery || retrievalQuery,
+        inputType: input.inputType,
+        limit: Math.min(8, Math.max(4, input.numberOfPosts * 2)),
+      }),
+    ]);
 
     const examplesForPrompt = retrieval.entries
       .slice(0, 10)
@@ -1374,21 +1750,6 @@ export async function POST(request: Request) {
     const memeExecutionDirective = shouldGenerateMemes(input.inputType)
       ? "This is a meme-focused request. Keep hooks and first body lines short, punchy, and caption-friendly. If no meme brief is provided, come up with clever and funny angles automatically."
       : "Not a meme-focused request.";
-    const webFactCheck = await runWebFactCheck({
-      style: input.style,
-      goal: input.goal,
-      inputType: input.inputType,
-      details: input.details,
-      time: input.time,
-      place: input.place,
-      ctaLink: input.ctaLink,
-    });
-    const industryNewsContext = await runIndustryNewsContext({
-      style: input.style,
-      goal: input.goal,
-      inputType: input.inputType,
-      details: input.details,
-    });
     const industryNewsPromptLines = industryNewsContext.items.map((item, index) => {
       const keywordPart = item.matchedKeywords.length ? ` | matched keywords: ${item.matchedKeywords.join(", ")}` : "";
       return `${index + 1}. [${item.sourceName}] ${normalizeNoEmDash(item.title)}
@@ -1418,15 +1779,13 @@ export async function POST(request: Request) {
     const industryNewsTopicPlanSummary = industryNewsTopicPlanLines.length
       ? industryNewsTopicPlanLines.join("\n\n")
       : "(none)";
-    const industryNewsStatusSummary = industryNewsContext.enabled
-      ? industryNewsContext.warning
-        ? `enabled with warning: ${industryNewsContext.warning} (feeds ok: ${industryNewsContext.feedsSucceeded}/${industryNewsContext.feedsAttempted})`
-        : `enabled (feeds ok: ${industryNewsContext.feedsSucceeded}/${industryNewsContext.feedsAttempted})`
-      : "disabled";
     const webEvidenceLines = webFactCheck.evidenceLines
       .slice(0, FACT_CHECK_EVIDENCE_PROMPT_LIMIT)
       .map((line) => normalizeNoEmDash(line));
-    const soisEvidenceLines = soisContext.items.slice(0, SOIS_EVIDENCE_PROMPT_LIMIT).map((item, index) => {
+    const soisEvidencePromptLimit = hasSpecificSoisPromptDetails
+      ? DEFAULT_SOIS_EVIDENCE_PROMPT_LIMIT
+      : soisBroadEvidencePromptLimit;
+    const soisEvidenceLines = soisContext.items.slice(0, soisEvidencePromptLimit).map((item, index) => {
       const compactText = normalizeNoEmDash(item.text.replace(/\s*\n+\s*/g, " | "));
       return `${index + 1}. [${item.categoryLabel} ${item.subcategory}] ${item.subcategoryLabel}
 - Source: ${item.sourceUrl}
@@ -1438,25 +1797,30 @@ export async function POST(request: Request) {
     const soisDirective = soisContext.enabled
       ? "State of In-App Subscriptions (SOIS) benchmark evidence is available. Use it as a first-class factual source for hooks, mechanisms, caveats, and numeric anchors."
       : "State of In-App Subscriptions (SOIS) benchmark evidence is unavailable for this run. Do not fabricate benchmark numbers or section-specific claims.";
-    const soisStatusSummary = soisContext.enabled
-      ? soisContext.warning
-        ? `enabled (${soisContext.method}) with warning: ${soisContext.warning} (sections fetched: ${soisContext.fetchedSections}/${soisContext.availableSections})`
-        : `enabled (${soisContext.method}) (sections fetched: ${soisContext.fetchedSections}/${soisContext.availableSections})`
-      : soisContext.warning || "disabled";
-    const factCheckStatusSummary = webFactCheck.enabled
-      ? webFactCheck.warning
-        ? `enabled (${webFactCheck.provider}) with warning: ${webFactCheck.warning}`
-        : `enabled (${webFactCheck.provider})`
-      : webFactCheck.warning || "disabled";
-    const factCheckQueriesSummary = webFactCheck.queries.length
-      ? webFactCheck.queries.map((query, index) => `${index + 1}. ${normalizeNoEmDash(query)}`).join("\n")
-      : "(none)";
     const factCheckEvidenceForPrompt = webEvidenceLines.length
       ? webEvidenceLines.join("\n")
       : "No live web evidence available for this request.";
     const soisEvidenceForPrompt = soisEvidenceLines.length
       ? soisEvidenceLines.join("\n")
       : "No SOIS benchmark evidence available for this request.";
+    const revenueCatEvidenceForPrompt =
+      revenueCatContext.enabled && revenueCatContext.items.length
+        ? revenueCatContext.items.map((item) => item.text).join("\n")
+        : "";
+    const allowedNumericClaims = buildAllowedNumericClaimSet(
+      [
+        factCheckEvidenceForPrompt,
+        soisEvidenceForPrompt,
+        revenueCatEvidenceForPrompt,
+        input.details,
+        input.time,
+        input.place,
+        input.ctaLink,
+        chartPromptSummary,
+        industryNewsContextSummary,
+        industryNewsTopicPlanSummary,
+      ].filter(Boolean),
+    );
 
     const responseSchema = makeGeneratePostsResponseSchema(input.numberOfPosts);
     const promptGuides = await getPromptGuides();
@@ -1522,7 +1886,7 @@ ${toBulletedSection(QUALITY_GATE_PROMPT_LINES)}
 - Templates: ${memeTemplatePreferences.length ? memeTemplatePreferences.join(", ") : "auto"}
 - Variants per post: ${memeVariantTarget}
 - GIPHY companions: ${input.giphyEnabled ? "enabled" : "disabled"}
-- GIPHY query preference: ${giphyQueryPreference || "(auto)"}`
+- GIPHY query hint: ${giphyQueryPreference || "(auto from each post content)"}`
       : "";
 
     const userPrompt = `
@@ -1548,11 +1912,16 @@ Generation request:
 Required length per post:
 ${lengthPlan.map((length, index) => `${index + 1}. ${length} -> ${lengthGuide(length)}`).join("\n")}
 
-Evidence context (ONLY use numbers that appear verbatim below — do NOT invent any statistic, percentage, sample size, or multiplier):
-${factCheckEvidenceForPrompt}
+Evidence context (priority order: SOIS > RevenueCat > web. ONLY use numbers that appear verbatim below — do NOT invent any statistic, percentage, sample size, or multiplier):
 
-SOIS benchmark context (ONLY use numbers that appear verbatim below — if a number is not here, do not use it):
+1. SOIS benchmark context (highest priority — Adapty State of In-App Subscriptions):
 ${soisEvidenceForPrompt}
+
+2. RevenueCat benchmarks (second priority — State of Subscription Apps 2025):
+${revenueCatEvidenceForPrompt || "No RevenueCat data for this post type."}
+
+3. Web fact-check (third priority — use only if SOIS/RevenueCat lack the claim):
+${factCheckEvidenceForPrompt}
 
 Industry news context:
 ${industryNewsContextSummary}
@@ -1943,6 +2312,21 @@ CTA: ${post.cta}`,
       // Editor pass is best-effort; if it fails, keep the original posts
     }
 
+    let normalizedHooks = parsed.hooks.map((hook) => normalizeNoEmDash(hook));
+    const sanitizedHooksResult = sanitizeHookSuggestionsNumericClaims(normalizedHooks, allowedNumericClaims);
+    normalizedHooks = sanitizedHooksResult.hooks.map((hook) => normalizeNoEmDash(hook));
+
+    const sanitizedPostsResult = sanitizeGeneratedPostsNumericClaims(normalizedPosts, allowedNumericClaims);
+    normalizedPosts = sanitizedPostsResult.posts;
+
+    const numericClaimsSanitizedCount =
+      sanitizedHooksResult.unsupportedClaims.length + sanitizedPostsResult.unsupportedClaims.length;
+    if (numericClaimsSanitizedCount > 0) {
+      console.warn(
+        `Numeric safety pass rewrote ${numericClaimsSanitizedCount} unsupported number claim(s) to qualitative phrasing.`,
+      );
+    }
+
     let postsWithMemes: GeneratePostsResponse["posts"] = normalizedPosts;
 
     if (includeMemeCompanion) {
@@ -2089,12 +2473,12 @@ For each post:
           });
 
           try {
-            const variants = await fetchGiphyVariants({
+            const queryVariants = await fetchGiphyVariants({
               apiKey: giphyApiKey,
               query,
               limit: giphyVariantTarget,
             });
-            return ensureDistinctGiphyVariants(variants, giphyVariantTarget);
+            return ensureDistinctGiphyVariants(queryVariants, giphyVariantTarget);
           } catch (giphyError) {
             console.error("GIPHY companion fetch failed for one post", giphyError);
             return [];
@@ -2149,7 +2533,7 @@ For each post:
     }
 
     const response: GeneratePostsResponse = {
-      hooks: parsed.hooks.map((hook) => normalizeNoEmDash(hook)),
+      hooks: normalizedHooks,
       chart: chartCompanion,
       posts: postsWithMedia,
       generation: {

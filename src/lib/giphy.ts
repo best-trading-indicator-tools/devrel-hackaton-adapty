@@ -47,7 +47,8 @@ function getGiphyBaseUrl(): string {
   if (!custom) {
     return DEFAULT_GIPHY_BASE_URL;
   }
-  return custom.replace(/\/+$/g, "");
+  const trimmed = custom.replace(/\/+$/g, "");
+  return /\/v1$/i.test(trimmed) ? trimmed : `${trimmed}/v1`;
 }
 
 function buildSafeQuery(value: string): string {
@@ -123,10 +124,10 @@ export function buildGiphyQuery(params: {
       .find((line) => line.length > 10) || "";
 
   const composed = [
-    params.giphyQuery?.trim(),
-    params.memeBrief?.trim(),
     params.hook.trim(),
     firstBodyLine,
+    params.memeBrief?.trim(),
+    params.giphyQuery?.trim(),
   ]
     .filter(Boolean)
     .join(" ");

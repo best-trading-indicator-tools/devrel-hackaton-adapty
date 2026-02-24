@@ -2208,7 +2208,7 @@ export default function Home() {
                     }`}
                     onClick={() => applyPostTypeSelection(type)}
                   >
-                    <p className="flex items-center gap-1.5 text-sm font-semibold text-slate-900">
+                    <div className="flex items-center gap-1.5 text-sm font-semibold text-slate-900">
                       <span>{type}</span>
                       {isIndustryNewsType ? (
                         <span className="group/industry-rss relative inline-flex items-center">
@@ -2223,12 +2223,12 @@ export default function Home() {
                             onClick={(event) => event.stopPropagation()}
                             onMouseDown={(event) => event.stopPropagation()}
                           >
-                            <p className="text-xs font-semibold text-slate-900">
+                            <div className="text-xs font-semibold text-slate-900">
                               RSS feeds used for Industry news reaction posts
-                            </p>
-                            <p className="mt-1 text-[11px] text-slate-600">
+                            </div>
+                            <div className="mt-1 text-[11px] text-slate-600">
                               {enabledIndustryRssCount} enabled feeds, grouped by category.
-                            </p>
+                            </div>
                             <div className="mt-2 max-h-56 space-y-2 overflow-y-auto overscroll-contain pr-1">
                               {(Object.keys(groupedIndustryRssFeeds) as FeedCategory[]).map((category) => {
                                 const feeds = groupedIndustryRssFeeds[category];
@@ -2255,7 +2255,7 @@ export default function Home() {
                           </span>
                         </span>
                       ) : null}
-                    </p>
+                    </div>
                     <p className="mt-1 text-xs text-slate-600">{POST_TYPE_UI_DESCRIPTIONS[type]}</p>
                   </button>
                 );
@@ -2386,38 +2386,38 @@ export default function Home() {
                 />
               </label>
 
-              <div className="space-y-2 rounded-xl border border-black/10 bg-white p-3">
+              <div className="mt-3 space-y-2 rounded-xl border border-black/10 bg-white p-3">
                 <label className="flex items-center gap-2">
                   <input
                     type="checkbox"
                     className="h-4 w-4 rounded border-black/20"
                     checked={form.giphyEnabled}
-                    onChange={(event) =>
-                      setForm((prev) => ({
-                        ...prev,
-                        giphyEnabled: event.target.checked,
-                      }))
-                    }
+                    onChange={(event) => setForm((prev) => ({ ...prev, giphyEnabled: event.target.checked }))}
                   />
                   <span className="text-sm font-medium">Add GIPHY GIF Companions</span>
                 </label>
 
                 {form.giphyEnabled ? (
-                  <label className="space-y-1">
-                    <span className="text-sm font-medium">GIPHY Query (optional)</span>
-                    <input
-                      type="text"
-                      placeholder="Optional base query, e.g. frustrated PM, growth marketing meme"
-                      className={baseControlClassName}
-                      style={compactInputStyle}
-                      value={form.giphyQuery}
-                      onChange={(event) => setForm((prev) => ({ ...prev, giphyQuery: event.target.value }))}
-                    />
-                    <p className="text-xs text-slate-600">
-                      If empty, query is inferred from each post hook/body and meme prompt.
-                    </p>
-                    <p className="text-xs text-slate-600">Powered by GIPHY. Beta keys are rate-limited to 100 calls/hour.</p>
-                  </label>
+                  <div className="space-y-1">
+                    <label className="space-y-1">
+                      <span className="text-sm font-medium">GIPHY Query (optional)</span>
+                      <input
+                        type="text"
+                        placeholder="Optional base query, e.g. frustrated PM, growth marketing meme"
+                        className={baseControlClassName}
+                        style={compactInputStyle}
+                        value={form.giphyQuery}
+                        onChange={(event) => setForm((prev) => ({ ...prev, giphyQuery: event.target.value }))}
+                      />
+                      <p className="text-xs text-slate-600">
+                        AI chooses the best query for each generated post from its hook/body.
+                      </p>
+                      <p className="text-xs text-slate-600">
+                        Your query, if provided, is used as a hint only.
+                      </p>
+                      <p className="text-xs text-slate-600">Powered by GIPHY. Beta keys are rate-limited to 100 calls/hour.</p>
+                    </label>
+                  </div>
                 ) : null}
               </div>
 
