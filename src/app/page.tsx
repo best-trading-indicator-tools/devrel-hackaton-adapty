@@ -3222,7 +3222,7 @@ export default function Home() {
               <span className="generation-overlay__progress-bar" />
             </div>
             <p className="generation-overlay__meta">
-              This can take up to a few seconds for multi-post runs with meme and chart companions.
+              This can take up to a minute.
             </p>
           </div>
         </div>
