@@ -475,11 +475,15 @@ function qualitativeReplacementForNumericClaim(claim: NumericClaim): string {
     const unit = claim.unit ?? "";
     const timeUnits = new Set(["day", "week", "month", "year", "hour", "minute"]);
     const magnitudeUnits = new Set(["million", "billion", "thousand", "k", "m", "b"]);
+    const smallCountUnits = new Set(["app", "user", "install", "download", "trial", "test", "experiment", "placement", "paywall"]);
     if (timeUnits.has(unit)) {
-      return "over time";
+      return `several ${toPluralUnit(unit)}`;
     }
     if (magnitudeUnits.has(unit)) {
-      return "a large amount";
+      return "meaningful";
+    }
+    if (smallCountUnits.has(unit)) {
+      return `a few ${toPluralUnit(unit)}`;
     }
     if (unit) {
       return `many ${toPluralUnit(unit)}`;
@@ -487,7 +491,96 @@ function qualitativeReplacementForNumericClaim(claim: NumericClaim): string {
     return "many";
   }
 
-  return "several";
+  return "a few";
+}
+
+const RANGE_BETWEEN = /^\s*[$€£¥]?\s*(?:to|-|–)\s*[$€£¥]?\s*$/i;
+const CURRENCY = /^[$€£¥]$/;
+
+function contextAwareNumericSplice(
+  value: string,
+  claimsToReplace: NumericClaim[],
+  allClaims: NumericClaim[],
+): string {
+  if (!claimsToReplace.length) return value;
+
+  const replaceStarts = new Set(claimsToReplace.map((c) => c.start));
+
+  const rangePairs: Array<{ left: NumericClaim; right: NumericClaim }> = [];
+  for (let i = 0; i < allClaims.length - 1; i++) {
+    const left = allClaims[i];
+    const right = allClaims[i + 1];
+    const between = value.slice(left.end, right.start).replace(/\s+/g, " ").trim();
+    if (RANGE_BETWEEN.test(between) && (replaceStarts.has(left.start) || replaceStarts.has(right.start))) {
+      rangePairs.push({ left, right });
+    }
+  }
+
+  const absorbedLeft = new Set<number>();
+  for (const { left, right } of rangePairs) {
+    if (absorbedLeft.has(left.start)) continue;
+    absorbedLeft.add(left.start);
+  }
+
+  const sorted = [...claimsToReplace].sort((a, b) => b.start - a.start);
+
+  let result = value;
+  for (const claim of sorted) {
+    if (absorbedLeft.has(claim.start)) continue;
+
+    let rStart = claim.start;
+    let rEnd = claim.end;
+    let rep = qualitativeReplacementForNumericClaim(claim);
+
+    const rangePair = rangePairs.find((p) => p.right.start === claim.start || p.left.start === claim.start);
+    if (rangePair && (claim.start === rangePair.right.start || claim.start === rangePair.left.start)) {
+      rStart = rangePair.left.start;
+      rEnd = rangePair.right.end;
+      rep = "a broad range";
+      absorbedLeft.add(rangePair.left.start);
+    } else {
+      const before = result.slice(0, claim.start);
+      const after = result.slice(claim.end);
+
+      if (CURRENCY.test(result[claim.start - 1] ?? "")) {
+        rStart = claim.start - 1;
+      }
+      const artMatch = before.match(/((?:a|an)\s+)$/i);
+      if (artMatch && (rep.startsWith("a ") || /^(?:many|several|significantly|meaningful)\b/.test(rep))) {
+        rStart -= artMatch[1].length;
+      }
+
+      const firstMatch = before.match(/(first\s+)$/i);
+      const theseMatch = before.match(/(these\s+)$/i);
+      const underMatch = before.match(/(under\s+)$/i);
+      if (theseMatch) {
+        rep = "";
+      } else if (firstMatch && rep.startsWith("many ")) {
+        rStart -= firstMatch[1].length;
+        rep = `early ${rep.slice(5)}`;
+      } else if (underMatch) {
+        rStart -= underMatch[1].length;
+        rep = "a low threshold";
+      }
+
+      const lastWord = rep.split(/\s+/).pop() ?? "";
+      const trailMatch = after.match(new RegExp(`^\\s+(${lastWord})\\b`, "i"));
+      if (lastWord && trailMatch) {
+        rEnd += trailMatch[0].length;
+      }
+    }
+
+    result = result.slice(0, rStart) + rep + result.slice(rEnd);
+  }
+
+  return result
+    .replace(/[ \t]{2,}/g, " ")
+    .replace(/[ \t]+([,.;:!?])/g, "$1")
+    .replace(/\(\s+/g, "(")
+    .replace(/\s+\)/g, ")")
+    .replace(/[ \t]+\n/g, "\n")
+    .replace(/\n[ \t]+/g, "\n")
+    .trim();
 }
 
 function rewriteUnsupportedNumericClaims(value: string, allowedClaims: Set<string>): {
@@ -504,24 +597,7 @@ function rewriteUnsupportedNumericClaims(value: string, allowedClaims: Set<strin
     };
   }
 
-  let rewritten = value;
-  const replacements = [...unsupportedClaims].sort((a, b) => b.start - a.start);
-
-  for (const claim of replacements) {
-    rewritten =
-      rewritten.slice(0, claim.start) +
-      qualitativeReplacementForNumericClaim(claim) +
-      rewritten.slice(claim.end);
-  }
-
-  rewritten = rewritten
-    .replace(/[ \t]{2,}/g, " ")
-    .replace(/[ \t]+([,.;:!?])/g, "$1")
-    .replace(/\(\s+/g, "(")
-    .replace(/\s+\)/g, ")")
-    .replace(/[ \t]+\n/g, "\n")
-    .replace(/\n[ \t]+/g, "\n")
-    .trim();
+  const rewritten = contextAwareNumericSplice(value, unsupportedClaims, claims);
 
   return {
     value: rewritten,
@@ -566,24 +642,7 @@ function rewriteNumericClaimsWithBudget(
     };
   }
 
-  let rewritten = value;
-  const replacements = [...rewrittenClaims].sort((a, b) => b.start - a.start);
-
-  for (const claim of replacements) {
-    rewritten =
-      rewritten.slice(0, claim.start) +
-      qualitativeReplacementForNumericClaim(claim) +
-      rewritten.slice(claim.end);
-  }
-
-  rewritten = rewritten
-    .replace(/[ \t]{2,}/g, " ")
-    .replace(/[ \t]+([,.;:!?])/g, "$1")
-    .replace(/\(\s+/g, "(")
-    .replace(/\s+\)/g, ")")
-    .replace(/[ \t]+\n/g, "\n")
-    .replace(/\n[ \t]+/g, "\n")
-    .trim();
+  const rewritten = contextAwareNumericSplice(value, rewrittenClaims, claims);
 
   return {
     value: rewritten,
@@ -625,24 +684,7 @@ function rewriteRepeatedAllowedNumericClaims(
     };
   }
 
-  let rewritten = value;
-  const replacements = [...rewrittenClaims].sort((a, b) => b.start - a.start);
-
-  for (const claim of replacements) {
-    rewritten =
-      rewritten.slice(0, claim.start) +
-      qualitativeReplacementForNumericClaim(claim) +
-      rewritten.slice(claim.end);
-  }
-
-  rewritten = rewritten
-    .replace(/[ \t]{2,}/g, " ")
-    .replace(/[ \t]+([,.;:!?])/g, "$1")
-    .replace(/\(\s+/g, "(")
-    .replace(/\s+\)/g, ")")
-    .replace(/[ \t]+\n/g, "\n")
-    .replace(/\n[ \t]+/g, "\n")
-    .trim();
+  const rewritten = contextAwareNumericSplice(value, rewrittenClaims, claims);
 
   return {
     value: rewritten,
@@ -2998,6 +3040,49 @@ Return ${parsed.hooks.length} hook suggestions as well (keep good ones, tighten 
       if (sauceRepeatRewriteCount > 0) {
         console.warn(
           `Sauce repetition pass rewrote ${sauceRepeatRewriteCount} repeated benchmark number mention(s) within posts.`,
+        );
+      }
+    }
+
+    if (looksLikeSaucePostType(input.inputType) && sauceBenchmarkNumericClaims.size > 0 && normalizedPosts.length > 1) {
+      const sauceBenchmarkMaxRepeatsAcrossPosts = Math.max(1, Math.ceil(normalizedPosts.length / 2));
+      let sauceCrossPostRewriteCount = 0;
+      const seenAllowedClaimCounts = new Map<string, number>();
+
+      normalizedPosts = normalizedPosts.map((post) => {
+        const hookRewrite = rewriteRepeatedAllowedNumericClaims(
+          post.hook,
+          sauceBenchmarkNumericClaims,
+          sauceBenchmarkMaxRepeatsAcrossPosts,
+          seenAllowedClaimCounts,
+        );
+        const bodyRewrite = rewriteRepeatedAllowedNumericClaims(
+          post.body,
+          sauceBenchmarkNumericClaims,
+          sauceBenchmarkMaxRepeatsAcrossPosts,
+          seenAllowedClaimCounts,
+        );
+        const ctaRewrite = rewriteRepeatedAllowedNumericClaims(
+          post.cta,
+          sauceBenchmarkNumericClaims,
+          sauceBenchmarkMaxRepeatsAcrossPosts,
+          seenAllowedClaimCounts,
+        );
+
+        sauceCrossPostRewriteCount +=
+          hookRewrite.rewrittenClaims.length + bodyRewrite.rewrittenClaims.length + ctaRewrite.rewrittenClaims.length;
+
+        return {
+          ...post,
+          hook: hookRewrite.value,
+          body: bodyRewrite.value,
+          cta: ctaRewrite.value,
+        };
+      });
+
+      if (sauceCrossPostRewriteCount > 0) {
+        console.warn(
+          `Sauce cross-post diversity pass rewrote ${sauceCrossPostRewriteCount} repeated benchmark number mention(s) across posts.`,
         );
       }
     }
