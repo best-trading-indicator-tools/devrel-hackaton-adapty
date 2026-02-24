@@ -4,7 +4,7 @@ Use this as a hard operating contract. If any rule fails, rewrite before returni
 
 Core rhythm and structure:
 - Write like a cohesive mini-article, not stacked slogans.
-- Use one sentence per line for body copy.
+- Use natural paragraphs. One paragraph can have 1 to a few sentences.
 - Use blank lines between subtopics so longer posts breathe.
 - Keep paragraph rhythm human: usually 2 to 5 sentences before a blank line.
 - Avoid rap cadence and short-fragment stacks.
@@ -21,7 +21,7 @@ Anti-slop rules:
 - Include at least one concrete proof unit per post: number, metric, micro-example, or mini story.
 - Include caveats and boundaries such as most, unless, in practice, or for this segment.
 - Prefer lived perspective lines when relevant, such as from what we see, we tested, or in practice.
-- Occasional ellipses are acceptable as human texture, but keep usage rare.
+- Occasional ellipses (...) are acceptable as human texture for doubt, pause, or emphasis, but keep usage rare and natural.
 
 Formatting and safety:
 - No separator lines like _____, ---, ***.

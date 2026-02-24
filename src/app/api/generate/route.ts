@@ -58,7 +58,7 @@ const GOAL_PLAYBOOKS: Record<ContentGoal, string> = {
 
 const LINKEDIN_WRITING_CONTRACT = [
   "Write like a cohesive mini-article, not stacked slogans.",
-  "Use line breaks for readability. One sentence per line when practical, and add blank lines between subtopics.",
+  "Use natural paragraph formatting. One paragraph can contain 1 to a few sentences, with blank lines between subtopics.",
   "Keep paragraph rhythm human, usually 2 to 5 sentences before a blank line.",
   "Do not stack ultra-short lines back-to-back. Avoid rap or poem cadence.",
   "Mix short, medium, and long sentence lengths so rhythm feels human.",
@@ -69,7 +69,7 @@ const LINKEDIN_WRITING_CONTRACT = [
   "Include at least one concrete proof unit per post, such as a number, metric, micro-example, or specific scenario.",
   "Include caveats and boundary conditions like most, unless, in practice, or for this category.",
   "Prefer lived perspective lines where relevant, such as I saw, from what I see, or we tested.",
-  "Occasional ellipses are acceptable as human texture, but keep them rare and clear.",
+  "Occasional ellipses (...) are acceptable for pause, doubt, or emphasis, but keep them rare and natural.",
   "No separator lines like _____, ---, or ***.",
   "Never leak meta text such as assistant, final, json, or planning notes.",
   "Never use em dash or en dash punctuation. Use commas, periods, colons, semicolons, or normal hyphen.",
@@ -1456,7 +1456,7 @@ Draft to repair:
 ${draftSummary}
 
 Repair requirements:
-- Keep one sentence per line in body copy.
+- Use natural paragraphs with 1 to a few sentences per paragraph.
 - Add blank lines between subtopics.
 - Keep output human, concrete, and non-generic.
 - Avoid cliché opener lines.
