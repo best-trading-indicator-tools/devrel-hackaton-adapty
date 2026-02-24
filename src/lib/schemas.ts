@@ -37,6 +37,7 @@ export const generatePostsRequestSchema = z.object({
   chartImagePrompt: z.string().trim().max(1200).default(""),
   chartData: z.string().trim().max(20_000).default(""),
   chartOptions: z.string().trim().max(20_000).default(""),
+  memeEnabled: z.coerce.boolean().default(false),
   memeBrief: z.string().trim().max(400).default(""),
   giphyEnabled: z.coerce.boolean().default(false),
   giphyQuery: z.string().trim().max(220).default(""),
@@ -111,6 +112,7 @@ export type GeneratePostsResponse = {
       templateName: string;
       topText: string;
       bottomText: string;
+      textLines?: string[];
       url: string;
       toneFitScore?: number;
       toneFitReason?: string;
@@ -121,6 +123,7 @@ export type GeneratePostsResponse = {
       templateName: string;
       topText: string;
       bottomText: string;
+      textLines?: string[];
       url: string;
       toneFitScore?: number;
       toneFitReason?: string;

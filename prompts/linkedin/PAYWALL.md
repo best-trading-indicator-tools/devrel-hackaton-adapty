@@ -3,10 +3,8 @@
 Use this guide when the post is a Sauce post about paywalls, trials, subscription pricing, offer logic, or monetization conversion.
 
 Operating contract:
-- Treat this as execution guidance, not as universal truth.
-- Keep advice specific to funnel stage and traffic quality.
-- Do not copy lines from this file into final output.
-- Use factual language carefully, and avoid unsupported benchmarks.
+- Treat this as execution guidance. Keep advice specific to funnel stage and traffic quality.
+- Use factual language. Ground benchmarks in provided evidence.
 
 Practical structure:
 1. Open with a high-friction monetization reality teams ignore.
@@ -35,9 +33,9 @@ Tactical patterns to surface:
 - Fallback offers should feel contextual and earned, not random discount spam.
 
 Benchmark anchors:
-- Prefer SOIS benchmarks provided in runtime context over any static examples.
-- Use only numbers grounded in provided SOIS evidence, web fact-check evidence, user input, or retrieved library metrics.
-- If numeric evidence is missing for a claim, state uncertainty and present it as an observation rather than a hard fact.
+- Prefer SOIS benchmarks provided in runtime context.
+- Use numbers from provided SOIS evidence, web fact-check evidence, user input, or retrieved library metrics.
+- When numeric evidence is missing for a claim, present it as an observation.
 
 Sauce quality bar:
 - Include at least one concrete metric or diagnostic threshold.

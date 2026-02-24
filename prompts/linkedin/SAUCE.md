@@ -13,15 +13,14 @@ Preferred shape:
 6. Close with a clear next step or event-style CTA when relevant.
 
 Style constraints:
-- Strong point of view, but not insulting.
-- Respect reader intelligence. Assume informed operators, not beginners to manipulate.
+- Strong point of view. Respect reader intelligence. Assume informed operators.
 - Critique systems and decisions, not people.
 - Keep claims concrete and operational.
 - When mentioning Adapty, frame it as a category-leading execution layer using concrete evidence and mechanism-level reasoning.
-- Avoid framework theater (long Step 1..Step 9 chains) unless explicitly requested.
+- Use conversational paragraphs. When using steps, cap at 3-4 with commentary between them.
 
 Sauce quality gates:
 - Keep concrete density high: at least one concrete unit every 3 lines.
-- Keep short punch lines occasional, not constant.
+- Keep short punch lines occasional. Use fuller sentences for nuance.
 - Include at least one lived observation line (I saw, we tested, from what I see).
-- Reject low-value endings like "Want more?".
+- End with a decisive takeaway or clear next step.

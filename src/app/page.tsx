@@ -42,6 +42,7 @@ type FormState = {
   chartSeriesTwoLabel: string;
   chartSeriesTwoValues: string;
   chartLegendPosition: ChartLegendPosition;
+  memeEnabled: boolean;
   memeBrief: string;
   giphyEnabled: boolean;
   giphyQuery: string;
@@ -71,6 +72,7 @@ const defaultForm: FormState = {
   chartSeriesTwoLabel: "",
   chartSeriesTwoValues: "",
   chartLegendPosition: "right",
+  memeEnabled: false,
   memeBrief: "",
   giphyEnabled: false,
   giphyQuery: "",
@@ -501,6 +503,7 @@ function sanitizeGenerationResult(result: GeneratePostsResponse): GeneratePostsR
             ...post.meme,
             topText: normalizeNoEmDash(post.meme.topText),
             bottomText: normalizeNoEmDash(post.meme.bottomText),
+            textLines: post.meme.textLines?.map((line) => normalizeNoEmDash(line)),
             url: post.meme.url.trim(),
             toneFitReason: post.meme.toneFitReason ? normalizeNoEmDash(post.meme.toneFitReason) : post.meme.toneFitReason,
           }
@@ -509,6 +512,7 @@ function sanitizeGenerationResult(result: GeneratePostsResponse): GeneratePostsR
         ...variant,
         topText: normalizeNoEmDash(variant.topText),
         bottomText: normalizeNoEmDash(variant.bottomText),
+        textLines: variant.textLines?.map((line) => normalizeNoEmDash(line)),
         toneFitReason: variant.toneFitReason ? normalizeNoEmDash(variant.toneFitReason) : variant.toneFitReason,
         url: variant.url.trim(),
       })),
@@ -561,10 +565,6 @@ function getSelectWidthFromOptions(
 
 function needsEventDetails(inputType: string): boolean {
   return EVENT_TOPIC_PATTERN.test(inputType);
-}
-
-function needsMemeDetails(inputType: string): boolean {
-  return MEME_TOPIC_PATTERN.test(inputType);
 }
 
 function needsChartDetails(inputType: string): boolean {
@@ -858,10 +858,7 @@ export default function Home() {
     () => normalizedSelectedPostTypes.some((type) => needsEventDetails(type)),
     [normalizedSelectedPostTypes],
   );
-  const showMemeFields = useMemo(
-    () => normalizedSelectedPostTypes.some((type) => needsMemeDetails(type)),
-    [normalizedSelectedPostTypes],
-  );
+  const showMemeFields = normalizedSelectedPostTypes.length > 0;
   const showChartFields = useMemo(
     () => normalizedSelectedPostTypes.some((type) => needsChartDetails(type)),
     [normalizedSelectedPostTypes],
@@ -1085,11 +1082,6 @@ export default function Home() {
       time: effectiveSelected.some((type) => needsEventDetails(type)) ? prev.time : "",
       place: effectiveSelected.some((type) => needsEventDetails(type)) ? prev.place : "",
       chartEnabled: effectiveSelected.some((type) => needsChartDetails(type)) ? prev.chartEnabled : false,
-      memeBrief: effectiveSelected.some((type) => needsMemeDetails(type)) ? prev.memeBrief : "",
-      memeTemplateIds: effectiveSelected.some((type) => needsMemeDetails(type)) ? prev.memeTemplateIds : [],
-      memeVariantCount: effectiveSelected.some((type) => needsMemeDetails(type))
-        ? prev.memeVariantCount
-        : defaultForm.memeVariantCount,
     }));
   }
 
@@ -1374,7 +1366,6 @@ export default function Home() {
             const allocationIndex = startIndex + batchOffset;
             const typeNeedsChart = needsChartDetails(allocation.inputType);
             const typeNeedsEvent = needsEventDetails(allocation.inputType);
-            const typeNeedsMeme = needsMemeDetails(allocation.inputType);
             const shouldAttachChart =
               typeNeedsChart && form.chartEnabled && allocationIndex === firstChartAllocationIndex;
 
@@ -1393,11 +1384,12 @@ export default function Home() {
               chartOptions: shouldAttachChart ? chartOptionsPayload : "",
               time: typeNeedsEvent ? formatEventTimeForPrompt(form.time) : "",
               place: typeNeedsEvent ? form.place : "",
-              memeBrief: typeNeedsMeme ? form.memeBrief : "",
+              memeEnabled: form.memeEnabled,
+              memeBrief: form.memeEnabled ? form.memeBrief : "",
               giphyEnabled: form.giphyEnabled,
               giphyQuery: form.giphyQuery,
-              memeTemplateIds: typeNeedsMeme ? form.memeTemplateIds : [],
-              memeVariantCount: typeNeedsMeme ? form.memeVariantCount : defaultForm.memeVariantCount,
+              memeTemplateIds: form.memeEnabled ? form.memeTemplateIds : [],
+              memeVariantCount: form.memeEnabled ? form.memeVariantCount : defaultForm.memeVariantCount,
             };
 
             const response = await fetch("/api/generate", {
@@ -2308,134 +2300,148 @@ export default function Home() {
           {showMemeFields ? (
             <div className="space-y-3 rounded-2xl border border-black/10 bg-slate-50 p-3">
               <p className="text-xs font-semibold uppercase tracking-wide text-slate-600">Meme Options (optional)</p>
-              <div className="grid gap-3 sm:grid-cols-2">
-                <label className="flex h-full flex-col">
-                  <span className="text-sm font-medium sm:min-h-[2.75rem]">Variants Per Post</span>
-                  <input
-                    type="number"
-                    min={1}
-                    max={6}
-                    className={baseControlClassName}
-                    style={smallNumberInputStyle}
-                    value={form.memeVariantCount}
-                    onChange={(event) =>
-                      setForm((prev) => ({
-                        ...prev,
-                        memeVariantCount: Math.min(6, Math.max(1, Number(event.target.value || defaultForm.memeVariantCount))),
-                      }))
-                    }
-                  />
-                  <p className="mt-1 text-xs text-slate-600">
-                    Generates {form.memeVariantCount} meme variant{form.memeVariantCount > 1 ? "s" : ""} for each post.
-                  </p>
-                </label>
-              </div>
-
-              <div className="space-y-2 rounded-xl border border-black/10 bg-white p-3">
-                <div className="flex flex-wrap items-center justify-between gap-2">
-                  <p className="text-sm font-medium">Template Picker (optional)</p>
-                  <button
-                    type="button"
-                    className="rounded-lg border border-black/10 bg-white px-2 py-1 text-xs text-slate-700 hover:bg-slate-100"
-                    onClick={() => setForm((prev) => ({ ...prev, memeTemplateIds: [] }))}
-                  >
-                    Use Auto Template
-                  </button>
-                </div>
-
+              <label className="flex items-center gap-2">
                 <input
-                  placeholder="Search templates by name or id..."
-                  className={baseControlClassName}
-                  style={compactInputStyle}
-                  value={memeTemplateSearch}
-                  onChange={(event) => setMemeTemplateSearch(event.target.value)}
+                  type="checkbox"
+                  className="h-4 w-4 rounded border-black/20"
+                  checked={form.memeEnabled}
+                  onChange={(event) => setForm((prev) => ({ ...prev, memeEnabled: event.target.checked }))}
                 />
-                <p className="text-xs text-slate-600">
-                  Click one or more templates to include them. Leave all unselected for Auto.
-                </p>
-
-                <div className="grid max-h-[26rem] grid-cols-[repeat(auto-fill,minmax(13rem,1fr))] gap-2 overflow-y-auto pr-1">
-                  <button
-                    type="button"
-                    className={`min-h-40 rounded-xl border p-2 text-left transition ${
-                      form.memeTemplateIds.length === 0 ? selectableCardSelectedClass : selectableCardUnselectedClass
-                    }`}
-                    onClick={() => setForm((prev) => ({ ...prev, memeTemplateIds: [] }))}
-                  >
-                    <p className="text-sm font-medium text-slate-900">Auto</p>
-                    <p className="text-xs text-slate-600">Model picks best template per variant.</p>
-                  </button>
-
-                  {filteredMemeTemplates.map((template) => (
-                    <button
-                      key={template.id}
-                      type="button"
-                      className={`rounded-xl border p-2 text-left transition ${
-                        form.memeTemplateIds.includes(template.id) ? selectableCardSelectedClass : selectableCardUnselectedClass
-                      }`}
-                      onClick={() =>
-                        setForm((prev) => {
-                          const isSelected = prev.memeTemplateIds.includes(template.id);
-                          return {
-                            ...prev,
-                            memeTemplateIds: isSelected
-                              ? prev.memeTemplateIds.filter((id) => id !== template.id)
-                              : [...prev.memeTemplateIds, template.id],
-                          };
-                        })
-                      }
-                    >
-                      {/* eslint-disable-next-line @next/next/no-img-element */}
-                      <img
-                        src={template.previewUrl}
-                        alt={template.name}
-                        className="aspect-video w-full rounded-md border border-black/10 bg-slate-100 object-cover object-center"
-                        loading="lazy"
-                      />
-                      <p className="mt-2 text-xs font-medium text-slate-900">{template.name}</p>
-                      <p className="mt-0.5 text-[11px] text-slate-600">@{template.id}</p>
-                    </button>
-                  ))}
-                </div>
-
-                {totalMemeTemplateMatches > filteredMemeTemplates.length ? (
-                  <p className="text-xs text-slate-600">
-                    Showing first {filteredMemeTemplates.length} matches out of {totalMemeTemplateMatches}. Refine search to narrow further.
-                  </p>
-                ) : null}
-
-                {memeTemplateLoadError ? <p className="text-xs text-slate-600">{memeTemplateLoadError}</p> : null}
-
-                <p className="text-xs text-slate-600">
-                  Selected templates:{" "}
-                  {form.memeTemplateIds.length
-                    ? form.memeTemplateIds
-                        .slice(0, 6)
-                        .map((id) => memeTemplateNameById[id] ?? formatTemplateIdLabel(id))
-                        .join(", ") + (form.memeTemplateIds.length > 6 ? ` +${form.memeTemplateIds.length - 6} more` : "")
-                    : "Auto"}
-                </p>
-              </div>
-
-              <label className="space-y-1">
-                <span className="text-sm font-medium">Meme Prompt</span>
-                <textarea
-                  rows={3}
-                  placeholder="Any specific angle, joke format, or comparison to include..."
-                  className={baseControlClassName}
-                  value={form.memeBrief}
-                  onChange={(event) => setForm((prev) => ({ ...prev, memeBrief: event.target.value }))}
-                />
+                <span className="text-sm font-medium">Add Meme Companion to each post</span>
               </label>
 
-              <p className="text-xs text-slate-600">
-                Meme style is inferred automatically from Brand Voice, Goal, Post Type, and your prompt details.
-              </p>
-              <p className="text-xs text-slate-600">
-                Total meme images for this run: {totalMemeVariants} ({form.numberOfPosts} post
-                {form.numberOfPosts > 1 ? "s" : ""} x {form.memeVariantCount} variant
-                {form.memeVariantCount > 1 ? "s" : ""} each).
-              </p>
+              {form.memeEnabled ? (
+                <>
+                  <div className="grid gap-3 sm:grid-cols-2">
+                    <label className="flex h-full flex-col">
+                      <span className="text-sm font-medium sm:min-h-[2.75rem]">Variants Per Post</span>
+                      <input
+                        type="number"
+                        min={1}
+                        max={6}
+                        className={baseControlClassName}
+                        style={smallNumberInputStyle}
+                        value={form.memeVariantCount}
+                        onChange={(event) =>
+                          setForm((prev) => ({
+                            ...prev,
+                            memeVariantCount: Math.min(6, Math.max(1, Number(event.target.value || defaultForm.memeVariantCount))),
+                          }))
+                        }
+                      />
+                      <p className="mt-1 text-xs text-slate-600">
+                        Generates {form.memeVariantCount} meme variant{form.memeVariantCount > 1 ? "s" : ""} for each post.
+                      </p>
+                    </label>
+                  </div>
+
+                  <div className="space-y-2 rounded-xl border border-black/10 bg-white p-3">
+                    <div className="flex flex-wrap items-center justify-between gap-2">
+                      <p className="text-sm font-medium">Template Picker (optional)</p>
+                      <button
+                        type="button"
+                        className="rounded-lg border border-black/10 bg-white px-2 py-1 text-xs text-slate-700 hover:bg-slate-100"
+                        onClick={() => setForm((prev) => ({ ...prev, memeTemplateIds: [] }))}
+                      >
+                        Use Auto Template
+                      </button>
+                    </div>
+
+                    <input
+                      placeholder="Search templates by name or id..."
+                      className={baseControlClassName}
+                      style={compactInputStyle}
+                      value={memeTemplateSearch}
+                      onChange={(event) => setMemeTemplateSearch(event.target.value)}
+                    />
+                    <p className="text-xs text-slate-600">
+                      Click one or more templates to include them. Leave all unselected for Auto.
+                    </p>
+
+                    <div className="grid max-h-[26rem] grid-cols-[repeat(auto-fill,minmax(13rem,1fr))] gap-2 overflow-y-auto pr-1">
+                      <button
+                        type="button"
+                        className={`min-h-40 rounded-xl border p-2 text-left transition ${
+                          form.memeTemplateIds.length === 0 ? selectableCardSelectedClass : selectableCardUnselectedClass
+                        }`}
+                        onClick={() => setForm((prev) => ({ ...prev, memeTemplateIds: [] }))}
+                      >
+                        <p className="text-sm font-medium text-slate-900">Auto</p>
+                        <p className="text-xs text-slate-600">Model picks best template per variant.</p>
+                      </button>
+
+                      {filteredMemeTemplates.map((template) => (
+                        <button
+                          key={template.id}
+                          type="button"
+                          className={`rounded-xl border p-2 text-left transition ${
+                            form.memeTemplateIds.includes(template.id) ? selectableCardSelectedClass : selectableCardUnselectedClass
+                          }`}
+                          onClick={() =>
+                            setForm((prev) => {
+                              const isSelected = prev.memeTemplateIds.includes(template.id);
+                              return {
+                                ...prev,
+                                memeTemplateIds: isSelected
+                                  ? prev.memeTemplateIds.filter((id) => id !== template.id)
+                                  : [...prev.memeTemplateIds, template.id],
+                              };
+                            })
+                          }
+                        >
+                          {/* eslint-disable-next-line @next/next/no-img-element */}
+                          <img
+                            src={template.previewUrl}
+                            alt={template.name}
+                            className="aspect-video w-full rounded-md border border-black/10 bg-slate-100 object-cover object-center"
+                            loading="lazy"
+                          />
+                          <p className="mt-2 text-xs font-medium text-slate-900">{template.name}</p>
+                          <p className="mt-0.5 text-[11px] text-slate-600">@{template.id}</p>
+                        </button>
+                      ))}
+                    </div>
+
+                    {totalMemeTemplateMatches > filteredMemeTemplates.length ? (
+                      <p className="text-xs text-slate-600">
+                        Showing first {filteredMemeTemplates.length} matches out of {totalMemeTemplateMatches}. Refine search to narrow further.
+                      </p>
+                    ) : null}
+
+                    {memeTemplateLoadError ? <p className="text-xs text-slate-600">{memeTemplateLoadError}</p> : null}
+
+                    <p className="text-xs text-slate-600">
+                      Selected templates:{" "}
+                      {form.memeTemplateIds.length
+                        ? form.memeTemplateIds
+                            .slice(0, 6)
+                            .map((id) => memeTemplateNameById[id] ?? formatTemplateIdLabel(id))
+                            .join(", ") + (form.memeTemplateIds.length > 6 ? ` +${form.memeTemplateIds.length - 6} more` : "")
+                        : "Auto"}
+                    </p>
+                  </div>
+
+                  <label className="space-y-1">
+                    <span className="text-sm font-medium">Meme Prompt</span>
+                    <textarea
+                      rows={3}
+                      placeholder="Any specific angle, joke format, or comparison to include..."
+                      className={baseControlClassName}
+                      value={form.memeBrief}
+                      onChange={(event) => setForm((prev) => ({ ...prev, memeBrief: event.target.value }))}
+                    />
+                  </label>
+
+                  <p className="text-xs text-slate-600">
+                    Meme style is inferred automatically from Brand Voice, Goal, Post Type, and your prompt details.
+                  </p>
+                  <p className="text-xs text-slate-600">
+                    Total meme images for this run: {totalMemeVariants} ({form.numberOfPosts} post
+                    {form.numberOfPosts > 1 ? "s" : ""} x {form.memeVariantCount} variant
+                    {form.memeVariantCount > 1 ? "s" : ""} each).
+                  </p>
+                </>
+              ) : null}
             </div>
           ) : null}
 
@@ -3322,9 +3328,22 @@ export default function Home() {
                               />
 
                               <p className="text-xs text-slate-600">
-                                Top: {variant.topText}
-                                <br />
-                                Bottom: {variant.bottomText}
+                                {Array.isArray(variant.textLines) && variant.textLines.length > 2 ? (
+                                  <>
+                                    {variant.textLines.map((line, lineIndex) => (
+                                      <span key={`${variant.rank}-${variant.templateId}-line-${lineIndex}`}>
+                                        Line {lineIndex + 1}: {line}
+                                        <br />
+                                      </span>
+                                    ))}
+                                  </>
+                                ) : (
+                                  <>
+                                    Top: {variant.topText}
+                                    <br />
+                                    Bottom: {variant.bottomText}
+                                  </>
+                                )}
                               </p>
 
                               {variant.toneFitReason ? <p className="text-xs text-slate-600">{variant.toneFitReason}</p> : null}

@@ -19,15 +19,15 @@ const GUIDE_PATHS: Record<PromptGuideKey, string> = {
 
 const DEFAULT_GUIDES: PromptGuides = {
   writing: [
-    "Write like a cohesive mini-article, not stacked slogans.",
+    "Write like a cohesive mini-article, one thought flowing into the next.",
     "Use this default flow: observation, why it matters, mechanism/example, practical next move.",
     "Address reader directly at least once with you or your team when natural.",
     "Include one operator action sentence using verbs like test, measure, compare, or fix.",
     "Use line breaks for readability. Add blank lines between subtopics.",
-    "Avoid rap cadence and short-fragment stacks.",
+    "Use fuller paragraphs with 2-4 sentences. Keep one-line paragraphs occasional.",
     "Include concrete proof units and caveats.",
-    "Avoid buzzword fog and meta leakage.",
-    "Never use em dash or en dash punctuation.",
+    "Use the words app makers use in real conversations.",
+    "Use hyphens, commas, and periods.",
   ].join("\n"),
   sauce: [
     "For Sauce posts, combine practical breakdown and data insight.",
@@ -44,8 +44,8 @@ const DEFAULT_GUIDES: PromptGuides = {
   ].join("\n"),
   factCheck: [
     "For factual claims, prefer web-verified evidence.",
-    "If evidence is missing, rewrite as opinion or observation.",
-    "Do not invent hard numbers or timing-sensitive facts.",
+    "When evidence is missing, rewrite as opinion or observation.",
+    "Use only numbers and facts that appear in the provided evidence.",
   ].join("\n"),
 };
 

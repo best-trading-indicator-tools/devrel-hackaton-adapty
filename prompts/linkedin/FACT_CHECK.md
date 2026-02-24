@@ -4,10 +4,8 @@ Use this contract for factual safety.
 
 - SOIS benchmark evidence is preferred when available in context. Use those numbers as grounded anchors when relevant.
 - For factual claims, prefer web-verified evidence when available.
-- Prefer concrete numbers only when they are evidence-backed.
-- If evidence is missing, rewrite as opinion, observation, or hypothesis.
-- Do not invent numbers, percentages, benchmarks, dates, or policy changes.
-- Avoid absolute claims unless you can support them.
-- Prefer wording like "from what we see", "in our sample", "in practice", or "for many teams" when certainty is limited.
-- If citing timing-sensitive facts, include concrete dates.
+- Use concrete numbers only when they appear in the evidence.
+- When evidence is missing, rewrite as opinion, observation, or hypothesis.
+- Use wording like "from what we see", "in our sample", "in practice", or "for many teams" when certainty is limited.
+- When citing timing-sensitive facts, include concrete dates.
 - Keep claims consistent with provided context and sources.

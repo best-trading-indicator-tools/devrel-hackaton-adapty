@@ -16,7 +16,6 @@ import {
   MEME_TEMPLATE_IDS,
   MEME_TEMPLATE_LABELS,
   MEME_TEMPLATE_MEANINGS,
-  MEME_TEMPLATE_OPTIONS,
   buildLengthPlan,
   GOAL_DESCRIPTIONS,
   GOAL_LABELS,
@@ -54,6 +53,26 @@ export const runtime = "nodejs";
 const MEME_INPUT_TYPE_PATTERN = /\b(meme|shitpost)\b/i;
 const MEME_LINE_MAX_CHARS = 72;
 const DEFAULT_MEMEGEN_BASE_URL = "https://api.memegen.link";
+const DEFAULT_MEME_TEMPLATE_LINE_COUNT = 2;
+const MAX_MEME_TEMPLATE_LINE_COUNT = 8;
+const MEME_TEMPLATE_LINE_COUNT_CACHE_TTL_MS = 24 * 60 * 60 * 1000;
+const MEME_TEMPLATE_LINE_COUNT_TIMEOUT_MS = 3_000;
+const MEME_TEMPLATE_LINE_COUNT_CACHE = new Map<string, { lineCount: number; expiresAt: number }>();
+const KNOWN_MEME_TEMPLATE_LINE_COUNTS: Record<string, number> = {
+  chair: 6,
+  gru: 4,
+  right: 5,
+  anakin: 4,
+  db: 3,
+  same: 3,
+};
+const MEME_TEMPLATE_FLOW_RULES: Record<string, string> = {
+  right:
+    "5-line dialogue: line1 setup claim, line2 optimistic \"right?\", line3 hidden catch, line4 nervous follow-up question, line5 awkward payoff.",
+  chair:
+    "6-line argument with alternating speakers: line1 claim, line2 rebuttal, line3 escalation, line4 counter, line5 loud thesis, line6 final reality-check punchline.",
+  gru: "4-line plan flow: idea, expected result, failure realization, corrected action.",
+};
 const FACT_CHECK_EVIDENCE_PROMPT_LIMIT = 4;
 const DEFAULT_SOIS_EVIDENCE_PROMPT_LIMIT = 8;
 const DEFAULT_SOIS_BROAD_EVIDENCE_PROMPT_LIMIT = 24;
@@ -568,6 +587,93 @@ function rewriteNumericClaimsWithBudget(
 
   return {
     value: rewritten,
+    rewrittenClaims,
+  };
+}
+
+function rewriteRepeatedAllowedNumericClaims(
+  value: string,
+  allowedClaims: Set<string>,
+  maxOccurrencesPerClaim: number,
+  seenAllowedClaimCounts: Map<string, number>,
+): {
+  value: string;
+  rewrittenClaims: NumericClaim[];
+} {
+  const claims = extractNumericClaims(value);
+  const rewrittenClaims: NumericClaim[] = [];
+  const occurrenceLimit = Math.max(1, Math.floor(maxOccurrencesPerClaim));
+
+  for (const claim of claims) {
+    if (!allowedClaims.has(claim.canonical)) {
+      continue;
+    }
+
+    const seenCount = seenAllowedClaimCounts.get(claim.canonical) ?? 0;
+    if (seenCount < occurrenceLimit) {
+      seenAllowedClaimCounts.set(claim.canonical, seenCount + 1);
+      continue;
+    }
+
+    rewrittenClaims.push(claim);
+  }
+
+  if (!rewrittenClaims.length) {
+    return {
+      value,
+      rewrittenClaims: [],
+    };
+  }
+
+  let rewritten = value;
+  const replacements = [...rewrittenClaims].sort((a, b) => b.start - a.start);
+
+  for (const claim of replacements) {
+    rewritten =
+      rewritten.slice(0, claim.start) +
+      qualitativeReplacementForNumericClaim(claim) +
+      rewritten.slice(claim.end);
+  }
+
+  rewritten = rewritten
+    .replace(/[ \t]{2,}/g, " ")
+    .replace(/[ \t]+([,.;:!?])/g, "$1")
+    .replace(/\(\s+/g, "(")
+    .replace(/\s+\)/g, ")")
+    .replace(/[ \t]+\n/g, "\n")
+    .replace(/\n[ \t]+/g, "\n")
+    .trim();
+
+  return {
+    value: rewritten,
+    rewrittenClaims,
+  };
+}
+
+function sanitizeHookNumericClaimRepetition(
+  hooks: string[],
+  allowedClaims: Set<string>,
+  maxOccurrencesPerClaim = 2,
+): {
+  hooks: string[];
+  rewrittenClaims: NumericClaim[];
+} {
+  const rewrittenClaims: NumericClaim[] = [];
+  const seenAllowedClaimCounts = new Map<string, number>();
+
+  const sanitizedHooks = hooks.map((hook) => {
+    const result = rewriteRepeatedAllowedNumericClaims(
+      hook,
+      allowedClaims,
+      maxOccurrencesPerClaim,
+      seenAllowedClaimCounts,
+    );
+    rewrittenClaims.push(...result.rewrittenClaims);
+    return result.value;
+  });
+
+  return {
+    hooks: sanitizedHooks,
     rewrittenClaims,
   };
 }
@@ -1108,24 +1214,6 @@ function clipMemeLine(value: string, maxChars: number): string {
   return clipped || clean.slice(0, maxChars).trim();
 }
 
-function pickMemeBottomLine(body: string, avoidLine = ""): string {
-  const candidates = body
-    .split(/\n+/)
-    .map((line) => normalizeMemeLine(line))
-    .filter((line) => line.length >= 12 && !/^https?:\/\//i.test(line));
-
-  if (candidates.length) {
-    const distinctCandidate = candidates.find((line) => !memeLinesAreEquivalent(line, avoidLine));
-    if (distinctCandidate) {
-      return distinctCandidate;
-    }
-
-    return candidates[0];
-  }
-
-  return "Still shipping and iterating";
-}
-
 function encodeMemegenPathSegment(value: string): string {
   const clean = normalizeMemeLine(value);
 
@@ -1154,10 +1242,179 @@ function getMemegenBaseUrl(): string {
   return custom.replace(/\/+$/g, "");
 }
 
+function getKnownMemeTemplateLineCount(templateId: string): number {
+  const normalized = templateId.trim().toLowerCase();
+  const known = KNOWN_MEME_TEMPLATE_LINE_COUNTS[normalized];
+  if (Number.isInteger(known) && known >= 2 && known <= MAX_MEME_TEMPLATE_LINE_COUNT) {
+    return known;
+  }
+
+  return DEFAULT_MEME_TEMPLATE_LINE_COUNT;
+}
+
+function sanitizeMemeLineCount(value: unknown, fallbackValue = DEFAULT_MEME_TEMPLATE_LINE_COUNT): number {
+  if (!Number.isInteger(value)) {
+    return fallbackValue;
+  }
+
+  return Math.min(MAX_MEME_TEMPLATE_LINE_COUNT, Math.max(2, Number(value)));
+}
+
+async function fetchMemegenTemplateLineCount(templateId: string): Promise<number> {
+  const normalizedTemplateId = templateId.trim().toLowerCase();
+  if (!normalizedTemplateId) {
+    return DEFAULT_MEME_TEMPLATE_LINE_COUNT;
+  }
+
+  const cached = MEME_TEMPLATE_LINE_COUNT_CACHE.get(normalizedTemplateId);
+  if (cached && cached.expiresAt > Date.now()) {
+    return cached.lineCount;
+  }
+
+  const fallbackLineCount = getKnownMemeTemplateLineCount(normalizedTemplateId);
+  const controller = new AbortController();
+  const timer = setTimeout(() => controller.abort(), MEME_TEMPLATE_LINE_COUNT_TIMEOUT_MS);
+
+  try {
+    const response = await fetch(`${getMemegenBaseUrl()}/templates/${encodeURIComponent(normalizedTemplateId)}`, {
+      method: "GET",
+      cache: "force-cache",
+      signal: controller.signal,
+    });
+
+    if (!response.ok) {
+      MEME_TEMPLATE_LINE_COUNT_CACHE.set(normalizedTemplateId, {
+        lineCount: fallbackLineCount,
+        expiresAt: Date.now() + MEME_TEMPLATE_LINE_COUNT_CACHE_TTL_MS,
+      });
+      return fallbackLineCount;
+    }
+
+    const payload = (await response.json()) as { lines?: unknown };
+    const resolvedLineCount = sanitizeMemeLineCount(payload.lines, fallbackLineCount);
+    MEME_TEMPLATE_LINE_COUNT_CACHE.set(normalizedTemplateId, {
+      lineCount: resolvedLineCount,
+      expiresAt: Date.now() + MEME_TEMPLATE_LINE_COUNT_CACHE_TTL_MS,
+    });
+    return resolvedLineCount;
+  } catch {
+    MEME_TEMPLATE_LINE_COUNT_CACHE.set(normalizedTemplateId, {
+      lineCount: fallbackLineCount,
+      expiresAt: Date.now() + MEME_TEMPLATE_LINE_COUNT_CACHE_TTL_MS,
+    });
+    return fallbackLineCount;
+  } finally {
+    clearTimeout(timer);
+  }
+}
+
+async function resolveMemegenTemplateLineCountMap(templateIds: string[]): Promise<Map<string, number>> {
+  const uniqueTemplateIds = Array.from(
+    new Set(
+      templateIds
+        .map((templateId) => templateId.trim().toLowerCase())
+        .filter(Boolean),
+    ),
+  );
+
+  const lineCountEntries = await Promise.all(
+    uniqueTemplateIds.map(async (templateId) => [templateId, await fetchMemegenTemplateLineCount(templateId)] as const),
+  );
+
+  return new Map<string, number>(lineCountEntries);
+}
+
+function resolveMemeTextLines(params: {
+  templateId: string;
+  templateLineCount: number;
+  topText: string;
+  bottomText: string;
+  textLines?: string[];
+}): string[] {
+  const normalizedTemplateId = params.templateId.trim().toLowerCase();
+  const targetLineCount = sanitizeMemeLineCount(params.templateLineCount);
+  const slotMaxChars =
+    targetLineCount >= 6 ? 52 : targetLineCount === 5 ? 48 : targetLineCount === 4 ? 44 : targetLineCount === 3 ? 56 : MEME_LINE_MAX_CHARS;
+  const danglingTailWords = new Set([
+    "a",
+    "an",
+    "the",
+    "and",
+    "or",
+    "but",
+    "because",
+    "to",
+    "for",
+    "with",
+    "without",
+    "in",
+    "on",
+    "at",
+    "of",
+    "your",
+    "our",
+    "their",
+    "his",
+    "her",
+    "my",
+  ]);
+  const validateLine = (line: string, lineIndex: number) => {
+    const clean = clipMemeLine(line, slotMaxChars);
+    if (!clean) {
+      throw new Error(`Template '${normalizedTemplateId}' line ${lineIndex + 1} is empty.`);
+    }
+    if (/^(and|but)\b/i.test(clean)) {
+      throw new Error(`Template '${normalizedTemplateId}' line ${lineIndex + 1} starts with dangling conjunction.`);
+    }
+    const tail = clean.split(/\s+/).filter(Boolean).at(-1)?.toLowerCase() ?? "";
+    if (tail && danglingTailWords.has(tail)) {
+      throw new Error(`Template '${normalizedTemplateId}' line ${lineIndex + 1} ends with dangling word '${tail}'.`);
+    }
+    return clean;
+  };
+
+  const normalizedProvidedLines = (params.textLines ?? [])
+    .map((line) => normalizeNoEmDash(line))
+    .map((line) => line.trim())
+    .filter(Boolean);
+
+  const resolvedLines =
+    targetLineCount <= 2 && normalizedProvidedLines.length < 2
+      ? [params.topText, params.bottomText].map((line) => normalizeNoEmDash(line)).map((line) => line.trim()).filter(Boolean)
+      : normalizedProvidedLines;
+
+  if (resolvedLines.length < targetLineCount) {
+    throw new Error(
+      `Template '${normalizedTemplateId}' requires at least ${targetLineCount} lines, received ${resolvedLines.length}.`,
+    );
+  }
+
+  const finalLines = resolvedLines.slice(0, targetLineCount).map((line, lineIndex) => validateLine(line, lineIndex));
+  const uniqueCount = finalLines.filter((line, index) => !finalLines.slice(0, index).some((prev) => memeLinesAreEquivalent(prev, line))).length;
+
+  if (uniqueCount < finalLines.length) {
+    throw new Error(`Template '${normalizedTemplateId}' includes duplicate lines; provide unique line-by-line dialogue.`);
+  }
+
+  if ((normalizedTemplateId === "right" || normalizedTemplateId === "anakin") && finalLines.length >= 4) {
+    if (!finalLines[1]?.includes("?") || !finalLines[3]?.includes("?")) {
+      throw new Error(`Template '${normalizedTemplateId}' must follow dialogue flow with question beats on lines 2 and 4.`);
+    }
+  }
+
+  return finalLines;
+}
+
+function buildMemegenImageUrl(templateId: string, textLines: string[]): string {
+  const encodedLines = textLines.map((line) => encodeMemegenPathSegment(line)).join("/");
+  return `${getMemegenBaseUrl()}/images/${templateId}/${encodedLines}.jpg`;
+}
+
 type MemeVariantCandidate = {
   templateId: MemeTemplateId;
   topText: string;
   bottomText: string;
+  textLines?: string[];
   toneFitScore: number;
   toneFitReason: string;
 };
@@ -1179,6 +1436,11 @@ function makeMemeSelectionResponseSchema(postCount: number, variantCount: number
                   .regex(/^[a-z0-9-]+$/i, "templateId must use letters, numbers, and hyphen only"),
                 topText: z.string().min(4).max(120),
                 bottomText: z.string().min(4).max(120),
+                textLines: z
+                  .array(z.string().min(2).max(120))
+                  .min(2)
+                  .max(MAX_MEME_TEMPLATE_LINE_COUNT)
+                  .optional(),
                 toneFitScore: z.number().int().min(0).max(100),
                 toneFitReason: z.string().min(8).max(220),
               }),
@@ -1217,7 +1479,7 @@ function makeMemeSelectionJsonSchema(postCount: number, variantCount: number): R
               items: {
                 type: "object",
                 additionalProperties: false,
-                required: ["templateId", "topText", "bottomText", "toneFitScore", "toneFitReason"],
+                required: ["templateId", "topText", "bottomText", "textLines", "toneFitScore", "toneFitReason"],
                 properties: {
                   templateId: {
                     type: "string",
@@ -1234,6 +1496,16 @@ function makeMemeSelectionJsonSchema(postCount: number, variantCount: number): R
                     type: "string",
                     minLength: 4,
                     maxLength: 120,
+                  },
+                  textLines: {
+                    type: "array",
+                    minItems: 2,
+                    maxItems: MAX_MEME_TEMPLATE_LINE_COUNT,
+                    items: {
+                      type: "string",
+                      minLength: 2,
+                      maxLength: 120,
+                    },
                   },
                   toneFitScore: {
                     type: "integer",
@@ -1260,55 +1532,59 @@ function sanitizeModelMemeVariants(params: {
     templateId: string;
     topText: string;
     bottomText: string;
+    textLines?: string[];
     toneFitScore: number;
     toneFitReason: string;
   }>;
   allowedTemplateIds: MemeTemplateId[];
-  postIndex: number;
-  postBody: string;
 }): MemeVariantCandidate[] {
   const allowedTemplateSet = new Set(params.allowedTemplateIds);
-  const fallbackTemplateId =
-    params.allowedTemplateIds[params.postIndex % params.allowedTemplateIds.length] ?? MEME_TEMPLATE_IDS[0];
 
   return params.variants.map((variant) => {
     const normalizedTemplateId = variant.templateId.trim().toLowerCase();
-    const templateId = allowedTemplateSet.has(normalizedTemplateId as MemeTemplateId)
-      ? (normalizedTemplateId as MemeTemplateId)
-      : fallbackTemplateId;
+    if (!allowedTemplateSet.has(normalizedTemplateId as MemeTemplateId)) {
+      throw new Error(`Model returned disallowed meme template '${variant.templateId}'.`);
+    }
+    const templateId = normalizedTemplateId as MemeTemplateId;
     const topText = normalizeNoEmDash(variant.topText);
-    let bottomText = normalizeNoEmDash(variant.bottomText);
-
-    if (memeLinesAreEquivalent(topText, bottomText)) {
-      bottomText = pickMemeBottomLine(params.postBody, topText);
-    }
-
-    if (memeLinesAreEquivalent(topText, bottomText)) {
-      bottomText = templateId === "drake" ? "Measure revenue, not installs" : "Different move, better outcome";
-    }
+    const bottomText = normalizeNoEmDash(variant.bottomText);
+    const normalizedTextLines = Array.isArray(variant.textLines)
+      ? variant.textLines
+          .map((line) => normalizeNoEmDash(line))
+          .filter((line) => Boolean(line.trim()))
+          .slice(0, MAX_MEME_TEMPLATE_LINE_COUNT)
+      : undefined;
 
     return {
       templateId,
       topText,
       bottomText,
+      textLines: normalizedTextLines,
       toneFitScore: variant.toneFitScore,
       toneFitReason: normalizeNoEmDash(variant.toneFitReason),
     };
   });
 }
 
-function buildMemeCompanionFromVariant(params: { variant: MemeVariantCandidate; rank: number }) {
+function buildMemeCompanionFromVariant(params: {
+  variant: MemeVariantCandidate;
+  rank: number;
+  templateLineCount: number;
+}) {
   const templateName = MEME_TEMPLATE_LABELS[params.variant.templateId] ?? params.variant.templateId;
-  const topText = clipMemeLine(params.variant.topText, MEME_LINE_MAX_CHARS) || "App teams shipping fast";
-  let bottomText = clipMemeLine(params.variant.bottomText, MEME_LINE_MAX_CHARS) || "Growth teams in 2026";
-
-  if (memeLinesAreEquivalent(topText, bottomText)) {
-    const forcedBottom =
-      params.variant.templateId === "drake" ? "Measure revenue, not installs" : "Different move, better outcome";
-    bottomText = clipMemeLine(forcedBottom, MEME_LINE_MAX_CHARS) || "Different move, better outcome";
+  const textLines = resolveMemeTextLines({
+    templateId: params.variant.templateId,
+    templateLineCount: params.templateLineCount,
+    topText: params.variant.topText,
+    bottomText: params.variant.bottomText,
+    textLines: params.variant.textLines,
+  });
+  const topText = textLines[0];
+  const bottomText = textLines[1];
+  if (!topText || !bottomText) {
+    throw new Error("Insufficient meme lines from LLM");
   }
-
-  const url = `${getMemegenBaseUrl()}/images/${params.variant.templateId}/${encodeMemegenPathSegment(topText)}/${encodeMemegenPathSegment(bottomText)}.jpg`;
+  const url = buildMemegenImageUrl(params.variant.templateId, textLines);
 
   return {
     rank: params.rank,
@@ -1316,49 +1592,11 @@ function buildMemeCompanionFromVariant(params: { variant: MemeVariantCandidate; 
     templateName,
     topText,
     bottomText,
+    textLines,
     url,
     toneFitScore: Math.max(0, Math.min(100, Math.round(params.variant.toneFitScore))),
     toneFitReason: normalizeNoEmDash(params.variant.toneFitReason),
   };
-}
-
-function buildHeuristicMemeVariants(params: {
-  hook: string;
-  body: string;
-  index: number;
-  variantCount: number;
-  toneProfile: string;
-  preferredTemplateIds: MemeTemplateId[];
-  allowedTemplateIds: MemeTemplateId[];
-}) {
-  const fallbackTop = clipMemeLine(params.hook, MEME_LINE_MAX_CHARS) || "App growth team update";
-  const fallbackBottom = clipMemeLine(pickMemeBottomLine(params.body, fallbackTop), MEME_LINE_MAX_CHARS) || "Still iterating";
-  const compactTone = clipMemeLine(params.toneProfile, 48) || "clever";
-  const preferredTemplates = params.preferredTemplateIds.length ? params.preferredTemplateIds : params.allowedTemplateIds;
-  const allowedTemplates = preferredTemplates.length ? preferredTemplates : MEME_TEMPLATE_IDS;
-
-  return Array.from({ length: params.variantCount }, (_, variantIndex) => {
-    const templateId = allowedTemplates[(params.index + variantIndex) % allowedTemplates.length];
-    const topText =
-      variantIndex === 0
-        ? fallbackTop
-        : clipMemeLine(`${compactTone}: ${fallbackTop}`, MEME_LINE_MAX_CHARS) || fallbackTop;
-    const bottomText =
-      variantIndex === 0
-        ? fallbackBottom
-        : clipMemeLine(`${fallbackBottom} (${variantIndex + 1})`, MEME_LINE_MAX_CHARS) || fallbackBottom;
-
-    return buildMemeCompanionFromVariant({
-      rank: variantIndex + 1,
-      variant: {
-        templateId,
-        topText,
-        bottomText,
-        toneFitScore: Math.max(35, 82 - variantIndex * 7),
-        toneFitReason: variantIndex === 0 ? "Fallback best-fit based on hook and body." : "Fallback alternative variant.",
-      },
-    });
-  });
 }
 
 function formatExampleMetrics(entry: LibraryEntry): string {
@@ -1958,9 +2196,12 @@ export async function POST(request: Request) {
     );
     const memeVariantTarget = input.memeVariantCount;
     const giphyVariantTarget = 1;
-    const memeExecutionDirective = shouldGenerateMemes(input.inputType)
-      ? "This is a meme-focused request. Keep hooks and first body lines short, punchy, and caption-friendly. If no meme brief is provided, come up with clever and funny angles automatically."
-      : "Not a meme-focused request.";
+    const includeMemeCompanion = input.memeEnabled || shouldGenerateMemes(input.inputType);
+    const memeExecutionDirective = includeMemeCompanion
+      ? shouldGenerateMemes(input.inputType)
+        ? "This is a meme-focused request. Keep hooks and first body lines short, punchy, and caption-friendly. If no meme brief is provided, come up with clever and funny angles automatically."
+        : "Meme companion is enabled. Keep post copy strong for the selected post type, and let meme captions punch up one concrete insight."
+      : "Meme companion is disabled for this request.";
     const industryNewsPromptLines = industryNewsContext.items.map((item, index) => {
       const keywordPart = item.matchedKeywords.length ? ` | matched keywords: ${item.matchedKeywords.join(", ")}` : "";
       return `${index + 1}. [${item.sourceName}] ${normalizeNoEmDash(item.title)}
@@ -2003,11 +2244,11 @@ export async function POST(request: Request) {
 - Evidence: ${compactText}`;
     });
     const factCheckDirective = webEvidenceLines.length
-      ? "Web evidence is available. For factual claims, stay consistent with the evidence context and avoid unsupported new hard facts. Prefer real numbers only when they can be grounded in this evidence or other provided context."
-      : "Web evidence is unavailable or empty. Do not invent hard facts or numbers. Rewrite uncertain factual claims as opinion, observation, or hypothesis.";
+      ? "Web evidence is available. Ground factual claims in this evidence. Use real numbers only when they appear in the evidence or provided context."
+      : "Web evidence is unavailable or empty. Phrase uncertain factual claims as opinion, observation, or hypothesis.";
     const soisDirective = soisContext.enabled
       ? "State of In-App Subscriptions (SOIS) benchmark evidence is available. Use it as a first-class factual source for hooks, mechanisms, caveats, and numeric anchors."
-      : "State of In-App Subscriptions (SOIS) benchmark evidence is unavailable for this run. Do not fabricate benchmark numbers or section-specific claims.";
+      : "State of In-App Subscriptions (SOIS) benchmark evidence is unavailable for this run. Use only numbers and claims from other provided evidence.";
     const factCheckEvidenceForPrompt = webEvidenceLines.length
       ? webEvidenceLines.join("\n")
       : "No live web evidence available for this request.";
@@ -2065,6 +2306,7 @@ Sauce number rule:
 - Prefer SOIS benchmarks first; only use RevenueCat when SOIS does not cover the specific point.
 - Every number must be copied verbatim from the SOIS or RevenueCat evidence below.
 - If relevant evidence exists, each Sauce post must include at least one benchmark number.
+- Do not repeat the same benchmark number multiple times in the same post or across most hook suggestions.
 `
       : "";
 
@@ -2082,11 +2324,11 @@ ${productUpdateToneContext}
     const systemPrompt = `
 You write LinkedIn posts for Adapty, the tool app teams use to grow subscription revenue through paywalls, experiments, and analytics.
 
-Voice: write like a sharp friend who works in mobile apps talking to another operator. Not a marketing department. Not a consultant. A real person who's been in the trenches and talks like it.
+Voice: write like a sharp friend who works in mobile apps talking to another operator over coffee. A real person who's been in the trenches and talks like it.
 
-If a sentence sounds like it could come from a press release, a consulting deck, or a default AI response, rewrite it the way you'd actually say it to a colleague over coffee. If a sentence just restates itself in two halves separated by a comma, it's doing nothing — cut or rewrite.
+Rewrite any sentence to sound the way you'd say it to a colleague. Each sentence adds something new.
 
-Hooks need soul. Soulful hooks start from a specific observation: a number, a name, a thing that happened. Soulless hooks use the "X is not Y, it's Z" template (e.g. "Your traffic is not the main paywall problem, your sequence is"). Rewrite soulless hooks to anchor in something concrete.
+Hooks start from a specific observation: a number, a name, a thing that happened. Anchor in something concrete.
 
 Writing guide:
 ${promptGuides.writing}
@@ -2102,15 +2344,15 @@ Output format:
 - When source metadata says "others", use for structural inspiration, not voice imitation.
 - Back any Adapty positioning with proof or mechanism, not empty superlatives.
 
-Numbers rule: NEVER invent statistics, percentages, sample sizes, or multipliers. Every number in a post must be copy-pasted from the evidence sections in the user prompt. If a number does not appear in those sections, do NOT use it. Use qualitative language instead (e.g. "significantly higher" not "5x higher", "most apps" not "763 apps"). A post with one fabricated number is worse than a post with zero numbers. Do NOT hallucinate sample sizes like "763 apps" or "1,200 apps" — if the evidence does not state a sample size, omit it.
+Numbers: copy every number verbatim from the evidence sections in the user prompt. When a number exists in the evidence, use it. When it does not, use qualitative language ("significantly higher", "most apps"). Omit sample sizes when the evidence does not state them.
 
-Before returning, read each post out loud in your head. If any sentence sounds like something no human would actually say, rewrite it.
+Before returning, read each post out loud in your head. Rewrite any sentence that sounds unnatural spoken.
 ${toBulletedSection(QUALITY_GATE_PROMPT_LINES)}
 `;
 
     const factsPolicy = [factCheckDirective, soisDirective].filter(Boolean).join(" ");
 
-    const memeSection = shouldGenerateMemes(input.inputType)
+    const memeSection = includeMemeCompanion
       ? `\nMeme config: ${memeExecutionDirective}
 - Tone: ${memeToneProfile}
 - Brief: ${memeBriefPreference || "(auto)"}
@@ -2131,7 +2373,7 @@ Generation request:
 - Brand voice: ${input.style} — ${brandVoiceDirective} ${autoHookDirective}
 - Goal: ${GOAL_LABELS[input.goal]} (${GOAL_DESCRIPTIONS[input.goal]}) — ${goalExecutionDirective}
 - Post type: ${input.inputType} — ${postTypeDirective}
-- Facts policy: ${factsPolicy} EVERY number must come verbatim from the evidence sections below. If no number exists for a claim, use qualitative language. Zero tolerance for invented statistics.
+- Facts policy: ${factsPolicy} Copy numbers verbatim from the evidence sections below. When no number exists for a claim, use qualitative language.
 - Details: ${input.details || "(none)"}
 - CTA link: ${input.ctaLink || "(not provided)"}
 - Event time: ${input.time || "(not provided)"}
@@ -2143,8 +2385,7 @@ Generation request:
 Required length per post:
 ${lengthPlan.map((length, index) => `${index + 1}. ${length} -> ${lengthGuide(length)}`).join("\n")}
 
-Evidence context (priority order: SOIS > RevenueCat > web). Numbers from SOIS and RevenueCat are real benchmarks — USE them, they make posts more compelling. But ONLY use numbers that appear verbatim in the evidence below. CRITICAL: Use each number only for its labeled metric (e.g. install_to_paid_rate as %, avg_ltv as $, price_usd as $). Never use a log-scale, price, or LTV value as a conversion percentage. Never invent, round, or approximate. If a number is not in the evidence, write without it — never use "$several" or "X%".
-For Sauce posts, default to 1-2 benchmark numbers total per post.
+Evidence context (priority order: SOIS > RevenueCat > web). Numbers from SOIS and RevenueCat are real benchmarks — use them, they make posts more compelling. Copy numbers verbatim from the evidence below. Use each number for its labeled metric only: install_to_paid_rate as %, avg_ltv as $, price_usd as $. When a number is not in the evidence, write the sentence without it. For Sauce posts, use 1-2 benchmark numbers total per post.
 
 1. SOIS (Adapty State of In-App Subscriptions) — fetched from dags.adpinfra.dev:
 ${soisEvidenceForPrompt}
@@ -2358,7 +2599,6 @@ ${rankedContextLines}`;
       }
     }
 
-    const includeMemeCompanion = shouldGenerateMemes(input.inputType);
     const shouldEnforceParagraphNormalization = !MEME_INPUT_TYPE_PATTERN.test(input.inputType.toLowerCase());
     const hasNumericInputsAvailable =
       webEvidenceLines.length > 0 ||
@@ -2479,23 +2719,22 @@ Read the draft. For each sentence ask: would someone actually say this to a frie
 Hooks need soul. Soulful hooks start from a specific observation: a number, a name, a thing that happened. Soulless hooks use the "X is not Y, it's Z" template — they sound like consultant deck headlines. Rewrite soulless hooks to anchor in something concrete.
 
 Do this:
-- Cut sentences whose only job is to frame the next sentence ("This is what most people miss", "Here's the thing", "Let's talk about why").
+- Start with the point. Remove sentences that only frame the next one.
 - Rewrite sentences that restate themselves in two halves separated by a comma or period.
 - Replace stiff phrasing with how someone would actually say it.
 - Say "app makers" or "app founders" instead of "teams" or "operators."
 - Use digits for numbers ("3 things" not "three things").
-- Use hyphens, commas, and periods. No em dashes or en dashes.
+- Use hyphens, commas, and periods.
 
 Fact and benchmark rules:
-- Keep all facts, arguments, and structure intact. Do not add new claims.
+- Keep all facts, arguments, and structure intact.
 - Keep a number only if it appears verbatim in the provided evidence context.
-- If a numeric claim is unsupported, rewrite it qualitatively instead of inventing.
-- Never remap metric meaning (for example: conversion stays %, LTV stays currency, price stays currency).
-- For Sauce posts with benchmark evidence, keep 1-2 benchmark numbers per post, not a metric dump.
+- When a numeric claim is unsupported, rewrite it qualitatively.
+- Use each metric in its correct unit: conversion as %, LTV as currency, price as currency.
+- For Sauce posts with benchmark evidence, use 1-2 benchmark numbers per post.
+- Vary benchmark numbers across posts and hook suggestions.
 
-Patterns to catch and fix:
-
-Soulless hooks (X is not Y, it's Z) — rewrite with something concrete:
+Rewrite to concrete anchors:
 Before: "Your traffic is not the main paywall problem, your sequence is."
 After: "We ran 12 paywall tests last quarter. The one that moved LTV had nothing to do with copy."
 
@@ -2619,6 +2858,12 @@ Return ${parsed.hooks.length} hook suggestions as well (keep good ones, tighten 
     if (looksLikeSaucePostType(input.inputType) && sauceBenchmarkNumericClaims.size > 0) {
       const sauceHookSanitization = sanitizeHookSuggestionsNumericClaims(normalizedHooks, sauceBenchmarkNumericClaims);
       normalizedHooks = sauceHookSanitization.hooks.map((hook) => normalizeNoEmDash(hook));
+      const sauceHookRepetitionSanitization = sanitizeHookNumericClaimRepetition(
+        normalizedHooks,
+        sauceBenchmarkNumericClaims,
+        2,
+      );
+      normalizedHooks = sauceHookRepetitionSanitization.hooks.map((hook) => normalizeNoEmDash(hook));
 
       const saucePostSanitization = sanitizeGeneratedPostsNumericClaims(normalizedPosts, sauceBenchmarkNumericClaims);
       normalizedPosts = saucePostSanitization.posts;
@@ -2628,6 +2873,11 @@ Return ${parsed.hooks.length} hook suggestions as well (keep good ones, tighten 
       if (sauceStrictSanitizedCount > 0) {
         console.warn(
           `Sauce benchmark safety pass rewrote ${sauceStrictSanitizedCount} non-benchmark number claim(s).`,
+        );
+      }
+      if (sauceHookRepetitionSanitization.rewrittenClaims.length > 0) {
+        console.warn(
+          `Sauce hook diversity pass rewrote ${sauceHookRepetitionSanitization.rewrittenClaims.length} repeated benchmark number claim(s).`,
         );
       }
     }
@@ -2707,10 +2957,56 @@ Return ${parsed.hooks.length} hook suggestions as well (keep good ones, tighten 
       }
     }
 
+    if (looksLikeSaucePostType(input.inputType) && sauceBenchmarkNumericClaims.size > 0) {
+      const sauceBenchmarkMaxRepeatsPerPost = 1;
+      let sauceRepeatRewriteCount = 0;
+
+      normalizedPosts = normalizedPosts.map((post) => {
+        const seenAllowedClaimCounts = new Map<string, number>();
+        const hookRepeatRewrite = rewriteRepeatedAllowedNumericClaims(
+          post.hook,
+          sauceBenchmarkNumericClaims,
+          sauceBenchmarkMaxRepeatsPerPost,
+          seenAllowedClaimCounts,
+        );
+        const bodyRepeatRewrite = rewriteRepeatedAllowedNumericClaims(
+          post.body,
+          sauceBenchmarkNumericClaims,
+          sauceBenchmarkMaxRepeatsPerPost,
+          seenAllowedClaimCounts,
+        );
+        const ctaRepeatRewrite = rewriteRepeatedAllowedNumericClaims(
+          post.cta,
+          sauceBenchmarkNumericClaims,
+          sauceBenchmarkMaxRepeatsPerPost,
+          seenAllowedClaimCounts,
+        );
+
+        sauceRepeatRewriteCount +=
+          hookRepeatRewrite.rewrittenClaims.length +
+          bodyRepeatRewrite.rewrittenClaims.length +
+          ctaRepeatRewrite.rewrittenClaims.length;
+
+        return {
+          ...post,
+          hook: hookRepeatRewrite.value,
+          body: bodyRepeatRewrite.value,
+          cta: ctaRepeatRewrite.value,
+        };
+      });
+
+      if (sauceRepeatRewriteCount > 0) {
+        console.warn(
+          `Sauce repetition pass rewrote ${sauceRepeatRewriteCount} repeated benchmark number mention(s) within posts.`,
+        );
+      }
+    }
+
     let postsWithMemes: GeneratePostsResponse["posts"] = normalizedPosts;
 
     if (includeMemeCompanion) {
       const allowedTemplateIds: MemeTemplateId[] = memeTemplatePreferences.length ? memeTemplatePreferences : [...MEME_TEMPLATE_IDS];
+      const templateLineCountById = await resolveMemegenTemplateLineCountMap(allowedTemplateIds);
       const memeSelectionSchema = makeMemeSelectionResponseSchema(
         normalizedPosts.length,
         memeVariantTarget,
@@ -2723,7 +3019,12 @@ Return ${parsed.hooks.length} hook suggestions as well (keep good ones, tighten 
         .map((id) => {
           const name = MEME_TEMPLATE_LABELS[id] ?? id.replace(/-/g, " ");
           const meaning = MEME_TEMPLATE_MEANINGS[id];
-          return meaning ? `- ${id}: ${name} — ${meaning}` : `- ${id}: ${name}`;
+          const lineCount = templateLineCountById.get(id.trim().toLowerCase()) ?? getKnownMemeTemplateLineCount(id);
+          const flowRule = MEME_TEMPLATE_FLOW_RULES[id.trim().toLowerCase()];
+          const flowRuleSuffix = flowRule ? ` | flow: ${flowRule}` : "";
+          return meaning
+            ? `- ${id}: ${name} (lines: ${lineCount})${flowRuleSuffix} — ${meaning}`
+            : `- ${id}: ${name} (lines: ${lineCount})${flowRuleSuffix}`;
         })
         .join("\n");
       const memeSelectionSystemPrompt = `
@@ -2762,10 +3063,15 @@ For each post:
      ? `Use only these templates: ${memeTemplatePreferences.join(", ")}. Vary between them across variants.`
      : "Vary templates across variants when possible."
  }
-3. Keep top and bottom lines concise and readable on image memes.
-4. Match caption to template: topText and bottomText must fit the template's format and visual meaning. Do not paste style labels or meta-commentary.
-5. Joke must be funny and relevant to the post — extract the humor from the hook/body, not generic one-liners.
-6. Score tone fit from 0 to 100 and explain briefly.
+3. Keep each text line concise and readable on image memes.
+4. Match caption to template format and visual meaning. Do not paste style labels or meta-commentary.
+5. Always include textLines array in order.
+   textLines length must exactly match the selected template's line count from the catalog.
+   If a template includes a flow note, follow that line-by-line order.
+   For standard templates: textLines has 2 lines matching topText and bottomText.
+   For templates with more slots (for example Gru, Anakin/Padme, or American Chopper): include every slot in order.
+6. Joke must be funny and relevant to the post — extract the humor from the hook/body, not generic one-liners.
+7. Score tone fit from 0 to 100 and explain briefly.
 `;
 
       const runMemeSelection = (model: string) => {
@@ -2825,7 +3131,7 @@ For each post:
       }
 
       if (!parsedMemeSelection && memeSelectionError) {
-        console.error("Meme variant generation failed, using heuristic fallback", memeSelectionError);
+        throw memeSelectionError;
       }
 
       const selectionsByPostIndex = new Map<number, { variants: MemeVariantCandidate[] }>();
@@ -2836,34 +3142,34 @@ For each post:
         });
       }
 
-      postsWithMemes = normalizedPosts.map((post, index) => {
+      const variantCandidatesByPost = normalizedPosts.map((_post, index) => {
         const modelVariants = selectionsByPostIndex.get(index)?.variants;
         const normalizedModelVariants =
           modelVariants?.length === memeVariantTarget
             ? sanitizeModelMemeVariants({
                 variants: modelVariants,
                 allowedTemplateIds,
-                postIndex: index,
-                postBody: post.body,
               })
             : null;
-        const variants =
-          normalizedModelVariants?.length === memeVariantTarget
-            ? normalizedModelVariants.map((variant, variantIndex) =>
-                buildMemeCompanionFromVariant({
-                  rank: variantIndex + 1,
-                  variant,
-                }),
-              )
-            : buildHeuristicMemeVariants({
-                hook: post.hook,
-                body: post.body,
-                index,
-                variantCount: memeVariantTarget,
-                toneProfile: memeToneProfile,
-                preferredTemplateIds: memeTemplatePreferences,
-                allowedTemplateIds,
-              });
+        if (normalizedModelVariants?.length !== memeVariantTarget) {
+          throw new Error(
+            `Meme variant generation failed: expected ${memeVariantTarget} variants from LLM, got ${normalizedModelVariants?.length ?? 0}`,
+          );
+        }
+
+        return normalizedModelVariants;
+      });
+
+      postsWithMemes = normalizedPosts.map((post, index) => {
+        const variantCandidates = variantCandidatesByPost[index] ?? [];
+        const variants = variantCandidates.map((variant, variantIndex) =>
+          buildMemeCompanionFromVariant({
+            rank: variantIndex + 1,
+            variant,
+            templateLineCount:
+              templateLineCountById.get(variant.templateId.trim().toLowerCase()) ?? getKnownMemeTemplateLineCount(variant.templateId),
+          }),
+        );
 
         return {
           ...post,
