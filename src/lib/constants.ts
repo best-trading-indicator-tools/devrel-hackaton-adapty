@@ -22,42 +22,42 @@ export const BRAND_VOICE_PROFILES: Record<
     uiDescription:
       "Mirror the proven Adapty LinkedIn voice from your internal library: sharp, practical, data-aware, and actionable.",
     promptDirective:
-      "Treat the linkedin-adapty-library examples as canonical style anchors. Mirror their rhythm, formatting, tone, and storytelling style closely while keeping all copy original. Position Adapty as a category-leading monetization solution by proving it through concrete mechanisms, facts, and realistic comparisons, not vague hype.",
+      "Match the library examples closely: same rhythm, same formatting, same storytelling style. Keep all copy original. Show why Adapty matters through real mechanisms and facts, not hype.",
   },
   clickbait: {
     label: "Clickbait",
     uiDescription:
       "Use curiosity-heavy hooks and tension that invite clicks, while keeping every claim truthful and specific.",
     promptDirective:
-      "Lead with high-curiosity hooks and clear stakes, but keep claims factual, specific, and defensible. No fake urgency and no misleading claims.",
+      "Lead with hooks that make people stop scrolling. Create real stakes and curiosity. Keep every claim factual and specific. Make people want to read the next line.",
   },
   "founder personal": {
     label: "Founder Personal",
     uiDescription:
       "Write like a founder sharing learned lessons from the field, with first-person insight and concrete examples.",
     promptDirective:
-      "Use a founder-first perspective with lived observations, trade-offs, and practical lessons. Prefer first-person framing and concrete examples over abstract advice.",
+      "Write in first person like a founder sharing what they learned the hard way. Use real observations, trade-offs, and concrete examples from operating experience.",
   },
   "bold / contrarian": {
     label: "Bold / Contrarian",
     uiDescription:
       "Challenge common growth assumptions directly, then back the take with mechanics, caveats, and practical alternatives.",
     promptDirective:
-      "Take a strong contrarian angle on common growth beliefs, then support it with mechanics, caveats, and clear alternatives. Critique systems and decisions, not people.",
+      "Pick a common belief in the space and challenge it directly. Back up the contrarian take with mechanics, caveats, and a better alternative. Critique decisions, not people.",
   },
   "technical breakdown": {
     label: "Technical Breakdown",
     uiDescription:
       "Use a clear, step-by-step analytical style with concrete metrics, framework clarity, and implementation detail.",
     promptDirective:
-      "Write in analytical builder mode. Explain the mechanism, include concrete numbers or steps, and keep language precise and practical.",
+      "Write like a builder explaining how something actually works. Walk through the mechanism step by step with real numbers and clear language.",
   },
   "playful meme tone": {
     label: "Playful Meme Tone",
     uiDescription:
       "Keep the tone witty and internet-native while staying relevant to mobile app growth and monetization realities.",
     promptDirective:
-      "Use playful, witty language and meme-aware phrasing while staying useful and on-topic for B2C mobile app monetization operators.",
+      "Keep it witty, internet-native, and fun. Use meme energy and humor while staying relevant to real app monetization pain points.",
   },
 };
 

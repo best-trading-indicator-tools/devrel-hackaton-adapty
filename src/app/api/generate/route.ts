@@ -903,80 +903,25 @@ function toBulletedSection(lines: readonly string[]): string {
 function resolveBrandVoiceDirective(style: string): string {
   const normalizedStyle = style.trim().toLowerCase();
   const sharedHumanDirective =
-    "Regardless of voice, sound like a close, smart best friend talking to app makers: human, direct, relatable, and practical. Never sound robotic or corporate-lame.";
+    "Always sound like a sharp friend talking to another app maker. Human, direct, relatable.";
 
   if (isBrandVoicePreset(normalizedStyle)) {
     const baseDirective = BRAND_VOICE_PROFILES[normalizedStyle].promptDirective;
     return `${baseDirective} ${sharedHumanDirective}`;
   }
 
-  return `Follow custom brand voice exactly as requested: "${style.trim()}". ${sharedHumanDirective}`;
+  return `Follow custom brand voice: "${style.trim()}". ${sharedHumanDirective}`;
 }
 
 function resolveAutoHookDirective(params: { style: string; inputType: string; goal: ContentGoal }): string {
   const styleKey = params.style.trim().toLowerCase();
-  const typeKey = params.inputType.trim().toLowerCase();
 
-  const styleDirective = (() => {
-    if (styleKey === "clickbait") {
-      return "Use high-curiosity hook framing with clear stakes, while keeping claims truthful and specific. Avoid clickbait theater and keep it credible.";
-    }
-    if (styleKey === "founder personal") {
-      return "Use founder-style hooks that sound lived, practical, and grounded in real operating pain.";
-    }
-    if (styleKey === "bold / contrarian") {
-      return "Use contrarian hooks that challenge common assumptions, then make them defensible.";
-    }
-    if (styleKey === "technical breakdown") {
-      return "Use mechanism-first hooks with concrete signal words like conversion, retention, paywall, trial, and revenue.";
-    }
-    if (styleKey === "playful meme tone") {
-      return "Use witty, internet-native hooks with clear product-growth relevance.";
-    }
-    return "Use hooks aligned with the selected brand voice and grounded in concrete operator pain points.";
-  })();
-
-  const postTypeDirective = (() => {
-    if (/event|webinar/.test(typeKey)) {
-      return "For event or webinar posts, hooks should connect a real market pain to why attending is worth the time now.";
-    }
-    if (/sauce/.test(typeKey)) {
-      return "For Sauce posts, hooks should open with a hard question, friction point, or surprising operating truth.";
-    }
-    if (/meme|shitpost/.test(typeKey)) {
-      return "For meme posts, hooks should be short, punchy, and caption-friendly.";
-    }
-    if (/case study|social proof/.test(typeKey)) {
-      return "For case study posts, hooks should tease a specific before-after outcome.";
-    }
-    if (/poll|quiz|engagement farming/.test(typeKey)) {
-      return "For poll or quiz posts, hooks should ask a concrete, vote-worthy question.";
-    }
-    return "Hooks should match the requested post type and be immediately clear to the target audience.";
-  })();
-
-  const goalDirective = (() => {
-    if (params.goal === "virality") {
-      return "Prioritize scroll-stopping hooks that say the uncomfortable obvious truth in a useful way.";
-    }
-    if (params.goal === "engagement") {
-      return "Prioritize discussion-driving hooks that invite thoughtful replies.";
-    }
-    if (params.goal === "traffic") {
-      return "Prioritize value-tease hooks that naturally motivate qualified clicks.";
-    }
-    if (params.goal === "awareness") {
-      return "Prioritize clear, memorable hooks for broad audience recall.";
-    }
-    return "Balance reach, clarity, and action intent in hook phrasing.";
-  })();
-
-  const clickbaitViralityDirective =
+  const clickbaitViralityRule =
     styleKey === "clickbait" && params.goal === "virality"
-      ? "Critical hook rule: make the hook one declarative sentence that states a concrete fact or observation people already suspect but rarely say out loud. Prefer direct you or your language. Do not start hook with If and do not use word-plus-colon openers."
+      ? " Hook must be one declarative sentence with a concrete fact people suspect but rarely say. Use you/your. Do not start with If."
       : "";
 
-  return `${styleDirective} ${postTypeDirective} ${goalDirective} ${clickbaitViralityDirective}`.trim();
+  return `Hook: make it specific, scroll-stopping, and matched to the voice and goal.${clickbaitViralityRule}`;
 }
 
 function resolvePostTypeDirective(inputType: string): string {
@@ -1444,92 +1389,74 @@ ${productUpdateToneContext}
       : "";
 
     const systemPrompt = `
-You create LinkedIn content at scale for Adapty.
-Adapty enables app makers to monetize their mobile apps with subscription growth, paywall optimization, experimentation, and analytics.
-Mission:
-- Create high-performing LinkedIn posts for B2B SaaS growth teams.
-- Keep voice sharp, clear, practical, and human sounding.
-- Never output generic fluff.
-- Treat readers as informed operators. Never sound patronizing or insulting.
-- Position Adapty as a category-leading solution by demonstrating concrete mechanisms and factual support.
+You write LinkedIn posts for Adapty, the tool app teams use to grow subscription revenue through paywalls, experiments, and analytics.
 
-Repository writing guide:
+Voice: write like a sharp friend who works in mobile apps talking to another operator. Not a marketing department. Not a consultant. A real person who's been in the trenches and talks like it.
+
+If a sentence sounds like it could come from a press release, a consulting deck, or a default AI response, rewrite it the way you'd actually say it to a colleague over coffee. If a sentence just restates itself in two halves separated by a comma, it's doing nothing — cut or rewrite.
+
+Writing guide:
 ${promptGuides.writing}
 ${sauceDomainGuideSection}${productUpdateToneSection}
-Repository fact-check guide:
+Fact-check guide:
 ${promptGuides.factCheck}
 
-Output contract:
-- Tone must follow requested brand voice.
-- Execution must follow requested goal and post type.
-- Hook suggestions must be punchy, specific, and scroll-stopping.
-- For each post return:
-  - hook: first line
-  - body: full post text excluding final CTA line
-  - cta: final action line
-- For industry news reaction batches with multiple posts, use different primary news topics across posts when multiple items are provided.
-- Use line breaks for readability.
-- Avoid overusing emojis and hashtags.
-- If CTA link is provided, include it naturally in the CTA line.
-- Use performance insights and recurring winning patterns when available.
-- Examples are tagged with source metadata. If source is "others", use for angle discovery and winning structures, not final Adapty voice imitation.
-- Do not use empty superlatives about Adapty. Back positioning claims with proof, mechanism, or evidence.
+Output format:
+- For each post return: hook (first line), body (full post excluding CTA), cta (final action line).
+- Use line breaks between subtopics so posts breathe.
+- If CTA link is provided, weave it naturally into the CTA line.
+- For multi-post industry news batches, anchor each post to a different news item.
+- When source metadata says "others", use for structural inspiration, not voice imitation.
+- Back any Adapty positioning with proof or mechanism, not empty superlatives.
 
-Quality gate before final answer:
+Before returning, read each post out loud in your head. If any sentence sounds like something no human would actually say, rewrite it.
 ${toBulletedSection(QUALITY_GATE_PROMPT_LINES)}
 `;
 
+    const factsPolicy = [factCheckDirective, soisDirective].filter(Boolean).join(" ");
+
+    const memeSection = shouldGenerateMemes(input.inputType)
+      ? `\nMeme config: ${memeExecutionDirective}
+- Tone: ${memeToneProfile}
+- Brief: ${memeBriefPreference || "(auto)"}
+- Templates: ${memeTemplatePreferences.length ? memeTemplatePreferences.join(", ") : "auto"}
+- Variants per post: ${memeVariantTarget}`
+      : "";
+
     const userPrompt = `
-Generation request:
-- Brand voice: ${input.style}
-- Brand voice directive: ${brandVoiceDirective}
-- Hook directive: ${autoHookDirective}
-- Goal: ${GOAL_LABELS[input.goal]} (${GOAL_DESCRIPTIONS[input.goal]})
-- Goal execution directive: ${goalExecutionDirective}
-- Post type execution directive: ${postTypeDirective}
-- Industry news execution directive: ${industryNewsExecutionDirective}
-- Industry news status: ${industryNewsStatusSummary}
-- Chart execution directive: ${chartExecutionDirective}
-- Chart summary: ${chartPromptSummary}
-- Meme execution directive: ${memeExecutionDirective}
-- Meme tone profile (auto-inferred): ${memeToneProfile}
-- Meme brief: ${memeBriefPreference || "(not provided, use clever/funny defaults)"}
-- Meme template preferences: ${memeTemplatePreferences.length ? memeTemplatePreferences.join(", ") : "auto"}
-- Meme variants per post target: ${memeVariantTarget}
-- Fact-check policy: ${factCheckDirective}
-- SOIS benchmark policy: ${soisDirective}
-- Numeric evidence policy: Prefer real numeric anchors when available, but use only numbers grounded in provided evidence, inputs, library metrics, or chart data.
-- Fact-check status: ${factCheckStatusSummary}
-- SOIS benchmark status: ${soisStatusSummary}
-- Fact-check queries:
-${factCheckQueriesSummary}
-- Post type: ${input.inputType}
-- Event time: ${input.time || "(not provided)"}
-- Event place: ${input.place || "(not provided)"}
-- CTA link: ${input.ctaLink || "(not provided)"}
-- Attached image context: ${input.imageDataUrl ? "provided" : "(none)"}
-- Number of posts: ${input.numberOfPosts}
-- Additional details: ${input.details || "(none)"}
-
-Required length per post in order:
-${lengthPlan.map((length, index) => `${index + 1}. ${length} -> ${lengthGuide(length)}`).join("\n")}
-
-Use the following high-performing library examples as stylistic inspiration:
+Voice anchor — match the tone, rhythm, and phrasing of these posts:
 ${examplesForPrompt || "No library examples available."}
 
-Performance insights extracted from your historical posts:
+Performance patterns from past posts:
 ${performanceInsightsForPrompt}
 
-Web fact-check evidence context:
+Generation request:
+- Brand voice: ${input.style} — ${brandVoiceDirective} ${autoHookDirective}
+- Goal: ${GOAL_LABELS[input.goal]} (${GOAL_DESCRIPTIONS[input.goal]}) — ${goalExecutionDirective}
+- Post type: ${input.inputType} — ${postTypeDirective}
+- Facts policy: ${factsPolicy} Use only numbers grounded in provided evidence, inputs, or chart data.
+- Details: ${input.details || "(none)"}
+- CTA link: ${input.ctaLink || "(not provided)"}
+- Event time: ${input.time || "(not provided)"}
+- Event place: ${input.place || "(not provided)"}
+- Number of posts: ${input.numberOfPosts}
+- Chart: ${chartExecutionDirective} ${chartPromptSummary !== "(not provided)" ? `Summary: ${chartPromptSummary}` : ""}
+- Image context: ${input.imageDataUrl ? "provided" : "(none)"}${memeSection}
+
+Required length per post:
+${lengthPlan.map((length, index) => `${index + 1}. ${length} -> ${lengthGuide(length)}`).join("\n")}
+
+Evidence context:
 ${factCheckEvidenceForPrompt}
 
-SOIS benchmark evidence context:
+SOIS benchmark context:
 ${soisEvidenceForPrompt}
 
-Ranked RSS context for industry news reactions:
+Industry news context:
 ${industryNewsContextSummary}
+${industryNewsExecutionDirective}
 
-Per-post industry topic plan (follow post order when provided):
+Per-post industry topic plan:
 ${industryNewsTopicPlanSummary}
 
 Also generate a list of hook suggestions inspired by this style and request.
