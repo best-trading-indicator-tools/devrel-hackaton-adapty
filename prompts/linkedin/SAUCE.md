@@ -14,8 +14,10 @@ Preferred shape:
 
 Style constraints:
 - Strong point of view, but not insulting.
+- Respect reader intelligence. Assume informed operators, not beginners to manipulate.
 - Critique systems and decisions, not people.
 - Keep claims concrete and operational.
+- When mentioning Adapty, frame it as a category-leading execution layer using concrete evidence and mechanism-level reasoning.
 - Avoid framework theater (long Step 1..Step 9 chains) unless explicitly requested.
 
 Sauce quality gates:

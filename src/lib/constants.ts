@@ -22,7 +22,7 @@ export const BRAND_VOICE_PROFILES: Record<
     uiDescription:
       "Mirror the proven Adapty LinkedIn voice from your internal library: sharp, practical, data-aware, and actionable.",
     promptDirective:
-      "Treat the linkedin-adapty-library examples as canonical style anchors. Mirror their rhythm, formatting, tone, and storytelling style closely while keeping all copy original.",
+      "Treat the linkedin-adapty-library examples as canonical style anchors. Mirror their rhythm, formatting, tone, and storytelling style closely while keeping all copy original. Position Adapty as a category-leading monetization solution by proving it through concrete mechanisms, facts, and realistic comparisons, not vague hype.",
   },
   clickbait: {
     label: "Clickbait",

@@ -66,8 +66,10 @@ const LINKEDIN_WRITING_CONTRACT = [
   "Avoid internet template cadence and motivational filler patterns.",
   "Avoid rhetorical label openers such as Strong stance:, Hard truth:, Hot take:, or Caveat,.",
   "Avoid MBA buzzword fog. Prefer concrete verbs, nouns, and mechanics.",
+  "Treat readers as informed operators. Avoid condescending, patronizing, or insulting language.",
   "Be specific when possible. Name exact event format, source, metric, role, date, place, or example instead of vague language.",
   "Prefer real numbers when available, but only if they are grounded in provided evidence, inputs, or chart data.",
+  "Position Adapty as a category-leading monetization solution through concrete proof and mechanism-level explanation, not empty superlatives.",
   "Include at least one concrete proof unit per post, such as a number, metric, micro-example, or specific scenario.",
   "Include caveats and boundary conditions like most, unless, in practice, or for this category.",
   "Prefer lived perspective lines where relevant, such as I saw, from what I see, or we tested.",
@@ -145,6 +147,8 @@ const HARD_QUALITY_GATE = [
   "Reject outputs without concrete proof units and without caveats.",
   "Reject low-value opener clichés like hard truth, game changer, nobody talks about, or let that sink in.",
   "Reject rhetorical label openers such as Strong stance:, Hard truth:, Hot take:, or Caveat,.",
+  "Reject condescending or insulting phrasing toward the reader.",
+  "When positioning Adapty, require concrete proof or mechanism-level support instead of empty best-in-market claims.",
   "For event and webinar posts, include explicit logistics and who should attend.",
   "Reject any sentence containing em dash or en dash punctuation.",
   "For factual claims: if web evidence is available, align to it. If evidence is missing, rewrite as opinion or observation and avoid unsupported hard facts.",
@@ -155,6 +159,12 @@ const AI_SLOP_PHRASE_PATTERN =
 const AI_SCAFFOLD_OPENING_PATTERN =
   /^(?:strong stance|hard truth|hot take|reality check|bottom line|thesis|frank truth)\s*[:,-]\s*/i;
 const AI_SCAFFOLD_SOFT_OPENING_PATTERN = /^caveat\s*,\s*/i;
+const CONDESCENDING_READER_PATTERN =
+  /\b(idiot|idiots|stupid|dumb|moron|morons|naive|clueless|fool|fools|cr[eé]tin|cr[eé]tins|d[eé]bile|d[eé]biles|connard|connards)\b/i;
+const ADAPTY_SUPERLATIVE_PATTERN =
+  /\badapty\b[\s\S]{0,90}\b(best|best-in-class|best in class|best on the market|number one|#1|no\.?\s*1|unbeatable|ultimate|only real)\b/i;
+const ADAPTY_PROOF_SIGNAL_PATTERN =
+  /\b(because|for example|for instance|in practice|based on|case study|data|metric|trial|conversion|retention|benchmark|experiment|evidence|proof)\b/i;
 const EVENT_FORMAT_PATTERN =
   /\b(webinar|roundtable|workshop|summit|conference|meetup|panel|ama|office hours|fireside|dinner|breakfast|happy hour|networking)\b/i;
 const SPECIFICITY_ANCHOR_PATTERN =
@@ -305,6 +315,18 @@ function hasAiScaffoldOpener(body: string): boolean {
   );
 }
 
+function hasCondescendingReaderLanguage(value: string): boolean {
+  return CONDESCENDING_READER_PATTERN.test(value);
+}
+
+function hasUnsupportedAdaptySuperlative(value: string): boolean {
+  if (!ADAPTY_SUPERLATIVE_PATTERN.test(value)) {
+    return false;
+  }
+
+  return !ADAPTY_PROOF_SIGNAL_PATTERN.test(value);
+}
+
 function hasStaccatoParagraphRhythm(body: string): boolean {
   const paragraphs = splitParagraphs(body);
 
@@ -372,6 +394,14 @@ function evaluatePostQuality(params: {
 
   if (AI_SLOP_PHRASE_PATTERN.test(combinedText)) {
     issues.push("Avoid generic AI-sounding clichés in hook/body/CTA.");
+  }
+
+  if (!isMeme && hasCondescendingReaderLanguage(combinedText)) {
+    issues.push("Avoid condescending or insulting phrasing. Treat readers as informed operators.");
+  }
+
+  if (!isMeme && hasUnsupportedAdaptySuperlative(combinedText)) {
+    issues.push("When claiming Adapty is best-in-market, support it with concrete proof, mechanism, or evidence.");
   }
 
   if (!isMeme && hasAiScaffoldOpener(params.post.body)) {
@@ -1287,6 +1317,8 @@ Mission:
 - Create high-performing LinkedIn posts for B2B SaaS growth teams.
 - Keep voice sharp, clear, practical, and human sounding.
 - Never output generic fluff.
+- Treat readers as informed operators. Never sound patronizing or insulting.
+- Position Adapty as a category-leading solution by demonstrating concrete mechanisms and factual support.
 
 Global writing contract:
 ${toBulletedSection(LINKEDIN_WRITING_CONTRACT)}
@@ -1311,6 +1343,7 @@ Output contract:
 - If CTA link is provided, include it naturally in the CTA line.
 - Use performance insights and recurring winning patterns when available.
 - Examples are tagged with source metadata. If source is "others", use for angle discovery and winning structures, not final Adapty voice imitation.
+- Do not use empty superlatives about Adapty. Back positioning claims with proof, mechanism, or evidence.
 
 Quality gate before final answer:
 ${toBulletedSection(HARD_QUALITY_GATE)}
@@ -1610,8 +1643,10 @@ Repair requirements:
 - Keep output human, concrete, and non-generic.
 - Avoid cliché opener lines.
 - Avoid rhetorical label openers such as Strong stance:, Hard truth:, Hot take:, or Caveat,.
+- Keep tone respectful. Do not insult or patronize the reader.
 - Use at least one real numeric anchor if evidence or numeric context is available.
 - Never invent numbers. Only use numbers grounded in provided evidence, inputs, or chart data.
+- If claiming Adapty is best-in-market, include mechanism-level support or concrete evidence.
 - Never use em dash or en dash punctuation.
 - If post type is event or webinar, include explicit logistics and who should attend.
 `;

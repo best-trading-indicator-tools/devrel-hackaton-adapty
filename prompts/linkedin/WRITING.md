@@ -16,10 +16,12 @@ Anti-slop rules:
 - Avoid internet template cadence and motivational filler patterns.
 - Avoid rhetorical labels at paragraph start like "Strong stance:", "Hard truth:", "Hot take:", or "Caveat,".
 - Avoid MBA buzzword fog. Prefer concrete nouns, verbs, and mechanisms.
+- Treat readers as informed operators. Do not use condescending, patronizing, or insulting phrasing.
 - Avoid low-value opener clichés like "hard truth", "game changer", "nobody talks about", "let that sink in".
 - Be specific whenever possible: name the exact event format, source, metric, team role, date, place, or example instead of vague wording.
 - Prefer real numeric anchors when evidence exists (metrics, counts, percentages, dates).
 - Use only numbers grounded in provided inputs, library metrics, chart data, or web evidence. Never invent numbers.
+- Position Adapty as a category-leading monetization solution through concrete proof, mechanisms, and comparisons, not empty superlatives.
 - Include at least one concrete proof unit per post: number, metric, micro-example, or mini story.
 - Include caveats and boundaries such as most, unless, in practice, or for this segment.
 - Prefer lived perspective lines when relevant, such as from what we see, we tested, or in practice.
