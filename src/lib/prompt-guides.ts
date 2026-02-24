@@ -87,7 +87,7 @@ export async function getPromptGuides(): Promise<PromptGuides> {
 }
 
 const PRODUCT_UPDATE_TONE_PATH = path.join(process.cwd(), "content", "adapty-changelog-tone.txt");
-const PRODUCT_UPDATE_TONE_MAX_CHARS = 5_000;
+const PRODUCT_UPDATE_TONE_MAX_CHARS = 15_000;
 
 export async function getProductUpdateToneContext(): Promise<string> {
   try {

@@ -1375,12 +1375,9 @@ ${promptGuides.paywall}
 `
       : "";
 
-    const productUpdateToneContext =
-      looksLikeProductUpdatePostType(input.inputType) &&
-      isBrandVoicePreset(input.style) &&
-      input.style === "adapty"
-        ? await getProductUpdateToneContext()
-        : "";
+    const productUpdateToneContext = looksLikeProductUpdatePostType(input.inputType)
+      ? await getProductUpdateToneContext()
+      : "";
     const productUpdateToneSection = productUpdateToneContext
       ? `
 
