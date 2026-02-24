@@ -489,6 +489,10 @@ function formatLengthLabel(value: string): string {
     return value;
   }
 
+  if (value.toLowerCase() === "standard") {
+    return "Medium";
+  }
+
   return value.charAt(0).toUpperCase() + value.slice(1);
 }
 
@@ -905,7 +909,7 @@ export default function Home() {
       return `${form.numberOfPosts} post${form.numberOfPosts > 1 ? "s" : ""}${scopeSuffix} in ${formatLengthLabel(form.inputLength)} format`;
     }
 
-    return `${form.numberOfPosts} post${form.numberOfPosts > 1 ? "s" : ""}${scopeSuffix} with mixed lengths (Short, Standard, Long)`;
+    return `${form.numberOfPosts} post${form.numberOfPosts > 1 ? "s" : ""}${scopeSuffix} with mixed lengths (Short, Medium, Long)`;
   }, [form.inputLength, form.numberOfPosts, normalizedSelectedBrandVoices.length, normalizedSelectedGoals.length, normalizedSelectedPostTypes.length]);
   const totalMemeVariants = useMemo(() => {
     const posts = Math.max(1, Number(form.numberOfPosts) || 1);
