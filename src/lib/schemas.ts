@@ -161,7 +161,7 @@ export type GeneratePostsResponse = {
     examplesUsed: number;
     performancePostsAnalyzed: number;
     performanceInsightsUsed: number;
-    evidenceSources?: { sois: boolean; revenueCat: boolean; web: boolean };
+    evidenceSources?: { sois: boolean; web: boolean };
   };
   giphyRequested?: boolean;
 };

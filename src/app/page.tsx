@@ -2992,15 +2992,10 @@ export default function Home() {
               {result.retrieval.evidenceSources.sois ? (
                 <span className="rounded-md bg-emerald-100 px-2 py-0.5 text-[11px] text-emerald-800">SOIS</span>
               ) : null}
-              {result.retrieval.evidenceSources.revenueCat ? (
-                <span className="rounded-md bg-blue-100 px-2 py-0.5 text-[11px] text-blue-800">RevenueCat</span>
-              ) : null}
               {result.retrieval.evidenceSources.web ? (
                 <span className="rounded-md bg-amber-100 px-2 py-0.5 text-[11px] text-amber-800">Web</span>
               ) : null}
-              {!result.retrieval.evidenceSources.sois &&
-              !result.retrieval.evidenceSources.revenueCat &&
-              !result.retrieval.evidenceSources.web ? (
+              {!result.retrieval.evidenceSources.sois && !result.retrieval.evidenceSources.web ? (
                 <span className="text-[11px] text-slate-500">None</span>
               ) : null}
             </div>

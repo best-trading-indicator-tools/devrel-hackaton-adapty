@@ -39,7 +39,6 @@ import {
 } from "@/lib/giphy";
 import { retrieveLibraryContext, type LibraryEntry } from "@/lib/library-retrieval";
 import { getProductUpdateToneContext, getPromptGuides } from "@/lib/prompt-guides";
-import { retrieveRevenueCatContext } from "@/lib/revenuecat-retrieval";
 import { runIndustryNewsContext } from "@/lib/rss-news";
 import { retrieveSoisContext } from "@/lib/sois-context";
 import {
@@ -107,17 +106,17 @@ const POST_TYPE_PLAYBOOKS: Array<{ pattern: RegExp; directive: string }> = [
   {
     pattern: /event|webinar/i,
     directive:
-      "Lead with a real operator pain teams feel now, explain why this event helps in concrete terms, include explicit logistics (date/time/place), who should attend, and one practical conversation or takeaway they will get.",
+      "Lead with a real operator pain or short story teams relate to, explain why this event helps in concrete terms, include explicit logistics (date/time/place), who should attend, and one practical conversation or takeaway they will get.",
   },
   {
     pattern: /product feature launch/i,
     directive:
-      "Frame the user pain first, then explain what changed, why it matters, and one concrete outcome or use case.",
+      "Frame the user pain first (a story helps), then explain what changed, why it matters, and one concrete outcome or use case.",
   },
   {
     pattern: /sauce/i,
     directive:
-      "For Sauce posts, combine clear practical breakdown with data-backed insight. Use concrete numbers, explain the mechanism, and include caveats or segmentation when relevant.",
+      "For Sauce posts, combine clear practical breakdown with data-backed insight. Anchor with a short story when it illustrates the mechanism (e.g. a test that surprised you). Use concrete numbers, explain the mechanism, and include caveats or segmentation when relevant.",
   },
   {
     pattern: /meme|shitpost/i,
@@ -127,7 +126,7 @@ const POST_TYPE_PLAYBOOKS: Array<{ pattern: RegExp; directive: string }> = [
   {
     pattern: /industry news reaction/i,
     directive:
-      "React quickly to the news with a clear stance, concrete implication for app teams, and a practical next move.",
+      "React quickly to the news with a clear stance. A short story of how this affects a real team or scenario helps. Add concrete implication for app teams and a practical next move.",
   },
   {
     pattern: /poll|quiz|engagement farming/i,
@@ -137,22 +136,22 @@ const POST_TYPE_PLAYBOOKS: Array<{ pattern: RegExp; directive: string }> = [
   {
     pattern: /case study|social proof/i,
     directive:
-      "Use before and after framing with baseline, intervention, and measurable result. Keep claims concrete and scoped.",
+      "Tell the story: before and after framing with baseline, intervention, and measurable result. Keep claims concrete and scoped.",
   },
   {
     pattern: /hiring|team culture/i,
     directive:
-      "Highlight role context, ownership, and why this team environment is compelling. Keep tone human and specific.",
+      "Highlight role context, ownership, and why this team environment is compelling. A short story about the team or a moment that defines culture helps. Keep tone human and specific.",
   },
   {
     pattern: /milestone|company update/i,
     directive:
-      "Share the milestone, why it matters, and what changed operationally to get there. Prefer specific numbers over hype.",
+      "Share the milestone, why it matters, and a brief story of what changed operationally to get there. Prefer specific numbers over hype.",
   },
   {
     pattern: /controversial hot take/i,
     directive:
-      "Take a strong stance on a real industry habit, then back it with mechanics, caveats, and a practical alternative.",
+      "Take a strong stance on a real industry habit. A short story that illustrates your point helps. Back with mechanics, caveats, and a practical alternative.",
   },
   {
     pattern: /curated roundup/i,
@@ -2150,12 +2149,7 @@ export async function POST(request: Request) {
     ]
       .filter(Boolean)
       .join(" | ");
-    const revenueCatQuery =
-      looksLikeSaucePostType(input.inputType) && (soisRetrievalQuery || retrievalQuery)
-        ? `${soisRetrievalQuery || retrievalQuery} | conversion trial paywall LTV revenue benchmark`
-        : soisRetrievalQuery || retrievalQuery;
-
-    const [retrieval, soisContext, webFactCheck, industryNewsContext, revenueCatContext] = await Promise.all([
+    const [retrieval, soisContext, webFactCheck, industryNewsContext] = await Promise.all([
       retrieveLibraryContext({
         client: embeddingClient,
         query: retrievalQuery,
@@ -2184,14 +2178,6 @@ export async function POST(request: Request) {
         goal: input.goal,
         inputType: input.inputType,
         details: input.details,
-      }),
-      retrieveRevenueCatContext({
-        client: embeddingClient,
-        query: revenueCatQuery,
-        inputType: input.inputType,
-        limit: looksLikeSaucePostType(input.inputType)
-          ? 24
-          : Math.min(8, Math.max(4, input.numberOfPosts * 2)),
       }),
     ]);
 
@@ -2297,18 +2283,11 @@ export async function POST(request: Request) {
     const soisEvidenceForPrompt = soisEvidenceLines.length
       ? soisEvidenceLines.join("\n")
       : "No SOIS benchmark evidence available for this request.";
-    const revenueCatEvidenceForPrompt =
-      revenueCatContext.enabled && revenueCatContext.items.length
-        ? revenueCatContext.items.map((item) => item.text).join("\n")
-        : "";
-
     console.log("[Evidence] SOIS lines:", soisEvidenceLines.length, "\n", soisEvidenceForPrompt.slice(0, 1500));
-    console.log("[Evidence] RevenueCat lines:", revenueCatContext.items.length, "\n", revenueCatEvidenceForPrompt.slice(0, 1500));
     const allowedNumericClaims = buildAllowedNumericClaimSet(
       [
         factCheckEvidenceForPrompt,
         soisEvidenceForPrompt,
-        revenueCatEvidenceForPrompt,
         input.details,
         input.time,
         input.place,
@@ -2319,16 +2298,11 @@ export async function POST(request: Request) {
       ].filter(Boolean),
     );
     const sauceBenchmarkNumericClaims = buildAllowedNumericClaimSet(
-      [
-        ...soisContext.items.map((item) => item.text),
-        ...revenueCatContext.items.map((item) => item.text),
-        input.ctaLink,
-      ].filter(Boolean),
+      [...soisContext.items.map((item) => item.text), input.ctaLink].filter(Boolean),
     );
-    const sauceBenchmarkSnippets = collectBenchmarkEvidenceSnippets([
-      ...soisContext.items.map((item) => item.text),
-      ...revenueCatContext.items.map((item) => item.text),
-    ]);
+    const sauceBenchmarkSnippets = collectBenchmarkEvidenceSnippets(
+      soisContext.items.map((item) => item.text),
+    );
 
     const responseSchema = makeGeneratePostsResponseSchema(input.numberOfPosts);
     const promptGuides = await getPromptGuides();
@@ -2345,8 +2319,7 @@ ${promptGuides.paywall}
 
 Sauce number rule:
 - Default target is 1 to 2 benchmark numbers per post, not a metric dump.
-- Prefer SOIS benchmarks first; only use RevenueCat when SOIS does not cover the specific point.
-- Every number must be copied verbatim from the SOIS or RevenueCat evidence below.
+- Every number must be copied verbatim from the SOIS or web evidence below.
 - If relevant evidence exists, each Sauce post must include at least one benchmark number.
 - Do not repeat the same benchmark number multiple times in the same post or across most hook suggestions.
 `
@@ -2427,15 +2400,12 @@ Generation request:
 Required length per post:
 ${lengthPlan.map((length, index) => `${index + 1}. ${length} -> ${lengthGuide(length)}`).join("\n")}
 
-Evidence context (priority order: SOIS > RevenueCat > web). Numbers from SOIS and RevenueCat are real benchmarks — use them, they make posts more compelling. Copy numbers verbatim from the evidence below. Use each number for its labeled metric only: install_to_paid_rate as %, avg_ltv as $, price_usd as $. When a number is not in the evidence, write the sentence without it. For Sauce posts, use 1-2 benchmark numbers total per post.
+Evidence context (priority order: SOIS > web). Numbers from SOIS are real benchmarks — use them, they make posts more compelling. Copy numbers verbatim from the evidence below. Use each number for its labeled metric only: install_to_paid_rate as %, avg_ltv as $, price_usd as $. When a number is not in the evidence, write the sentence without it. For Sauce posts, use 1-2 benchmark numbers total per post.
 
 1. SOIS (Adapty State of In-App Subscriptions) — fetched from dags.adpinfra.dev:
 ${soisEvidenceForPrompt}
 
-2. RevenueCat (State of Subscription Apps 2025) — from revenuecat-data/*.json:
-${revenueCatEvidenceForPrompt || "No RevenueCat data for this post type."}
-
-3. Web fact-check (third priority — use only if SOIS/RevenueCat lack the claim):
+2. Web fact-check (use when SOIS lacks the claim):
 ${factCheckEvidenceForPrompt}
 
 Industry news context:
@@ -2745,12 +2715,9 @@ ${toBulletedSection(QUALITY_REPAIR_REQUIREMENT_LINES)}
         .filter(Boolean)
         .map((line) => `- ${line}`)
         .join("\n");
-      const editorEvidenceBlock = `Evidence context for factual QA (SOIS > RevenueCat > web):
+      const editorEvidenceBlock = `Evidence context for factual QA (SOIS > web):
 SOIS evidence:
 ${soisEvidenceForPrompt.slice(0, 2400)}
-
-RevenueCat evidence:
-${(revenueCatEvidenceForPrompt || "No RevenueCat data for this request.").slice(0, 2400)}
 
 Web evidence:
 ${factCheckEvidenceForPrompt.slice(0, 1400)}`;
@@ -3391,7 +3358,6 @@ For each post:
         performanceInsightsUsed: retrieval.performanceInsights?.summaryLines.length ?? 0,
         evidenceSources: {
           sois: soisContext.enabled && soisContext.items.length > 0,
-          revenueCat: revenueCatContext.enabled && revenueCatContext.items.length > 0,
           web: webEvidenceLines.length > 0,
         },
       },

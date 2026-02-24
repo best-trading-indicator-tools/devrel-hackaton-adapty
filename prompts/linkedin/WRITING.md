@@ -2,6 +2,8 @@
 
 Write like a cohesive mini-article, one thought flowing into the next. Default flow: concrete observation, why it matters, mechanism or example, practical next move.
 
+People are drawn to stories. Use a short story when it fits the post type: a founder moment, a test that surprised you, a user behavior that changed your mind. Stories make insight stick.
+
 Use the actual words app makers say in Slack, standups, and founder chats. Use contractions. Say "it's tricky" instead of "it is challenging."
 
 Hooks start from a specific observation: a number, a name, a thing that happened. Anchor in something concrete: "We ran 12 paywall tests last quarter. The one that moved LTV had nothing to do with copy." or "Most apps I audit have 3 paywall variants and 0 placement tests." For clickbait + virality: one declarative sentence with texture. Use "you" or "your" when natural. Open with the claim or the scene.
