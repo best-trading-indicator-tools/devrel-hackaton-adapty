@@ -64,6 +64,7 @@ const LINKEDIN_WRITING_CONTRACT = [
   "Mix short, medium, and long sentence lengths so rhythm feels human.",
   "Avoid internet template cadence and motivational filler patterns.",
   "Avoid MBA buzzword fog. Prefer concrete verbs, nouns, and mechanics.",
+  "Be specific when possible. Name exact event format, source, metric, role, date, place, or example instead of vague language.",
   "Include at least one concrete proof unit per post, such as a number, metric, micro-example, or specific scenario.",
   "Include caveats and boundary conditions like most, unless, in practice, or for this category.",
   "Prefer lived perspective lines where relevant, such as I saw, from what I see, or we tested.",
@@ -135,6 +136,7 @@ const HARD_QUALITY_GATE = [
   "Silently self-check every output before finalizing.",
   "If any rule fails, rewrite and self-check again before returning.",
   "Reject generic template cadence, staccato short-line stacks, and abstract filler.",
+  "Prefer specific details over vague phrasing. Name concrete event format, source, metric, date, place, or example whenever available.",
   "Reject outputs without concrete proof units and without caveats.",
   "Reject low-value opener clichés like hard truth, game changer, nobody talks about, or let that sink in.",
   "For event and webinar posts, include explicit logistics and who should attend.",
@@ -144,6 +146,10 @@ const HARD_QUALITY_GATE = [
 
 const AI_SLOP_PHRASE_PATTERN =
   /\b(hard truth|game changer|nobody talks about|let that sink in|this changes everything|stop scrolling)\b/i;
+const EVENT_FORMAT_PATTERN =
+  /\b(webinar|roundtable|workshop|summit|conference|meetup|panel|ama|office hours|fireside|dinner|breakfast|happy hour|networking)\b/i;
+const SPECIFICITY_ANCHOR_PATTERN =
+  /\b(\d+(?:[.,]\d+)?%?|\b(?:jan|feb|mar|apr|may|jun|jul|aug|sep|oct|nov|dec|monday|tuesday|wednesday|thursday|friday|saturday|sunday)\b|https?:\/\/|apple|google|meta|tiktok|appfigures|revenuecat|adapty|ios|android|app store|google play|skadnetwork|att)\b/i;
 
 function normalizeLooseMatch(value: string): string {
   return value
@@ -170,6 +176,14 @@ function countConcreteProofUnits(value: string): number {
     value.match(/\b(trial|conversion|retention|ctr|cac|arppu|mrr|paywall|onboarding|revenue|churn|install)\b/gi) ?? [];
 
   return numberLike.length + (concreteSignal.length ? 1 : 0);
+}
+
+function countSpecificityAnchors(value: string): number {
+  const anchorMatches = value.match(
+    /\b(\d+(?:[.,]\d+)?%?|(?:jan|feb|mar|apr|may|jun|jul|aug|sep|oct|nov|dec|monday|tuesday|wednesday|thursday|friday|saturday|sunday)|https?:\/\/|apple|google|meta|tiktok|appfigures|revenuecat|adapty|ios|android|app store|google play|skadnetwork|att)\b/gi,
+  );
+
+  return anchorMatches?.length ?? 0;
 }
 
 function hasShortLineStack(body: string): boolean {
@@ -222,6 +236,10 @@ function evaluatePostQuality(params: {
     issues.push("Add at least one concrete proof unit such as number, metric, or specific mechanism.");
   }
 
+  if (!isMeme && countSpecificityAnchors(combinedText) < 1 && !SPECIFICITY_ANCHOR_PATTERN.test(combinedText)) {
+    issues.push("Be more specific. Add concrete anchors like exact event type, named source/entity, date, place, URL, or metric.");
+  }
+
   if (!isMeme && params.post.body.length > 280 && !/\n\s*\n/.test(params.post.body)) {
     issues.push("Add blank lines between subtopics so longer body text is readable.");
   }
@@ -241,6 +259,10 @@ function evaluatePostQuality(params: {
 
     if (nonEmptyBodyLines.length < 4) {
       issues.push("Event post body is too thin. Add operator context, practical value, and logistics.");
+    }
+
+    if (!EVENT_FORMAT_PATTERN.test(combinedText)) {
+      issues.push("Event post should name the concrete event format (for example webinar, roundtable, workshop, or dinner).");
     }
   }
 

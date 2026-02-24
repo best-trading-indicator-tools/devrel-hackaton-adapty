@@ -15,6 +15,7 @@ Anti-slop rules:
 - Avoid internet template cadence and motivational filler patterns.
 - Avoid MBA buzzword fog. Prefer concrete nouns, verbs, and mechanisms.
 - Avoid low-value opener clichés like "hard truth", "game changer", "nobody talks about", "let that sink in".
+- Be specific whenever possible: name the exact event format, source, metric, team role, date, place, or example instead of vague wording.
 - Include at least one concrete proof unit per post: number, metric, micro-example, or mini story.
 - Include caveats and boundaries such as most, unless, in practice, or for this segment.
 - Prefer lived perspective lines when relevant, such as from what we see, we tested, or in practice.
