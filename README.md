@@ -136,24 +136,38 @@ These are implemented in `src/lib/library-retrieval.ts`.
 
 ## Generation behavior and prompt policy
 
-- System prompt is explicitly anchored to Adapty business context:
-  - "You create LinkedIn content at scale for Adapty"
-  - Adapty described as helping app makers monetize mobile apps
-- Prompt is modular:
-  - Global anti-slop writing contract
-  - Brand voice playbook
-  - Post type playbook
-  - Goal playbook
-  - Hard self-check gate (regenerate if rules fail)
-- Prompt also loads repository guides:
-  - `prompts/linkedin/WRITING.md`
-  - `prompts/linkedin/SAUCE.md` (applied for Sauce post type)
-  - `prompts/linkedin/ASO.md` (applied for Sauce post type)
-  - `prompts/linkedin/PAYWALL.md` (applied for Sauce post type)
-  - `prompts/linkedin/FACT_CHECK.md`
+### Prompt design principles
+
+The prompting system follows two core principles:
+
+1. **Tell AI what to DO, not what NOT to do.** Positive voice targets ("write like a sharp friend talking to another app maker") produce better results than negative rule lists ("avoid corporate jargon", "reject robotic phrasing"). The model aims at a clear target instead of navigating a minefield of prohibitions.
+2. **Show, don't tell.** Few-shot library examples are the primary voice anchor, positioned at the top of the user prompt. Models learn voice from examples far better than from rules.
+
+### Generation pipeline
+
+Each generation request goes through 3 passes:
+
+1. **Writer pass** (temperature 0.8): Generates posts using the system prompt, writing guide, brand voice directive, goal playbook, post type directive, and library examples as voice anchors.
+2. **Quality repair pass** (conditional): If regex-based checks detect mechanical issues (missing em dashes, missing proof units, etc.), the draft is sent back to the LLM for targeted fixes.
+3. **Editor pass** (temperature 0.4, always runs): A separate LLM call with a dedicated editor persona reads every draft and rewrites sentences that sound AI-generated. Cuts throat-clearing, fixes false-profundity patterns, enforces natural phrasing, and applies terminology preferences. This pass only tightens existing content and never adds new material.
+
+### Prompt files
+
+- `prompts/linkedin/WRITING.md` — ~14 positive voice principles with before/after examples of sloppy vs clean writing
+- `prompts/linkedin/SAUCE.md` (applied for Sauce post type)
+- `prompts/linkedin/ASO.md` (applied for Sauce post type)
+- `prompts/linkedin/PAYWALL.md` (applied for Sauce post type)
+- `prompts/linkedin/FACT_CHECK.md`
+
+### Prompt structure
+
+- System prompt is conversational: "write like a sharp friend who works in mobile apps talking to another operator"
+- Library examples are positioned as "Voice anchor" at the top of the user prompt
+- User prompt consolidates directives into ~7 lines (brand voice + hook, goal, post type, facts policy, details, chart, meme)
+- Quality gate is 7 positive self-checks (down from 23 negative rules)
+- Editor pass uses a focused ~15-line prompt with concrete before/after examples of AI slop patterns to fix
 - If Brand Voice is `adapty`, prompt treats `linkedin-adapty-library` as canonical style source
-- Hook strategy is auto-derived from Brand Voice + Post Type + Goal
-- If Goal is `virality`, prompt emphasizes uncomfortable obvious truths with practical utility
+- Hook strategy is auto-derived from Brand Voice + Goal combination
 - Optional web fact-check context is injected when configured (Brave Search)
 - If CTA link is provided, API ensures it is included in final CTA line
 - Image context is passed to model when attached

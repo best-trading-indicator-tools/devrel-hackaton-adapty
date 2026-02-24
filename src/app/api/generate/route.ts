@@ -1004,6 +1004,7 @@ async function runOpenAiChatGeneration(params: {
   userPrompt: string;
   imageDataUrl?: string;
   responseSchema: ReturnType<typeof makeGeneratePostsResponseSchema>;
+  temperature?: number;
 }) {
   const { client } = getOpenAIClient(params.token);
   const userContent: OpenAI.Chat.Completions.ChatCompletionUserMessageParam["content"] = params.imageDataUrl
@@ -1021,7 +1022,7 @@ async function runOpenAiChatGeneration(params: {
 
   const completion = await client.chat.completions.parse({
     model: params.model,
-    temperature: 0.8,
+    temperature: params.temperature ?? 0.8,
     messages: [
       { role: "system", content: params.systemPrompt },
       { role: "user", content: userContent },
@@ -1717,6 +1718,97 @@ ${toBulletedSection(QUALITY_REPAIR_REQUIREMENT_LINES)}
 
       parsed = repairedBatchRun.parsed;
       normalizedPosts = normalizeGeneratedPosts(parsed.posts);
+    }
+
+    const editorSystemPrompt = `You edit LinkedIn posts to sound like a real human wrote them.
+
+Read the draft. For each sentence ask: would someone actually say this to a friend? If not, rewrite it simpler.
+
+Do this:
+- Cut sentences whose only job is to frame the next sentence ("This is what most people miss", "Here's the thing", "Let's talk about why").
+- Rewrite sentences that restate themselves in two halves separated by a comma or period.
+- Replace stiff phrasing with how someone would actually say it.
+- Say "app makers" or "app founders" instead of "teams" or "operators."
+- Use digits for numbers ("3 things" not "three things").
+- Use hyphens, commas, and periods. No em dashes or en dashes.
+
+Keep all facts, numbers, arguments, and structure intact. Do not add new content. Only tighten what is there.
+
+Examples of what to fix:
+Before: "This is the part most teams feel but do not say out loud. Traffic volume does not fix a weak paywall sequence."
+After: "Traffic volume does not fix a weak paywall sequence."
+
+Before: "That gap is where revenue leaks. And most of the time, the leak is not visual polish."
+After: "Most of the time, it is not visual polish. It is flow design."
+
+Before: "If you want a simple plan this week, do three things."
+After: "If you want a simple plan this week, do these 3 things."`;
+
+    const editorDraftPrompt = normalizedPosts
+      .map(
+        (post, index) => `Post ${index + 1}:
+Hook: ${post.hook}
+Body:
+${post.body}
+CTA: ${post.cta}`,
+      )
+      .join("\n\n");
+
+    const editorUserPrompt = `Edit these ${normalizedPosts.length} post(s). Return the same number of posts with the same hooks array.\n\n${editorDraftPrompt}\n\nReturn ${parsed.hooks.length} hook suggestions as well (keep good ones, tighten sloppy ones).`;
+
+    const runEditorGeneration = (params: {
+      model: string;
+      userPrompt: string;
+      responseSchema: ReturnType<typeof makeGeneratePostsResponseSchema>;
+    }): Promise<GeneratedBatch> => {
+      if (oauthCredentials) {
+        return runCodexOauthGeneration({
+          oauth: oauthCredentials,
+          model: params.model,
+          systemPrompt: editorSystemPrompt,
+          userPrompt: params.userPrompt,
+          responseSchema: params.responseSchema,
+        });
+      }
+
+      if (!openAiApiToken) {
+        throw new Error("OpenAI API token is missing");
+      }
+
+      return runOpenAiChatGeneration({
+        token: openAiApiToken,
+        model: params.model,
+        systemPrompt: editorSystemPrompt,
+        userPrompt: params.userPrompt,
+        responseSchema: params.responseSchema,
+        temperature: 0.4,
+      });
+    };
+
+    try {
+      const editorRun = await (async () => {
+        try {
+          return await runEditorGeneration({
+            model: requestedModel,
+            userPrompt: editorUserPrompt,
+            responseSchema,
+          });
+        } catch (primaryError) {
+          if (fallbackModel.trim().length > 0 && fallbackModel !== requestedModel && isModelAccessError(primaryError)) {
+            return runEditorGeneration({
+              model: fallbackModel,
+              userPrompt: editorUserPrompt,
+              responseSchema,
+            });
+          }
+          throw primaryError;
+        }
+      })();
+
+      parsed = editorRun;
+      normalizedPosts = normalizeGeneratedPosts(editorRun.posts);
+    } catch {
+      // Editor pass is best-effort; if it fails, keep the original posts
     }
 
     let postsWithMemes: GeneratePostsResponse["posts"] = normalizedPosts;

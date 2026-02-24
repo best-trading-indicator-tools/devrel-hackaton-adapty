@@ -24,6 +24,15 @@ Every sentence should move the thought forward. If you took the second half away
 
 Say it plainly. If you need words like "hidden", "real", or "true" to make a sentence feel insightful, the insight probably isn't there. Real insight earns its weight without a dramatic frame.
 
+Delete any sentence whose only job is to frame the next sentence. If it says "here's the thing", "this is what most people miss", or "let's talk about why" before the actual point, cut it and just say the point.
+
+Say "app makers" or "app founders" when referring to peers. Not "teams" or "operators." Use digits for numbers ("3 things" not "three things").
+
 When you're not sure about a fact, say it as opinion or observation, not truth.
 
-Event and webinar posts: open with a real operator pain, explain why this event helps in concrete terms, include date/time/place and who should attend, make CTAs feel low-pressure and human ("If you're in SF next week, swing by").
+Examples of sloppy vs clean:
+- Sloppy: "This is the part most teams feel but do not say out loud. Traffic volume does not fix a weak paywall sequence." Clean: "Traffic volume does not fix a weak paywall sequence."
+- Sloppy: "That gap is where revenue leaks. And most of the time, the leak is not visual polish." Clean: "Most of the time, it is not visual polish. It is flow design."
+- Sloppy: "If you want a simple plan this week, do three things." Clean: "If you want a simple plan this week, do these 3 things."
+
+Event and webinar posts: open with a real app maker pain, explain why this event helps in concrete terms, include date/time/place and who should attend, make CTAs feel low-pressure and human ("If you're in SF next week, swing by").
