@@ -38,6 +38,8 @@ export const generatePostsRequestSchema = z.object({
   chartData: z.string().trim().max(20_000).default(""),
   chartOptions: z.string().trim().max(20_000).default(""),
   memeBrief: z.string().trim().max(400).default(""),
+  giphyEnabled: z.coerce.boolean().default(false),
+  giphyQuery: z.string().trim().max(220).default(""),
   memeTemplateIds: z
     .array(
       z
@@ -121,6 +123,24 @@ export type GeneratePostsResponse = {
       url: string;
       toneFitScore?: number;
       toneFitReason?: string;
+    }>;
+    giphy?: {
+      rank: number;
+      id: string;
+      title: string;
+      url: string;
+      previewUrl: string;
+      sourceQuery: string;
+      rating?: string;
+    };
+    giphyVariants?: Array<{
+      rank: number;
+      id: string;
+      title: string;
+      url: string;
+      previewUrl: string;
+      sourceQuery: string;
+      rating?: string;
     }>;
   }>;
   generation: {

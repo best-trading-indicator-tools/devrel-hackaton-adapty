@@ -1,3 +1,4 @@
+import Anthropic from "@anthropic-ai/sdk";
 import { NextResponse } from "next/server";
 import OpenAI from "openai";
 import { zodResponseFormat } from "openai/helpers/zod";
@@ -31,6 +32,7 @@ import {
   QUALITY_REPAIR_REQUIREMENT_LINES,
 } from "@/lib/enforcement-rules";
 import { runWebFactCheck } from "@/lib/fact-check";
+import { buildGiphyQuery, ensureDistinctGiphyVariants, fetchGiphyVariants } from "@/lib/giphy";
 import { retrieveLibraryContext, type LibraryEntry } from "@/lib/library-retrieval";
 import { getProductUpdateToneContext, getPromptGuides } from "@/lib/prompt-guides";
 import { runIndustryNewsContext } from "@/lib/rss-news";
@@ -1069,6 +1071,89 @@ async function runCodexOauthGeneration(params: {
   return params.responseSchema.parse(parsedJson);
 }
 
+const CLAUDE_WRITER_MODEL = "claude-sonnet-4-5";
+
+function buildClaudePostsJsonSchema(postCount: number): Record<string, unknown> {
+  return {
+    type: "object",
+    properties: {
+      hooks: {
+        type: "array",
+        items: { type: "string" },
+        minItems: 1,
+      },
+      posts: {
+        type: "array",
+        items: {
+          type: "object",
+          properties: {
+            length: { type: "string", enum: ["short", "medium", "long", "very long", "standard"] },
+            hook: { type: "string" },
+            body: { type: "string" },
+            cta: { type: "string" },
+          },
+          required: ["length", "hook", "body", "cta"],
+          additionalProperties: false,
+        },
+        minItems: 1,
+      },
+    },
+    required: ["hooks", "posts"],
+    additionalProperties: false,
+  };
+}
+
+async function runClaudeWriterGeneration(params: {
+  systemPrompt: string;
+  userPrompt: string;
+  imageDataUrl?: string;
+  responseSchema: ReturnType<typeof makeGeneratePostsResponseSchema>;
+  postCount: number;
+}) {
+  const apiKey = process.env.ANTHROPIC_API_KEY;
+  if (!apiKey) {
+    throw new Error("ANTHROPIC_API_KEY is required for Claude writer");
+  }
+
+  const client = new Anthropic({ apiKey });
+  const userContent: Anthropic.MessageParam["content"] = [];
+
+  if (params.imageDataUrl) {
+    const match = params.imageDataUrl.match(/^data:([^;]+);base64,(.+)$/);
+    if (match) {
+      const mediaType = match[1] === "image/png" ? "image/png" : match[1] === "image/jpeg" ? "image/jpeg" : "image/png";
+      userContent.push({
+        type: "image",
+        source: { type: "base64", media_type: mediaType, data: match[2] },
+      });
+    }
+  }
+
+  userContent.push({ type: "text", text: params.userPrompt });
+
+  const response = await client.messages.create({
+    model: process.env.CLAUDE_WRITER_MODEL ?? CLAUDE_WRITER_MODEL,
+    max_tokens: 4096,
+    system: params.systemPrompt,
+    messages: [{ role: "user", content: userContent }],
+    temperature: 0.8,
+    output_config: {
+      format: {
+        type: "json_schema" as const,
+        schema: buildClaudePostsJsonSchema(params.postCount),
+      },
+    },
+  });
+
+  const textBlock = response.content.find((b): b is Anthropic.TextBlock => b.type === "text");
+  if (!textBlock?.text) {
+    throw new Error("Claude returned no text content");
+  }
+
+  const parsed = JSON.parse(textBlock.text) as unknown;
+  return params.responseSchema.parse(parsed);
+}
+
 async function runOpenAiChatMemeSelection(params: {
   token: string;
   model: string;
@@ -1145,6 +1230,15 @@ export async function POST(request: Request) {
     }
 
     const input = parsedInput.data;
+    if (input.giphyEnabled && shouldGenerateMemes(input.inputType) && !process.env.GIPHY_API_KEY?.trim()) {
+      return NextResponse.json(
+        {
+          error: "GIPHY API key is missing",
+          message: "Set GIPHY_API_KEY to enable GIF companions.",
+        },
+        { status: 400 },
+      );
+    }
     let preparedChartInput: PreparedChartInput | null = null;
 
     try {
@@ -1211,6 +1305,8 @@ export async function POST(request: Request) {
       preparedChartInput?.visualStyle ?? "",
       preparedChartInput?.imagePrompt ?? "",
       input.memeBrief,
+      input.giphyEnabled ? "giphy:on" : "",
+      input.giphyQuery,
       input.memeTemplateIds.length ? `templates:${input.memeTemplateIds.join(",")}` : "",
       input.time,
       input.place,
@@ -1265,6 +1361,7 @@ export async function POST(request: Request) {
       memeBrief: input.memeBrief,
     });
     const memeBriefPreference = input.memeBrief.trim();
+    const giphyQueryPreference = input.giphyQuery.trim();
     const memeTemplatePreferences = Array.from(
       new Set(
         input.memeTemplateIds
@@ -1273,6 +1370,7 @@ export async function POST(request: Request) {
       ),
     );
     const memeVariantTarget = input.memeVariantCount;
+    const giphyVariantTarget = Math.max(1, Math.min(6, input.memeVariantCount));
     const memeExecutionDirective = shouldGenerateMemes(input.inputType)
       ? "This is a meme-focused request. Keep hooks and first body lines short, punchy, and caption-friendly. If no meme brief is provided, come up with clever and funny angles automatically."
       : "Not a meme-focused request.";
@@ -1393,6 +1491,8 @@ Voice: write like a sharp friend who works in mobile apps talking to another ope
 
 If a sentence sounds like it could come from a press release, a consulting deck, or a default AI response, rewrite it the way you'd actually say it to a colleague over coffee. If a sentence just restates itself in two halves separated by a comma, it's doing nothing — cut or rewrite.
 
+Hooks need soul. Soulful hooks start from a specific observation: a number, a name, a thing that happened. Soulless hooks use the "X is not Y, it's Z" template (e.g. "Your traffic is not the main paywall problem, your sequence is"). Rewrite soulless hooks to anchor in something concrete.
+
 Writing guide:
 ${promptGuides.writing}
 ${sauceDomainGuideSection}${productUpdateToneSection}
@@ -1407,6 +1507,8 @@ Output format:
 - When source metadata says "others", use for structural inspiration, not voice imitation.
 - Back any Adapty positioning with proof or mechanism, not empty superlatives.
 
+Numbers rule: NEVER invent statistics, percentages, sample sizes, or multipliers. Every number in a post must be copy-pasted from the evidence sections in the user prompt. If a number does not appear in those sections, do NOT use it. Use qualitative language instead (e.g. "significantly higher" not "5x higher", "most apps" not "763 apps"). A post with one fabricated number is worse than a post with zero numbers. Do NOT hallucinate sample sizes like "763 apps" or "1,200 apps" — if the evidence does not state a sample size, omit it.
+
 Before returning, read each post out loud in your head. If any sentence sounds like something no human would actually say, rewrite it.
 ${toBulletedSection(QUALITY_GATE_PROMPT_LINES)}
 `;
@@ -1418,7 +1520,9 @@ ${toBulletedSection(QUALITY_GATE_PROMPT_LINES)}
 - Tone: ${memeToneProfile}
 - Brief: ${memeBriefPreference || "(auto)"}
 - Templates: ${memeTemplatePreferences.length ? memeTemplatePreferences.join(", ") : "auto"}
-- Variants per post: ${memeVariantTarget}`
+- Variants per post: ${memeVariantTarget}
+- GIPHY companions: ${input.giphyEnabled ? "enabled" : "disabled"}
+- GIPHY query preference: ${giphyQueryPreference || "(auto)"}`
       : "";
 
     const userPrompt = `
@@ -1432,7 +1536,7 @@ Generation request:
 - Brand voice: ${input.style} — ${brandVoiceDirective} ${autoHookDirective}
 - Goal: ${GOAL_LABELS[input.goal]} (${GOAL_DESCRIPTIONS[input.goal]}) — ${goalExecutionDirective}
 - Post type: ${input.inputType} — ${postTypeDirective}
-- Facts policy: ${factsPolicy} Use only numbers grounded in provided evidence, inputs, or chart data.
+- Facts policy: ${factsPolicy} EVERY number must come verbatim from the evidence sections below. If no number exists for a claim, use qualitative language. Zero tolerance for invented statistics.
 - Details: ${input.details || "(none)"}
 - CTA link: ${input.ctaLink || "(not provided)"}
 - Event time: ${input.time || "(not provided)"}
@@ -1444,10 +1548,10 @@ Generation request:
 Required length per post:
 ${lengthPlan.map((length, index) => `${index + 1}. ${length} -> ${lengthGuide(length)}`).join("\n")}
 
-Evidence context:
+Evidence context (ONLY use numbers that appear verbatim below — do NOT invent any statistic, percentage, sample size, or multiplier):
 ${factCheckEvidenceForPrompt}
 
-SOIS benchmark context:
+SOIS benchmark context (ONLY use numbers that appear verbatim below — if a number is not here, do not use it):
 ${soisEvidenceForPrompt}
 
 Industry news context:
@@ -1472,11 +1576,24 @@ Also generate a list of hook suggestions inspired by this style and request.
       posts: GeneratedPost[];
     };
 
+    const anthropicApiKey = process.env.ANTHROPIC_API_KEY?.trim();
+    const useClaudeWriter = Boolean(anthropicApiKey);
+
     const runGeneration = (params: {
       model: string;
       userPrompt: string;
       responseSchema: ReturnType<typeof makeGeneratePostsResponseSchema>;
     }): Promise<GeneratedBatch> => {
+      if (useClaudeWriter) {
+        return runClaudeWriterGeneration({
+          systemPrompt,
+          userPrompt: params.userPrompt,
+          imageDataUrl: input.imageDataUrl || undefined,
+          responseSchema: params.responseSchema,
+          postCount: input.numberOfPosts,
+        });
+      }
+
       if (oauthCredentials) {
         return runCodexOauthGeneration({
           oauth: oauthCredentials,
@@ -1538,7 +1655,7 @@ Also generate a list of hook suggestions inspired by this style and request.
       }
     };
 
-    let modelUsed = requestedModel;
+    let modelUsed = useClaudeWriter ? (process.env.CLAUDE_WRITER_MODEL ?? CLAUDE_WRITER_MODEL) : requestedModel;
     let fallbackUsed = false;
 
     let parsed: GeneratedBatch;
@@ -1628,8 +1745,10 @@ ${rankedContextLines}`;
         responseSchema,
       });
       parsed = batchRun.parsed;
-      modelUsed = batchRun.modelUsed;
-      fallbackUsed = batchRun.fallbackUsed;
+      if (!useClaudeWriter) {
+        modelUsed = batchRun.modelUsed;
+        fallbackUsed = batchRun.fallbackUsed;
+      }
     }
 
     const includeMemeCompanion = shouldGenerateMemes(input.inputType);
@@ -1721,6 +1840,8 @@ ${toBulletedSection(QUALITY_REPAIR_REQUIREMENT_LINES)}
 
 Read the draft. For each sentence ask: would someone actually say this to a friend? If not, rewrite it simpler.
 
+Hooks need soul. Soulful hooks start from a specific observation: a number, a name, a thing that happened. Soulless hooks use the "X is not Y, it's Z" template — they sound like consultant deck headlines. Rewrite soulless hooks to anchor in something concrete.
+
 Do this:
 - Cut sentences whose only job is to frame the next sentence ("This is what most people miss", "Here's the thing", "Let's talk about why").
 - Rewrite sentences that restate themselves in two halves separated by a comma or period.
@@ -1732,6 +1853,13 @@ Do this:
 Keep all facts, numbers, arguments, and structure intact. Do not add new content. Only tighten what is there.
 
 Patterns to catch and fix:
+
+Soulless hooks (X is not Y, it's Z) — rewrite with something concrete:
+Before: "Your traffic is not the main paywall problem, your sequence is."
+After: "We ran 12 paywall tests last quarter. The one that moved LTV had nothing to do with copy."
+
+Before: "Your app is probably not under-monetized, it is under-tested."
+After: "Most apps I audit have 3 paywall variants and 0 placement tests."
 
 Before: "We keep seeing the same pattern: app makers drive installs, start trials, then watch 40% disappear by day 3."
 After: "App makers drive installs, start trials, then watch 40% disappear by day 3."
@@ -1946,6 +2074,49 @@ For each post:
       });
     }
 
+    let postsWithMedia: GeneratePostsResponse["posts"] = postsWithMemes;
+    const shouldGenerateGiphy = includeMemeCompanion && input.giphyEnabled;
+    const giphyApiKey = process.env.GIPHY_API_KEY?.trim();
+
+    if (shouldGenerateGiphy && giphyApiKey) {
+      const giphyVariantsByPost = await Promise.all(
+        postsWithMemes.map(async (post) => {
+          const query = buildGiphyQuery({
+            hook: post.hook,
+            body: post.body,
+            memeBrief: memeBriefPreference,
+            giphyQuery: giphyQueryPreference,
+          });
+
+          try {
+            const variants = await fetchGiphyVariants({
+              apiKey: giphyApiKey,
+              query,
+              limit: giphyVariantTarget,
+            });
+            return ensureDistinctGiphyVariants(variants, giphyVariantTarget);
+          } catch (giphyError) {
+            console.error("GIPHY companion fetch failed for one post", giphyError);
+            return [];
+          }
+        }),
+      );
+
+      postsWithMedia = postsWithMemes.map((post, index) => {
+        const variants = giphyVariantsByPost[index] ?? [];
+
+        if (!variants.length) {
+          return post;
+        }
+
+        return {
+          ...post,
+          giphy: variants[0],
+          giphyVariants: variants,
+        };
+      });
+    }
+
     let chartCompanion: GeneratePostsResponse["chart"] | undefined;
 
     if (preparedChartInput) {
@@ -1980,7 +2151,7 @@ For each post:
     const response: GeneratePostsResponse = {
       hooks: parsed.hooks.map((hook) => normalizeNoEmDash(hook)),
       chart: chartCompanion,
-      posts: postsWithMemes,
+      posts: postsWithMedia,
       generation: {
         modelRequested: requestedModel,
         modelUsed,

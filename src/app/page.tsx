@@ -43,6 +43,8 @@ type FormState = {
   chartSeriesTwoValues: string;
   chartLegendPosition: ChartLegendPosition;
   memeBrief: string;
+  giphyEnabled: boolean;
+  giphyQuery: string;
   memeTemplateIds: MemeTemplateId[];
   memeVariantCount: number;
   time: string;
@@ -70,6 +72,8 @@ const defaultForm: FormState = {
   chartSeriesTwoValues: "",
   chartLegendPosition: "right",
   memeBrief: "",
+  giphyEnabled: false,
+  giphyQuery: "",
   memeTemplateIds: [],
   memeVariantCount: 3,
   time: "",
@@ -506,6 +510,22 @@ function sanitizeGenerationResult(result: GeneratePostsResponse): GeneratePostsR
         bottomText: normalizeNoEmDash(variant.bottomText),
         toneFitReason: variant.toneFitReason ? normalizeNoEmDash(variant.toneFitReason) : variant.toneFitReason,
         url: variant.url.trim(),
+      })),
+      giphy: post.giphy
+        ? {
+            ...post.giphy,
+            title: normalizeNoEmDash(post.giphy.title),
+            sourceQuery: normalizeNoEmDash(post.giphy.sourceQuery),
+            url: post.giphy.url.trim(),
+            previewUrl: post.giphy.previewUrl.trim(),
+          }
+        : undefined,
+      giphyVariants: post.giphyVariants?.map((variant) => ({
+        ...variant,
+        title: normalizeNoEmDash(variant.title),
+        sourceQuery: normalizeNoEmDash(variant.sourceQuery),
+        url: variant.url.trim(),
+        previewUrl: variant.previewUrl.trim(),
       })),
     })),
   };
@@ -1064,6 +1084,8 @@ export default function Home() {
       place: effectiveSelected.some((type) => needsEventDetails(type)) ? prev.place : "",
       chartEnabled: effectiveSelected.some((type) => needsChartDetails(type)) ? prev.chartEnabled : false,
       memeBrief: effectiveSelected.some((type) => needsMemeDetails(type)) ? prev.memeBrief : "",
+      giphyEnabled: effectiveSelected.some((type) => needsMemeDetails(type)) ? prev.giphyEnabled : false,
+      giphyQuery: effectiveSelected.some((type) => needsMemeDetails(type)) ? prev.giphyQuery : "",
       memeTemplateIds: effectiveSelected.some((type) => needsMemeDetails(type)) ? prev.memeTemplateIds : [],
       memeVariantCount: effectiveSelected.some((type) => needsMemeDetails(type))
         ? prev.memeVariantCount
@@ -1358,6 +1380,8 @@ export default function Home() {
           time: typeNeedsEvent ? formatEventTimeForPrompt(form.time) : "",
           place: typeNeedsEvent ? form.place : "",
           memeBrief: typeNeedsMeme ? form.memeBrief : "",
+          giphyEnabled: typeNeedsMeme ? form.giphyEnabled : false,
+          giphyQuery: typeNeedsMeme ? form.giphyQuery : "",
           memeTemplateIds: typeNeedsMeme ? form.memeTemplateIds : [],
           memeVariantCount: typeNeedsMeme ? form.memeVariantCount : defaultForm.memeVariantCount,
         };
@@ -1546,6 +1570,8 @@ export default function Home() {
         body: rebuiltBody,
         meme: undefined,
         memeVariants: undefined,
+        giphy: undefined,
+        giphyVariants: undefined,
       };
     });
     setSelectedLineByPost((prev) => {
@@ -1615,6 +1641,8 @@ export default function Home() {
       cta: normalizedDraft,
       meme: undefined,
       memeVariants: undefined,
+      giphy: undefined,
+      giphyVariants: undefined,
     }));
 
     setSelectedCtaByPost((prev) => {
@@ -1754,6 +1782,8 @@ export default function Home() {
         cta: normalizeNoEmDash(String(nextPost.cta ?? currentPost.cta)),
         meme: undefined,
         memeVariants: undefined,
+        giphy: undefined,
+        giphyVariants: undefined,
       }));
       setManualLineDraftByPost((prev) => {
         const next = { ...prev };
@@ -1866,6 +1896,8 @@ export default function Home() {
           body: rebuiltBody,
           meme: undefined,
           memeVariants: undefined,
+          giphy: undefined,
+          giphyVariants: undefined,
         };
       });
       setSelectedLineByPost((prev) => {
@@ -1959,6 +1991,8 @@ export default function Home() {
         cta: normalizeNoEmDash(nextLine.trim()),
         meme: undefined,
         memeVariants: undefined,
+        giphy: undefined,
+        giphyVariants: undefined,
       }));
 
       setSelectedCtaByPost((prev) => {
@@ -2352,6 +2386,41 @@ export default function Home() {
                 />
               </label>
 
+              <div className="space-y-2 rounded-xl border border-black/10 bg-white p-3">
+                <label className="flex items-center gap-2">
+                  <input
+                    type="checkbox"
+                    className="h-4 w-4 rounded border-black/20"
+                    checked={form.giphyEnabled}
+                    onChange={(event) =>
+                      setForm((prev) => ({
+                        ...prev,
+                        giphyEnabled: event.target.checked,
+                      }))
+                    }
+                  />
+                  <span className="text-sm font-medium">Add GIPHY GIF Companions</span>
+                </label>
+
+                {form.giphyEnabled ? (
+                  <label className="space-y-1">
+                    <span className="text-sm font-medium">GIPHY Query (optional)</span>
+                    <input
+                      type="text"
+                      placeholder="Optional base query, e.g. frustrated PM, growth marketing meme"
+                      className={baseControlClassName}
+                      style={compactInputStyle}
+                      value={form.giphyQuery}
+                      onChange={(event) => setForm((prev) => ({ ...prev, giphyQuery: event.target.value }))}
+                    />
+                    <p className="text-xs text-slate-600">
+                      If empty, query is inferred from each post hook/body and meme prompt.
+                    </p>
+                    <p className="text-xs text-slate-600">Powered by GIPHY. Beta keys are rate-limited to 100 calls/hour.</p>
+                  </label>
+                ) : null}
+              </div>
+
               <p className="text-xs text-slate-600">
                 Meme style is inferred automatically from Brand Voice, Goal, Post Type, and your prompt details.
               </p>
@@ -2360,6 +2429,13 @@ export default function Home() {
                 {form.numberOfPosts > 1 ? "s" : ""} x {form.memeVariantCount} variant
                 {form.memeVariantCount > 1 ? "s" : ""} each).
               </p>
+              {form.giphyEnabled ? (
+                <p className="text-xs text-slate-600">
+                  Total GIPHY GIFs targeted for this run: {totalMemeVariants} ({form.numberOfPosts} post
+                  {form.numberOfPosts > 1 ? "s" : ""} x {form.memeVariantCount} variant
+                  {form.memeVariantCount > 1 ? "s" : ""} each).
+                </p>
+              ) : null}
             </div>
           ) : null}
 
@@ -3192,6 +3268,76 @@ export default function Home() {
                               </p>
 
                               {variant.toneFitReason ? <p className="text-xs text-slate-600">{variant.toneFitReason}</p> : null}
+                            </div>
+                          ))}
+                        </div>
+                      </div>
+                    );
+                  })()}
+
+                  {(() => {
+                    const giphyVariants = post.giphyVariants?.length ? post.giphyVariants : post.giphy ? [post.giphy] : [];
+                    if (!giphyVariants.length) {
+                      return null;
+                    }
+
+                    return (
+                      <div className="mt-5 space-y-3 rounded-2xl border border-black/10 bg-slate-50 p-3">
+                        <div className="flex items-center justify-between gap-2">
+                          <p className="text-xs font-semibold uppercase tracking-wide text-slate-600">
+                            GIPHY Companions · {giphyVariants.length} GIF{giphyVariants.length > 1 ? "s" : ""}
+                          </p>
+                          <a
+                            href="https://giphy.com"
+                            target="_blank"
+                            rel="noreferrer"
+                            className="text-[11px] font-medium text-slate-500 underline underline-offset-2 hover:text-slate-700"
+                          >
+                            Powered by GIPHY
+                          </a>
+                        </div>
+
+                        <div className="grid gap-3 lg:grid-cols-2">
+                          {giphyVariants.map((variant) => (
+                            <div
+                              key={`${variant.rank}-${variant.id}-${variant.url}`}
+                              className="space-y-2 rounded-xl border border-black/10 bg-white p-2"
+                            >
+                              <div className="flex items-start justify-between gap-2">
+                                <p className="text-xs font-semibold uppercase tracking-wide text-slate-600">
+                                  #{variant.rank} · {variant.title}
+                                  {variant.rating ? ` · ${variant.rating.toUpperCase()}` : ""}
+                                </p>
+                                <div className="flex items-center gap-2">
+                                  <a
+                                    href={variant.url}
+                                    target="_blank"
+                                    rel="noreferrer"
+                                    className="rounded-md border border-black/10 bg-white px-2 py-1 text-xs text-slate-700 hover:bg-slate-100"
+                                  >
+                                    Open
+                                  </a>
+                                  <button
+                                    type="button"
+                                    className="rounded-md border border-black/10 bg-white px-2 py-1 text-xs text-slate-700 hover:bg-slate-100"
+                                    onClick={() => {
+                                      navigator.clipboard.writeText(variant.url).catch(() => {});
+                                    }}
+                                  >
+                                    Copy URL
+                                  </button>
+                                </div>
+                              </div>
+
+                              {/* eslint-disable-next-line @next/next/no-img-element */}
+                              <img
+                                src={variant.previewUrl || variant.url}
+                                alt={`GIPHY variant ${variant.rank}: ${variant.title}`}
+                                className="h-auto w-full rounded-xl border border-black/10 bg-white"
+                                loading="lazy"
+                              />
+
+                              <p className="text-xs text-slate-600">Query: {variant.sourceQuery}</p>
                             </div>
                           ))}
                         </div>

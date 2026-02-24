@@ -4,7 +4,7 @@ Write like a cohesive mini-article, one thought flowing into the next. Default f
 
 Use the actual words app makers say in Slack, standups, and founder chats. Use contractions. Say "it's tricky" instead of "it is challenging."
 
-Open hooks with something specific: a number, a name, a thing that happened. For clickbait + virality: one declarative sentence stating a concrete fact or observation people suspect but rarely say. Use "you" or "your" when natural. Do not open with "If ...".
+Hooks need soul. Soulful hooks start from a specific observation: a number, a name, a thing that happened. Soulless hooks use the "X is not Y, it's Z" template — they sound like consultant deck headlines, not something you'd say to a friend. Avoid abstract reframes like "Your traffic is not the main paywall problem, your sequence is" or "Your app is probably not under-monetized, it is under-tested." Instead, anchor in something concrete: "We ran 12 paywall tests last quarter. The one that moved LTV had nothing to do with copy." or "Most apps I audit have 3 paywall variants and 0 placement tests." For clickbait + virality: one declarative sentence with texture. Use "you" or "your" when natural. Do not open with "If ...".
 
 Talk to the reader directly at least once per post: "you", "your app", "your team."
 
@@ -29,6 +29,11 @@ Delete any sentence whose only job is to frame the next sentence. If it says "he
 Say "app makers" or "app founders" when referring to peers. Not "teams" or "operators." Use digits for numbers ("3 things" not "three things").
 
 When you're not sure about a fact, say it as opinion or observation, not truth.
+
+Soulless hooks (X is not Y, it's Z) — rewrite with something concrete:
+- Before: "Your traffic is not the main paywall problem, your sequence is." After: "We ran 12 paywall tests last quarter. The one that moved LTV had nothing to do with copy."
+- Before: "Your app is probably not under-monetized, it is under-tested." After: "Most apps I audit have 3 paywall variants and 0 placement tests."
+- Before: "The hidden leak is often acquisition quality, not billing mechanics." After: "We looked at 40 apps. The ones with weak trial-to-paid had one thing in common: paywall before value."
 
 Patterns to cut (with fixes):
 - Before: "We keep seeing the same pattern: app makers drive installs, start trials, then watch 40% disappear by day 3." After: "App makers drive installs, start trials, then watch 40% disappear by day 3."
