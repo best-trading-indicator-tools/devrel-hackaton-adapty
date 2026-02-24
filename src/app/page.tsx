@@ -96,6 +96,33 @@ const CHART_VISUAL_STYLE_OPTIONS = [
   "minimal monochrome",
   "neon cyberpunk",
 ] as const;
+const CHART_IMAGE_PROMPT_QUICK_SUGGESTIONS = [
+  {
+    id: "linkedin-clean",
+    label: "LinkedIn Clean",
+    prompt: "clean LinkedIn-ready infographic, high contrast, crisp labels, direct value callouts, minimal clutter, white background",
+  },
+  {
+    id: "executive-report",
+    label: "Executive Report",
+    prompt: "executive report style, subtle grid, precise typography, readable legend and labels, polished but simple, data-first composition",
+  },
+  {
+    id: "bold-feed",
+    label: "Bold Feed",
+    prompt: "bold social feed chart style, strong color separation, large readable labels, clear percentages, mobile-friendly layout",
+  },
+  {
+    id: "minimal-bw",
+    label: "Minimal Monochrome",
+    prompt: "minimal monochrome chart, grayscale palette, clean spacing, legible labels and values, no decorative elements",
+  },
+  {
+    id: "playful-anime",
+    label: "Playful Anime",
+    prompt: "anime-inspired infographic style with playful colors, keep labels and values very readable, balanced composition for LinkedIn",
+  },
+] as const;
 const MAX_TEMPLATE_RESULTS = 80;
 const INDUSTRY_NEWS_REACTION_PATTERN = /\bindustry news reaction\b/i;
 
@@ -778,6 +805,9 @@ export default function Home() {
   const [copyFeedbackByPost, setCopyFeedbackByPost] = useState<Record<number, "copied" | "failed">>({});
   const [imageName, setImageName] = useState<string>("");
   const [isImageProcessing, setIsImageProcessing] = useState(false);
+  const [isChartPromptLoading, setIsChartPromptLoading] = useState(false);
+  const [chartPromptError, setChartPromptError] = useState("");
+  const [chartPromptHint, setChartPromptHint] = useState("");
   const fallbackMemeTemplates = useMemo(() => buildFallbackMemeTemplates(), []);
   const [memeTemplateOptions, setMemeTemplateOptions] = useState<MemeTemplateOption[]>(fallbackMemeTemplates);
   const [memeTemplateSearch, setMemeTemplateSearch] = useState("");
@@ -1157,6 +1187,74 @@ export default function Home() {
       chartSeriesOneValues: preset.chartSeriesOneValues,
       chartSeriesTwoValues: preset.chartSeriesTwoValues,
     }));
+  }
+
+  function applyChartPromptQuickSuggestion(prompt: string) {
+    setChartPromptError("");
+    setChartPromptHint("Suggestion applied.");
+    setForm((prev) => ({
+      ...prev,
+      chartImagePrompt: prompt,
+    }));
+  }
+
+  async function generateChartPromptWithAi() {
+    setChartPromptError("");
+    setChartPromptHint("");
+    setIsChartPromptLoading(true);
+
+    try {
+      const response = await fetch("/api/chart-prompt", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+          style: form.style,
+          goal: form.goal,
+          inputType: form.inputType,
+          details: form.details,
+          chartType: form.chartType,
+          chartTitle: form.chartTitle,
+          chartVisualStyle: form.chartVisualStyle,
+          chartLegendPosition: form.chartLegendPosition,
+          chartSeriesOneLabel: form.chartSeriesOneLabel,
+          chartSeriesTwoLabel: form.chartSeriesTwoLabel,
+          chartLabels: form.chartLabels,
+          chartSeriesOneValues: form.chartSeriesOneValues,
+          chartSeriesTwoValues: form.chartSeriesTwoValues,
+        }),
+      });
+
+      const responsePayload = await response.json();
+      if (!response.ok) {
+        throw new Error(extractApiErrorMessage(responsePayload, response.status));
+      }
+
+      const prompt =
+        responsePayload &&
+        typeof responsePayload === "object" &&
+        "prompt" in responsePayload &&
+        typeof (responsePayload as { prompt?: unknown }).prompt === "string"
+          ? normalizeNoEmDash((responsePayload as { prompt: string }).prompt).trim()
+          : "";
+
+      if (!prompt) {
+        throw new Error("AI did not return a prompt suggestion.");
+      }
+
+      setForm((prev) => ({
+        ...prev,
+        chartImagePrompt: prompt,
+      }));
+      setChartPromptHint("AI suggestion applied.");
+    } catch (suggestionError) {
+      setChartPromptError(
+        suggestionError instanceof Error ? suggestionError.message : "Could not generate chart prompt suggestion.",
+      );
+    } finally {
+      setIsChartPromptLoading(false);
+    }
   }
 
   async function onSubmit(event: FormEvent<HTMLFormElement>) {
@@ -2416,16 +2514,55 @@ export default function Home() {
                     )}
                   </div>
 
-                  <label className="space-y-1">
-                    <span className="text-sm font-medium">Chart Image Prompt (optional)</span>
+                  <div className="space-y-2">
+                    <div className="flex flex-wrap items-center justify-between gap-2">
+                      <span className="text-sm font-medium">Chart Image Prompt (optional)</span>
+                      <button
+                        type="button"
+                        className="inline-flex items-center gap-1 rounded-lg border border-black/10 bg-white px-2 py-1 text-xs text-slate-700 hover:bg-slate-100 disabled:cursor-not-allowed disabled:opacity-60"
+                        onClick={generateChartPromptWithAi}
+                        disabled={isChartPromptLoading || isLoading}
+                      >
+                        <IconSpark className="h-3.5 w-3.5" />
+                        {isChartPromptLoading ? "Suggesting..." : "AI Suggest"}
+                      </button>
+                    </div>
                     <textarea
                       rows={2}
                       placeholder="Optional style direction, e.g. anime infographic, realistic magazine style, hand-drawn look."
                       className={baseControlClassName}
                       value={form.chartImagePrompt}
-                      onChange={(event) => setForm((prev) => ({ ...prev, chartImagePrompt: event.target.value }))}
+                      onChange={(event) => {
+                        setChartPromptError("");
+                        setChartPromptHint("");
+                        setForm((prev) => ({ ...prev, chartImagePrompt: event.target.value }));
+                      }}
                     />
-                  </label>
+                    <div className="flex flex-wrap gap-2">
+                      {CHART_IMAGE_PROMPT_QUICK_SUGGESTIONS.map((suggestion) => {
+                        const selected = form.chartImagePrompt.trim() === suggestion.prompt;
+                        return (
+                          <button
+                            key={suggestion.id}
+                            type="button"
+                            className={`rounded-lg border px-2 py-1 text-xs transition ${
+                              selected
+                                ? "border-sky-400 bg-sky-100 text-sky-900"
+                                : "border-black/10 bg-white text-slate-700 hover:bg-slate-100"
+                            }`}
+                            onClick={() => applyChartPromptQuickSuggestion(suggestion.prompt)}
+                          >
+                            {suggestion.label}
+                          </button>
+                        );
+                      })}
+                    </div>
+                    <p className="text-xs text-slate-600">
+                      Click a suggestion to pre-fill the prompt, or use AI Suggest to generate one from your chart type, labels, and values.
+                    </p>
+                    {chartPromptError ? <p className="text-xs text-red-600">{chartPromptError}</p> : null}
+                    {chartPromptHint ? <p className="text-xs text-emerald-700">{chartPromptHint}</p> : null}
+                  </div>
 
                   <div className="space-y-2 rounded-xl border border-black/10 bg-white p-3">
                     <div className="flex items-center justify-between gap-2">
