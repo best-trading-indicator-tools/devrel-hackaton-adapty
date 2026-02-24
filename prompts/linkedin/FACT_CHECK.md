@@ -3,6 +3,7 @@
 Use this contract for factual safety.
 
 - For factual claims, prefer web-verified evidence when available.
+- Prefer concrete numbers only when they are evidence-backed.
 - If evidence is missing, rewrite as opinion, observation, or hypothesis.
 - Do not invent numbers, percentages, benchmarks, dates, or policy changes.
 - Avoid absolute claims unless you can support them.

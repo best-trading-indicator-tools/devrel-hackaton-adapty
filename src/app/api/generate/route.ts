@@ -65,6 +65,7 @@ const LINKEDIN_WRITING_CONTRACT = [
   "Avoid internet template cadence and motivational filler patterns.",
   "Avoid MBA buzzword fog. Prefer concrete verbs, nouns, and mechanics.",
   "Be specific when possible. Name exact event format, source, metric, role, date, place, or example instead of vague language.",
+  "Prefer real numbers when available, but only if they are grounded in provided evidence, inputs, or chart data.",
   "Include at least one concrete proof unit per post, such as a number, metric, micro-example, or specific scenario.",
   "Include caveats and boundary conditions like most, unless, in practice, or for this category.",
   "Prefer lived perspective lines where relevant, such as I saw, from what I see, or we tested.",
@@ -137,6 +138,8 @@ const HARD_QUALITY_GATE = [
   "If any rule fails, rewrite and self-check again before returning.",
   "Reject generic template cadence, staccato short-line stacks, and abstract filler.",
   "Prefer specific details over vague phrasing. Name concrete event format, source, metric, date, place, or example whenever available.",
+  "If evidence or numeric inputs are available, include at least one real numeric anchor.",
+  "Never invent numbers, percentages, dates, or benchmarks.",
   "Reject outputs without concrete proof units and without caveats.",
   "Reject low-value opener clichés like hard truth, game changer, nobody talks about, or let that sink in.",
   "For event and webinar posts, include explicit logistics and who should attend.",
@@ -186,6 +189,11 @@ function countSpecificityAnchors(value: string): number {
   return anchorMatches?.length ?? 0;
 }
 
+function countNumericTokens(value: string): number {
+  const numericMatches = value.match(/\b\d+(?:[.,]\d+)?%?\b/g);
+  return numericMatches?.length ?? 0;
+}
+
 function hasShortLineStack(body: string): boolean {
   const lines = body
     .split(/\n+/)
@@ -217,6 +225,7 @@ function evaluatePostQuality(params: {
   inputType: string;
   time: string;
   place: string;
+  requireNumericAnchor: boolean;
 }): string[] {
   const issues: string[] = [];
   const combinedText = `${params.post.hook}\n${params.post.body}\n${params.post.cta}`;
@@ -234,6 +243,10 @@ function evaluatePostQuality(params: {
 
   if (!isMeme && countConcreteProofUnits(combinedText) < 1) {
     issues.push("Add at least one concrete proof unit such as number, metric, or specific mechanism.");
+  }
+
+  if (!isMeme && params.requireNumericAnchor && countNumericTokens(combinedText) < 1) {
+    issues.push("Use at least one real numeric anchor from provided evidence or input context.");
   }
 
   if (!isMeme && countSpecificityAnchors(combinedText) < 1 && !SPECIFICITY_ANCHOR_PATTERN.test(combinedText)) {
@@ -1097,8 +1110,8 @@ export async function POST(request: Request) {
       .slice(0, FACT_CHECK_EVIDENCE_PROMPT_LIMIT)
       .map((line) => normalizeNoEmDash(line));
     const factCheckDirective = webEvidenceLines.length
-      ? "Web evidence is available. For factual claims, stay consistent with the evidence context and avoid unsupported new hard facts."
-      : "Web evidence is unavailable or empty. Do not invent hard facts. Rewrite uncertain factual claims as opinion, observation, or hypothesis.";
+      ? "Web evidence is available. For factual claims, stay consistent with the evidence context and avoid unsupported new hard facts. Prefer real numbers only when they can be grounded in this evidence or other provided context."
+      : "Web evidence is unavailable or empty. Do not invent hard facts or numbers. Rewrite uncertain factual claims as opinion, observation, or hypothesis.";
     const factCheckStatusSummary = webFactCheck.enabled
       ? webFactCheck.warning
         ? `enabled (${webFactCheck.provider}) with warning: ${webFactCheck.warning}`
@@ -1180,6 +1193,7 @@ Generation request:
 - Meme template preferences: ${memeTemplatePreferences.length ? memeTemplatePreferences.join(", ") : "auto"}
 - Meme variants per post target: ${memeVariantTarget}
 - Fact-check policy: ${factCheckDirective}
+- Numeric evidence policy: Prefer real numeric anchors when available, but use only numbers grounded in provided evidence, inputs, library metrics, or chart data.
 - Fact-check status: ${factCheckStatusSummary}
 - Fact-check queries:
 ${factCheckQueriesSummary}
@@ -1385,6 +1399,12 @@ ${rankedContextLines}`;
     }
 
     const includeMemeCompanion = shouldGenerateMemes(input.inputType);
+    const hasNumericInputsAvailable =
+      webEvidenceLines.length > 0 ||
+      preparedChartInput !== null ||
+      /\d/.test(input.time) ||
+      /\d/.test(input.details) ||
+      (retrieval.performanceInsights?.summaryLines?.some((line) => /\d/.test(line)) ?? false);
     const normalizeGeneratedPosts = (posts: GeneratedPost[]) =>
       posts.map((post, index) => ({
         length: lengthPlan[index] ?? post.length,
@@ -1402,6 +1422,7 @@ ${rankedContextLines}`;
           inputType: input.inputType,
           time: input.time,
           place: input.place,
+          requireNumericAnchor: hasNumericInputsAvailable,
         }),
       }))
       .filter((item) => item.issues.length > 0);
@@ -1439,6 +1460,8 @@ Repair requirements:
 - Add blank lines between subtopics.
 - Keep output human, concrete, and non-generic.
 - Avoid cliché opener lines.
+- Use at least one real numeric anchor if evidence or numeric context is available.
+- Never invent numbers. Only use numbers grounded in provided evidence, inputs, or chart data.
 - Never use em dash or en dash punctuation.
 - If post type is event or webinar, include explicit logistics and who should attend.
 `;
