@@ -1,23 +1,11 @@
-import { createCanvas } from "canvas";
-import { Chart, registerables, type ChartConfiguration } from "chart.js";
+import OpenAI from "openai";
 
-import { type ChartTypeOption } from "@/lib/constants";
-
-const CHART_COLORS = ["#5B8DC8", "#B876C6", "#FF5E66", "#2BB3A3", "#FFB020", "#64748B"] as const;
-const LANDSCAPE_SIZE = { width: 1200, height: 675 } as const;
-const SQUARE_SIZE = { width: 1200, height: 1200 } as const;
-let chartModulesRegistered = false;
-
-function ensureChartModulesRegistered() {
-  if (chartModulesRegistered) {
-    return;
-  }
-
-  Chart.register(...registerables);
-  chartModulesRegistered = true;
-}
+import { CHART_TYPE_LABELS, type ChartTypeOption } from "@/lib/constants";
 
 type JsonRecord = Record<string, unknown>;
+
+const RADIAL_TYPES = new Set<ChartTypeOption>(["doughnut", "pie", "polarArea"]);
+const LEGEND_POSITIONS = new Set(["top", "right", "bottom", "left"]);
 
 export class ChartInputError extends Error {
   constructor(message: string) {
@@ -29,14 +17,21 @@ export class ChartInputError extends Error {
 export type PreparedChartInput = {
   type: ChartTypeOption;
   title: string;
+  visualStyle: string;
+  imagePrompt: string;
+  legendPosition: "top" | "right" | "bottom" | "left";
   labels: string[];
-  datasets: Array<JsonRecord>;
-  options: JsonRecord;
+  datasets: Array<{
+    label: string;
+    data: number[];
+  }>;
 };
 
 export type RenderedChartCompanion = {
   type: ChartTypeOption;
   title: string;
+  visualStyle: string;
+  imagePrompt: string;
   imageDataUrl: string;
   width: number;
   height: number;
@@ -44,12 +39,22 @@ export type RenderedChartCompanion = {
   datasetCount: number;
 };
 
+type ChartImageCredentials = {
+  oauth?: {
+    accessToken: string;
+    accountId: string;
+  } | null;
+  apiKey?: string;
+  apiBaseUrl?: string;
+  imageModel?: string;
+};
+
 function isRecord(value: unknown): value is JsonRecord {
   return Boolean(value) && typeof value === "object" && !Array.isArray(value);
 }
 
 function isRadialChart(type: ChartTypeOption): boolean {
-  return type === "doughnut" || type === "pie" || type === "polarArea";
+  return RADIAL_TYPES.has(type);
 }
 
 function parseJsonObjectField(rawValue: string, fieldName: string, required: boolean): JsonRecord {
@@ -95,91 +100,6 @@ function toNumericArray(value: unknown, fieldName: string): number[] {
   });
 }
 
-function mergeJsonRecords(base: JsonRecord, override: JsonRecord): JsonRecord {
-  const merged: JsonRecord = { ...base };
-
-  for (const [key, value] of Object.entries(override)) {
-    const existing = merged[key];
-
-    if (isRecord(existing) && isRecord(value)) {
-      merged[key] = mergeJsonRecords(existing, value);
-      continue;
-    }
-
-    merged[key] = value;
-  }
-
-  return merged;
-}
-
-function buildDefaultOptions(type: ChartTypeOption, title: string): JsonRecord {
-  const base: JsonRecord = {
-    responsive: false,
-    maintainAspectRatio: false,
-    animation: false,
-    layout: {
-      padding: 18,
-    },
-    plugins: {
-      legend: {
-        display: true,
-        position: isRadialChart(type) ? "right" : "top",
-        labels: {
-          color: "#1E293B",
-          font: {
-            size: 16,
-          },
-        },
-      },
-      title: {
-        display: Boolean(title),
-        text: title,
-        color: "#0F172A",
-        font: {
-          size: 28,
-          weight: "600",
-        },
-        padding: {
-          top: 8,
-          bottom: 16,
-        },
-      },
-      tooltip: {
-        enabled: true,
-      },
-    },
-  };
-
-  if (!isRadialChart(type)) {
-    base.scales = {
-      x: {
-        ticks: {
-          color: "#334155",
-          font: {
-            size: 14,
-          },
-        },
-        grid: {
-          color: "#E2E8F0",
-        },
-      },
-      y: {
-        ticks: {
-          color: "#334155",
-          font: {
-            size: 14,
-          },
-        },
-        grid: {
-          color: "#E2E8F0",
-        },
-      },
-    };
-  }
-
-  return base;
-}
-
 function normalizeLabels(rawLabels: unknown): string[] {
   if (!Array.isArray(rawLabels) || rawLabels.length === 0) {
     throw new ChartInputError("chartData.labels must be a non-empty array.");
@@ -194,7 +114,7 @@ function normalizeLabels(rawLabels: unknown): string[] {
   });
 }
 
-function normalizeDatasets(type: ChartTypeOption, rawDatasets: unknown, labelCount: number): Array<JsonRecord> {
+function normalizeDatasets(type: ChartTypeOption, rawDatasets: unknown, labelCount: number): PreparedChartInput["datasets"] {
   if (!Array.isArray(rawDatasets) || rawDatasets.length === 0) {
     throw new ChartInputError("chartData.datasets must be a non-empty array.");
   }
@@ -206,59 +126,171 @@ function normalizeDatasets(type: ChartTypeOption, rawDatasets: unknown, labelCou
 
     const data = toNumericArray(datasetValue.data, `chartData.datasets[${datasetIndex}].data`);
     const fallbackLabel = `Series ${datasetIndex + 1}`;
-    const safeLabel = typeof datasetValue.label === "string" ? datasetValue.label : fallbackLabel;
+    const safeLabel = typeof datasetValue.label === "string" ? datasetValue.label.trim() : fallbackLabel;
 
-    const dataset: JsonRecord = {
-      ...datasetValue,
+    if (data.length !== labelCount && !isRadialChart(type)) {
+      throw new ChartInputError(`chartData.datasets[${datasetIndex}].data count must match labels count.`);
+    }
+
+    return {
       label: safeLabel.slice(0, 90),
       data,
     };
-
-    if (!("borderWidth" in dataset)) {
-      dataset.borderWidth = type === "line" ? 3 : 1;
-    }
-
-    if (isRadialChart(type)) {
-      if (!("backgroundColor" in dataset)) {
-        dataset.backgroundColor = Array.from({ length: Math.max(labelCount, data.length) }, (_, colorIndex) => CHART_COLORS[colorIndex % CHART_COLORS.length]);
-      }
-      if (!("borderColor" in dataset)) {
-        dataset.borderColor = "#FFFFFF";
-      }
-      if (!("hoverOffset" in dataset)) {
-        dataset.hoverOffset = 4;
-      }
-    } else {
-      const color = CHART_COLORS[datasetIndex % CHART_COLORS.length];
-      if (!("backgroundColor" in dataset)) {
-        dataset.backgroundColor = type === "line" ? `${color}33` : color;
-      }
-      if (!("borderColor" in dataset)) {
-        dataset.borderColor = color;
-      }
-      if (type === "line" && !("fill" in dataset)) {
-        dataset.fill = true;
-      }
-      if (type === "line" && !("pointRadius" in dataset)) {
-        dataset.pointRadius = 3;
-      }
-      if (type === "radar" && !("fill" in dataset)) {
-        dataset.fill = true;
-      }
-    }
-
-    return dataset;
   });
 }
 
-function resolveCanvasSize(type: ChartTypeOption): { width: number; height: number } {
-  return isRadialChart(type) ? SQUARE_SIZE : LANDSCAPE_SIZE;
+function parseLegendPosition(optionsObject: JsonRecord, chartType: ChartTypeOption): "top" | "right" | "bottom" | "left" {
+  const pluginValue = optionsObject.plugins;
+  if (!isRecord(pluginValue)) {
+    return isRadialChart(chartType) ? "right" : "top";
+  }
+
+  const legendValue = pluginValue.legend;
+  if (!isRecord(legendValue)) {
+    return isRadialChart(chartType) ? "right" : "top";
+  }
+
+  const positionRaw = legendValue.position;
+  if (typeof positionRaw !== "string") {
+    return isRadialChart(chartType) ? "right" : "top";
+  }
+
+  const normalized = positionRaw.trim().toLowerCase();
+  if (LEGEND_POSITIONS.has(normalized)) {
+    return normalized as "top" | "right" | "bottom" | "left";
+  }
+
+  return isRadialChart(chartType) ? "right" : "top";
+}
+
+function sanitizeStyle(value: string): string {
+  const trimmed = value.trim();
+  return trimmed || "clean infographic";
+}
+
+function sanitizeImagePrompt(value: string): string {
+  return value.trim();
+}
+
+function resolveImageSize(type: ChartTypeOption): "1024x1024" | "1536x1024" {
+  return isRadialChart(type) ? "1024x1024" : "1536x1024";
+}
+
+function parseImageSize(size: "1024x1024" | "1536x1024"): { width: number; height: number } {
+  const [widthText, heightText] = size.split("x");
+  return {
+    width: Number(widthText),
+    height: Number(heightText),
+  };
+}
+
+function buildChartImagePrompt(chartInput: PreparedChartInput): string {
+  const datasetSummary = chartInput.datasets
+    .map((dataset, datasetIndex) => {
+      const valuePairs = chartInput.labels.map((label, labelIndex) => {
+        const value = dataset.data[labelIndex];
+        if (typeof value === "number" && Number.isFinite(value)) {
+          return `${label}: ${value}`;
+        }
+        return `${label}: n/a`;
+      });
+      return `${datasetIndex + 1}. ${dataset.label}: ${valuePairs.join("; ")}`;
+    })
+    .join("\n");
+
+  return `
+Create a polished chart image for a LinkedIn post.
+
+Chart type: ${CHART_TYPE_LABELS[chartInput.type]}
+Chart title: ${chartInput.title || "(none)"}
+Legend position: ${chartInput.legendPosition}
+Visual style: ${chartInput.visualStyle}
+Additional style prompt: ${chartInput.imagePrompt || "(none)"}
+
+Data to visualize exactly:
+${datasetSummary}
+
+Requirements:
+- Keep numbers and category labels exact. Do not invent, round, or alter values.
+- Keep labels readable on mobile feed.
+- No watermark, no logo, no brand marks, no extra annotations.
+- White or very light background.
+- Use a modern social-media-friendly composition.
+- Return only the chart visual, no decorative scene.
+`.trim();
+}
+
+function buildOpenAIClient(params: {
+  token: string;
+  accountId?: string;
+  baseUrl?: string;
+}): OpenAI {
+  const defaultHeaders: Record<string, string> = {};
+  if (params.accountId) {
+    defaultHeaders["chatgpt-account-id"] = params.accountId;
+  }
+
+  return new OpenAI({
+    apiKey: params.token,
+    baseURL: params.baseUrl?.trim() || undefined,
+    defaultHeaders: Object.keys(defaultHeaders).length ? defaultHeaders : undefined,
+  });
+}
+
+async function imageDataUrlFromOpenAI(params: {
+  client: OpenAI;
+  model: string;
+  prompt: string;
+  size: "1024x1024" | "1536x1024";
+}): Promise<string> {
+  const attempt = async (quality?: "high") =>
+    params.client.images.generate({
+      model: params.model,
+      prompt: params.prompt,
+      size: params.size,
+      quality,
+    });
+
+  let generation: Awaited<ReturnType<OpenAI["images"]["generate"]>>;
+
+  try {
+    generation = await attempt("high");
+  } catch {
+    generation = await attempt();
+  }
+
+  const firstImage = generation.data?.[0];
+
+  if (firstImage?.b64_json) {
+    return `data:image/png;base64,${firstImage.b64_json}`;
+  }
+
+  if (firstImage?.url) {
+    const imageResponse = await fetch(firstImage.url);
+    if (!imageResponse.ok) {
+      throw new Error(`Failed to fetch generated image URL (${imageResponse.status})`);
+    }
+    const mimeType = imageResponse.headers.get("content-type")?.split(";")[0]?.trim() || "image/png";
+    const buffer = Buffer.from(await imageResponse.arrayBuffer());
+    return `data:${mimeType};base64,${buffer.toString("base64")}`;
+  }
+
+  throw new Error("Image model returned no b64 image or URL.");
+}
+
+function parseOpenAIError(error: unknown): string {
+  if (error instanceof Error && error.message.trim()) {
+    return error.message;
+  }
+  return "Unknown OpenAI image generation error.";
 }
 
 export function prepareChartInputFromRequest(params: {
   enabled: boolean;
   type: ChartTypeOption;
   title: string;
+  visualStyle?: string;
+  imagePrompt?: string;
   dataJson: string;
   optionsJson: string;
 }): PreparedChartInput | null {
@@ -270,14 +302,16 @@ export function prepareChartInputFromRequest(params: {
   const optionsObject = parseJsonObjectField(params.optionsJson, "chartOptions", false);
   const labels = normalizeLabels(dataObject.labels);
   const datasets = normalizeDatasets(params.type, dataObject.datasets, labels.length);
-  const defaultOptions = buildDefaultOptions(params.type, params.title.trim());
+  const legendPosition = parseLegendPosition(optionsObject, params.type);
 
   return {
     type: params.type,
     title: params.title.trim(),
+    visualStyle: sanitizeStyle(params.visualStyle ?? ""),
+    imagePrompt: sanitizeImagePrompt(params.imagePrompt ?? ""),
+    legendPosition,
     labels,
     datasets,
-    options: mergeJsonRecords(defaultOptions, optionsObject),
   };
 }
 
@@ -286,60 +320,92 @@ export function summarizeChartForPrompt(chartInput: PreparedChartInput): string 
   const datasetSummary = chartInput.datasets
     .slice(0, 4)
     .map((dataset, index) => {
-      const label = typeof dataset.label === "string" ? dataset.label : `Series ${index + 1}`;
-      const values = Array.isArray(dataset.data) ? dataset.data.slice(0, 8).join(", ") : "";
-      return `${label}: [${values}]`;
+      const values = dataset.data.slice(0, 8).join(", ");
+      return `${dataset.label || `Series ${index + 1}`}: [${values}]`;
     })
     .join(" | ");
 
-  return `type=${chartInput.type}; title=${chartInput.title || "(none)"}; labels=[${labelsPreview}]; datasets=${datasetSummary}`;
+  return `type=${chartInput.type}; title=${chartInput.title || "(none)"}; style=${chartInput.visualStyle}; legend=${chartInput.legendPosition}; labels=[${labelsPreview}]; datasets=${datasetSummary}`;
 }
 
-export async function renderChartCompanion(chartInput: PreparedChartInput): Promise<RenderedChartCompanion> {
-  ensureChartModulesRegistered();
+export async function renderChartCompanion(
+  chartInput: PreparedChartInput,
+  credentials: ChartImageCredentials = {},
+): Promise<RenderedChartCompanion> {
+  const imageModel = credentials.imageModel?.trim() || process.env.OPENAI_IMAGE_MODEL?.trim() || "gpt-image-1.5";
+  const size = resolveImageSize(chartInput.type);
+  const { width, height } = parseImageSize(size);
+  const prompt = buildChartImagePrompt(chartInput);
 
-  const { width, height } = resolveCanvasSize(chartInput.type);
-  const canvas = createCanvas(width, height);
-  const context = canvas.getContext("2d");
+  const oauthToken = credentials.oauth?.accessToken?.trim();
+  const oauthAccountId = credentials.oauth?.accountId?.trim();
+  const apiKey = credentials.apiKey?.trim();
+  const apiBaseUrl = credentials.apiBaseUrl?.trim();
 
-  const config: ChartConfiguration = {
-    type: chartInput.type,
-    data: {
-      labels: chartInput.labels,
-      datasets: chartInput.datasets as unknown as ChartConfiguration["data"]["datasets"],
-    },
-    options: chartInput.options as ChartConfiguration["options"],
-  };
+  if (!oauthToken && !apiKey) {
+    throw new Error("Missing credentials for chart image generation.");
+  }
 
-  // Keep a white background so exported PNGs are social-ready.
-  const whiteBackgroundPlugin = {
-    id: "white-background",
-    beforeDraw(chartInstance: { ctx: CanvasRenderingContext2D; width: number; height: number }) {
-      const { ctx, width, height } = chartInstance;
-      ctx.save();
-      ctx.globalCompositeOperation = "destination-over";
-      ctx.fillStyle = "#FFFFFF";
-      ctx.fillRect(0, 0, width, height);
-      ctx.restore();
-    },
-  };
+  const errors: string[] = [];
 
-  const chart = new Chart(context as unknown as CanvasRenderingContext2D, {
-    ...config,
-    plugins: [whiteBackgroundPlugin],
-  });
+  if (oauthToken) {
+    try {
+      const oauthClient = buildOpenAIClient({
+        token: oauthToken,
+        accountId: oauthAccountId,
+        baseUrl: apiBaseUrl,
+      });
+      const imageDataUrl = await imageDataUrlFromOpenAI({
+        client: oauthClient,
+        model: imageModel,
+        prompt,
+        size,
+      });
 
-  chart.update();
-  const buffer = canvas.toBuffer("image/png");
-  chart.destroy();
+      return {
+        type: chartInput.type,
+        title: chartInput.title,
+        visualStyle: chartInput.visualStyle,
+        imagePrompt: chartInput.imagePrompt,
+        imageDataUrl,
+        width,
+        height,
+        labelsCount: chartInput.labels.length,
+        datasetCount: chartInput.datasets.length,
+      };
+    } catch (error) {
+      errors.push(`OAuth image generation failed: ${parseOpenAIError(error)}`);
+    }
+  }
 
-  return {
-    type: chartInput.type,
-    title: chartInput.title,
-    imageDataUrl: `data:image/png;base64,${buffer.toString("base64")}`,
-    width,
-    height,
-    labelsCount: chartInput.labels.length,
-    datasetCount: chartInput.datasets.length,
-  };
+  if (apiKey) {
+    try {
+      const apiClient = buildOpenAIClient({
+        token: apiKey,
+        baseUrl: apiBaseUrl,
+      });
+      const imageDataUrl = await imageDataUrlFromOpenAI({
+        client: apiClient,
+        model: imageModel,
+        prompt,
+        size,
+      });
+
+      return {
+        type: chartInput.type,
+        title: chartInput.title,
+        visualStyle: chartInput.visualStyle,
+        imagePrompt: chartInput.imagePrompt,
+        imageDataUrl,
+        width,
+        height,
+        labelsCount: chartInput.labels.length,
+        datasetCount: chartInput.datasets.length,
+      };
+    } catch (error) {
+      errors.push(`API key image generation failed: ${parseOpenAIError(error)}`);
+    }
+  }
+
+  throw new Error(errors.join(" | "));
 }

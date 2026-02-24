@@ -798,6 +798,8 @@ export async function POST(request: Request) {
         enabled: input.chartEnabled,
         type: input.chartType,
         title: input.chartTitle,
+        visualStyle: input.chartVisualStyle,
+        imagePrompt: input.chartImagePrompt,
         dataJson: input.chartData,
         optionsJson: input.chartOptions,
       });
@@ -851,6 +853,8 @@ export async function POST(request: Request) {
       input.inputType,
       preparedChartInput ? `chart:${preparedChartInput.type}` : "",
       preparedChartInput?.title ?? "",
+      preparedChartInput?.visualStyle ?? "",
+      preparedChartInput?.imagePrompt ?? "",
       input.memeBrief,
       input.memeTemplateIds.length ? `templates:${input.memeTemplateIds.join(",")}` : "",
       input.time,
@@ -890,7 +894,7 @@ export async function POST(request: Request) {
     const goalExecutionDirective = GOAL_PLAYBOOKS[input.goal];
     const postTypeDirective = resolvePostTypeDirective(input.inputType);
     const chartExecutionDirective = preparedChartInput
-      ? "Chart companion is enabled. Ground the narrative in the provided chart values and call out one or two concrete numbers naturally."
+      ? "Chart companion is enabled. Ground the narrative in the provided chart values and call out one or two concrete numbers naturally. Match the requested chart visual style."
       : "No chart companion requested.";
     const chartPromptSummary = preparedChartInput ? summarizeChartForPrompt(preparedChartInput) : "(not provided)";
     const memeToneProfile = resolveMemeToneProfile({
@@ -1251,16 +1255,26 @@ For each post:
 
     if (preparedChartInput) {
       try {
-        chartCompanion = await renderChartCompanion(preparedChartInput);
+        chartCompanion = await renderChartCompanion(preparedChartInput, {
+          oauth: oauthCredentials
+            ? {
+                accessToken: oauthCredentials.accessToken,
+                accountId: oauthCredentials.accountId,
+              }
+            : null,
+          apiKey: openAiApiToken,
+          apiBaseUrl: process.env.OPENAI_BASE_URL,
+          imageModel: process.env.OPENAI_IMAGE_MODEL,
+        });
       } catch (chartRenderError) {
         const message =
           chartRenderError instanceof Error
             ? chartRenderError.message
-            : "Chart rendering failed for the provided chart data/options.";
+            : "Chart image generation failed for the provided chart data.";
 
         return NextResponse.json(
           {
-            error: "Chart rendering failed",
+            error: "Chart image generation failed",
             message,
           },
           { status: 400 },

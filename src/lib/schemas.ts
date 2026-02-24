@@ -16,6 +16,8 @@ export const generatePostsRequestSchema = z.object({
   chartEnabled: z.coerce.boolean().default(false),
   chartType: z.enum(CHART_TYPE_OPTIONS).default("doughnut"),
   chartTitle: z.string().trim().max(140).default(""),
+  chartVisualStyle: z.string().trim().max(120).default("clean infographic"),
+  chartImagePrompt: z.string().trim().max(1200).default(""),
   chartData: z.string().trim().max(20_000).default(""),
   chartOptions: z.string().trim().max(20_000).default(""),
   memeBrief: z.string().trim().max(400).default(""),
@@ -70,6 +72,8 @@ export type GeneratePostsResponse = {
   chart?: {
     type: ChartTypeOption;
     title: string;
+    visualStyle?: string;
+    imagePrompt?: string;
     imageDataUrl: string;
     width: number;
     height: number;

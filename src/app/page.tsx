@@ -34,6 +34,8 @@ type FormState = {
   chartEnabled: boolean;
   chartType: ChartTypeOption;
   chartTitle: string;
+  chartVisualStyle: string;
+  chartImagePrompt: string;
   chartLabels: string;
   chartSeriesOneLabel: string;
   chartSeriesOneValues: string;
@@ -59,6 +61,8 @@ const defaultForm: FormState = {
   chartEnabled: false,
   chartType: "doughnut",
   chartTitle: "",
+  chartVisualStyle: "clean infographic",
+  chartImagePrompt: "",
   chartLabels: "Without trial, With paid trial, With free trial",
   chartSeriesOneLabel: "Share %",
   chartSeriesOneValues: "56.9, 28.9, 14.3",
@@ -84,6 +88,14 @@ const EVENT_TOPIC_PATTERN = /\b(event|webinar)\b/i;
 const MEME_TOPIC_PATTERN = /\b(meme|shitpost)\b/i;
 const CUSTOM_BRAND_VOICE = "__custom__";
 const CHART_LEGEND_POSITIONS: ChartLegendPosition[] = ["top", "right", "bottom", "left"];
+const CHART_VISUAL_STYLE_OPTIONS = [
+  "clean infographic",
+  "corporate report",
+  "anime",
+  "realistic",
+  "minimal monochrome",
+  "neon cyberpunk",
+] as const;
 const MAX_TEMPLATE_RESULTS = 80;
 const INDUSTRY_NEWS_REACTION_PATTERN = /\bindustry news reaction\b/i;
 
@@ -115,6 +127,80 @@ type GenerationAllocation = {
   goal: ContentGoal;
   count: number;
 };
+
+type ChartWizardPreset = {
+  id: string;
+  label: string;
+  chartType: ChartTypeOption;
+  chartTitle: string;
+  chartLegendPosition: ChartLegendPosition;
+  chartSeriesOneLabel: string;
+  chartSeriesTwoLabel: string;
+  chartVisualStyle: (typeof CHART_VISUAL_STYLE_OPTIONS)[number];
+  chartImagePrompt: string;
+  chartLabels: string;
+  chartSeriesOneValues: string;
+  chartSeriesTwoValues: string;
+};
+
+const CHART_WIZARD_PRESETS: ChartWizardPreset[] = [
+  {
+    id: "trial-split",
+    label: "Trial mix",
+    chartType: "doughnut",
+    chartTitle: "Trial strategy split",
+    chartLegendPosition: "right",
+    chartSeriesOneLabel: "Share %",
+    chartSeriesTwoLabel: "",
+    chartVisualStyle: "clean infographic",
+    chartImagePrompt: "make it polished and social media ready with crisp labels",
+    chartLabels: "Without trial, With paid trial, With free trial",
+    chartSeriesOneValues: "56.9, 28.9, 14.3",
+    chartSeriesTwoValues: "",
+  },
+  {
+    id: "cohort-retention",
+    label: "Cohort retention",
+    chartType: "line",
+    chartTitle: "Week-4 retention by cohort",
+    chartLegendPosition: "top",
+    chartSeriesOneLabel: "Current flow",
+    chartSeriesTwoLabel: "Optimized flow",
+    chartVisualStyle: "corporate report",
+    chartImagePrompt: "clean benchmark style, subtle grid, easy to read on LinkedIn feed",
+    chartLabels: "Week 1, Week 2, Week 3, Week 4",
+    chartSeriesOneValues: "42, 33, 27, 21",
+    chartSeriesTwoValues: "44, 38, 33, 29",
+  },
+  {
+    id: "paywall-funnel",
+    label: "Paywall funnel",
+    chartType: "bar",
+    chartTitle: "Paywall funnel drop-off",
+    chartLegendPosition: "top",
+    chartSeriesOneLabel: "Current",
+    chartSeriesTwoLabel: "Target",
+    chartVisualStyle: "minimal monochrome",
+    chartImagePrompt: "high-contrast bars with direct value labels and no clutter",
+    chartLabels: "Paywall views, Trial starts, Paid starts, Month-2 renewals",
+    chartSeriesOneValues: "100, 26, 11, 6",
+    chartSeriesTwoValues: "100, 30, 14, 9",
+  },
+  {
+    id: "channel-roi",
+    label: "Channel ROI",
+    chartType: "radar",
+    chartTitle: "Channel quality by metric",
+    chartLegendPosition: "top",
+    chartSeriesOneLabel: "Paid social",
+    chartSeriesTwoLabel: "Search",
+    chartVisualStyle: "neon cyberpunk",
+    chartImagePrompt: "bold futuristic style, still keep labels readable",
+    chartLabels: "CTR, Trial rate, Paid rate, LTV, Payback",
+    chartSeriesOneValues: "71, 52, 44, 39, 47",
+    chartSeriesTwoValues: "56, 68, 61, 63, 59",
+  },
+];
 
 function IconPencil({ className }: { className?: string }) {
   return (
@@ -205,6 +291,14 @@ function splitCsvNumbers(value: string): number[] {
 
 function getLegendLabel(position: ChartLegendPosition): string {
   return position.charAt(0).toUpperCase() + position.slice(1);
+}
+
+function formatChartVisualStyleLabel(style: string): string {
+  return style
+    .split(" ")
+    .filter(Boolean)
+    .map((part) => part.charAt(0).toUpperCase() + part.slice(1))
+    .join(" ");
 }
 
 function formatEventTimeForPrompt(value: string): string {
@@ -359,6 +453,8 @@ function sanitizeGenerationResult(result: GeneratePostsResponse): GeneratePostsR
       ? {
           ...result.chart,
           title: normalizeNoEmDash(result.chart.title),
+          visualStyle: result.chart.visualStyle ? normalizeNoEmDash(result.chart.visualStyle) : result.chart.visualStyle,
+          imagePrompt: result.chart.imagePrompt ? normalizeNoEmDash(result.chart.imagePrompt) : result.chart.imagePrompt,
           imageDataUrl: result.chart.imageDataUrl.trim(),
         }
       : undefined,
@@ -770,6 +866,18 @@ export default function Home() {
       }),
     [],
   );
+  const chartVisualStyleSelectWidth = useMemo(
+    () =>
+      getSelectWidthFromOptions(
+        CHART_VISUAL_STYLE_OPTIONS.map((style) => formatChartVisualStyleLabel(style)),
+        {
+          minCh: 16,
+          maxCh: 24,
+          paddingCh: 5,
+        },
+      ),
+    [],
+  );
   const inputLengthSelectWidth = useMemo(
     () =>
       getSelectWidthFromOptions(INPUT_LENGTH_OPTIONS.map((length) => formatLengthLabel(length)), {
@@ -1031,6 +1139,22 @@ export default function Home() {
     });
   }
 
+  function applyChartWizardPreset(preset: ChartWizardPreset) {
+    setForm((prev) => ({
+      ...prev,
+      chartType: preset.chartType,
+      chartTitle: preset.chartTitle,
+      chartLegendPosition: preset.chartLegendPosition,
+      chartSeriesOneLabel: preset.chartSeriesOneLabel,
+      chartSeriesTwoLabel: preset.chartSeriesTwoLabel,
+      chartVisualStyle: preset.chartVisualStyle,
+      chartImagePrompt: preset.chartImagePrompt,
+      chartLabels: preset.chartLabels,
+      chartSeriesOneValues: preset.chartSeriesOneValues,
+      chartSeriesTwoValues: preset.chartSeriesTwoValues,
+    }));
+  }
+
   async function onSubmit(event: FormEvent<HTMLFormElement>) {
     event.preventDefault();
     const committedNumberOfPosts = commitNumberOfPostsInput();
@@ -1116,6 +1240,8 @@ export default function Home() {
           chartEnabled: typeNeedsChart ? form.chartEnabled : false,
           chartType: typeNeedsChart && form.chartEnabled ? form.chartType : defaultForm.chartType,
           chartTitle: typeNeedsChart && form.chartEnabled ? form.chartTitle : "",
+          chartVisualStyle: typeNeedsChart && form.chartEnabled ? form.chartVisualStyle : defaultForm.chartVisualStyle,
+          chartImagePrompt: typeNeedsChart && form.chartEnabled ? form.chartImagePrompt : "",
           chartData: typeNeedsChart && form.chartEnabled ? chartDataPayload : "",
           chartOptions: typeNeedsChart && form.chartEnabled ? chartOptionsPayload : "",
           time: typeNeedsEvent ? formatEventTimeForPrompt(form.time) : "",
@@ -2149,9 +2275,26 @@ export default function Home() {
 
               {form.chartEnabled ? (
                 <div className="space-y-3">
-                  <div className="grid gap-3 sm:grid-cols-2 lg:grid-cols-3">
+                  <div className="space-y-2 rounded-xl border border-black/10 bg-white p-3">
+                    <p className="text-xs font-semibold uppercase tracking-wide text-slate-600">Chart Wizard</p>
+                    <p className="text-xs text-slate-600">Pick a starter template, then tweak values, style, and prompt.</p>
+                    <div className="flex flex-wrap gap-2">
+                      {CHART_WIZARD_PRESETS.map((preset) => (
+                        <button
+                          key={preset.id}
+                          type="button"
+                          className="rounded-lg border border-black/10 bg-white px-2 py-1 text-xs text-slate-700 hover:bg-slate-100"
+                          onClick={() => applyChartWizardPreset(preset)}
+                        >
+                          {preset.label}
+                        </button>
+                      ))}
+                    </div>
+                  </div>
+
+                  <div className="grid gap-3 sm:grid-cols-2 lg:grid-cols-4">
                     <label className="flex h-full flex-col">
-                      <span className="text-sm font-medium sm:min-h-[2.75rem]">Chart Type</span>
+                      <span className="text-sm font-medium">Chart Type</span>
                       <select
                         className={baseControlClassName}
                         style={{ width: chartTypeSelectWidth }}
@@ -2190,7 +2333,7 @@ export default function Home() {
                     </label>
 
                     <label className="flex h-full flex-col">
-                      <span className="text-sm font-medium sm:min-h-[2.75rem]">Chart Title</span>
+                      <span className="text-sm font-medium">Chart Title</span>
                       <input
                         placeholder="Trial strategy split by app sample"
                         className={baseControlClassName}
@@ -2201,7 +2344,7 @@ export default function Home() {
                     </label>
 
                     <label className="flex h-full flex-col">
-                      <span className="text-sm font-medium sm:min-h-[2.75rem]">Legend Position</span>
+                      <span className="text-sm font-medium">Legend Position</span>
                       <select
                         className={baseControlClassName}
                         style={{ width: chartLegendSelectWidth }}
@@ -2216,6 +2359,22 @@ export default function Home() {
                         {CHART_LEGEND_POSITIONS.map((position) => (
                           <option key={position} value={position}>
                             {getLegendLabel(position)}
+                          </option>
+                        ))}
+                      </select>
+                    </label>
+
+                    <label className="flex h-full flex-col">
+                      <span className="text-sm font-medium">Chart Visual Style</span>
+                      <select
+                        className={baseControlClassName}
+                        style={{ width: chartVisualStyleSelectWidth }}
+                        value={form.chartVisualStyle}
+                        onChange={(event) => setForm((prev) => ({ ...prev, chartVisualStyle: event.target.value }))}
+                      >
+                        {CHART_VISUAL_STYLE_OPTIONS.map((style) => (
+                          <option key={style} value={style}>
+                            {formatChartVisualStyleLabel(style)}
                           </option>
                         ))}
                       </select>
@@ -2249,6 +2408,17 @@ export default function Home() {
                       <div className="hidden sm:block" aria-hidden />
                     )}
                   </div>
+
+                  <label className="space-y-1">
+                    <span className="text-sm font-medium">Chart Image Prompt (optional)</span>
+                    <textarea
+                      rows={2}
+                      placeholder="Optional style direction, e.g. anime infographic, realistic magazine style, hand-drawn look."
+                      className={baseControlClassName}
+                      value={form.chartImagePrompt}
+                      onChange={(event) => setForm((prev) => ({ ...prev, chartImagePrompt: event.target.value }))}
+                    />
+                  </label>
 
                   <div className="space-y-2 rounded-xl border border-black/10 bg-white p-3">
                     <div className="flex items-center justify-between gap-2">
@@ -2374,7 +2544,7 @@ export default function Home() {
                     Each row links one chart label directly to its value(s). No JSON and no comma juggling.
                   </p>
                   <p className="text-xs text-slate-600">
-                    Chart image is rendered automatically server-side and returned in your results.
+                    Chart image is generated server-side with OpenAI image model and returned in your results.
                   </p>
                 </div>
               ) : (
@@ -2554,6 +2724,8 @@ export default function Home() {
                     {CHART_TYPE_LABELS[result.chart.type]} · {result.chart.labelsCount} labels · {result.chart.datasetCount} dataset
                     {result.chart.datasetCount > 1 ? "s" : ""}
                   </p>
+                  {result.chart.visualStyle ? <p className="text-xs text-slate-600">Style: {result.chart.visualStyle}</p> : null}
+                  {result.chart.imagePrompt ? <p className="text-xs text-slate-600">Prompt: {result.chart.imagePrompt}</p> : null}
                 </div>
                 <div className="flex items-center gap-2">
                   <a
