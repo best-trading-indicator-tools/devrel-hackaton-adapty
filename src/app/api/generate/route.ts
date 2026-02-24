@@ -77,7 +77,7 @@ const POST_TYPE_PLAYBOOKS: Array<{ pattern: RegExp; directive: string }> = [
   {
     pattern: /event|webinar/i,
     directive:
-      "Lead with why this event matters now, then provide concrete logistics, who should attend, and what they will learn.",
+      "Lead with a real operator pain teams feel now, explain why this event helps in concrete terms, include explicit logistics (date/time/place), who should attend, and one practical conversation or takeaway they will get.",
   },
   {
     pattern: /product feature launch/i,
@@ -136,9 +136,116 @@ const HARD_QUALITY_GATE = [
   "If any rule fails, rewrite and self-check again before returning.",
   "Reject generic template cadence, staccato short-line stacks, and abstract filler.",
   "Reject outputs without concrete proof units and without caveats.",
+  "Reject low-value opener clichés like hard truth, game changer, nobody talks about, or let that sink in.",
+  "For event and webinar posts, include explicit logistics and who should attend.",
   "Reject any sentence containing em dash or en dash punctuation.",
   "For factual claims: if web evidence is available, align to it. If evidence is missing, rewrite as opinion or observation and avoid unsupported hard facts.",
 ] as const;
+
+const AI_SLOP_PHRASE_PATTERN =
+  /\b(hard truth|game changer|nobody talks about|let that sink in|this changes everything|stop scrolling)\b/i;
+
+function normalizeLooseMatch(value: string): string {
+  return value
+    .toLowerCase()
+    .replace(/[^a-z0-9]+/g, " ")
+    .replace(/\s+/g, " ")
+    .trim();
+}
+
+function looseIncludes(haystack: string, needle: string): boolean {
+  const hay = normalizeLooseMatch(haystack);
+  const ndl = normalizeLooseMatch(needle);
+
+  if (!hay || !ndl) {
+    return false;
+  }
+
+  return hay.includes(ndl) || ndl.split(" ").every((part) => part.length > 2 && hay.includes(part));
+}
+
+function countConcreteProofUnits(value: string): number {
+  const numberLike = value.match(/\b\d+(?:[.,]\d+)?%?\b/g) ?? [];
+  const concreteSignal =
+    value.match(/\b(trial|conversion|retention|ctr|cac|arppu|mrr|paywall|onboarding|revenue|churn|install)\b/gi) ?? [];
+
+  return numberLike.length + (concreteSignal.length ? 1 : 0);
+}
+
+function hasShortLineStack(body: string): boolean {
+  const lines = body
+    .split(/\n+/)
+    .map((line) => line.trim())
+    .filter(Boolean);
+
+  if (lines.length < 2) {
+    return false;
+  }
+
+  for (let index = 0; index < lines.length - 1; index += 1) {
+    const currentWords = lines[index].split(/\s+/).filter(Boolean).length;
+    const nextWords = lines[index + 1].split(/\s+/).filter(Boolean).length;
+
+    if (currentWords <= 5 && nextWords <= 5) {
+      return true;
+    }
+  }
+
+  return false;
+}
+
+function evaluatePostQuality(params: {
+  post: {
+    hook: string;
+    body: string;
+    cta: string;
+  };
+  inputType: string;
+  time: string;
+  place: string;
+}): string[] {
+  const issues: string[] = [];
+  const combinedText = `${params.post.hook}\n${params.post.body}\n${params.post.cta}`;
+  const lowerInputType = params.inputType.toLowerCase();
+  const isMeme = MEME_INPUT_TYPE_PATTERN.test(lowerInputType);
+  const isEvent = /event|webinar/.test(lowerInputType);
+  const nonEmptyBodyLines = params.post.body
+    .split(/\n+/)
+    .map((line) => line.trim())
+    .filter(Boolean);
+
+  if (AI_SLOP_PHRASE_PATTERN.test(combinedText)) {
+    issues.push("Avoid generic AI-sounding clichés in hook/body/CTA.");
+  }
+
+  if (!isMeme && countConcreteProofUnits(combinedText) < 1) {
+    issues.push("Add at least one concrete proof unit such as number, metric, or specific mechanism.");
+  }
+
+  if (!isMeme && params.post.body.length > 280 && !/\n\s*\n/.test(params.post.body)) {
+    issues.push("Add blank lines between subtopics so longer body text is readable.");
+  }
+
+  if (hasShortLineStack(params.post.body)) {
+    issues.push("Avoid stacking ultra-short lines back-to-back.");
+  }
+
+  if (isEvent) {
+    if (params.time.trim() && !looseIncludes(combinedText, params.time)) {
+      issues.push("Event post must include the provided event time.");
+    }
+
+    if (params.place.trim() && !looseIncludes(combinedText, params.place)) {
+      issues.push("Event post must include the provided event place.");
+    }
+
+    if (nonEmptyBodyLines.length < 4) {
+      issues.push("Event post body is too thin. Add operator context, practical value, and logistics.");
+    }
+  }
+
+  return issues;
+}
 
 function getOpenAIApiToken(): string | undefined {
   return process.env.OPENAI_API_KEY ?? process.env.OPENAI_ACCESS_TOKEN;
@@ -1256,12 +1363,77 @@ ${rankedContextLines}`;
     }
 
     const includeMemeCompanion = shouldGenerateMemes(input.inputType);
-    const normalizedPosts = parsed.posts.map((post, index) => ({
-      length: lengthPlan[index] ?? post.length,
-      hook: normalizeNoEmDash(post.hook),
-      body: normalizeNoEmDash(post.body),
-      cta: normalizeNoEmDash(ensureFinalCta(post.cta, input.ctaLink)),
-    }));
+    const normalizeGeneratedPosts = (posts: GeneratedPost[]) =>
+      posts.map((post, index) => ({
+        length: lengthPlan[index] ?? post.length,
+        hook: normalizeNoEmDash(post.hook),
+        body: normalizeNoEmDash(post.body),
+        cta: normalizeNoEmDash(ensureFinalCta(post.cta, input.ctaLink)),
+      }));
+
+    let normalizedPosts = normalizeGeneratedPosts(parsed.posts);
+    const qualityIssuesByPost = normalizedPosts
+      .map((post, index) => ({
+        postIndex: index,
+        issues: evaluatePostQuality({
+          post,
+          inputType: input.inputType,
+          time: input.time,
+          place: input.place,
+        }),
+      }))
+      .filter((item) => item.issues.length > 0);
+
+    if (qualityIssuesByPost.length > 0) {
+      const qualityIssueSummary = qualityIssuesByPost
+        .map(
+          (item) =>
+            `Post ${item.postIndex + 1}:\n${item.issues.map((issue) => `- ${issue}`).join("\n")}`,
+        )
+        .join("\n\n");
+      const draftSummary = normalizedPosts
+        .map(
+          (post, index) => `Post ${index + 1}
+Hook: ${post.hook}
+Body:
+${post.body}
+CTA: ${post.cta}`,
+        )
+        .join("\n\n");
+      const qualityRepairPrompt = `${userPrompt}
+
+Quality repair pass required.
+The first draft did not satisfy anti-slop and formatting gates.
+Fix the failing posts while preserving the core message.
+
+Failing checks:
+${qualityIssueSummary}
+
+Draft to repair:
+${draftSummary}
+
+Repair requirements:
+- Keep one sentence per line in body copy.
+- Add blank lines between subtopics.
+- Keep output human, concrete, and non-generic.
+- Avoid cliché opener lines.
+- Never use em dash or en dash punctuation.
+- If post type is event or webinar, include explicit logistics and who should attend.
+`;
+
+      const repairedBatchRun = await runGenerationWithFallback({
+        userPrompt: qualityRepairPrompt,
+        responseSchema,
+      });
+
+      if (repairedBatchRun.fallbackUsed) {
+        fallbackUsed = true;
+        modelUsed = repairedBatchRun.modelUsed;
+      }
+
+      parsed = repairedBatchRun.parsed;
+      normalizedPosts = normalizeGeneratedPosts(parsed.posts);
+    }
 
     let postsWithMemes: GeneratePostsResponse["posts"] = normalizedPosts;
 

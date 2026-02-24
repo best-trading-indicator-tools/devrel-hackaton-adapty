@@ -1,20 +1,36 @@
 # LinkedIn Writing Contract
 
-Use this to keep output human and useful.
+Use this as a hard operating contract. If any rule fails, rewrite before returning output.
 
-- Write like a mini-article, not stacked slogans.
-- Keep one sentence per line when practical.
-- Add blank lines between subtopics so long posts breathe.
+Core rhythm and structure:
+- Write like a cohesive mini-article, not stacked slogans.
+- Use one sentence per line for body copy.
+- Use blank lines between subtopics so longer posts breathe.
 - Keep paragraph rhythm human: usually 2 to 5 sentences before a blank line.
-- Avoid verse cadence and short-fragment stacks.
+- Avoid rap cadence and short-fragment stacks.
 - Never stack ultra-short lines back-to-back.
-- Mix short, medium, and long sentence lengths.
-- Avoid internet template cadence and motivational filler.
-- Avoid MBA buzzword fog. Prefer concrete nouns and verbs.
-- Include at least one proof unit per post: number, metric, micro-example, or mini story.
-- Include caveats or scope words like most, unless, in practice, for this segment.
-- Include at least one lived perspective line when relevant.
-- Occasional ellipses are fine, but keep usage rare.
+- Mix short, medium, and long sentence lengths naturally.
+
+Anti-slop rules:
+- Avoid internet template cadence and motivational filler patterns.
+- Avoid MBA buzzword fog. Prefer concrete nouns, verbs, and mechanisms.
+- Avoid low-value opener clichés like "hard truth", "game changer", "nobody talks about", "let that sink in".
+- Include at least one concrete proof unit per post: number, metric, micro-example, or mini story.
+- Include caveats and boundaries such as most, unless, in practice, or for this segment.
+- Prefer lived perspective lines when relevant, such as from what we see, we tested, or in practice.
+- Occasional ellipses are acceptable as human texture, but keep usage rare.
+
+Formatting and safety:
 - No separator lines like _____, ---, ***.
+- No low-value outros like "Want more?".
 - No meta leakage like assistant, final, json, planning text, or markdown headers in output.
 - Never use em dash or en dash punctuation. Use normal hyphen, comma, colon, or period.
+- For factual claims: if verified web evidence is available, stay aligned to it. If evidence is missing, write as opinion or observation.
+
+Event and webinar promo contract:
+- Open with a real operator pain that your audience recognizes immediately.
+- Explain the mechanism behind the pain in concrete terms, not generic inspiration.
+- State why this event matters now for teams running subscriptions and monetization.
+- Include explicit logistics: city or place, date, and time when provided.
+- Include who should attend and what practical conversations they will get.
+- Keep CTA specific and action-oriented.
