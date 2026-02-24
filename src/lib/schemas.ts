@@ -9,6 +9,24 @@ import {
   type MemeTemplateId,
 } from "@/lib/constants";
 
+const inputLengthSchema = z
+  .preprocess(
+    (value) => {
+      if (typeof value !== "string") {
+        return value;
+      }
+
+      const normalized = value.trim().toLowerCase();
+      return normalized === "standard" ? "medium" : normalized;
+    },
+    z.enum(INPUT_LENGTH_OPTIONS),
+  )
+  .default("medium");
+
+const outputLengthSchema = z
+  .enum(["short", "medium", "long", "very long", "standard"])
+  .transform((value) => (value === "standard" ? "medium" : value));
+
 export const generatePostsRequestSchema = z.object({
   style: z.string().trim().min(1).max(260).default("adapty"),
   goal: z.enum(GOAL_OPTIONS).default("virality"),
@@ -44,7 +62,7 @@ export const generatePostsRequestSchema = z.object({
     .refine((value) => !value || /^data:image\/[a-zA-Z0-9.+-]+;base64,/.test(value), {
       message: "imageDataUrl must be a base64 data URL for an image",
     }),
-  inputLength: z.enum(INPUT_LENGTH_OPTIONS).default("standard"),
+  inputLength: inputLengthSchema,
   numberOfPosts: z.coerce.number().int().min(1).max(12).default(3),
   details: z.string().trim().max(3000).default(""),
 });
@@ -57,7 +75,7 @@ export function makeGeneratePostsResponseSchema(postCount: number) {
     posts: z
       .array(
         z.object({
-          length: z.enum(["short", "standard", "long"]),
+          length: outputLengthSchema,
           hook: z.string().min(8).max(280),
           body: z.string().min(40).max(3500),
           cta: z.string().min(4).max(320),
@@ -81,7 +99,7 @@ export type GeneratePostsResponse = {
     datasetCount: number;
   };
   posts: Array<{
-    length: "short" | "standard" | "long";
+    length: "short" | "medium" | "long" | "very long";
     hook: string;
     body: string;
     cta: string;

@@ -20,7 +20,7 @@ const rewriteRequestSchema = z.object({
   details: z.string().trim().max(3000).default(""),
   prompt: z.string().trim().max(1200).default(""),
   post: z.object({
-    length: z.enum(["short", "standard", "long"]),
+    length: z.enum(["short", "medium", "long", "very long", "standard"]).transform((value) => (value === "standard" ? "medium" : value)),
     hook: z.string().trim().min(1).max(400),
     body: z.string().trim().min(1).max(5000),
     cta: z.string().trim().min(1).max(500),

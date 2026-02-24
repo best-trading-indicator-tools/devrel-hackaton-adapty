@@ -93,7 +93,7 @@ export const POST_TYPE_UI_DESCRIPTIONS: Record<(typeof POST_TYPE_OPTIONS)[number
   "Curated roundup": "Publish a digest of top resources, examples, or observations with quick takeaways.",
 };
 
-export const INPUT_LENGTH_OPTIONS = ["short", "standard", "long", "mix"] as const;
+export const INPUT_LENGTH_OPTIONS = ["short", "medium", "long", "very long", "mix"] as const;
 
 export type InputLength = (typeof INPUT_LENGTH_OPTIONS)[number];
 export type OutputLength = Exclude<InputLength, "mix">;
@@ -169,7 +169,7 @@ export const GOAL_UI_DESCRIPTIONS: Record<ContentGoal, string> = {
     "Balance reach, comments, and clicks without over-optimizing one metric; prioritize practical clarity across all.",
 };
 
-const LENGTH_SEQUENCE: OutputLength[] = ["short", "standard", "long"];
+const LENGTH_SEQUENCE: OutputLength[] = ["short", "medium", "long", "very long"];
 
 export function buildLengthPlan(inputLength: InputLength, count: number): OutputLength[] {
   if (inputLength !== "mix") {
@@ -182,11 +182,13 @@ export function buildLengthPlan(inputLength: InputLength, count: number): Output
 export function lengthGuide(length: OutputLength): string {
   switch (length) {
     case "short":
-      return "2-4 short paragraphs, around 350-550 characters.";
-    case "standard":
-      return "5-8 paragraphs, around 600-1000 characters.";
+      return "2-4 sentences.";
+    case "medium":
+      return "5-9 sentences.";
     case "long":
-      return "8-14 paragraphs, around 1000-1700 characters.";
+      return "18-35 sentences.";
+    case "very long":
+      return "36-90 sentences.";
     default:
       return "Natural LinkedIn length.";
   }

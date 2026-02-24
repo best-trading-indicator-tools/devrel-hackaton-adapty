@@ -76,7 +76,7 @@ const defaultForm: FormState = {
   place: "",
   ctaLink: "",
   imageDataUrl: "",
-  inputLength: "standard",
+  inputLength: "medium",
   numberOfPosts: 3,
   details: "",
 };
@@ -516,11 +516,16 @@ function formatLengthLabel(value: string): string {
     return value;
   }
 
-  if (value.toLowerCase() === "standard") {
+  const normalized = value.trim().toLowerCase();
+  if (normalized === "standard") {
     return "Medium";
   }
 
-  return value.charAt(0).toUpperCase() + value.slice(1);
+  return normalized
+    .split(/\s+/)
+    .filter(Boolean)
+    .map((part) => part.charAt(0).toUpperCase() + part.slice(1))
+    .join(" ");
 }
 
 function getSelectWidthFromOptions(
@@ -939,7 +944,7 @@ export default function Home() {
       return `${form.numberOfPosts} post${form.numberOfPosts > 1 ? "s" : ""}${scopeSuffix} in ${formatLengthLabel(form.inputLength)} format`;
     }
 
-    return `${form.numberOfPosts} post${form.numberOfPosts > 1 ? "s" : ""}${scopeSuffix} with mixed lengths (Short, Medium, Long)`;
+    return `${form.numberOfPosts} post${form.numberOfPosts > 1 ? "s" : ""}${scopeSuffix} with mixed lengths (Short, Medium, Long, Very Long)`;
   }, [form.inputLength, form.numberOfPosts, normalizedSelectedBrandVoices.length, normalizedSelectedGoals.length, normalizedSelectedPostTypes.length]);
   const totalMemeVariants = useMemo(() => {
     const posts = Math.max(1, Number(form.numberOfPosts) || 1);

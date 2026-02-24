@@ -1084,7 +1084,7 @@ Also generate a list of hook suggestions inspired by this style and request.
 `;
 
     type GeneratedPost = {
-      length: "short" | "standard" | "long";
+      length: "short" | "medium" | "long" | "very long";
       hook: string;
       body: string;
       cta: string;
@@ -1178,7 +1178,7 @@ Also generate a list of hook suggestions inspired by this style and request.
 
       for (let index = 0; index < input.numberOfPosts; index += 1) {
         const assignedItem = industryNewsContext.items[index % industryNewsContext.items.length];
-        const postLength = lengthPlan[index] ?? "standard";
+        const postLength = lengthPlan[index] ?? "medium";
         const singlePostSchema = makeGeneratePostsResponseSchema(1);
         const singlePostPrompt = `${userPrompt}
 
