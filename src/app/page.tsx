@@ -1950,13 +1950,12 @@ export default function Home() {
             <p className="text-sm text-slate-600">Generate multiple post variants with hook suggestions, based on your own winning library.</p>
           </header>
 
-          <div className="rounded-xl border border-sky-200 bg-sky-50 px-3 py-2">
-            <p className="text-xs font-medium text-sky-900">
-              Mix mode: when you select multiple Brand Voices, Goals, or Post Types, this run generates a blended batch across those selected settings.
+          <div className="inline-flex w-fit max-w-[min(100%,56rem)] flex-col gap-1 rounded-xl border border-black/10 bg-white px-3 py-2 shadow-sm">
+            <p className="text-xs font-semibold uppercase tracking-wide text-slate-700">Mix Mode</p>
+            <p className="text-xs text-slate-700">
+              If you select multiple Brand Voices, Goals, or Post Types, posts are automatically distributed across those selections.
             </p>
-            <p className="mt-1 text-xs text-sky-800">
-              Each post uses one selected combination, then the generator rotates through combinations until it reaches your total number of posts.
-            </p>
+            <p className="text-xs text-slate-600">The generator rotates through selected combinations until it reaches your post count.</p>
           </div>
 
           <div className="grid gap-3 sm:grid-cols-2">
