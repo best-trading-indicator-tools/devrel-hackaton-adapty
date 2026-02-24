@@ -1,0 +1,202 @@
+# Adapty Changelog — Tone Reference for Product Update Posts
+
+Use these posts as inspiration for Adapty brand voice when writing product feature launch or product update posts. Source: https://changelog.adapty.io/
+
+---
+
+[Image: https://img.announcekit.app/2a1bf04f355b2f7f6ae81a1fbbe667df?s=cee3f45d693953927964c7c10f6234e1]
+
+What's new in Adapty: Capacitor SDK and Apple Ads Manager upgrades
+
+Capacitor SDK is out of beta. After months in beta, the Capacitor SDK is officially here. If you're building cross-platform apps with Capacitor, you now have full subscription management support without the platform-specific headaches. Read the docs →
+
+Global pricing opportunities in Autopilot. Get country-specific pricing recommendations for your top 5 markets. Autopilot analyzes local conversion rates and purchasing power to suggest whether you should raise, lower, or maintain prices based on the Adapty Pricing Index.
+
+Autopilot now works for new apps. You no longer need extensive transaction history to get started with Autopilot — it now provides growth insights for brand-new apps from day one. One more thing: you can now choose which specific paywall Autopilot analyzes before it runs. Read the docs →
+
+New billing and grace period charts. Get more visibility into how billing retries and grace periods affect your revenue. Four new charts let you track that: Billing issue converted, Billing issue converted revenue, Grace period converted, and Grace period converted revenue. Especially useful if you're actively working on retention recovery.
+
+New documentation platform. We migrated our documentation to a new platform with better search, clearer navigation, and a redesigned homepage.
+
+New features in Apple Ads Manager. Apple Ads Manager just got significantly more powerful. This update eliminates several workflow bottlenecks and gives you more control over ad performance:
+- New charts for campaigns, ad groups, and keywords: Combine multiple attribution metrics in one chart to spot correlations over time. Plus, you can now open keyword charts directly from the Keywords tab, simplifying navigation. Read the docs →
+- Ad-level attribution: Access performance metrics at the ad level to see which specific ad setup is driving results.
+- Create ads directly in Adapty: You can now map Custom Product Pages to specific ad groups and intents. No more switching tools or manually setting up ads in Apple's console. Read the docs →
+Apple Ads segmentation: Create user segments in Adapty based on Apple Ads data — including campaigns, ad groups, and keywords. This makes launching tailored paywalls much faster. Read the docs →
+
+---
+
+[Image: https://img.announcekit.app/f054ec19953f01d09624042ffe3a20eb?s=487f50726006175cc3f0cadb7c1cdb1f]
+
+What's new in Adapty: new template library, web paywalls in in-app browser, and more
+
+Create dynamic rolling segments. You can now create user segments that update automatically over time. Users enter and exit segments based on conditions you define, such as actions taken within the last N hours or days. This lets you run A/B tests for new or recently active users without manual updates. Learn more →
+
+In-app web paywalls. Display web paywalls within your app using an in-app browser, providing a seamless experience without external redirects. iOS | Android | React Native | Flutter
+
+Updated template library. Finding the right paywall template is now easier. With this update, you can sort templates by length, components, visuals, and more.
+
+[Image: https://img.announcekit.app/f0ce30167b753e56e15d22c06239d0d8?s=754e202d14d892141af2c54d57072b11]
+
+Web paywall button for Android. You can add a button that opens a web paywall on Android directly from the Paywall Builder. Available starting from the Android SDK 3.15.0.
+
+Line-by-line AI translation in Paywall Builder. In Paywall Builder, you can select specific text elements in your paywall and translate them with AI assistance, making localization more precise and flexible. Learn more →
+
+Search apps by name. We added app name search so you can find the right application faster, especially when managing multiple apps.
+
+---
+
+[Image: https://img.announcekit.app/c8959f20f982303f27a66309746e5096?s=f8e550399c84e86951f7d380ee34b8de]
+
+New in Adapty: easier product setup, 80 templates, and more
+
+Create products directly in Adapty. No more going back and forth when adding new products. Now you can create them directly in Adapty and push them to the stores. A couple of clicks and everything is synced. Running experiments becomes easier than ever. Learn more in our docs →
+
+Explore new templates in Paywall Builder. We've added 17 more, bringing the total to 80 unique paywalls in our library. Find the one that fits your app best and customize it freely.
+
+Or design high-converting paywalls with the AI Paywall Generator. Using a familiar chat interface, describe what you want, get a ready design, and edit as needed. More details →
+
+Get the money stores owe you right away with Adapty Finance. Apple pays after 45 days. Google after 30. But your growth can't wait. Adapty Finance unlocks up to 85% of your earned revenue within 1-2 days. Get the details here →
+
+Kotlin Multiplatform and Capacitor Adapty SDKs are here. We continue expanding the range of languages and technologies that Adapty integrates with. Check out our Kotlin Multiplatform and Capacitor docs.
+
+---
+
+[Image: https://img.announcekit.app/14c1267da5c12d4ceeddb9810105a729?s=73a79c89edbf544877b61115e18283b4]
+
+Ads Manager is live for everyone!
+
+Launch, attribute, and optimize Apple Ads in one place. Real-time analytics, smart automations that grow ROAS, and no MMP fees.
+
+- Save 2–4% of ad spend by eliminating MMP costs.
+- Seamless analytics: from impressions to ROAS.
+- Single source of truth: no MMP lags, no data loss, no duplicates.
+- Automations adjust bids by your rules to hit target CPA/ROAS.
+- Best price on the market.
+- Adapty infrastructure: security, reliability, and 24/7 support.
+
+Get started in minutes — sign in with Apple (≈3 min) and launch your first campaigns.
+
+Start your 14-day free trial now or book a demo to learn more about Adapty Ads Manager.
+
+---
+
+What's new in Adapty? September updates
+
+For the past month, we've been working on major things at Adapty. While some updates are still under wraps, here's what we can already share.
+
+1. Preview your paywalls in our mobile app. You can now preview paywalls created in the Paywall Builder right in the Adapty iOS app — without publishing them live. Click "Test on Device" in the builder's web UI, scan the QR code with your phone, and see how your paywall looks on your device. Or open the app, go to the Paywalls section, select the paywall, and tap the play icon.
+
+By the way, we've upgraded the mobile app in more ways than one. Now it's the easiest way to track your app's performance on the go:
+— Check MRR, revenue, installs, ARPU, and subscriptions by day, week, or month
+— Access the real-time feed of subscription events — trials, conversions, renewals
+— View your active paywalls and A/B test results
+
+[Image: https://img.announcekit.app/0930f39ae81cacfa69dce487511a6682?s=878929d6fd016982b8770d2651cf2721]
+
+2. Run live API requests directly in our docs. Our API documentation is now interactive. You no longer need to copy requests into a terminal or import a Postman collection. Just paste your API key into the authorization field and see real responses from your account as you read. When you are ready to build, copy a ready-to-use code sample in your preferred language and run it instantly. Try it here →
+
+---
+
+[Image: https://img.announcekit.app/f64870b46b3fa1e439f0ca3c42b03695?s=6b9d805c1529280c0c038c7f3fda8ffc]
+
+August updates: What's new in Adapty
+
+— Copy-paste paywalls made with our builder. Managing multiple apps? No need to rebuild paywalls from scratch. With Paywall Builder, you can now copy a paywall from one app and paste it into another in seconds. Learn more here →
+— Localize onboardings in our Onboarding Builder. Translate your onboarding content manually, use AI, or export a localization file. Adapty creates a localized flow that you can fine-tune and adjust as needed. Click here for details →
+— Smoother user experience with instant onboarding screen loading. With our Onboarding Builder, you can now create seamless onboarding flows without any delays between screens. If you already have a flow built in Onboarding Builder, simply republish it to get the speed boost.
+— Add transparency to your paywall footer. Use a simple switch in Paywall Builder to make the footer transparent or filled when scrolled.
+— Reworked documentation, easier to navigate. Our docs got a major upgrade with a new structure that makes everything faster to find. Jump into streamlined quick start guides or switch between platform-specific sections right from the header.
+
+---
+
+[Image: https://img.announcekit.app/648b1e141f8c731f80064035a6c81081?s=e42698f83572a713ad223ee9ef90cf3a]
+
+July Adapty updates: smarter paywalls, sharper analytics
+
+— Animate your purchase button. You can add subtle animations to purchase buttons in Paywall Builder to better catch users' attention and boost conversions. More on how to add animations →
+[Image: https://img.announcekit.app/45fce714302ed38cbbf50819678e442a?s=4b46aa8126b70dead914def0078970ba]
+— Create custom user segments in analytics. Assign custom attributes to users during onboarding (e.g., their goals within the app) to create meaningful segments. You can then group or filter users in your analytics and see how key metrics like LTV or conversion rates vary across user profiles. Learn more →
+— Show custom media on paywalls. Display custom images or videos on paywalls based on user attributes (e.g., user location). This helps build trust, makes your paywalls more relevant, and increases engagement. See how it works →
+— Improved Install → Paid conversion metric. We've updated this metric to include all subscriptions, not only those started without a trial. for a more complete view of user monetization.
+— Faster updates for paywalls and placements. Our CDN and caching systems are now faster and more efficient. That means changes to paywalls or placements go live instantly. No need to wait or refresh manually.
+— Smarter audience filters. You can now filter users by install version, install date, or access level and use greater than / less than logic.
+— New API to manage paywalls remotely. You can now manage paywalls without opening the Adapty dashboard. Use our new server-side API to fetch a specific paywall, list all paywalls, update remote config (e.g., prices, images, button text). This gives your dev team more control and flexibility for automating workflows or integrating Adapty into your backend.
+
+All features are available now. Try them in your dashboard or explore the docs to get started.
+
+---
+
+[Image: https://img.announcekit.app/f774b36b201bd032fba02d5b627b4405?s=f88902a9969be7d23643fc7274c3aa8c]
+
+What's new at Adapty: June edition
+
+A fresh batch of updates to help you build faster, test smarter, and grow revenue.
+
+— Paddle integration is live. Sync your web purchases with mobile and track all revenue in one place. Set it up →
+— Onboarding builder is now available for Pro and Pro+ plans, including support for React Native and Flutter. Create onboarding flows without writing a single line of code. See how it works →
+— Our documentation is now LLM-friendly. We've optimized every article for LLMs with Markdown formatting, a "Copy for LLM" button, and a ready-to-use file for chatbot integrations. Give it a try →
+— Revenue filters by renewals. You can now break down subscription revenue by activations vs renewals — see exactly how much comes from new subscribers and how much from repeat ones. More on analytics filters →
+— Refund analytics just got better. Now you can clearly distinguish standard refunds from those triggered by plan upgrades. More on refunds →
+— Subscriptions renewal cancellations now show up on your main Overview dashboard. One of the key metrics to watch, now front and center.
+
+---
+
+[Image: https://img.announcekit.app/b7bf3fa8346523671f89b4edfdac96d5?s=efe95f689752cdcaff22cab82015c722]
+
+What's new in May? Quite a lot. Let's get you up to speed.
+
+From web paywalls to onboarding flows and fresher metrics, May was full of upgrades. Here are the highlights worth checking out.
+
+Web paywalls. You can now send users from your iOS app to Safari, let them pay outside the App Store, and activate the subscription when they come back. It's fast, seamless, and totally compliant. Read how it works →
+
+No-code onboardings. First impressions count – now you can build onboarding flows right in Adapty. Show them in your app with the SDK, and track visits, conversions, and revenue. No dev time needed. Enterprise-only for now. Docs → / SDK guide →
+
+iPad paywalls. The Paywall Builder now supports tablets and landscape mode. We added width limits and smarter image cropping to make your designs look good on iPads (SDK 3.7.0+ required).
+
+Official Stripe App. No more copying API keys, just connect and go. And yep, we automatically sync Stripe data with AppsFlyer now.
+
+New metrics in Adapty app. You can now track ARPAS, Active trials, New trials, Install-to-trial, Install-to-paid, Trial-to-paid, Refund events, and Refund amount.
+
+---
+
+Web paywalls are now live on all platforms!
+
+With the release of Adapty React Native SDK 3.6.0, web paywalls are fully supported across all major platforms – iOS, Flutter, and React Native.
+
+Here's what you get with web paywalls:
+- Skip the 30% App Store fee
+- Boost revenue with upsells and smart offers
+- Accept payments via Stripe, PayPal, Paddle, and more
+- Enable Apple Pay for a native-feeling checkout
+- Build web paywalls in minutes
+
+Make sure to update your SDK to version 3.6.0 or higher to access the new features. Read the docs for setup instructions.
+
+---
+
+[Image: https://img.announcekit.app/2add3b102ebc6ce5268d03f65bf149a9?s=7208fb8badc769d024e4d3c6e94679b8]
+
+Web paywalls are here!
+
+You can now add web paywalls to your app in a few taps, bypassing Apple's 30% fee.
+
+Key features:
+- Create high-converting web paywalls in minutes
+- Streamline checkout with Apple Pay button
+- Integrate with major PSPs & MoRs – Stripe, Solidgate, PayPal, Paddle, Braintree, Adyen, and more
+- Boost LTV with upsells, upgrades, and smart offers
+
+Available for all users with the latest SDK. Read the documentation for more details.
+
+---
+
+Tone patterns to mirror:
+- Lead with the feature name or "What's new" framing. Be direct.
+- One sentence per feature: what it does, why it matters, optional doc link.
+- Use bullets or short dashes for lists. Keep paragraphs short.
+- Include concrete outcomes (e.g., "A couple of clicks and everything is synced", "No more switching tools").
+- Docs links as "Read the docs →", "Learn more →", "Set it up →" — action-oriented.
+- No hype. No "game changer" or "revolutionary." Just clear, practical updates.
+- When multiple features: group by theme, use subheadings or bold feature names.
+- Images: changelog posts often open with a hero image; note [Image: url] for visual context when relevant.

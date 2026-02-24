@@ -42,7 +42,7 @@ const DEFAULT_GUIDES: PromptGuides = {
   ].join("\n"),
 };
 
-const MAX_GUIDE_CHARS = 4_000;
+const MAX_GUIDE_CHARS = 6_000;
 let guideCache: PromptGuides | null = null;
 
 function normalizeGuideText(value: string): string {
@@ -81,4 +81,16 @@ export async function getPromptGuides(): Promise<PromptGuides> {
   };
 
   return guideCache;
+}
+
+const PRODUCT_UPDATE_TONE_PATH = path.join(process.cwd(), "content", "adapty-changelog-tone.txt");
+const PRODUCT_UPDATE_TONE_MAX_CHARS = 5_000;
+
+export async function getProductUpdateToneContext(): Promise<string> {
+  try {
+    const raw = await readFile(PRODUCT_UPDATE_TONE_PATH, "utf8");
+    return raw.replace(/\r\n?/g, "\n").trim().slice(0, PRODUCT_UPDATE_TONE_MAX_CHARS);
+  } catch {
+    return "";
+  }
 }

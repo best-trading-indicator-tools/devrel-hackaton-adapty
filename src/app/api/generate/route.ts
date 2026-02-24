@@ -27,8 +27,9 @@ import { createCodexStructuredCompletion } from "@/lib/codex-responses";
 import { getCodexOAuthCredentials, type CodexOAuthCredentials } from "@/lib/codex-oauth";
 import { runWebFactCheck } from "@/lib/fact-check";
 import { retrieveLibraryContext, type LibraryEntry } from "@/lib/library-retrieval";
-import { getPromptGuides } from "@/lib/prompt-guides";
+import { getProductUpdateToneContext, getPromptGuides } from "@/lib/prompt-guides";
 import { runIndustryNewsContext } from "@/lib/rss-news";
+import { retrieveSoisContext } from "@/lib/sois-context";
 import {
   generatePostsRequestSchema,
   makeGeneratePostsResponseSchema,
@@ -41,7 +42,13 @@ const MEME_INPUT_TYPE_PATTERN = /\b(meme|shitpost)\b/i;
 const MEME_LINE_MAX_CHARS = 72;
 const DEFAULT_MEMEGEN_BASE_URL = "https://api.memegen.link";
 const FACT_CHECK_EVIDENCE_PROMPT_LIMIT = 4;
+const SOIS_EVIDENCE_PROMPT_LIMIT = 8;
 const INDUSTRY_NEWS_REACTION_PATTERN = /\bindustry news reaction\b/i;
+const PRODUCT_UPDATE_PATTERN = /\bproduct feature launch\b/i;
+
+function looksLikeProductUpdatePostType(inputType: string): boolean {
+  return PRODUCT_UPDATE_PATTERN.test(inputType);
+}
 
 const GOAL_PLAYBOOKS: Record<ContentGoal, string> = {
   virality:
@@ -1160,6 +1167,7 @@ export async function POST(request: Request) {
     }
 
     const lengthPlan = buildLengthPlan(input.inputLength, input.numberOfPosts);
+    const embeddingClient = getEmbeddingClient();
     const retrievalQuery = [
       input.goal,
       input.style,
@@ -1178,10 +1186,16 @@ export async function POST(request: Request) {
       .join(" | ");
 
     const retrieval = await retrieveLibraryContext({
-      client: getEmbeddingClient(),
+      client: embeddingClient,
       query: retrievalQuery,
       limit: Math.min(12, Math.max(6, input.numberOfPosts * 3)),
       goal: input.goal,
+    });
+    const soisContext = await retrieveSoisContext({
+      client: embeddingClient,
+      query: retrievalQuery,
+      inputType: input.inputType,
+      limit: Math.min(12, Math.max(6, input.numberOfPosts * 2)),
     });
 
     const examplesForPrompt = retrieval.entries
@@ -1280,9 +1294,23 @@ export async function POST(request: Request) {
     const webEvidenceLines = webFactCheck.evidenceLines
       .slice(0, FACT_CHECK_EVIDENCE_PROMPT_LIMIT)
       .map((line) => normalizeNoEmDash(line));
+    const soisEvidenceLines = soisContext.items.slice(0, SOIS_EVIDENCE_PROMPT_LIMIT).map((item, index) => {
+      const compactText = normalizeNoEmDash(item.text.replace(/\s*\n+\s*/g, " | "));
+      return `${index + 1}. [${item.categoryLabel} ${item.subcategory}] ${item.subcategoryLabel}
+- Source: ${item.sourceUrl}
+- Evidence: ${compactText}`;
+    });
     const factCheckDirective = webEvidenceLines.length
       ? "Web evidence is available. For factual claims, stay consistent with the evidence context and avoid unsupported new hard facts. Prefer real numbers only when they can be grounded in this evidence or other provided context."
       : "Web evidence is unavailable or empty. Do not invent hard facts or numbers. Rewrite uncertain factual claims as opinion, observation, or hypothesis.";
+    const soisDirective = soisContext.enabled
+      ? "SOIS benchmark evidence is available. Use it as a first-class factual source for hooks, mechanisms, caveats, and numeric anchors."
+      : "SOIS benchmark evidence is unavailable for this run. Do not fabricate benchmark numbers or section-specific claims.";
+    const soisStatusSummary = soisContext.enabled
+      ? soisContext.warning
+        ? `enabled (${soisContext.method}) with warning: ${soisContext.warning} (sections fetched: ${soisContext.fetchedSections}/${soisContext.availableSections})`
+        : `enabled (${soisContext.method}) (sections fetched: ${soisContext.fetchedSections}/${soisContext.availableSections})`
+      : soisContext.warning || "disabled";
     const factCheckStatusSummary = webFactCheck.enabled
       ? webFactCheck.warning
         ? `enabled (${webFactCheck.provider}) with warning: ${webFactCheck.warning}`
@@ -1294,6 +1322,9 @@ export async function POST(request: Request) {
     const factCheckEvidenceForPrompt = webEvidenceLines.length
       ? webEvidenceLines.join("\n")
       : "No live web evidence available for this request.";
+    const soisEvidenceForPrompt = soisEvidenceLines.length
+      ? soisEvidenceLines.join("\n")
+      : "No SOIS benchmark evidence available for this request.";
 
     const responseSchema = makeGeneratePostsResponseSchema(input.numberOfPosts);
     const promptGuides = await getPromptGuides();
@@ -1307,6 +1338,20 @@ ${promptGuides.aso}
 
 Paywall guide from repository prompt file:
 ${promptGuides.paywall}
+`
+      : "";
+
+    const productUpdateToneContext =
+      looksLikeProductUpdatePostType(input.inputType) &&
+      isBrandVoicePreset(input.style) &&
+      input.style === "adapty"
+        ? await getProductUpdateToneContext()
+        : "";
+    const productUpdateToneSection = productUpdateToneContext
+      ? `
+
+Product update tone reference (Adapty changelog style — use as inspiration for rhythm, structure, and voice):
+${productUpdateToneContext}
 `
       : "";
 
@@ -1325,7 +1370,7 @@ ${toBulletedSection(LINKEDIN_WRITING_CONTRACT)}
 
 Repository writing guide:
 ${promptGuides.writing}
-${sauceDomainGuideSection}
+${sauceDomainGuideSection}${productUpdateToneSection}
 Repository fact-check guide:
 ${promptGuides.factCheck}
 
@@ -1367,8 +1412,10 @@ Generation request:
 - Meme template preferences: ${memeTemplatePreferences.length ? memeTemplatePreferences.join(", ") : "auto"}
 - Meme variants per post target: ${memeVariantTarget}
 - Fact-check policy: ${factCheckDirective}
+- SOIS benchmark policy: ${soisDirective}
 - Numeric evidence policy: Prefer real numeric anchors when available, but use only numbers grounded in provided evidence, inputs, library metrics, or chart data.
 - Fact-check status: ${factCheckStatusSummary}
+- SOIS benchmark status: ${soisStatusSummary}
 - Fact-check queries:
 ${factCheckQueriesSummary}
 - Post type: ${input.inputType}
@@ -1390,6 +1437,9 @@ ${performanceInsightsForPrompt}
 
 Web fact-check evidence context:
 ${factCheckEvidenceForPrompt}
+
+SOIS benchmark evidence context:
+${soisEvidenceForPrompt}
 
 Ranked RSS context for industry news reactions:
 ${industryNewsContextSummary}
@@ -1576,6 +1626,7 @@ ${rankedContextLines}`;
     const shouldEnforceParagraphNormalization = !MEME_INPUT_TYPE_PATTERN.test(input.inputType.toLowerCase());
     const hasNumericInputsAvailable =
       webEvidenceLines.length > 0 ||
+      soisEvidenceLines.length > 0 ||
       preparedChartInput !== null ||
       /\d/.test(input.time) ||
       /\d/.test(input.details) ||

@@ -104,6 +104,9 @@ Everything below is already implemented in this repo on `main`.
 - Two libraries are read and merged for context:
   - `content/linkedin-adapty-library.txt`
   - `content/linkedin-others-library.txt`
+- Optional SOIS benchmark context can be fetched from Adapty internal endpoint and merged into generation evidence:
+  - `https://dags.adpinfra.dev/webhook/sois-data`
+  - Categories: `ltv`, `conversions`, `pricing`, `market`, `retention`, `refunds`, `stores`, `ai`, `paywalls`, `webpaywalls`
 - Block separator: line containing `---`
 - Optional performance metadata per block:
   - `Impressions`, `Likes`, `Comments`, `Repost/Reposts`, `Clicks`, `CTR`
@@ -196,6 +199,10 @@ Use `.env` (local) and set same keys in Vercel project settings.
 - `ENABLE_LANCEDB=true|false`
 - `OPENAI_EMBEDDING_MODEL` (default `text-embedding-3-small`, recommended `text-embedding-3-large` for quality-first retrieval)
 - `OPENAI_EMBEDDING_BASE_URL` (optional)
+- `ENABLE_SOIS_CONTEXT=true|false` (default: true)
+- `SOIS_DATA_URL` (default: `https://dags.adpinfra.dev/webhook/sois-data`)
+- `SOIS_DATA_USERNAME`
+- `SOIS_DATA_PASSWORD`
 
 ### Memes
 

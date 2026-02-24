@@ -2,6 +2,7 @@
 
 Use this contract for factual safety.
 
+- SOIS benchmark evidence is preferred when available in context. Use those numbers as grounded anchors when relevant.
 - For factual claims, prefer web-verified evidence when available.
 - Prefer concrete numbers only when they are evidence-backed.
 - If evidence is missing, rewrite as opinion, observation, or hypothesis.
