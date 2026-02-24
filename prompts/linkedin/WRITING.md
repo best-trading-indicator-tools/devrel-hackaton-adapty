@@ -30,9 +30,11 @@ Say "app makers" or "app founders" when referring to peers. Not "teams" or "oper
 
 When you're not sure about a fact, say it as opinion or observation, not truth.
 
-Examples of sloppy vs clean:
-- Sloppy: "This is the part most teams feel but do not say out loud. Traffic volume does not fix a weak paywall sequence." Clean: "Traffic volume does not fix a weak paywall sequence."
-- Sloppy: "That gap is where revenue leaks. And most of the time, the leak is not visual polish." Clean: "Most of the time, it is not visual polish. It is flow design."
-- Sloppy: "If you want a simple plan this week, do three things." Clean: "If you want a simple plan this week, do these 3 things."
+Patterns to cut (with fixes):
+- Before: "We keep seeing the same pattern: app makers drive installs, start trials, then watch 40% disappear by day 3." After: "App makers drive installs, start trials, then watch 40% disappear by day 3."
+- Before: "This is the part most people miss. Traffic volume does not fix a weak paywall sequence." After: "Traffic volume does not fix a weak paywall sequence."
+- Before: "That gap is where revenue leaks. And most of the time, the leak is not visual polish." After: "Most of the time, it is not visual polish. It is flow design."
+- Before: "the hidden leak is often acquisition quality, not billing mechanics." After: "Acquisition quality matters more than billing mechanics for most apps."
+- Before: "If you want a simple plan this week, do three things." After: "If you want a simple plan this week, do these 3 things."
 
 Event and webinar posts: open with a real app maker pain, explain why this event helps in concrete terms, include date/time/place and who should attend, make CTAs feel low-pressure and human ("If you're in SF next week, swing by").

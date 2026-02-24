@@ -1734,12 +1734,19 @@ Do this:
 
 Keep all facts, numbers, arguments, and structure intact. Do not add new content. Only tighten what is there.
 
-Examples of what to fix:
+Patterns to catch and fix:
+
+Before: "We keep seeing the same pattern: app makers drive installs, start trials, then watch 40% disappear by day 3."
+After: "App makers drive installs, start trials, then watch 40% disappear by day 3."
+
 Before: "This is the part most teams feel but do not say out loud. Traffic volume does not fix a weak paywall sequence."
 After: "Traffic volume does not fix a weak paywall sequence."
 
 Before: "That gap is where revenue leaks. And most of the time, the leak is not visual polish."
 After: "Most of the time, it is not visual polish. It is flow design."
+
+Before: "the hidden leak is often acquisition quality, not billing mechanics."
+After: "Acquisition quality matters more than billing mechanics for most apps."
 
 Before: "If you want a simple plan this week, do three things."
 After: "If you want a simple plan this week, do these 3 things."`;
