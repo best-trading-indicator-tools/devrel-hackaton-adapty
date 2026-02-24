@@ -3209,7 +3209,7 @@ export default function Home() {
 
           <div className="generation-overlay__card">
             <p className="generation-overlay__kicker">Adapty Content Studio</p>
-            <h2 className="generation-overlay__title">Generating your post set</h2>
+            <h2 className="generation-overlay__title">Generating your posts set</h2>
             <p className="generation-overlay__subtitle">
               Running retrieval, writing, and quality pass.
             </p>
