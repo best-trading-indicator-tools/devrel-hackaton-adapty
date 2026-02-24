@@ -7,6 +7,7 @@ const DEFAULT_FEED_TIMEOUT_MS = 4500;
 const DEFAULT_ITEMS_PER_FEED = 12;
 const MAX_XML_LENGTH = 1_800_000;
 const INDUSTRY_NEWS_PATTERN = /\bindustry news reaction\b/i;
+const TOPIC_SIMILARITY_THRESHOLD = 0.52;
 
 type RawNewsItem = {
   sourceId: string;
@@ -54,6 +55,13 @@ type CachedFeedSnapshot = {
   feedsAttempted: number;
   feedsSucceeded: number;
   warning?: string;
+};
+
+type RankedCandidate = {
+  item: RawNewsItem;
+  score: number;
+  matchedKeywords: string[];
+  ageDays: number;
 };
 
 const feedCache: CachedFeedSnapshot = {
@@ -118,6 +126,129 @@ function truncate(value: string, maxChars: number): string {
     return value;
   }
   return value.slice(0, maxChars).replace(/\s+\S*$/, "").trim();
+}
+
+function tokenizeTopicText(value: string): Set<string> {
+  const stopwords = new Set([
+    "about",
+    "after",
+    "again",
+    "also",
+    "amid",
+    "among",
+    "apps",
+    "app",
+    "are",
+    "beta",
+    "change",
+    "changes",
+    "for",
+    "from",
+    "here",
+    "into",
+    "just",
+    "latest",
+    "more",
+    "most",
+    "news",
+    "new",
+    "now",
+    "over",
+    "patch",
+    "post",
+    "release",
+    "rollout",
+    "says",
+    "that",
+    "the",
+    "their",
+    "this",
+    "today",
+    "update",
+    "version",
+    "week",
+    "with",
+    "you",
+    "your",
+  ]);
+
+  const normalized = value
+    .toLowerCase()
+    .replace(/[^a-z0-9\s]/g, " ")
+    .split(/\s+/)
+    .map((token) => token.trim())
+    .filter((token) => token.length >= 3)
+    .filter((token) => !stopwords.has(token))
+    .filter((token) => !/^\d+(\.\d+)*$/.test(token));
+
+  return new Set(normalized.slice(0, 48));
+}
+
+function jaccardSimilarity(a: Set<string>, b: Set<string>): number {
+  if (!a.size || !b.size) {
+    return 0;
+  }
+
+  let intersection = 0;
+  for (const token of a) {
+    if (b.has(token)) {
+      intersection += 1;
+    }
+  }
+
+  const union = a.size + b.size - intersection;
+  if (!union) {
+    return 0;
+  }
+
+  return intersection / union;
+}
+
+function isNearDuplicateTopic(a: RawNewsItem, b: RawNewsItem): boolean {
+  const aTokens = tokenizeTopicText(`${a.title} ${a.summary}`);
+  const bTokens = tokenizeTopicText(`${b.title} ${b.summary}`);
+
+  return jaccardSimilarity(aTokens, bTokens) >= TOPIC_SIMILARITY_THRESHOLD;
+}
+
+function selectDiversifiedRankedItems(ranked: RankedCandidate[], target: number): RankedCandidate[] {
+  const selected: RankedCandidate[] = [];
+  const selectedUrls = new Set<string>();
+
+  for (const candidate of ranked) {
+    const candidateUrl = candidate.item.url.toLowerCase().trim();
+    if (selectedUrls.has(candidateUrl)) {
+      continue;
+    }
+
+    const tooSimilar = selected.some((existing) => isNearDuplicateTopic(candidate.item, existing.item));
+    if (tooSimilar) {
+      continue;
+    }
+
+    selected.push(candidate);
+    selectedUrls.add(candidateUrl);
+
+    if (selected.length >= target) {
+      return selected;
+    }
+  }
+
+  for (const candidate of ranked) {
+    const candidateUrl = candidate.item.url.toLowerCase().trim();
+    if (selectedUrls.has(candidateUrl)) {
+      continue;
+    }
+
+    selected.push(candidate);
+    selectedUrls.add(candidateUrl);
+
+    if (selected.length >= target) {
+      break;
+    }
+  }
+
+  return selected;
 }
 
 function escapeRegex(value: string): string {
@@ -377,7 +508,7 @@ export async function runIndustryNewsContext(input: IndustryNewsInput): Promise<
   const snapshot = await loadRecentFeedItems(maxAgeDays);
   const keywords = buildKeywordSet(input);
 
-  const ranked = snapshot.items
+  const rankedAll = snapshot.items
     .map((item) => {
       const scoreData = rankItem(item, keywords);
       return {
@@ -385,8 +516,9 @@ export async function runIndustryNewsContext(input: IndustryNewsInput): Promise<
         ...scoreData,
       };
     })
-    .sort((a, b) => b.score - a.score || b.item.publishedAtMs - a.item.publishedAtMs)
-    .slice(0, topItemsTarget);
+    .sort((a, b) => b.score - a.score || b.item.publishedAtMs - a.item.publishedAtMs);
+
+  const ranked = selectDiversifiedRankedItems(rankedAll, topItemsTarget);
 
   const items: RankedIndustryNewsItem[] = ranked.map((entry) => ({
     sourceId: entry.item.sourceId,

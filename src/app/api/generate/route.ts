@@ -938,14 +938,27 @@ export async function POST(request: Request) {
 - Summary: ${normalizeNoEmDash(item.summary)}
 - Score: ${item.score}${keywordPart}`;
     });
+    const industryNewsTopicPlanLines =
+      looksLikeIndustryNewsReactionPostType(input.inputType) && input.numberOfPosts > 1 && industryNewsContext.items.length
+        ? Array.from({ length: input.numberOfPosts }, (_, index) => {
+            const item = industryNewsContext.items[index % industryNewsContext.items.length];
+            return `Post ${index + 1}: [${item.sourceName}] ${normalizeNoEmDash(item.title)}
+- URL: ${item.url}`;
+          })
+        : [];
     const industryNewsExecutionDirective = looksLikeIndustryNewsReactionPostType(input.inputType)
       ? industryNewsPromptLines.length
-        ? "Industry news context is available. Anchor each post to one relevant recent news item and explain practical implications for app teams."
+        ? input.numberOfPosts > 1
+          ? "Industry news context is available. Diversify: each post must anchor to a different primary news item when possible. Follow the per-post topic plan and avoid repeating one story across all posts unless there are fewer unique news items than requested posts."
+          : "Industry news context is available. Anchor the post to one relevant recent news item and explain practical implications for app teams."
         : "Industry news context is empty. Do not pretend there is breaking news; provide an opinionated reaction format without fabricated details."
       : "No industry news reaction context required.";
     const industryNewsContextSummary = industryNewsPromptLines.length
       ? industryNewsPromptLines.join("\n\n")
       : "No ranked RSS items available within recency window.";
+    const industryNewsTopicPlanSummary = industryNewsTopicPlanLines.length
+      ? industryNewsTopicPlanLines.join("\n\n")
+      : "(none)";
     const industryNewsStatusSummary = industryNewsContext.enabled
       ? industryNewsContext.warning
         ? `enabled with warning: ${industryNewsContext.warning} (feeds ok: ${industryNewsContext.feedsSucceeded}/${industryNewsContext.feedsAttempted})`
@@ -1009,6 +1022,7 @@ Output contract:
   - hook: first line
   - body: full post text excluding final CTA line
   - cta: final action line
+- For industry news reaction batches with multiple posts, use different primary news topics across posts when multiple items are provided.
 - Use line breaks for readability.
 - Avoid overusing emojis and hashtags.
 - If CTA link is provided, include it naturally in the CTA line.
@@ -1063,18 +1077,37 @@ ${factCheckEvidenceForPrompt}
 Ranked RSS context for industry news reactions:
 ${industryNewsContextSummary}
 
+Per-post industry topic plan (follow post order when provided):
+${industryNewsTopicPlanSummary}
+
 Also generate a list of hook suggestions inspired by this style and request.
 `;
 
-    const runGeneration = (model: string) => {
+    type GeneratedPost = {
+      length: "short" | "standard" | "long";
+      hook: string;
+      body: string;
+      cta: string;
+    };
+
+    type GeneratedBatch = {
+      hooks: string[];
+      posts: GeneratedPost[];
+    };
+
+    const runGeneration = (params: {
+      model: string;
+      userPrompt: string;
+      responseSchema: ReturnType<typeof makeGeneratePostsResponseSchema>;
+    }): Promise<GeneratedBatch> => {
       if (oauthCredentials) {
         return runCodexOauthGeneration({
           oauth: oauthCredentials,
-          model,
+          model: params.model,
           systemPrompt,
-          userPrompt,
+          userPrompt: params.userPrompt,
           imageDataUrl: input.imageDataUrl || undefined,
-          responseSchema,
+          responseSchema: params.responseSchema,
         });
       }
 
@@ -1084,32 +1117,142 @@ Also generate a list of hook suggestions inspired by this style and request.
 
       return runOpenAiChatGeneration({
         token: openAiApiToken,
-        model,
+        model: params.model,
         systemPrompt,
-        userPrompt,
+        userPrompt: params.userPrompt,
         imageDataUrl: input.imageDataUrl || undefined,
-        responseSchema,
+        responseSchema: params.responseSchema,
       });
+    };
+
+    const runGenerationWithFallback = async (params: {
+      userPrompt: string;
+      responseSchema: ReturnType<typeof makeGeneratePostsResponseSchema>;
+    }) => {
+      try {
+        const parsed = await runGeneration({
+          model: requestedModel,
+          userPrompt: params.userPrompt,
+          responseSchema: params.responseSchema,
+        });
+        return {
+          parsed,
+          modelUsed: requestedModel,
+          fallbackUsed: false,
+        };
+      } catch (primaryError) {
+        const canFallback =
+          fallbackModel.trim().length > 0 && fallbackModel !== requestedModel && isModelAccessError(primaryError);
+
+        if (!canFallback) {
+          throw primaryError;
+        }
+
+        const parsed = await runGeneration({
+          model: fallbackModel,
+          userPrompt: params.userPrompt,
+          responseSchema: params.responseSchema,
+        });
+        return {
+          parsed,
+          modelUsed: fallbackModel,
+          fallbackUsed: true,
+        };
+      }
     };
 
     let modelUsed = requestedModel;
     let fallbackUsed = false;
 
-    let parsed;
+    let parsed: GeneratedBatch;
+    const shouldSplitIndustryNewsBatch =
+      looksLikeIndustryNewsReactionPostType(input.inputType) && input.numberOfPosts > 1 && industryNewsContext.items.length > 1;
 
-    try {
-      parsed = await runGeneration(requestedModel);
-    } catch (primaryError) {
-      const canFallback =
-        fallbackModel.trim().length > 0 && fallbackModel !== requestedModel && isModelAccessError(primaryError);
+    if (shouldSplitIndustryNewsBatch) {
+      const batchHooks: string[] = [];
+      const batchPosts: GeneratedPost[] = [];
+      const requiredHookCount = Math.max(5, input.numberOfPosts);
+      const rankedContextLines = industryNewsContext.items
+        .map((item, index) => `${index + 1}. ${normalizeNoEmDash(item.title)} (${item.sourceName})`)
+        .join("\n");
 
-      if (!canFallback) {
-        throw primaryError;
+      for (let index = 0; index < input.numberOfPosts; index += 1) {
+        const assignedItem = industryNewsContext.items[index % industryNewsContext.items.length];
+        const postLength = lengthPlan[index] ?? "standard";
+        const singlePostSchema = makeGeneratePostsResponseSchema(1);
+        const singlePostPrompt = `${userPrompt}
+
+Hard per-post assignment for this call:
+- Generate exactly 1 post in posts array.
+- This is post ${index + 1} of ${input.numberOfPosts} in the full batch.
+- Required length: ${postLength} -> ${lengthGuide(postLength)}
+- Mandatory primary topic:
+  - Source: ${assignedItem.sourceName}
+  - Title: ${normalizeNoEmDash(assignedItem.title)}
+  - URL: ${assignedItem.url}
+  - Published: ${assignedItem.publishedAtIso}
+  - Summary: ${normalizeNoEmDash(assignedItem.summary)}
+- Use this assigned topic as the main story driver. Do not anchor this post to another ranked item as primary.
+- Keep implication and CTA aligned to this assigned topic.
+
+Ranked item index for this post: ${(index % industryNewsContext.items.length) + 1}
+All ranked item titles for reference:
+${rankedContextLines}`;
+
+        const singleRun = await runGenerationWithFallback({
+          userPrompt: singlePostPrompt,
+          responseSchema: singlePostSchema,
+        });
+
+        if (singleRun.fallbackUsed) {
+          fallbackUsed = true;
+          modelUsed = singleRun.modelUsed;
+        }
+
+        batchHooks.push(...singleRun.parsed.hooks.map((hook) => normalizeNoEmDash(hook)));
+        if (singleRun.parsed.posts[0]) {
+          batchPosts.push(singleRun.parsed.posts[0]);
+        }
       }
 
-      parsed = await runGeneration(fallbackModel);
-      modelUsed = fallbackModel;
-      fallbackUsed = true;
+      const dedupedHooks: string[] = [];
+      for (const hook of batchHooks) {
+        if (!dedupedHooks.includes(hook)) {
+          dedupedHooks.push(hook);
+        }
+        if (dedupedHooks.length >= 20) {
+          break;
+        }
+      }
+
+      if (dedupedHooks.length < requiredHookCount) {
+        for (const post of batchPosts) {
+          const hook = normalizeNoEmDash(post.hook);
+          if (!dedupedHooks.includes(hook)) {
+            dedupedHooks.push(hook);
+          }
+          if (dedupedHooks.length >= requiredHookCount) {
+            break;
+          }
+        }
+      }
+
+      if (batchPosts.length !== input.numberOfPosts) {
+        throw new Error("Failed to generate full industry news batch with assigned topics.");
+      }
+
+      parsed = {
+        hooks: dedupedHooks.slice(0, 20),
+        posts: batchPosts.slice(0, input.numberOfPosts),
+      };
+    } else {
+      const batchRun = await runGenerationWithFallback({
+        userPrompt,
+        responseSchema,
+      });
+      parsed = batchRun.parsed;
+      modelUsed = batchRun.modelUsed;
+      fallbackUsed = batchRun.fallbackUsed;
     }
 
     const includeMemeCompanion = shouldGenerateMemes(input.inputType);
