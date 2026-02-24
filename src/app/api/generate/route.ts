@@ -45,6 +45,13 @@ const FACT_CHECK_EVIDENCE_PROMPT_LIMIT = 4;
 const SOIS_EVIDENCE_PROMPT_LIMIT = 8;
 const INDUSTRY_NEWS_REACTION_PATTERN = /\bindustry news reaction\b/i;
 const PRODUCT_UPDATE_PATTERN = /\bproduct feature launch\b/i;
+const SOIS_ACRONYM_PATTERN = /\bsois\b/i;
+const SOIS_EXPANDED_PATTERN = /\bstate of in[-\s]?app subscriptions\b/i;
+const AI_LABEL_STYLE_OPENER_PATTERN = /(?:^|[.!?]\s+)[A-Za-z][A-Za-z ]{1,24}:\s+/i;
+const HOOK_IF_OPENING_PATTERN = /^\s*if\b/i;
+const ROBOTIC_FILLER_PATTERN = /\b(?:the|this|that)\s+[a-z][a-z\s]{0,24}\s+is real\./i;
+const SNAPSHOT_JARGON_PATTERN = /\b(for one segment snapshot|segment snapshot|rows analyzed|sample size)\b/i;
+const YOU_YOUR_PATTERN = /\b(you|your)\b/i;
 
 function looksLikeProductUpdatePostType(inputType: string): boolean {
   return PRODUCT_UPDATE_PATTERN.test(inputType);
@@ -65,6 +72,11 @@ const GOAL_PLAYBOOKS: Record<ContentGoal, string> = {
 
 const LINKEDIN_WRITING_CONTRACT = [
   "Write like a cohesive mini-article, not stacked slogans.",
+  "For every brand voice, sound like a close, smart friend talking to app makers: direct, relatable, and practical.",
+  "Use plain spoken language app makers use in real conversations.",
+  "Use this structure by default: 1) concrete observation, 2) why it matters, 3) mechanism or example, 4) practical next move.",
+  "Address the reader directly at least once with you, your app, or your team when natural.",
+  "Include one actionable operator move with a clear verb, such as test, measure, compare, cut, fix, or ship.",
   "Use natural paragraph formatting. One paragraph can contain 1 to a few sentences, with blank lines between subtopics.",
   "Keep paragraph rhythm human, usually 2 to 5 sentences before a blank line.",
   "Keep one-sentence paragraphs occasional for emphasis, not the dominant rhythm.",
@@ -72,10 +84,16 @@ const LINKEDIN_WRITING_CONTRACT = [
   "Mix short, medium, and long sentence lengths so rhythm feels human.",
   "Avoid internet template cadence and motivational filler patterns.",
   "Avoid rhetorical label openers such as Strong stance:, Hard truth:, Hot take:, or Caveat,.",
+  "Avoid sentence openings using label-plus-colon scaffolds like Uncomfortable truth:, Reality check:, or Bottom line:.",
   "Avoid MBA buzzword fog. Prefer concrete verbs, nouns, and mechanics.",
   "Treat readers as informed operators. Avoid condescending, patronizing, or insulting language.",
   "Be specific when possible. Name exact event format, source, metric, role, date, place, or example instead of vague language.",
+  "If referencing SOIS data, write the first mention as State of In-App Subscriptions (SOIS), then use SOIS after that.",
+  "When style is clickbait and goal is virality, hook first sentence must be one clear factual observation people already suspect but rarely say out loud.",
+  "For clickbait plus virality hooks, prefer direct reader framing with you or your when natural.",
+  "For clickbait plus virality hooks, do not open with If ...",
   "Prefer real numbers when available, but only if they are grounded in provided evidence, inputs, or chart data.",
+  "When citing data, keep it plain language. Avoid internal phrasing like segment snapshot, rows analyzed, or sample size.",
   "Position Adapty as a category-leading monetization solution through concrete proof and mechanism-level explanation, not empty superlatives.",
   "Include at least one concrete proof unit per post, such as a number, metric, micro-example, or specific scenario.",
   "Include caveats and boundary conditions like most, unless, in practice, or for this category.",
@@ -152,8 +170,15 @@ const HARD_QUALITY_GATE = [
   "If evidence or numeric inputs are available, include at least one real numeric anchor.",
   "Never invent numbers, percentages, dates, or benchmarks.",
   "Reject outputs without concrete proof units and without caveats.",
+  "Reject unexplained acronyms. For SOIS, first mention must be State of In-App Subscriptions (SOIS).",
+  "Reject sentence-start label scaffolds using word-plus-colon format.",
   "Reject low-value opener clichés like hard truth, game changer, nobody talks about, or let that sink in.",
   "Reject rhetorical label openers such as Strong stance:, Hard truth:, Hot take:, or Caveat,.",
+  "Reject robotic or corporate-lame phrasing and replace it with direct human language.",
+  "Require at least one direct reader line using you or your team when natural.",
+  "Require one practical next action sentence with an operator verb.",
+  "For clickbait plus virality, hook must be one declarative factual sentence and must not start with If ...",
+  "Reject robotic phrasing like The timing gap is real. and internal dataset wording such as segment snapshot, rows analyzed, or sample size.",
   "Reject condescending or insulting phrasing toward the reader.",
   "When positioning Adapty, require concrete proof or mechanism-level support instead of empty best-in-market claims.",
   "For event and webinar posts, include explicit logistics and who should attend.",
@@ -172,6 +197,12 @@ const ADAPTY_SUPERLATIVE_PATTERN =
   /\badapty\b[\s\S]{0,90}\b(best|best-in-class|best in class|best on the market|number one|#1|no\.?\s*1|unbeatable|ultimate|only real)\b/i;
 const ADAPTY_PROOF_SIGNAL_PATTERN =
   /\b(because|for example|for instance|in practice|based on|case study|data|metric|trial|conversion|retention|benchmark|experiment|evidence|proof)\b/i;
+const CORPORATE_JARGON_PATTERN =
+  /\b(?:synergy|stakeholder(?:s)?|stakeholder alignment|north star|best-in-class|go-to-market(?:\s+motion)?|thought leadership|unlock value|move the needle|bandwidth|circle back|leverage(?:d|ing)?|low-hanging fruit|paradigm|core competency|value proposition|strategic pillar)\b/i;
+const ROBOTIC_CORPORATE_PATTERN =
+  /\b(?:it is important to note|in today's|in order to|this underscores|therefore teams must|at scale we|from a strategic standpoint)\b/i;
+const OPERATOR_ACTION_VERB_PATTERN =
+  /\b(?:test|measure|compare|check|audit|fix|ship|cut|reduce|increase|prioritize|validate|instrument|review|run)\b/i;
 const EVENT_FORMAT_PATTERN =
   /\b(webinar|roundtable|workshop|summit|conference|meetup|panel|ama|office hours|fireside|dinner|breakfast|happy hour|networking)\b/i;
 const SPECIFICITY_ANCHOR_PATTERN =
@@ -334,6 +365,43 @@ function hasUnsupportedAdaptySuperlative(value: string): boolean {
   return !ADAPTY_PROOF_SIGNAL_PATTERN.test(value);
 }
 
+function hasCorporateJargon(value: string): boolean {
+  return CORPORATE_JARGON_PATTERN.test(value);
+}
+
+function hasRoboticCorporateTone(value: string): boolean {
+  return ROBOTIC_CORPORATE_PATTERN.test(value);
+}
+
+function hasDirectReaderAddress(value: string): boolean {
+  return /\b(you|your|your app|your team)\b/i.test(value);
+}
+
+function hasOperatorActionLanguage(value: string): boolean {
+  return OPERATOR_ACTION_VERB_PATTERN.test(value);
+}
+
+function hasUnexpandedSoisAcronym(value: string): boolean {
+  return SOIS_ACRONYM_PATTERN.test(value) && !SOIS_EXPANDED_PATTERN.test(value);
+}
+
+function hasLabelStyleSentenceOpener(value: string): boolean {
+  return AI_LABEL_STYLE_OPENER_PATTERN.test(value);
+}
+
+function hasDenseMetricDump(value: string): boolean {
+  const sentences = splitSentenceUnits(value);
+  return sentences.some((sentence) => {
+    const wordCount = sentence.split(/\s+/).filter(Boolean).length;
+    const numericCount = countNumericTokens(sentence);
+    return wordCount >= 24 && numericCount >= 3;
+  });
+}
+
+function shouldEnforceClickbaitViralityHook(style: string, goal: ContentGoal): boolean {
+  return style.trim().toLowerCase() === "clickbait" && goal === "virality";
+}
+
 function hasStaccatoParagraphRhythm(body: string): boolean {
   const paragraphs = splitParagraphs(body);
 
@@ -384,6 +452,8 @@ function evaluatePostQuality(params: {
     body: string;
     cta: string;
   };
+  style: string;
+  goal: ContentGoal;
   inputType: string;
   time: string;
   place: string;
@@ -394,6 +464,7 @@ function evaluatePostQuality(params: {
   const lowerInputType = params.inputType.toLowerCase();
   const isMeme = MEME_INPUT_TYPE_PATTERN.test(lowerInputType);
   const isEvent = /event|webinar/.test(lowerInputType);
+  const isClickbaitVirality = shouldEnforceClickbaitViralityHook(params.style, params.goal);
   const nonEmptyBodyLines = params.post.body
     .split(/\n+/)
     .map((line) => line.trim())
@@ -411,8 +482,44 @@ function evaluatePostQuality(params: {
     issues.push("When claiming Adapty is best-in-market, support it with concrete proof, mechanism, or evidence.");
   }
 
+  if (!isMeme && hasCorporateJargon(combinedText)) {
+    issues.push("Avoid corporate jargon. Use plain, direct language app makers use in real conversations.");
+  }
+
+  if (!isMeme && hasRoboticCorporateTone(combinedText)) {
+    issues.push("Tone sounds robotic or corporate. Rewrite to sound human, direct, and relatable.");
+  }
+
+  if (!isMeme && !hasDirectReaderAddress(combinedText)) {
+    issues.push("Add at least one direct reader line using you, your app, or your team.");
+  }
+
+  if (!isMeme && !hasOperatorActionLanguage(combinedText)) {
+    issues.push("Add one practical operator action sentence with a clear verb like test, measure, compare, fix, or ship.");
+  }
+
+  if (!isMeme && hasUnexpandedSoisAcronym(combinedText)) {
+    issues.push("Write SOIS as State of In-App Subscriptions (SOIS) on first mention.");
+  }
+
+  if (!isMeme && hasLabelStyleSentenceOpener(combinedText)) {
+    issues.push("Avoid sentence-start label scaffolds using word-plus-colon format.");
+  }
+
   if (!isMeme && hasAiScaffoldOpener(params.post.body)) {
     issues.push("Avoid AI-style rhetorical label openers such as Strong stance:, Hard truth:, Hot take:, or Caveat,.");
+  }
+
+  if (!isMeme && ROBOTIC_FILLER_PATTERN.test(combinedText)) {
+    issues.push("Avoid robotic filler phrasing like The timing gap is real.");
+  }
+
+  if (!isMeme && SNAPSHOT_JARGON_PATTERN.test(combinedText)) {
+    issues.push("Avoid internal dataset phrasing like segment snapshot, rows analyzed, or sample size.");
+  }
+
+  if (!isMeme && hasDenseMetricDump(combinedText)) {
+    issues.push("Avoid dense metric dumps in one sentence. Keep data phrasing plain and human.");
   }
 
   if (!isMeme && countConcreteProofUnits(combinedText) < 1) {
@@ -437,6 +544,34 @@ function evaluatePostQuality(params: {
 
   if (!isMeme && hasStaccatoParagraphRhythm(params.post.body)) {
     issues.push("Body rhythm is too staccato. Use fuller paragraphs with mostly 2-4 sentences and keep one-line paragraphs occasional.");
+  }
+
+  if (!isMeme && isClickbaitVirality) {
+    const hook = params.post.hook.trim();
+    const hookSentences = splitSentenceUnits(hook);
+    const firstSentence = hookSentences[0]?.trim() ?? hook;
+
+    if (hookSentences.length !== 1) {
+      issues.push("For clickbait plus virality, hook must be one sentence.");
+    }
+
+    if (firstSentence.endsWith("?")) {
+      issues.push("For clickbait plus virality, hook should be a declarative statement, not a question.");
+    }
+
+    if (HOOK_IF_OPENING_PATTERN.test(firstSentence)) {
+      issues.push("For clickbait plus virality, do not open hook with If ...");
+    }
+
+    if (countNumericTokens(firstSentence) < 1 && !SPECIFICITY_ANCHOR_PATTERN.test(firstSentence)) {
+      issues.push(
+        "For clickbait plus virality, hook must open with one concrete factual anchor (number, named platform, date, metric, or source).",
+      );
+    }
+
+    if (!YOU_YOUR_PATTERN.test(firstSentence)) {
+      issues.push("For clickbait plus virality, prefer direct user framing with you or your when natural.");
+    }
   }
 
   if (isEvent) {
@@ -822,12 +957,15 @@ function toBulletedSection(lines: readonly string[]): string {
 
 function resolveBrandVoiceDirective(style: string): string {
   const normalizedStyle = style.trim().toLowerCase();
+  const sharedHumanDirective =
+    "Regardless of voice, sound like a close, smart best friend talking to app makers: human, direct, relatable, and practical. Never sound robotic or corporate-lame.";
 
   if (isBrandVoicePreset(normalizedStyle)) {
-    return BRAND_VOICE_PROFILES[normalizedStyle].promptDirective;
+    const baseDirective = BRAND_VOICE_PROFILES[normalizedStyle].promptDirective;
+    return `${baseDirective} ${sharedHumanDirective}`;
   }
 
-  return `Follow custom brand voice exactly as requested: "${style.trim()}". Keep the output coherent, practical, and human sounding.`;
+  return `Follow custom brand voice exactly as requested: "${style.trim()}". ${sharedHumanDirective}`;
 }
 
 function resolveAutoHookDirective(params: { style: string; inputType: string; goal: ContentGoal }): string {
@@ -836,7 +974,7 @@ function resolveAutoHookDirective(params: { style: string; inputType: string; go
 
   const styleDirective = (() => {
     if (styleKey === "clickbait") {
-      return "Use high-curiosity hook framing with clear stakes, while keeping claims truthful and specific.";
+      return "Use high-curiosity hook framing with clear stakes, while keeping claims truthful and specific. Avoid clickbait theater and keep it credible.";
     }
     if (styleKey === "founder personal") {
       return "Use founder-style hooks that sound lived, practical, and grounded in real operating pain.";
@@ -888,7 +1026,12 @@ function resolveAutoHookDirective(params: { style: string; inputType: string; go
     return "Balance reach, clarity, and action intent in hook phrasing.";
   })();
 
-  return `${styleDirective} ${postTypeDirective} ${goalDirective}`;
+  const clickbaitViralityDirective =
+    styleKey === "clickbait" && params.goal === "virality"
+      ? "Critical hook rule: make the hook one declarative sentence that states a concrete fact or observation people already suspect but rarely say out loud. Prefer direct you or your language. Do not start hook with If and do not use word-plus-colon openers."
+      : "";
+
+  return `${styleDirective} ${postTypeDirective} ${goalDirective} ${clickbaitViralityDirective}`.trim();
 }
 
 function resolvePostTypeDirective(inputType: string): string {
@@ -1304,8 +1447,8 @@ export async function POST(request: Request) {
       ? "Web evidence is available. For factual claims, stay consistent with the evidence context and avoid unsupported new hard facts. Prefer real numbers only when they can be grounded in this evidence or other provided context."
       : "Web evidence is unavailable or empty. Do not invent hard facts or numbers. Rewrite uncertain factual claims as opinion, observation, or hypothesis.";
     const soisDirective = soisContext.enabled
-      ? "SOIS benchmark evidence is available. Use it as a first-class factual source for hooks, mechanisms, caveats, and numeric anchors."
-      : "SOIS benchmark evidence is unavailable for this run. Do not fabricate benchmark numbers or section-specific claims.";
+      ? "State of In-App Subscriptions (SOIS) benchmark evidence is available. Use it as a first-class factual source for hooks, mechanisms, caveats, and numeric anchors."
+      : "State of In-App Subscriptions (SOIS) benchmark evidence is unavailable for this run. Do not fabricate benchmark numbers or section-specific claims.";
     const soisStatusSummary = soisContext.enabled
       ? soisContext.warning
         ? `enabled (${soisContext.method}) with warning: ${soisContext.warning} (sections fetched: ${soisContext.fetchedSections}/${soisContext.availableSections})`
@@ -1651,6 +1794,8 @@ ${rankedContextLines}`;
         postIndex: index,
         issues: evaluatePostQuality({
           post,
+          style: input.style,
+          goal: input.goal,
           inputType: input.inputType,
           time: input.time,
           place: input.place,
@@ -1692,11 +1837,17 @@ Repair requirements:
 - Keep most paragraphs at 2-4 sentences and avoid one-line paragraph chains.
 - Add blank lines between subtopics.
 - Keep output human, concrete, and non-generic.
+- Use plain spoken language and sound like a close smart friend to app makers.
+- Include at least one direct reader line with you, your app, or your team.
+- Include one practical operator action sentence with a clear verb like test, measure, compare, fix, or ship.
 - Avoid cliché opener lines.
 - Avoid rhetorical label openers such as Strong stance:, Hard truth:, Hot take:, or Caveat,.
+- Avoid sentence-start label scaffolds using word-plus-colon format (for example Uncomfortable truth:).
 - Keep tone respectful. Do not insult or patronize the reader.
 - Use at least one real numeric anchor if evidence or numeric context is available.
 - Never invent numbers. Only use numbers grounded in provided evidence, inputs, or chart data.
+- For clickbait plus virality, hook must be one declarative factual sentence, should use you or your when natural, and must not start with If ...
+- Avoid robotic phrasing like The timing gap is real. Avoid internal dataset wording like segment snapshot, rows analyzed, or sample size.
 - If claiming Adapty is best-in-market, include mechanism-level support or concrete evidence.
 - Never use em dash or en dash punctuation.
 - If post type is event or webinar, include explicit logistics and who should attend.

@@ -16,6 +16,9 @@ const GUIDE_PATHS: Record<PromptGuideKey, string> = {
 const DEFAULT_GUIDES: PromptGuides = {
   writing: [
     "Write like a cohesive mini-article, not stacked slogans.",
+    "Use this default flow: observation, why it matters, mechanism/example, practical next move.",
+    "Address reader directly at least once with you or your team when natural.",
+    "Include one operator action sentence using verbs like test, measure, compare, or fix.",
     "Use line breaks for readability. Add blank lines between subtopics.",
     "Avoid rap cadence and short-fragment stacks.",
     "Include concrete proof units and caveats.",

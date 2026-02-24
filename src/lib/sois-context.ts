@@ -12,6 +12,7 @@ const SOIS_CACHE_DIR = path.join(SOIS_LANCEDB_PATH, "sois-cache");
 const SOIS_FETCH_TIMEOUT_MS = 15_000;
 const SOIS_CACHE_TTL_MS = 6 * 60 * 60 * 1000;
 const SOIS_MAX_METRICS_PER_SECTION = 5;
+const SOIS_REPORT_NAME = "State of In-App Subscriptions";
 
 const ANALYSIS_POST_TYPE_PATTERN =
   /\b(sauce|curated roundup|controversial hot take|industry news reaction|case study|social proof|product feature launch|milestone|company update)\b/i;
@@ -392,7 +393,7 @@ function buildEvidenceChunks(params: {
   });
 
   const overviewLines = [
-    `SOIS ${params.target.categoryLabel} ${params.target.subcategory}: ${params.target.subcategoryLabel}`,
+    `${SOIS_REPORT_NAME} ${params.target.categoryLabel} ${params.target.subcategory}: ${params.target.subcategoryLabel}`,
     `Rows analyzed: ${rows.length.toLocaleString("en-US")}`,
     `Columns: ${overviewColumns.map((column) => normalizeLabel(column)).join(", ")}`,
   ];
