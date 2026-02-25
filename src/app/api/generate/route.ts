@@ -1638,14 +1638,28 @@ function resolveMemeTextLines(params: {
     if (!clean) {
       throw new Error(`Template '${normalizedTemplateId}' line ${lineIndex + 1} is empty.`);
     }
-    if (/^(and|but)\b/i.test(clean)) {
-      throw new Error(`Template '${normalizedTemplateId}' line ${lineIndex + 1} starts with dangling conjunction.`);
+
+    // Normalize common model artifacts without aborting the entire generation.
+    let normalized = clean.replace(/^(and|but)\b[\s,:-]*/i, "").trim();
+    if (!normalized) {
+      throw new Error(`Template '${normalizedTemplateId}' line ${lineIndex + 1} is empty after cleanup.`);
     }
-    const tail = clean.split(/\s+/).filter(Boolean).at(-1)?.toLowerCase() ?? "";
-    if (tail && danglingTailWords.has(tail)) {
-      throw new Error(`Template '${normalizedTemplateId}' line ${lineIndex + 1} ends with dangling word '${tail}'.`);
+
+    const words = normalized.split(/\s+/).filter(Boolean);
+    while (words.length > 1) {
+      const tail = words.at(-1)?.toLowerCase() ?? "";
+      if (!tail || !danglingTailWords.has(tail)) {
+        break;
+      }
+      words.pop();
     }
-    return clean;
+
+    normalized = words.join(" ").trim();
+    if (!normalized) {
+      throw new Error(`Template '${normalizedTemplateId}' line ${lineIndex + 1} is empty after cleanup.`);
+    }
+
+    return normalized;
   };
 
   const normalizedProvidedLines = (params.textLines ?? [])
@@ -3488,29 +3502,30 @@ Return ${parsed.hooks.length} hook suggestions as well (keep good ones, tighten 
     let postsWithMemes: GeneratePostsResponse["posts"] = normalizedPosts;
 
     if (includeMemeCompanion) {
-      const allowedTemplateIds: MemeTemplateId[] = memeTemplatePreferences.length ? memeTemplatePreferences : [...MEME_TEMPLATE_IDS];
-      const templateLineCountById = await resolveMemegenTemplateLineCountMap(allowedTemplateIds);
-      const memeSelectionSchema = makeMemeSelectionResponseSchema(
-        normalizedPosts.length,
-        memeVariantTarget,
-      );
-      const memeSelectionJsonSchema = makeMemeSelectionJsonSchema(
-        normalizedPosts.length,
-        memeVariantTarget,
-      );
-      const memeTemplateCatalog = allowedTemplateIds
-        .map((id) => {
-          const name = MEME_TEMPLATE_LABELS[id] ?? id.replace(/-/g, " ");
-          const meaning = MEME_TEMPLATE_MEANINGS[id];
-          const lineCount = templateLineCountById.get(id.trim().toLowerCase()) ?? getKnownMemeTemplateLineCount(id);
-          const flowRule = MEME_TEMPLATE_FLOW_RULES[id.trim().toLowerCase()];
-          const flowRuleSuffix = flowRule ? ` | flow: ${flowRule}` : "";
-          return meaning
-            ? `- ${id}: ${name} (lines: ${lineCount})${flowRuleSuffix} — ${meaning}`
-            : `- ${id}: ${name} (lines: ${lineCount})${flowRuleSuffix}`;
-        })
-        .join("\n");
-      const memeSelectionSystemPrompt = `
+      try {
+        const allowedTemplateIds: MemeTemplateId[] = memeTemplatePreferences.length ? memeTemplatePreferences : [...MEME_TEMPLATE_IDS];
+        const templateLineCountById = await resolveMemegenTemplateLineCountMap(allowedTemplateIds);
+        const memeSelectionSchema = makeMemeSelectionResponseSchema(
+          normalizedPosts.length,
+          memeVariantTarget,
+        );
+        const memeSelectionJsonSchema = makeMemeSelectionJsonSchema(
+          normalizedPosts.length,
+          memeVariantTarget,
+        );
+        const memeTemplateCatalog = allowedTemplateIds
+          .map((id) => {
+            const name = MEME_TEMPLATE_LABELS[id] ?? id.replace(/-/g, " ");
+            const meaning = MEME_TEMPLATE_MEANINGS[id];
+            const lineCount = templateLineCountById.get(id.trim().toLowerCase()) ?? getKnownMemeTemplateLineCount(id);
+            const flowRule = MEME_TEMPLATE_FLOW_RULES[id.trim().toLowerCase()];
+            const flowRuleSuffix = flowRule ? ` | flow: ${flowRule}` : "";
+            return meaning
+              ? `- ${id}: ${name} (lines: ${lineCount})${flowRuleSuffix} — ${meaning}`
+              : `- ${id}: ${name} (lines: ${lineCount})${flowRuleSuffix}`;
+          })
+          .join("\n");
+        const memeSelectionSystemPrompt = `
 You are selecting meme templates and caption lines for LinkedIn meme posts.
 You must choose only from the provided template IDs and produce ranked variants.
 
@@ -3519,7 +3534,7 @@ CRITICAL: The caption (top/bottom text) must semantically match the meme image. 
 The caption must be funny (it's a meme) and relevant to the specific post. Derive the joke from the post's hook and body — the meme should illustrate or punch up a point from that post, not generic filler. Make sense and land the joke.
 Never use em dash punctuation. Use standard hyphen if needed.
 `;
-      const memeSelectionUserPrompt = `
+        const memeSelectionUserPrompt = `
 Meme selection request:
 - Tone profile (inferred): ${memeToneProfile}
 - Meme brief: ${memeBriefPreference || "(none provided - come up with a clever and funny angle automatically)"}
@@ -3557,109 +3572,145 @@ For each post:
 7. Score tone fit from 0 to 100 and explain briefly.
 `;
 
-      const runMemeSelection = (model: string) => {
-        if (oauthCredentials) {
-          return runCodexOauthMemeSelection({
-            oauth: oauthCredentials,
+        const runMemeSelection = (model: string) => {
+          if (oauthCredentials) {
+            return runCodexOauthMemeSelection({
+              oauth: oauthCredentials,
+              model,
+              systemPrompt: memeSelectionSystemPrompt,
+              userPrompt: memeSelectionUserPrompt,
+              responseSchema: memeSelectionSchema,
+              jsonSchema: memeSelectionJsonSchema,
+            });
+          }
+
+          if (!openAiApiToken) {
+            throw new Error("OpenAI API token is missing");
+          }
+
+          return runOpenAiChatMemeSelection({
+            token: openAiApiToken,
             model,
             systemPrompt: memeSelectionSystemPrompt,
             userPrompt: memeSelectionUserPrompt,
             responseSchema: memeSelectionSchema,
-            jsonSchema: memeSelectionJsonSchema,
           });
+        };
+
+        let parsedMemeSelection: z.infer<typeof memeSelectionSchema> | null = null;
+        const memeModelCandidates: string[] = [];
+        const pushMemeModelCandidate = (candidate: string) => {
+          const normalized = candidate.trim();
+          if (!normalized) {
+            return;
+          }
+          if (oauthCredentials && !isCodexOauthModelSupported(normalized)) {
+            return;
+          }
+          if (!memeModelCandidates.includes(normalized)) {
+            memeModelCandidates.push(normalized);
+          }
+        };
+
+        pushMemeModelCandidate(oauthCredentials ? requestedModel : modelUsed);
+        pushMemeModelCandidate(fallbackModel);
+        if (oauthCredentials && memeModelCandidates.length === 0) {
+          pushMemeModelCandidate("gpt-5.2");
         }
 
-        if (!openAiApiToken) {
-          throw new Error("OpenAI API token is missing");
+        let memeSelectionError: unknown = null;
+        for (const candidateModel of memeModelCandidates) {
+          try {
+            parsedMemeSelection = await runMemeSelection(candidateModel);
+            break;
+          } catch (memeError) {
+            memeSelectionError = memeError;
+          }
         }
 
-        return runOpenAiChatMemeSelection({
-          token: openAiApiToken,
-          model,
-          systemPrompt: memeSelectionSystemPrompt,
-          userPrompt: memeSelectionUserPrompt,
-          responseSchema: memeSelectionSchema,
-        });
-      };
-
-      let parsedMemeSelection: z.infer<typeof memeSelectionSchema> | null = null;
-      const memeModelCandidates: string[] = [];
-      const pushMemeModelCandidate = (candidate: string) => {
-        const normalized = candidate.trim();
-        if (!normalized) {
-          return;
-        }
-        if (oauthCredentials && !isCodexOauthModelSupported(normalized)) {
-          return;
-        }
-        if (!memeModelCandidates.includes(normalized)) {
-          memeModelCandidates.push(normalized);
-        }
-      };
-
-      pushMemeModelCandidate(oauthCredentials ? requestedModel : modelUsed);
-      pushMemeModelCandidate(fallbackModel);
-      if (oauthCredentials && memeModelCandidates.length === 0) {
-        pushMemeModelCandidate("gpt-5.2");
-      }
-
-      let memeSelectionError: unknown = null;
-      for (const candidateModel of memeModelCandidates) {
-        try {
-          parsedMemeSelection = await runMemeSelection(candidateModel);
-          break;
-        } catch (memeError) {
-          memeSelectionError = memeError;
-        }
-      }
-
-      if (!parsedMemeSelection && memeSelectionError) {
-        throw memeSelectionError;
-      }
-
-      const selectionsByPostIndex = new Map<number, { variants: MemeVariantCandidate[] }>();
-
-      for (const selection of parsedMemeSelection?.selections ?? []) {
-        selectionsByPostIndex.set(selection.postIndex - 1, {
-          variants: selection.variants,
-        });
-      }
-
-      const variantCandidatesByPost = normalizedPosts.map((_post, index) => {
-        const modelVariants = selectionsByPostIndex.get(index)?.variants;
-        const normalizedModelVariants =
-          modelVariants?.length === memeVariantTarget
-            ? sanitizeModelMemeVariants({
-                variants: modelVariants,
-                allowedTemplateIds,
-              })
-            : null;
-        if (normalizedModelVariants?.length !== memeVariantTarget) {
+        if (!parsedMemeSelection) {
           throw new Error(
-            `Meme variant generation failed: expected ${memeVariantTarget} variants from LLM, got ${normalizedModelVariants?.length ?? 0}`,
+            `Meme selection produced no valid result.${
+              memeSelectionError
+                ? ` Last error: ${memeSelectionError instanceof Error ? memeSelectionError.message : String(memeSelectionError)}`
+                : ""
+            }`,
           );
         }
 
-        return normalizedModelVariants;
-      });
+        const selectionsByPostIndex = new Map<number, { variants: MemeVariantCandidate[] }>();
 
-      postsWithMemes = normalizedPosts.map((post, index) => {
-        const variantCandidates = variantCandidatesByPost[index] ?? [];
-        const variants = variantCandidates.map((variant, variantIndex) =>
-          buildMemeCompanionFromVariant({
+        for (const selection of parsedMemeSelection.selections) {
+          selectionsByPostIndex.set(selection.postIndex - 1, {
+            variants: selection.variants,
+          });
+        }
+
+        const variantCandidatesByPost = normalizedPosts.map((_post, index) => {
+          const modelVariants = selectionsByPostIndex.get(index)?.variants;
+          const normalizedModelVariants =
+            modelVariants?.length === memeVariantTarget
+              ? sanitizeModelMemeVariants({
+                  variants: modelVariants,
+                  allowedTemplateIds,
+                })
+              : null;
+          if (normalizedModelVariants?.length !== memeVariantTarget) {
+            throw new Error(
+              `Meme variant generation failed: expected ${memeVariantTarget} variants from LLM, got ${normalizedModelVariants?.length ?? 0}`,
+            );
+          }
+
+          return normalizedModelVariants;
+        });
+
+        postsWithMemes = normalizedPosts.map((post, index) => {
+          const variantCandidates = variantCandidatesByPost[index] ?? [];
+          const variants = variantCandidates.flatMap((variant, variantIndex) => {
+            try {
+              return [
+                buildMemeCompanionFromVariant({
+                  rank: variantIndex + 1,
+                  variant,
+                  templateLineCount:
+                    templateLineCountById.get(variant.templateId.trim().toLowerCase()) ??
+                    getKnownMemeTemplateLineCount(variant.templateId),
+                }),
+              ];
+            } catch (variantError) {
+              console.warn(
+                `Skipping invalid meme variant #${variantIndex + 1} for post ${index + 1}: ${
+                  variantError instanceof Error ? variantError.message : String(variantError)
+                }`,
+              );
+              return [];
+            }
+          });
+
+          if (!variants.length) {
+            console.warn(`No valid meme variants remained for post ${index + 1}; returning post without meme companions.`);
+            return post;
+          }
+
+          const rankedVariants = variants.map((variant, variantIndex) => ({
+            ...variant,
             rank: variantIndex + 1,
-            variant,
-            templateLineCount:
-              templateLineCountById.get(variant.templateId.trim().toLowerCase()) ?? getKnownMemeTemplateLineCount(variant.templateId),
-          }),
-        );
+          }));
 
-        return {
-          ...post,
-          meme: variants[0],
-          memeVariants: variants,
-        };
-      });
+          return {
+            ...post,
+            meme: rankedVariants[0],
+            memeVariants: rankedVariants,
+          };
+        });
+      } catch (memePipelineError) {
+        console.warn(
+          `Meme companion pipeline failed; continuing without memes. ${
+            memePipelineError instanceof Error ? memePipelineError.message : String(memePipelineError)
+          }`,
+        );
+        postsWithMemes = normalizedPosts;
+      }
     }
 
     let postsWithMedia: GeneratePostsResponse["posts"] = postsWithMemes;
