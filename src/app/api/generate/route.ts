@@ -56,6 +56,8 @@ const MAX_MEME_TEMPLATE_LINE_COUNT = 8;
 const MEME_TEMPLATE_LINE_COUNT_CACHE_TTL_MS = 24 * 60 * 60 * 1000;
 const MEME_TEMPLATE_LINE_COUNT_TIMEOUT_MS = 3_000;
 const MEME_TEMPLATE_LINE_COUNT_CACHE = new Map<string, { lineCount: number; expiresAt: number }>();
+const GONE_TEMPLATE_ID = "gone";
+const GONE_TEMPLATE_FIXED_BOTTOM_TEXT = "Aaaaand..... it's gone";
 const KNOWN_MEME_TEMPLATE_LINE_COUNTS: Record<string, number> = {
   chair: 6,
   gru: 4,
@@ -70,6 +72,8 @@ const MEME_TEMPLATE_FLOW_RULES: Record<string, string> = {
   chair:
     "6-line argument with alternating speakers: line1 claim, line2 rebuttal, line3 escalation, line4 counter, line5 loud thesis, line6 final reality-check punchline.",
   gru: "4-line plan flow: idea, expected result, failure realization, corrected action.",
+  [GONE_TEMPLATE_ID]:
+    `2-line format: line1 is setup, line2 must be exactly "${GONE_TEMPLATE_FIXED_BOTTOM_TEXT}".`,
 };
 const FACT_CHECK_EVIDENCE_PROMPT_LIMIT = 4;
 const DEFAULT_SOIS_EVIDENCE_PROMPT_LIMIT = 8;
@@ -1895,6 +1899,12 @@ function resolveMemeTextLines(params: {
   }
 
   const finalLines = resolvedLines.slice(0, targetLineCount).map((line, lineIndex) => validateLine(line, lineIndex));
+
+  if (normalizedTemplateId === GONE_TEMPLATE_ID && finalLines.length >= 2) {
+    // Force the canonical South Park punchline for this template.
+    finalLines[1] = GONE_TEMPLATE_FIXED_BOTTOM_TEXT;
+  }
+
   const uniqueCount = finalLines.filter((line, index) => !finalLines.slice(0, index).some((prev) => memeLinesAreEquivalent(prev, line))).length;
 
   if (uniqueCount < finalLines.length) {
@@ -4029,13 +4039,14 @@ For each post:
  }
 3. Keep each text line concise and readable on image memes.
 4. Match caption to template format and visual meaning. Do not paste style labels or meta-commentary.
-5. Always include textLines array in order.
+5. Special template rule: if templateId is "${GONE_TEMPLATE_ID}", set bottomText and textLines[1] exactly to "${GONE_TEMPLATE_FIXED_BOTTOM_TEXT}".
+6. Always include textLines array in order.
    textLines length must exactly match the selected template's line count from the catalog.
    If a template includes a flow note, follow that line-by-line order.
    For standard templates: textLines has 2 lines matching topText and bottomText.
    For templates with more slots (for example Gru, Anakin/Padme, or American Chopper): include every slot in order.
-6. Joke must be funny and relevant to the post — extract the humor from the hook/body, not generic one-liners.
-7. Score tone fit from 0 to 100 and explain briefly.
+7. Joke must be funny and relevant to the post — extract the humor from the hook/body, not generic one-liners.
+8. Score tone fit from 0 to 100 and explain briefly.
 `;
 
         const runMemeSelection = (model: string) => {
