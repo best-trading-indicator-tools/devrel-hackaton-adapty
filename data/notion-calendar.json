@@ -1,0 +1,236 @@
+{
+  "syncedAt": "2026-02-25T14:00:00.000Z",
+  "entries": [
+    {
+      "id": "2ff1ca43-55c3-80be-b361-fde6b76d54df",
+      "notionUrl": "https://www.notion.so/2ff1ca4355c380beb361fde6b76d54df",
+      "name": "Webinar: Boost Your Onboarding & Paywalls",
+      "date": "2026-02-10",
+      "content": "Channels: LinkedIn, X, TR Telegram. Here's the link and all the details: https://adapty.io/webinars/boost-your-onboarding-paywalls/",
+      "event": {
+        "id": "2e31ca43-55c3-8015-a27e-c320105ad6e7",
+        "name": "Boost Onboarding & Paywalls",
+        "eventName": "Boost Onboarding & Paywalls",
+        "eventType": ["Webinar"],
+        "eventDate": "2026-02-19",
+        "eventPage": "https://adapty.io/webinars/boost-your-onboarding-paywalls/",
+        "region": "💻Online",
+        "time": "5 pm CET",
+        "ownerIds": ["2dfd872b-594c-81ba-8cd0-0002a8b262cc"]
+      },
+      "tags": [],
+      "needsAuthorInput": false,
+      "needsEventDetails": false,
+      "authorIdsToTag": ["5ac0c36e-9df9-4fc6-a067-f42a71e42cca"]
+    },
+    {
+      "id": "3021ca43-55c3-809d-b1ca-e4cc39dbe9ec",
+      "notionUrl": "https://www.notion.so/3021ca4355c3809db1cae4cc39dbe9ec",
+      "name": "Google Webinar Article & YT Post promo",
+      "date": "2026-02-13",
+      "content": "",
+      "tags": [],
+      "needsAuthorInput": true,
+      "needsEventDetails": false,
+      "authorIdsToTag": ["1f8d872b-594c-8141-9a7f-00023792fa71"]
+    },
+    {
+      "id": "2ff1ca43-55c3-8028-8273-e3ec5e2febeb",
+      "notionUrl": "https://www.notion.so/2ff1ca4355c380288273e3ec5e2febeb",
+      "name": "Webinar: Boost Your Onboarding & Paywalls",
+      "date": "2026-02-16",
+      "content": "Channels: LinkedIn, X, TR Telegram. Here's the link and all the details: https://adapty.io/webinars/boost-your-onboarding-paywalls/",
+      "event": {
+        "id": "2e31ca43-55c3-8015-a27e-c320105ad6e7",
+        "name": "Boost Onboarding & Paywalls",
+        "eventName": "Boost Onboarding & Paywalls",
+        "eventType": ["Webinar"],
+        "eventDate": "2026-02-19",
+        "eventPage": "https://adapty.io/webinars/boost-your-onboarding-paywalls/",
+        "region": "💻Online",
+        "time": "5 pm CET",
+        "ownerIds": ["2dfd872b-594c-81ba-8cd0-0002a8b262cc"]
+      },
+      "tags": [],
+      "needsAuthorInput": false,
+      "needsEventDetails": false,
+      "authorIdsToTag": ["5ac0c36e-9df9-4fc6-a067-f42a71e42cca"]
+    },
+    {
+      "id": "3091ca43-55c3-80ee-b513-e44f2d557514",
+      "notionUrl": "https://www.notion.so/3091ca4355c380eeb513e44f2d557514",
+      "name": "Webinar FF",
+      "date": "2026-02-17",
+      "content": "",
+      "tags": [],
+      "needsAuthorInput": true,
+      "needsEventDetails": false,
+      "authorIdsToTag": ["5ac0c36e-9df9-4fc6-a067-f42a71e42cca"]
+    },
+    {
+      "id": "3091ca43-55c3-8024-a62b-f9723ce1f925",
+      "notionUrl": "https://www.notion.so/3091ca4355c38024a62bf9723ce1f925",
+      "name": "AGS LA",
+      "date": "2026-02-18",
+      "content": "Draft post about the event. Adapty Team will be at the AGS Los Angeles next Tuesday (Feb, 24). If you want to catch up and get insights from Web2App report - join us! You can apply for a pass via link in comments. See you there! https://appgrowthsummit.com/events/app-growth-summit-los-angeles-2026/",
+      "event": {
+        "id": "2e11ca43-55c3-8007-baa2-fd9d0b551027",
+        "name": "AGS LA",
+        "eventName": "AGS LA",
+        "eventType": ["Sponsorship", "Client speaking"],
+        "eventDate": "2026-02-24",
+        "eventPage": "https://appgrowthsummit.com/events/app-growth-summit-los-angeles-2026/",
+        "region": "🇺🇸USA",
+        "time": "",
+        "ownerIds": ["2e0d872b-594c-812c-b601-000221dae0e0"]
+      },
+      "tags": [],
+      "needsAuthorInput": false,
+      "needsEventDetails": false,
+      "authorIdsToTag": ["5ac0c36e-9df9-4fc6-a067-f42a71e42cca"]
+    },
+    {
+      "id": "2ff1ca43-55c3-80f4-a684-cf5be6d27900",
+      "notionUrl": "https://www.notion.so/2ff1ca4355c380f4a684cf5be6d27900",
+      "name": "Webinar: Boost Your Onboarding & Paywalls",
+      "date": "2026-02-18",
+      "content": "Channels: LinkedIn, X, TR Telegram. Here's the link and all the details: https://adapty.io/webinars/boost-your-onboarding-paywalls/",
+      "event": {
+        "id": "2e31ca43-55c3-8015-a27e-c320105ad6e7",
+        "name": "Boost Onboarding & Paywalls",
+        "eventName": "Boost Onboarding & Paywalls",
+        "eventType": ["Webinar"],
+        "eventDate": "2026-02-19",
+        "eventPage": "https://adapty.io/webinars/boost-your-onboarding-paywalls/",
+        "region": "💻Online",
+        "time": "5 pm CET",
+        "ownerIds": ["2dfd872b-594c-81ba-8cd0-0002a8b262cc"]
+      },
+      "tags": [],
+      "needsAuthorInput": false,
+      "needsEventDetails": false,
+      "authorIdsToTag": ["5ac0c36e-9df9-4fc6-a067-f42a71e42cca"]
+    },
+    {
+      "id": "3091ca43-55c3-8093-90d8-fe6b0fb77244",
+      "notionUrl": "https://www.notion.so/3091ca4355c3809390d8fe6b0fb77244",
+      "name": "Article Promo Adapty Finance",
+      "date": "2026-02-20",
+      "content": "",
+      "tags": [],
+      "needsAuthorInput": true,
+      "needsEventDetails": false,
+      "authorIdsToTag": ["1f8d872b-594c-8141-9a7f-00023792fa71"]
+    },
+    {
+      "id": "3101ca43-55c3-808d-bbd5-ca1c3e32c693",
+      "notionUrl": "https://www.notion.so/3101ca4355c3808dbbd5ca1c3e32c693",
+      "name": "Side Event post",
+      "date": "2026-02-24",
+      "content": "Hi-hi! We're holding a side event - https://luma.com/jj7qjnrt, and we'll need to post an after-photo on Feb, 24 - photo with sales team and participants. I'll share the photo in the morning of Feb, 24",
+      "event": {
+        "id": "2e11ca43-55c3-801f-b685-e3eb5e739d2f",
+        "name": "Side event AGS LA [State of APPetizers]",
+        "eventName": "Side event AGS LA [State of APPetizers]",
+        "eventType": ["Our side event"],
+        "eventDate": "2026-02-23",
+        "eventPage": "https://luma.com/jj7qjnrt",
+        "region": "🇺🇸USA",
+        "time": "",
+        "ownerIds": ["2e0d872b-594c-812c-b601-000221dae0e0"]
+      },
+      "tags": [],
+      "needsAuthorInput": false,
+      "needsEventDetails": false,
+      "authorIdsToTag": ["5ac0c36e-9df9-4fc6-a067-f42a71e42cca"]
+    },
+    {
+      "id": "3091ca43-55c3-8012-9e1f-d66337ca8cf6",
+      "notionUrl": "https://www.notion.so/3091ca4355c380129e1fd66337ca8cf6",
+      "name": "AIM Conf -1st post",
+      "date": "2026-02-25",
+      "content": "",
+      "event": {
+        "id": "2d91ca43-55c3-80f0-b123-72019e2340a",
+        "name": "Apps In a Motion (AIM)",
+        "eventName": "Apps In a Motion (AIM)",
+        "eventType": ["Our conference"],
+        "eventDate": "2026-04-08",
+        "eventPage": "",
+        "region": "🇺🇸USA",
+        "time": "",
+        "ownerIds": ["2e0d872b-594c-812c-b601-000221dae0e0"]
+      },
+      "tags": [],
+      "needsAuthorInput": true,
+      "needsEventDetails": false,
+      "authorIdsToTag": ["5ac0c36e-9df9-4fc6-a067-f42a71e42cca"]
+    },
+    {
+      "id": "3091ca43-55c3-8028-9668-efa682104acd",
+      "notionUrl": "https://www.notion.so/3091ca4355c380289668efa682104acd",
+      "name": "AppsForum- own event",
+      "date": "2026-03-02",
+      "content": "",
+      "event": {
+        "id": "2e11ca43-55c3-800f-b052-e81fe2822051",
+        "name": "Pre-party AppsForum Lisbon",
+        "eventName": "Pre-party AppsForum Lisbon",
+        "eventType": ["Our side event"],
+        "eventDate": "2026-03-03",
+        "eventPage": "",
+        "region": "🇪🇺Europe",
+        "time": "",
+        "ownerIds": ["2e9d872b-594c-8146-a0e4-00022b9dca98"]
+      },
+      "tags": [],
+      "needsAuthorInput": true,
+      "needsEventDetails": false,
+      "authorIdsToTag": ["5ac0c36e-9df9-4fc6-a067-f42a71e42cca"]
+    },
+    {
+      "id": "3091ca43-55c3-8084-b16c-fcf50969442d",
+      "notionUrl": "https://www.notion.so/3091ca4355c38084b16cfcf50969442d",
+      "name": "AppsForum - we´ve live",
+      "date": "2026-03-04",
+      "content": "",
+      "event": {
+        "id": "2e11ca43-55c3-80b8-a149-db6af97b1895",
+        "name": "AppsForum Lisbon",
+        "eventName": "AppsForum Lisbon",
+        "eventType": ["Sponsorship"],
+        "eventDate": "2026-03-04",
+        "eventPage": "https://www.appsforum.io",
+        "region": "🇪🇺Europe",
+        "time": "",
+        "ownerIds": ["2e9d872b-594c-8146-a0e4-00022b9dca98"]
+      },
+      "tags": [],
+      "needsAuthorInput": true,
+      "needsEventDetails": false,
+      "authorIdsToTag": ["5ac0c36e-9df9-4fc6-a067-f42a71e42cca"]
+    },
+    {
+      "id": "30d1ca43-55c3-8080-9315-ff60f8d66e56",
+      "notionUrl": "https://www.notion.so/30d1ca4355c380809315ff60f8d66e56",
+      "name": "Pre-MAU event announcement",
+      "date": "2026-03-12",
+      "content": "Details TBD.",
+      "event": {
+        "id": "2e11ca43-55c3-8098-ae75-f3a1a38122e9",
+        "name": "Side event pre-MAU (Speed car)",
+        "eventName": "Side event pre-MAU (Speed car)",
+        "eventType": ["Our side event"],
+        "eventDate": "2026-05-20",
+        "eventPage": "",
+        "region": "🇺🇸USA",
+        "time": "",
+        "ownerIds": ["2e0d872b-594c-812c-b601-000221dae0e0"]
+      },
+      "tags": [],
+      "needsAuthorInput": true,
+      "needsEventDetails": false,
+      "authorIdsToTag": ["5ac0c36e-9df9-4fc6-a067-f42a71e42cca"]
+    }
+  ]
+}

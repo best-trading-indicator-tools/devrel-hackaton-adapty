@@ -23,6 +23,11 @@ import {
   type InputLength,
   type MemeTemplateId,
 } from "@/lib/constants";
+import {
+  getEntriesForMonth,
+  type NotionCalendarData,
+  type NotionCalendarEntry,
+} from "@/lib/notion-calendar";
 import type { GeneratePostsResponse } from "@/lib/schemas";
 
 type ChartLegendPosition = "top" | "right" | "bottom" | "left";
@@ -92,6 +97,7 @@ const MAX_IMAGE_DATA_URL_CHARS = 4_500_000;
 const IMAGE_EXPORT_QUALITY = 0.82;
 const MAX_CONCURRENT_GENERATION_REQUESTS = 3;
 const EVENT_TOPIC_PATTERN = /\b(event|webinar)\b/i;
+const WEBINAR_TOPIC_PATTERN = /\bwebinar\b/i;
 const CUSTOM_BRAND_VOICE = "__custom__";
 const CHART_LEGEND_POSITIONS: ChartLegendPosition[] = ["top", "right", "bottom", "left"];
 const CHART_VISUAL_STYLE_OPTIONS = [
@@ -131,6 +137,7 @@ const CHART_IMAGE_PROMPT_QUICK_SUGGESTIONS = [
 ] as const;
 const MAX_TEMPLATE_RESULTS = 80;
 const INDUSTRY_NEWS_REACTION_PATTERN = /\bindustry news reaction\b/i;
+const CALENDAR_DAY_LABELS = ["Sun", "Mon", "Tue", "Wed", "Thu", "Fri", "Sat"] as const;
 
 type MemeTemplateOption = {
   id: string;
@@ -159,6 +166,25 @@ type GenerationAllocation = {
   style: string;
   goal: ContentGoal;
   count: number;
+  calendarEntry?: NotionCalendarEntry;
+};
+
+type MonthCalendarCell = {
+  key: string;
+  dayOfMonth: number;
+  isCurrentMonth: boolean;
+  isToday: boolean;
+  entries: NotionCalendarEntry[];
+};
+
+type CalendarEntryMissingField = "date" | "content";
+
+type GeneratedPostsCalendarCell = {
+  key: string;
+  dayOfMonth: number;
+  isCurrentMonth: boolean;
+  isToday: boolean;
+  postIndices: number[];
 };
 
 type ChartWizardPreset = {
@@ -334,6 +360,21 @@ function formatChartVisualStyleLabel(style: string): string {
     .join(" ");
 }
 
+function buildDetailsFromCalendarEntry(entry: NotionCalendarEntry): string {
+  const parts: string[] = [];
+  if (entry.name) parts.push(`Post: ${entry.name}`);
+  if (entry.content) parts.push(entry.content);
+  const e = entry.event;
+  if (e) {
+    if (e.eventName) parts.push(`Event: ${e.eventName}`);
+    if (e.eventDate) parts.push(`Date: ${e.eventDate}`);
+    if (e.region) parts.push(`Place: ${e.region}`);
+    if (e.time) parts.push(`Time: ${e.time}`);
+    if (e.eventPage) parts.push(`Link: ${e.eventPage}`);
+  }
+  return parts.join("\n\n");
+}
+
 function formatEventTimeForPrompt(value: string): string {
   const trimmed = value.trim();
   if (!trimmed) {
@@ -351,6 +392,171 @@ function formatEventTimeForPrompt(value: string): string {
   }).format(parsed);
 
   return `${formatted} (local time)`;
+}
+
+function parseCalendarDate(value: string): Date | null {
+  const match = /^(\d{4})-(\d{2})-(\d{2})$/.exec(value.trim());
+  if (!match) {
+    return null;
+  }
+
+  const year = Number(match[1]);
+  const month = Number(match[2]);
+  const day = Number(match[3]);
+
+  if (!Number.isInteger(year) || !Number.isInteger(month) || !Number.isInteger(day)) {
+    return null;
+  }
+
+  const parsed = new Date(year, month - 1, day);
+  if (parsed.getFullYear() !== year || parsed.getMonth() !== month - 1 || parsed.getDate() !== day) {
+    return null;
+  }
+
+  parsed.setHours(0, 0, 0, 0);
+  return parsed;
+}
+
+function getStartOfMonth(value: Date): Date {
+  const month = new Date(value.getFullYear(), value.getMonth(), 1);
+  month.setHours(0, 0, 0, 0);
+  return month;
+}
+
+function shiftMonth(value: Date, delta: number): Date {
+  return getStartOfMonth(new Date(value.getFullYear(), value.getMonth() + delta, 1));
+}
+
+function addCalendarDays(value: Date, days: number): Date {
+  const next = new Date(value);
+  next.setDate(next.getDate() + days);
+  next.setHours(0, 0, 0, 0);
+  return next;
+}
+
+function formatCalendarDateKey(value: Date): string {
+  const year = value.getFullYear();
+  const month = String(value.getMonth() + 1).padStart(2, "0");
+  const day = String(value.getDate()).padStart(2, "0");
+  return `${year}-${month}-${day}`;
+}
+
+function formatCalendarMonthKey(value: Date): string {
+  const year = value.getFullYear();
+  const month = String(value.getMonth() + 1).padStart(2, "0");
+  return `${year}-${month}`;
+}
+
+function formatCalendarMonthLabel(value: Date): string {
+  return new Intl.DateTimeFormat("en-US", {
+    month: "long",
+    year: "numeric",
+  }).format(value);
+}
+
+function formatCalendarDateLabel(value: string): string {
+  const parsed = parseCalendarDate(value);
+  if (!parsed) {
+    return value;
+  }
+
+  return new Intl.DateTimeFormat("en-US", {
+    month: "short",
+    day: "numeric",
+    year: "numeric",
+  }).format(parsed);
+}
+
+function extractDateKeyFromDateTimeInput(value: string): string {
+  const trimmed = value.trim();
+  if (!trimmed) {
+    return "";
+  }
+
+  const directMatch = /^(\d{4}-\d{2}-\d{2})/.exec(trimmed);
+  if (directMatch) {
+    return directMatch[1];
+  }
+
+  const parsed = new Date(trimmed);
+  if (Number.isNaN(parsed.getTime())) {
+    return "";
+  }
+
+  return formatCalendarDateKey(parsed);
+}
+
+function buildMonthCalendarCells(
+  allEntries: NotionCalendarEntry[],
+  monthCursor: Date,
+  todayDate: Date,
+): MonthCalendarCell[] {
+  const monthStart = getStartOfMonth(monthCursor);
+  const monthYear = monthStart.getFullYear();
+  const monthIndex = monthStart.getMonth();
+  const todayKey = formatCalendarDateKey(todayDate);
+  const entriesByDate = new Map<string, NotionCalendarEntry[]>();
+
+  for (const entry of allEntries) {
+    const parsedDate = parseCalendarDate(entry.date);
+    if (!parsedDate) {
+      continue;
+    }
+
+    const key = formatCalendarDateKey(parsedDate);
+    const existing = entriesByDate.get(key);
+    if (existing) {
+      existing.push(entry);
+      continue;
+    }
+    entriesByDate.set(key, [entry]);
+  }
+
+  const gridStart = addCalendarDays(monthStart, -monthStart.getDay());
+  const cells: MonthCalendarCell[] = [];
+  for (let offset = 0; offset < 42; offset += 1) {
+    const cellDate = addCalendarDays(gridStart, offset);
+    const key = formatCalendarDateKey(cellDate);
+    const entries = entriesByDate.get(key) ?? [];
+
+    cells.push({
+      key,
+      dayOfMonth: cellDate.getDate(),
+      isCurrentMonth: cellDate.getFullYear() === monthYear && cellDate.getMonth() === monthIndex,
+      isToday: key === todayKey,
+      entries,
+    });
+  }
+
+  return cells;
+}
+
+function buildGeneratedPostsCalendarCells(
+  postIndicesByDate: Map<string, number[]>,
+  monthCursor: Date,
+  todayDate: Date,
+): GeneratedPostsCalendarCell[] {
+  const monthStart = getStartOfMonth(monthCursor);
+  const monthYear = monthStart.getFullYear();
+  const monthIndex = monthStart.getMonth();
+  const todayKey = formatCalendarDateKey(todayDate);
+
+  const gridStart = addCalendarDays(monthStart, -monthStart.getDay());
+  const cells: GeneratedPostsCalendarCell[] = [];
+
+  for (let offset = 0; offset < 42; offset += 1) {
+    const cellDate = addCalendarDays(gridStart, offset);
+    const key = formatCalendarDateKey(cellDate);
+    cells.push({
+      key,
+      dayOfMonth: cellDate.getDate(),
+      isCurrentMonth: cellDate.getFullYear() === monthYear && cellDate.getMonth() === monthIndex,
+      isToday: key === todayKey,
+      postIndices: postIndicesByDate.get(key) ?? [],
+    });
+  }
+
+  return cells;
 }
 
 function formatTemplateIdLabel(templateId: string): string {
@@ -566,7 +772,38 @@ function needsEventDetails(inputType: string): boolean {
   return EVENT_TOPIC_PATTERN.test(inputType);
 }
 
-function needsChartDetails(_inputType: string): boolean {
+function isWebinarCalendarEntry(entry: NotionCalendarEntry): boolean {
+  if (WEBINAR_TOPIC_PATTERN.test(entry.name)) {
+    return true;
+  }
+
+  if (entry.event?.eventName && WEBINAR_TOPIC_PATTERN.test(entry.event.eventName)) {
+    return true;
+  }
+
+  if (entry.event?.eventType?.some((eventType) => WEBINAR_TOPIC_PATTERN.test(eventType))) {
+    return true;
+  }
+
+  return false;
+}
+
+function getCalendarEntryMissingFields(entry: NotionCalendarEntry): CalendarEntryMissingField[] {
+  const missing: CalendarEntryMissingField[] = [];
+
+  if (!entry.date.trim() || !parseCalendarDate(entry.date)) {
+    missing.push("date");
+  }
+
+  if (!entry.content.trim()) {
+    missing.push("content");
+  }
+
+  return missing;
+}
+
+function needsChartDetails(inputType: string): boolean {
+  void inputType;
   return true;
 }
 
@@ -814,6 +1051,9 @@ export default function Home() {
   const [postTypeByPostIndex, setPostTypeByPostIndex] = useState<Record<number, string>>({});
   const [brandVoiceByPostIndex, setBrandVoiceByPostIndex] = useState<Record<number, string>>({});
   const [goalByPostIndex, setGoalByPostIndex] = useState<Record<number, ContentGoal>>({});
+  const [postDateByPostIndex, setPostDateByPostIndex] = useState<Record<number, string>>({});
+  const [generatedPostsMonthCursor, setGeneratedPostsMonthCursor] = useState<Date>(() => getStartOfMonth(new Date()));
+  const [selectedGeneratedPostsDate, setSelectedGeneratedPostsDate] = useState<string | null>(null);
   const [numberOfPostsInput, setNumberOfPostsInput] = useState<string>(() => String(defaultForm.numberOfPosts));
   const [result, setResult] = useState<GeneratePostsResponse | null>(null);
   const [rewriteContext, setRewriteContext] = useState<RewriteContext>(defaultRewriteContext);
@@ -833,11 +1073,22 @@ export default function Home() {
   const [isChartPromptLoading, setIsChartPromptLoading] = useState(false);
   const [chartPromptError, setChartPromptError] = useState("");
   const [chartPromptHint, setChartPromptHint] = useState("");
+  const [notionCalendar, setNotionCalendar] = useState<NotionCalendarData | null>(null);
+  const [notionCalendarLoading, setNotionCalendarLoading] = useState(false);
+  const [notionCalendarSyncLoading, setNotionCalendarSyncLoading] = useState(false);
+  const [showWebinarsOnly, setShowWebinarsOnly] = useState(true);
+  const [calendarMonthCursor, setCalendarMonthCursor] = useState<Date>(() => getStartOfMonth(new Date()));
+  const [selectedCalendarEntryIds, setSelectedCalendarEntryIds] = useState<string[]>([]);
   const fallbackMemeTemplates = useMemo(() => buildFallbackMemeTemplates(), []);
   const [memeTemplateOptions, setMemeTemplateOptions] = useState<MemeTemplateOption[]>(fallbackMemeTemplates);
   const [memeTemplateSearch, setMemeTemplateSearch] = useState("");
   const [memeTemplateLoadError, setMemeTemplateLoadError] = useState("");
   const imageInputRef = useRef<HTMLInputElement>(null);
+  const todayDate = useMemo(() => {
+    const now = new Date();
+    now.setHours(0, 0, 0, 0);
+    return now;
+  }, []);
   const normalizedSelectedPostTypes = useMemo(
     () => (selectedPostTypes.length ? selectedPostTypes : [defaultForm.inputType]),
     [selectedPostTypes],
@@ -857,6 +1108,92 @@ export default function Home() {
     () => normalizedSelectedPostTypes.some((type) => needsEventDetails(type)),
     [normalizedSelectedPostTypes],
   );
+  const calendarEntries = useMemo(() => {
+    const entries = notionCalendar?.entries ?? [];
+    return showWebinarsOnly ? entries.filter((entry) => isWebinarCalendarEntry(entry)) : entries;
+  }, [notionCalendar?.entries, showWebinarsOnly]);
+  const monthEntries = useMemo(() => {
+    if (!calendarEntries.length) return [];
+    return getEntriesForMonth(calendarEntries, calendarMonthCursor);
+  }, [calendarEntries, calendarMonthCursor]);
+  const missingFieldsByCalendarEntryId = useMemo(() => {
+    const byId = new Map<string, CalendarEntryMissingField[]>();
+    for (const entry of calendarEntries) {
+      const missing = getCalendarEntryMissingFields(entry);
+      if (missing.length) {
+        byId.set(entry.id, missing);
+      }
+    }
+    return byId;
+  }, [calendarEntries]);
+  const calendarEntriesMissingDate = useMemo(
+    () => calendarEntries.filter((entry) => missingFieldsByCalendarEntryId.get(entry.id)?.includes("date")),
+    [calendarEntries, missingFieldsByCalendarEntryId],
+  );
+  const selectedCalendarEntryIdSet = useMemo(() => new Set(selectedCalendarEntryIds), [selectedCalendarEntryIds]);
+  const selectedCalendarEntries = useMemo(() => {
+    if (!calendarEntries.length || !selectedCalendarEntryIds.length) {
+      return [];
+    }
+
+    const selectedIds = new Set(selectedCalendarEntryIds);
+    return calendarEntries
+      .filter((entry) => selectedIds.has(entry.id))
+      .sort((a, b) => a.date.localeCompare(b.date) || a.name.localeCompare(b.name));
+  }, [calendarEntries, selectedCalendarEntryIds]);
+  const monthCalendarCells = useMemo(
+    () => buildMonthCalendarCells(calendarEntries, calendarMonthCursor, todayDate),
+    [calendarEntries, calendarMonthCursor, todayDate],
+  );
+  const calendarMonthLabel = useMemo(() => formatCalendarMonthLabel(calendarMonthCursor), [calendarMonthCursor]);
+  const useNotionCalendarForGeneration = showEventFields && selectedCalendarEntries.length > 0;
+  const generatedPostIndicesByDate = useMemo(() => {
+    const byDate = new Map<string, number[]>();
+    if (!result?.posts.length) {
+      return byDate;
+    }
+
+    for (let index = 0; index < result.posts.length; index += 1) {
+      const dateKey = postDateByPostIndex[index];
+      if (!dateKey || !parseCalendarDate(dateKey)) {
+        continue;
+      }
+
+      const existing = byDate.get(dateKey);
+      if (existing) {
+        existing.push(index);
+      } else {
+        byDate.set(dateKey, [index]);
+      }
+    }
+
+    return byDate;
+  }, [postDateByPostIndex, result?.posts]);
+  const generatedPostDates = useMemo(() => Array.from(generatedPostIndicesByDate.keys()).sort(), [generatedPostIndicesByDate]);
+  const generatedPostsMonthCells = useMemo(
+    () => buildGeneratedPostsCalendarCells(generatedPostIndicesByDate, generatedPostsMonthCursor, todayDate),
+    [generatedPostIndicesByDate, generatedPostsMonthCursor, todayDate],
+  );
+  const generatedPostsMonthLabel = useMemo(
+    () => formatCalendarMonthLabel(generatedPostsMonthCursor),
+    [generatedPostsMonthCursor],
+  );
+  const filteredGeneratedPostIndices = useMemo(() => {
+    if (!result?.posts.length) {
+      return [];
+    }
+
+    if (!selectedGeneratedPostsDate) {
+      return result.posts.map((_, index) => index);
+    }
+
+    const selected = generatedPostIndicesByDate.get(selectedGeneratedPostsDate);
+    if (selected?.length) {
+      return selected;
+    }
+
+    return result.posts.map((_, index) => index);
+  }, [generatedPostIndicesByDate, result?.posts, selectedGeneratedPostsDate]);
   const showMemeFields = normalizedSelectedPostTypes.length > 0;
   const showChartFields = useMemo(
     () => normalizedSelectedPostTypes.some((type) => needsChartDetails(type)),
@@ -1162,6 +1499,139 @@ export default function Home() {
     };
   }, [fallbackMemeTemplates]);
 
+  useEffect(() => {
+    if (!showEventFields) return;
+    let isCancelled = false;
+    setNotionCalendarLoading(true);
+    fetch("/api/notion-calendar")
+      .then((r) => r.json())
+      .then((data: NotionCalendarData) => {
+        if (!isCancelled) setNotionCalendar(data);
+      })
+      .catch(() => {
+        if (!isCancelled) setNotionCalendar(null);
+      })
+      .finally(() => {
+        if (!isCancelled) setNotionCalendarLoading(false);
+      });
+    return () => {
+      isCancelled = true;
+    };
+  }, [showEventFields]);
+
+  useEffect(() => {
+    if (!calendarEntries.length) {
+      return;
+    }
+
+    setCalendarMonthCursor((currentCursor) => {
+      if (getEntriesForMonth(calendarEntries, currentCursor).length) {
+        return currentCursor;
+      }
+
+      const firstEntry = [...calendarEntries].sort((a, b) => a.date.localeCompare(b.date))[0];
+      const firstEntryDate = firstEntry ? parseCalendarDate(firstEntry.date) : null;
+      return firstEntryDate ? getStartOfMonth(firstEntryDate) : currentCursor;
+    });
+  }, [calendarEntries]);
+
+  useEffect(() => {
+    if (!calendarEntries.length) {
+      setSelectedCalendarEntryIds([]);
+      return;
+    }
+
+    setSelectedCalendarEntryIds((previous) => {
+      const validIds = new Set(calendarEntries.map((entry) => entry.id));
+      return previous.filter((id) => validIds.has(id));
+    });
+  }, [calendarEntries]);
+
+  useEffect(() => {
+    if (!generatedPostDates.length) {
+      setSelectedGeneratedPostsDate(null);
+      return;
+    }
+
+    setGeneratedPostsMonthCursor((currentCursor) => {
+      const monthKey = formatCalendarMonthKey(currentCursor);
+      if (generatedPostDates.some((date) => date.startsWith(`${monthKey}-`))) {
+        return currentCursor;
+      }
+
+      const firstDate = parseCalendarDate(generatedPostDates[0]);
+      return firstDate ? getStartOfMonth(firstDate) : currentCursor;
+    });
+
+    setSelectedGeneratedPostsDate((previous) =>
+      previous && generatedPostIndicesByDate.has(previous) ? previous : generatedPostDates[0],
+    );
+  }, [generatedPostDates, generatedPostIndicesByDate]);
+
+  async function reloadNotionCalendar() {
+    setNotionCalendarSyncLoading(true);
+    try {
+      const cal = await fetch("/api/notion-calendar").then((res) => res.json());
+      setNotionCalendar(cal);
+    } catch (err) {
+      setError(err instanceof Error ? err.message : "Reload failed");
+    } finally {
+      setNotionCalendarSyncLoading(false);
+    }
+  }
+
+  function showPreviousCalendarMonth() {
+    setCalendarMonthCursor((current) => shiftMonth(current, -1));
+  }
+
+  function showNextCalendarMonth() {
+    setCalendarMonthCursor((current) => shiftMonth(current, 1));
+  }
+
+  function jumpToCurrentCalendarMonth() {
+    setCalendarMonthCursor(getStartOfMonth(todayDate));
+  }
+
+  function toggleCalendarEntrySelection(entryId: string) {
+    setSelectedCalendarEntryIds((previous) =>
+      previous.includes(entryId) ? previous.filter((id) => id !== entryId) : [...previous, entryId],
+    );
+  }
+
+  function selectAllEntriesInCurrentMonth() {
+    const monthIds = monthEntries.map((entry) => entry.id);
+    if (!monthIds.length) {
+      return;
+    }
+
+    setSelectedCalendarEntryIds((previous) => Array.from(new Set([...previous, ...monthIds])));
+  }
+
+  function clearCurrentMonthSelections() {
+    if (!monthEntries.length) {
+      return;
+    }
+
+    const monthIds = new Set(monthEntries.map((entry) => entry.id));
+    setSelectedCalendarEntryIds((previous) => previous.filter((id) => !monthIds.has(id)));
+  }
+
+  function showPreviousGeneratedPostsMonth() {
+    setGeneratedPostsMonthCursor((current) => shiftMonth(current, -1));
+  }
+
+  function showNextGeneratedPostsMonth() {
+    setGeneratedPostsMonthCursor((current) => shiftMonth(current, 1));
+  }
+
+  function jumpToGeneratedPostsCurrentMonth() {
+    setGeneratedPostsMonthCursor(getStartOfMonth(todayDate));
+  }
+
+  function toggleGeneratedPostsDateSelection(dateKey: string) {
+    setSelectedGeneratedPostsDate((previous) => (previous === dateKey ? null : dateKey));
+  }
+
   function updateChartRows(
     updater: (rows: Array<{ label: string; primary: string; secondary: string }>) => Array<{
       label: string;
@@ -1293,6 +1763,8 @@ export default function Home() {
     setPostTypeByPostIndex({});
     setBrandVoiceByPostIndex({});
     setGoalByPostIndex({});
+    setPostDateByPostIndex({});
+    setSelectedGeneratedPostsDate(null);
 
     if (isImageProcessing) {
       setError("Image is still processing. Please wait a second and retry.");
@@ -1315,12 +1787,26 @@ export default function Home() {
             .filter(Boolean),
         ),
       );
-      const generationAllocations = buildGenerationAllocations({
-        inputTypes: normalizedSelectedPostTypes,
-        styles: selectedStylesForGeneration,
-        goals: normalizedSelectedGoals,
-        totalPosts: committedNumberOfPosts,
-      });
+      let generationAllocations: GenerationAllocation[];
+      if (useNotionCalendarForGeneration) {
+        const type = normalizedSelectedPostTypes[0] ?? defaultForm.inputType;
+        const style = selectedStylesForGeneration[0] ?? defaultForm.style;
+        const goal = normalizedSelectedGoals[0] ?? defaultForm.goal;
+        generationAllocations = selectedCalendarEntries.map((entry) => ({
+          inputType: type,
+          style,
+          goal,
+          count: 1,
+          calendarEntry: entry,
+        }));
+      } else {
+        generationAllocations = buildGenerationAllocations({
+          inputTypes: normalizedSelectedPostTypes,
+          styles: selectedStylesForGeneration,
+          goals: normalizedSelectedGoals,
+          totalPosts: committedNumberOfPosts,
+        });
+      }
       if (!generationAllocations.length) {
         setError("Please select at least one post type.");
         setIsLoading(false);
@@ -1368,6 +1854,11 @@ export default function Home() {
             const shouldAttachChart =
               typeNeedsChart && form.chartEnabled && allocationIndex === firstChartAllocationIndex;
 
+            const entry = allocation.calendarEntry;
+            const timeVal = entry?.event?.time ?? form.time;
+            const placeVal = entry?.event?.region ?? form.place;
+            const detailsVal = entry ? buildDetailsFromCalendarEntry(entry) : form.details;
+            const ctaVal = entry?.event?.eventPage ?? form.ctaLink;
             const requestPayload = {
               ...form,
               style: allocation.style,
@@ -1381,8 +1872,10 @@ export default function Home() {
               chartImagePrompt: shouldAttachChart ? form.chartImagePrompt : "",
               chartData: shouldAttachChart ? chartDataPayload : "",
               chartOptions: shouldAttachChart ? chartOptionsPayload : "",
-              time: typeNeedsEvent ? formatEventTimeForPrompt(form.time) : "",
-              place: typeNeedsEvent ? form.place : "",
+              time: typeNeedsEvent ? formatEventTimeForPrompt(timeVal) : "",
+              place: typeNeedsEvent ? placeVal : "",
+              details: detailsVal,
+              ctaLink: ctaVal,
               memeEnabled: form.memeEnabled,
               memeBrief: form.memeEnabled ? form.memeBrief : "",
               giphyEnabled: form.giphyEnabled,
@@ -1447,6 +1940,7 @@ export default function Home() {
       const nextPostTypeByIndex: Record<number, string> = {};
       const nextBrandVoiceByIndex: Record<number, string> = {};
       const nextGoalByIndex: Record<number, ContentGoal> = {};
+      const nextPostDateByIndex: Record<number, string> = {};
       const mergedPosts: GeneratePostsResponse["posts"] = [];
       let postCursor = 0;
 
@@ -1455,12 +1949,38 @@ export default function Home() {
           nextPostTypeByIndex[postCursor] = chunk.allocation.inputType;
           nextBrandVoiceByIndex[postCursor] = chunk.allocation.style;
           nextGoalByIndex[postCursor] = chunk.allocation.goal;
+          const generatedDate =
+            chunk.allocation.calendarEntry?.date || extractDateKeyFromDateTimeInput(form.time);
+          if (generatedDate) {
+            nextPostDateByIndex[postCursor] = generatedDate;
+          }
           mergedPosts.push(post);
           postCursor += 1;
         }
       }
 
-      const trimmedPosts = mergedPosts.slice(0, committedNumberOfPosts);
+      const postLimit = useNotionCalendarForGeneration ? mergedPosts.length : committedNumberOfPosts;
+      const trimmedPosts = mergedPosts.slice(0, postLimit);
+      const trimmedPostTypeByIndex: Record<number, string> = {};
+      const trimmedBrandVoiceByIndex: Record<number, string> = {};
+      const trimmedGoalByIndex: Record<number, ContentGoal> = {};
+      const trimmedPostDateByIndex: Record<number, string> = {};
+
+      for (let index = 0; index < trimmedPosts.length; index += 1) {
+        if (Object.prototype.hasOwnProperty.call(nextPostTypeByIndex, index)) {
+          trimmedPostTypeByIndex[index] = nextPostTypeByIndex[index];
+        }
+        if (Object.prototype.hasOwnProperty.call(nextBrandVoiceByIndex, index)) {
+          trimmedBrandVoiceByIndex[index] = nextBrandVoiceByIndex[index];
+        }
+        if (Object.prototype.hasOwnProperty.call(nextGoalByIndex, index)) {
+          trimmedGoalByIndex[index] = nextGoalByIndex[index];
+        }
+        if (Object.prototype.hasOwnProperty.call(nextPostDateByIndex, index)) {
+          trimmedPostDateByIndex[index] = nextPostDateByIndex[index];
+        }
+      }
+
       const mergedHooks = Array.from(
         new Set(
           generationChunks
@@ -1518,9 +2038,10 @@ export default function Home() {
         ctaLink: form.ctaLink,
         details: form.details,
       };
-      setPostTypeByPostIndex(nextPostTypeByIndex);
-      setBrandVoiceByPostIndex(nextBrandVoiceByIndex);
-      setGoalByPostIndex(nextGoalByIndex);
+      setPostTypeByPostIndex(trimmedPostTypeByIndex);
+      setBrandVoiceByPostIndex(trimmedBrandVoiceByIndex);
+      setGoalByPostIndex(trimmedGoalByIndex);
+      setPostDateByPostIndex(trimmedPostDateByIndex);
       setResult(mergedResult);
       setRewriteContext(nextRewriteContext);
     } catch {
@@ -2296,6 +2817,222 @@ export default function Home() {
             </div>
           </div>
 
+          {showEventFields ? (
+            <div className="space-y-3 rounded-2xl border border-sky-200 bg-sky-50/50 p-4">
+              <div className="flex items-center justify-between gap-2">
+                <span className="text-sm font-semibold text-slate-900">Notion calendar (month)</span>
+                <div className="flex items-center gap-2">
+                  <label className="flex items-center gap-1.5 rounded-lg border border-black/10 bg-white px-2 py-1 text-xs text-slate-700">
+                    <input
+                      type="checkbox"
+                      className="h-3.5 w-3.5 rounded border-black/20"
+                      checked={showWebinarsOnly}
+                      onChange={(event) => setShowWebinarsOnly(event.target.checked)}
+                    />
+                    Webinars only
+                  </label>
+                  <button
+                    type="button"
+                    disabled={notionCalendarSyncLoading}
+                    className="rounded-lg border border-black/10 bg-white px-2 py-1 text-xs text-slate-700 hover:bg-slate-50 disabled:opacity-50"
+                    onClick={reloadNotionCalendar}
+                  >
+                    {notionCalendarSyncLoading ? "Reloading…" : "Reload"}
+                  </button>
+                </div>
+              </div>
+              {notionCalendarLoading ? (
+                <p className="text-xs text-slate-600">Loading calendar…</p>
+              ) : notionCalendar?.entries.length ? (
+                <>
+                  {calendarEntriesMissingDate.length ? (
+                    <div className="space-y-2 rounded-xl border border-amber-300 bg-amber-50 p-3">
+                      <p className="text-xs font-semibold uppercase tracking-wide text-amber-900">
+                        Missing date in Notion ({calendarEntriesMissingDate.length}) - not shown on calendar grid
+                      </p>
+                      <ul className="space-y-1">
+                        {calendarEntriesMissingDate.map((entry) => (
+                          <li key={entry.id} className="flex items-center justify-between gap-2 text-xs text-amber-900">
+                            <span className="min-w-0 truncate">{entry.name || "Untitled entry"}</span>
+                            <a
+                              href={entry.notionUrl}
+                              target="_blank"
+                              rel="noopener noreferrer"
+                              className="shrink-0 underline underline-offset-2"
+                            >
+                              Open
+                            </a>
+                          </li>
+                        ))}
+                      </ul>
+                    </div>
+                  ) : null}
+
+                  <div className="flex flex-wrap items-center justify-between gap-2">
+                    <div className="flex items-center gap-1">
+                      <button
+                        type="button"
+                        className="rounded-lg border border-black/10 bg-white px-2 py-1 text-xs text-slate-700 hover:bg-slate-50"
+                        onClick={showPreviousCalendarMonth}
+                        aria-label="Show previous month"
+                      >
+                        ‹
+                      </button>
+                      <button
+                        type="button"
+                        className="rounded-lg border border-black/10 bg-white px-2 py-1 text-xs text-slate-700 hover:bg-slate-50"
+                        onClick={jumpToCurrentCalendarMonth}
+                      >
+                        Today
+                      </button>
+                      <button
+                        type="button"
+                        className="rounded-lg border border-black/10 bg-white px-2 py-1 text-xs text-slate-700 hover:bg-slate-50"
+                        onClick={showNextCalendarMonth}
+                        aria-label="Show next month"
+                      >
+                        ›
+                      </button>
+                    </div>
+                    <span className="text-sm font-semibold text-slate-800">{calendarMonthLabel}</span>
+                    <div className="flex items-center gap-1">
+                      <button
+                        type="button"
+                        disabled={!monthEntries.length}
+                        className="rounded-lg border border-black/10 bg-white px-2 py-1 text-xs text-slate-700 hover:bg-slate-50 disabled:opacity-50"
+                        onClick={selectAllEntriesInCurrentMonth}
+                      >
+                        Select month
+                      </button>
+                      <button
+                        type="button"
+                        disabled={!monthEntries.length}
+                        className="rounded-lg border border-black/10 bg-white px-2 py-1 text-xs text-slate-700 hover:bg-slate-50 disabled:opacity-50"
+                        onClick={clearCurrentMonthSelections}
+                      >
+                        Clear month
+                      </button>
+                    </div>
+                  </div>
+
+                  {!monthEntries.length ? (
+                    <p className="text-xs text-slate-600">
+                      No {showWebinarsOnly ? "webinar " : ""}entries scheduled in {calendarMonthLabel}.
+                    </p>
+                  ) : null}
+
+                  <div className="overflow-x-auto">
+                    <div className="grid min-w-[46rem] grid-cols-7 gap-px overflow-hidden rounded-xl border border-black/10 bg-black/10">
+                      {CALENDAR_DAY_LABELS.map((dayLabel) => (
+                        <div
+                          key={dayLabel}
+                          className="bg-slate-100 px-2 py-1 text-center text-[11px] font-semibold uppercase tracking-wide text-slate-600"
+                        >
+                          {dayLabel}
+                        </div>
+                      ))}
+                      {monthCalendarCells.map((cell) => (
+                        <div
+                          key={cell.key}
+                          className={`min-h-28 space-y-1.5 p-2 ${cell.isCurrentMonth ? "bg-white" : "bg-slate-50/80"}`}
+                        >
+                          <div className="flex items-center justify-end">
+                            <span
+                              className={`inline-flex h-6 w-6 items-center justify-center rounded-full text-xs font-semibold ${
+                                cell.isToday
+                                  ? "bg-rose-500 text-white"
+                                  : cell.isCurrentMonth
+                                    ? "text-slate-700"
+                                    : "text-slate-400"
+                              }`}
+                            >
+                              {cell.dayOfMonth}
+                            </span>
+                          </div>
+
+                          <div className="space-y-1">
+                            {cell.entries.map((entry) => {
+                              const isSelected = selectedCalendarEntryIdSet.has(entry.id);
+                              const needsAttention = entry.needsAuthorInput || entry.needsEventDetails;
+                              const missingFields = missingFieldsByCalendarEntryId.get(entry.id) ?? [];
+                              const hasMissingFields = missingFields.length > 0;
+                              const missingLabel = missingFields.join(" + ");
+                              return (
+                                <div
+                                  key={entry.id}
+                                  className={`rounded-md border px-2 py-1 text-[11px] leading-tight transition ${
+                                    isSelected ? selectableCardSelectedClass : selectableCardUnselectedClass
+                                  } ${hasMissingFields ? "ring-2 ring-amber-300 ring-inset" : ""}`}
+                                >
+                                  <button
+                                    type="button"
+                                    onClick={() => toggleCalendarEntrySelection(entry.id)}
+                                    className="flex w-full items-start justify-between gap-1 text-left"
+                                  >
+                                    <span className="min-w-0 flex-1 truncate font-medium text-slate-800">{entry.name}</span>
+                                    <span className="mt-0.5 flex shrink-0 items-center gap-1">
+                                      {hasMissingFields ? (
+                                        <span
+                                          className="rounded bg-amber-200 px-1 py-0.5 text-[10px] font-semibold uppercase tracking-wide text-amber-900"
+                                          title={`Missing ${missingLabel}`}
+                                        >
+                                          Missing {missingLabel}
+                                        </span>
+                                      ) : null}
+                                      {needsAttention ? (
+                                        <span
+                                          className="h-1.5 w-1.5 rounded-full bg-amber-500"
+                                          title="Missing info: ask Cursor to tag author in Notion"
+                                        />
+                                      ) : null}
+                                      {isSelected ? <IconCheck className="h-3 w-3 text-sky-700" /> : null}
+                                    </span>
+                                  </button>
+                                  {hasMissingFields ? (
+                                    <p className="mt-1 text-[10px] font-semibold uppercase tracking-wide text-amber-800">
+                                      Needs Notion update
+                                    </p>
+                                  ) : null}
+                                  <div className="mt-1 flex items-center justify-between gap-1">
+                                    <span className="min-w-0 truncate text-[10px] text-slate-500">
+                                      {entry.event?.eventName || entry.date}
+                                    </span>
+                                    <a
+                                      href={entry.notionUrl}
+                                      target="_blank"
+                                      rel="noopener noreferrer"
+                                      className="shrink-0 text-[10px] text-slate-500 underline-offset-2 hover:underline"
+                                    >
+                                      Open
+                                    </a>
+                                  </div>
+                                </div>
+                              );
+                            })}
+                          </div>
+                        </div>
+                      ))}
+                    </div>
+                  </div>
+
+                  <p className="text-xs text-slate-600">
+                    {selectedCalendarEntries.length
+                      ? `${selectedCalendarEntries.length} selected event${
+                          selectedCalendarEntries.length === 1 ? "" : "s"
+                        } will be used for generation.`
+                      : "Select one or more events to generate posts from Notion context."}
+                  </p>
+                </>
+              ) : notionCalendar?.syncedAt ? (
+                <p className="text-xs text-slate-600">No calendar entries found.</p>
+              ) : (
+                <p className="text-xs text-slate-600">
+                  Ask Cursor to sync the Notion calendar (using Notion MCP), then click Reload.
+                </p>
+              )}
+            </div>
+          ) : null}
+
           {showMemeFields ? (
             <div className="space-y-3 rounded-2xl border border-black/10 bg-slate-50 p-3">
               <p className="text-xs font-semibold uppercase tracking-wide text-slate-600">Meme Options (optional)</p>
@@ -2837,7 +3574,11 @@ export default function Home() {
                   value={form.time}
                   onChange={(event) => setForm((prev) => ({ ...prev, time: event.target.value }))}
                 />
-                <p className="text-xs text-slate-600">Click to pick date and time from calendar/time selector.</p>
+                <p className="text-xs text-slate-600">
+                  {useNotionCalendarForGeneration
+                    ? "Used as a fallback when a selected calendar event has no time."
+                    : "Click to pick date and time from calendar/time selector."}
+                </p>
               </label>
 
               <label className="space-y-1">
@@ -3044,12 +3785,127 @@ export default function Home() {
             </div>
           ) : null}
 
+          {result?.posts.length && generatedPostDates.length ? (
+            <div className="space-y-3 rounded-3xl border border-black/10 bg-white/90 p-4 shadow-[0_12px_30px_rgba(0,0,0,0.06)] sm:p-5">
+              <div className="flex flex-wrap items-center justify-between gap-2">
+                <h2 className="text-lg font-semibold text-slate-900">Generated posts calendar</h2>
+                <button
+                  type="button"
+                  disabled={!selectedGeneratedPostsDate}
+                  className="rounded-lg border border-black/10 bg-white px-2 py-1 text-xs text-slate-700 hover:bg-slate-50 disabled:opacity-50"
+                  onClick={() => setSelectedGeneratedPostsDate(null)}
+                >
+                  Show all posts
+                </button>
+              </div>
+
+              <div className="flex flex-wrap items-center justify-between gap-2">
+                <div className="flex items-center gap-1">
+                  <button
+                    type="button"
+                    className="rounded-lg border border-black/10 bg-white px-2 py-1 text-xs text-slate-700 hover:bg-slate-50"
+                    onClick={showPreviousGeneratedPostsMonth}
+                    aria-label="Show previous generated-post month"
+                  >
+                    ‹
+                  </button>
+                  <button
+                    type="button"
+                    className="rounded-lg border border-black/10 bg-white px-2 py-1 text-xs text-slate-700 hover:bg-slate-50"
+                    onClick={jumpToGeneratedPostsCurrentMonth}
+                  >
+                    Today
+                  </button>
+                  <button
+                    type="button"
+                    className="rounded-lg border border-black/10 bg-white px-2 py-1 text-xs text-slate-700 hover:bg-slate-50"
+                    onClick={showNextGeneratedPostsMonth}
+                    aria-label="Show next generated-post month"
+                  >
+                    ›
+                  </button>
+                </div>
+                <span className="text-sm font-semibold text-slate-800">{generatedPostsMonthLabel}</span>
+                <p className="text-xs text-slate-600">
+                  {selectedGeneratedPostsDate
+                    ? `Showing ${filteredGeneratedPostIndices.length} post${
+                        filteredGeneratedPostIndices.length === 1 ? "" : "s"
+                      } for ${formatCalendarDateLabel(selectedGeneratedPostsDate)}.`
+                    : "Click a day to filter generated posts."}
+                </p>
+              </div>
+
+              <div className="overflow-x-auto">
+                <div className="grid min-w-[46rem] grid-cols-7 gap-px overflow-hidden rounded-xl border border-black/10 bg-black/10">
+                  {CALENDAR_DAY_LABELS.map((dayLabel) => (
+                    <div
+                      key={dayLabel}
+                      className="bg-slate-100 px-2 py-1 text-center text-[11px] font-semibold uppercase tracking-wide text-slate-600"
+                    >
+                      {dayLabel}
+                    </div>
+                  ))}
+                  {generatedPostsMonthCells.map((cell) => {
+                    const hasPosts = cell.postIndices.length > 0;
+                    const isSelected = selectedGeneratedPostsDate === cell.key;
+                    const previewPost = hasPosts && result?.posts ? result.posts[cell.postIndices[0]] : undefined;
+
+                    return (
+                      <div
+                        key={cell.key}
+                        className={`min-h-24 space-y-1.5 p-2 ${cell.isCurrentMonth ? "bg-white" : "bg-slate-50/80"}`}
+                      >
+                        <div className="flex items-center justify-end">
+                          <span
+                            className={`inline-flex h-6 w-6 items-center justify-center rounded-full text-xs font-semibold ${
+                              cell.isToday
+                                ? "bg-rose-500 text-white"
+                                : cell.isCurrentMonth
+                                  ? "text-slate-700"
+                                  : "text-slate-400"
+                            }`}
+                          >
+                            {cell.dayOfMonth}
+                          </span>
+                        </div>
+
+                        {hasPosts ? (
+                          <button
+                            type="button"
+                            onClick={() => toggleGeneratedPostsDateSelection(cell.key)}
+                            className={`w-full rounded-md border px-2 py-1 text-left text-[11px] leading-tight transition ${
+                              isSelected
+                                ? "border-sky-500 bg-sky-50 text-sky-900"
+                                : "border-black/10 bg-white text-slate-700 hover:border-slate-400 hover:bg-slate-50"
+                            }`}
+                          >
+                            <p className="truncate font-medium">
+                              {cell.postIndices.length} post{cell.postIndices.length === 1 ? "" : "s"}
+                            </p>
+                            {previewPost?.hook ? <p className="mt-0.5 truncate text-[10px] text-slate-500">{previewPost.hook}</p> : null}
+                          </button>
+                        ) : null}
+                      </div>
+                    );
+                  })}
+                </div>
+              </div>
+            </div>
+          ) : null}
+
           <div className="space-y-4">
-            {result?.posts.map((post, index) => {
+            {result?.posts && filteredGeneratedPostIndices.map((postIndex) => {
+              const post = result.posts[postIndex];
+              if (!post) {
+                return null;
+              }
+
+              const index = postIndex;
               const bodyLineOptions = buildEditableBodyLines(post.body);
               const generatedPostType = postTypeByPostIndex[index];
               const generatedStyle = brandVoiceByPostIndex[index];
               const generatedGoal = goalByPostIndex[index];
+              const generatedPostDate = postDateByPostIndex[index];
               const selectedLine = bodyLineOptions.find(
                 (lineOption) => lineOption.lineIndex === selectedLineByPost[index] && !lineOption.isBlank,
               );
@@ -3070,6 +3926,7 @@ export default function Home() {
                       {generatedPostType ? ` · ${generatedPostType}` : ""}
                       {generatedStyle ? ` · ${generatedStyle}` : ""}
                       {generatedGoal ? ` · ${GOAL_LABELS[generatedGoal]}` : ""}
+                      {generatedPostDate ? ` · ${formatCalendarDateLabel(generatedPostDate)}` : ""}
                       {" · "}
                       {formatLengthLabel(post.length)}
                     </p>
