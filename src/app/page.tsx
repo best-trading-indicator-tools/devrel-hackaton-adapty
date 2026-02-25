@@ -1155,7 +1155,7 @@ export default function Home() {
   const [postDateByPostIndex, setPostDateByPostIndex] = useState<Record<number, string>>({});
   const [postEventLabelByPostIndex, setPostEventLabelByPostIndex] = useState<Record<number, string>>({});
   const [generatedPostsMonthCursor, setGeneratedPostsMonthCursor] = useState<Date>(() => getStartOfMonth(new Date()));
-  const [selectedGeneratedPostsDate, setSelectedGeneratedPostsDate] = useState<string | null>(null);
+  const [selectedGeneratedPostsDates, setSelectedGeneratedPostsDates] = useState<string[]>([]);
   const [numberOfPostsInput, setNumberOfPostsInput] = useState<string>(() => String(defaultForm.numberOfPosts));
   const [result, setResult] = useState<GeneratePostsResponse | null>(null);
   const [rewriteContext, setRewriteContext] = useState<RewriteContext>(defaultRewriteContext);
@@ -1268,6 +1268,10 @@ export default function Home() {
     return byDate;
   }, [postDateByPostIndex, result?.posts]);
   const generatedPostDates = useMemo(() => Array.from(generatedPostIndicesByDate.keys()).sort(), [generatedPostIndicesByDate]);
+  const selectedGeneratedPostsDateSet = useMemo(
+    () => new Set(selectedGeneratedPostsDates),
+    [selectedGeneratedPostsDates],
+  );
   const generatedPostsMonthCells = useMemo(
     () => buildGeneratedPostsCalendarCells(generatedPostIndicesByDate, generatedPostsMonthCursor, todayDate),
     [generatedPostIndicesByDate, generatedPostsMonthCursor, todayDate],
@@ -1281,17 +1285,27 @@ export default function Home() {
       return [];
     }
 
-    if (!selectedGeneratedPostsDate) {
+    if (!selectedGeneratedPostsDates.length) {
       return result.posts.map((_, index) => index);
     }
 
-    const selected = generatedPostIndicesByDate.get(selectedGeneratedPostsDate);
-    if (selected?.length) {
-      return selected;
+    const selectedPostIndexSet = new Set<number>();
+    for (const dateKey of selectedGeneratedPostsDates) {
+      const indices = generatedPostIndicesByDate.get(dateKey);
+      if (!indices?.length) {
+        continue;
+      }
+      for (const postIndex of indices) {
+        selectedPostIndexSet.add(postIndex);
+      }
+    }
+
+    if (selectedPostIndexSet.size) {
+      return result.posts.map((_, index) => index).filter((index) => selectedPostIndexSet.has(index));
     }
 
     return result.posts.map((_, index) => index);
-  }, [generatedPostIndicesByDate, result?.posts, selectedGeneratedPostsDate]);
+  }, [generatedPostIndicesByDate, result?.posts, selectedGeneratedPostsDates]);
   const showMemeFields = normalizedSelectedPostTypes.length > 0;
   const showChartFields = useMemo(
     () => normalizedSelectedPostTypes.some((type) => needsChartDetails(type)),
@@ -1647,7 +1661,7 @@ export default function Home() {
 
   useEffect(() => {
     if (!generatedPostDates.length) {
-      setSelectedGeneratedPostsDate(null);
+      setSelectedGeneratedPostsDates([]);
       return;
     }
 
@@ -1661,9 +1675,7 @@ export default function Home() {
       return firstDate ? getStartOfMonth(firstDate) : currentCursor;
     });
 
-    setSelectedGeneratedPostsDate((previous) =>
-      previous && generatedPostIndicesByDate.has(previous) ? previous : generatedPostDates[0],
-    );
+    setSelectedGeneratedPostsDates((previous) => previous.filter((date) => generatedPostIndicesByDate.has(date)));
   }, [generatedPostDates, generatedPostIndicesByDate]);
 
   async function reloadNotionCalendar() {
@@ -1727,7 +1739,9 @@ export default function Home() {
   }
 
   function toggleGeneratedPostsDateSelection(dateKey: string) {
-    setSelectedGeneratedPostsDate((previous) => (previous === dateKey ? null : dateKey));
+    setSelectedGeneratedPostsDates((previous) =>
+      previous.includes(dateKey) ? previous.filter((existingDate) => existingDate !== dateKey) : [...previous, dateKey],
+    );
   }
 
   function updateChartRows(
@@ -1863,7 +1877,7 @@ export default function Home() {
     setGoalByPostIndex({});
     setPostDateByPostIndex({});
     setPostEventLabelByPostIndex({});
-    setSelectedGeneratedPostsDate(null);
+    setSelectedGeneratedPostsDates([]);
 
     if (isImageProcessing) {
       setError("Image is still processing. Please wait a second and retry.");
@@ -3912,9 +3926,9 @@ export default function Home() {
                 <h2 className="text-lg font-semibold text-slate-900">Generated posts calendar</h2>
                 <button
                   type="button"
-                  disabled={!selectedGeneratedPostsDate}
+                  disabled={!selectedGeneratedPostsDates.length}
                   className="rounded-lg border border-black/10 bg-white px-2 py-1 text-xs text-slate-700 hover:bg-slate-50 disabled:opacity-50"
-                  onClick={() => setSelectedGeneratedPostsDate(null)}
+                  onClick={() => setSelectedGeneratedPostsDates([])}
                 >
                   Show all posts
                 </button>
@@ -3948,11 +3962,13 @@ export default function Home() {
                 </div>
                 <span className="text-sm font-semibold text-slate-800">{generatedPostsMonthLabel}</span>
                 <p className="text-xs text-slate-600">
-                  {selectedGeneratedPostsDate
+                  {selectedGeneratedPostsDates.length
                     ? `Showing ${filteredGeneratedPostIndices.length} post${
                         filteredGeneratedPostIndices.length === 1 ? "" : "s"
-                      } for ${formatCalendarDateLabel(selectedGeneratedPostsDate)}.`
-                    : "Click a day to filter generated posts."}
+                      } for ${selectedGeneratedPostsDates.length} selected day${
+                        selectedGeneratedPostsDates.length === 1 ? "" : "s"
+                      }.`
+                    : "Click one or more days to filter generated posts."}
                 </p>
               </div>
 
@@ -3968,7 +3984,7 @@ export default function Home() {
                   ))}
                   {generatedPostsMonthCells.map((cell) => {
                     const hasPosts = cell.postIndices.length > 0;
-                    const isSelected = selectedGeneratedPostsDate === cell.key;
+                    const isSelected = selectedGeneratedPostsDateSet.has(cell.key);
                     const calendarCellSummary = buildGeneratedCalendarCellSummary({
                       postIndices: cell.postIndices,
                       postTypeByPostIndex,
