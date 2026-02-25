@@ -2460,10 +2460,18 @@ export async function POST(request: Request) {
     ]
       .filter(Boolean)
       .join(" | ");
-    const isInternalEventOrProductPostType =
-      looksLikeEventOrWebinarPostType(input.inputType) || looksLikeProductUpdatePostType(input.inputType);
-    const shouldRunWebFactCheck = !isInternalEventOrProductPostType;
-    const shouldRunSoisContext = !isInternalEventOrProductPostType;
+    const isEventOrWebinarPostType = looksLikeEventOrWebinarPostType(input.inputType);
+    const isProductUpdatePostType = looksLikeProductUpdatePostType(input.inputType);
+    const shouldRunWebFactCheck = !isProductUpdatePostType;
+    const shouldRunSoisContext = !isProductUpdatePostType && !isEventOrWebinarPostType;
+    const webFactCheckSkipReason = isProductUpdatePostType
+      ? "Web fact-check skipped for product feature launch post type."
+      : "Web fact-check skipped for this post type.";
+    const soisContextSkipReason = isProductUpdatePostType
+      ? "SOIS context skipped for product feature launch post type."
+      : isEventOrWebinarPostType
+        ? "SOIS context skipped for event/webinar post type."
+        : "SOIS context skipped for this post type.";
     const webFactCheckPromise = shouldRunWebFactCheck
       ? runWebFactCheck({
           style: input.style,
@@ -2480,7 +2488,7 @@ export async function POST(request: Request) {
           queries: [],
           sources: [],
           evidenceLines: [],
-          warning: "Web fact-check skipped for internal post type.",
+          warning: webFactCheckSkipReason,
         });
     const soisContextPromise = shouldRunSoisContext
       ? retrieveSoisContext({
@@ -2495,7 +2503,7 @@ export async function POST(request: Request) {
           enabled: false,
           method: "none" as const,
           items: [],
-          warning: "SOIS context skipped for internal post type.",
+          warning: soisContextSkipReason,
           fetchedSections: 0,
           availableSections: 0,
         });
@@ -2617,22 +2625,26 @@ export async function POST(request: Request) {
 - Evidence: ${compactText}`;
     });
     const factCheckDirective = !shouldRunWebFactCheck
-      ? "Web fact-check is intentionally skipped for this internal post type. Use only internal context and provided evidence."
+      ? `${webFactCheckSkipReason} Use only internal context and provided evidence.`
       : webEvidenceLines.length
         ? "Web evidence is available. Ground factual claims in this evidence. Use real numbers only when they appear in the evidence or provided context."
         : "Web evidence is unavailable or empty. Phrase uncertain factual claims as opinion, observation, or hypothesis.";
     const soisDirective = !shouldRunSoisContext
-      ? "State of In-App Subscriptions (SOIS) benchmark retrieval is intentionally skipped for this internal post type. Use only internal context and provided event/request details."
+      ? `${soisContextSkipReason} Use only non-SOIS evidence and provided event/request details.`
       : soisContext.enabled
         ? "State of In-App Subscriptions (SOIS) benchmark evidence is available. Use it as a first-class factual source for hooks, mechanisms, caveats, and numeric anchors."
         : "State of In-App Subscriptions (SOIS) benchmark evidence is unavailable for this run. Use only numbers and claims from other provided evidence.";
+    const eventWebEnrichmentDirective =
+      isEventOrWebinarPostType && shouldRunWebFactCheck
+        ? "For event/webinar posts, use web evidence to recover missing logistics (date, time, place, registration URL) when possible. If unresolved, keep it generic instead of guessing."
+        : "";
     const factCheckEvidenceForPrompt = !shouldRunWebFactCheck
-      ? "Web fact-check skipped for this internal post type."
+      ? webFactCheckSkipReason
       : webEvidenceLines.length
         ? webEvidenceLines.join("\n")
         : "No live web evidence available for this request.";
     const soisEvidenceForPrompt = !shouldRunSoisContext
-      ? "SOIS benchmark retrieval skipped for this internal post type."
+      ? soisContextSkipReason
       : soisEvidenceLines.length
         ? soisEvidenceLines.join("\n")
         : "No SOIS benchmark evidence available for this request.";
@@ -2645,17 +2657,21 @@ export async function POST(request: Request) {
         : "internal context";
     const evidenceContextGuidance = shouldRunSoisContext
       ? `Evidence context (priority order: ${evidencePriorityOrder}). Numbers from SOIS are real benchmarks - use them, they make posts more compelling. Copy numbers verbatim from the evidence below. Use each number for its labeled metric only: install_to_paid_rate as %, avg_ltv as $, price_usd as $. When a number is not in the evidence, write the sentence without it. For Sauce posts: only use numbers from the SOIS evidence below (not from web fact-check or user input). Use 1-2 benchmark numbers total per post.`
-      : `Evidence context (priority order: ${evidencePriorityOrder}). This internal post type should use internal request context only (details, event data, date/time/place, and CTA link). Do not introduce SOIS benchmark claims.`;
+      : shouldRunWebFactCheck
+        ? `Evidence context (priority order: ${evidencePriorityOrder}). Use web evidence to fill factual gaps when available (especially for event logistics). If a detail is not supported by evidence, keep phrasing qualitative and avoid invented specifics. Do not introduce SOIS benchmark claims.`
+        : `Evidence context (priority order: ${evidencePriorityOrder}). Use internal request context only (details, event data, date/time/place, and CTA link). Do not introduce SOIS benchmark claims.`;
     const soisSectionTitle = shouldRunSoisContext
       ? "1. SOIS (Adapty State of In-App Subscriptions) - fetched from dags.adpinfra.dev:"
-      : "1. SOIS benchmark context: skipped for internal post type.";
+      : `1. SOIS benchmark context: ${soisContextSkipReason}`;
     const webFactCheckSectionTitle = shouldRunWebFactCheck
-      ? "2. Web fact-check (use when SOIS lacks the claim):"
-      : "2. Web fact-check: skipped for internal post type.";
+      ? shouldRunSoisContext
+        ? "2. Web fact-check (use when SOIS lacks the claim):"
+        : "2. Web fact-check (primary external evidence source):"
+      : `2. Web fact-check: ${webFactCheckSkipReason}`;
     if (shouldRunSoisContext) {
       console.log("[Evidence] SOIS lines:", soisEvidenceLines.length, "\n", soisEvidenceForPrompt.slice(0, 1500));
     } else {
-      console.log("[Evidence] SOIS check skipped for internal post type.");
+      console.log("[Evidence]", soisContextSkipReason);
     }
     const allowedNumericClaims = buildAllowedNumericClaimSet(
       [
@@ -2741,7 +2757,7 @@ Before returning, read each post out loud in your head. Rewrite any sentence tha
 ${toBulletedSection(QUALITY_GATE_PROMPT_LINES)}
 `;
 
-    const factsPolicy = [factCheckDirective, soisDirective].filter(Boolean).join(" ");
+    const factsPolicy = [factCheckDirective, soisDirective, eventWebEnrichmentDirective].filter(Boolean).join(" ");
 
     const memeSection = includeMemeCompanion
       ? `\nMeme config: ${memeExecutionDirective}

@@ -563,6 +563,19 @@ function shiftMonth(value: Date, delta: number): Date {
   return getStartOfMonth(new Date(value.getFullYear(), value.getMonth() + delta, 1));
 }
 
+function getStartOfWeek(value: Date): Date {
+  const start = new Date(value);
+  start.setHours(0, 0, 0, 0);
+  start.setDate(start.getDate() - start.getDay());
+  return start;
+}
+
+function getWeekRange(referenceDate: Date, weekOffset = 0): { start: Date; end: Date } {
+  const start = addCalendarDays(getStartOfWeek(referenceDate), weekOffset * 7);
+  const end = addCalendarDays(start, 6);
+  return { start, end };
+}
+
 function addCalendarDays(value: Date, days: number): Date {
   const next = new Date(value);
   next.setDate(next.getDate() + days);
@@ -601,6 +614,10 @@ function formatCalendarDateLabel(value: string): string {
     day: "numeric",
     year: "numeric",
   }).format(parsed);
+}
+
+function formatWeekRangeLabel(range: { start: Date; end: Date }): string {
+  return `${formatCalendarDateLabel(formatCalendarDateKey(range.start))} - ${formatCalendarDateLabel(formatCalendarDateKey(range.end))}`;
 }
 
 function extractDateKeyFromDateTimeInput(value: string): string {
@@ -671,6 +688,44 @@ function getProductUpdateEntriesForMonth(entries: SlackProductUpdateEntry[], mon
   const monthKey = `${formatCalendarMonthKey(monthDate)}-`;
   return entries
     .filter((entry) => entry.releaseDate.startsWith(monthKey))
+    .sort((a, b) => a.releaseDate.localeCompare(b.releaseDate) || a.name.localeCompare(b.name));
+}
+
+function getCalendarEntriesForWeek(entries: NotionCalendarEntry[], referenceDate: Date, weekOffset = 0): NotionCalendarEntry[] {
+  const { start, end } = getWeekRange(referenceDate, weekOffset);
+  const startMs = start.getTime();
+  const endMs = end.getTime();
+
+  return entries
+    .filter((entry) => {
+      const parsedDate = parseCalendarDate(entry.date);
+      if (!parsedDate) {
+        return false;
+      }
+      const entryMs = parsedDate.getTime();
+      return entryMs >= startMs && entryMs <= endMs;
+    })
+    .sort((a, b) => a.date.localeCompare(b.date) || a.name.localeCompare(b.name));
+}
+
+function getProductUpdateEntriesForWeek(
+  entries: SlackProductUpdateEntry[],
+  referenceDate: Date,
+  weekOffset = 0,
+): SlackProductUpdateEntry[] {
+  const { start, end } = getWeekRange(referenceDate, weekOffset);
+  const startMs = start.getTime();
+  const endMs = end.getTime();
+
+  return entries
+    .filter((entry) => {
+      const parsedDate = parseCalendarDate(entry.releaseDate);
+      if (!parsedDate) {
+        return false;
+      }
+      const entryMs = parsedDate.getTime();
+      return entryMs >= startMs && entryMs <= endMs;
+    })
     .sort((a, b) => a.releaseDate.localeCompare(b.releaseDate) || a.name.localeCompare(b.name));
 }
 
@@ -1849,10 +1904,22 @@ export default function Home() {
     [normalizedSelectedPostTypes],
   );
   const calendarEntries = useMemo(() => notionCalendar?.entries ?? [], [notionCalendar?.entries]);
+  const currentWeekRange = useMemo(() => getWeekRange(todayDate, 0), [todayDate]);
+  const nextWeekRange = useMemo(() => getWeekRange(todayDate, 1), [todayDate]);
+  const currentWeekRangeLabel = useMemo(() => formatWeekRangeLabel(currentWeekRange), [currentWeekRange]);
+  const nextWeekRangeLabel = useMemo(() => formatWeekRangeLabel(nextWeekRange), [nextWeekRange]);
   const monthEntries = useMemo(() => {
     if (!calendarEntries.length) return [];
     return getEntriesForMonth(calendarEntries, calendarMonthCursor);
   }, [calendarEntries, calendarMonthCursor]);
+  const currentWeekCalendarEntries = useMemo(
+    () => getCalendarEntriesForWeek(calendarEntries, todayDate, 0),
+    [calendarEntries, todayDate],
+  );
+  const nextWeekCalendarEntries = useMemo(
+    () => getCalendarEntriesForWeek(calendarEntries, todayDate, 1),
+    [calendarEntries, todayDate],
+  );
   const missingFieldsByCalendarEntryId = useMemo(() => {
     const byId = new Map<string, CalendarEntryMissingField[]>();
     for (const entry of calendarEntries) {
@@ -1888,6 +1955,14 @@ export default function Home() {
   const productUpdateMonthEntries = useMemo(
     () => getProductUpdateEntriesForMonth(productUpdateEntries, productUpdatesMonthCursor),
     [productUpdateEntries, productUpdatesMonthCursor],
+  );
+  const currentWeekProductUpdateEntries = useMemo(
+    () => getProductUpdateEntriesForWeek(productUpdateEntries, todayDate, 0),
+    [productUpdateEntries, todayDate],
+  );
+  const nextWeekProductUpdateEntries = useMemo(
+    () => getProductUpdateEntriesForWeek(productUpdateEntries, todayDate, 1),
+    [productUpdateEntries, todayDate],
   );
   const productUpdatesMonthCells = useMemo(
     () => buildProductUpdatesMonthCalendarCells(productUpdateEntries, productUpdatesMonthCursor, todayDate),
@@ -2474,6 +2549,14 @@ export default function Home() {
     setSelectedCalendarEntryIds((previous) => previous.filter((id) => !monthIds.has(id)));
   }
 
+  function selectCalendarEntriesForWeek(weekOffset: number) {
+    const weekEntries = getCalendarEntriesForWeek(calendarEntries, todayDate, weekOffset);
+    const weekIds = weekEntries.map((entry) => entry.id);
+    setSelectedCalendarEntryIds(weekIds);
+    const weekRange = getWeekRange(todayDate, weekOffset);
+    setCalendarMonthCursor(getStartOfMonth(weekRange.start));
+  }
+
   function toggleProductUpdateSelection(entryId: string) {
     setSelectedProductUpdateIds((previous) =>
       previous.includes(entryId) ? previous.filter((id) => id !== entryId) : [...previous, entryId],
@@ -2508,6 +2591,14 @@ export default function Home() {
 
     const monthIds = new Set(productUpdateMonthEntries.map((entry) => entry.id));
     setSelectedProductUpdateIds((previous) => previous.filter((id) => !monthIds.has(id)));
+  }
+
+  function selectProductUpdatesForWeek(weekOffset: number) {
+    const weekEntries = getProductUpdateEntriesForWeek(productUpdateEntries, todayDate, weekOffset);
+    const weekIds = weekEntries.map((entry) => entry.id);
+    setSelectedProductUpdateIds(weekIds);
+    const weekRange = getWeekRange(todayDate, weekOffset);
+    setProductUpdatesMonthCursor(getStartOfMonth(weekRange.start));
   }
 
   function showPreviousGeneratedPostsMonth() {
@@ -3966,6 +4057,28 @@ export default function Home() {
                     </div>
                   </div>
 
+                  <div className="flex flex-wrap items-center gap-1">
+                    <span className="text-xs font-medium text-slate-600">Quick week:</span>
+                    <button
+                      type="button"
+                      className="rounded-lg border border-black/10 bg-white px-2 py-1 text-xs text-slate-700 hover:bg-slate-50 disabled:opacity-50"
+                      disabled={!currentWeekProductUpdateEntries.length}
+                      onClick={() => selectProductUpdatesForWeek(0)}
+                      title={currentWeekRangeLabel}
+                    >
+                      Current week ({currentWeekProductUpdateEntries.length})
+                    </button>
+                    <button
+                      type="button"
+                      className="rounded-lg border border-black/10 bg-white px-2 py-1 text-xs text-slate-700 hover:bg-slate-50 disabled:opacity-50"
+                      disabled={!nextWeekProductUpdateEntries.length}
+                      onClick={() => selectProductUpdatesForWeek(1)}
+                      title={nextWeekRangeLabel}
+                    >
+                      Next week ({nextWeekProductUpdateEntries.length})
+                    </button>
+                  </div>
+
                   {!productUpdateMonthEntries.length ? (
                     <p className="text-xs text-slate-600">No releases scheduled in {productUpdatesMonthLabel}.</p>
                   ) : null}
@@ -4169,6 +4282,28 @@ export default function Home() {
                     </div>
                   </div>
 
+                  <div className="flex flex-wrap items-center gap-1">
+                    <span className="text-xs font-medium text-slate-600">Quick week:</span>
+                    <button
+                      type="button"
+                      disabled={!currentWeekCalendarEntries.length}
+                      className="rounded-lg border border-black/10 bg-white px-2 py-1 text-xs text-slate-700 hover:bg-slate-50 disabled:opacity-50"
+                      onClick={() => selectCalendarEntriesForWeek(0)}
+                      title={currentWeekRangeLabel}
+                    >
+                      Current week ({currentWeekCalendarEntries.length})
+                    </button>
+                    <button
+                      type="button"
+                      disabled={!nextWeekCalendarEntries.length}
+                      className="rounded-lg border border-black/10 bg-white px-2 py-1 text-xs text-slate-700 hover:bg-slate-50 disabled:opacity-50"
+                      onClick={() => selectCalendarEntriesForWeek(1)}
+                      title={nextWeekRangeLabel}
+                    >
+                      Next week ({nextWeekCalendarEntries.length})
+                    </button>
+                  </div>
+
                   {!monthEntries.length ? (
                     <p className="text-xs text-slate-600">No entries scheduled in {calendarMonthLabel}.</p>
                   ) : null}
@@ -4279,6 +4414,9 @@ export default function Home() {
                           selectedCalendarEntries.length === 1 ? "" : "s"
                         } × ${form.numberOfPosts} post${form.numberOfPosts === 1 ? "" : "s"} each (${selectedCalendarEntries.length * form.numberOfPosts} total).`
                       : "Select one or more events to generate posts from Notion context."}
+                  </p>
+                  <p className="text-xs text-slate-600">
+                    Missing fields are highlighted. When event name/details are present, generation will attempt web enrichment for missing event logistics.
                   </p>
                 </>
               ) : notionCalendar?.syncedAt ? (
