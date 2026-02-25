@@ -8,7 +8,7 @@ When the user asks to sync the Notion calendar:
 4. For each linked Event: fetch with `notion-fetch` to get Event name, date, Region, Time, Owner, Event Type
 5. Build JSON matching `NotionCalendarData` in `src/lib/notion-calendar.ts`
 6. Write to `data/notion-calendar.json`
-7. **Tag specific people for incomplete entries** using the rules below. Use `notion-update-page` to add mentions in the page body.
+7. **Tag specific people for incomplete entries** using the rules below. Use `notion-update-page` to add mentions in the page body. **Only tag upcoming posts** (entry date ≥ today); skip past entries.
 
 ## User IDs (fixed)
 

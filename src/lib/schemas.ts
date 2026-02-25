@@ -73,6 +73,7 @@ export const generatePostsRequestSchema = z.object({
   memeVariantCount: z.coerce.number().int().min(1).max(6).default(3),
   time: z.string().trim().max(120).default(""),
   place: z.string().trim().max(120).default(""),
+  includeCta: z.coerce.boolean().default(true),
   ctaLink: z.string().trim().max(500).default(""),
   ctaLinks: z.array(z.string().trim().max(500)).max(20).default([]),
   imageDataUrl: optionalImageDataUrlSchema.default(""),
@@ -84,7 +85,8 @@ export const generatePostsRequestSchema = z.object({
 
 export type GeneratePostsRequest = z.infer<typeof generatePostsRequestSchema>;
 
-export function makeGeneratePostsResponseSchema(postCount: number) {
+export function makeGeneratePostsResponseSchema(postCount: number, options?: { requireCta?: boolean }) {
+  const requireCta = options?.requireCta ?? true;
   return z.object({
     hooks: z.array(z.string().min(8).max(220)).min(Math.max(5, postCount)).max(20),
     posts: z
@@ -93,7 +95,7 @@ export function makeGeneratePostsResponseSchema(postCount: number) {
           length: outputLengthSchema,
           hook: z.string().min(8).max(280),
           body: z.string().min(40).max(5000),
-          cta: z.string().min(4).max(320),
+          cta: requireCta ? z.string().min(4).max(320) : z.string().max(320),
         }),
       )
       .length(postCount),

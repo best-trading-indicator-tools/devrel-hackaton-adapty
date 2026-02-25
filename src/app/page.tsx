@@ -32,7 +32,7 @@ import type { SlackProductUpdateEntry, SlackProductUpdatesData } from "@/lib/sla
 import type { GeneratePostsResponse } from "@/lib/schemas";
 
 type ChartLegendPosition = "top" | "right" | "bottom" | "left";
-type CtaLinkMode = "shared" | "per_post";
+type CtaLinkMode = "shared" | "per_post" | "none";
 
 type FormState = {
   style: string;
@@ -1842,6 +1842,8 @@ export default function Home() {
     "inline-flex cursor-pointer items-center justify-center rounded-lg border border-slate-300 bg-white px-2 py-1 text-xs font-medium text-slate-800 shadow-sm transition hover:border-slate-400 hover:bg-slate-100 hover:shadow active:scale-[0.99] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-sky-300 disabled:cursor-not-allowed disabled:opacity-45";
   const calendarPrimaryButtonClassName =
     "inline-flex cursor-pointer items-center justify-center rounded-lg border border-sky-300 bg-sky-50 px-2 py-1 text-xs font-semibold text-sky-900 shadow-sm transition hover:border-sky-400 hover:bg-sky-100 hover:shadow active:scale-[0.99] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-sky-300 disabled:cursor-not-allowed disabled:opacity-45";
+  const postMetaChipClassName =
+    "inline-flex max-w-full items-center rounded-full border border-slate-200 bg-slate-50 px-2.5 py-1 text-[11px] font-medium text-slate-700";
   const selectableCardSelectedClass =
     "border-sky-500 bg-sky-50 shadow-[0_0_0_1px_rgba(56,189,248,0.22)]";
   const selectableCardUnselectedClass = "border-black/10 bg-white hover:border-slate-400 hover:bg-slate-50";
@@ -2867,8 +2869,13 @@ export default function Home() {
         return;
       }
 
-      const sharedCtaLink = form.ctaLink.trim();
+      const shouldIncludeCta = ctaLinkMode !== "none";
+      const sharedCtaLink = shouldIncludeCta ? form.ctaLink.trim() : "";
       const getDefaultCtaLinkForAllocation = (allocation: GenerationAllocation): string => {
+        if (!shouldIncludeCta) {
+          return "";
+        }
+
         if (allocation.productUpdateEntry) {
           return normalizeCtaLink(sharedCtaLink);
         }
@@ -2880,10 +2887,11 @@ export default function Home() {
         const calendarCtaLink = allocation.calendarEntry?.event?.eventPage?.trim() ?? "";
         return calendarCtaLink;
       };
-      const requestedPerPostCtaLinks = ctaLinkMode === "per_post" ? splitMultilineUrls(perPostCtaLinksInput) : [];
+      const requestedPerPostCtaLinks =
+        shouldIncludeCta && ctaLinkMode === "per_post" ? splitMultilineUrls(perPostCtaLinksInput) : [];
       let ctaLinkCursor = 0;
       const ctaLinksByAllocationIndex = generationAllocations.map((allocation) => {
-        if (ctaLinkMode !== "per_post") {
+        if (!shouldIncludeCta || ctaLinkMode !== "per_post") {
           return [];
         }
 
@@ -2961,7 +2969,9 @@ export default function Home() {
             const defaultCtaLinkForAllocation = getDefaultCtaLinkForAllocation(allocation);
             const ctaLinksForRequest = ctaLinksByAllocationIndex[allocationIndex] ?? [];
             const ctaVal =
-              ctaLinkMode === "per_post"
+              !shouldIncludeCta
+                ? ""
+                : ctaLinkMode === "per_post"
                 ? defaultCtaLinkForAllocation
                 : ctaLinksForRequest.find((link) => link.trim().length > 0) ?? defaultCtaLinkForAllocation;
             const sourceImageUrls = productUpdateEntry
@@ -2998,8 +3008,9 @@ export default function Home() {
               time: typeNeedsEvent ? formatEventTimeForPrompt(timeVal) : "",
               place: typeNeedsEvent ? placeVal : "",
               details: detailsVal,
-              ctaLink: ctaVal,
-              ctaLinks: ctaLinksForRequest,
+              includeCta: shouldIncludeCta,
+              ctaLink: shouldIncludeCta ? ctaVal : "",
+              ctaLinks: shouldIncludeCta ? ctaLinksForRequest : [],
               memeEnabled: form.memeEnabled,
               memeBrief: form.memeEnabled ? form.memeBrief : "",
               giphyEnabled: form.giphyEnabled,
@@ -3116,10 +3127,12 @@ export default function Home() {
           }
           const requestedCtaLinkForPost = chunk.ctaLinksUsed[chunkPostIndex];
           const ctaLinkForPost = requestedCtaLinkForPost?.trim() ? requestedCtaLinkForPost : chunk.ctaLinkUsed;
-          nextPostCtaLinkByIndex[postCursor] = ctaLinkForPost;
+          if (shouldIncludeCta) {
+            nextPostCtaLinkByIndex[postCursor] = ctaLinkForPost;
+          }
           mergedPosts.push({
             ...post,
-            cta: ensureFinalCtaText(post.cta, ctaLinkForPost),
+            cta: shouldIncludeCta ? ensureFinalCtaText(post.cta, ctaLinkForPost) : "",
           });
           postCursor += 1;
         }
@@ -3218,12 +3231,13 @@ export default function Home() {
         style: generationAllocations[0]?.style ?? form.style,
         goal: generationAllocations[0]?.goal ?? form.goal,
         inputType: generationAllocations[0]?.inputType ?? form.inputType,
-        ctaLink:
-          trimmedPostCtaLinkByIndex[0]?.trim()
+        ctaLink: shouldIncludeCta
+          ? trimmedPostCtaLinkByIndex[0]?.trim()
             ? trimmedPostCtaLinkByIndex[0]
             : generationAllocations[0]?.productUpdateEntry
               ? normalizeCtaLink(form.ctaLink)
-              : form.ctaLink,
+              : form.ctaLink
+          : "",
         details: form.details,
       };
       setPostTypeByPostIndex(trimmedPostTypeByIndex);
@@ -3462,6 +3476,10 @@ export default function Home() {
   }
 
   function getRewriteCtaLink(postIndex: number): string {
+    if (ctaLinkMode === "none") {
+      return "";
+    }
+
     if (Object.prototype.hasOwnProperty.call(postCtaLinkByPostIndex, postIndex)) {
       return postCtaLinkByPostIndex[postIndex] ?? "";
     }
@@ -3534,7 +3552,7 @@ export default function Home() {
         ...currentPost,
         hook: normalizeNoEmDash(String(nextPost.hook ?? currentPost.hook)),
         body: normalizeNoEmDash(String(nextPost.body ?? currentPost.body)),
-        cta: normalizeNoEmDash(String(nextPost.cta ?? currentPost.cta)),
+        cta: ctaLinkMode === "none" ? "" : normalizeNoEmDash(String(nextPost.cta ?? currentPost.cta)),
         meme: undefined,
         memeVariants: undefined,
         giphy: undefined,
@@ -5034,26 +5052,39 @@ export default function Home() {
               >
                 Different URL per post
               </button>
+              <button
+                type="button"
+                className={`rounded-lg border px-2 py-1 text-xs transition ${
+                  ctaLinkMode === "none"
+                    ? "border-sky-500 bg-sky-50 text-sky-900"
+                    : "border-black/10 bg-white text-slate-700 hover:bg-slate-50"
+                }`}
+                onClick={() => setCtaLinkMode("none")}
+              >
+                No CTA
+              </button>
             </div>
           </div>
 
-          <label className="space-y-1">
-            <span className="text-sm font-medium">
-              {ctaLinkMode === "per_post" ? "Default CTA URL (optional)" : "CTA URL (optional)"}
-            </span>
-            <input
-              placeholder="https://example.com/webinar"
-              className={baseControlClassName}
-              style={compactInputStyle}
-              value={form.ctaLink}
-              onChange={(event) => setForm((prev) => ({ ...prev, ctaLink: event.target.value }))}
-            />
-            {ctaLinkMode === "per_post" ? (
-              <p className="text-xs text-slate-600">
-                This URL is used automatically for any post that does not have its own URL in the list below.
-              </p>
-            ) : null}
-          </label>
+          {ctaLinkMode !== "none" ? (
+            <label className="space-y-1">
+              <span className="text-sm font-medium">
+                {ctaLinkMode === "per_post" ? "Default CTA URL (optional)" : "CTA URL (optional)"}
+              </span>
+              <input
+                placeholder="https://example.com/webinar"
+                className={baseControlClassName}
+                style={compactInputStyle}
+                value={form.ctaLink}
+                onChange={(event) => setForm((prev) => ({ ...prev, ctaLink: event.target.value }))}
+              />
+              {ctaLinkMode === "per_post" ? (
+                <p className="text-xs text-slate-600">
+                  This URL is used automatically for any post that does not have its own URL in the list below.
+                </p>
+              ) : null}
+            </label>
+          ) : null}
 
           {ctaLinkMode === "per_post" ? (
             <label className="space-y-1">
@@ -5073,13 +5104,13 @@ export default function Home() {
             </label>
           ) : null}
 
-          {useSlackProductUpdatesForGeneration ? (
+          {useSlackProductUpdatesForGeneration && ctaLinkMode !== "none" ? (
             <p className="text-xs text-slate-600">
               For Product feature launch posts, you can use any valid CTA URL (including Slack links).
             </p>
           ) : null}
 
-          {showEventFields && useNotionCalendarForGeneration ? (
+          {showEventFields && useNotionCalendarForGeneration && ctaLinkMode !== "none" ? (
             <p className="text-xs text-slate-600">
               Webinar/event posts use CTA URLs from this planner; if CTA fields are empty, the Notion event page URL is used.
             </p>
@@ -5488,15 +5519,18 @@ export default function Home() {
               return (
                 <article key={`${post.hook}-${index}`} className="rounded-3xl border border-black/10 bg-white p-4 shadow-[0_10px_24px_rgba(0,0,0,0.07)] sm:p-5">
                   <div className="mb-3 flex flex-wrap items-center justify-between gap-2">
-                    <p className="rounded-full bg-slate-100 px-3 py-1 text-xs uppercase tracking-wide text-slate-700">
-                      Post {index + 1}
-                      {generatedPostType ? ` · ${generatedPostType}` : ""}
-                      {generatedStyle ? ` · ${generatedStyle}` : ""}
-                      {generatedGoal ? ` · ${GOAL_LABELS[generatedGoal]}` : ""}
-                      {generatedPostDate ? ` · ${formatCalendarDateLabel(generatedPostDate)}` : ""}
-                      {" · "}
-                      {formatLengthLabel(post.length)}
-                    </p>
+                    <div className="flex min-w-0 flex-wrap items-center gap-1.5">
+                      <span className="inline-flex rounded-full bg-slate-900 px-2.5 py-1 text-[11px] font-semibold text-white">
+                        Post {index + 1}
+                      </span>
+                      {generatedPostType ? <span className={postMetaChipClassName}>{generatedPostType}</span> : null}
+                      {generatedStyle ? <span className={postMetaChipClassName}>{generatedStyle}</span> : null}
+                      {generatedGoal ? <span className={postMetaChipClassName}>{GOAL_LABELS[generatedGoal]}</span> : null}
+                      {generatedPostDate ? (
+                        <span className={postMetaChipClassName}>{formatCalendarDateLabel(generatedPostDate)}</span>
+                      ) : null}
+                      <span className={postMetaChipClassName}>{formatLengthLabel(post.length)}</span>
+                    </div>
                     <div className="flex flex-wrap items-center justify-end gap-1.5">
                       <button
                         type="button"
@@ -5691,75 +5725,77 @@ export default function Home() {
                           );
                         })}
 
-                        <div className="mt-2 rounded-md border border-slate-200 bg-white px-2 py-1.5">
-                          <p className="mb-0.5 text-[11px] font-semibold uppercase tracking-wide text-slate-500">CTA</p>
-                          {isCtaEditing ? (
-                            <div className="rounded-md border border-emerald-200 bg-emerald-50/40 p-2">
-                              <textarea
-                                rows={2}
-                                autoFocus
-                                className="w-full rounded-lg border border-emerald-200 bg-white px-2 py-2 text-sm font-medium text-slate-900 outline-none transition focus:border-emerald-500"
-                                value={manualCtaDraft}
-                                onChange={(event) =>
-                                  setManualCtaDraftByPost((prev) => ({
-                                    ...prev,
-                                    [index]: event.target.value,
-                                  }))
-                                }
-                              />
-                              <div className="mt-2 flex flex-wrap gap-2">
-                                <button
-                                  type="button"
-                                  className="inline-flex items-center gap-1.5 rounded-lg border border-emerald-200 bg-emerald-50 px-2.5 py-1.5 text-xs font-medium text-emerald-700 hover:bg-emerald-100 disabled:cursor-not-allowed disabled:opacity-60"
-                                  disabled={isLoading || Boolean(rewriteLoadingKey) || !manualCtaDraft.trim()}
-                                  onClick={() => applyManualCtaEdit(index)}
-                                >
-                                  <IconCheck className="h-3.5 w-3.5" />
-                                  Save CTA
-                                </button>
-                                <button
-                                  type="button"
-                                  className="inline-flex items-center gap-1.5 rounded-lg border border-indigo-200 bg-indigo-50 px-2.5 py-1.5 text-xs font-medium text-indigo-700 hover:bg-indigo-100 disabled:cursor-not-allowed disabled:opacity-60"
-                                  disabled={isLoading || isCtaRewriteLoading || Boolean(rewriteLoadingKey)}
-                                  onClick={() => regenerateCtaLine(index)}
-                                >
-                                  <IconSpark className="h-3.5 w-3.5" />
-                                  {isCtaRewriteLoading ? "AI Rewriting..." : "AI Rewrite CTA"}
-                                </button>
-                                <button
-                                  type="button"
-                                  className="inline-flex items-center gap-1.5 rounded-lg border border-slate-300 bg-white px-2.5 py-1.5 text-xs font-medium text-slate-700 hover:bg-slate-100 disabled:cursor-not-allowed disabled:opacity-60"
-                                  disabled={isLoading || Boolean(rewriteLoadingKey)}
-                                  onClick={() => cancelCtaEdit(index)}
-                                >
-                                  <IconClose className="h-3.5 w-3.5" />
-                                  Cancel
-                                </button>
+                        {post.cta.trim() || configuredCtaLink ? (
+                          <div className="mt-2 rounded-md border border-slate-200 bg-white px-2 py-1.5">
+                            <p className="mb-0.5 text-[11px] font-semibold uppercase tracking-wide text-slate-500">CTA</p>
+                            {isCtaEditing ? (
+                              <div className="rounded-md border border-emerald-200 bg-emerald-50/40 p-2">
+                                <textarea
+                                  rows={2}
+                                  autoFocus
+                                  className="w-full rounded-lg border border-emerald-200 bg-white px-2 py-2 text-sm font-medium text-slate-900 outline-none transition focus:border-emerald-500"
+                                  value={manualCtaDraft}
+                                  onChange={(event) =>
+                                    setManualCtaDraftByPost((prev) => ({
+                                      ...prev,
+                                      [index]: event.target.value,
+                                    }))
+                                  }
+                                />
+                                <div className="mt-2 flex flex-wrap gap-2">
+                                  <button
+                                    type="button"
+                                    className="inline-flex items-center gap-1.5 rounded-lg border border-emerald-200 bg-emerald-50 px-2.5 py-1.5 text-xs font-medium text-emerald-700 hover:bg-emerald-100 disabled:cursor-not-allowed disabled:opacity-60"
+                                    disabled={isLoading || Boolean(rewriteLoadingKey) || !manualCtaDraft.trim()}
+                                    onClick={() => applyManualCtaEdit(index)}
+                                  >
+                                    <IconCheck className="h-3.5 w-3.5" />
+                                    Save CTA
+                                  </button>
+                                  <button
+                                    type="button"
+                                    className="inline-flex items-center gap-1.5 rounded-lg border border-indigo-200 bg-indigo-50 px-2.5 py-1.5 text-xs font-medium text-indigo-700 hover:bg-indigo-100 disabled:cursor-not-allowed disabled:opacity-60"
+                                    disabled={isLoading || isCtaRewriteLoading || Boolean(rewriteLoadingKey)}
+                                    onClick={() => regenerateCtaLine(index)}
+                                  >
+                                    <IconSpark className="h-3.5 w-3.5" />
+                                    {isCtaRewriteLoading ? "AI Rewriting..." : "AI Rewrite CTA"}
+                                  </button>
+                                  <button
+                                    type="button"
+                                    className="inline-flex items-center gap-1.5 rounded-lg border border-slate-300 bg-white px-2.5 py-1.5 text-xs font-medium text-slate-700 hover:bg-slate-100 disabled:cursor-not-allowed disabled:opacity-60"
+                                    disabled={isLoading || Boolean(rewriteLoadingKey)}
+                                    onClick={() => cancelCtaEdit(index)}
+                                  >
+                                    <IconClose className="h-3.5 w-3.5" />
+                                    Cancel
+                                  </button>
+                                </div>
                               </div>
-                            </div>
-                          ) : (
-                            <button
-                              type="button"
-                              className="w-full rounded-md border border-transparent px-1 py-0.5 text-left text-sm font-medium text-slate-900 transition hover:border-emerald-200 hover:bg-emerald-50/60"
-                              onClick={() => selectCtaForEditing(index, post.cta)}
-                            >
-                              {post.cta}
-                            </button>
-                          )}
-                          {configuredCtaLink ? (
-                            <p className="mt-1 break-all px-1 text-[11px] text-slate-500">
-                              CTA URL used:{" "}
-                              <a
-                                href={configuredCtaLink}
-                                target="_blank"
-                                rel="noreferrer"
-                                className="text-sky-700 underline-offset-2 hover:underline"
+                            ) : (
+                              <button
+                                type="button"
+                                className="w-full rounded-md border border-transparent px-1 py-0.5 text-left text-sm font-medium text-slate-900 transition hover:border-emerald-200 hover:bg-emerald-50/60"
+                                onClick={() => selectCtaForEditing(index, post.cta)}
                               >
-                                {configuredCtaLink}
-                              </a>
-                            </p>
-                          ) : null}
-                        </div>
+                                {post.cta}
+                              </button>
+                            )}
+                            {configuredCtaLink ? (
+                              <p className="mt-1 break-all px-1 text-[11px] text-slate-500">
+                                CTA URL used:{" "}
+                                <a
+                                  href={configuredCtaLink}
+                                  target="_blank"
+                                  rel="noreferrer"
+                                  className="text-sky-700 underline-offset-2 hover:underline"
+                                >
+                                  {configuredCtaLink}
+                                </a>
+                              </p>
+                            ) : null}
+                          </div>
+                        ) : null}
                       </div>
                     </>
                   ) : (

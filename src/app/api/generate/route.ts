@@ -2738,10 +2738,15 @@ export async function POST(request: Request) {
 
     const input = parsedInput.data;
     const isProductUpdateInputType = looksLikeProductUpdatePostType(input.inputType);
-    const fallbackCtaLink = isProductUpdateInputType
-      ? normalizeCtaLink(input.ctaLink)
-      : input.ctaLink.trim();
-    const requestedCtaLinks = trimTrailingEmptyStrings(input.ctaLinks.map((value) => value.trim()));
+    const shouldIncludeCta = input.includeCta;
+    const fallbackCtaLink = shouldIncludeCta
+      ? isProductUpdateInputType
+        ? normalizeCtaLink(input.ctaLink)
+        : input.ctaLink.trim()
+      : "";
+    const requestedCtaLinks = shouldIncludeCta
+      ? trimTrailingEmptyStrings(input.ctaLinks.map((value) => value.trim()))
+      : [];
     const effectiveCtaLinksByPost = Array.from({ length: input.numberOfPosts }, (_, index) => {
       const candidateLink = requestedCtaLinks[index] ?? "";
       const normalizedCandidateLink = isProductUpdateInputType
@@ -2750,7 +2755,7 @@ export async function POST(request: Request) {
       return normalizedCandidateLink || fallbackCtaLink;
     });
     const effectiveCtaLink = effectiveCtaLinksByPost.find(Boolean) ?? fallbackCtaLink;
-    const hasPerPostCtaPlan = requestedCtaLinks.length > 0;
+    const hasPerPostCtaPlan = shouldIncludeCta && requestedCtaLinks.length > 0;
     const shouldUseVisionImageContext = !looksLikeProductUpdatePostType(input.inputType);
     const inputImageDataUrls = shouldUseVisionImageContext
       ? Array.from(
@@ -3092,7 +3097,9 @@ export async function POST(request: Request) {
       ? `Evidence context (priority order: ${evidencePriorityOrder}). Numbers from SOIS are real benchmarks - use them, they make posts more compelling. Copy numbers verbatim from the evidence below. Use each number for its labeled metric only: install_to_paid_rate as %, avg_ltv as $, price_usd as $. When a number is not in the evidence, write the sentence without it. For Sauce posts: only use numbers from the SOIS evidence below (not from web fact-check or user input). Use 1-2 benchmark numbers total per post.`
       : shouldRunWebFactCheck
         ? `Evidence context (priority order: ${evidencePriorityOrder}). Use web evidence to fill factual gaps when available (especially for event logistics). If a detail is not supported by evidence, keep phrasing qualitative and avoid invented specifics. Do not introduce SOIS benchmark claims.`
-        : `Evidence context (priority order: ${evidencePriorityOrder}). Use internal request context only (details, event data, date/time/place, and CTA link). Do not introduce SOIS benchmark claims.`;
+        : `Evidence context (priority order: ${evidencePriorityOrder}). Use internal request context only (details, event data, date/time/place${
+            shouldIncludeCta ? ", and CTA link" : ""
+          }). Do not introduce SOIS benchmark claims.`;
     const soisSectionTitle = shouldRunSoisContext
       ? "1. SOIS (Adapty State of In-App Subscriptions) - fetched from dags.adpinfra.dev:"
       : `1. SOIS benchmark context: ${soisContextSkipReason}`;
@@ -3128,7 +3135,9 @@ export async function POST(request: Request) {
       soisContext.items.map((item) => item.text),
     );
 
-    const responseSchema = makeGeneratePostsResponseSchema(input.numberOfPosts);
+    const responseSchema = makeGeneratePostsResponseSchema(input.numberOfPosts, {
+      requireCta: shouldIncludeCta,
+    });
     const promptGuides = await getPromptGuides();
     const sauceDomainGuideSection = looksLikeSaucePostType(input.inputType)
       ? `
@@ -3159,6 +3168,12 @@ Product update tone reference (Adapty changelog style — use as inspiration for
 ${productUpdateToneContext}
 `
       : "";
+    const ctaOutputDirective = shouldIncludeCta
+      ? "- For each post return: hook (first line), body (full post excluding CTA), cta (final action line)."
+      : "- For each post return: hook (first line), body (full post), cta (empty string).";
+    const ctaGuidanceDirective = shouldIncludeCta
+      ? "- If CTA link is provided, weave it naturally into the CTA line."
+      : "- CTA is disabled for this run. Keep cta empty and avoid action lines asking readers to click, register, or book a demo.";
 
     const systemPrompt = `
 You write LinkedIn posts for Adapty, the tool app teams use to grow subscription revenue through paywalls, experiments, and analytics.
@@ -3176,9 +3191,9 @@ Fact-check guide:
 ${promptGuides.factCheck}
 
 Output format:
-- For each post return: hook (first line), body (full post excluding CTA), cta (final action line).
+${ctaOutputDirective}
 - Use paragraphs of 2-4 sentences. Add blank lines only between paragraphs, not between sentences. Do not put each sentence on its own line.
-- If CTA link is provided, weave it naturally into the CTA line.
+${ctaGuidanceDirective}
 - For multi-post industry news batches, anchor each post to a different news item.
 - When source metadata says "others", use for structural inspiration, not voice imitation.
 - Back any Adapty positioning with proof or mechanism, not empty superlatives.
@@ -3214,6 +3229,9 @@ ${sauceTopicPlanSummary}`
 - Per-post CTA links (post order):
 ${effectiveCtaLinksByPost.map((link, index) => `  ${index + 1}. ${link || "(none)"}`).join("\n")}`
       : "";
+    const ctaRequestSection = shouldIncludeCta
+      ? `- CTA link: ${effectiveCtaLink || "(not provided)"}${perPostCtaPlanSection}`
+      : "- CTA: disabled for this run. Return cta as an empty string for every post.";
 
     const userPrompt = `
 Voice anchor - match the tone, rhythm, and phrasing of these posts:
@@ -3228,8 +3246,7 @@ Generation request:
 - Post type: ${input.inputType} - ${postTypeDirective}
 - Facts policy: ${factsPolicy} Copy numbers verbatim from the evidence sections below. When no number exists for a claim, use qualitative language.
 - Details: ${input.details || "(none)"}
-- CTA link: ${effectiveCtaLink || "(not provided)"}
-${perPostCtaPlanSection}
+${ctaRequestSection}
 - Event time: ${input.time || "(not provided)"}
 - Event place: ${input.place || "(not provided)"}
 - Number of posts: ${input.numberOfPosts}
@@ -3379,7 +3396,9 @@ Also generate a list of hook suggestions inspired by this style and request.
       for (let index = 0; index < input.numberOfPosts; index += 1) {
         const assignedItem = industryNewsContext.items[index % industryNewsContext.items.length];
         const postLength = lengthPlan[index] ?? "medium";
-        const singlePostSchema = makeGeneratePostsResponseSchema(1);
+        const singlePostSchema = makeGeneratePostsResponseSchema(1, {
+          requireCta: shouldIncludeCta,
+        });
         const singlePostPrompt = `${userPrompt}
 
 Hard per-post assignment for this call:
@@ -3393,7 +3412,7 @@ Hard per-post assignment for this call:
   - Published: ${assignedItem.publishedAtIso}
   - Summary: ${normalizeNoEmDash(assignedItem.summary)}
 - Use this assigned topic as the main story driver. Do not anchor this post to another ranked item as primary.
-- Keep implication and CTA aligned to this assigned topic.
+- Keep implication${shouldIncludeCta ? " and CTA" : ""} aligned to this assigned topic.
 
 Ranked item index for this post: ${(index % industryNewsContext.items.length) + 1}
 All ranked item titles for reference:
@@ -3472,9 +3491,9 @@ ${rankedContextLines}`;
         const normalizedHook = stripAiScaffoldOpeners(normalizeNoEmDash(post.hook));
         const normalizedBody = normalizeNoEmDash(post.body);
         const ctaLinkForPost = effectiveCtaLinksByPost[index] ?? effectiveCtaLink;
-        const normalizedCta = stripAiScaffoldOpeners(
-          normalizeNoEmDash(ensureFinalCta(post.cta, ctaLinkForPost)),
-        );
+        const normalizedCta = shouldIncludeCta
+          ? stripAiScaffoldOpeners(normalizeNoEmDash(ensureFinalCta(post.cta, ctaLinkForPost)))
+          : "";
 
         return {
           length: lengthPlan[index] ?? post.length,
