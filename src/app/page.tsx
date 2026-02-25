@@ -144,6 +144,8 @@ const IMAGE_URL_PATTERN = /https?:\/\/[^\s)]+\.(png|jpe?g|webp|gif|avif|svg)(\?[
 const VISUAL_HINT_PATTERN = /\b(image|img|photo|visual|screenshot|creative|banner|thumbnail|cover|asset|after-photo)\b/i;
 const ARTICLE_PROMO_PATTERN = /\barticle\b/i;
 const PRODUCT_UPDATE_PATTERN = /\bproduct update\b/i;
+const MAX_MODEL_CONTEXT_IMAGES_PER_POST = 3;
+const MAX_PRODUCT_UPDATE_IMAGES_PER_POST = 8;
 
 type MemeTemplateOption = {
   id: string;
@@ -399,20 +401,41 @@ function clipTextForDetails(value: string, maxChars = 2800): string {
   return `${trimmed.slice(0, maxChars).trimEnd()}...`;
 }
 
-function getPrimaryProductUpdateImageUrl(entry: SlackProductUpdateEntry): string {
-  const candidate = entry.images.find((imageUrl) => typeof imageUrl === "string" && imageUrl.trim());
-  if (candidate) {
-    return candidate.trim();
+function getTopProductUpdateImageUrls(entry: SlackProductUpdateEntry, limit = MAX_PRODUCT_UPDATE_IMAGES_PER_POST): string[] {
+  const normalizedLimit = Math.max(0, Math.trunc(limit));
+  if (normalizedLimit === 0) {
+    return [];
   }
 
-  for (const message of entry.thread) {
-    const threadCandidate = message.images.find((imageUrl) => typeof imageUrl === "string" && imageUrl.trim());
-    if (threadCandidate) {
-      return threadCandidate.trim();
+  const deduped = new Set<string>();
+
+  for (const imageUrl of entry.images) {
+    const normalized = typeof imageUrl === "string" ? imageUrl.trim() : "";
+    if (!normalized) {
+      continue;
+    }
+
+    deduped.add(normalized);
+    if (deduped.size >= normalizedLimit) {
+      return Array.from(deduped);
     }
   }
 
-  return "";
+  for (const message of entry.thread) {
+    for (const imageUrl of message.images) {
+      const normalized = typeof imageUrl === "string" ? imageUrl.trim() : "";
+      if (!normalized) {
+        continue;
+      }
+
+      deduped.add(normalized);
+      if (deduped.size >= normalizedLimit) {
+        return Array.from(deduped);
+      }
+    }
+  }
+
+  return Array.from(deduped);
 }
 
 function buildDetailsFromProductUpdateEntry(entry: SlackProductUpdateEntry): string {
@@ -1116,12 +1139,25 @@ function removeLeadingHookFromBodyForCopy(hook: string, body: string): string {
   return nextLines.join("\n").trim();
 }
 
-function buildPostTextForCopy(post: { hook: string; body: string; cta: string }): string {
+function buildPostTextForCopy(
+  post: { hook: string; body: string; cta: string },
+  sourceImageUrls: string[] = [],
+): string {
   const hook = post.hook.trim();
   const body = removeLeadingHookFromBodyForCopy(post.hook, post.body);
   const cta = post.cta.trim();
+  const normalizedSourceImageUrls = Array.from(
+    new Set(
+      sourceImageUrls
+        .map((value) => value.trim())
+        .filter(Boolean),
+    ),
+  );
+  const attachedImagesSection = normalizedSourceImageUrls.length
+    ? ["Attached images:", ...normalizedSourceImageUrls.map((url, index) => `${index + 1}. ${url}`)].join("\n")
+    : "";
 
-  return [hook, body, cta].filter(Boolean).join("\n\n");
+  return [hook, body, cta, attachedImagesSection].filter(Boolean).join("\n\n");
 }
 
 function extractApiErrorMessage(responsePayload: unknown, status: number): string {
@@ -1139,43 +1175,6 @@ function extractApiErrorMessage(responsePayload: unknown, status: number): strin
   }
 
   return apiMessage || apiError || `Request failed (${status})`;
-}
-
-async function fetchSlackImageDataUrl(imageUrl: string): Promise<string> {
-  const response = await fetch("/api/slack-product-updates/image-data-url", {
-    method: "POST",
-    headers: {
-      "Content-Type": "application/json",
-    },
-    body: JSON.stringify({
-      url: imageUrl,
-    }),
-  });
-
-  const payload = await response.json();
-  if (!response.ok) {
-    throw new Error(extractApiErrorMessage(payload, response.status));
-  }
-
-  if (
-    !payload ||
-    typeof payload !== "object" ||
-    !("dataUrl" in payload) ||
-    typeof (payload as { dataUrl?: unknown }).dataUrl !== "string"
-  ) {
-    throw new Error("Slack image endpoint returned an invalid payload.");
-  }
-
-  const dataUrl = (payload as { dataUrl: string }).dataUrl.trim();
-  if (!dataUrl.startsWith("data:image/")) {
-    throw new Error("Slack image endpoint returned a non-image data URL.");
-  }
-
-  if (dataUrl.length > MAX_IMAGE_DATA_URL_CHARS) {
-    throw new Error("Slack image is too large for model context.");
-  }
-
-  return dataUrl;
 }
 
 function readFileAsDataUrl(file: File): Promise<string> {
@@ -1308,8 +1307,8 @@ export default function Home() {
   const [goalByPostIndex, setGoalByPostIndex] = useState<Record<number, ContentGoal>>({});
   const [postDateByPostIndex, setPostDateByPostIndex] = useState<Record<number, string>>({});
   const [postEventLabelByPostIndex, setPostEventLabelByPostIndex] = useState<Record<number, string>>({});
-  const [postImageDataUrlByPostIndex, setPostImageDataUrlByPostIndex] = useState<Record<number, string>>({});
-  const [postSourceImageUrlByPostIndex, setPostSourceImageUrlByPostIndex] = useState<Record<number, string>>({});
+  const [postImageDataUrlByPostIndex, setPostImageDataUrlByPostIndex] = useState<Record<number, string[]>>({});
+  const [postSourceImageUrlByPostIndex, setPostSourceImageUrlByPostIndex] = useState<Record<number, string[]>>({});
   const [generatedPostsMonthCursor, setGeneratedPostsMonthCursor] = useState<Date>(() => getStartOfMonth(new Date()));
   const [selectedGeneratedPostsDates, setSelectedGeneratedPostsDates] = useState<string[]>([]);
   const [numberOfPostsInput, setNumberOfPostsInput] = useState<string>(() => String(defaultForm.numberOfPosts));
@@ -2264,14 +2263,13 @@ export default function Home() {
         {
           allocation: GenerationAllocation;
           response: GeneratePostsResponse;
-          imageDataUrlUsed: string;
-          sourceImageUrl: string;
+          imageDataUrlsUsed: string[];
+          sourceImageUrls: string[];
         } | null
       > = new Array(generationAllocations.length).fill(null);
       const firstChartAllocationIndex = form.chartEnabled
         ? generationAllocations.findIndex((allocation) => needsChartDetails(allocation.inputType))
         : -1;
-      const slackImageDataUrlCache = new Map<string, string>();
 
       let allocationErrorMessage = "";
       const concurrency = Math.max(1, Math.min(MAX_CONCURRENT_GENERATION_REQUESTS, generationAllocations.length));
@@ -2300,19 +2298,20 @@ export default function Home() {
                 ? buildDetailsFromProductUpdateEntry(productUpdateEntry)
                 : form.details;
             const ctaVal = calendarEntry?.event?.eventPage ?? (form.ctaLink.trim() || productUpdateEntry?.slackUrl || "");
-            const sourceImageUrl = productUpdateEntry ? getPrimaryProductUpdateImageUrl(productUpdateEntry) : "";
-            let imageDataUrlForRequest = productUpdateEntry ? "" : calendarEntry ? "" : form.imageDataUrl;
+            const sourceImageUrls = productUpdateEntry
+              ? getTopProductUpdateImageUrls(productUpdateEntry, MAX_PRODUCT_UPDATE_IMAGES_PER_POST)
+              : [];
+            const shouldUseVisionContext = !productUpdateEntry && !calendarEntry;
+            const imageDataUrlsForRequest = shouldUseVisionContext ? [form.imageDataUrl] : [];
 
-            if (sourceImageUrl) {
-              const cachedImageDataUrl = slackImageDataUrlCache.get(sourceImageUrl);
-              if (cachedImageDataUrl) {
-                imageDataUrlForRequest = cachedImageDataUrl;
-              } else {
-                const fetchedImageDataUrl = await fetchSlackImageDataUrl(sourceImageUrl);
-                slackImageDataUrlCache.set(sourceImageUrl, fetchedImageDataUrl);
-                imageDataUrlForRequest = fetchedImageDataUrl;
-              }
-            }
+            const normalizedImageDataUrlsForRequest = Array.from(
+              new Set(
+                imageDataUrlsForRequest
+                  .map((value) => value.trim())
+                  .filter((value) => value.startsWith("data:image/")),
+              ),
+            ).slice(0, MAX_MODEL_CONTEXT_IMAGES_PER_POST);
+            const primaryImageDataUrlForRequest = normalizedImageDataUrlsForRequest[0] ?? "";
 
             const requestPayload = {
               ...form,
@@ -2320,7 +2319,8 @@ export default function Home() {
               goal: allocation.goal,
               inputType: allocation.inputType,
               numberOfPosts: allocation.count,
-              imageDataUrl: imageDataUrlForRequest,
+              imageDataUrl: primaryImageDataUrlForRequest,
+              imageDataUrls: normalizedImageDataUrlsForRequest,
               chartEnabled: shouldAttachChart,
               chartType: shouldAttachChart ? form.chartType : defaultForm.chartType,
               chartTitle: shouldAttachChart ? form.chartTitle : "",
@@ -2360,8 +2360,8 @@ export default function Home() {
               allocationIndex,
               allocation,
               response: sanitizeGenerationResult(responsePayload as GeneratePostsResponse),
-              imageDataUrlUsed: imageDataUrlForRequest,
-              sourceImageUrl,
+              imageDataUrlsUsed: normalizedImageDataUrlsForRequest,
+              sourceImageUrls,
             };
           }),
         );
@@ -2371,8 +2371,8 @@ export default function Home() {
             generationChunksByIndex[item.value.allocationIndex] = {
               allocation: item.value.allocation,
               response: item.value.response,
-              imageDataUrlUsed: item.value.imageDataUrlUsed,
-              sourceImageUrl: item.value.sourceImageUrl,
+              imageDataUrlsUsed: item.value.imageDataUrlsUsed,
+              sourceImageUrls: item.value.sourceImageUrls,
             };
             continue;
           }
@@ -2392,8 +2392,8 @@ export default function Home() {
         (chunk): chunk is {
           allocation: GenerationAllocation;
           response: GeneratePostsResponse;
-          imageDataUrlUsed: string;
-          sourceImageUrl: string;
+          imageDataUrlsUsed: string[];
+          sourceImageUrls: string[];
         } => Boolean(chunk),
       );
 
@@ -2407,8 +2407,8 @@ export default function Home() {
       const nextGoalByIndex: Record<number, ContentGoal> = {};
       const nextPostDateByIndex: Record<number, string> = {};
       const nextPostEventLabelByIndex: Record<number, string> = {};
-      const nextPostImageDataUrlByIndex: Record<number, string> = {};
-      const nextPostSourceImageUrlByIndex: Record<number, string> = {};
+      const nextPostImageDataUrlByIndex: Record<number, string[]> = {};
+      const nextPostSourceImageUrlByIndex: Record<number, string[]> = {};
       const mergedPosts: GeneratePostsResponse["posts"] = [];
       let postCursor = 0;
 
@@ -2432,11 +2432,11 @@ export default function Home() {
           if (generatedEventLabel) {
             nextPostEventLabelByIndex[postCursor] = generatedEventLabel;
           }
-          if (chunk.imageDataUrlUsed) {
-            nextPostImageDataUrlByIndex[postCursor] = chunk.imageDataUrlUsed;
+          if (chunk.imageDataUrlsUsed.length) {
+            nextPostImageDataUrlByIndex[postCursor] = [...chunk.imageDataUrlsUsed];
           }
-          if (chunk.sourceImageUrl) {
-            nextPostSourceImageUrlByIndex[postCursor] = chunk.sourceImageUrl;
+          if (chunk.sourceImageUrls.length) {
+            nextPostSourceImageUrlByIndex[postCursor] = [...chunk.sourceImageUrls];
           }
           mergedPosts.push(post);
           postCursor += 1;
@@ -2451,8 +2451,8 @@ export default function Home() {
       const trimmedGoalByIndex: Record<number, ContentGoal> = {};
       const trimmedPostDateByIndex: Record<number, string> = {};
       const trimmedPostEventLabelByIndex: Record<number, string> = {};
-      const trimmedPostImageDataUrlByIndex: Record<number, string> = {};
-      const trimmedPostSourceImageUrlByIndex: Record<number, string> = {};
+      const trimmedPostImageDataUrlByIndex: Record<number, string[]> = {};
+      const trimmedPostSourceImageUrlByIndex: Record<number, string[]> = {};
 
       for (let index = 0; index < trimmedPosts.length; index += 1) {
         if (Object.prototype.hasOwnProperty.call(nextPostTypeByIndex, index)) {
@@ -3417,7 +3417,8 @@ export default function Home() {
                           <div className="space-y-1">
                             {cell.entries.map((entry) => {
                               const isSelected = selectedProductUpdateIdSet.has(entry.id);
-                              const primaryImageUrl = getPrimaryProductUpdateImageUrl(entry);
+                              const contextImageUrls = getTopProductUpdateImageUrls(entry);
+                              const primaryImageUrl = contextImageUrls[0] ?? "";
                               return (
                                 <div
                                   key={entry.id}
@@ -3442,7 +3443,7 @@ export default function Home() {
                                     {isSelected ? <IconCheck className="mt-0.5 h-3 w-3 shrink-0 text-sky-700" /> : null}
                                   </div>
                                   <div className="mt-0.5 flex items-center gap-1 text-[9px] text-slate-500">
-                                    <span>{entry.images.length} img</span>
+                                    <span>{contextImageUrls.length} ctx img</span>
                                     {primaryImageUrl ? (
                                       <a
                                         href={primaryImageUrl}
@@ -3486,7 +3487,7 @@ export default function Home() {
                       : "Feed loaded."}
                   </p>
                   <p className="text-xs text-slate-600">
-                    Selected release images are passed to the vision model as generation context.
+                    Up to the top {MAX_PRODUCT_UPDATE_IMAGES_PER_POST} release images are attached to each generated post.
                   </p>
                 </>
               ) : slackProductUpdates?.syncedAt ? (
@@ -4286,7 +4287,7 @@ export default function Home() {
             </p>
           ) : useSlackProductUpdatesForGeneration ? (
             <p className="text-xs text-slate-600">
-              Product release images are taken from the selected Slack product updates and passed into generation context.
+              Product release images are taken from selected Slack product updates (top {MAX_PRODUCT_UPDATE_IMAGES_PER_POST}) and attached to generated posts.
             </p>
           ) : (
             <div className="mt-4 space-y-2">
@@ -4618,8 +4619,8 @@ export default function Home() {
               const generatedStyle = brandVoiceByPostIndex[index];
               const generatedGoal = goalByPostIndex[index];
               const generatedPostDate = postDateByPostIndex[index];
-              const generatedImageDataUrl = postImageDataUrlByPostIndex[index];
-              const generatedSourceImageUrl = postSourceImageUrlByPostIndex[index];
+              const generatedImageDataUrls = postImageDataUrlByPostIndex[index] ?? [];
+              const generatedSourceImageUrls = postSourceImageUrlByPostIndex[index] ?? [];
               const selectedLine = bodyLineOptions.find(
                 (lineOption) => lineOption.lineIndex === selectedLineByPost[index] && !lineOption.isBlank,
               );
@@ -4648,7 +4649,7 @@ export default function Home() {
                       type="button"
                       className="shrink-0 rounded-lg border border-black/10 px-2 py-1 text-xs text-slate-600 hover:bg-slate-50"
                       onClick={async () => {
-                        const text = buildPostTextForCopy(post);
+                        const text = buildPostTextForCopy(post, generatedSourceImageUrls);
                         const copied = await copyTextToClipboard(text);
                         showCopyFeedback(index, copied ? "copied" : "failed");
                       }}
@@ -4799,40 +4800,67 @@ export default function Home() {
                     </div>
                   </div>
 
-                  {generatedImageDataUrl ? (
+                  {generatedImageDataUrls.length || generatedSourceImageUrls.length ? (
                     <div className="mt-5 space-y-2 rounded-2xl border border-black/10 bg-slate-50 p-3">
                       <div className="flex flex-wrap items-center justify-between gap-2">
-                        <p className="text-xs font-semibold uppercase tracking-wide text-slate-600">Source Image Context</p>
+                        <p className="text-xs font-semibold uppercase tracking-wide text-slate-600">
+                          {generatedSourceImageUrls.length
+                            ? `Attached Release Images (${generatedSourceImageUrls.length})`
+                            : `Source Image Context (${generatedImageDataUrls.length})`}
+                        </p>
                         <div className="flex items-center gap-2">
-                          {generatedSourceImageUrl ? (
+                          {generatedSourceImageUrls.map((sourceUrl, sourceIndex) => (
                             <a
-                              href={generatedSourceImageUrl}
+                              key={`${index}-source-${sourceIndex}`}
+                              href={sourceUrl}
                               target="_blank"
                               rel="noreferrer"
                               className="rounded-md border border-black/10 bg-white px-2 py-1 text-xs text-slate-700 hover:bg-slate-100"
                             >
-                              Open Source
+                              Open Source {sourceIndex + 1}
                             </a>
+                          ))}
+                          {generatedSourceImageUrls.length ? (
+                            <button
+                              type="button"
+                              className="rounded-md border border-black/10 bg-white px-2 py-1 text-xs text-slate-700 hover:bg-slate-100"
+                              onClick={() => {
+                                navigator.clipboard.writeText(generatedSourceImageUrls.join("\n")).catch(() => {});
+                              }}
+                            >
+                              Copy Source URLs
+                            </button>
                           ) : null}
-                          <button
-                            type="button"
-                            className="rounded-md border border-black/10 bg-white px-2 py-1 text-xs text-slate-700 hover:bg-slate-100"
-                            onClick={() => {
-                              navigator.clipboard.writeText(generatedImageDataUrl).catch(() => {});
-                            }}
-                          >
-                            Copy Data URL
-                          </button>
+                          {generatedImageDataUrls.length ? (
+                            <button
+                              type="button"
+                              className="rounded-md border border-black/10 bg-white px-2 py-1 text-xs text-slate-700 hover:bg-slate-100"
+                              onClick={() => {
+                                navigator.clipboard.writeText(generatedImageDataUrls.join("\n")).catch(() => {});
+                              }}
+                            >
+                              Copy Data URLs
+                            </button>
+                          ) : null}
                         </div>
                       </div>
-                      <NextImage
-                        src={generatedImageDataUrl}
-                        alt={`Source context for post ${index + 1}`}
-                        width={1200}
-                        height={620}
-                        unoptimized
-                        className="h-auto w-full rounded-xl border border-black/10 bg-white object-contain"
-                      />
+                      {generatedImageDataUrls.length ? (
+                        <div className="grid gap-2 sm:grid-cols-2 lg:grid-cols-3">
+                          {generatedImageDataUrls.map((imageDataUrl, imageIndex) => (
+                            <NextImage
+                              key={`${index}-source-image-${imageIndex}`}
+                              src={imageDataUrl}
+                              alt={`Source context ${imageIndex + 1} for post ${index + 1}`}
+                              width={1200}
+                              height={620}
+                              unoptimized
+                              className="h-auto w-full rounded-xl border border-black/10 bg-white object-contain"
+                            />
+                          ))}
+                        </div>
+                      ) : (
+                        <p className="text-xs text-slate-600">Release image links are attached above.</p>
+                      )}
                     </div>
                   ) : null}
 

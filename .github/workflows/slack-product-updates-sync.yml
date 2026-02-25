@@ -1,5 +1,5 @@
 # Sync #product-release from Slack to data/slack-product-updates.json
-# Runs every 6 hours; commits updated JSON if changed
+# Runs daily; commits updated JSON if changed
 name: Slack Product Updates Sync
 
 permissions:
@@ -7,7 +7,7 @@ permissions:
 
 on:
   schedule:
-    - cron: "0 */6 * * *"  # Every 6 hours
+    - cron: "0 0 * * *"  # Daily at 00:00 UTC
   workflow_dispatch:  # Manual trigger
 
 jobs:

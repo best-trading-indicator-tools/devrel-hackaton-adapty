@@ -1981,21 +1981,22 @@ async function runOpenAiChatGeneration(params: {
   model: string;
   systemPrompt: string;
   userPrompt: string;
-  imageDataUrl?: string;
+  imageDataUrls?: string[];
   responseSchema: ReturnType<typeof makeGeneratePostsResponseSchema>;
   temperature?: number;
 }) {
   const { client } = getOpenAIClient(params.token);
-  const userContent: OpenAI.Chat.Completions.ChatCompletionUserMessageParam["content"] = params.imageDataUrl
+  const imageDataUrls = (params.imageDataUrls ?? []).filter(Boolean);
+  const userContent: OpenAI.Chat.Completions.ChatCompletionUserMessageParam["content"] = imageDataUrls.length
     ? [
         { type: "text", text: params.userPrompt },
-        {
-          type: "image_url",
+        ...imageDataUrls.map((imageDataUrl) => ({
+          type: "image_url" as const,
           image_url: {
-            url: params.imageDataUrl,
-            detail: "auto",
+            url: imageDataUrl,
+            detail: "auto" as const,
           },
-        },
+        })),
       ]
     : params.userPrompt;
 
@@ -2023,7 +2024,7 @@ async function runCodexOauthGeneration(params: {
   model: string;
   systemPrompt: string;
   userPrompt: string;
-  imageDataUrl?: string;
+  imageDataUrls?: string[];
   responseSchema: ReturnType<typeof makeGeneratePostsResponseSchema>;
 }) {
   const responseFormat = zodResponseFormat(params.responseSchema, "linkedin_post_batch");
@@ -2039,7 +2040,7 @@ async function runCodexOauthGeneration(params: {
     model: params.model,
     instructions: params.systemPrompt,
     userInput: params.userPrompt,
-    imageDataUrl: params.imageDataUrl,
+    imageDataUrls: params.imageDataUrls,
     schemaName: "linkedin_post_batch",
     jsonSchema: jsonSchema as Record<string, unknown>,
     baseUrl: process.env.OPENAI_CODEX_BASE_URL,
@@ -2085,7 +2086,7 @@ function buildClaudePostsJsonSchema(): Record<string, unknown> {
 async function runClaudeWriterGeneration(params: {
   systemPrompt: string;
   userPrompt: string;
-  imageDataUrl?: string;
+  imageDataUrls?: string[];
   responseSchema: ReturnType<typeof makeGeneratePostsResponseSchema>;
   postCount: number;
 }) {
@@ -2097,15 +2098,17 @@ async function runClaudeWriterGeneration(params: {
   const client = new Anthropic({ apiKey });
   const userContent: Anthropic.MessageParam["content"] = [];
 
-  if (params.imageDataUrl) {
-    const match = params.imageDataUrl.match(/^data:([^;]+);base64,(.+)$/);
-    if (match) {
-      const mediaType = match[1] === "image/png" ? "image/png" : match[1] === "image/jpeg" ? "image/jpeg" : "image/png";
-      userContent.push({
-        type: "image",
-        source: { type: "base64", media_type: mediaType, data: match[2] },
-      });
+  for (const imageDataUrl of params.imageDataUrls ?? []) {
+    const match = imageDataUrl.match(/^data:([^;]+);base64,(.+)$/);
+    if (!match) {
+      continue;
     }
+
+    const mediaType = match[1] === "image/png" ? "image/png" : match[1] === "image/jpeg" ? "image/jpeg" : "image/png";
+    userContent.push({
+      type: "image",
+      source: { type: "base64", media_type: mediaType, data: match[2] },
+    });
   }
 
   userContent.push({ type: "text", text: params.userPrompt });
@@ -2257,6 +2260,16 @@ export async function POST(request: Request) {
     }
 
     const input = parsedInput.data;
+    const shouldUseVisionImageContext = !looksLikeProductUpdatePostType(input.inputType);
+    const inputImageDataUrls = shouldUseVisionImageContext
+      ? Array.from(
+          new Set(
+            [input.imageDataUrl, ...input.imageDataUrls]
+              .map((value) => value.trim())
+              .filter((value) => value.startsWith("data:image/")),
+          ),
+        ).slice(0, 3)
+      : [];
     if (input.giphyEnabled && !process.env.GIPHY_API_KEY?.trim()) {
       return NextResponse.json(
         {
@@ -2707,7 +2720,11 @@ Generation request:
 - Event place: ${input.place || "(not provided)"}
 - Number of posts: ${input.numberOfPosts}
 - Chart: ${chartExecutionDirective} ${chartPromptSummary !== "(not provided)" ? `Summary: ${chartPromptSummary}` : ""}
-- Image context: ${input.imageDataUrl ? "provided" : "(none)"}${memeSection}
+- Image context: ${
+      inputImageDataUrls.length
+        ? `provided (${inputImageDataUrls.length} image${inputImageDataUrls.length === 1 ? "" : "s"})`
+        : "(none)"
+    }${memeSection}
 
 Required length per post:
 ${lengthPlan.map((length, index) => `${index + 1}. ${length} -> ${lengthGuide(length)}`).join("\n")}
@@ -2756,7 +2773,7 @@ Also generate a list of hook suggestions inspired by this style and request.
         return runClaudeWriterGeneration({
           systemPrompt,
           userPrompt: params.userPrompt,
-          imageDataUrl: input.imageDataUrl || undefined,
+          imageDataUrls: inputImageDataUrls.length ? inputImageDataUrls : undefined,
           responseSchema: params.responseSchema,
           postCount: params.postCount,
         });
@@ -2768,7 +2785,7 @@ Also generate a list of hook suggestions inspired by this style and request.
           model: params.model,
           systemPrompt,
           userPrompt: params.userPrompt,
-          imageDataUrl: input.imageDataUrl || undefined,
+          imageDataUrls: inputImageDataUrls.length ? inputImageDataUrls : undefined,
           responseSchema: params.responseSchema,
         });
       }
@@ -2782,7 +2799,7 @@ Also generate a list of hook suggestions inspired by this style and request.
         model: params.model,
         systemPrompt,
         userPrompt: params.userPrompt,
-        imageDataUrl: input.imageDataUrl || undefined,
+        imageDataUrls: inputImageDataUrls.length ? inputImageDataUrls : undefined,
         responseSchema: params.responseSchema,
       });
     };
