@@ -2448,16 +2448,16 @@ export default function Home() {
 
       const sharedCtaLink = form.ctaLink.trim();
       const getDefaultCtaLinkForAllocation = (allocation: GenerationAllocation): string => {
-        const calendarCtaLink = allocation.calendarEntry?.event?.eventPage?.trim() ?? "";
-        if (calendarCtaLink) {
-          return calendarCtaLink;
-        }
-
         if (allocation.productUpdateEntry) {
           return getPublicAdaptyCtaLink(sharedCtaLink);
         }
 
-        return sharedCtaLink;
+        if (sharedCtaLink) {
+          return sharedCtaLink;
+        }
+
+        const calendarCtaLink = allocation.calendarEntry?.event?.eventPage?.trim() ?? "";
+        return calendarCtaLink;
       };
       const requestedPerPostCtaLinks = ctaLinkMode === "per_post" ? splitMultilineUrls(perPostCtaLinksInput) : [];
       let ctaLinkCursor = 0;
@@ -3771,7 +3771,7 @@ export default function Home() {
           {showEventFields ? (
             <div className="space-y-3 rounded-2xl border border-sky-200 bg-sky-50/50 p-4">
               <div className="flex items-center justify-between gap-2">
-                <span className="text-sm font-semibold text-slate-900">Notion calendar (month)</span>
+                <span className="text-sm font-semibold text-slate-900">Webinar Events Notion calendar (month)</span>
                 <button
                   type="button"
                   disabled={notionCalendarSyncLoading}
@@ -4601,6 +4601,12 @@ export default function Home() {
           {useSlackProductUpdatesForGeneration ? (
             <p className="text-xs text-slate-600">
               For Product feature launch posts, only public `adapty.io` CTA URLs are allowed. Internal Slack links are ignored.
+            </p>
+          ) : null}
+
+          {showEventFields && useNotionCalendarForGeneration ? (
+            <p className="text-xs text-slate-600">
+              Webinar/event posts use CTA URLs from this planner; if left blank, the Notion event page URL is used as fallback.
             </p>
           ) : null}
 
