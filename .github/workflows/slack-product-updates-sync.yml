@@ -13,9 +13,8 @@ on:
 jobs:
   sync:
     runs-on: ubuntu-latest
-    # SLACK_BOT_TOKEN must be added in repo Settings → Secrets
     env:
-      SLACK_BOT_TOKEN: ${{ secrets.SLACK_BOT_TOKEN }}
+      SLACK_BOT_TOKEN: ${{ secrets['SLACK_BOT_TOKEN'] }}
     steps:
       - uses: actions/checkout@v4
 
