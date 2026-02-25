@@ -64,6 +64,11 @@ type FormState = {
   details: string;
 };
 
+type GeneratedPost = GeneratePostsResponse["posts"][number];
+type MemeCompanion = NonNullable<GeneratedPost["meme"]>;
+type GiphyCompanion = NonNullable<GeneratedPost["giphy"]>;
+type CopyAction = "post_images" | "memes" | "giphy" | "everything";
+
 const defaultForm: FormState = {
   style: "adapty",
   goal: "virality",
@@ -159,8 +164,6 @@ type MemegenTemplateApiItem = {
   name?: string;
   blank?: string;
 };
-
-type GeneratedPost = GeneratePostsResponse["posts"][number];
 
 type EditableBodyLine = {
   lineIndex: number;
@@ -1204,6 +1207,133 @@ function buildPostTextForCopy(
   return [hook, body, cta, attachedImagesSection].filter(Boolean).join("\n\n");
 }
 
+function normalizeHttpUrl(rawUrl: string): string {
+  const trimmed = rawUrl.trim();
+  if (!trimmed) {
+    return "";
+  }
+
+  try {
+    const parsed = new URL(trimmed);
+    if (parsed.protocol !== "https:" && parsed.protocol !== "http:") {
+      return "";
+    }
+    return parsed.toString();
+  } catch {
+    return "";
+  }
+}
+
+function isSlackPrivateFileUrl(rawUrl: string): boolean {
+  try {
+    const parsed = new URL(rawUrl);
+    return parsed.protocol === "https:" && parsed.hostname === "files.slack.com";
+  } catch {
+    return false;
+  }
+}
+
+function dedupeStrings(values: string[]): string[] {
+  return Array.from(
+    new Set(
+      values
+        .map((value) => value.trim())
+        .filter(Boolean),
+    ),
+  );
+}
+
+function getMemeVariantsForPost(post: GeneratedPost): MemeCompanion[] {
+  return post.memeVariants?.length ? post.memeVariants : post.meme ? [post.meme] : [];
+}
+
+function getGiphyVariantsForPost(post: GeneratedPost): GiphyCompanion[] {
+  return post.giphyVariants?.length ? post.giphyVariants : post.giphy ? [post.giphy] : [];
+}
+
+function buildMemeCompanionsTextForCopy(memeVariants: MemeCompanion[]): string {
+  if (!memeVariants.length) {
+    return "";
+  }
+
+  const blocks = memeVariants.map((variant, variantIndex) => {
+    const lines: string[] = [
+      `${variantIndex + 1}. ${variant.templateName} (${variant.templateId})`,
+      `URL: ${variant.url}`,
+    ];
+
+    if (Array.isArray(variant.textLines) && variant.textLines.length > 2) {
+      variant.textLines.forEach((line, lineIndex) => {
+        lines.push(`Line ${lineIndex + 1}: ${line}`);
+      });
+    } else {
+      lines.push(`Top: ${variant.topText}`);
+      lines.push(`Bottom: ${variant.bottomText}`);
+    }
+
+    if (variant.toneFitReason) {
+      lines.push(`Reason: ${variant.toneFitReason}`);
+    }
+
+    return lines.join("\n");
+  });
+
+  return ["Meme companions:", ...blocks].join("\n\n");
+}
+
+function buildGiphyCompanionsTextForCopy(giphyVariants: GiphyCompanion[]): string {
+  if (!giphyVariants.length) {
+    return "";
+  }
+
+  const blocks = giphyVariants.map((variant, variantIndex) => {
+    const lines = [
+      `${variantIndex + 1}. ${variant.title}`,
+      `Page URL: ${variant.url}`,
+      `Preview URL: ${variant.previewUrl || variant.url}`,
+      `Query: ${variant.sourceQuery}`,
+      variant.rating ? `Rating: ${variant.rating.toUpperCase()}` : "",
+    ].filter(Boolean);
+
+    return lines.join("\n");
+  });
+
+  return ["GIPHY companions:", ...blocks].join("\n\n");
+}
+
+function buildRichClipboardHtml(params: {
+  textSections: string[];
+  sourceUrls: string[];
+  embeddedImageUrls: string[];
+}): string {
+  const sectionHtml = params.textSections
+    .map((section) => section.trim())
+    .filter(Boolean)
+    .map((section) => `<p>${escapeHtml(section).replace(/\n/g, "<br/>")}</p>`)
+    .join("");
+
+  const sourceListHtml = params.sourceUrls.length
+    ? `<p><strong>Links:</strong></p><ol>${params.sourceUrls
+        .map((url) => `<li><a href="${escapeHtml(url)}">${escapeHtml(url)}</a></li>`)
+        .join("")}</ol>`
+    : "";
+
+  const embeddedImagesHtml = params.embeddedImageUrls.length
+    ? `<div>${params.embeddedImageUrls
+        .map(
+          (imageUrl, index) =>
+            `<p><img src="${escapeHtml(imageUrl)}" alt="Attached image ${index + 1}" style="max-width:100%;height:auto;" /></p>`,
+        )
+        .join("")}</div>`
+    : "";
+
+  return `<article>
+${sectionHtml}
+${sourceListHtml}
+${embeddedImagesHtml}
+</article>`;
+}
+
 function extractApiErrorMessage(responsePayload: unknown, status: number): string {
   const apiError =
     responsePayload && typeof responsePayload === "object" && "error" in responsePayload
@@ -1426,6 +1556,88 @@ function buildSlackImageProxyUrl(imageUrl: string): string {
   return `/api/slack-product-updates/image-data-url?url=${encodeURIComponent(imageUrl)}`;
 }
 
+async function resolveClipboardImageUrl(imageUrl: string): Promise<string | null> {
+  const trimmed = imageUrl.trim();
+  if (!trimmed) {
+    return null;
+  }
+
+  if (trimmed.startsWith("data:image/")) {
+    return trimmed;
+  }
+
+  const normalizedUrl = normalizeHttpUrl(trimmed);
+  if (!normalizedUrl) {
+    return null;
+  }
+
+  if (isSlackPrivateFileUrl(normalizedUrl)) {
+    const slackDataUrl = await fetchSlackImageDataUrlForClipboard(normalizedUrl);
+    return slackDataUrl || normalizedUrl;
+  }
+
+  return normalizedUrl;
+}
+
+async function copySectionsAndImagesToClipboard(params: {
+  textSections: string[];
+  sourceUrls?: string[];
+  imageUrls?: string[];
+}): Promise<boolean> {
+  const textSections = params.textSections
+    .map((section) => section.trim())
+    .filter(Boolean);
+  const sourceUrls = dedupeStrings((params.sourceUrls ?? []).map((value) => normalizeHttpUrl(value)).filter(Boolean));
+  const plainTextSourceSection = sourceUrls.length
+    ? ["Links:", ...sourceUrls.map((url, index) => `${index + 1}. ${url}`)].join("\n")
+    : "";
+  const plainText = [...textSections, plainTextSourceSection].filter(Boolean).join("\n\n");
+
+  if (!plainText) {
+    return false;
+  }
+
+  const imageCandidates = dedupeStrings(params.imageUrls ?? []);
+  const settled = await Promise.allSettled(imageCandidates.map((imageUrl) => resolveClipboardImageUrl(imageUrl)));
+  let embeddedImageUrls = settled.flatMap((item) => {
+    if (item.status !== "fulfilled" || !item.value) {
+      return [];
+    }
+    return [item.value];
+  });
+
+  if (!embeddedImageUrls.length) {
+    embeddedImageUrls = dedupeStrings(
+      imageCandidates.map((imageUrl) => {
+        if (imageUrl.trim().startsWith("data:image/")) {
+          return imageUrl.trim();
+        }
+        return normalizeHttpUrl(imageUrl);
+      }),
+    );
+  }
+
+  if (typeof navigator !== "undefined" && navigator.clipboard?.write && typeof ClipboardItem !== "undefined") {
+    try {
+      const html = buildRichClipboardHtml({
+        textSections,
+        sourceUrls,
+        embeddedImageUrls,
+      });
+      const item = new ClipboardItem({
+        "text/plain": new Blob([plainText], { type: "text/plain" }),
+        "text/html": new Blob([html], { type: "text/html" }),
+      });
+      await navigator.clipboard.write([item]);
+      return true;
+    } catch {
+      // Fall back to plain text copy.
+    }
+  }
+
+  return copyTextToClipboard(plainText);
+}
+
 async function copyPostAndImagesToClipboard(params: {
   post: { hook: string; body: string; cta: string };
   sourceImageUrls: string[];
@@ -1484,6 +1696,62 @@ async function copyPostAndImagesToClipboard(params: {
   return copyTextToClipboard(plainText);
 }
 
+async function copyMemeCompanionsToClipboard(memeVariants: MemeCompanion[]): Promise<boolean> {
+  const memeText = buildMemeCompanionsTextForCopy(memeVariants);
+  if (!memeText) {
+    return false;
+  }
+
+  const memeUrls = dedupeStrings(memeVariants.map((variant) => normalizeHttpUrl(variant.url)).filter(Boolean));
+  return copySectionsAndImagesToClipboard({
+    textSections: [memeText],
+    sourceUrls: memeUrls,
+    imageUrls: memeUrls,
+  });
+}
+
+async function copyGiphyCompanionsToClipboard(giphyVariants: GiphyCompanion[]): Promise<boolean> {
+  const giphyText = buildGiphyCompanionsTextForCopy(giphyVariants);
+  if (!giphyText) {
+    return false;
+  }
+
+  const giphyPageUrls = dedupeStrings(giphyVariants.map((variant) => normalizeHttpUrl(variant.url)).filter(Boolean));
+  const giphyPreviewUrls = dedupeStrings(
+    giphyVariants.map((variant) => normalizeHttpUrl(variant.previewUrl || variant.url)).filter(Boolean),
+  );
+
+  return copySectionsAndImagesToClipboard({
+    textSections: [giphyText],
+    sourceUrls: [...giphyPageUrls, ...giphyPreviewUrls],
+    imageUrls: giphyPreviewUrls,
+  });
+}
+
+async function copyEverythingToClipboard(params: {
+  post: { hook: string; body: string; cta: string };
+  sourceImageUrls: string[];
+  imageDataUrls: string[];
+  memeVariants: MemeCompanion[];
+  giphyVariants: GiphyCompanion[];
+}): Promise<boolean> {
+  const postText = buildPostTextForCopy(params.post);
+  const memeText = buildMemeCompanionsTextForCopy(params.memeVariants);
+  const giphyText = buildGiphyCompanionsTextForCopy(params.giphyVariants);
+
+  const memeImageUrls = dedupeStrings(params.memeVariants.map((variant) => normalizeHttpUrl(variant.url)).filter(Boolean));
+  const giphyPreviewUrls = dedupeStrings(
+    params.giphyVariants.map((variant) => normalizeHttpUrl(variant.previewUrl || variant.url)).filter(Boolean),
+  );
+  const giphyPageUrls = dedupeStrings(params.giphyVariants.map((variant) => normalizeHttpUrl(variant.url)).filter(Boolean));
+
+  return copySectionsAndImagesToClipboard({
+    textSections: [postText, memeText, giphyText],
+    sourceUrls: [...params.sourceImageUrls, ...memeImageUrls, ...giphyPageUrls, ...giphyPreviewUrls],
+    imageUrls: [...params.imageDataUrls, ...params.sourceImageUrls, ...memeImageUrls, ...giphyPreviewUrls],
+  });
+}
+
 export default function Home() {
   const baseControlClassName =
     "block w-full rounded-xl border border-black/10 bg-white px-3 py-2 text-sm outline-none transition focus:border-slate-900";
@@ -1531,7 +1799,7 @@ export default function Home() {
   const [selectedCtaByPost, setSelectedCtaByPost] = useState<Record<number, boolean>>({});
   const [rewriteErrorByPost, setRewriteErrorByPost] = useState<Record<number, string>>({});
   const [lineFeedbackByPost, setLineFeedbackByPost] = useState<Record<number, string>>({});
-  const [copyFeedbackByPost, setCopyFeedbackByPost] = useState<Record<number, "copied" | "failed">>({});
+  const [copyFeedbackByPostAction, setCopyFeedbackByPostAction] = useState<Record<string, "copied" | "failed">>({});
   const [imageName, setImageName] = useState<string>("");
   const [isImageProcessing, setIsImageProcessing] = useState(false);
   const [isChartPromptLoading, setIsChartPromptLoading] = useState(false);
@@ -2386,7 +2654,7 @@ export default function Home() {
     setSelectedCtaByPost({});
     setRewriteErrorByPost({});
     setLineFeedbackByPost({});
-    setCopyFeedbackByPost({});
+    setCopyFeedbackByPostAction({});
     setRewriteLoadingKey(null);
     setPostTypeByPostIndex({});
     setBrandVoiceByPostIndex({});
@@ -3373,16 +3641,32 @@ export default function Home() {
     }
   }
 
-  function showCopyFeedback(postIndex: number, status: "copied" | "failed") {
-    setCopyFeedbackByPost((prev) => ({
+  function copyFeedbackKey(postIndex: number, action: CopyAction): string {
+    return `${postIndex}:${action}`;
+  }
+
+  function getCopyButtonLabel(postIndex: number, action: CopyAction, defaultLabel: string): string {
+    const feedback = copyFeedbackByPostAction[copyFeedbackKey(postIndex, action)];
+    if (feedback === "copied") {
+      return "Copied";
+    }
+    if (feedback === "failed") {
+      return "Retry";
+    }
+    return defaultLabel;
+  }
+
+  function showCopyFeedback(postIndex: number, action: CopyAction, status: "copied" | "failed") {
+    const key = copyFeedbackKey(postIndex, action);
+    setCopyFeedbackByPostAction((prev) => ({
       ...prev,
-      [postIndex]: status,
+      [key]: status,
     }));
 
     setTimeout(() => {
-      setCopyFeedbackByPost((prev) => {
+      setCopyFeedbackByPostAction((prev) => {
         const next = { ...prev };
-        delete next[postIndex];
+        delete next[key];
         return next;
       });
     }, 1500);
@@ -4536,34 +4820,6 @@ export default function Home() {
             </div>
           ) : null}
 
-          {showEventFields && !useNotionCalendarForGeneration ? (
-            <div className="grid gap-3 sm:grid-cols-2">
-              <label className="space-y-1">
-                <span className="text-sm font-medium">Time</span>
-                <input
-                  type="datetime-local"
-                  step={300}
-                  className={baseControlClassName}
-                  style={mediumInputStyle}
-                  value={form.time}
-                  onChange={(event) => setForm((prev) => ({ ...prev, time: event.target.value }))}
-                />
-                <p className="text-xs text-slate-600">Click to pick date and time from calendar/time selector.</p>
-              </label>
-
-              <label className="space-y-1">
-                <span className="text-sm font-medium">Place</span>
-                <input
-                  placeholder="Paris / Online / Booth B12"
-                  className={baseControlClassName}
-                  style={mediumInputStyle}
-                  value={form.place}
-                  onChange={(event) => setForm((prev) => ({ ...prev, place: event.target.value }))}
-                />
-              </label>
-            </div>
-          ) : null}
-
           {showEventFields && useNotionCalendarForGeneration ? (
             <p className="text-xs text-slate-600">
               Time and place are taken from selected Notion calendar entries.
@@ -4986,6 +5242,10 @@ export default function Home() {
               const generatedPostDate = postDateByPostIndex[index];
               const generatedImageDataUrls = postImageDataUrlByPostIndex[index] ?? [];
               const generatedSourceImageUrls = postSourceImageUrlByPostIndex[index] ?? [];
+              const memeVariantsForPost = getMemeVariantsForPost(post);
+              const giphyVariantsForPost = getGiphyVariantsForPost(post);
+              const hasMemeVariantsForPost = memeVariantsForPost.length > 0;
+              const hasGiphyVariantsForPost = giphyVariantsForPost.length > 0;
               const generatedSourcePreviewUrls = generatedSourceImageUrls.map((sourceImageUrl) =>
                 buildSlackImageProxyUrl(sourceImageUrl),
               );
@@ -5015,24 +5275,60 @@ export default function Home() {
                       {" · "}
                       {formatLengthLabel(post.length)}
                     </p>
-                    <button
-                      type="button"
-                      className="shrink-0 rounded-lg border border-black/10 px-2 py-1 text-xs text-slate-600 hover:bg-slate-50"
-                      onClick={async () => {
-                        const copied = await copyPostAndImagesToClipboard({
-                          post,
-                          sourceImageUrls: generatedSourceImageUrls,
-                          imageDataUrls: generatedImageDataUrls,
-                        });
-                        showCopyFeedback(index, copied ? "copied" : "failed");
-                      }}
-                    >
-                      {copyFeedbackByPost[index] === "copied"
-                        ? "Copied"
-                        : copyFeedbackByPost[index] === "failed"
-                          ? "Retry copy"
-                          : "Copy Post + Images"}
-                    </button>
+                    <div className="flex flex-wrap items-center justify-end gap-1.5">
+                      <button
+                        type="button"
+                        className="shrink-0 rounded-lg border border-black/10 px-2 py-1 text-xs text-slate-600 hover:bg-slate-50"
+                        onClick={async () => {
+                          const copied = await copyPostAndImagesToClipboard({
+                            post,
+                            sourceImageUrls: generatedSourceImageUrls,
+                            imageDataUrls: generatedImageDataUrls,
+                          });
+                          showCopyFeedback(index, "post_images", copied ? "copied" : "failed");
+                        }}
+                      >
+                        {getCopyButtonLabel(index, "post_images", "Copy Post + Images")}
+                      </button>
+                      <button
+                        type="button"
+                        className="shrink-0 rounded-lg border border-black/10 px-2 py-1 text-xs text-slate-600 hover:bg-slate-50 disabled:cursor-not-allowed disabled:opacity-60"
+                        disabled={!hasMemeVariantsForPost}
+                        onClick={async () => {
+                          const copied = await copyMemeCompanionsToClipboard(memeVariantsForPost);
+                          showCopyFeedback(index, "memes", copied ? "copied" : "failed");
+                        }}
+                      >
+                        {getCopyButtonLabel(index, "memes", "Copy Memes")}
+                      </button>
+                      <button
+                        type="button"
+                        className="shrink-0 rounded-lg border border-black/10 px-2 py-1 text-xs text-slate-600 hover:bg-slate-50 disabled:cursor-not-allowed disabled:opacity-60"
+                        disabled={!hasGiphyVariantsForPost}
+                        onClick={async () => {
+                          const copied = await copyGiphyCompanionsToClipboard(giphyVariantsForPost);
+                          showCopyFeedback(index, "giphy", copied ? "copied" : "failed");
+                        }}
+                      >
+                        {getCopyButtonLabel(index, "giphy", "Copy GIPHY")}
+                      </button>
+                      <button
+                        type="button"
+                        className="shrink-0 rounded-lg border border-black/10 px-2 py-1 text-xs text-slate-600 hover:bg-slate-50"
+                        onClick={async () => {
+                          const copied = await copyEverythingToClipboard({
+                            post,
+                            sourceImageUrls: generatedSourceImageUrls,
+                            imageDataUrls: generatedImageDataUrls,
+                            memeVariants: memeVariantsForPost,
+                            giphyVariants: giphyVariantsForPost,
+                          });
+                          showCopyFeedback(index, "everything", copied ? "copied" : "failed");
+                        }}
+                      >
+                        {getCopyButtonLabel(index, "everything", "Copy Everything")}
+                      </button>
+                    </div>
                   </div>
 
                   <p className="mb-3 text-lg font-semibold leading-snug">{post.hook}</p>
