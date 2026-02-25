@@ -1097,7 +1097,7 @@ export default function Home() {
       return form.numberOfPosts;
     }
 
-    const normalized = Math.min(12, Math.max(1, Math.trunc(parsed)));
+    const normalized = Math.min(20, Math.max(1, Math.trunc(parsed)));
 
     setNumberOfPostsInput(String(normalized));
     setForm((prev) => {
@@ -2926,7 +2926,7 @@ export default function Home() {
               <input
                 type="number"
                 min={1}
-                max={12}
+                max={20}
                 className={baseControlClassName}
                 style={smallNumberInputStyle}
                 value={numberOfPostsInput}

@@ -66,7 +66,7 @@ export const generatePostsRequestSchema = z.object({
       message: "imageDataUrl must be a base64 data URL for an image",
     }),
   inputLength: inputLengthSchema,
-  numberOfPosts: z.coerce.number().int().min(1).max(12).default(3),
+  numberOfPosts: z.coerce.number().int().min(1).max(20).default(3),
   details: z.string().trim().max(3000).default(""),
 });
 
