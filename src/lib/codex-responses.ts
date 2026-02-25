@@ -6,6 +6,7 @@ type CodexResponsesOptions = {
   model: string;
   instructions: string;
   userInput: string;
+  imageDataUrl?: string;
   imageDataUrls?: string[];
   schemaName: string;
   jsonSchema: Record<string, unknown>;
@@ -134,6 +135,11 @@ function extractResponseText(response: CodexResponseEnvelope): string {
 }
 
 export async function createCodexStructuredCompletion<T>(options: CodexResponsesOptions): Promise<T> {
+  const normalizedImageDataUrls = [options.imageDataUrl, ...(options.imageDataUrls ?? [])]
+    .filter((value): value is string => typeof value === "string")
+    .map((value) => value.trim())
+    .filter(Boolean);
+
   const contentParts: Array<
     { type: "input_text"; text: string } | { type: "input_image"; image_url: string; detail: "auto" }
   > = [
@@ -143,11 +149,7 @@ export async function createCodexStructuredCompletion<T>(options: CodexResponses
     },
   ];
 
-  for (const imageDataUrl of options.imageDataUrls ?? []) {
-    if (!imageDataUrl) {
-      continue;
-    }
-
+  for (const imageDataUrl of normalizedImageDataUrls) {
     contentParts.push({
       type: "input_image",
       image_url: imageDataUrl,
