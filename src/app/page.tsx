@@ -32,6 +32,7 @@ import type { SlackProductUpdateEntry, SlackProductUpdatesData } from "@/lib/sla
 import type { GeneratePostsResponse } from "@/lib/schemas";
 
 type ChartLegendPosition = "top" | "right" | "bottom" | "left";
+type CtaLinkMode = "shared" | "per_post";
 
 type FormState = {
   style: string;
@@ -363,6 +364,13 @@ function trimTrailingEmpty(values: string[]): string[] {
 
 function splitCsvNumbers(value: string): number[] {
   return splitCsvText(value).map((part) => Number(part));
+}
+
+function splitMultilineUrls(value: string): string[] {
+  return value
+    .split(/\r?\n/)
+    .map((line) => line.trim())
+    .filter(Boolean);
 }
 
 function getLegendLabel(position: ChartLegendPosition): string {
@@ -1486,9 +1494,12 @@ export default function Home() {
   const [postEventLabelByPostIndex, setPostEventLabelByPostIndex] = useState<Record<number, string>>({});
   const [postImageDataUrlByPostIndex, setPostImageDataUrlByPostIndex] = useState<Record<number, string[]>>({});
   const [postSourceImageUrlByPostIndex, setPostSourceImageUrlByPostIndex] = useState<Record<number, string[]>>({});
+  const [postCtaLinkByPostIndex, setPostCtaLinkByPostIndex] = useState<Record<number, string>>({});
   const [generatedPostsMonthCursor, setGeneratedPostsMonthCursor] = useState<Date>(() => getStartOfMonth(new Date()));
   const [selectedGeneratedPostsDates, setSelectedGeneratedPostsDates] = useState<string[]>([]);
   const [numberOfPostsInput, setNumberOfPostsInput] = useState<string>(() => String(defaultForm.numberOfPosts));
+  const [ctaLinkMode, setCtaLinkMode] = useState<CtaLinkMode>("shared");
+  const [perPostCtaLinksInput, setPerPostCtaLinksInput] = useState<string>("");
   const [result, setResult] = useState<GeneratePostsResponse | null>(null);
   const [rewriteContext, setRewriteContext] = useState<RewriteContext>(defaultRewriteContext);
   const [error, setError] = useState<string>("");
@@ -1611,6 +1622,21 @@ export default function Home() {
       .sort((a, b) => b.releaseDate.localeCompare(a.releaseDate) || a.name.localeCompare(b.name));
   }, [productUpdateEntries, selectedProductUpdateIds]);
   const useSlackProductUpdatesForGeneration = showProductLaunchFields && selectedProductUpdateEntries.length > 0;
+  const plannedPostCountForCta = useMemo(() => {
+    if (useNotionCalendarForGeneration) {
+      return selectedCalendarEntries.length * form.numberOfPosts;
+    }
+    if (useSlackProductUpdatesForGeneration) {
+      return selectedProductUpdateEntries.length * form.numberOfPosts;
+    }
+    return form.numberOfPosts;
+  }, [
+    form.numberOfPosts,
+    selectedCalendarEntries.length,
+    selectedProductUpdateEntries.length,
+    useNotionCalendarForGeneration,
+    useSlackProductUpdatesForGeneration,
+  ]);
   const generatedPostIndicesByDate = useMemo(() => {
     const byDate = new Map<string, number[]>();
     if (!result?.posts.length) {
@@ -2350,6 +2376,7 @@ export default function Home() {
     setPostEventLabelByPostIndex({});
     setPostImageDataUrlByPostIndex({});
     setPostSourceImageUrlByPostIndex({});
+    setPostCtaLinkByPostIndex({});
     setSelectedGeneratedPostsDates([]);
 
     if (isImageProcessing) {
@@ -2419,6 +2446,40 @@ export default function Home() {
         return;
       }
 
+      const sharedCtaLink = form.ctaLink.trim();
+      const getDefaultCtaLinkForAllocation = (allocation: GenerationAllocation): string => {
+        const calendarCtaLink = allocation.calendarEntry?.event?.eventPage?.trim() ?? "";
+        if (calendarCtaLink) {
+          return calendarCtaLink;
+        }
+
+        if (allocation.productUpdateEntry) {
+          return getPublicAdaptyCtaLink(sharedCtaLink);
+        }
+
+        return sharedCtaLink;
+      };
+      const requestedPerPostCtaLinks = ctaLinkMode === "per_post" ? splitMultilineUrls(perPostCtaLinksInput) : [];
+      let ctaLinkCursor = 0;
+      const ctaLinksByAllocationIndex = generationAllocations.map((allocation) => {
+        if (ctaLinkMode !== "per_post") {
+          return [];
+        }
+
+        const defaultCtaLinkForAllocation = getDefaultCtaLinkForAllocation(allocation);
+        const ctaLinksForAllocation = Array.from({ length: allocation.count }, () => {
+          const rawCandidate = requestedPerPostCtaLinks[ctaLinkCursor] ?? defaultCtaLinkForAllocation;
+          ctaLinkCursor += 1;
+
+          if (allocation.productUpdateEntry) {
+            return getPublicAdaptyCtaLink(rawCandidate);
+          }
+          return rawCandidate.trim();
+        });
+
+        return ctaLinksForAllocation;
+      });
+
       let chartDataPayload = "";
       let chartOptionsPayload = "";
       const shouldValidateChart =
@@ -2442,6 +2503,8 @@ export default function Home() {
           response: GeneratePostsResponse;
           imageDataUrlsUsed: string[];
           sourceImageUrls: string[];
+          ctaLinkUsed: string;
+          ctaLinksUsed: string[];
         } | null
       > = new Array(generationAllocations.length).fill(null);
       const firstChartAllocationIndex = form.chartEnabled
@@ -2474,8 +2537,9 @@ export default function Home() {
               : productUpdateEntry
                 ? buildDetailsFromProductUpdateEntry(productUpdateEntry)
                 : form.details;
-            const ctaVal = calendarEntry?.event?.eventPage
-              ?? (productUpdateEntry ? getPublicAdaptyCtaLink(form.ctaLink) : form.ctaLink.trim());
+            const defaultCtaLinkForAllocation = getDefaultCtaLinkForAllocation(allocation);
+            const ctaLinksForRequest = ctaLinksByAllocationIndex[allocationIndex] ?? [];
+            const ctaVal = ctaLinksForRequest.find((link) => link.trim().length > 0) ?? defaultCtaLinkForAllocation;
             const sourceImageUrls = productUpdateEntry
               ? getTopProductUpdateImageUrls(productUpdateEntry, MAX_PRODUCT_UPDATE_IMAGES_PER_POST)
               : [];
@@ -2510,6 +2574,7 @@ export default function Home() {
               place: typeNeedsEvent ? placeVal : "",
               details: detailsVal,
               ctaLink: ctaVal,
+              ctaLinks: ctaLinksForRequest,
               memeEnabled: form.memeEnabled,
               memeBrief: form.memeEnabled ? form.memeBrief : "",
               giphyEnabled: form.giphyEnabled,
@@ -2540,6 +2605,8 @@ export default function Home() {
               response: sanitizeGenerationResult(responsePayload as GeneratePostsResponse),
               imageDataUrlsUsed: normalizedImageDataUrlsForRequest,
               sourceImageUrls,
+              ctaLinkUsed: ctaVal,
+              ctaLinksUsed: ctaLinksForRequest,
             };
           }),
         );
@@ -2551,6 +2618,8 @@ export default function Home() {
               response: item.value.response,
               imageDataUrlsUsed: item.value.imageDataUrlsUsed,
               sourceImageUrls: item.value.sourceImageUrls,
+              ctaLinkUsed: item.value.ctaLinkUsed,
+              ctaLinksUsed: item.value.ctaLinksUsed,
             };
             continue;
           }
@@ -2572,6 +2641,8 @@ export default function Home() {
           response: GeneratePostsResponse;
           imageDataUrlsUsed: string[];
           sourceImageUrls: string[];
+          ctaLinkUsed: string;
+          ctaLinksUsed: string[];
         } => Boolean(chunk),
       );
 
@@ -2587,11 +2658,13 @@ export default function Home() {
       const nextPostEventLabelByIndex: Record<number, string> = {};
       const nextPostImageDataUrlByIndex: Record<number, string[]> = {};
       const nextPostSourceImageUrlByIndex: Record<number, string[]> = {};
+      const nextPostCtaLinkByIndex: Record<number, string> = {};
       const mergedPosts: GeneratePostsResponse["posts"] = [];
       let postCursor = 0;
 
       for (const chunk of generationChunks) {
-        for (const post of chunk.response.posts) {
+        for (let chunkPostIndex = 0; chunkPostIndex < chunk.response.posts.length; chunkPostIndex += 1) {
+          const post = chunk.response.posts[chunkPostIndex];
           nextPostTypeByIndex[postCursor] = chunk.allocation.inputType;
           nextBrandVoiceByIndex[postCursor] = chunk.allocation.style;
           nextGoalByIndex[postCursor] = chunk.allocation.goal;
@@ -2616,6 +2689,8 @@ export default function Home() {
           if (chunk.sourceImageUrls.length) {
             nextPostSourceImageUrlByIndex[postCursor] = [...chunk.sourceImageUrls];
           }
+          const ctaLinkForPost = chunk.ctaLinksUsed[chunkPostIndex] ?? chunk.ctaLinkUsed;
+          nextPostCtaLinkByIndex[postCursor] = ctaLinkForPost;
           mergedPosts.push(post);
           postCursor += 1;
         }
@@ -2631,6 +2706,7 @@ export default function Home() {
       const trimmedPostEventLabelByIndex: Record<number, string> = {};
       const trimmedPostImageDataUrlByIndex: Record<number, string[]> = {};
       const trimmedPostSourceImageUrlByIndex: Record<number, string[]> = {};
+      const trimmedPostCtaLinkByIndex: Record<number, string> = {};
 
       for (let index = 0; index < trimmedPosts.length; index += 1) {
         if (Object.prototype.hasOwnProperty.call(nextPostTypeByIndex, index)) {
@@ -2653,6 +2729,9 @@ export default function Home() {
         }
         if (Object.prototype.hasOwnProperty.call(nextPostSourceImageUrlByIndex, index)) {
           trimmedPostSourceImageUrlByIndex[index] = nextPostSourceImageUrlByIndex[index];
+        }
+        if (Object.prototype.hasOwnProperty.call(nextPostCtaLinkByIndex, index)) {
+          trimmedPostCtaLinkByIndex[index] = nextPostCtaLinkByIndex[index];
         }
       }
 
@@ -2710,9 +2789,8 @@ export default function Home() {
         style: generationAllocations[0]?.style ?? form.style,
         goal: generationAllocations[0]?.goal ?? form.goal,
         inputType: generationAllocations[0]?.inputType ?? form.inputType,
-        ctaLink: generationAllocations[0]?.productUpdateEntry
-          ? getPublicAdaptyCtaLink(form.ctaLink)
-          : form.ctaLink,
+        ctaLink: trimmedPostCtaLinkByIndex[0]
+          ?? (generationAllocations[0]?.productUpdateEntry ? getPublicAdaptyCtaLink(form.ctaLink) : form.ctaLink),
         details: form.details,
       };
       setPostTypeByPostIndex(trimmedPostTypeByIndex);
@@ -2722,6 +2800,7 @@ export default function Home() {
       setPostEventLabelByPostIndex(trimmedPostEventLabelByIndex);
       setPostImageDataUrlByPostIndex(trimmedPostImageDataUrlByIndex);
       setPostSourceImageUrlByPostIndex(trimmedPostSourceImageUrlByIndex);
+      setPostCtaLinkByPostIndex(trimmedPostCtaLinkByIndex);
       setResult(mergedResult);
       setRewriteContext(nextRewriteContext);
     } catch (submitError) {
@@ -2949,6 +3028,14 @@ export default function Home() {
     return goalByPostIndex[postIndex] || rewriteContext.goal;
   }
 
+  function getRewriteCtaLink(postIndex: number): string {
+    if (Object.prototype.hasOwnProperty.call(postCtaLinkByPostIndex, postIndex)) {
+      return postCtaLinkByPostIndex[postIndex] ?? "";
+    }
+
+    return rewriteContext.ctaLink;
+  }
+
   async function rewriteEntirePost(postIndex: number) {
     const post = result?.posts[postIndex];
     if (!post) {
@@ -2973,6 +3060,7 @@ export default function Home() {
           style: getRewriteStyle(postIndex),
           goal: getRewriteGoal(postIndex),
           inputType: getRewriteInputType(postIndex),
+          ctaLink: getRewriteCtaLink(postIndex),
           prompt: rewritePromptByPost[postIndex] ?? "",
           post: {
             length: post.length,
@@ -3081,6 +3169,7 @@ export default function Home() {
           style: getRewriteStyle(postIndex),
           goal: getRewriteGoal(postIndex),
           inputType: getRewriteInputType(postIndex),
+          ctaLink: getRewriteCtaLink(postIndex),
           prompt: "",
           lineIndex,
           post: {
@@ -3187,6 +3276,7 @@ export default function Home() {
           style: getRewriteStyle(postIndex),
           goal: getRewriteGoal(postIndex),
           inputType: getRewriteInputType(postIndex),
+          ctaLink: getRewriteCtaLink(postIndex),
           prompt: "",
           post: {
             length: post.length,
@@ -4450,8 +4540,38 @@ export default function Home() {
             </p>
           ) : null}
 
+          <div className="space-y-2">
+            <span className="text-sm font-medium">CTA URL Mode</span>
+            <div className="flex flex-wrap gap-2">
+              <button
+                type="button"
+                className={`rounded-lg border px-2 py-1 text-xs transition ${
+                  ctaLinkMode === "shared"
+                    ? "border-sky-500 bg-sky-50 text-sky-900"
+                    : "border-black/10 bg-white text-slate-700 hover:bg-slate-50"
+                }`}
+                onClick={() => setCtaLinkMode("shared")}
+              >
+                Same URL for all posts
+              </button>
+              <button
+                type="button"
+                className={`rounded-lg border px-2 py-1 text-xs transition ${
+                  ctaLinkMode === "per_post"
+                    ? "border-sky-500 bg-sky-50 text-sky-900"
+                    : "border-black/10 bg-white text-slate-700 hover:bg-slate-50"
+                }`}
+                onClick={() => setCtaLinkMode("per_post")}
+              >
+                Different URL per post
+              </button>
+            </div>
+          </div>
+
           <label className="space-y-1">
-            <span className="text-sm font-medium">CTA Link (optional)</span>
+            <span className="text-sm font-medium">
+              {ctaLinkMode === "per_post" ? "Fallback CTA URL (optional)" : "CTA URL (optional)"}
+            </span>
             <input
               placeholder="https://adapty.io/webinar"
               className={baseControlClassName}
@@ -4460,9 +4580,27 @@ export default function Home() {
               onChange={(event) => setForm((prev) => ({ ...prev, ctaLink: event.target.value }))}
             />
           </label>
+
+          {ctaLinkMode === "per_post" ? (
+            <label className="space-y-1">
+              <span className="text-sm font-medium">Per-post CTA URLs (one per line)</span>
+              <textarea
+                rows={Math.min(8, Math.max(3, plannedPostCountForCta))}
+                placeholder={`https://adapty.io/link-1\nhttps://adapty.io/link-2`}
+                className={baseControlClassName}
+                value={perPostCtaLinksInput}
+                onChange={(event) => setPerPostCtaLinksInput(event.target.value)}
+              />
+              <p className="text-xs text-slate-600">
+                Line 1 maps to Post 1, Line 2 to Post 2, etc. Planned posts: {plannedPostCountForCta}. Missing lines use
+                the fallback CTA URL.
+              </p>
+            </label>
+          ) : null}
+
           {useSlackProductUpdatesForGeneration ? (
             <p className="text-xs text-slate-600">
-              For Product feature launch posts, CTA is added only when this is a public `adapty.io` URL. Internal Slack links are ignored.
+              For Product feature launch posts, only public `adapty.io` CTA URLs are allowed. Internal Slack links are ignored.
             </p>
           ) : null}
 

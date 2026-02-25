@@ -2294,9 +2294,19 @@ export async function POST(request: Request) {
 
     const input = parsedInput.data;
     const isProductUpdateInputType = looksLikeProductUpdatePostType(input.inputType);
-    const effectiveCtaLink = isProductUpdateInputType
+    const fallbackCtaLink = isProductUpdateInputType
       ? extractPublicAdaptyCtaLink(input.ctaLink)
       : input.ctaLink.trim();
+    const requestedCtaLinks = input.ctaLinks.map((value) => value.trim()).filter(Boolean);
+    const effectiveCtaLinksByPost = Array.from({ length: input.numberOfPosts }, (_, index) => {
+      const candidateLink = requestedCtaLinks[index] ?? "";
+      const normalizedCandidateLink = isProductUpdateInputType
+        ? extractPublicAdaptyCtaLink(candidateLink)
+        : candidateLink;
+      return normalizedCandidateLink || fallbackCtaLink;
+    });
+    const effectiveCtaLink = effectiveCtaLinksByPost.find(Boolean) ?? fallbackCtaLink;
+    const hasPerPostCtaPlan = requestedCtaLinks.length > 0;
     const shouldUseVisionImageContext = !looksLikeProductUpdatePostType(input.inputType);
     const inputImageDataUrls = shouldUseVisionImageContext
       ? Array.from(
@@ -2643,6 +2653,7 @@ export async function POST(request: Request) {
         input.details,
         input.time,
         input.place,
+        ...effectiveCtaLinksByPost,
         effectiveCtaLink,
         chartPromptSummary,
         industryNewsContextSummary,
@@ -2651,7 +2662,7 @@ export async function POST(request: Request) {
       ].filter(Boolean),
     );
     const sauceBenchmarkNumericClaims = buildAllowedNumericClaimSet(
-      [...soisContext.items.map((item) => item.text), effectiveCtaLink].filter(Boolean),
+      [...soisContext.items.map((item) => item.text), ...effectiveCtaLinksByPost, effectiveCtaLink].filter(Boolean),
     );
     const sauceBenchmarkSnippets = collectBenchmarkEvidenceSnippets(
       soisContext.items.map((item) => item.text),
@@ -2738,9 +2749,14 @@ ${sauceTopicExecutionDirective}
 Per-post Sauce topic plan:
 ${sauceTopicPlanSummary}`
       : "";
+    const perPostCtaPlanSection = hasPerPostCtaPlan
+      ? `
+- Per-post CTA links (post order):
+${effectiveCtaLinksByPost.map((link, index) => `  ${index + 1}. ${link || "(none)"}`).join("\n")}`
+      : "";
 
     const userPrompt = `
-Voice anchor — match the tone, rhythm, and phrasing of these posts:
+Voice anchor - match the tone, rhythm, and phrasing of these posts:
 ${examplesForPrompt || "No library examples available."}
 
 Performance patterns from past posts:
@@ -2749,10 +2765,11 @@ ${performanceInsightsForPrompt}
 Generation request:
 - Brand voice: ${input.style} — ${brandVoiceDirective} ${autoHookDirective}
 - Goal: ${GOAL_LABELS[input.goal]} (${GOAL_DESCRIPTIONS[input.goal]}) — ${goalExecutionDirective}
-- Post type: ${input.inputType} — ${postTypeDirective}
+- Post type: ${input.inputType} - ${postTypeDirective}
 - Facts policy: ${factsPolicy} Copy numbers verbatim from the evidence sections below. When no number exists for a claim, use qualitative language.
 - Details: ${input.details || "(none)"}
 - CTA link: ${effectiveCtaLink || "(not provided)"}
+${perPostCtaPlanSection}
 - Event time: ${input.time || "(not provided)"}
 - Event place: ${input.place || "(not provided)"}
 - Number of posts: ${input.numberOfPosts}
@@ -2994,12 +3011,13 @@ ${rankedContextLines}`;
       posts.map((post, index) => {
         const normalizedHook = stripAiScaffoldOpeners(normalizeNoEmDash(post.hook));
         const normalizedBody = normalizeNoEmDash(post.body);
+        const ctaLinkForPost = effectiveCtaLinksByPost[index] ?? effectiveCtaLink;
         let normalizedCta = stripAiScaffoldOpeners(
-          normalizeNoEmDash(ensureFinalCta(post.cta, effectiveCtaLink)),
+          normalizeNoEmDash(ensureFinalCta(post.cta, ctaLinkForPost)),
         );
         if (isProductUpdateInputType) {
           const noSlackCta = stripSlackLinksFromText(normalizedCta);
-          normalizedCta = effectiveCtaLink ? ensureFinalCta(noSlackCta, effectiveCtaLink) : "";
+          normalizedCta = ctaLinkForPost ? ensureFinalCta(noSlackCta, ctaLinkForPost) : "";
         }
 
         return {

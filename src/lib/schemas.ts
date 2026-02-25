@@ -73,6 +73,7 @@ export const generatePostsRequestSchema = z.object({
   time: z.string().trim().max(120).default(""),
   place: z.string().trim().max(120).default(""),
   ctaLink: z.string().trim().max(500).default(""),
+  ctaLinks: z.array(z.string().trim().max(500)).max(20).default([]),
   imageDataUrl: optionalImageDataUrlSchema.default(""),
   imageDataUrls: z.array(imageDataUrlSchema).max(3).default([]),
   inputLength: inputLengthSchema,
