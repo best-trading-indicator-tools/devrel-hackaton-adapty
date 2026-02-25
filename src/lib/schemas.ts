@@ -26,6 +26,22 @@ const inputLengthSchema = z
 const outputLengthSchema = z
   .enum(["short", "medium", "long", "very long", "standard"]);
 
+const imageDataUrlPattern = /^data:image\/[a-zA-Z0-9.+-]+;base64,/;
+const optionalImageDataUrlSchema = z
+  .string()
+  .trim()
+  .max(4_500_000)
+  .refine((value) => !value || imageDataUrlPattern.test(value), {
+    message: "imageDataUrl must be a base64 data URL for an image",
+  });
+const imageDataUrlSchema = z
+  .string()
+  .trim()
+  .max(4_500_000)
+  .refine((value) => imageDataUrlPattern.test(value), {
+    message: "imageDataUrls entries must be base64 data URLs for images",
+  });
+
 export const generatePostsRequestSchema = z.object({
   style: z.string().trim().min(1).max(260).default("adapty"),
   goal: z.enum(GOAL_OPTIONS).default("virality"),
@@ -57,14 +73,8 @@ export const generatePostsRequestSchema = z.object({
   time: z.string().trim().max(120).default(""),
   place: z.string().trim().max(120).default(""),
   ctaLink: z.string().trim().max(500).default(""),
-  imageDataUrl: z
-    .string()
-    .trim()
-    .max(4_500_000)
-    .default("")
-    .refine((value) => !value || /^data:image\/[a-zA-Z0-9.+-]+;base64,/.test(value), {
-      message: "imageDataUrl must be a base64 data URL for an image",
-    }),
+  imageDataUrl: optionalImageDataUrlSchema.default(""),
+  imageDataUrls: z.array(imageDataUrlSchema).max(3).default([]),
   inputLength: inputLengthSchema,
   numberOfPosts: z.coerce.number().int().min(1).max(20).default(3),
   details: z.string().trim().max(3000).default(""),

@@ -438,6 +438,27 @@ function getTopProductUpdateImageUrls(entry: SlackProductUpdateEntry, limit = MA
   return Array.from(deduped);
 }
 
+function getPublicAdaptyCtaLink(rawLink: string): string {
+  const trimmed = rawLink.trim();
+  if (!trimmed) {
+    return "";
+  }
+
+  try {
+    const parsed = new URL(trimmed);
+    const hostname = parsed.hostname.toLowerCase();
+    const isAdaptyDomain =
+      hostname === "adapty.io" || hostname === "www.adapty.io" || hostname.endsWith(".adapty.io");
+    const isHttp = parsed.protocol === "https:" || parsed.protocol === "http:";
+    if (!isAdaptyDomain || !isHttp) {
+      return "";
+    }
+    return parsed.toString();
+  } catch {
+    return "";
+  }
+}
+
 function buildDetailsFromProductUpdateEntry(entry: SlackProductUpdateEntry): string {
   const parts: string[] = [];
   if (entry.name.trim()) parts.push(`Feature: ${entry.name.trim()}`);
@@ -1278,6 +1299,162 @@ async function copyTextToClipboard(value: string): Promise<boolean> {
   } catch {
     return false;
   }
+}
+
+function escapeHtml(value: string): string {
+  return value
+    .replace(/&/g, "&amp;")
+    .replace(/</g, "&lt;")
+    .replace(/>/g, "&gt;")
+    .replace(/"/g, "&quot;")
+    .replace(/'/g, "&#39;");
+}
+
+function buildPostHtmlForClipboard(params: {
+  post: { hook: string; body: string; cta: string };
+  sourceImageUrls: string[];
+  embeddedImageUrls: string[];
+}): string {
+  const hook = params.post.hook.trim();
+  const body = removeLeadingHookFromBodyForCopy(params.post.hook, params.post.body);
+  const cta = params.post.cta.trim();
+  const sourceImageUrls = Array.from(
+    new Set(
+      params.sourceImageUrls
+        .map((value) => value.trim())
+        .filter(Boolean),
+    ),
+  );
+
+  const embeddedImageUrls = Array.from(
+    new Set(
+      params.embeddedImageUrls
+        .map((value) => value.trim())
+        .filter(Boolean),
+    ),
+  );
+
+  const sourceListHtml = sourceImageUrls.length
+    ? `<p><strong>Attached images:</strong></p><ol>${sourceImageUrls
+        .map((url) => `<li><a href="${escapeHtml(url)}">${escapeHtml(url)}</a></li>`)
+        .join("")}</ol>`
+    : "";
+
+  const embeddedImagesHtml = embeddedImageUrls.length
+    ? `<div>${embeddedImageUrls
+        .map(
+          (imageUrl, index) =>
+            `<p><img src="${escapeHtml(imageUrl)}" alt="Attached image ${index + 1}" style="max-width:100%;height:auto;" /></p>`,
+        )
+        .join("")}</div>`
+    : "";
+
+  return `<article>
+<p><strong>${escapeHtml(hook)}</strong></p>
+${body ? `<p>${escapeHtml(body).replace(/\n/g, "<br/>")}</p>` : ""}
+${cta ? `<p>${escapeHtml(cta)}</p>` : ""}
+${sourceListHtml}
+${embeddedImagesHtml}
+</article>`;
+}
+
+async function fetchSlackImageDataUrlForClipboard(imageUrl: string): Promise<string | null> {
+  try {
+    const response = await fetch("/api/slack-product-updates/image-data-url", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({
+        url: imageUrl,
+      }),
+    });
+
+    const payload = await response.json();
+    if (!response.ok) {
+      return null;
+    }
+
+    if (
+      !payload ||
+      typeof payload !== "object" ||
+      !("dataUrl" in payload) ||
+      typeof (payload as { dataUrl?: unknown }).dataUrl !== "string"
+    ) {
+      return null;
+    }
+
+    const dataUrl = (payload as { dataUrl: string }).dataUrl.trim();
+    if (!dataUrl.startsWith("data:image/")) {
+      return null;
+    }
+
+    if (dataUrl.length > MAX_IMAGE_DATA_URL_CHARS) {
+      return null;
+    }
+
+    return dataUrl;
+  } catch {
+    return null;
+  }
+}
+
+async function copyPostAndImagesToClipboard(params: {
+  post: { hook: string; body: string; cta: string };
+  sourceImageUrls: string[];
+  imageDataUrls: string[];
+}): Promise<boolean> {
+  const sourceImageUrls = Array.from(
+    new Set(
+      params.sourceImageUrls
+        .map((value) => value.trim())
+        .filter(Boolean),
+    ),
+  );
+  const plainText = buildPostTextForCopy(params.post, sourceImageUrls);
+  if (!plainText) {
+    return false;
+  }
+
+  let embeddedImageUrls = Array.from(
+    new Set(
+      params.imageDataUrls
+        .map((value) => value.trim())
+        .filter((value) => value.startsWith("data:image/")),
+    ),
+  );
+
+  if (!embeddedImageUrls.length && sourceImageUrls.length) {
+    const settled = await Promise.allSettled(
+      sourceImageUrls.map((sourceImageUrl) => fetchSlackImageDataUrlForClipboard(sourceImageUrl)),
+    );
+    embeddedImageUrls = settled.flatMap((item) => {
+      if (item.status !== "fulfilled" || !item.value) {
+        return [];
+      }
+      return [item.value];
+    });
+  }
+
+  if (typeof navigator !== "undefined" && navigator.clipboard?.write && typeof ClipboardItem !== "undefined") {
+    try {
+      const html = buildPostHtmlForClipboard({
+        post: params.post,
+        sourceImageUrls,
+        embeddedImageUrls: embeddedImageUrls.length ? embeddedImageUrls : sourceImageUrls,
+      });
+      const item = new ClipboardItem({
+        "text/plain": new Blob([plainText], { type: "text/plain" }),
+        "text/html": new Blob([html], { type: "text/html" }),
+      });
+      await navigator.clipboard.write([item]);
+      return true;
+    } catch {
+      // Fall back to plain text copy.
+    }
+  }
+
+  return copyTextToClipboard(plainText);
 }
 
 export default function Home() {
@@ -2297,7 +2474,8 @@ export default function Home() {
               : productUpdateEntry
                 ? buildDetailsFromProductUpdateEntry(productUpdateEntry)
                 : form.details;
-            const ctaVal = calendarEntry?.event?.eventPage ?? (form.ctaLink.trim() || productUpdateEntry?.slackUrl || "");
+            const ctaVal = calendarEntry?.event?.eventPage
+              ?? (productUpdateEntry ? getPublicAdaptyCtaLink(form.ctaLink) : form.ctaLink.trim());
             const sourceImageUrls = productUpdateEntry
               ? getTopProductUpdateImageUrls(productUpdateEntry, MAX_PRODUCT_UPDATE_IMAGES_PER_POST)
               : [];
@@ -2532,7 +2710,9 @@ export default function Home() {
         style: generationAllocations[0]?.style ?? form.style,
         goal: generationAllocations[0]?.goal ?? form.goal,
         inputType: generationAllocations[0]?.inputType ?? form.inputType,
-        ctaLink: form.ctaLink,
+        ctaLink: generationAllocations[0]?.productUpdateEntry
+          ? getPublicAdaptyCtaLink(form.ctaLink)
+          : form.ctaLink,
         details: form.details,
       };
       setPostTypeByPostIndex(trimmedPostTypeByIndex);
@@ -4280,6 +4460,11 @@ export default function Home() {
               onChange={(event) => setForm((prev) => ({ ...prev, ctaLink: event.target.value }))}
             />
           </label>
+          {useSlackProductUpdatesForGeneration ? (
+            <p className="text-xs text-slate-600">
+              For Product feature launch posts, CTA is added only when this is a public `adapty.io` URL. Internal Slack links are ignored.
+            </p>
+          ) : null}
 
           {showEventFields && useNotionCalendarForGeneration ? (
             <p className="text-xs text-slate-600">
@@ -4649,8 +4834,11 @@ export default function Home() {
                       type="button"
                       className="shrink-0 rounded-lg border border-black/10 px-2 py-1 text-xs text-slate-600 hover:bg-slate-50"
                       onClick={async () => {
-                        const text = buildPostTextForCopy(post, generatedSourceImageUrls);
-                        const copied = await copyTextToClipboard(text);
+                        const copied = await copyPostAndImagesToClipboard({
+                          post,
+                          sourceImageUrls: generatedSourceImageUrls,
+                          imageDataUrls: generatedImageDataUrls,
+                        });
                         showCopyFeedback(index, copied ? "copied" : "failed");
                       }}
                     >
@@ -4658,7 +4846,7 @@ export default function Home() {
                         ? "Copied"
                         : copyFeedbackByPost[index] === "failed"
                           ? "Retry copy"
-                          : "Copy"}
+                          : "Copy Post + Images"}
                     </button>
                   </div>
 
@@ -4829,17 +5017,6 @@ export default function Home() {
                               }}
                             >
                               Copy Source URLs
-                            </button>
-                          ) : null}
-                          {generatedImageDataUrls.length ? (
-                            <button
-                              type="button"
-                              className="rounded-md border border-black/10 bg-white px-2 py-1 text-xs text-slate-700 hover:bg-slate-100"
-                              onClick={() => {
-                                navigator.clipboard.writeText(generatedImageDataUrls.join("\n")).catch(() => {});
-                              }}
-                            >
-                              Copy Data URLs
                             </button>
                           ) : null}
                         </div>

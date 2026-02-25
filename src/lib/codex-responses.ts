@@ -6,7 +6,7 @@ type CodexResponsesOptions = {
   model: string;
   instructions: string;
   userInput: string;
-  imageDataUrl?: string;
+  imageDataUrls?: string[];
   schemaName: string;
   jsonSchema: Record<string, unknown>;
   baseUrl?: string;
@@ -143,10 +143,14 @@ export async function createCodexStructuredCompletion<T>(options: CodexResponses
     },
   ];
 
-  if (options.imageDataUrl) {
+  for (const imageDataUrl of options.imageDataUrls ?? []) {
+    if (!imageDataUrl) {
+      continue;
+    }
+
     contentParts.push({
       type: "input_image",
-      image_url: options.imageDataUrl,
+      image_url: imageDataUrl,
       detail: "auto",
     });
   }

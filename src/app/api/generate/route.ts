@@ -1412,11 +1412,44 @@ function ensureFinalCta(cta: string, ctaLink: string): string {
     return cleanCta;
   }
 
+  if (!cleanCta) {
+    return cleanLink;
+  }
+
   if (cleanCta.includes(cleanLink)) {
     return cleanCta;
   }
 
   return `${cleanCta.replace(/[.\s]+$/g, "")}. ${cleanLink}`;
+}
+
+function extractPublicAdaptyCtaLink(rawLink: string): string {
+  const trimmed = rawLink.trim();
+  if (!trimmed) {
+    return "";
+  }
+
+  try {
+    const parsed = new URL(trimmed);
+    const hostname = parsed.hostname.toLowerCase();
+    const isAdaptyDomain =
+      hostname === "adapty.io" || hostname === "www.adapty.io" || hostname.endsWith(".adapty.io");
+    const isHttp = parsed.protocol === "https:" || parsed.protocol === "http:";
+    if (!isAdaptyDomain || !isHttp) {
+      return "";
+    }
+    return parsed.toString();
+  } catch {
+    return "";
+  }
+}
+
+function stripSlackLinksFromText(value: string): string {
+  return value
+    .replace(/\bhttps?:\/\/[^\s)\]]*slack\.com[^\s)\]]*/gi, "")
+    .replace(/[ \t]{2,}/g, " ")
+    .replace(/[ \t]+([,.;:!?])/g, "$1")
+    .trim();
 }
 
 function normalizeNoEmDash(value: string): string {
@@ -2260,6 +2293,10 @@ export async function POST(request: Request) {
     }
 
     const input = parsedInput.data;
+    const isProductUpdateInputType = looksLikeProductUpdatePostType(input.inputType);
+    const effectiveCtaLink = isProductUpdateInputType
+      ? extractPublicAdaptyCtaLink(input.ctaLink)
+      : input.ctaLink.trim();
     const shouldUseVisionImageContext = !looksLikeProductUpdatePostType(input.inputType);
     const inputImageDataUrls = shouldUseVisionImageContext
       ? Array.from(
@@ -2414,7 +2451,7 @@ export async function POST(request: Request) {
           details: input.details,
           time: input.time,
           place: input.place,
-          ctaLink: input.ctaLink,
+          ctaLink: effectiveCtaLink,
         })
       : Promise.resolve({
           enabled: false,
@@ -2606,7 +2643,7 @@ export async function POST(request: Request) {
         input.details,
         input.time,
         input.place,
-        input.ctaLink,
+        effectiveCtaLink,
         chartPromptSummary,
         industryNewsContextSummary,
         industryNewsTopicPlanSummary,
@@ -2614,7 +2651,7 @@ export async function POST(request: Request) {
       ].filter(Boolean),
     );
     const sauceBenchmarkNumericClaims = buildAllowedNumericClaimSet(
-      [...soisContext.items.map((item) => item.text), input.ctaLink].filter(Boolean),
+      [...soisContext.items.map((item) => item.text), effectiveCtaLink].filter(Boolean),
     );
     const sauceBenchmarkSnippets = collectBenchmarkEvidenceSnippets(
       soisContext.items.map((item) => item.text),
@@ -2715,7 +2752,7 @@ Generation request:
 - Post type: ${input.inputType} — ${postTypeDirective}
 - Facts policy: ${factsPolicy} Copy numbers verbatim from the evidence sections below. When no number exists for a claim, use qualitative language.
 - Details: ${input.details || "(none)"}
-- CTA link: ${input.ctaLink || "(not provided)"}
+- CTA link: ${effectiveCtaLink || "(not provided)"}
 - Event time: ${input.time || "(not provided)"}
 - Event place: ${input.place || "(not provided)"}
 - Number of posts: ${input.numberOfPosts}
@@ -2957,7 +2994,13 @@ ${rankedContextLines}`;
       posts.map((post, index) => {
         const normalizedHook = stripAiScaffoldOpeners(normalizeNoEmDash(post.hook));
         const normalizedBody = normalizeNoEmDash(post.body);
-        const normalizedCta = stripAiScaffoldOpeners(normalizeNoEmDash(ensureFinalCta(post.cta, input.ctaLink)));
+        let normalizedCta = stripAiScaffoldOpeners(
+          normalizeNoEmDash(ensureFinalCta(post.cta, effectiveCtaLink)),
+        );
+        if (isProductUpdateInputType) {
+          const noSlackCta = stripSlackLinksFromText(normalizedCta);
+          normalizedCta = effectiveCtaLink ? ensureFinalCta(noSlackCta, effectiveCtaLink) : "";
+        }
 
         return {
           length: lengthPlan[index] ?? post.length,
