@@ -28,6 +28,7 @@ import {
   type NotionCalendarData,
   type NotionCalendarEntry,
 } from "@/lib/notion-calendar";
+import type { SlackProductUpdateEntry, SlackProductUpdatesData } from "@/lib/slack-product-updates";
 import type { GeneratePostsResponse } from "@/lib/schemas";
 
 type ChartLegendPosition = "top" | "right" | "bottom" | "left";
@@ -97,6 +98,7 @@ const MAX_IMAGE_DATA_URL_CHARS = 4_500_000;
 const IMAGE_EXPORT_QUALITY = 0.82;
 const MAX_CONCURRENT_GENERATION_REQUESTS = 3;
 const EVENT_TOPIC_PATTERN = /\b(event|webinar)\b/i;
+const PRODUCT_FEATURE_LAUNCH_PATTERN = /\bproduct feature launch\b/i;
 const CUSTOM_BRAND_VOICE = "__custom__";
 const CHART_LEGEND_POSITIONS: ChartLegendPosition[] = ["top", "right", "bottom", "left"];
 const CHART_VISUAL_STYLE_OPTIONS = [
@@ -171,6 +173,7 @@ type GenerationAllocation = {
   goal: ContentGoal;
   count: number;
   calendarEntry?: NotionCalendarEntry;
+  productUpdateEntry?: SlackProductUpdateEntry;
 };
 
 type MonthCalendarCell = {
@@ -179,6 +182,14 @@ type MonthCalendarCell = {
   isCurrentMonth: boolean;
   isToday: boolean;
   entries: NotionCalendarEntry[];
+};
+
+type ProductUpdatesMonthCalendarCell = {
+  key: string;
+  dayOfMonth: number;
+  isCurrentMonth: boolean;
+  isToday: boolean;
+  entries: SlackProductUpdateEntry[];
 };
 
 type CalendarEntryMissingField = "date" | "content" | "url" | "image";
@@ -379,6 +390,57 @@ function buildDetailsFromCalendarEntry(entry: NotionCalendarEntry): string {
   return parts.join("\n\n");
 }
 
+function clipTextForDetails(value: string, maxChars = 2800): string {
+  const trimmed = value.trim();
+  if (trimmed.length <= maxChars) {
+    return trimmed;
+  }
+
+  return `${trimmed.slice(0, maxChars).trimEnd()}...`;
+}
+
+function getPrimaryProductUpdateImageUrl(entry: SlackProductUpdateEntry): string {
+  const candidate = entry.images.find((imageUrl) => typeof imageUrl === "string" && imageUrl.trim());
+  if (candidate) {
+    return candidate.trim();
+  }
+
+  for (const message of entry.thread) {
+    const threadCandidate = message.images.find((imageUrl) => typeof imageUrl === "string" && imageUrl.trim());
+    if (threadCandidate) {
+      return threadCandidate.trim();
+    }
+  }
+
+  return "";
+}
+
+function buildDetailsFromProductUpdateEntry(entry: SlackProductUpdateEntry): string {
+  const parts: string[] = [];
+  if (entry.name.trim()) parts.push(`Feature: ${entry.name.trim()}`);
+  if (entry.releaseDate.trim()) parts.push(`Release date: ${entry.releaseDate.trim()}`);
+  if (entry.message.trim()) parts.push(`Main update:\n${entry.message.trim()}`);
+  if (entry.matchingReplies.length) {
+    const keyReplies = entry.matchingReplies
+      .map((reply) => `[${reply.userName}] ${reply.text}`)
+      .join("\n\n")
+      .trim();
+    if (keyReplies) {
+      parts.push(`Key product comments:\n${keyReplies}`);
+    }
+  } else if (entry.content.trim()) {
+    parts.push(`Thread context:\n${entry.content.trim()}`);
+  }
+  if (entry.images.length) {
+    parts.push(`Thread images:\n${entry.images.join("\n")}`);
+  }
+  if (entry.slackUrl.trim()) {
+    parts.push(`Slack thread: ${entry.slackUrl.trim()}`);
+  }
+
+  return clipTextForDetails(parts.join("\n\n"), 2900);
+}
+
 function formatEventTimeForPrompt(value: string): string {
   const trimmed = value.trim();
   if (!trimmed) {
@@ -529,6 +591,57 @@ function buildMonthCalendarCells(
       isCurrentMonth: cellDate.getFullYear() === monthYear && cellDate.getMonth() === monthIndex,
       isToday: key === todayKey,
       entries,
+    });
+  }
+
+  return cells;
+}
+
+function getProductUpdateEntriesForMonth(entries: SlackProductUpdateEntry[], monthDate: Date): SlackProductUpdateEntry[] {
+  const monthKey = `${formatCalendarMonthKey(monthDate)}-`;
+  return entries
+    .filter((entry) => entry.releaseDate.startsWith(monthKey))
+    .sort((a, b) => a.releaseDate.localeCompare(b.releaseDate) || a.name.localeCompare(b.name));
+}
+
+function buildProductUpdatesMonthCalendarCells(
+  entries: SlackProductUpdateEntry[],
+  monthCursor: Date,
+  todayDate: Date,
+): ProductUpdatesMonthCalendarCell[] {
+  const monthStart = getStartOfMonth(monthCursor);
+  const monthYear = monthStart.getFullYear();
+  const monthIndex = monthStart.getMonth();
+  const todayKey = formatCalendarDateKey(todayDate);
+  const entriesByDate = new Map<string, SlackProductUpdateEntry[]>();
+
+  for (const entry of entries) {
+    const parsedDate = parseCalendarDate(entry.releaseDate);
+    if (!parsedDate) {
+      continue;
+    }
+
+    const key = formatCalendarDateKey(parsedDate);
+    const existing = entriesByDate.get(key);
+    if (existing) {
+      existing.push(entry);
+      continue;
+    }
+    entriesByDate.set(key, [entry]);
+  }
+
+  const gridStart = addCalendarDays(monthStart, -monthStart.getDay());
+  const cells: ProductUpdatesMonthCalendarCell[] = [];
+
+  for (let offset = 0; offset < 42; offset += 1) {
+    const cellDate = addCalendarDays(gridStart, offset);
+    const key = formatCalendarDateKey(cellDate);
+    cells.push({
+      key,
+      dayOfMonth: cellDate.getDate(),
+      isCurrentMonth: cellDate.getFullYear() === monthYear && cellDate.getMonth() === monthIndex,
+      isToday: key === todayKey,
+      entries: entriesByDate.get(key) ?? [],
     });
   }
 
@@ -774,6 +887,10 @@ function getSelectWidthFromOptions(
 
 function needsEventDetails(inputType: string): boolean {
   return EVENT_TOPIC_PATTERN.test(inputType);
+}
+
+function needsProductFeatureLaunchSelection(inputType: string): boolean {
+  return PRODUCT_FEATURE_LAUNCH_PATTERN.test(inputType);
 }
 
 function getCalendarMissingFieldLabel(field: CalendarEntryMissingField): string {
@@ -1024,6 +1141,43 @@ function extractApiErrorMessage(responsePayload: unknown, status: number): strin
   return apiMessage || apiError || `Request failed (${status})`;
 }
 
+async function fetchSlackImageDataUrl(imageUrl: string): Promise<string> {
+  const response = await fetch("/api/slack-product-updates/image-data-url", {
+    method: "POST",
+    headers: {
+      "Content-Type": "application/json",
+    },
+    body: JSON.stringify({
+      url: imageUrl,
+    }),
+  });
+
+  const payload = await response.json();
+  if (!response.ok) {
+    throw new Error(extractApiErrorMessage(payload, response.status));
+  }
+
+  if (
+    !payload ||
+    typeof payload !== "object" ||
+    !("dataUrl" in payload) ||
+    typeof (payload as { dataUrl?: unknown }).dataUrl !== "string"
+  ) {
+    throw new Error("Slack image endpoint returned an invalid payload.");
+  }
+
+  const dataUrl = (payload as { dataUrl: string }).dataUrl.trim();
+  if (!dataUrl.startsWith("data:image/")) {
+    throw new Error("Slack image endpoint returned a non-image data URL.");
+  }
+
+  if (dataUrl.length > MAX_IMAGE_DATA_URL_CHARS) {
+    throw new Error("Slack image is too large for model context.");
+  }
+
+  return dataUrl;
+}
+
 function readFileAsDataUrl(file: File): Promise<string> {
   return new Promise((resolve, reject) => {
     const reader = new FileReader();
@@ -1154,6 +1308,8 @@ export default function Home() {
   const [goalByPostIndex, setGoalByPostIndex] = useState<Record<number, ContentGoal>>({});
   const [postDateByPostIndex, setPostDateByPostIndex] = useState<Record<number, string>>({});
   const [postEventLabelByPostIndex, setPostEventLabelByPostIndex] = useState<Record<number, string>>({});
+  const [postImageDataUrlByPostIndex, setPostImageDataUrlByPostIndex] = useState<Record<number, string>>({});
+  const [postSourceImageUrlByPostIndex, setPostSourceImageUrlByPostIndex] = useState<Record<number, string>>({});
   const [generatedPostsMonthCursor, setGeneratedPostsMonthCursor] = useState<Date>(() => getStartOfMonth(new Date()));
   const [selectedGeneratedPostsDates, setSelectedGeneratedPostsDates] = useState<string[]>([]);
   const [numberOfPostsInput, setNumberOfPostsInput] = useState<string>(() => String(defaultForm.numberOfPosts));
@@ -1180,6 +1336,11 @@ export default function Home() {
   const [notionCalendarSyncLoading, setNotionCalendarSyncLoading] = useState(false);
   const [calendarMonthCursor, setCalendarMonthCursor] = useState<Date>(() => getStartOfMonth(new Date()));
   const [selectedCalendarEntryIds, setSelectedCalendarEntryIds] = useState<string[]>([]);
+  const [productUpdatesMonthCursor, setProductUpdatesMonthCursor] = useState<Date>(() => getStartOfMonth(new Date()));
+  const [slackProductUpdates, setSlackProductUpdates] = useState<SlackProductUpdatesData | null>(null);
+  const [slackProductUpdatesLoading, setSlackProductUpdatesLoading] = useState(false);
+  const [slackProductUpdatesSyncLoading, setSlackProductUpdatesSyncLoading] = useState(false);
+  const [selectedProductUpdateIds, setSelectedProductUpdateIds] = useState<string[]>([]);
   const fallbackMemeTemplates = useMemo(() => buildFallbackMemeTemplates(), []);
   const [memeTemplateOptions, setMemeTemplateOptions] = useState<MemeTemplateOption[]>(fallbackMemeTemplates);
   const [memeTemplateSearch, setMemeTemplateSearch] = useState("");
@@ -1207,6 +1368,10 @@ export default function Home() {
   );
   const showEventFields = useMemo(
     () => normalizedSelectedPostTypes.some((type) => needsEventDetails(type)),
+    [normalizedSelectedPostTypes],
+  );
+  const showProductLaunchFields = useMemo(
+    () => normalizedSelectedPostTypes.some((type) => needsProductFeatureLaunchSelection(type)),
     [normalizedSelectedPostTypes],
   );
   const calendarEntries = useMemo(() => notionCalendar?.entries ?? [], [notionCalendar?.entries]);
@@ -1245,6 +1410,31 @@ export default function Home() {
   );
   const calendarMonthLabel = useMemo(() => formatCalendarMonthLabel(calendarMonthCursor), [calendarMonthCursor]);
   const useNotionCalendarForGeneration = showEventFields && selectedCalendarEntries.length > 0;
+  const productUpdateEntries = useMemo(() => slackProductUpdates?.entries ?? [], [slackProductUpdates?.entries]);
+  const productUpdateMonthEntries = useMemo(
+    () => getProductUpdateEntriesForMonth(productUpdateEntries, productUpdatesMonthCursor),
+    [productUpdateEntries, productUpdatesMonthCursor],
+  );
+  const productUpdatesMonthCells = useMemo(
+    () => buildProductUpdatesMonthCalendarCells(productUpdateEntries, productUpdatesMonthCursor, todayDate),
+    [productUpdateEntries, productUpdatesMonthCursor, todayDate],
+  );
+  const productUpdatesMonthLabel = useMemo(
+    () => formatCalendarMonthLabel(productUpdatesMonthCursor),
+    [productUpdatesMonthCursor],
+  );
+  const selectedProductUpdateIdSet = useMemo(() => new Set(selectedProductUpdateIds), [selectedProductUpdateIds]);
+  const selectedProductUpdateEntries = useMemo(() => {
+    if (!productUpdateEntries.length || !selectedProductUpdateIds.length) {
+      return [];
+    }
+
+    const selectedIds = new Set(selectedProductUpdateIds);
+    return productUpdateEntries
+      .filter((entry) => selectedIds.has(entry.id))
+      .sort((a, b) => b.releaseDate.localeCompare(a.releaseDate) || a.name.localeCompare(b.name));
+  }, [productUpdateEntries, selectedProductUpdateIds]);
+  const useSlackProductUpdatesForGeneration = showProductLaunchFields && selectedProductUpdateEntries.length > 0;
   const generatedPostIndicesByDate = useMemo(() => {
     const byDate = new Map<string, number[]>();
     if (!result?.posts.length) {
@@ -1632,6 +1822,33 @@ export default function Home() {
   }, [showEventFields]);
 
   useEffect(() => {
+    if (!showProductLaunchFields) return;
+    let isCancelled = false;
+    setSlackProductUpdatesLoading(true);
+    fetch("/api/slack-product-updates")
+      .then((response) => response.json())
+      .then((data: SlackProductUpdatesData) => {
+        if (!isCancelled) {
+          setSlackProductUpdates(data);
+        }
+      })
+      .catch(() => {
+        if (!isCancelled) {
+          setSlackProductUpdates(null);
+        }
+      })
+      .finally(() => {
+        if (!isCancelled) {
+          setSlackProductUpdatesLoading(false);
+        }
+      });
+
+    return () => {
+      isCancelled = true;
+    };
+  }, [showProductLaunchFields]);
+
+  useEffect(() => {
     if (!calendarEntries.length) {
       return;
     }
@@ -1648,6 +1865,24 @@ export default function Home() {
   }, [calendarEntries]);
 
   useEffect(() => {
+    if (!productUpdateEntries.length) {
+      return;
+    }
+
+    setProductUpdatesMonthCursor((currentCursor) => {
+      if (getProductUpdateEntriesForMonth(productUpdateEntries, currentCursor).length) {
+        return currentCursor;
+      }
+
+      const firstEntry = [...productUpdateEntries]
+        .filter((entry) => Boolean(parseCalendarDate(entry.releaseDate)))
+        .sort((a, b) => a.releaseDate.localeCompare(b.releaseDate) || a.name.localeCompare(b.name))[0];
+      const firstEntryDate = firstEntry ? parseCalendarDate(firstEntry.releaseDate) : null;
+      return firstEntryDate ? getStartOfMonth(firstEntryDate) : currentCursor;
+    });
+  }, [productUpdateEntries]);
+
+  useEffect(() => {
     if (!calendarEntries.length) {
       setSelectedCalendarEntryIds([]);
       return;
@@ -1658,6 +1893,18 @@ export default function Home() {
       return previous.filter((id) => validIds.has(id));
     });
   }, [calendarEntries]);
+
+  useEffect(() => {
+    if (!productUpdateEntries.length) {
+      setSelectedProductUpdateIds([]);
+      return;
+    }
+
+    setSelectedProductUpdateIds((previous) => {
+      const validIds = new Set(productUpdateEntries.map((entry) => entry.id));
+      return previous.filter((id) => validIds.has(id));
+    });
+  }, [productUpdateEntries]);
 
   useEffect(() => {
     if (!generatedPostDates.length) {
@@ -1687,6 +1934,18 @@ export default function Home() {
       setError(err instanceof Error ? err.message : "Reload failed");
     } finally {
       setNotionCalendarSyncLoading(false);
+    }
+  }
+
+  async function reloadSlackProductUpdates() {
+    setSlackProductUpdatesSyncLoading(true);
+    try {
+      const feed = (await fetch("/api/slack-product-updates").then((res) => res.json())) as SlackProductUpdatesData;
+      setSlackProductUpdates(feed);
+    } catch (err) {
+      setError(err instanceof Error ? err.message : "Reload failed");
+    } finally {
+      setSlackProductUpdatesSyncLoading(false);
     }
   }
 
@@ -1724,6 +1983,42 @@ export default function Home() {
 
     const monthIds = new Set(monthEntries.map((entry) => entry.id));
     setSelectedCalendarEntryIds((previous) => previous.filter((id) => !monthIds.has(id)));
+  }
+
+  function toggleProductUpdateSelection(entryId: string) {
+    setSelectedProductUpdateIds((previous) =>
+      previous.includes(entryId) ? previous.filter((id) => id !== entryId) : [...previous, entryId],
+    );
+  }
+
+  function showPreviousProductUpdatesMonth() {
+    setProductUpdatesMonthCursor((current) => shiftMonth(current, -1));
+  }
+
+  function showNextProductUpdatesMonth() {
+    setProductUpdatesMonthCursor((current) => shiftMonth(current, 1));
+  }
+
+  function jumpToCurrentProductUpdatesMonth() {
+    setProductUpdatesMonthCursor(getStartOfMonth(todayDate));
+  }
+
+  function selectAllProductUpdatesInCurrentMonth() {
+    const monthIds = productUpdateMonthEntries.map((entry) => entry.id);
+    if (!monthIds.length) {
+      return;
+    }
+
+    setSelectedProductUpdateIds((previous) => Array.from(new Set([...previous, ...monthIds])));
+  }
+
+  function clearCurrentProductUpdatesMonthSelections() {
+    if (!productUpdateMonthEntries.length) {
+      return;
+    }
+
+    const monthIds = new Set(productUpdateMonthEntries.map((entry) => entry.id));
+    setSelectedProductUpdateIds((previous) => previous.filter((id) => !monthIds.has(id)));
   }
 
   function showPreviousGeneratedPostsMonth() {
@@ -1877,6 +2172,8 @@ export default function Home() {
     setGoalByPostIndex({});
     setPostDateByPostIndex({});
     setPostEventLabelByPostIndex({});
+    setPostImageDataUrlByPostIndex({});
+    setPostSourceImageUrlByPostIndex({});
     setSelectedGeneratedPostsDates([]);
 
     if (isImageProcessing) {
@@ -1900,19 +2197,39 @@ export default function Home() {
             .filter(Boolean),
         ),
       );
-      let generationAllocations: GenerationAllocation[];
+      let generationAllocations: GenerationAllocation[] = [];
+      const contextStyle = selectedStylesForGeneration[0] ?? defaultForm.style;
+      const contextGoal = normalizedSelectedGoals[0] ?? defaultForm.goal;
+      const selectedEventPostType =
+        normalizedSelectedPostTypes.find((type) => needsEventDetails(type)) ?? POST_TYPE_OPTIONS[1];
+      const selectedProductLaunchPostType =
+        normalizedSelectedPostTypes.find((type) => needsProductFeatureLaunchSelection(type)) ?? POST_TYPE_OPTIONS[0];
+
       if (useNotionCalendarForGeneration) {
-        const type = normalizedSelectedPostTypes[0] ?? defaultForm.inputType;
-        const style = selectedStylesForGeneration[0] ?? defaultForm.style;
-        const goal = normalizedSelectedGoals[0] ?? defaultForm.goal;
-        generationAllocations = selectedCalendarEntries.map((entry) => ({
-          inputType: type,
-          style,
-          goal,
-          count: committedNumberOfPosts,
-          calendarEntry: entry,
-        }));
-      } else {
+        generationAllocations = generationAllocations.concat(
+          selectedCalendarEntries.map((entry) => ({
+            inputType: selectedEventPostType,
+            style: contextStyle,
+            goal: contextGoal,
+            count: committedNumberOfPosts,
+            calendarEntry: entry,
+          })),
+        );
+      }
+
+      if (useSlackProductUpdatesForGeneration) {
+        generationAllocations = generationAllocations.concat(
+          selectedProductUpdateEntries.map((entry) => ({
+            inputType: selectedProductLaunchPostType,
+            style: contextStyle,
+            goal: contextGoal,
+            count: committedNumberOfPosts,
+            productUpdateEntry: entry,
+          })),
+        );
+      }
+
+      if (!generationAllocations.length) {
         generationAllocations = buildGenerationAllocations({
           inputTypes: normalizedSelectedPostTypes,
           styles: selectedStylesForGeneration,
@@ -1944,11 +2261,17 @@ export default function Home() {
       }
 
       const generationChunksByIndex: Array<
-        { allocation: GenerationAllocation; response: GeneratePostsResponse } | null
+        {
+          allocation: GenerationAllocation;
+          response: GeneratePostsResponse;
+          imageDataUrlUsed: string;
+          sourceImageUrl: string;
+        } | null
       > = new Array(generationAllocations.length).fill(null);
       const firstChartAllocationIndex = form.chartEnabled
         ? generationAllocations.findIndex((allocation) => needsChartDetails(allocation.inputType))
         : -1;
+      const slackImageDataUrlCache = new Map<string, string>();
 
       let allocationErrorMessage = "";
       const concurrency = Math.max(1, Math.min(MAX_CONCURRENT_GENERATION_REQUESTS, generationAllocations.length));
@@ -1967,18 +2290,37 @@ export default function Home() {
             const shouldAttachChart =
               typeNeedsChart && form.chartEnabled && allocationIndex === firstChartAllocationIndex;
 
-            const entry = allocation.calendarEntry;
-            const timeVal = entry ? (entry.event?.time ?? "") : form.time;
-            const placeVal = entry ? (entry.event?.region ?? "") : form.place;
-            const detailsVal = entry ? buildDetailsFromCalendarEntry(entry) : form.details;
-            const ctaVal = entry?.event?.eventPage ?? form.ctaLink;
+            const calendarEntry = allocation.calendarEntry;
+            const productUpdateEntry = allocation.productUpdateEntry;
+            const timeVal = calendarEntry ? (calendarEntry.event?.time ?? "") : form.time;
+            const placeVal = calendarEntry ? (calendarEntry.event?.region ?? "") : form.place;
+            const detailsVal = calendarEntry
+              ? buildDetailsFromCalendarEntry(calendarEntry)
+              : productUpdateEntry
+                ? buildDetailsFromProductUpdateEntry(productUpdateEntry)
+                : form.details;
+            const ctaVal = calendarEntry?.event?.eventPage ?? (form.ctaLink.trim() || productUpdateEntry?.slackUrl || "");
+            const sourceImageUrl = productUpdateEntry ? getPrimaryProductUpdateImageUrl(productUpdateEntry) : "";
+            let imageDataUrlForRequest = productUpdateEntry ? "" : calendarEntry ? "" : form.imageDataUrl;
+
+            if (sourceImageUrl) {
+              const cachedImageDataUrl = slackImageDataUrlCache.get(sourceImageUrl);
+              if (cachedImageDataUrl) {
+                imageDataUrlForRequest = cachedImageDataUrl;
+              } else {
+                const fetchedImageDataUrl = await fetchSlackImageDataUrl(sourceImageUrl);
+                slackImageDataUrlCache.set(sourceImageUrl, fetchedImageDataUrl);
+                imageDataUrlForRequest = fetchedImageDataUrl;
+              }
+            }
+
             const requestPayload = {
               ...form,
               style: allocation.style,
               goal: allocation.goal,
               inputType: allocation.inputType,
               numberOfPosts: allocation.count,
-              imageDataUrl: entry ? "" : form.imageDataUrl,
+              imageDataUrl: imageDataUrlForRequest,
               chartEnabled: shouldAttachChart,
               chartType: shouldAttachChart ? form.chartType : defaultForm.chartType,
               chartTitle: shouldAttachChart ? form.chartTitle : "",
@@ -2018,6 +2360,8 @@ export default function Home() {
               allocationIndex,
               allocation,
               response: sanitizeGenerationResult(responsePayload as GeneratePostsResponse),
+              imageDataUrlUsed: imageDataUrlForRequest,
+              sourceImageUrl,
             };
           }),
         );
@@ -2027,6 +2371,8 @@ export default function Home() {
             generationChunksByIndex[item.value.allocationIndex] = {
               allocation: item.value.allocation,
               response: item.value.response,
+              imageDataUrlUsed: item.value.imageDataUrlUsed,
+              sourceImageUrl: item.value.sourceImageUrl,
             };
             continue;
           }
@@ -2043,7 +2389,12 @@ export default function Home() {
       }
 
       const generationChunks = generationChunksByIndex.filter(
-        (chunk): chunk is { allocation: GenerationAllocation; response: GeneratePostsResponse } => Boolean(chunk),
+        (chunk): chunk is {
+          allocation: GenerationAllocation;
+          response: GeneratePostsResponse;
+          imageDataUrlUsed: string;
+          sourceImageUrl: string;
+        } => Boolean(chunk),
       );
 
       if (!generationChunks.length) {
@@ -2056,6 +2407,8 @@ export default function Home() {
       const nextGoalByIndex: Record<number, ContentGoal> = {};
       const nextPostDateByIndex: Record<number, string> = {};
       const nextPostEventLabelByIndex: Record<number, string> = {};
+      const nextPostImageDataUrlByIndex: Record<number, string> = {};
+      const nextPostSourceImageUrlByIndex: Record<number, string> = {};
       const mergedPosts: GeneratePostsResponse["posts"] = [];
       let postCursor = 0;
 
@@ -2065,27 +2418,41 @@ export default function Home() {
           nextBrandVoiceByIndex[postCursor] = chunk.allocation.style;
           nextGoalByIndex[postCursor] = chunk.allocation.goal;
           const generatedDate =
-            chunk.allocation.calendarEntry?.date || extractDateKeyFromDateTimeInput(form.time);
+            chunk.allocation.calendarEntry?.date ||
+            chunk.allocation.productUpdateEntry?.releaseDate ||
+            extractDateKeyFromDateTimeInput(form.time);
           if (generatedDate) {
             nextPostDateByIndex[postCursor] = generatedDate;
           }
           const generatedEventLabel =
-            chunk.allocation.calendarEntry?.event?.eventName?.trim() || chunk.allocation.calendarEntry?.name?.trim() || "";
+            chunk.allocation.calendarEntry?.event?.eventName?.trim() ||
+            chunk.allocation.calendarEntry?.name?.trim() ||
+            chunk.allocation.productUpdateEntry?.name?.trim() ||
+            "";
           if (generatedEventLabel) {
             nextPostEventLabelByIndex[postCursor] = generatedEventLabel;
+          }
+          if (chunk.imageDataUrlUsed) {
+            nextPostImageDataUrlByIndex[postCursor] = chunk.imageDataUrlUsed;
+          }
+          if (chunk.sourceImageUrl) {
+            nextPostSourceImageUrlByIndex[postCursor] = chunk.sourceImageUrl;
           }
           mergedPosts.push(post);
           postCursor += 1;
         }
       }
 
-      const postLimit = useNotionCalendarForGeneration ? mergedPosts.length : committedNumberOfPosts;
+      const postLimit =
+        useNotionCalendarForGeneration || useSlackProductUpdatesForGeneration ? mergedPosts.length : committedNumberOfPosts;
       const trimmedPosts = mergedPosts.slice(0, postLimit);
       const trimmedPostTypeByIndex: Record<number, string> = {};
       const trimmedBrandVoiceByIndex: Record<number, string> = {};
       const trimmedGoalByIndex: Record<number, ContentGoal> = {};
       const trimmedPostDateByIndex: Record<number, string> = {};
       const trimmedPostEventLabelByIndex: Record<number, string> = {};
+      const trimmedPostImageDataUrlByIndex: Record<number, string> = {};
+      const trimmedPostSourceImageUrlByIndex: Record<number, string> = {};
 
       for (let index = 0; index < trimmedPosts.length; index += 1) {
         if (Object.prototype.hasOwnProperty.call(nextPostTypeByIndex, index)) {
@@ -2102,6 +2469,12 @@ export default function Home() {
         }
         if (Object.prototype.hasOwnProperty.call(nextPostEventLabelByIndex, index)) {
           trimmedPostEventLabelByIndex[index] = nextPostEventLabelByIndex[index];
+        }
+        if (Object.prototype.hasOwnProperty.call(nextPostImageDataUrlByIndex, index)) {
+          trimmedPostImageDataUrlByIndex[index] = nextPostImageDataUrlByIndex[index];
+        }
+        if (Object.prototype.hasOwnProperty.call(nextPostSourceImageUrlByIndex, index)) {
+          trimmedPostSourceImageUrlByIndex[index] = nextPostSourceImageUrlByIndex[index];
         }
       }
 
@@ -2167,10 +2540,12 @@ export default function Home() {
       setGoalByPostIndex(trimmedGoalByIndex);
       setPostDateByPostIndex(trimmedPostDateByIndex);
       setPostEventLabelByPostIndex(trimmedPostEventLabelByIndex);
+      setPostImageDataUrlByPostIndex(trimmedPostImageDataUrlByIndex);
+      setPostSourceImageUrlByPostIndex(trimmedPostSourceImageUrlByIndex);
       setResult(mergedResult);
       setRewriteContext(nextRewriteContext);
-    } catch {
-      setError("Could not reach the API route.");
+    } catch (submitError) {
+      setError(submitError instanceof Error ? submitError.message : "Could not reach the API route.");
     } finally {
       setIsLoading(false);
     }
@@ -2941,6 +3316,186 @@ export default function Home() {
               })}
             </div>
           </div>
+
+          {showProductLaunchFields ? (
+            <div className="space-y-3 rounded-2xl border border-emerald-200 bg-emerald-50/40 p-4">
+              <div className="flex items-center justify-between gap-2">
+                <span className="text-sm font-semibold text-slate-900">Slack product updates</span>
+                <button
+                  type="button"
+                  disabled={slackProductUpdatesSyncLoading}
+                  className="rounded-lg border border-black/10 bg-white px-2 py-1 text-xs text-slate-700 hover:bg-slate-50 disabled:opacity-50"
+                  onClick={reloadSlackProductUpdates}
+                >
+                  {slackProductUpdatesSyncLoading ? "Reloading…" : "Reload"}
+                </button>
+              </div>
+
+              {slackProductUpdatesLoading ? (
+                <p className="text-xs text-slate-600">Loading product updates…</p>
+              ) : productUpdateEntries.length ? (
+                <>
+                  <div className="flex flex-wrap items-center justify-between gap-2">
+                    <div className="flex items-center gap-1">
+                      <button
+                        type="button"
+                        className="rounded-lg border border-black/10 bg-white px-2 py-1 text-xs text-slate-700 hover:bg-slate-50"
+                        onClick={showPreviousProductUpdatesMonth}
+                        aria-label="Show previous month"
+                      >
+                        ‹
+                      </button>
+                      <button
+                        type="button"
+                        className="rounded-lg border border-black/10 bg-white px-2 py-1 text-xs text-slate-700 hover:bg-slate-50"
+                        onClick={jumpToCurrentProductUpdatesMonth}
+                      >
+                        Today
+                      </button>
+                      <button
+                        type="button"
+                        className="rounded-lg border border-black/10 bg-white px-2 py-1 text-xs text-slate-700 hover:bg-slate-50"
+                        onClick={showNextProductUpdatesMonth}
+                        aria-label="Show next month"
+                      >
+                        ›
+                      </button>
+                    </div>
+                    <span className="text-sm font-semibold text-slate-800">{productUpdatesMonthLabel}</span>
+                    <div className="flex items-center gap-1">
+                      <button
+                        type="button"
+                        className="rounded-lg border border-black/10 bg-white px-2 py-1 text-xs text-slate-700 hover:bg-slate-50 disabled:opacity-50"
+                        disabled={!productUpdateMonthEntries.length}
+                        onClick={selectAllProductUpdatesInCurrentMonth}
+                      >
+                        Select month
+                      </button>
+                      <button
+                        type="button"
+                        className="rounded-lg border border-black/10 bg-white px-2 py-1 text-xs text-slate-700 hover:bg-slate-50 disabled:opacity-50"
+                        disabled={!productUpdateMonthEntries.length}
+                        onClick={clearCurrentProductUpdatesMonthSelections}
+                      >
+                        Clear month
+                      </button>
+                    </div>
+                  </div>
+
+                  {!productUpdateMonthEntries.length ? (
+                    <p className="text-xs text-slate-600">No releases scheduled in {productUpdatesMonthLabel}.</p>
+                  ) : null}
+
+                  <div className="overflow-x-auto">
+                    <div className="grid min-w-184 grid-cols-7 gap-px overflow-hidden rounded-xl border border-black/10 bg-black/10">
+                      {CALENDAR_DAY_LABELS.map((dayLabel) => (
+                        <div
+                          key={dayLabel}
+                          className="bg-slate-100 px-2 py-1 text-center text-[11px] font-semibold uppercase tracking-wide text-slate-600"
+                        >
+                          {dayLabel}
+                        </div>
+                      ))}
+                      {productUpdatesMonthCells.map((cell) => (
+                        <div
+                          key={cell.key}
+                          className={`min-h-24 space-y-1 p-1.5 ${cell.isCurrentMonth ? "bg-white" : "bg-slate-50/80"}`}
+                        >
+                          <div className="flex items-center justify-end">
+                            <span
+                              className={`inline-flex h-5 w-5 items-center justify-center rounded-full text-[10px] font-semibold ${
+                                cell.isToday
+                                  ? "bg-rose-500 text-white"
+                                  : cell.isCurrentMonth
+                                    ? "text-slate-700"
+                                    : "text-slate-400"
+                              }`}
+                            >
+                              {cell.dayOfMonth}
+                            </span>
+                          </div>
+                          <div className="space-y-1">
+                            {cell.entries.map((entry) => {
+                              const isSelected = selectedProductUpdateIdSet.has(entry.id);
+                              const primaryImageUrl = getPrimaryProductUpdateImageUrl(entry);
+                              return (
+                                <div
+                                  key={entry.id}
+                                  role="button"
+                                  tabIndex={0}
+                                  onClick={() => toggleProductUpdateSelection(entry.id)}
+                                  onKeyDown={(event) => {
+                                    if (event.key === "Enter" || event.key === " ") {
+                                      event.preventDefault();
+                                      toggleProductUpdateSelection(entry.id);
+                                    }
+                                  }}
+                                  className={`cursor-pointer rounded-md border px-1.5 py-1 text-[10px] leading-tight transition ${
+                                    isSelected ? selectableCardSelectedClass : selectableCardUnselectedClass
+                                  }`}
+                                  title={`${entry.name || "Untitled feature update"} (${entry.releaseDate || "unknown date"})`}
+                                >
+                                  <div className="flex items-start justify-between gap-1">
+                                    <span className="min-w-0 flex-1 truncate font-medium text-slate-800">
+                                      {entry.name.trim() || "Untitled"}
+                                    </span>
+                                    {isSelected ? <IconCheck className="mt-0.5 h-3 w-3 shrink-0 text-sky-700" /> : null}
+                                  </div>
+                                  <div className="mt-0.5 flex items-center gap-1 text-[9px] text-slate-500">
+                                    <span>{entry.images.length} img</span>
+                                    {primaryImageUrl ? (
+                                      <a
+                                        href={primaryImageUrl}
+                                        target="_blank"
+                                        rel="noopener noreferrer"
+                                        className="underline underline-offset-2"
+                                        onClick={(event) => event.stopPropagation()}
+                                      >
+                                        image
+                                      </a>
+                                    ) : null}
+                                    <a
+                                      href={entry.slackUrl}
+                                      target="_blank"
+                                      rel="noopener noreferrer"
+                                      className="underline underline-offset-2"
+                                      onClick={(event) => event.stopPropagation()}
+                                    >
+                                      open
+                                    </a>
+                                  </div>
+                                </div>
+                              );
+                            })}
+                          </div>
+                        </div>
+                      ))}
+                    </div>
+                  </div>
+
+                  <p className="text-xs text-slate-600">
+                    {selectedProductUpdateEntries.length
+                      ? `${selectedProductUpdateEntries.length} selected release${
+                          selectedProductUpdateEntries.length === 1 ? "" : "s"
+                        } × ${form.numberOfPosts} post${form.numberOfPosts === 1 ? "" : "s"} each (${selectedProductUpdateEntries.length * form.numberOfPosts} total).`
+                      : "Select one or more releases to generate Product feature launch posts."}
+                  </p>
+                  <p className="text-xs text-slate-600">
+                    {slackProductUpdates?.syncedAt
+                      ? `Feed synced ${new Date(slackProductUpdates.syncedAt).toLocaleString("en-US")}.`
+                      : "Feed loaded."}
+                  </p>
+                  <p className="text-xs text-slate-600">
+                    Selected release images are passed to the vision model as generation context.
+                  </p>
+                </>
+              ) : slackProductUpdates?.syncedAt ? (
+                <p className="text-xs text-slate-600">No product updates found in the Slack feed.</p>
+              ) : (
+                <p className="text-xs text-slate-600">Run `npm run slack-sync`, then click Reload.</p>
+              )}
+            </div>
+          ) : null}
 
           {showEventFields ? (
             <div className="space-y-3 rounded-2xl border border-sky-200 bg-sky-50/50 p-4">
@@ -3729,6 +4284,10 @@ export default function Home() {
             <p className="text-xs text-slate-600">
               Event images are taken from selected Notion calendar entries when available.
             </p>
+          ) : useSlackProductUpdatesForGeneration ? (
+            <p className="text-xs text-slate-600">
+              Product release images are taken from the selected Slack product updates and passed into generation context.
+            </p>
           ) : (
             <div className="mt-4 space-y-2">
               <span className="text-sm font-medium">Attach Image (optional)</span>
@@ -3790,7 +4349,11 @@ export default function Home() {
 
             <label className="space-y-1">
               <span className="text-sm font-medium">
-                {useNotionCalendarForGeneration ? "Posts Per Selected Event" : "Number of Posts"}
+                {useNotionCalendarForGeneration
+                  ? "Posts Per Selected Event"
+                  : useSlackProductUpdatesForGeneration
+                    ? "Posts Per Selected Release"
+                    : "Number of Posts"}
               </span>
               <input
                 type="number"
@@ -3814,6 +4377,12 @@ export default function Home() {
                 <p className="text-xs text-slate-600">
                   Total planned: {selectedCalendarEntries.length * form.numberOfPosts} posts (
                   {selectedCalendarEntries.length} event{selectedCalendarEntries.length === 1 ? "" : "s"} ×{" "}
+                  {form.numberOfPosts} each).
+                </p>
+              ) : useSlackProductUpdatesForGeneration ? (
+                <p className="text-xs text-slate-600">
+                  Total planned: {selectedProductUpdateEntries.length * form.numberOfPosts} posts (
+                  {selectedProductUpdateEntries.length} release{selectedProductUpdateEntries.length === 1 ? "" : "s"} ×{" "}
                   {form.numberOfPosts} each).
                 </p>
               ) : null}
@@ -4049,6 +4618,8 @@ export default function Home() {
               const generatedStyle = brandVoiceByPostIndex[index];
               const generatedGoal = goalByPostIndex[index];
               const generatedPostDate = postDateByPostIndex[index];
+              const generatedImageDataUrl = postImageDataUrlByPostIndex[index];
+              const generatedSourceImageUrl = postSourceImageUrlByPostIndex[index];
               const selectedLine = bodyLineOptions.find(
                 (lineOption) => lineOption.lineIndex === selectedLineByPost[index] && !lineOption.isBlank,
               );
@@ -4227,6 +4798,43 @@ export default function Home() {
                       )}
                     </div>
                   </div>
+
+                  {generatedImageDataUrl ? (
+                    <div className="mt-5 space-y-2 rounded-2xl border border-black/10 bg-slate-50 p-3">
+                      <div className="flex flex-wrap items-center justify-between gap-2">
+                        <p className="text-xs font-semibold uppercase tracking-wide text-slate-600">Source Image Context</p>
+                        <div className="flex items-center gap-2">
+                          {generatedSourceImageUrl ? (
+                            <a
+                              href={generatedSourceImageUrl}
+                              target="_blank"
+                              rel="noreferrer"
+                              className="rounded-md border border-black/10 bg-white px-2 py-1 text-xs text-slate-700 hover:bg-slate-100"
+                            >
+                              Open Source
+                            </a>
+                          ) : null}
+                          <button
+                            type="button"
+                            className="rounded-md border border-black/10 bg-white px-2 py-1 text-xs text-slate-700 hover:bg-slate-100"
+                            onClick={() => {
+                              navigator.clipboard.writeText(generatedImageDataUrl).catch(() => {});
+                            }}
+                          >
+                            Copy Data URL
+                          </button>
+                        </div>
+                      </div>
+                      <NextImage
+                        src={generatedImageDataUrl}
+                        alt={`Source context for post ${index + 1}`}
+                        width={1200}
+                        height={620}
+                        unoptimized
+                        className="h-auto w-full rounded-xl border border-black/10 bg-white object-contain"
+                      />
+                    </div>
+                  ) : null}
 
                   <div className="mt-5 space-y-3 rounded-2xl border border-black/10 bg-slate-50 p-3">
                     <p className="text-xs font-semibold uppercase tracking-wide text-slate-600">Rewrite Entire Post</p>

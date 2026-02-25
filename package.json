@@ -7,7 +7,8 @@
     "prebuild": "node scripts/prune-lancedb-binaries.mjs",
     "build": "next build",
     "start": "next start",
-    "lint": "eslint"
+    "lint": "eslint",
+    "slack-sync": "node scripts/slack-product-updates-sync.mjs"
   },
   "dependencies": {
     "@anthropic-ai/sdk": "^0.78.0",

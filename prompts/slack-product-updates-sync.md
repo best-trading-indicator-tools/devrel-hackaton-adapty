@@ -1,34 +1,25 @@
-# Slack Product Updates Sync (via MCP)
+# Slack Product Updates Sync
 
 When the user asks to sync Slack product updates:
 
-1. **Prerequisite**: Slack MCP must be connected. See "How to connect Slack MCP" below.
-2. Use Slack MCP tools to read `#product-release` channel history.
-3. For each message that has thread replies:
-   - Use `conversations_replies` (or equivalent) to get full thread
-   - Keep only posts where the thread has **lengthy comments** (≥80 chars) from:
-     - **Product people**: @Kir, @Mykola Martynovets, @Maxim Borisik
-     - **OR** any team mention: @sales-team, @cs-team
-4. Build JSON matching `SlackProductUpdatesData` in `src/lib/slack-product-updates.ts`
-5. Write to `data/slack-product-updates.json`
+1. **Prerequisite**: `SLACK_BOT_TOKEN` in `.env`. Bot must be invited to #product-release (`/invite @adapty_product_update`).
+2. Run: `npm run slack-sync`
+
+## Auto-sync (GitHub Actions)
+
+The workflow `.github/workflows/slack-product-updates-sync.yml` runs every 6 hours and on manual trigger. Add `SLACK_BOT_TOKEN` to repo Secrets.
 
 ## Filter rules
 
 | Condition | Include? |
 |-----------|----------|
-| Thread has reply from Kir, Mykola Martynovets, or Maxim Borisik (≥80 chars) | Yes |
+| Thread has reply from Kir, Mykola Martynovets, or Maxim Borisik (≥50 chars) | Yes |
 | Thread has @sales-team or @cs-team mention | Yes |
-| Thread reply is &lt;80 chars | No (skip that reply; check others) |
 | No matching replies | No (exclude post) |
-
-**Lengthy comment**: Reply text length ≥ 80 characters (exclude short reactions/acknowledgments).
 
 ## Schema
 
-- `syncedAt`: ISO string
-- `channel`: `"#product-release"`
-- `entries`: array of `{ id, slackUrl, message, date, matchingReplies, hasTeamMention }`
-- `matchingReplies`: `{ userId, userName, text, date }[]`
+See `src/lib/slack-product-updates.ts`. Entry fields: `id`, `slackUrl`, `name`, `author`, `jiraLink`, `affectedAreas`, `postDate`, `message`, `releaseDate`, `thread`, `content`, `matchingReplies`, `hasTeamMention`, `images`
 
 ---
 

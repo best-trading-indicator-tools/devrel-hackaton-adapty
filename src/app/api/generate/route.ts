@@ -82,7 +82,8 @@ const FAST_PATH_PROMPT_EXAMPLE_LIMIT = 4;
 const FAST_PATH_PROMPT_EXAMPLE_CHAR_LIMIT = 700;
 const SAUCE_TOPIC_ANCHOR_MAX_CHARS = 220;
 const INDUSTRY_NEWS_REACTION_PATTERN = /\bindustry news reaction\b/i;
-const PRODUCT_UPDATE_PATTERN = /\bproduct feature launch\b/i;
+const PRODUCT_UPDATE_PATTERN =
+  /\bproduct\s+(?:feature\s+)?(?:launch|lunch)(?:\s+update)?\b|\bproduct\s+update\b/i;
 const SOIS_ACRONYM_PATTERN = /\bsois\b/i;
 const SOIS_EXPANDED_PATTERN = /\bstate of in[-\s]?app subscriptions\b/i;
 const AI_LABEL_STYLE_OPENER_PATTERN = /(?:^|[.!?]\s+)[A-Za-z][A-Za-z ]{1,24}:\s+/i;
@@ -120,7 +121,7 @@ const POST_TYPE_PLAYBOOKS: Array<{ pattern: RegExp; directive: string }> = [
       "Lead with a real operator pain or short story teams relate to. Stack: relatable scenario + why-now + logistics + takeaway. Include explicit logistics (date/time/place), who should attend, and one practical conversation or takeaway.",
   },
   {
-    pattern: /product feature launch/i,
+    pattern: /product feature launch|product launch update|product update/i,
     directive:
       "Frame the user pain first. Stack: pain story + what changed + concrete outcome. Explain why it matters and one concrete use case.",
   },
