@@ -137,6 +137,11 @@ const CHART_IMAGE_PROMPT_QUICK_SUGGESTIONS = [
 const MAX_TEMPLATE_RESULTS = 80;
 const INDUSTRY_NEWS_REACTION_PATTERN = /\bindustry news reaction\b/i;
 const CALENDAR_DAY_LABELS = ["Sun", "Mon", "Tue", "Wed", "Thu", "Fri", "Sat"] as const;
+const URL_PATTERN = /https?:\/\/[^\s)]+/i;
+const IMAGE_URL_PATTERN = /https?:\/\/[^\s)]+\.(png|jpe?g|webp|gif|avif|svg)(\?[^\s)]*)?$/i;
+const VISUAL_HINT_PATTERN = /\b(image|img|photo|visual|screenshot|creative|banner|thumbnail|cover|asset|after-photo)\b/i;
+const ARTICLE_PROMO_PATTERN = /\barticle\b/i;
+const PRODUCT_UPDATE_PATTERN = /\bproduct update\b/i;
 
 type MemeTemplateOption = {
   id: string;
@@ -176,7 +181,7 @@ type MonthCalendarCell = {
   entries: NotionCalendarEntry[];
 };
 
-type CalendarEntryMissingField = "date" | "content";
+type CalendarEntryMissingField = "date" | "content" | "url" | "image";
 
 type GeneratedPostsCalendarCell = {
   key: string;
@@ -771,15 +776,47 @@ function needsEventDetails(inputType: string): boolean {
   return EVENT_TOPIC_PATTERN.test(inputType);
 }
 
+function getCalendarMissingFieldLabel(field: CalendarEntryMissingField): string {
+  switch (field) {
+    case "date":
+      return "date";
+    case "content":
+      return "content";
+    case "url":
+      return "url";
+    case "image":
+      return "image";
+    default:
+      return field;
+  }
+}
+
 function getCalendarEntryMissingFields(entry: NotionCalendarEntry): CalendarEntryMissingField[] {
   const missing: CalendarEntryMissingField[] = [];
+  const content = entry.content.trim();
+  const eventPage = entry.event?.eventPage?.trim() ?? "";
+  const tagText = (entry.tags ?? []).join(" ");
+  const hasUrl = Boolean(eventPage) || URL_PATTERN.test(content);
+  const hasImageSignal = VISUAL_HINT_PATTERN.test(content) || IMAGE_URL_PATTERN.test(content);
+  const eventText = `${entry.name} ${entry.event?.eventName ?? ""} ${tagText}`.trim();
+  const isEventOrWebinar = Boolean(entry.event) || EVENT_TOPIC_PATTERN.test(eventText);
+  const isArticlePromo = ARTICLE_PROMO_PATTERN.test(eventText);
+  const isProductUpdate = PRODUCT_UPDATE_PATTERN.test(eventText);
 
   if (!entry.date.trim() || !parseCalendarDate(entry.date)) {
     missing.push("date");
   }
 
-  if (!entry.content.trim()) {
+  if (!content) {
     missing.push("content");
+  }
+
+  if ((isArticlePromo || isEventOrWebinar) && !hasUrl) {
+    missing.push("url");
+  }
+
+  if ((isEventOrWebinar || isProductUpdate) && !hasImageSignal) {
+    missing.push("image");
   }
 
   return missing;
@@ -887,6 +924,44 @@ function buildEditableBodyLines(body: string): EditableBodyLine[] {
     text: line,
     isBlank: line.trim().length === 0,
   }));
+}
+
+function normalizeCopyComparisonLine(value: string): string {
+  return normalizeNoEmDash(value)
+    .replace(/[“”]/g, '"')
+    .replace(/\s+/g, " ")
+    .replace(/[.!?]+$/g, "")
+    .trim()
+    .toLowerCase();
+}
+
+function removeLeadingHookFromBodyForCopy(hook: string, body: string): string {
+  const normalizedHook = normalizeCopyComparisonLine(hook);
+  const lines = body.split("\n");
+  const firstContentLineIndex = lines.findIndex((line) => line.trim().length > 0);
+
+  if (!normalizedHook || firstContentLineIndex < 0) {
+    return body.trim();
+  }
+
+  const firstContentLine = lines[firstContentLineIndex] ?? "";
+  const normalizedFirstContentLine = normalizeCopyComparisonLine(firstContentLine);
+
+  if (normalizedFirstContentLine !== normalizedHook) {
+    return body.trim();
+  }
+
+  const nextLines = [...lines];
+  nextLines.splice(firstContentLineIndex, 1);
+  return nextLines.join("\n").trim();
+}
+
+function buildPostTextForCopy(post: { hook: string; body: string; cta: string }): string {
+  const hook = post.hook.trim();
+  const body = removeLeadingHookFromBodyForCopy(post.hook, post.body);
+  const cta = post.cta.trim();
+
+  return [hook, body, cta].filter(Boolean).join("\n\n");
 }
 
 function extractApiErrorMessage(responsePayload: unknown, status: number): string {
@@ -1844,6 +1919,7 @@ export default function Home() {
               goal: allocation.goal,
               inputType: allocation.inputType,
               numberOfPosts: allocation.count,
+              imageDataUrl: entry ? "" : form.imageDataUrl,
               chartEnabled: shouldAttachChart,
               chartType: shouldAttachChart ? form.chartType : defaultForm.chartType,
               chartTitle: shouldAttachChart ? form.chartTitle : "",
@@ -2821,7 +2897,7 @@ export default function Home() {
                       <ul className="space-y-1">
                         {calendarEntriesMissingDate.map((entry) => (
                           <li key={entry.id} className="flex items-center justify-between gap-2 text-xs text-amber-900">
-                            <span className="min-w-0 truncate">{entry.name || "Untitled entry"}</span>
+                            <span className="min-w-0 whitespace-normal break-normal">{entry.name || "Untitled entry"}</span>
                             <a
                               href={entry.notionUrl}
                               target="_blank"
@@ -2922,7 +2998,7 @@ export default function Home() {
                               const needsAttention = entry.needsAuthorInput || entry.needsEventDetails;
                               const missingFields = missingFieldsByCalendarEntryId.get(entry.id) ?? [];
                               const hasMissingFields = missingFields.length > 0;
-                              const missingLabel = missingFields.join(" + ");
+                              const missingLabel = missingFields.map((field) => getCalendarMissingFieldLabel(field)).join(", ");
                               return (
                                 <div
                                   key={entry.id}
@@ -2940,14 +3016,14 @@ export default function Home() {
                                   } ${hasMissingFields ? "ring-2 ring-amber-300 ring-inset" : ""} cursor-pointer`}
                                 >
                                   <div className="flex w-full items-start justify-between gap-1 text-left">
-                                    <span className="min-w-0 flex-1 truncate font-medium text-slate-800">{entry.name}</span>
+                                    <span className="min-w-0 flex-1 whitespace-normal break-normal font-medium text-slate-800">{entry.name}</span>
                                     <span className="mt-0.5 flex shrink-0 items-center gap-1">
                                       {hasMissingFields ? (
                                         <span
                                           className="rounded bg-amber-200 px-1 py-0.5 text-[10px] font-semibold uppercase tracking-wide text-amber-900"
-                                          title={`Missing ${missingLabel}`}
+                                          title={`Missing: ${missingLabel}`}
                                         >
-                                          Missing {missingLabel}
+                                          Missing data
                                         </span>
                                       ) : null}
                                       {needsAttention ? (
@@ -2961,11 +3037,11 @@ export default function Home() {
                                   </div>
                                   {hasMissingFields ? (
                                     <p className="mt-1 text-[10px] font-semibold uppercase tracking-wide text-amber-800">
-                                      Needs Notion update
+                                      Missing: {missingLabel}
                                     </p>
                                   ) : null}
-                                  <div className="mt-1 flex items-center justify-between gap-1">
-                                    <span className="min-w-0 truncate text-[10px] text-slate-500">
+                                  <div className="mt-1 flex items-start justify-between gap-1">
+                                    <span className="min-w-0 flex-1 whitespace-normal break-normal text-[10px] text-slate-500">
                                       {entry.event?.eventName || entry.date}
                                     </span>
                                     <a
@@ -3579,45 +3655,51 @@ export default function Home() {
             />
           </label>
 
-          <div className="mt-4 space-y-2">
-            <span className="text-sm font-medium">Attach Image (optional)</span>
-            <input
-              ref={imageInputRef}
-              type="file"
-              accept="image/*"
-              className={`${baseControlClassName} cursor-pointer`}
-              style={compactInputStyle}
-              onChange={onImageChange}
-            />
-            <p className="text-xs text-slate-600">Attached image will be analyzed as additional context for hooks and post copy.</p>
+          {showEventFields && useNotionCalendarForGeneration ? (
+            <p className="text-xs text-slate-600">
+              Event images are taken from selected Notion calendar entries when available.
+            </p>
+          ) : (
+            <div className="mt-4 space-y-2">
+              <span className="text-sm font-medium">Attach Image (optional)</span>
+              <input
+                ref={imageInputRef}
+                type="file"
+                accept="image/*"
+                className={`${baseControlClassName} cursor-pointer`}
+                style={compactInputStyle}
+                onChange={onImageChange}
+              />
+              <p className="text-xs text-slate-600">Attached image will be analyzed as additional context for hooks and post copy.</p>
 
-            {isImageProcessing ? (
-              <p className="rounded-xl bg-amber-50 px-3 py-2 text-xs text-amber-700">Processing image...</p>
-            ) : null}
+              {isImageProcessing ? (
+                <p className="rounded-xl bg-amber-50 px-3 py-2 text-xs text-amber-700">Processing image...</p>
+              ) : null}
 
-            {form.imageDataUrl ? (
-              <div className="rounded-2xl border border-black/10 bg-white p-3">
-                <NextImage
-                  src={form.imageDataUrl}
-                  alt={imageName || "Attached context image"}
-                  width={1200}
-                  height={480}
-                  unoptimized
-                  className="h-36 w-full rounded-xl object-cover"
-                />
-                <div className="mt-2 flex items-center justify-between gap-2 text-xs text-slate-600">
-                  <span className="truncate">{imageName || "Attached image"}</span>
-                  <button
-                    type="button"
-                    className="rounded-lg border border-black/10 px-2 py-1 text-xs text-slate-700 hover:bg-slate-50"
-                    onClick={removeImage}
-                  >
-                    Remove
-                  </button>
+              {form.imageDataUrl ? (
+                <div className="rounded-2xl border border-black/10 bg-white p-3">
+                  <NextImage
+                    src={form.imageDataUrl}
+                    alt={imageName || "Attached context image"}
+                    width={1200}
+                    height={480}
+                    unoptimized
+                    className="h-36 w-full rounded-xl object-cover"
+                  />
+                  <div className="mt-2 flex items-center justify-between gap-2 text-xs text-slate-600">
+                    <span className="truncate">{imageName || "Attached image"}</span>
+                    <button
+                      type="button"
+                      className="rounded-lg border border-black/10 px-2 py-1 text-xs text-slate-700 hover:bg-slate-50"
+                      onClick={removeImage}
+                    >
+                      Remove
+                    </button>
+                  </div>
                 </div>
-              </div>
-            ) : null}
-          </div>
+              ) : null}
+            </div>
+          )}
 
           <div className="grid gap-3 sm:grid-cols-2">
             <label className="space-y-1">
@@ -3862,10 +3944,12 @@ export default function Home() {
                                 : "border-black/10 bg-white text-slate-700 hover:border-slate-400 hover:bg-slate-50"
                             }`}
                           >
-                            <p className="truncate font-medium">
+                            <p className="whitespace-normal break-normal font-medium">
                               {cell.postIndices.length} post{cell.postIndices.length === 1 ? "" : "s"}
                             </p>
-                            {previewPost?.hook ? <p className="mt-0.5 truncate text-[10px] text-slate-500">{previewPost.hook}</p> : null}
+                            {previewPost?.hook ? (
+                              <p className="mt-0.5 whitespace-normal break-normal text-[10px] text-slate-500">{previewPost.hook}</p>
+                            ) : null}
                           </button>
                         ) : null}
                       </div>
@@ -3917,7 +4001,7 @@ export default function Home() {
                       type="button"
                       className="shrink-0 rounded-lg border border-black/10 px-2 py-1 text-xs text-slate-600 hover:bg-slate-50"
                       onClick={async () => {
-                        const text = `${post.hook}\n\n${post.body}\n\n${post.cta}`;
+                        const text = buildPostTextForCopy(post);
                         const copied = await copyTextToClipboard(text);
                         showCopyFeedback(index, copied ? "copied" : "failed");
                       }}
