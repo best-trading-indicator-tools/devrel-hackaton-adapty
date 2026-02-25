@@ -1855,8 +1855,8 @@ export default function Home() {
               typeNeedsChart && form.chartEnabled && allocationIndex === firstChartAllocationIndex;
 
             const entry = allocation.calendarEntry;
-            const timeVal = entry?.event?.time ?? form.time;
-            const placeVal = entry?.event?.region ?? form.place;
+            const timeVal = entry ? (entry.event?.time ?? "") : form.time;
+            const placeVal = entry ? (entry.event?.region ?? "") : form.place;
             const detailsVal = entry ? buildDetailsFromCalendarEntry(entry) : form.details;
             const ctaVal = entry?.event?.eventPage ?? form.ctaLink;
             const requestPayload = {
@@ -2960,15 +2960,20 @@ export default function Home() {
                               return (
                                 <div
                                   key={entry.id}
+                                  role="button"
+                                  tabIndex={0}
+                                  onClick={() => toggleCalendarEntrySelection(entry.id)}
+                                  onKeyDown={(event) => {
+                                    if (event.key === "Enter" || event.key === " ") {
+                                      event.preventDefault();
+                                      toggleCalendarEntrySelection(entry.id);
+                                    }
+                                  }}
                                   className={`rounded-md border px-2 py-1 text-[11px] leading-tight transition ${
                                     isSelected ? selectableCardSelectedClass : selectableCardUnselectedClass
-                                  } ${hasMissingFields ? "ring-2 ring-amber-300 ring-inset" : ""}`}
+                                  } ${hasMissingFields ? "ring-2 ring-amber-300 ring-inset" : ""} cursor-pointer`}
                                 >
-                                  <button
-                                    type="button"
-                                    onClick={() => toggleCalendarEntrySelection(entry.id)}
-                                    className="flex w-full items-start justify-between gap-1 text-left"
-                                  >
+                                  <div className="flex w-full items-start justify-between gap-1 text-left">
                                     <span className="min-w-0 flex-1 truncate font-medium text-slate-800">{entry.name}</span>
                                     <span className="mt-0.5 flex shrink-0 items-center gap-1">
                                       {hasMissingFields ? (
@@ -2987,7 +2992,7 @@ export default function Home() {
                                       ) : null}
                                       {isSelected ? <IconCheck className="h-3 w-3 text-sky-700" /> : null}
                                     </span>
-                                  </button>
+                                  </div>
                                   {hasMissingFields ? (
                                     <p className="mt-1 text-[10px] font-semibold uppercase tracking-wide text-amber-800">
                                       Needs Notion update
@@ -3002,6 +3007,7 @@ export default function Home() {
                                       target="_blank"
                                       rel="noopener noreferrer"
                                       className="shrink-0 text-[10px] text-slate-500 underline-offset-2 hover:underline"
+                                      onClick={(event) => event.stopPropagation()}
                                     >
                                       Open
                                     </a>
@@ -3562,7 +3568,7 @@ export default function Home() {
             </div>
           ) : null}
 
-          {showEventFields ? (
+          {showEventFields && !useNotionCalendarForGeneration ? (
             <div className="grid gap-3 sm:grid-cols-2">
               <label className="space-y-1">
                 <span className="text-sm font-medium">Time</span>
@@ -3574,11 +3580,7 @@ export default function Home() {
                   value={form.time}
                   onChange={(event) => setForm((prev) => ({ ...prev, time: event.target.value }))}
                 />
-                <p className="text-xs text-slate-600">
-                  {useNotionCalendarForGeneration
-                    ? "Used as a fallback when a selected calendar event has no time."
-                    : "Click to pick date and time from calendar/time selector."}
-                </p>
+                <p className="text-xs text-slate-600">Click to pick date and time from calendar/time selector.</p>
               </label>
 
               <label className="space-y-1">
@@ -3592,6 +3594,12 @@ export default function Home() {
                 />
               </label>
             </div>
+          ) : null}
+
+          {showEventFields && useNotionCalendarForGeneration ? (
+            <p className="text-xs text-slate-600">
+              Time and place are taken from selected Notion calendar entries.
+            </p>
           ) : null}
 
           <label className="space-y-1">
