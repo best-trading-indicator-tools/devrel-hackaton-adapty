@@ -3869,7 +3869,7 @@ export default function Home() {
   }
 
   return (
-    <main className="mx-auto min-h-screen max-w-384 px-4 py-6 text-slate-900 sm:px-6 sm:py-8 md:px-8 md:py-10">
+    <main className="mx-auto min-h-screen max-w-384 overflow-x-hidden px-4 py-6 text-slate-900 sm:px-6 sm:py-8 md:px-8 md:py-10">
       <section className="space-y-6 lg:space-y-8">
         <form onSubmit={onSubmit} className="w-full min-w-0 space-y-5 rounded-3xl border border-black/10 bg-white/90 p-4 shadow-[0_12px_40px_rgba(0,0,0,0.08)] backdrop-blur sm:p-6">
           <header className="space-y-2">
@@ -4057,7 +4057,7 @@ export default function Home() {
 
           {showProductLaunchFields ? (
             <div className="space-y-3 rounded-2xl border border-emerald-200 bg-emerald-50/40 p-4">
-              <div className="flex items-center justify-between gap-2">
+              <div className="flex flex-wrap items-center justify-between gap-2">
                 <span className="text-sm font-semibold text-slate-900">Slack product updates</span>
                 <button
                   type="button"
@@ -4146,12 +4146,12 @@ export default function Home() {
                     <p className="text-xs text-slate-600">No releases scheduled in {productUpdatesMonthLabel}.</p>
                   ) : null}
 
-                  <div className="overflow-x-auto">
-                    <div className="grid min-w-184 grid-cols-7 gap-px overflow-hidden rounded-xl border border-black/10 bg-black/10">
+                  <div className="overflow-x-auto px-0.5">
+                    <div className="grid min-w-[34rem] grid-cols-7 gap-px overflow-hidden rounded-xl border border-black/10 bg-black/10 sm:min-w-184">
                       {CALENDAR_DAY_LABELS.map((dayLabel) => (
                         <div
                           key={dayLabel}
-                          className="bg-slate-100 px-2 py-1 text-center text-[11px] font-semibold uppercase tracking-wide text-slate-600"
+                          className="bg-slate-100 px-1 py-1 text-center text-[10px] font-semibold uppercase tracking-wide text-slate-600 sm:px-2 sm:text-[11px]"
                         >
                           {dayLabel}
                         </div>
@@ -4159,7 +4159,7 @@ export default function Home() {
                       {productUpdatesMonthCells.map((cell) => (
                         <div
                           key={cell.key}
-                          className={`min-h-24 space-y-1 p-1.5 ${cell.isCurrentMonth ? "bg-white" : "bg-slate-50/80"}`}
+                          className={`min-h-20 space-y-1 p-1.5 sm:min-h-24 ${cell.isCurrentMonth ? "bg-white" : "bg-slate-50/80"}`}
                         >
                           <div className="flex items-center justify-end">
                             <span
@@ -4260,7 +4260,7 @@ export default function Home() {
 
           {showEventFields ? (
             <div className="space-y-3 rounded-2xl border border-sky-200 bg-sky-50/50 p-4">
-              <div className="flex items-center justify-between gap-2">
+              <div className="flex flex-wrap items-center justify-between gap-2">
                 <span className="text-sm font-semibold text-slate-900">Webinar Events Notion calendar (month)</span>
                 <button
                   type="button"
@@ -4371,12 +4371,12 @@ export default function Home() {
                     <p className="text-xs text-slate-600">No entries scheduled in {calendarMonthLabel}.</p>
                   ) : null}
 
-                  <div className="overflow-x-auto">
-                    <div className="grid min-w-184 grid-cols-7 gap-px overflow-hidden rounded-xl border border-black/10 bg-black/10">
+                  <div className="overflow-x-auto px-0.5">
+                    <div className="grid min-w-[34rem] grid-cols-7 gap-px overflow-hidden rounded-xl border border-black/10 bg-black/10 sm:min-w-184">
                       {CALENDAR_DAY_LABELS.map((dayLabel) => (
                         <div
                           key={dayLabel}
-                          className="bg-slate-100 px-2 py-1 text-center text-[11px] font-semibold uppercase tracking-wide text-slate-600"
+                          className="bg-slate-100 px-1 py-1 text-center text-[10px] font-semibold uppercase tracking-wide text-slate-600 sm:px-2 sm:text-[11px]"
                         >
                           {dayLabel}
                         </div>
@@ -4384,7 +4384,7 @@ export default function Home() {
                       {monthCalendarCells.map((cell) => (
                         <div
                           key={cell.key}
-                          className={`min-h-28 space-y-1.5 p-2 ${cell.isCurrentMonth ? "bg-white" : "bg-slate-50/80"}`}
+                          className={`min-h-20 space-y-1.5 p-1.5 sm:min-h-28 sm:p-2 ${cell.isCurrentMonth ? "bg-white" : "bg-slate-50/80"}`}
                         >
                           <div className="flex items-center justify-end">
                             <span
@@ -4887,7 +4887,7 @@ export default function Home() {
                   </div>
 
                   <div className="space-y-2 rounded-xl border border-black/10 bg-white p-3">
-                    <div className="flex items-center justify-between gap-2">
+                    <div className="flex flex-wrap items-center justify-between gap-2">
                       <p className="text-xs font-semibold uppercase tracking-wide text-slate-600">Data Points</p>
                       <button
                         type="button"
@@ -5166,7 +5166,7 @@ export default function Home() {
             </div>
           )}
 
-          <div className="grid gap-3 sm:grid-cols-2">
+          <div className="grid gap-3 pb-3 sm:grid-cols-2 sm:pb-4">
             <label className="space-y-1">
               <span className="text-sm font-medium">Input Length</span>
               <select
@@ -5326,7 +5326,7 @@ export default function Home() {
                   {result.chart.visualStyle ? <p className="text-xs text-slate-600">Style: {result.chart.visualStyle}</p> : null}
                   {result.chart.imagePrompt ? <p className="text-xs text-slate-600">Prompt: {result.chart.imagePrompt}</p> : null}
                 </div>
-                <div className="flex items-center gap-2">
+                <div className="flex flex-wrap items-center gap-2">
                   <a
                     href={result.chart.imageDataUrl}
                     download={`chart-${result.chart.type}.png`}
@@ -5410,12 +5410,12 @@ export default function Home() {
                 </p>
               </div>
 
-              <div className="overflow-x-auto">
-                <div className="grid min-w-184 grid-cols-7 gap-px overflow-hidden rounded-xl border border-black/10 bg-black/10">
+              <div className="overflow-x-auto px-0.5">
+                <div className="grid min-w-[34rem] grid-cols-7 gap-px overflow-hidden rounded-xl border border-black/10 bg-black/10 sm:min-w-184">
                   {CALENDAR_DAY_LABELS.map((dayLabel) => (
                     <div
                       key={dayLabel}
-                      className="bg-slate-100 px-2 py-1 text-center text-[11px] font-semibold uppercase tracking-wide text-slate-600"
+                      className="bg-slate-100 px-1 py-1 text-center text-[10px] font-semibold uppercase tracking-wide text-slate-600 sm:px-2 sm:text-[11px]"
                     >
                       {dayLabel}
                     </div>
@@ -5432,7 +5432,7 @@ export default function Home() {
                     return (
                       <div
                         key={cell.key}
-                        className={`min-h-24 space-y-1.5 p-2 ${cell.isCurrentMonth ? "bg-white" : "bg-slate-50/80"}`}
+                        className={`min-h-20 space-y-1.5 p-1.5 sm:min-h-24 sm:p-2 ${cell.isCurrentMonth ? "bg-white" : "bg-slate-50/80"}`}
                       >
                         <div className="flex items-center justify-end">
                           <span
@@ -5934,7 +5934,7 @@ export default function Home() {
 
                     return (
                       <div className="mt-5 space-y-3 rounded-2xl border border-black/10 bg-slate-50 p-3">
-                        <div className="flex items-center justify-between gap-2">
+                        <div className="flex flex-wrap items-center justify-between gap-2">
                           <p className="text-xs font-semibold uppercase tracking-wide text-slate-600">
                             Meme Companions · {memeVariants.length} variant{memeVariants.length > 1 ? "s" : ""}
                           </p>
@@ -5946,12 +5946,12 @@ export default function Home() {
                               key={`${variant.rank}-${variant.templateId}-${variant.url}`}
                               className="space-y-2 rounded-xl border border-black/10 bg-white p-2"
                             >
-                              <div className="flex items-start justify-between gap-2">
-                                <p className="text-xs font-semibold uppercase tracking-wide text-slate-600">
+                              <div className="flex flex-wrap items-start justify-between gap-2">
+                                <p className="min-w-0 flex-1 text-xs font-semibold uppercase tracking-wide text-slate-600">
                                   #{variant.rank} · {variant.templateName}
                                   {typeof variant.toneFitScore === "number" ? ` · score ${variant.toneFitScore}` : ""}
                                 </p>
-                                <div className="flex items-center gap-2">
+                                <div className="flex flex-wrap items-center gap-2">
                                   <a
                                     href={variant.url}
                                     target="_blank"
@@ -6013,7 +6013,7 @@ export default function Home() {
                     if (giphyVariants.length) {
                       return (
                       <div className="mt-5 space-y-3 rounded-2xl border border-black/10 bg-slate-50 p-3">
-                        <div className="flex items-center justify-between gap-2">
+                        <div className="flex flex-wrap items-center justify-between gap-2">
                           <p className="text-xs font-semibold uppercase tracking-wide text-slate-600">
                             GIPHY Companions · {giphyVariants.length} GIF{giphyVariants.length > 1 ? "s" : ""}
                           </p>
@@ -6033,12 +6033,12 @@ export default function Home() {
                               key={`${variant.rank}-${variant.id}-${variant.url}`}
                               className="space-y-2 rounded-xl border border-black/10 bg-white p-2"
                             >
-                              <div className="flex items-start justify-between gap-2">
-                                <p className="text-xs font-semibold uppercase tracking-wide text-slate-600">
+                              <div className="flex flex-wrap items-start justify-between gap-2">
+                                <p className="min-w-0 flex-1 text-xs font-semibold uppercase tracking-wide text-slate-600">
                                   #{variant.rank} · {variant.title}
                                   {variant.rating ? ` · ${variant.rating.toUpperCase()}` : ""}
                                 </p>
-                                <div className="flex items-center gap-2">
+                                <div className="flex flex-wrap items-center gap-2">
                                   <a
                                     href={variant.url}
                                     target="_blank"
