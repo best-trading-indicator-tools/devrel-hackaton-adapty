@@ -76,6 +76,7 @@ const DEFAULT_SOIS_EVIDENCE_PROMPT_LIMIT = 8;
 const DEFAULT_SOIS_BROAD_EVIDENCE_PROMPT_LIMIT = 24;
 const MAX_X_THREAD_POST_CHARS = 280;
 const X_THREAD_PACK_TARGET_CHARS = 272;
+const X_THREAD_FIRST_POST_OPENER = "A thread 🧵";
 const DEFAULT_FAST_BATCH_THRESHOLD = 8;
 const FAST_PATH_SOIS_BROAD_EVIDENCE_PROMPT_LIMIT = 12;
 const DEFAULT_PROMPT_EXAMPLE_LIMIT = 10;
@@ -1135,21 +1136,54 @@ function buildThreadSegmentsFromText(value: string, maxChars: number): string[] 
   return segments;
 }
 
-function addThreadOrdinals(threadPosts: string[]): string[] {
-  if (threadPosts.length <= 1) {
-    return threadPosts;
+function stripThreadPaginationMarkers(value: string): string {
+  const withoutLeading = value.replace(/^\s*\d+\s*\/\s*\d+\s*[-–—:]\s*/g, "");
+  const withoutTrailing = withoutLeading.replace(/\s*[-–—:]?\s*\d+\s*\/\s*\d+\s*$/g, "");
+  return withoutTrailing.trim();
+}
+
+function stripThreadOpenerMarker(value: string): string {
+  return value.replace(/\s*a thread\s*🧵\s*$/i, "").trim();
+}
+
+function formatXThreadPosts(threadPosts: string[]): string[] {
+  if (!threadPosts.length) {
+    return [];
+  }
+
+  if (threadPosts.length === 1) {
+    const singlePost = stripThreadOpenerMarker(threadPosts[0]) || threadPosts[0];
+    return [clipTextStrictMax(singlePost, MAX_X_THREAD_POST_CHARS)];
   }
 
   const total = threadPosts.length;
-  return threadPosts.map((post, index) => {
-    const suffix = ` ${index + 1}/${total}`;
-    if (post.length + suffix.length <= MAX_X_THREAD_POST_CHARS) {
-      return `${post}${suffix}`;
-    }
+  const firstBaseRaw = stripThreadOpenerMarker(threadPosts[0]) || threadPosts[0];
+  const firstBodyMaxChars = Math.max(1, MAX_X_THREAD_POST_CHARS - X_THREAD_FIRST_POST_OPENER.length - 1);
+  const firstBody = clipTextStrictMax(firstBaseRaw, firstBodyMaxChars);
+  const firstPost = `${firstBody} ${X_THREAD_FIRST_POST_OPENER}`.trim();
 
-    const clipped = splitTextByWordBudget(post, Math.max(1, MAX_X_THREAD_POST_CHARS - suffix.length))[0] ?? post;
-    return `${clipped}${suffix}`;
+  const remainingPosts = threadPosts.slice(1).map((post, index) => {
+    const ordinalPrefix = `${index + 2}/${total} - `;
+    const cleanPost = stripThreadOpenerMarker(post) || post;
+    const maxBodyChars = Math.max(1, MAX_X_THREAD_POST_CHARS - ordinalPrefix.length);
+    const clippedBody = clipTextStrictMax(cleanPost, maxBodyChars);
+    return `${ordinalPrefix}${clippedBody}`.trim();
   });
+
+  return [firstPost, ...remainingPosts];
+}
+
+function sanitizeXThreadPosts(threadPosts: string[]): string[] {
+  const normalized = threadPosts
+    .map((post) => stripThreadPaginationMarkers(normalizeNoEmDash(post).replace(/\s+/g, " ").trim()))
+    .filter(Boolean)
+    .slice(0, 24);
+
+  if (!normalized.length) {
+    return [];
+  }
+
+  return formatXThreadPosts(normalized);
 }
 
 function buildXThreadFromLinkedInPost(post: { hook: string; body: string; cta: string }): string[] {
@@ -1201,7 +1235,7 @@ function buildXThreadFromLinkedInPost(post: { hook: string; body: string; cta: s
     .map((part) => normalizeNoEmDash(part).trim())
     .filter(Boolean);
 
-  return addThreadOrdinals(normalizedPackedPosts);
+  return sanitizeXThreadPosts(normalizedPackedPosts);
 }
 
 function stripAiScaffoldOpeners(paragraph: string): string {
@@ -2276,6 +2310,56 @@ async function runCodexOauthGeneration(params: {
 }
 
 const CLAUDE_WRITER_MODEL = "claude-sonnet-4-5";
+const CLAUDE_ALLOWED_LENGTHS = new Set(["short", "medium", "long", "very long", "standard"]);
+const CLAUDE_HOOK_LIMITS = { min: 8, max: 220 } as const;
+const CLAUDE_POST_HOOK_LIMITS = { min: 8, max: 280 } as const;
+const CLAUDE_POST_BODY_LIMITS = { min: 40, max: 5000 } as const;
+const CLAUDE_POST_CTA_LIMITS = { min: 4, max: 320 } as const;
+const CLAUDE_FALLBACK_HOOK = "Operator benchmark takeaway you can act on today.";
+const CLAUDE_FALLBACK_BODY =
+  "Here is a practical breakdown with a concrete lesson app makers can apply this week.";
+const CLAUDE_FALLBACK_CTA = "Share your main blocker in the comments.";
+
+function clipTextStrictMax(value: string, maxChars: number): string {
+  const normalized = normalizeNoEmDash(value).replace(/\s+/g, " ").trim();
+  if (normalized.length <= maxChars) {
+    return normalized;
+  }
+
+  const clipped = normalized.slice(0, maxChars + 1).replace(/\s+\S*$/, "").trim();
+  const fallback = normalized.slice(0, maxChars).trim();
+  const resolved = clipped || fallback;
+  return resolved.length <= maxChars ? resolved : resolved.slice(0, maxChars).trim();
+}
+
+function normalizeClaudeBoundedString(
+  value: unknown,
+  limits: { min: number; max: number },
+  fallbackValue: string,
+): string {
+  const fallback = clipTextStrictMax(fallbackValue, limits.max);
+  const rawValue = typeof value === "string" ? value : fallback;
+  const normalized = clipTextStrictMax(rawValue, limits.max);
+
+  if (normalized.length >= limits.min) {
+    return normalized;
+  }
+
+  if (fallback.length >= limits.min) {
+    return fallback;
+  }
+
+  return fallback.padEnd(limits.min, ".").slice(0, limits.max);
+}
+
+function buildClaudeFallbackPost(length: "short" | "medium" | "long" | "very long" | "standard" = "medium") {
+  return {
+    length,
+    hook: normalizeClaudeBoundedString(CLAUDE_FALLBACK_HOOK, CLAUDE_POST_HOOK_LIMITS, CLAUDE_FALLBACK_HOOK),
+    body: normalizeClaudeBoundedString(CLAUDE_FALLBACK_BODY, CLAUDE_POST_BODY_LIMITS, CLAUDE_FALLBACK_BODY),
+    cta: normalizeClaudeBoundedString(CLAUDE_FALLBACK_CTA, CLAUDE_POST_CTA_LIMITS, CLAUDE_FALLBACK_CTA),
+  };
+}
 
 function buildClaudePostsJsonSchema(): Record<string, unknown> {
   return {
@@ -2365,49 +2449,216 @@ async function runClaudeWriterGeneration(params: {
     const normalized = parsed as { hooks?: unknown[]; posts?: unknown[] };
     const requiredHookCount = Math.max(5, params.postCount);
 
-    if (Array.isArray(normalized.posts)) {
-      if (normalized.posts.length > params.postCount) {
-        normalized.posts = normalized.posts.slice(0, params.postCount);
-      }
+    const rawPosts = Array.isArray(normalized.posts) ? normalized.posts : [];
+    const clippedPosts = rawPosts.slice(0, params.postCount);
+    const sanitizedPosts = clippedPosts.map((post) => {
+      const rawPost = post && typeof post === "object" ? (post as Record<string, unknown>) : {};
+      const rawLength = typeof rawPost.length === "string" ? rawPost.length.trim().toLowerCase() : "";
+      const safeLength = CLAUDE_ALLOWED_LENGTHS.has(rawLength) ? rawLength : "medium";
 
-      if (normalized.posts.length > 0 && normalized.posts.length < params.postCount) {
-        const templatePost = normalized.posts[normalized.posts.length - 1];
-        while (normalized.posts.length < params.postCount) {
-          normalized.posts.push({ ...(templatePost as Record<string, unknown>) });
-        }
+      return {
+        length: safeLength as "short" | "medium" | "long" | "very long" | "standard",
+        hook: normalizeClaudeBoundedString(rawPost.hook, CLAUDE_POST_HOOK_LIMITS, CLAUDE_FALLBACK_HOOK),
+        body: normalizeClaudeBoundedString(rawPost.body, CLAUDE_POST_BODY_LIMITS, CLAUDE_FALLBACK_BODY),
+        cta: normalizeClaudeBoundedString(rawPost.cta, CLAUDE_POST_CTA_LIMITS, CLAUDE_FALLBACK_CTA),
+      };
+    });
+
+    if (!sanitizedPosts.length) {
+      sanitizedPosts.push(buildClaudeFallbackPost("medium"));
+    }
+
+    while (sanitizedPosts.length < params.postCount) {
+      const templatePost = sanitizedPosts[sanitizedPosts.length - 1] ?? buildClaudeFallbackPost("medium");
+      sanitizedPosts.push({ ...templatePost });
+    }
+
+    normalized.posts = sanitizedPosts;
+
+    const hookCandidatesFromResponse = Array.isArray(normalized.hooks)
+      ? normalized.hooks
+          .map((hook) => normalizeClaudeBoundedString(hook, CLAUDE_HOOK_LIMITS, CLAUDE_FALLBACK_HOOK))
+          .filter((hook) => hook.length >= CLAUDE_HOOK_LIMITS.min)
+      : [];
+
+    const postHooks = sanitizedPosts
+      .map((post) => normalizeClaudeBoundedString(post.hook, CLAUDE_HOOK_LIMITS, CLAUDE_FALLBACK_HOOK))
+      .filter((hook) => hook.length >= CLAUDE_HOOK_LIMITS.min);
+
+    const dedupedHookCandidates: string[] = [];
+    for (const hook of [...hookCandidatesFromResponse, ...postHooks]) {
+      if (dedupedHookCandidates.includes(hook)) {
+        continue;
+      }
+      dedupedHookCandidates.push(hook);
+      if (dedupedHookCandidates.length >= 20) {
+        break;
       }
     }
 
-    if (Array.isArray(normalized.hooks)) {
-      const hooks = normalized.hooks.filter((hook): hook is string => typeof hook === "string" && hook.trim().length > 0);
-      const postHooks =
-        Array.isArray(normalized.posts)
-          ? normalized.posts
-              .map((post) =>
-                post && typeof post === "object" && typeof (post as { hook?: unknown }).hook === "string"
-                  ? ((post as { hook: string }).hook ?? "")
-                  : "",
-              )
-              .filter(Boolean)
-          : [];
+    const finalizedHooks = dedupedHookCandidates.length
+      ? [...dedupedHookCandidates]
+      : [normalizeClaudeBoundedString(CLAUDE_FALLBACK_HOOK, CLAUDE_HOOK_LIMITS, CLAUDE_FALLBACK_HOOK)];
+    const hookCycleSource = finalizedHooks.length ? finalizedHooks : [CLAUDE_FALLBACK_HOOK];
 
-      const candidateHooks = [...hooks, ...postHooks].slice(0, 20);
-      const finalizedHooks = [...candidateHooks];
-
-      if (!finalizedHooks.length) {
-        finalizedHooks.push("Operator benchmark takeaway you can act on today.");
-      }
-
-      const cycleHooks = candidateHooks.length ? candidateHooks : finalizedHooks;
-      while (finalizedHooks.length < requiredHookCount) {
-        finalizedHooks.push(cycleHooks[finalizedHooks.length % cycleHooks.length] ?? finalizedHooks[0]);
-      }
-
-      normalized.hooks = finalizedHooks.slice(0, 20);
+    while (finalizedHooks.length < requiredHookCount) {
+      finalizedHooks.push(hookCycleSource[finalizedHooks.length % hookCycleSource.length] ?? hookCycleSource[0]);
     }
+
+    normalized.hooks = finalizedHooks
+      .slice(0, 20)
+      .map((hook) => normalizeClaudeBoundedString(hook, CLAUDE_HOOK_LIMITS, CLAUDE_FALLBACK_HOOK));
   }
 
   return params.responseSchema.parse(parsed);
+}
+
+type XThreadSourcePost = {
+  postIndex: number;
+  hook: string;
+  body: string;
+  cta: string;
+};
+
+function buildClaudeXThreadJsonSchema(): Record<string, unknown> {
+  return {
+    type: "object",
+    properties: {
+      threads: {
+        type: "array",
+        // Anthropic JSON schema currently allows only minItems 0 or 1.
+        minItems: 1,
+        items: {
+          type: "object",
+          properties: {
+            postIndex: { type: "integer", minimum: 1 },
+            posts: {
+              type: "array",
+              // Anthropic JSON schema currently allows only minItems 0 or 1.
+              minItems: 1,
+              items: { type: "string" },
+            },
+          },
+          required: ["postIndex", "posts"],
+          additionalProperties: false,
+        },
+      },
+    },
+    required: ["threads"],
+    additionalProperties: false,
+  };
+}
+
+async function runClaudeXThreadGeneration(params: {
+  apiKey: string;
+  model: string;
+  sourcePosts: XThreadSourcePost[];
+}): Promise<Map<number, string[]>> {
+  const client = new Anthropic({ apiKey: params.apiKey });
+  const sourcePostBlock = params.sourcePosts
+    .map(
+      (post) => `Post ${post.postIndex}
+Hook:
+${normalizeNoEmDash(post.hook)}
+
+Body:
+${normalizeNoEmDash(post.body)}
+
+CTA:
+${normalizeNoEmDash(post.cta)}`,
+    )
+    .join("\n\n---\n\n");
+
+  const response = await client.messages.create({
+    model: params.model,
+    max_tokens: 4096,
+    temperature: 0.4,
+    system: `You convert LinkedIn posts into X threads.
+
+Rules:
+- Keep every claim factual and aligned to the source post.
+- Keep tone practical and operator-focused.
+- Keep each X post <= ${MAX_X_THREAD_POST_CHARS} characters.
+- If a thread has 2 or more posts:
+  - First post must end with "${X_THREAD_FIRST_POST_OPENER}".
+  - Post 2+ must start with "X/Y - " (for example, "2/11 - ").
+  - Never place X/Y at the end of a post.
+- Do not include markdown formatting.
+- Do not include hashtags unless directly justified by source context.
+- Keep links only when they appear in the source CTA/body.
+- Return strict JSON only.`,
+    messages: [
+      {
+        role: "user",
+        content: `Create one X thread per source post.
+Return JSON object:
+{
+  "threads": [
+    { "postIndex": 1, "posts": ["...", "..."] }
+  ]
+}
+
+Include an item for every source post index.
+Each thread should feel cohesive and readable as a sequence.
+
+Source posts:
+${sourcePostBlock}`,
+      },
+    ],
+    output_config: {
+      format: {
+        type: "json_schema" as const,
+        schema: buildClaudeXThreadJsonSchema(),
+      },
+    },
+  });
+
+  const textBlock = response.content.find((block): block is Anthropic.TextBlock => block.type === "text");
+  if (!textBlock?.text) {
+    throw new Error("Claude returned no text content for X thread generation");
+  }
+
+  const parsed = JSON.parse(textBlock.text) as unknown;
+  const threadsByPostIndex = new Map<number, string[]>();
+
+  if (!parsed || typeof parsed !== "object") {
+    return threadsByPostIndex;
+  }
+
+  const rawThreads = (parsed as { threads?: unknown }).threads;
+  if (!Array.isArray(rawThreads)) {
+    return threadsByPostIndex;
+  }
+
+  for (const rawThread of rawThreads) {
+    if (!rawThread || typeof rawThread !== "object") {
+      continue;
+    }
+
+    const threadCandidate = rawThread as { postIndex?: unknown; posts?: unknown };
+    const postIndex =
+      Number.isInteger(threadCandidate.postIndex) && Number(threadCandidate.postIndex) > 0
+        ? Number(threadCandidate.postIndex)
+        : NaN;
+    if (!Number.isInteger(postIndex)) {
+      continue;
+    }
+
+    if (!Array.isArray(threadCandidate.posts)) {
+      continue;
+    }
+
+    const sanitizedThreadPosts = sanitizeXThreadPosts(
+      threadCandidate.posts.filter((post): post is string => typeof post === "string"),
+    );
+    if (!sanitizedThreadPosts.length) {
+      continue;
+    }
+
+    threadsByPostIndex.set(postIndex, sanitizedThreadPosts);
+  }
+
+  return threadsByPostIndex;
 }
 
 async function runOpenAiChatMemeSelection(params: {
@@ -3307,24 +3558,15 @@ ${toBulletedSection(QUALITY_REPAIR_REQUIREMENT_LINES)}
       );
     }
 
-    const shouldRunCodexReviewPass = useClaudeWriter && Boolean(oauthCredentials);
     const skipEditorForTest = process.env.SKIP_CODEX_EDITOR === "1";
-    const shouldRunEditorPass =
-      !skipEditorForTest && (qualityIssuesByPost.length > 0 || shouldRunCodexReviewPass);
+    const shouldRunEditorPass = !skipEditorForTest && qualityIssuesByPost.length > 0;
 
     if (shouldRunEditorPass) {
-      const sauceSoisVerificationGoal =
-        looksLikeSaucePostType(input.inputType) && shouldRunCodexReviewPass
-          ? "For Sauce posts: verify every number or percentage appears verbatim in the SOIS evidence above. Replace any number not from SOIS with qualitative phrasing."
-          : "";
       const editorPassGoals = [
-        qualityIssuesByPost.length > 0
-          ? "Fix the remaining quality-gate issues without changing the core argument."
+        "Fix the remaining quality-gate issues without changing the core argument.",
+        looksLikeSaucePostType(input.inputType)
+          ? "For Sauce posts: verify every number or percentage appears verbatim in SOIS evidence. Rewrite unsupported numbers qualitatively."
           : "",
-        shouldRunCodexReviewPass
-          ? "Run a second-pass factual QA pass: verify benchmark numbers and metric labels against evidence, and tighten weak phrasing."
-          : "",
-        sauceSoisVerificationGoal,
       ]
         .filter(Boolean)
         .map((line) => `- ${line}`)
@@ -3408,6 +3650,7 @@ Return ${parsed.hooks.length} hook suggestions as well (keep good ones, tighten 
         model: string;
         userPrompt: string;
         responseSchema: ReturnType<typeof makeGeneratePostsResponseSchema>;
+        postCount: number;
       }): Promise<GeneratedBatch> => {
         if (oauthCredentials) {
           return runCodexOauthGeneration({
@@ -3416,6 +3659,15 @@ Return ${parsed.hooks.length} hook suggestions as well (keep good ones, tighten 
             systemPrompt: editorSystemPrompt,
             userPrompt: params.userPrompt,
             responseSchema: params.responseSchema,
+          });
+        }
+
+        if (useClaudeWriter && anthropicApiKey) {
+          return runClaudeWriterGeneration({
+            systemPrompt: editorSystemPrompt,
+            userPrompt: params.userPrompt,
+            responseSchema: params.responseSchema,
+            postCount: params.postCount,
           });
         }
 
@@ -3440,6 +3692,7 @@ Return ${parsed.hooks.length} hook suggestions as well (keep good ones, tighten 
               model: requestedModel,
               userPrompt: editorUserPrompt,
               responseSchema,
+              postCount: input.numberOfPosts,
             });
           } catch (primaryError) {
             if (fallbackModel.trim().length > 0 && fallbackModel !== requestedModel && isModelAccessError(primaryError)) {
@@ -3447,6 +3700,7 @@ Return ${parsed.hooks.length} hook suggestions as well (keep good ones, tighten 
                 model: fallbackModel,
                 userPrompt: editorUserPrompt,
                 responseSchema,
+                postCount: input.numberOfPosts,
               });
             }
             throw primaryError;
@@ -3455,14 +3709,9 @@ Return ${parsed.hooks.length} hook suggestions as well (keep good ones, tighten 
 
         parsed = editorRun;
         normalizedPosts = normalizeGeneratedPosts(editorRun.posts);
-        if (shouldRunCodexReviewPass) {
-          console.info("Codex OAuth second-pass editor applied to Claude draft.");
-        }
       } catch (editorError) {
         // Editor pass is best-effort; if it fails, keep the original posts
-        if (shouldRunCodexReviewPass) {
-          console.warn("Codex OAuth second-pass editor failed; keeping Claude draft.", editorError);
-        }
+        console.warn("Editor review pass failed; keeping current draft.", editorError);
       }
     }
 
@@ -3989,18 +4238,54 @@ For each post:
 
     const shouldCreateXThreads =
       input.createXPosts && (input.inputLength === "long" || input.inputLength === "very long");
+    const eligibleXThreadPostIndices = shouldCreateXThreads
+      ? postsWithMedia
+          .map((post, postIndex) => ({ post, postIndex }))
+          .filter(({ post }) => post.length === "long" || post.length === "very long")
+          .map(({ postIndex }) => postIndex)
+      : [];
+
+    let claudeXThreadsByPostIndex = new Map<number, string[]>();
+    if (eligibleXThreadPostIndices.length && anthropicApiKey) {
+      try {
+        const sourcePostsForXThreads = eligibleXThreadPostIndices.map((postIndex) => {
+          const post = postsWithMedia[postIndex];
+          return {
+            postIndex: postIndex + 1,
+            hook: post?.hook ?? "",
+            body: post?.body ?? "",
+            cta: post?.cta ?? "",
+          };
+        });
+
+        claudeXThreadsByPostIndex = await runClaudeXThreadGeneration({
+          apiKey: anthropicApiKey,
+          model: process.env.CLAUDE_WRITER_MODEL ?? CLAUDE_WRITER_MODEL,
+          sourcePosts: sourcePostsForXThreads,
+        });
+      } catch (xThreadError) {
+        console.warn(
+          `Claude X-thread generation failed; falling back to deterministic thread split. ${
+            xThreadError instanceof Error ? xThreadError.message : String(xThreadError)
+          }`,
+        );
+      }
+    }
+
     const postsWithXThreads: GeneratePostsResponse["posts"] = shouldCreateXThreads
-      ? postsWithMedia.map((post) => {
+      ? postsWithMedia.map((post, postIndex) => {
           const shouldBuildThread = post.length === "long" || post.length === "very long";
           if (!shouldBuildThread) {
             return post;
           }
 
-          const xThread = buildXThreadFromLinkedInPost({
+          const xThreadFromClaude = claudeXThreadsByPostIndex.get(postIndex + 1) ?? [];
+          const fallbackThread = buildXThreadFromLinkedInPost({
             hook: post.hook,
             body: post.body,
             cta: post.cta,
           });
+          const xThread = xThreadFromClaude.length ? xThreadFromClaude : fallbackThread;
 
           if (!xThread.length) {
             return post;
