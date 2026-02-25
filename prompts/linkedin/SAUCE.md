@@ -22,5 +22,5 @@ Style constraints:
 Sauce quality gates:
 - Keep concrete density high: at least one concrete unit every 3 lines.
 - Keep short punch lines occasional. Use fuller sentences for nuance.
-- Include at least one lived observation line (I saw, we tested, from what I see).
+- Include at least one lived observation line in company voice (we saw, we tested, from what we see).
 - End with a decisive takeaway or clear next step.

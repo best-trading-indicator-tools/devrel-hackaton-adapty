@@ -38,11 +38,35 @@ const rewriteLineResponseSchema = z.object({
   line: z.string().min(4).max(320),
 });
 
+const FIRST_PERSON_SINGULAR_PATTERN = /\b(i(?:'m|'d|'ll|'ve)?|me|my|mine|myself)\b/i;
+
 function normalizeNoEmDash(value: string): string {
   return value
     .replace(/&(?:mdash|ndash);/gi, "-")
     .replace(/([^\s])[\u2012\u2013\u2014\u2015\u2212]([^\s])/g, "$1 - $2")
     .replace(/[\u2010\u2011\u2012\u2013\u2014\u2015\u2212]/g, "-");
+}
+
+function hasFirstPersonSingularPronouns(value: string): boolean {
+  return FIRST_PERSON_SINGULAR_PATTERN.test(value);
+}
+
+function enforceCompanyVoicePronouns(value: string): string {
+  if (!hasFirstPersonSingularPronouns(value)) {
+    return value;
+  }
+
+  return value
+    .replace(/\bI(?:'|’)m\b/g, "we're")
+    .replace(/\bI(?:'|’)d\b/g, "we'd")
+    .replace(/\bI(?:'|’)ll\b/g, "we'll")
+    .replace(/\bI(?:'|’)ve\b/g, "we've")
+    .replace(/\bI am\b/gi, "we are")
+    .replace(/\bmyself\b/gi, "ourselves")
+    .replace(/\bmine\b/gi, "ours")
+    .replace(/\bmy\b/gi, "our")
+    .replace(/\bme\b/gi, "us")
+    .replace(/\bI\b/g, "we");
 }
 
 function getOpenAIApiToken(): string | undefined {
@@ -221,6 +245,7 @@ Rules:
 - Never use em dash or en dash punctuation.
 - Avoid generic AI-like cadence and buzzword filler.
 - Keep claims concrete and defensible.
+- Use Adapty company voice: "we", "our", and "us". Never use first-person singular pronouns ("I", "me", "my").
 
 Repository writing guide:
 ${promptGuides.writing}
@@ -395,9 +420,9 @@ Output requirements:
       return NextResponse.json({
         mode: "post",
         post: {
-          hook: normalizeNoEmDash(post.hook),
-          body: normalizeNoEmDash(post.body),
-          cta: normalizeNoEmDash(post.cta),
+          hook: normalizeNoEmDash(enforceCompanyVoicePronouns(post.hook)),
+          body: normalizeNoEmDash(enforceCompanyVoicePronouns(post.body)),
+          cta: normalizeNoEmDash(enforceCompanyVoicePronouns(post.cta)),
         },
         generation: {
           modelRequested: requestedModel,
@@ -412,7 +437,7 @@ Output requirements:
     const lineRewrite = rewriteLineResponseSchema.parse(parsed);
     return NextResponse.json({
       mode: "line",
-      line: normalizeNoEmDash(lineRewrite.line),
+      line: normalizeNoEmDash(enforceCompanyVoicePronouns(lineRewrite.line)),
       generation: {
         modelRequested: requestedModel,
         modelUsed,

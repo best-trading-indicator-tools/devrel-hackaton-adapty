@@ -913,6 +913,49 @@ function summarizeSelectedItems(items: string[], fallback: string): string {
   return `${items.slice(0, 2).join(", ")} +${items.length - 2} more`;
 }
 
+function buildGeneratedCalendarCellSummary(params: {
+  postIndices: number[];
+  postTypeByPostIndex: Record<number, string>;
+  postEventLabelByPostIndex: Record<number, string>;
+}): string {
+  const uniqueEventLabels = Array.from(
+    new Set(
+      params.postIndices
+        .map((postIndex) => params.postEventLabelByPostIndex[postIndex]?.trim() ?? "")
+        .filter(Boolean),
+    ),
+  );
+
+  if (uniqueEventLabels.length === 1) {
+    return uniqueEventLabels[0];
+  }
+
+  if (uniqueEventLabels.length > 1) {
+    return `${uniqueEventLabels.length} events: ${summarizeSelectedItems(uniqueEventLabels, "")}`;
+  }
+
+  const typeCounts = new Map<string, number>();
+  for (const postIndex of params.postIndices) {
+    const type = params.postTypeByPostIndex[postIndex]?.trim();
+    if (!type) {
+      continue;
+    }
+    typeCounts.set(type, (typeCounts.get(type) ?? 0) + 1);
+  }
+
+  if (!typeCounts.size) {
+    return "";
+  }
+
+  const typeEntries = Array.from(typeCounts.entries()).sort((a, b) => b[1] - a[1] || a[0].localeCompare(b[0]));
+  if (typeEntries.length === 1) {
+    return typeEntries[0][0];
+  }
+
+  const typeSummaryParts = typeEntries.map(([type, count]) => `${count}x ${type}`);
+  return `Mixed: ${summarizeSelectedItems(typeSummaryParts, "")}`;
+}
+
 function buildEditableBodyLines(body: string): EditableBodyLine[] {
   const rawLines = body.split("\n");
   if (!rawLines.length) {
@@ -1110,6 +1153,7 @@ export default function Home() {
   const [brandVoiceByPostIndex, setBrandVoiceByPostIndex] = useState<Record<number, string>>({});
   const [goalByPostIndex, setGoalByPostIndex] = useState<Record<number, ContentGoal>>({});
   const [postDateByPostIndex, setPostDateByPostIndex] = useState<Record<number, string>>({});
+  const [postEventLabelByPostIndex, setPostEventLabelByPostIndex] = useState<Record<number, string>>({});
   const [generatedPostsMonthCursor, setGeneratedPostsMonthCursor] = useState<Date>(() => getStartOfMonth(new Date()));
   const [selectedGeneratedPostsDate, setSelectedGeneratedPostsDate] = useState<string | null>(null);
   const [numberOfPostsInput, setNumberOfPostsInput] = useState<string>(() => String(defaultForm.numberOfPosts));
@@ -1818,6 +1862,7 @@ export default function Home() {
     setBrandVoiceByPostIndex({});
     setGoalByPostIndex({});
     setPostDateByPostIndex({});
+    setPostEventLabelByPostIndex({});
     setSelectedGeneratedPostsDate(null);
 
     if (isImageProcessing) {
@@ -1996,6 +2041,7 @@ export default function Home() {
       const nextBrandVoiceByIndex: Record<number, string> = {};
       const nextGoalByIndex: Record<number, ContentGoal> = {};
       const nextPostDateByIndex: Record<number, string> = {};
+      const nextPostEventLabelByIndex: Record<number, string> = {};
       const mergedPosts: GeneratePostsResponse["posts"] = [];
       let postCursor = 0;
 
@@ -2009,6 +2055,11 @@ export default function Home() {
           if (generatedDate) {
             nextPostDateByIndex[postCursor] = generatedDate;
           }
+          const generatedEventLabel =
+            chunk.allocation.calendarEntry?.event?.eventName?.trim() || chunk.allocation.calendarEntry?.name?.trim() || "";
+          if (generatedEventLabel) {
+            nextPostEventLabelByIndex[postCursor] = generatedEventLabel;
+          }
           mergedPosts.push(post);
           postCursor += 1;
         }
@@ -2020,6 +2071,7 @@ export default function Home() {
       const trimmedBrandVoiceByIndex: Record<number, string> = {};
       const trimmedGoalByIndex: Record<number, ContentGoal> = {};
       const trimmedPostDateByIndex: Record<number, string> = {};
+      const trimmedPostEventLabelByIndex: Record<number, string> = {};
 
       for (let index = 0; index < trimmedPosts.length; index += 1) {
         if (Object.prototype.hasOwnProperty.call(nextPostTypeByIndex, index)) {
@@ -2033,6 +2085,9 @@ export default function Home() {
         }
         if (Object.prototype.hasOwnProperty.call(nextPostDateByIndex, index)) {
           trimmedPostDateByIndex[index] = nextPostDateByIndex[index];
+        }
+        if (Object.prototype.hasOwnProperty.call(nextPostEventLabelByIndex, index)) {
+          trimmedPostEventLabelByIndex[index] = nextPostEventLabelByIndex[index];
         }
       }
 
@@ -2097,6 +2152,7 @@ export default function Home() {
       setBrandVoiceByPostIndex(trimmedBrandVoiceByIndex);
       setGoalByPostIndex(trimmedGoalByIndex);
       setPostDateByPostIndex(trimmedPostDateByIndex);
+      setPostEventLabelByPostIndex(trimmedPostEventLabelByIndex);
       setResult(mergedResult);
       setRewriteContext(nextRewriteContext);
     } catch {
@@ -3913,7 +3969,11 @@ export default function Home() {
                   {generatedPostsMonthCells.map((cell) => {
                     const hasPosts = cell.postIndices.length > 0;
                     const isSelected = selectedGeneratedPostsDate === cell.key;
-                    const previewPost = hasPosts && result?.posts ? result.posts[cell.postIndices[0]] : undefined;
+                    const calendarCellSummary = buildGeneratedCalendarCellSummary({
+                      postIndices: cell.postIndices,
+                      postTypeByPostIndex,
+                      postEventLabelByPostIndex,
+                    });
 
                     return (
                       <div
@@ -3947,8 +4007,8 @@ export default function Home() {
                             <p className="whitespace-normal break-normal font-medium">
                               {cell.postIndices.length} post{cell.postIndices.length === 1 ? "" : "s"}
                             </p>
-                            {previewPost?.hook ? (
-                              <p className="mt-0.5 whitespace-normal break-normal text-[10px] text-slate-500">{previewPost.hook}</p>
+                            {calendarCellSummary ? (
+                              <p className="mt-0.5 whitespace-normal break-normal text-[10px] text-slate-500">{calendarCellSummary}</p>
                             ) : null}
                           </button>
                         ) : null}

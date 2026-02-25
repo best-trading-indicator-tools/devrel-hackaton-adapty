@@ -1,6 +1,8 @@
 export const QUALITY_ISSUES = {
   AI_SLOP_CLICHES: "Use concrete, specific phrasing in hook/body/CTA.",
   CONDESCENDING: "Treat readers as informed operators.",
+  FIRST_PERSON_SINGULAR:
+    'Use Adapty company voice. Replace first-person singular pronouns ("I", "me", "my") with "we", "our", or "us".',
   UNSUPPORTED_ADAPTY_SUPERLATIVE:
     "When claiming Adapty is best-in-market, support it with concrete proof, mechanism, or evidence.",
   CORPORATE_JARGON: "Use plain, direct language app makers use in real conversations.",
@@ -40,6 +42,7 @@ export const QUALITY_ISSUES = {
 
 export const QUALITY_GATE_PROMPT_LINES = [
   "Read each post as if saying it out loud to a friend. Rewrite any sentence that sounds unnatural spoken.",
+  'Use Adapty company voice: "we", "our", and "us". Never use first-person singular pronouns ("I", "me", "my").',
   "Every post needs at least one specific number, name, or real example.",
   "Ground facts in provided evidence only. When you have no data for a claim, phrase it as opinion.",
   "Write SOIS as State of In-App Subscriptions (SOIS) on first mention.",
@@ -50,6 +53,7 @@ export const QUALITY_GATE_PROMPT_LINES = [
 
 export const QUALITY_REPAIR_REQUIREMENT_LINES = [
   "Write in natural paragraphs (2-4 sentences each) with blank lines between subtopics.",
+  'Use Adapty company voice: "we", "our", and "us". Never use first-person singular pronouns ("I", "me", "my").',
   "Sound like a sharp friend talking to an app maker. Use plain spoken language.",
   "Talk to the reader directly at least once: you, your app, or your team.",
   "Include one practical action with a clear verb: test, measure, compare, fix, or ship.",
@@ -58,4 +62,3 @@ export const QUALITY_REPAIR_REQUIREMENT_LINES = [
   "For events: include logistics and who should attend.",
   "For clickbait plus virality: hook must be one declarative factual sentence using you or your, starting with the claim or scene.",
 ] as const;
-

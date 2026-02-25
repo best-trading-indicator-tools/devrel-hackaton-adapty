@@ -90,6 +90,7 @@ const HOOK_IF_OPENING_PATTERN = /^\s*if\b/i;
 const ROBOTIC_FILLER_PATTERN = /\b(?:the|this|that)\s+[a-z][a-z\s]{0,24}\s+is real\./i;
 const SNAPSHOT_JARGON_PATTERN = /\b(for one segment snapshot|segment snapshot|rows analyzed|sample size)\b/i;
 const YOU_YOUR_PATTERN = /\b(you|your)\b/i;
+const FIRST_PERSON_SINGULAR_PATTERN = /\b(i(?:'m|'d|'ll|'ve)?|me|my|mine|myself)\b/i;
 
 function looksLikeProductUpdatePostType(inputType: string): boolean {
   return PRODUCT_UPDATE_PATTERN.test(inputType);
@@ -1092,6 +1093,10 @@ function hasCondescendingReaderLanguage(value: string): boolean {
   return CONDESCENDING_READER_PATTERN.test(value);
 }
 
+function hasFirstPersonSingularPronouns(value: string): boolean {
+  return FIRST_PERSON_SINGULAR_PATTERN.test(value);
+}
+
 function hasUnsupportedAdaptySuperlative(value: string): boolean {
   if (!ADAPTY_SUPERLATIVE_PATTERN.test(value)) {
     return false;
@@ -1210,6 +1215,10 @@ function evaluatePostQuality(params: {
 
   if (hasCondescendingReaderLanguage(combinedText)) {
     issues.push(QUALITY_ISSUES.CONDESCENDING);
+  }
+
+  if (hasFirstPersonSingularPronouns(combinedText)) {
+    issues.push(QUALITY_ISSUES.FIRST_PERSON_SINGULAR);
   }
 
   if (hasUnsupportedAdaptySuperlative(combinedText)) {
@@ -2379,8 +2388,10 @@ export async function POST(request: Request) {
     ]
       .filter(Boolean)
       .join(" | ");
-    const shouldRunWebFactCheck =
-      !looksLikeEventOrWebinarPostType(input.inputType) && !looksLikeProductUpdatePostType(input.inputType);
+    const isInternalEventOrProductPostType =
+      looksLikeEventOrWebinarPostType(input.inputType) || looksLikeProductUpdatePostType(input.inputType);
+    const shouldRunWebFactCheck = !isInternalEventOrProductPostType;
+    const shouldRunSoisContext = !isInternalEventOrProductPostType;
     const webFactCheckPromise = shouldRunWebFactCheck
       ? runWebFactCheck({
           style: input.style,
@@ -2399,6 +2410,23 @@ export async function POST(request: Request) {
           evidenceLines: [],
           warning: "Web fact-check skipped for internal post type.",
         });
+    const soisContextPromise = shouldRunSoisContext
+      ? retrieveSoisContext({
+          client: embeddingClient,
+          query: soisRetrievalQuery || retrievalQuery,
+          details: input.details,
+          preferBroadCoverage: !hasSpecificSoisPromptDetails,
+          inputType: input.inputType,
+          limit: Math.min(12, Math.max(6, input.numberOfPosts * 2)),
+        })
+      : Promise.resolve({
+          enabled: false,
+          method: "none" as const,
+          items: [],
+          warning: "SOIS context skipped for internal post type.",
+          fetchedSections: 0,
+          availableSections: 0,
+        });
     const [retrieval, soisContext, webFactCheck, industryNewsContext] = await Promise.all([
       retrieveLibraryContext({
         client: embeddingClient,
@@ -2406,14 +2434,7 @@ export async function POST(request: Request) {
         limit: Math.min(12, Math.max(6, input.numberOfPosts * 3)),
         goal: input.goal,
       }),
-      retrieveSoisContext({
-        client: embeddingClient,
-        query: soisRetrievalQuery || retrievalQuery,
-        details: input.details,
-        preferBroadCoverage: !hasSpecificSoisPromptDetails,
-        inputType: input.inputType,
-        limit: Math.min(12, Math.max(6, input.numberOfPosts * 2)),
-      }),
+      soisContextPromise,
       webFactCheckPromise,
       runIndustryNewsContext({
         style: input.style,
@@ -2528,22 +2549,42 @@ export async function POST(request: Request) {
       : webEvidenceLines.length
         ? "Web evidence is available. Ground factual claims in this evidence. Use real numbers only when they appear in the evidence or provided context."
         : "Web evidence is unavailable or empty. Phrase uncertain factual claims as opinion, observation, or hypothesis.";
-    const soisDirective = soisContext.enabled
-      ? "State of In-App Subscriptions (SOIS) benchmark evidence is available. Use it as a first-class factual source for hooks, mechanisms, caveats, and numeric anchors."
-      : "State of In-App Subscriptions (SOIS) benchmark evidence is unavailable for this run. Use only numbers and claims from other provided evidence.";
+    const soisDirective = !shouldRunSoisContext
+      ? "State of In-App Subscriptions (SOIS) benchmark retrieval is intentionally skipped for this internal post type. Use only internal context and provided event/request details."
+      : soisContext.enabled
+        ? "State of In-App Subscriptions (SOIS) benchmark evidence is available. Use it as a first-class factual source for hooks, mechanisms, caveats, and numeric anchors."
+        : "State of In-App Subscriptions (SOIS) benchmark evidence is unavailable for this run. Use only numbers and claims from other provided evidence.";
     const factCheckEvidenceForPrompt = !shouldRunWebFactCheck
       ? "Web fact-check skipped for this internal post type."
       : webEvidenceLines.length
         ? webEvidenceLines.join("\n")
         : "No live web evidence available for this request.";
-    const soisEvidenceForPrompt = soisEvidenceLines.length
-      ? soisEvidenceLines.join("\n")
-      : "No SOIS benchmark evidence available for this request.";
-    const evidencePriorityOrder = shouldRunWebFactCheck ? "SOIS > web" : "SOIS > internal context";
+    const soisEvidenceForPrompt = !shouldRunSoisContext
+      ? "SOIS benchmark retrieval skipped for this internal post type."
+      : soisEvidenceLines.length
+        ? soisEvidenceLines.join("\n")
+        : "No SOIS benchmark evidence available for this request.";
+    const evidencePriorityOrder = shouldRunSoisContext
+      ? shouldRunWebFactCheck
+        ? "SOIS > web"
+        : "SOIS > internal context"
+      : shouldRunWebFactCheck
+        ? "web > internal context"
+        : "internal context";
+    const evidenceContextGuidance = shouldRunSoisContext
+      ? `Evidence context (priority order: ${evidencePriorityOrder}). Numbers from SOIS are real benchmarks - use them, they make posts more compelling. Copy numbers verbatim from the evidence below. Use each number for its labeled metric only: install_to_paid_rate as %, avg_ltv as $, price_usd as $. When a number is not in the evidence, write the sentence without it. For Sauce posts: only use numbers from the SOIS evidence below (not from web fact-check or user input). Use 1-2 benchmark numbers total per post.`
+      : `Evidence context (priority order: ${evidencePriorityOrder}). This internal post type should use internal request context only (details, event data, date/time/place, and CTA link). Do not introduce SOIS benchmark claims.`;
+    const soisSectionTitle = shouldRunSoisContext
+      ? "1. SOIS (Adapty State of In-App Subscriptions) - fetched from dags.adpinfra.dev:"
+      : "1. SOIS benchmark context: skipped for internal post type.";
     const webFactCheckSectionTitle = shouldRunWebFactCheck
       ? "2. Web fact-check (use when SOIS lacks the claim):"
       : "2. Web fact-check: skipped for internal post type.";
-    console.log("[Evidence] SOIS lines:", soisEvidenceLines.length, "\n", soisEvidenceForPrompt.slice(0, 1500));
+    if (shouldRunSoisContext) {
+      console.log("[Evidence] SOIS lines:", soisEvidenceLines.length, "\n", soisEvidenceForPrompt.slice(0, 1500));
+    } else {
+      console.log("[Evidence] SOIS check skipped for internal post type.");
+    }
     const allowedNumericClaims = buildAllowedNumericClaimSet(
       [
         factCheckEvidenceForPrompt,
@@ -2619,6 +2660,7 @@ Output format:
 - For multi-post industry news batches, anchor each post to a different news item.
 - When source metadata says "others", use for structural inspiration, not voice imitation.
 - Back any Adapty positioning with proof or mechanism, not empty superlatives.
+- Voice perspective: speak as Adapty company voice. Use "we", "our", and "us". Never use first-person singular pronouns ("I", "me", "my").
 
 Numbers: copy every number verbatim from the evidence sections in the user prompt. When a number exists in the evidence, use it. When it does not, use qualitative language ("significantly higher", "most apps"). Omit sample sizes when the evidence does not state them.
 
@@ -2669,9 +2711,9 @@ Generation request:
 Required length per post:
 ${lengthPlan.map((length, index) => `${index + 1}. ${length} -> ${lengthGuide(length)}`).join("\n")}
 
-Evidence context (priority order: ${evidencePriorityOrder}). Numbers from SOIS are real benchmarks — use them, they make posts more compelling. Copy numbers verbatim from the evidence below. Use each number for its labeled metric only: install_to_paid_rate as %, avg_ltv as $, price_usd as $. When a number is not in the evidence, write the sentence without it. For Sauce posts: only use numbers from the SOIS evidence below (not from web fact-check or user input). Use 1-2 benchmark numbers total per post.
+${evidenceContextGuidance}
 
-1. SOIS (Adapty State of In-App Subscriptions) — fetched from dags.adpinfra.dev:
+${soisSectionTitle}
 ${soisEvidenceForPrompt}
 
 ${webFactCheckSectionTitle}
@@ -3023,6 +3065,7 @@ Do this:
 - Say "app makers" or "app founders" instead of "teams" or "operators."
 - Use digits for numbers ("3 things" not "three things").
 - Use hyphens, commas, and periods.
+- Use Adapty company voice: "we", "our", and "us". Never use first-person singular pronouns ("I", "me", "my").
 
 Fact and benchmark rules:
 - Keep all facts, arguments, and structure intact.
@@ -3038,7 +3081,7 @@ Before: "Your traffic is not the main paywall problem, your sequence is."
 After: "We ran 12 paywall tests last quarter. The one that moved LTV had nothing to do with copy."
 
 Before: "Your app is probably not under-monetized, it is under-tested."
-After: "Most apps I audit have 3 paywall variants and 0 placement tests."
+After: "Most apps we audit have 3 paywall variants and 0 placement tests."
 
 Before: "We keep seeing the same pattern: app makers drive installs, start trials, then watch 40% disappear by day 3."
 After: "App makers drive installs, start trials, then watch 40% disappear by day 3."

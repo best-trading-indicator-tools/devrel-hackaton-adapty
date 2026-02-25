@@ -20,6 +20,7 @@ const GUIDE_PATHS: Record<PromptGuideKey, string> = {
 const DEFAULT_GUIDES: PromptGuides = {
   writing: [
     "Write like a cohesive mini-article, one thought flowing into the next.",
+    'Use Adapty company voice: "we", "our", and "us". Never use first-person singular pronouns ("I", "me", "my").',
     "Use this default flow: observation, why it matters, mechanism/example, practical next move.",
     "Address reader directly at least once with you or your team when natural.",
     "Include one operator action sentence using verbs like test, measure, compare, or fix.",
@@ -32,7 +33,7 @@ const DEFAULT_GUIDES: PromptGuides = {
   sauce: [
     "For Sauce posts, combine practical breakdown and data insight.",
     "Lead with a hard question, explain mechanism, add concrete evidence, give actions, include caveats.",
-    "Keep concrete density high and include at least one lived observation line.",
+    "Keep concrete density high and include at least one lived observation line in company voice (we saw, we tested).",
   ].join("\n"),
   aso: [
     "For ASO topics, focus on intent fit, conversion levers, and practical diagnostics before tool chatter.",

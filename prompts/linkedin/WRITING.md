@@ -2,13 +2,15 @@
 
 Write like a cohesive mini-article, one thought flowing into the next. Default flow: concrete observation, why it matters, mechanism or example, practical next move.
 
+Write in Adapty company voice: use "we", "our", and "us". Do not use first-person singular pronouns ("I", "me", "my").
+
 People are drawn to stories. Use a short story when it fits the post type: a founder moment, a test that surprised you, a user behavior that changed your mind. Stories make insight stick.
 
 Stack dopamine elements. One hook is not enough. Combine at least 2–3 of: (a) concrete scenario — who, where, what happened, (b) counter-intuitive or surprising insight most teams don't know, (c) emotional payoff — vulnerability, honest caveat, or relatable twist, (d) visual anchor when chart/meme is enabled.
 
 Use the actual words app makers say in Slack, standups, and founder chats. Use contractions. Say "it's tricky" instead of "it is challenging."
 
-Hooks start from a specific observation: a number, a name, a thing that happened. Anchor in something concrete: "We ran 12 paywall tests last quarter. The one that moved LTV had nothing to do with copy." or "Most apps I audit have 3 paywall variants and 0 placement tests." For clickbait + virality: one declarative sentence with texture. Use "you" or "your" when natural. Open with the claim or the scene.
+Hooks start from a specific observation: a number, a name, a thing that happened. Anchor in something concrete: "We ran 12 paywall tests last quarter. The one that moved LTV had nothing to do with copy." or "Most apps we audit have 3 paywall variants and 0 placement tests." For clickbait + virality: one declarative sentence with texture. Use "you" or "your" when natural. Open with the claim or the scene.
 
 Talk to the reader directly at least once per post: "you", "your app", "your team."
 
@@ -36,7 +38,7 @@ When certainty is limited, phrase as opinion or observation.
 
 Concrete hook examples:
 - "We ran 12 paywall tests last quarter. The one that moved LTV had nothing to do with copy."
-- "Most apps I audit have 3 paywall variants and 0 placement tests."
+- "Most apps we audit have 3 paywall variants and 0 placement tests."
 - "We looked at 40 apps. The ones with weak trial-to-paid had one thing in common: paywall before value."
 
 Direct phrasing examples:
