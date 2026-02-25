@@ -97,7 +97,6 @@ const MAX_IMAGE_DATA_URL_CHARS = 4_500_000;
 const IMAGE_EXPORT_QUALITY = 0.82;
 const MAX_CONCURRENT_GENERATION_REQUESTS = 3;
 const EVENT_TOPIC_PATTERN = /\b(event|webinar)\b/i;
-const WEBINAR_TOPIC_PATTERN = /\bwebinar\b/i;
 const CUSTOM_BRAND_VOICE = "__custom__";
 const CHART_LEGEND_POSITIONS: ChartLegendPosition[] = ["top", "right", "bottom", "left"];
 const CHART_VISUAL_STYLE_OPTIONS = [
@@ -772,22 +771,6 @@ function needsEventDetails(inputType: string): boolean {
   return EVENT_TOPIC_PATTERN.test(inputType);
 }
 
-function isWebinarCalendarEntry(entry: NotionCalendarEntry): boolean {
-  if (WEBINAR_TOPIC_PATTERN.test(entry.name)) {
-    return true;
-  }
-
-  if (entry.event?.eventName && WEBINAR_TOPIC_PATTERN.test(entry.event.eventName)) {
-    return true;
-  }
-
-  if (entry.event?.eventType?.some((eventType) => WEBINAR_TOPIC_PATTERN.test(eventType))) {
-    return true;
-  }
-
-  return false;
-}
-
 function getCalendarEntryMissingFields(entry: NotionCalendarEntry): CalendarEntryMissingField[] {
   const missing: CalendarEntryMissingField[] = [];
 
@@ -1076,7 +1059,6 @@ export default function Home() {
   const [notionCalendar, setNotionCalendar] = useState<NotionCalendarData | null>(null);
   const [notionCalendarLoading, setNotionCalendarLoading] = useState(false);
   const [notionCalendarSyncLoading, setNotionCalendarSyncLoading] = useState(false);
-  const [showWebinarsOnly, setShowWebinarsOnly] = useState(true);
   const [calendarMonthCursor, setCalendarMonthCursor] = useState<Date>(() => getStartOfMonth(new Date()));
   const [selectedCalendarEntryIds, setSelectedCalendarEntryIds] = useState<string[]>([]);
   const fallbackMemeTemplates = useMemo(() => buildFallbackMemeTemplates(), []);
@@ -1108,10 +1090,7 @@ export default function Home() {
     () => normalizedSelectedPostTypes.some((type) => needsEventDetails(type)),
     [normalizedSelectedPostTypes],
   );
-  const calendarEntries = useMemo(() => {
-    const entries = notionCalendar?.entries ?? [];
-    return showWebinarsOnly ? entries.filter((entry) => isWebinarCalendarEntry(entry)) : entries;
-  }, [notionCalendar?.entries, showWebinarsOnly]);
+  const calendarEntries = useMemo(() => notionCalendar?.entries ?? [], [notionCalendar?.entries]);
   const monthEntries = useMemo(() => {
     if (!calendarEntries.length) return [];
     return getEntriesForMonth(calendarEntries, calendarMonthCursor);
@@ -1796,7 +1775,7 @@ export default function Home() {
           inputType: type,
           style,
           goal,
-          count: 1,
+          count: committedNumberOfPosts,
           calendarEntry: entry,
         }));
       } else {
@@ -2821,25 +2800,14 @@ export default function Home() {
             <div className="space-y-3 rounded-2xl border border-sky-200 bg-sky-50/50 p-4">
               <div className="flex items-center justify-between gap-2">
                 <span className="text-sm font-semibold text-slate-900">Notion calendar (month)</span>
-                <div className="flex items-center gap-2">
-                  <label className="flex items-center gap-1.5 rounded-lg border border-black/10 bg-white px-2 py-1 text-xs text-slate-700">
-                    <input
-                      type="checkbox"
-                      className="h-3.5 w-3.5 rounded border-black/20"
-                      checked={showWebinarsOnly}
-                      onChange={(event) => setShowWebinarsOnly(event.target.checked)}
-                    />
-                    Webinars only
-                  </label>
-                  <button
-                    type="button"
-                    disabled={notionCalendarSyncLoading}
-                    className="rounded-lg border border-black/10 bg-white px-2 py-1 text-xs text-slate-700 hover:bg-slate-50 disabled:opacity-50"
-                    onClick={reloadNotionCalendar}
-                  >
-                    {notionCalendarSyncLoading ? "Reloading…" : "Reload"}
-                  </button>
-                </div>
+                <button
+                  type="button"
+                  disabled={notionCalendarSyncLoading}
+                  className="rounded-lg border border-black/10 bg-white px-2 py-1 text-xs text-slate-700 hover:bg-slate-50 disabled:opacity-50"
+                  onClick={reloadNotionCalendar}
+                >
+                  {notionCalendarSyncLoading ? "Reloading…" : "Reload"}
+                </button>
               </div>
               {notionCalendarLoading ? (
                 <p className="text-xs text-slate-600">Loading calendar…</p>
@@ -2916,13 +2884,11 @@ export default function Home() {
                   </div>
 
                   {!monthEntries.length ? (
-                    <p className="text-xs text-slate-600">
-                      No {showWebinarsOnly ? "webinar " : ""}entries scheduled in {calendarMonthLabel}.
-                    </p>
+                    <p className="text-xs text-slate-600">No entries scheduled in {calendarMonthLabel}.</p>
                   ) : null}
 
                   <div className="overflow-x-auto">
-                    <div className="grid min-w-[46rem] grid-cols-7 gap-px overflow-hidden rounded-xl border border-black/10 bg-black/10">
+                    <div className="grid min-w-184 grid-cols-7 gap-px overflow-hidden rounded-xl border border-black/10 bg-black/10">
                       {CALENDAR_DAY_LABELS.map((dayLabel) => (
                         <div
                           key={dayLabel}
@@ -3025,7 +2991,7 @@ export default function Home() {
                     {selectedCalendarEntries.length
                       ? `${selectedCalendarEntries.length} selected event${
                           selectedCalendarEntries.length === 1 ? "" : "s"
-                        } will be used for generation.`
+                        } × ${form.numberOfPosts} post${form.numberOfPosts === 1 ? "" : "s"} each (${selectedCalendarEntries.length * form.numberOfPosts} total).`
                       : "Select one or more events to generate posts from Notion context."}
                   </p>
                 </>
@@ -3671,7 +3637,9 @@ export default function Home() {
             </label>
 
             <label className="space-y-1">
-              <span className="text-sm font-medium">Number of Posts</span>
+              <span className="text-sm font-medium">
+                {useNotionCalendarForGeneration ? "Posts Per Selected Event" : "Number of Posts"}
+              </span>
               <input
                 type="number"
                 min={1}
@@ -3690,6 +3658,13 @@ export default function Home() {
                   commitNumberOfPostsInput();
                 }}
               />
+              {useNotionCalendarForGeneration ? (
+                <p className="text-xs text-slate-600">
+                  Total planned: {selectedCalendarEntries.length * form.numberOfPosts} posts (
+                  {selectedCalendarEntries.length} event{selectedCalendarEntries.length === 1 ? "" : "s"} ×{" "}
+                  {form.numberOfPosts} each).
+                </p>
+              ) : null}
             </label>
           </div>
 
@@ -3844,7 +3819,7 @@ export default function Home() {
               </div>
 
               <div className="overflow-x-auto">
-                <div className="grid min-w-[46rem] grid-cols-7 gap-px overflow-hidden rounded-xl border border-black/10 bg-black/10">
+                <div className="grid min-w-184 grid-cols-7 gap-px overflow-hidden rounded-xl border border-black/10 bg-black/10">
                   {CALENDAR_DAY_LABELS.map((dayLabel) => (
                     <div
                       key={dayLabel}
