@@ -1423,7 +1423,7 @@ function ensureFinalCta(cta: string, ctaLink: string): string {
   return `${cleanCta.replace(/[.\s]+$/g, "")}. ${cleanLink}`;
 }
 
-function extractPublicAdaptyCtaLink(rawLink: string): string {
+function normalizeCtaLink(rawLink: string): string {
   const trimmed = rawLink.trim();
   if (!trimmed) {
     return "";
@@ -1431,11 +1431,8 @@ function extractPublicAdaptyCtaLink(rawLink: string): string {
 
   try {
     const parsed = new URL(trimmed);
-    const hostname = parsed.hostname.toLowerCase();
-    const isAdaptyDomain =
-      hostname === "adapty.io" || hostname === "www.adapty.io" || hostname.endsWith(".adapty.io");
     const isHttp = parsed.protocol === "https:" || parsed.protocol === "http:";
-    if (!isAdaptyDomain || !isHttp) {
+    if (!isHttp) {
       return "";
     }
     return parsed.toString();
@@ -1444,12 +1441,12 @@ function extractPublicAdaptyCtaLink(rawLink: string): string {
   }
 }
 
-function stripSlackLinksFromText(value: string): string {
-  return value
-    .replace(/\bhttps?:\/\/[^\s)\]]*slack\.com[^\s)\]]*/gi, "")
-    .replace(/[ \t]{2,}/g, " ")
-    .replace(/[ \t]+([,.;:!?])/g, "$1")
-    .trim();
+function trimTrailingEmptyStrings(values: string[]): string[] {
+  const next = [...values];
+  while (next.length && !next[next.length - 1].trim()) {
+    next.pop();
+  }
+  return next;
 }
 
 function normalizeNoEmDash(value: string): string {
@@ -2295,13 +2292,13 @@ export async function POST(request: Request) {
     const input = parsedInput.data;
     const isProductUpdateInputType = looksLikeProductUpdatePostType(input.inputType);
     const fallbackCtaLink = isProductUpdateInputType
-      ? extractPublicAdaptyCtaLink(input.ctaLink)
+      ? normalizeCtaLink(input.ctaLink)
       : input.ctaLink.trim();
-    const requestedCtaLinks = input.ctaLinks.map((value) => value.trim()).filter(Boolean);
+    const requestedCtaLinks = trimTrailingEmptyStrings(input.ctaLinks.map((value) => value.trim()));
     const effectiveCtaLinksByPost = Array.from({ length: input.numberOfPosts }, (_, index) => {
       const candidateLink = requestedCtaLinks[index] ?? "";
       const normalizedCandidateLink = isProductUpdateInputType
-        ? extractPublicAdaptyCtaLink(candidateLink)
+        ? normalizeCtaLink(candidateLink)
         : candidateLink;
       return normalizedCandidateLink || fallbackCtaLink;
     });
@@ -3012,13 +3009,9 @@ ${rankedContextLines}`;
         const normalizedHook = stripAiScaffoldOpeners(normalizeNoEmDash(post.hook));
         const normalizedBody = normalizeNoEmDash(post.body);
         const ctaLinkForPost = effectiveCtaLinksByPost[index] ?? effectiveCtaLink;
-        let normalizedCta = stripAiScaffoldOpeners(
+        const normalizedCta = stripAiScaffoldOpeners(
           normalizeNoEmDash(ensureFinalCta(post.cta, ctaLinkForPost)),
         );
-        if (isProductUpdateInputType) {
-          const noSlackCta = stripSlackLinksFromText(normalizedCta);
-          normalizedCta = ctaLinkForPost ? ensureFinalCta(noSlackCta, ctaLinkForPost) : "";
-        }
 
         return {
           length: lengthPlan[index] ?? post.length,

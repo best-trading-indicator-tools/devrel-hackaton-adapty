@@ -367,10 +367,9 @@ function splitCsvNumbers(value: string): number[] {
 }
 
 function splitMultilineUrls(value: string): string[] {
-  return value
-    .split(/\r?\n/)
-    .map((line) => line.trim())
-    .filter(Boolean);
+  return trimTrailingEmpty(
+    value.split(/\r?\n/).map((line) => line.trim()),
+  );
 }
 
 function getLegendLabel(position: ChartLegendPosition): string {
@@ -446,7 +445,7 @@ function getTopProductUpdateImageUrls(entry: SlackProductUpdateEntry, limit = MA
   return Array.from(deduped);
 }
 
-function getPublicAdaptyCtaLink(rawLink: string): string {
+function normalizeCtaLink(rawLink: string): string {
   const trimmed = rawLink.trim();
   if (!trimmed) {
     return "";
@@ -454,17 +453,33 @@ function getPublicAdaptyCtaLink(rawLink: string): string {
 
   try {
     const parsed = new URL(trimmed);
-    const hostname = parsed.hostname.toLowerCase();
-    const isAdaptyDomain =
-      hostname === "adapty.io" || hostname === "www.adapty.io" || hostname.endsWith(".adapty.io");
     const isHttp = parsed.protocol === "https:" || parsed.protocol === "http:";
-    if (!isAdaptyDomain || !isHttp) {
+    if (!isHttp) {
       return "";
     }
     return parsed.toString();
   } catch {
     return "";
   }
+}
+
+function ensureFinalCtaText(cta: string, ctaLink: string): string {
+  const cleanCta = cta.trim();
+  const cleanLink = ctaLink.trim();
+
+  if (!cleanLink) {
+    return cleanCta;
+  }
+
+  if (!cleanCta) {
+    return cleanLink;
+  }
+
+  if (cleanCta.includes(cleanLink)) {
+    return cleanCta;
+  }
+
+  return `${cleanCta.replace(/[.\s]+$/g, "")}. ${cleanLink}`;
 }
 
 function buildDetailsFromProductUpdateEntry(entry: SlackProductUpdateEntry): string {
@@ -1405,6 +1420,10 @@ async function fetchSlackImageDataUrlForClipboard(imageUrl: string): Promise<str
   } catch {
     return null;
   }
+}
+
+function buildSlackImageProxyUrl(imageUrl: string): string {
+  return `/api/slack-product-updates/image-data-url?url=${encodeURIComponent(imageUrl)}`;
 }
 
 async function copyPostAndImagesToClipboard(params: {
@@ -2449,7 +2468,7 @@ export default function Home() {
       const sharedCtaLink = form.ctaLink.trim();
       const getDefaultCtaLinkForAllocation = (allocation: GenerationAllocation): string => {
         if (allocation.productUpdateEntry) {
-          return getPublicAdaptyCtaLink(sharedCtaLink);
+          return normalizeCtaLink(sharedCtaLink);
         }
 
         if (sharedCtaLink) {
@@ -2472,7 +2491,7 @@ export default function Home() {
           ctaLinkCursor += 1;
 
           if (allocation.productUpdateEntry) {
-            return getPublicAdaptyCtaLink(rawCandidate);
+            return normalizeCtaLink(rawCandidate);
           }
           return rawCandidate.trim();
         });
@@ -2539,7 +2558,10 @@ export default function Home() {
                 : form.details;
             const defaultCtaLinkForAllocation = getDefaultCtaLinkForAllocation(allocation);
             const ctaLinksForRequest = ctaLinksByAllocationIndex[allocationIndex] ?? [];
-            const ctaVal = ctaLinksForRequest.find((link) => link.trim().length > 0) ?? defaultCtaLinkForAllocation;
+            const ctaVal =
+              ctaLinkMode === "per_post"
+                ? defaultCtaLinkForAllocation
+                : ctaLinksForRequest.find((link) => link.trim().length > 0) ?? defaultCtaLinkForAllocation;
             const sourceImageUrls = productUpdateEntry
               ? getTopProductUpdateImageUrls(productUpdateEntry, MAX_PRODUCT_UPDATE_IMAGES_PER_POST)
               : [];
@@ -2689,9 +2711,13 @@ export default function Home() {
           if (chunk.sourceImageUrls.length) {
             nextPostSourceImageUrlByIndex[postCursor] = [...chunk.sourceImageUrls];
           }
-          const ctaLinkForPost = chunk.ctaLinksUsed[chunkPostIndex] ?? chunk.ctaLinkUsed;
+          const requestedCtaLinkForPost = chunk.ctaLinksUsed[chunkPostIndex];
+          const ctaLinkForPost = requestedCtaLinkForPost?.trim() ? requestedCtaLinkForPost : chunk.ctaLinkUsed;
           nextPostCtaLinkByIndex[postCursor] = ctaLinkForPost;
-          mergedPosts.push(post);
+          mergedPosts.push({
+            ...post,
+            cta: ensureFinalCtaText(post.cta, ctaLinkForPost),
+          });
           postCursor += 1;
         }
       }
@@ -2789,8 +2815,12 @@ export default function Home() {
         style: generationAllocations[0]?.style ?? form.style,
         goal: generationAllocations[0]?.goal ?? form.goal,
         inputType: generationAllocations[0]?.inputType ?? form.inputType,
-        ctaLink: trimmedPostCtaLinkByIndex[0]
-          ?? (generationAllocations[0]?.productUpdateEntry ? getPublicAdaptyCtaLink(form.ctaLink) : form.ctaLink),
+        ctaLink:
+          trimmedPostCtaLinkByIndex[0]?.trim()
+            ? trimmedPostCtaLinkByIndex[0]
+            : generationAllocations[0]?.productUpdateEntry
+              ? normalizeCtaLink(form.ctaLink)
+              : form.ctaLink,
         details: form.details,
       };
       setPostTypeByPostIndex(trimmedPostTypeByIndex);
@@ -4570,15 +4600,20 @@ export default function Home() {
 
           <label className="space-y-1">
             <span className="text-sm font-medium">
-              {ctaLinkMode === "per_post" ? "Fallback CTA URL (optional)" : "CTA URL (optional)"}
+              {ctaLinkMode === "per_post" ? "Default CTA URL (optional)" : "CTA URL (optional)"}
             </span>
             <input
-              placeholder="https://adapty.io/webinar"
+              placeholder="https://example.com/webinar"
               className={baseControlClassName}
               style={compactInputStyle}
               value={form.ctaLink}
               onChange={(event) => setForm((prev) => ({ ...prev, ctaLink: event.target.value }))}
             />
+            {ctaLinkMode === "per_post" ? (
+              <p className="text-xs text-slate-600">
+                This URL is used automatically for any post that does not have its own URL in the list below.
+              </p>
+            ) : null}
           </label>
 
           {ctaLinkMode === "per_post" ? (
@@ -4586,27 +4621,28 @@ export default function Home() {
               <span className="text-sm font-medium">Per-post CTA URLs (one per line)</span>
               <textarea
                 rows={Math.min(8, Math.max(3, plannedPostCountForCta))}
-                placeholder={`https://adapty.io/link-1\nhttps://adapty.io/link-2`}
+                placeholder={`https://example.com/link-1\nhttps://example.com/link-2`}
                 className={baseControlClassName}
                 value={perPostCtaLinksInput}
                 onChange={(event) => setPerPostCtaLinksInput(event.target.value)}
               />
               <p className="text-xs text-slate-600">
-                Line 1 maps to Post 1, Line 2 to Post 2, etc. Planned posts: {plannedPostCountForCta}. Missing lines use
-                the fallback CTA URL.
+                <span className="block">Line 1 maps to Post 1, Line 2 to Post 2, and so on.</span>
+                <span className="block">Planned posts: {plannedPostCountForCta}.</span>
+                <span className="block">Leave a line empty to use the default CTA URL above.</span>
               </p>
             </label>
           ) : null}
 
           {useSlackProductUpdatesForGeneration ? (
             <p className="text-xs text-slate-600">
-              For Product feature launch posts, only public `adapty.io` CTA URLs are allowed. Internal Slack links are ignored.
+              For Product feature launch posts, you can use any valid CTA URL (including Slack links).
             </p>
           ) : null}
 
           {showEventFields && useNotionCalendarForGeneration ? (
             <p className="text-xs text-slate-600">
-              Webinar/event posts use CTA URLs from this planner; if left blank, the Notion event page URL is used as fallback.
+              Webinar/event posts use CTA URLs from this planner; if CTA fields are empty, the Notion event page URL is used.
             </p>
           ) : null}
 
@@ -4950,6 +4986,11 @@ export default function Home() {
               const generatedPostDate = postDateByPostIndex[index];
               const generatedImageDataUrls = postImageDataUrlByPostIndex[index] ?? [];
               const generatedSourceImageUrls = postSourceImageUrlByPostIndex[index] ?? [];
+              const generatedSourcePreviewUrls = generatedSourceImageUrls.map((sourceImageUrl) =>
+                buildSlackImageProxyUrl(sourceImageUrl),
+              );
+              const previewImageUrls = generatedImageDataUrls.length ? generatedImageDataUrls : generatedSourcePreviewUrls;
+              const configuredCtaLink = postCtaLinkByPostIndex[index]?.trim() ?? "";
               const selectedLine = bodyLineOptions.find(
                 (lineOption) => lineOption.lineIndex === selectedLineByPost[index] && !lineOption.isBlank,
               );
@@ -5129,6 +5170,19 @@ export default function Home() {
                           {post.cta}
                         </button>
                       )}
+                      {configuredCtaLink ? (
+                        <p className="mt-1 break-all px-1 text-[11px] text-slate-500">
+                          CTA URL used:{" "}
+                          <a
+                            href={configuredCtaLink}
+                            target="_blank"
+                            rel="noreferrer"
+                            className="text-sky-700 underline-offset-2 hover:underline"
+                          >
+                            {configuredCtaLink}
+                          </a>
+                        </p>
+                      ) : null}
                     </div>
                   </div>
 
@@ -5165,12 +5219,12 @@ export default function Home() {
                           ) : null}
                         </div>
                       </div>
-                      {generatedImageDataUrls.length ? (
+                      {previewImageUrls.length ? (
                         <div className="grid gap-2 sm:grid-cols-2 lg:grid-cols-3">
-                          {generatedImageDataUrls.map((imageDataUrl, imageIndex) => (
+                          {previewImageUrls.map((imageUrl, imageIndex) => (
                             <NextImage
                               key={`${index}-source-image-${imageIndex}`}
-                              src={imageDataUrl}
+                              src={imageUrl}
                               alt={`Source context ${imageIndex + 1} for post ${index + 1}`}
                               width={1200}
                               height={620}
@@ -5180,7 +5234,7 @@ export default function Home() {
                           ))}
                         </div>
                       ) : (
-                        <p className="text-xs text-slate-600">Release image links are attached above.</p>
+                        <p className="text-xs text-slate-600">Image previews are unavailable. Use source links above.</p>
                       )}
                     </div>
                   ) : null}
