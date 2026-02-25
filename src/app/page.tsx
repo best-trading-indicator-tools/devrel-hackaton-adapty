@@ -69,6 +69,7 @@ type GeneratedPost = GeneratePostsResponse["posts"][number];
 type MemeCompanion = NonNullable<GeneratedPost["meme"]>;
 type GiphyCompanion = NonNullable<GeneratedPost["giphy"]>;
 type CopyAction = "post_images" | "x_thread" | "memes" | "giphy" | "everything";
+type PostContentTab = "linkedin" | "x";
 
 const defaultForm: FormState = {
   style: "adapty",
@@ -1883,6 +1884,7 @@ export default function Home() {
   const [manualCtaDraftByPost, setManualCtaDraftByPost] = useState<Record<number, string>>({});
   const [selectedLineByPost, setSelectedLineByPost] = useState<Record<number, number>>({});
   const [selectedCtaByPost, setSelectedCtaByPost] = useState<Record<number, boolean>>({});
+  const [activeContentTabByPost, setActiveContentTabByPost] = useState<Record<number, PostContentTab>>({});
   const [rewriteErrorByPost, setRewriteErrorByPost] = useState<Record<number, string>>({});
   const [lineFeedbackByPost, setLineFeedbackByPost] = useState<Record<number, string>>({});
   const [copyFeedbackByPostAction, setCopyFeedbackByPostAction] = useState<Record<string, "copied" | "failed">>({});
@@ -2783,6 +2785,7 @@ export default function Home() {
     setManualCtaDraftByPost({});
     setSelectedLineByPost({});
     setSelectedCtaByPost({});
+    setActiveContentTabByPost({});
     setRewriteErrorByPost({});
     setLineFeedbackByPost({});
     setCopyFeedbackByPostAction({});
@@ -3989,9 +3992,10 @@ export default function Home() {
                             i
                           </span>
                           <span
-                            className="invisible pointer-events-auto absolute bottom-full left-1/2 z-20 mb-2 w-[min(90vw,30rem)] -translate-x-1/2 rounded-xl border border-sky-200 bg-white p-3 text-left opacity-0 shadow-xl transition group-hover/industry-rss:visible group-hover/industry-rss:opacity-100"
+                            className="invisible pointer-events-auto absolute bottom-full left-1/2 z-20 w-[min(90vw,30rem)] max-h-[min(75vh,38rem)] -translate-x-1/2 overflow-y-auto overscroll-contain rounded-xl border border-sky-200 bg-white p-3 text-left opacity-0 shadow-xl transition group-hover/industry-rss:visible group-hover/industry-rss:opacity-100 group-focus-within/industry-rss:visible group-focus-within/industry-rss:opacity-100 hover:visible hover:opacity-100"
                             onClick={(event) => event.stopPropagation()}
                             onMouseDown={(event) => event.stopPropagation()}
+                            onWheel={(event) => event.stopPropagation()}
                           >
                             <div className="text-xs font-semibold text-slate-900">
                               RSS feeds used for Industry news reaction posts
@@ -3999,7 +4003,7 @@ export default function Home() {
                             <div className="mt-1 text-[11px] text-slate-600">
                               {enabledIndustryRssCount} enabled feeds, grouped by category.
                             </div>
-                            <div className="mt-2 max-h-56 space-y-2 overflow-y-auto overscroll-contain pr-1">
+                            <div className="mt-2 space-y-2 pr-1">
                               {(Object.keys(groupedIndustryRssFeeds) as FeedCategory[]).map((category) => {
                                 const feeds = groupedIndustryRssFeeds[category];
                                 if (!feeds.length) {
@@ -5456,6 +5460,10 @@ export default function Home() {
               const generatedSourceImageUrls = postSourceImageUrlByPostIndex[index] ?? [];
               const xThreadForPost = normalizeXThreadPosts(post.xThread ?? []);
               const hasXThreadForPost = xThreadForPost.length > 0;
+              const hasImagesForPost = generatedImageDataUrls.length > 0 || generatedSourceImageUrls.length > 0;
+              const activeContentTab: PostContentTab = hasXThreadForPost
+                ? (activeContentTabByPost[index] ?? "linkedin")
+                : "linkedin";
               const memeVariantsForPost = getMemeVariantsForPost(post);
               const giphyVariantsForPost = getGiphyVariantsForPost(post);
               const hasMemeVariantsForPost = memeVariantsForPost.length > 0;
@@ -5502,7 +5510,7 @@ export default function Home() {
                           showCopyFeedback(index, "post_images", copied ? "copied" : "failed");
                         }}
                       >
-                        {getCopyButtonLabel(index, "post_images", "Copy Post + Images")}
+                        {getCopyButtonLabel(index, "post_images", hasImagesForPost ? "Copy Post + Images" : "Copy Post")}
                       </button>
                       <button
                         type="button"
@@ -5556,159 +5564,206 @@ export default function Home() {
                     </div>
                   </div>
 
-                  <p className="mb-3 text-lg font-semibold leading-snug">{post.hook}</p>
-                  <div className="space-y-1 rounded-xl border border-sky-200 bg-linear-to-b from-sky-50/80 to-white p-2.5">
-                    <p className="flex items-center gap-1.5 px-1 text-xs font-medium text-sky-700">
-                      <IconPencil className="h-3.5 w-3.5" />
-                      Click a body line to edit inline.
-                    </p>
-                    {bodyLineOptions.map((lineOption) => {
-                      if (lineOption.isBlank) {
-                        return <div key={`${index}-${lineOption.lineIndex}`} className="h-2" />;
-                      }
-
-                      const isSelected = selectedLine?.lineIndex === lineOption.lineIndex;
-
-                      if (isSelected) {
-                        return (
-                          <div
-                            key={`${index}-${lineOption.lineIndex}`}
-                            className="rounded-lg border border-sky-300 bg-white p-2 shadow-[0_0_0_1px_rgba(56,189,248,0.08)]"
-                          >
-                            <p className="mb-1 flex items-center gap-1.5 text-[11px] font-semibold uppercase tracking-wide text-sky-700">
-                              <IconPencil className="h-3 w-3" />
-                              L{lineOption.lineIndex + 1} Editing
-                            </p>
-                            <textarea
-                              rows={2}
-                              autoFocus
-                              className="w-full rounded-lg border border-sky-200 bg-white px-2 py-2 text-sm text-slate-700 outline-none transition focus:border-sky-500"
-                              value={manualLineDraft}
-                              onChange={(event) =>
-                                setManualLineDraftByPost((prev) => ({
-                                  ...prev,
-                                  [index]: event.target.value,
-                                }))
-                              }
-                            />
-                            <div className="mt-2 flex flex-wrap gap-2">
-                              <button
-                                type="button"
-                                className="inline-flex items-center gap-1.5 rounded-lg border border-emerald-200 bg-emerald-50 px-2.5 py-1.5 text-xs font-medium text-emerald-700 hover:bg-emerald-100 disabled:cursor-not-allowed disabled:opacity-60"
-                                disabled={isLoading || Boolean(rewriteLoadingKey) || !manualLineDraft.trim()}
-                                onClick={() => applyManualBodyLineEdit(index, lineOption.lineIndex)}
-                              >
-                                <IconCheck className="h-3.5 w-3.5" />
-                                Save Line
-                              </button>
-                              <button
-                                type="button"
-                                className="inline-flex items-center gap-1.5 rounded-lg border border-indigo-200 bg-indigo-50 px-2.5 py-1.5 text-xs font-medium text-indigo-700 hover:bg-indigo-100 disabled:cursor-not-allowed disabled:opacity-60"
-                                disabled={isLoading || isLineRewriteLoading || Boolean(rewriteLoadingKey)}
-                                onClick={() => regenerateBodyLine(index, lineOption.lineIndex)}
-                              >
-                                <IconSpark className="h-3.5 w-3.5" />
-                                {isLineRewriteLoading ? "AI Rewriting..." : "AI Rewrite Line"}
-                              </button>
-                              <button
-                                type="button"
-                                className="inline-flex items-center gap-1.5 rounded-lg border border-slate-300 bg-white px-2.5 py-1.5 text-xs font-medium text-slate-700 hover:bg-slate-100 disabled:cursor-not-allowed disabled:opacity-60"
-                                disabled={isLoading || Boolean(rewriteLoadingKey)}
-                                onClick={() => cancelBodyLineEdit(index)}
-                              >
-                                <IconClose className="h-3.5 w-3.5" />
-                                Cancel
-                              </button>
-                            </div>
-                          </div>
-                        );
-                      }
-
-                      return (
-                        <button
-                          key={`${index}-${lineOption.lineIndex}`}
-                          type="button"
-                          className="w-full rounded-md border border-transparent px-2 py-1 text-left text-sm leading-relaxed text-slate-700 transition hover:border-sky-200 hover:bg-white"
-                          onClick={() => selectBodyLineForEditing(index, lineOption.lineIndex, lineOption.text)}
-                        >
-                          {lineOption.text}
-                        </button>
-                      );
-                    })}
-
-                    <div className="mt-2 rounded-md border border-slate-200 bg-white px-2 py-1.5">
-                      <p className="mb-0.5 text-[11px] font-semibold uppercase tracking-wide text-slate-500">CTA</p>
-                      {isCtaEditing ? (
-                        <div className="rounded-md border border-emerald-200 bg-emerald-50/40 p-2">
-                          <textarea
-                            rows={2}
-                            autoFocus
-                            className="w-full rounded-lg border border-emerald-200 bg-white px-2 py-2 text-sm font-medium text-slate-900 outline-none transition focus:border-emerald-500"
-                            value={manualCtaDraft}
-                            onChange={(event) =>
-                              setManualCtaDraftByPost((prev) => ({
-                                ...prev,
-                                [index]: event.target.value,
-                              }))
-                            }
-                          />
-                          <div className="mt-2 flex flex-wrap gap-2">
-                            <button
-                              type="button"
-                              className="inline-flex items-center gap-1.5 rounded-lg border border-emerald-200 bg-emerald-50 px-2.5 py-1.5 text-xs font-medium text-emerald-700 hover:bg-emerald-100 disabled:cursor-not-allowed disabled:opacity-60"
-                              disabled={isLoading || Boolean(rewriteLoadingKey) || !manualCtaDraft.trim()}
-                              onClick={() => applyManualCtaEdit(index)}
-                            >
-                              <IconCheck className="h-3.5 w-3.5" />
-                              Save CTA
-                            </button>
-                            <button
-                              type="button"
-                              className="inline-flex items-center gap-1.5 rounded-lg border border-indigo-200 bg-indigo-50 px-2.5 py-1.5 text-xs font-medium text-indigo-700 hover:bg-indigo-100 disabled:cursor-not-allowed disabled:opacity-60"
-                              disabled={isLoading || isCtaRewriteLoading || Boolean(rewriteLoadingKey)}
-                              onClick={() => regenerateCtaLine(index)}
-                            >
-                              <IconSpark className="h-3.5 w-3.5" />
-                              {isCtaRewriteLoading ? "AI Rewriting..." : "AI Rewrite CTA"}
-                            </button>
-                            <button
-                              type="button"
-                              className="inline-flex items-center gap-1.5 rounded-lg border border-slate-300 bg-white px-2.5 py-1.5 text-xs font-medium text-slate-700 hover:bg-slate-100 disabled:cursor-not-allowed disabled:opacity-60"
-                              disabled={isLoading || Boolean(rewriteLoadingKey)}
-                              onClick={() => cancelCtaEdit(index)}
-                            >
-                              <IconClose className="h-3.5 w-3.5" />
-                              Cancel
-                            </button>
-                          </div>
-                        </div>
-                      ) : (
-                        <button
-                          type="button"
-                          className="w-full rounded-md border border-transparent px-1 py-0.5 text-left text-sm font-medium text-slate-900 transition hover:border-emerald-200 hover:bg-emerald-50/60"
-                          onClick={() => selectCtaForEditing(index, post.cta)}
-                        >
-                          {post.cta}
-                        </button>
-                      )}
-                      {configuredCtaLink ? (
-                        <p className="mt-1 break-all px-1 text-[11px] text-slate-500">
-                          CTA URL used:{" "}
-                          <a
-                            href={configuredCtaLink}
-                            target="_blank"
-                            rel="noreferrer"
-                            className="text-sky-700 underline-offset-2 hover:underline"
-                          >
-                            {configuredCtaLink}
-                          </a>
-                        </p>
-                      ) : null}
-                    </div>
-                  </div>
-
                   {hasXThreadForPost ? (
-                    <div className="mt-5 space-y-3 rounded-2xl border border-black/10 bg-slate-50 p-3">
+                    <div
+                      className="mb-3 inline-flex items-center gap-1 rounded-xl border border-slate-200 bg-slate-100/80 p-1"
+                      role="tablist"
+                      aria-label={`Post ${index + 1} platform view`}
+                    >
+                      <button
+                        type="button"
+                        role="tab"
+                        aria-selected={activeContentTab === "linkedin"}
+                        onClick={() =>
+                          setActiveContentTabByPost((prev) => ({
+                            ...prev,
+                            [index]: "linkedin",
+                          }))
+                        }
+                        className={`inline-flex cursor-pointer items-center rounded-lg border px-3 py-1.5 text-xs font-semibold transition focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-sky-300 ${
+                          activeContentTab === "linkedin"
+                            ? "border-slate-300 bg-white text-slate-900 shadow-sm"
+                            : "border-transparent bg-transparent text-slate-600 hover:bg-white/80"
+                        }`}
+                      >
+                        LinkedIn
+                      </button>
+                      <button
+                        type="button"
+                        role="tab"
+                        aria-selected={activeContentTab === "x"}
+                        onClick={() =>
+                          setActiveContentTabByPost((prev) => ({
+                            ...prev,
+                            [index]: "x",
+                          }))
+                        }
+                        className={`inline-flex cursor-pointer items-center rounded-lg border px-3 py-1.5 text-xs font-semibold transition focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-sky-300 ${
+                          activeContentTab === "x"
+                            ? "border-slate-300 bg-white text-slate-900 shadow-sm"
+                            : "border-transparent bg-transparent text-slate-600 hover:bg-white/80"
+                        }`}
+                      >
+                        X Thread · {xThreadForPost.length}
+                      </button>
+                    </div>
+                  ) : null}
+
+                  {activeContentTab === "linkedin" ? (
+                    <>
+                      <p className="mb-3 text-lg font-semibold leading-snug">{post.hook}</p>
+                      <div className="space-y-1 rounded-xl border border-sky-200 bg-linear-to-b from-sky-50/80 to-white p-2.5">
+                        <p className="flex items-center gap-1.5 px-1 text-xs font-medium text-sky-700">
+                          <IconPencil className="h-3.5 w-3.5" />
+                          Click a body line to edit inline.
+                        </p>
+                        {bodyLineOptions.map((lineOption) => {
+                          if (lineOption.isBlank) {
+                            return <div key={`${index}-${lineOption.lineIndex}`} className="h-2" />;
+                          }
+
+                          const isSelected = selectedLine?.lineIndex === lineOption.lineIndex;
+
+                          if (isSelected) {
+                            return (
+                              <div
+                                key={`${index}-${lineOption.lineIndex}`}
+                                className="rounded-lg border border-sky-300 bg-white p-2 shadow-[0_0_0_1px_rgba(56,189,248,0.08)]"
+                              >
+                                <p className="mb-1 flex items-center gap-1.5 text-[11px] font-semibold uppercase tracking-wide text-sky-700">
+                                  <IconPencil className="h-3 w-3" />
+                                  L{lineOption.lineIndex + 1} Editing
+                                </p>
+                                <textarea
+                                  rows={2}
+                                  autoFocus
+                                  className="w-full rounded-lg border border-sky-200 bg-white px-2 py-2 text-sm text-slate-700 outline-none transition focus:border-sky-500"
+                                  value={manualLineDraft}
+                                  onChange={(event) =>
+                                    setManualLineDraftByPost((prev) => ({
+                                      ...prev,
+                                      [index]: event.target.value,
+                                    }))
+                                  }
+                                />
+                                <div className="mt-2 flex flex-wrap gap-2">
+                                  <button
+                                    type="button"
+                                    className="inline-flex items-center gap-1.5 rounded-lg border border-emerald-200 bg-emerald-50 px-2.5 py-1.5 text-xs font-medium text-emerald-700 hover:bg-emerald-100 disabled:cursor-not-allowed disabled:opacity-60"
+                                    disabled={isLoading || Boolean(rewriteLoadingKey) || !manualLineDraft.trim()}
+                                    onClick={() => applyManualBodyLineEdit(index, lineOption.lineIndex)}
+                                  >
+                                    <IconCheck className="h-3.5 w-3.5" />
+                                    Save Line
+                                  </button>
+                                  <button
+                                    type="button"
+                                    className="inline-flex items-center gap-1.5 rounded-lg border border-indigo-200 bg-indigo-50 px-2.5 py-1.5 text-xs font-medium text-indigo-700 hover:bg-indigo-100 disabled:cursor-not-allowed disabled:opacity-60"
+                                    disabled={isLoading || isLineRewriteLoading || Boolean(rewriteLoadingKey)}
+                                    onClick={() => regenerateBodyLine(index, lineOption.lineIndex)}
+                                  >
+                                    <IconSpark className="h-3.5 w-3.5" />
+                                    {isLineRewriteLoading ? "AI Rewriting..." : "AI Rewrite Line"}
+                                  </button>
+                                  <button
+                                    type="button"
+                                    className="inline-flex items-center gap-1.5 rounded-lg border border-slate-300 bg-white px-2.5 py-1.5 text-xs font-medium text-slate-700 hover:bg-slate-100 disabled:cursor-not-allowed disabled:opacity-60"
+                                    disabled={isLoading || Boolean(rewriteLoadingKey)}
+                                    onClick={() => cancelBodyLineEdit(index)}
+                                  >
+                                    <IconClose className="h-3.5 w-3.5" />
+                                    Cancel
+                                  </button>
+                                </div>
+                              </div>
+                            );
+                          }
+
+                          return (
+                            <button
+                              key={`${index}-${lineOption.lineIndex}`}
+                              type="button"
+                              className="w-full rounded-md border border-transparent px-2 py-1 text-left text-sm leading-relaxed text-slate-700 transition hover:border-sky-200 hover:bg-white"
+                              onClick={() => selectBodyLineForEditing(index, lineOption.lineIndex, lineOption.text)}
+                            >
+                              {lineOption.text}
+                            </button>
+                          );
+                        })}
+
+                        <div className="mt-2 rounded-md border border-slate-200 bg-white px-2 py-1.5">
+                          <p className="mb-0.5 text-[11px] font-semibold uppercase tracking-wide text-slate-500">CTA</p>
+                          {isCtaEditing ? (
+                            <div className="rounded-md border border-emerald-200 bg-emerald-50/40 p-2">
+                              <textarea
+                                rows={2}
+                                autoFocus
+                                className="w-full rounded-lg border border-emerald-200 bg-white px-2 py-2 text-sm font-medium text-slate-900 outline-none transition focus:border-emerald-500"
+                                value={manualCtaDraft}
+                                onChange={(event) =>
+                                  setManualCtaDraftByPost((prev) => ({
+                                    ...prev,
+                                    [index]: event.target.value,
+                                  }))
+                                }
+                              />
+                              <div className="mt-2 flex flex-wrap gap-2">
+                                <button
+                                  type="button"
+                                  className="inline-flex items-center gap-1.5 rounded-lg border border-emerald-200 bg-emerald-50 px-2.5 py-1.5 text-xs font-medium text-emerald-700 hover:bg-emerald-100 disabled:cursor-not-allowed disabled:opacity-60"
+                                  disabled={isLoading || Boolean(rewriteLoadingKey) || !manualCtaDraft.trim()}
+                                  onClick={() => applyManualCtaEdit(index)}
+                                >
+                                  <IconCheck className="h-3.5 w-3.5" />
+                                  Save CTA
+                                </button>
+                                <button
+                                  type="button"
+                                  className="inline-flex items-center gap-1.5 rounded-lg border border-indigo-200 bg-indigo-50 px-2.5 py-1.5 text-xs font-medium text-indigo-700 hover:bg-indigo-100 disabled:cursor-not-allowed disabled:opacity-60"
+                                  disabled={isLoading || isCtaRewriteLoading || Boolean(rewriteLoadingKey)}
+                                  onClick={() => regenerateCtaLine(index)}
+                                >
+                                  <IconSpark className="h-3.5 w-3.5" />
+                                  {isCtaRewriteLoading ? "AI Rewriting..." : "AI Rewrite CTA"}
+                                </button>
+                                <button
+                                  type="button"
+                                  className="inline-flex items-center gap-1.5 rounded-lg border border-slate-300 bg-white px-2.5 py-1.5 text-xs font-medium text-slate-700 hover:bg-slate-100 disabled:cursor-not-allowed disabled:opacity-60"
+                                  disabled={isLoading || Boolean(rewriteLoadingKey)}
+                                  onClick={() => cancelCtaEdit(index)}
+                                >
+                                  <IconClose className="h-3.5 w-3.5" />
+                                  Cancel
+                                </button>
+                              </div>
+                            </div>
+                          ) : (
+                            <button
+                              type="button"
+                              className="w-full rounded-md border border-transparent px-1 py-0.5 text-left text-sm font-medium text-slate-900 transition hover:border-emerald-200 hover:bg-emerald-50/60"
+                              onClick={() => selectCtaForEditing(index, post.cta)}
+                            >
+                              {post.cta}
+                            </button>
+                          )}
+                          {configuredCtaLink ? (
+                            <p className="mt-1 break-all px-1 text-[11px] text-slate-500">
+                              CTA URL used:{" "}
+                              <a
+                                href={configuredCtaLink}
+                                target="_blank"
+                                rel="noreferrer"
+                                className="text-sky-700 underline-offset-2 hover:underline"
+                              >
+                                {configuredCtaLink}
+                              </a>
+                            </p>
+                          ) : null}
+                        </div>
+                      </div>
+                    </>
+                  ) : (
+                    <div className="space-y-3 rounded-2xl border border-black/10 bg-slate-50 p-3">
                       <div className="flex flex-wrap items-center justify-between gap-2">
                         <p className="text-xs font-semibold uppercase tracking-wide text-slate-600">
                           X Thread · {xThreadForPost.length} post{xThreadForPost.length === 1 ? "" : "s"}
@@ -5741,7 +5796,7 @@ export default function Home() {
                         ))}
                       </div>
                     </div>
-                  ) : null}
+                  )}
 
                   {generatedImageDataUrls.length || generatedSourceImageUrls.length ? (
                     <div className="mt-5 space-y-2 rounded-2xl border border-black/10 bg-slate-50 p-3">
