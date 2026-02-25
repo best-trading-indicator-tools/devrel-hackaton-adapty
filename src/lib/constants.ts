@@ -22,42 +22,42 @@ export const BRAND_VOICE_PROFILES: Record<
     uiDescription:
       "Mirror the proven Adapty LinkedIn voice from your internal library: sharp, practical, data-aware, and actionable.",
     promptDirective:
-      "Match the library examples closely: same rhythm, same formatting, same storytelling style. Keep all copy original. Show why Adapty matters through real mechanisms and facts, not hype.",
+      "Match the library examples closely: same rhythm, same formatting, same storytelling style. Stack scenario + mechanism + proof. Keep all copy original. Show why Adapty matters through real mechanisms and facts, not hype.",
   },
   clickbait: {
     label: "Clickbait",
     uiDescription:
       "Use curiosity-heavy hooks and tension that invite clicks, while keeping every claim truthful and specific.",
     promptDirective:
-      "Lead with hooks that make people stop scrolling. Create real stakes and curiosity. Keep every claim factual and specific. Make people want to read the next line.",
+      "Lead with hooks that make people stop scrolling. Stack curiosity + stakes + payoff. Create real stakes. Keep every claim factual and specific. Make people want to read the next line.",
   },
   "founder personal": {
     label: "Founder Personal",
     uiDescription:
       "Write like a founder sharing learned lessons from the field, with first-person insight and concrete examples.",
     promptDirective:
-      "Write in first person like a founder sharing what they learned the hard way. Use real observations, trade-offs, and concrete examples from operating experience.",
+      "Write in first person like a founder sharing what they learned the hard way. Stack lived moment + trade-off + honest caveat. Use real observations and concrete examples from operating experience.",
   },
   "bold / contrarian": {
     label: "Bold / Contrarian",
     uiDescription:
       "Challenge common growth assumptions directly, then back the take with mechanics, caveats, and practical alternatives.",
     promptDirective:
-      "Pick a common belief in the space and challenge it directly. Back up the contrarian take with mechanics, caveats, and a better alternative. Critique decisions, not people.",
+      "Pick a common belief and challenge it directly. Stack contrarian claim + mechanism + better alternative. Back with mechanics and caveats. Critique decisions, not people.",
   },
   "technical breakdown": {
     label: "Technical Breakdown",
     uiDescription:
       "Use a clear, step-by-step analytical style with concrete metrics, framework clarity, and implementation detail.",
     promptDirective:
-      "Write like a builder explaining how something actually works. Walk through the mechanism step by step with real numbers and clear language.",
+      "Write like a builder explaining how something actually works. Stack concrete setup + step-by-step mechanism + surprising result. Use real numbers and clear language.",
   },
   "playful meme tone": {
     label: "Playful Meme Tone",
     uiDescription:
       "Keep the tone witty and internet-native while staying relevant to mobile app growth and monetization realities.",
     promptDirective:
-      "Keep it witty, internet-native, and fun. Use meme energy and humor while staying relevant to real app monetization pain points.",
+      "Keep it witty, internet-native, and fun. Stack setup + punchline + relatable pain. Use meme energy while staying relevant to real app monetization pain points.",
   },
 };
 

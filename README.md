@@ -46,7 +46,7 @@ Everything below is already implemented in this repo on `main`.
 - Input Length
   - `short`, `standard`, `long`, `mix`
 - Number of Posts
-  - 1 to 12
+  - 1 to 20
 - Extra Prompt Details
   - Free text instruction field
 
@@ -65,6 +65,50 @@ Everything below is already implemented in this repo on `main`.
 - Meme options appear for all post types (optional add-on)
 - Chart options appear for all post types
 - CTA link is optional
+
+### Stack dopamine prompt framework
+
+Posts are prompted to stack multiple dopamine elements — one hook is not enough. The shared rule: combine at least 2–3 of (a) concrete scenario, (b) counter-intuitive insight, (c) emotional payoff, (d) visual anchor when chart/meme is enabled.
+
+**Per goal**
+
+| Goal | Stack formula |
+|------|---------------|
+| virality | scenario + counter-intuitive insight + emotional payoff |
+| engagement | relatable scenario + debatable take + question |
+| traffic | specific pain + surprising angle + clear value |
+| awareness | memorable scenario + one crisp message + repeatable framing |
+| balanced | at least two of: scenario, insight, payoff |
+
+**Per brand voice**
+
+| Voice | Stack formula |
+|-------|---------------|
+| adapty | scenario + mechanism + proof |
+| clickbait | curiosity + stakes + payoff |
+| founder personal | lived moment + trade-off + honest caveat |
+| bold / contrarian | contrarian claim + mechanism + better alternative |
+| technical breakdown | concrete setup + step-by-step mechanism + surprising result |
+| playful meme tone | setup + punchline + relatable pain |
+
+**Per post type**
+
+| Post type | Stack formula |
+|-----------|---------------|
+| event / webinar | relatable scenario + why-now + logistics + takeaway |
+| product feature launch | pain story + what changed + concrete outcome |
+| sauce | concrete scenario + mechanism + numbers + caveat |
+| industry news reaction | news hook + real-team impact + implication + next move |
+| engagement farming | context + clear options + why it matters |
+| case study | before + intervention + after + measurable result |
+| hiring / team culture | culture-defining moment + ownership + human detail |
+| milestone | milestone + brief story of how + why it matters |
+| controversial hot take | contrarian claim + illustrative story + mechanics + alternative |
+| curated roundup | one takeaway per item + recommendation on what to read first |
+
+**Sauce posts and SOIS data**
+
+Sauce posts fetch real benchmark data from the SOIS (State of In-App Subscriptions) report at `https://dags.adpinfra.dev/webhook/sois-data`. Categories used: conversions, pricing, retention, paywalls, ltv, market. For Sauce posts, only numbers/percentages from the SOIS report are allowed — not from web fact-check or user input. Unsupported claims are rewritten to qualitative phrasing.
 
 ### Meme companion system
 

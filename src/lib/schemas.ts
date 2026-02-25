@@ -80,7 +80,7 @@ export function makeGeneratePostsResponseSchema(postCount: number) {
         z.object({
           length: outputLengthSchema,
           hook: z.string().min(8).max(280),
-          body: z.string().min(40).max(3500),
+          body: z.string().min(40).max(5000),
           cta: z.string().min(4).max(320),
         }),
       )

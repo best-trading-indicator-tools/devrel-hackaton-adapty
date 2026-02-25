@@ -465,7 +465,7 @@ function compactNumber(value: number): string {
     return value.toFixed(2);
   }
 
-  return value.toFixed(4).replace(/0+$/g, "").replace(/\.$/, "");
+  return value.toFixed(2).replace(/0+$/g, "").replace(/\.$/, "");
 }
 
 function asPercent(value: number): string {
@@ -498,11 +498,29 @@ function quantile(values: number[], q: number): number {
   return sorted[index] ?? 0;
 }
 
+const ORDINALS: Record<number, string> = {
+  1: "first",
+  2: "second",
+  3: "third",
+  4: "fourth",
+  5: "fifth",
+  6: "sixth",
+  7: "seventh",
+  8: "eighth",
+  9: "ninth",
+  10: "tenth",
+};
+
 function normalizeLabel(value: string): string {
-  return value
+  const base = value
     .replace(/[_\-]+/g, " ")
     .replace(/\s+/g, " ")
     .trim();
+  return base.replace(/\b([a-z]+)\s*(\d{1,2})\b/gi, (_, word, num) => {
+    const n = Number.parseInt(num, 10);
+    const ordinal = ORDINALS[n];
+    return ordinal ? `${ordinal} ${word}` : `${word} ${num}`;
+  });
 }
 
 function isScalar(value: unknown): value is string | number | boolean {
@@ -647,6 +665,16 @@ function buildEvidenceChunks(params: {
 
   if (globalRow) {
     overviewLines.push(`Global row snapshot: ${describeRow(globalRow, dimensionKeys)}`);
+    const benchmarkParts: string[] = [];
+    for (const key of numericKeys) {
+      const val = toNumeric(globalRow[key]);
+      if (val !== null) {
+        benchmarkParts.push(`${normalizeLabel(key)}: ${formatMetricValue(key, val)}`);
+      }
+    }
+    if (benchmarkParts.length) {
+      overviewLines.push(`Benchmarks: ${benchmarkParts.join(" | ")}`);
+    }
   }
 
   items.push({

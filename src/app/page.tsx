@@ -2111,7 +2111,7 @@ export default function Home() {
   }
 
   return (
-    <main className="mx-auto min-h-screen max-w-[96rem] px-4 py-6 text-slate-900 sm:px-6 sm:py-8 md:px-8 md:py-10">
+    <main className="mx-auto min-h-screen max-w-384 px-4 py-6 text-slate-900 sm:px-6 sm:py-8 md:px-8 md:py-10">
       <section className="space-y-6 lg:space-y-8">
         <form onSubmit={onSubmit} className="w-full min-w-0 space-y-5 rounded-3xl border border-black/10 bg-white/90 p-4 shadow-[0_12px_40px_rgba(0,0,0,0.08)] backdrop-blur sm:p-6">
           <header className="space-y-2">
@@ -2313,7 +2313,7 @@ export default function Home() {
                 <>
                   <div className="grid gap-3 sm:grid-cols-2">
                     <label className="flex h-full flex-col">
-                      <span className="text-sm font-medium sm:min-h-[2.75rem]">Variants Per Post</span>
+                      <span className="text-sm font-medium sm:min-h-11">Variants Per Post</span>
                       <input
                         type="number"
                         min={1}
@@ -2357,7 +2357,7 @@ export default function Home() {
                       Click one or more templates to include them. Leave all unselected for Auto.
                     </p>
 
-                    <div className="grid max-h-[26rem] grid-cols-[repeat(auto-fill,minmax(13rem,1fr))] gap-2 overflow-y-auto pr-1">
+                    <div className="grid max-h-104 grid-cols-[repeat(auto-fill,minmax(13rem,1fr))] gap-2 overflow-y-auto pr-1">
                       <button
                         type="button"
                         className={`min-h-40 rounded-xl border p-2 text-left transition ${
@@ -3091,7 +3091,7 @@ export default function Home() {
                   </div>
 
                   <p className="mb-3 text-lg font-semibold leading-snug">{post.hook}</p>
-                  <div className="space-y-1 rounded-xl border border-sky-200 bg-gradient-to-b from-sky-50/80 to-white p-2.5">
+                  <div className="space-y-1 rounded-xl border border-sky-200 bg-linear-to-b from-sky-50/80 to-white p-2.5">
                     <p className="flex items-center gap-1.5 px-1 text-xs font-medium text-sky-700">
                       <IconPencil className="h-3.5 w-3.5" />
                       Click a body line to edit inline.

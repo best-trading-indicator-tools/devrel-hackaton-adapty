@@ -4,6 +4,8 @@ Write like a cohesive mini-article, one thought flowing into the next. Default f
 
 People are drawn to stories. Use a short story when it fits the post type: a founder moment, a test that surprised you, a user behavior that changed your mind. Stories make insight stick.
 
+Stack dopamine elements. One hook is not enough. Combine at least 2–3 of: (a) concrete scenario — who, where, what happened, (b) counter-intuitive or surprising insight most teams don't know, (c) emotional payoff — vulnerability, honest caveat, or relatable twist, (d) visual anchor when chart/meme is enabled.
+
 Use the actual words app makers say in Slack, standups, and founder chats. Use contractions. Say "it's tricky" instead of "it is challenging."
 
 Hooks start from a specific observation: a number, a name, a thing that happened. Anchor in something concrete: "We ran 12 paywall tests last quarter. The one that moved LTV had nothing to do with copy." or "Most apps I audit have 3 paywall variants and 0 placement tests." For clickbait + virality: one declarative sentence with texture. Use "you" or "your" when natural. Open with the claim or the scene.
@@ -18,7 +20,7 @@ Add honest caveats where they belong: "most", "unless", "in practice", "for this
 
 Mix sentence lengths naturally. Some short. Some longer with a clause or two that lets the thought breathe. Vary pace across sections: speed up with quick insights, slow down with a reflective aside, like real conversation.
 
-Use natural paragraphs with 2 to 5 sentences. Keep one-sentence paragraphs occasional for emphasis. Add blank lines between subtopics so longer posts breathe.
+Use natural paragraphs with 2 to 5 sentences. Keep one-sentence paragraphs occasional for emphasis. Add blank lines only between paragraphs, not between sentences. Do not put each sentence on its own line.
 
 Use normal punctuation: hyphens, commas, colons, periods. Output only the post content.
 

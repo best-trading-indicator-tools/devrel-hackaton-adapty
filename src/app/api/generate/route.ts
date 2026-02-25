@@ -40,7 +40,7 @@ import {
 import { retrieveLibraryContext, type LibraryEntry } from "@/lib/library-retrieval";
 import { getProductUpdateToneContext, getPromptGuides } from "@/lib/prompt-guides";
 import { runIndustryNewsContext } from "@/lib/rss-news";
-import { retrieveSoisContext } from "@/lib/sois-context";
+import { retrieveSoisContext, type SoisContextItem } from "@/lib/sois-context";
 import {
   generatePostsRequestSchema,
   makeGeneratePostsResponseSchema,
@@ -74,6 +74,13 @@ const MEME_TEMPLATE_FLOW_RULES: Record<string, string> = {
 const FACT_CHECK_EVIDENCE_PROMPT_LIMIT = 4;
 const DEFAULT_SOIS_EVIDENCE_PROMPT_LIMIT = 8;
 const DEFAULT_SOIS_BROAD_EVIDENCE_PROMPT_LIMIT = 24;
+const DEFAULT_FAST_BATCH_THRESHOLD = 8;
+const FAST_PATH_SOIS_BROAD_EVIDENCE_PROMPT_LIMIT = 12;
+const DEFAULT_PROMPT_EXAMPLE_LIMIT = 10;
+const DEFAULT_PROMPT_EXAMPLE_CHAR_LIMIT = 1600;
+const FAST_PATH_PROMPT_EXAMPLE_LIMIT = 4;
+const FAST_PATH_PROMPT_EXAMPLE_CHAR_LIMIT = 700;
+const SAUCE_TOPIC_ANCHOR_MAX_CHARS = 220;
 const INDUSTRY_NEWS_REACTION_PATTERN = /\bindustry news reaction\b/i;
 const PRODUCT_UPDATE_PATTERN = /\bproduct feature launch\b/i;
 const SOIS_ACRONYM_PATTERN = /\bsois\b/i;
@@ -90,67 +97,67 @@ function looksLikeProductUpdatePostType(inputType: string): boolean {
 
 const GOAL_PLAYBOOKS: Record<ContentGoal, string> = {
   virality:
-    "Say the uncomfortable obvious truth your audience already suspects but rarely says out loud. Keep it specific, useful, and defensible.",
+    "Say the uncomfortable obvious truth your audience already suspects but rarely says out loud. Stack: concrete scenario + counter-intuitive insight + emotional payoff. Keep it specific, useful, and defensible.",
   engagement:
-    "Optimize for replies and conversation quality. End with a concrete question that invites expert opinions, not generic agreement.",
+    "Optimize for replies and conversation quality. Stack: relatable scenario + debatable take + question that invites expert opinions. End with a concrete question, not generic agreement.",
   traffic:
-    "Drive qualified clicks by making the promise of the linked resource concrete. Make the value of clicking immediately clear.",
+    "Drive qualified clicks by making the promise of the linked resource concrete. Stack: specific pain + surprising angle + clear value of clicking. Make the value immediately clear.",
   awareness:
-    "Maximize clarity and recall for broad audiences. Keep positioning crisp and repeat one memorable brand-level message.",
+    "Maximize clarity and recall for broad audiences. Stack: memorable scenario + one crisp message + repeatable framing. Keep positioning crisp.",
   balanced:
-    "Balance reach, comments, and clicks without over-optimizing a single metric. Prioritize clarity and practical value.",
+    "Balance reach, comments, and clicks. Stack at least two: scenario, insight, payoff. Prioritize clarity and practical value.",
 };
 
 const POST_TYPE_PLAYBOOKS: Array<{ pattern: RegExp; directive: string }> = [
   {
     pattern: /event|webinar/i,
     directive:
-      "Lead with a real operator pain or short story teams relate to, explain why this event helps in concrete terms, include explicit logistics (date/time/place), who should attend, and one practical conversation or takeaway they will get.",
+      "Lead with a real operator pain or short story teams relate to. Stack: relatable scenario + why-now + logistics + takeaway. Include explicit logistics (date/time/place), who should attend, and one practical conversation or takeaway.",
   },
   {
     pattern: /product feature launch/i,
     directive:
-      "Frame the user pain first (a story helps), then explain what changed, why it matters, and one concrete outcome or use case.",
+      "Frame the user pain first. Stack: pain story + what changed + concrete outcome. Explain why it matters and one concrete use case.",
   },
   {
     pattern: /sauce/i,
     directive:
-      "For Sauce posts, combine clear practical breakdown with data-backed insight. Anchor with a short story when it illustrates the mechanism (e.g. a test that surprised you). Use concrete numbers, explain the mechanism, and include caveats or segmentation when relevant.",
+      "For Sauce posts, combine clear practical breakdown with data-backed insight. Stack: concrete scenario (e.g. a test that surprised you) + mechanism + numbers + caveat. Use concrete numbers and include caveats or segmentation.",
   },
   {
     pattern: /industry news reaction/i,
     directive:
-      "React quickly to the news with a clear stance. A short story of how this affects a real team or scenario helps. Add concrete implication for app teams and a practical next move.",
+      "React quickly to the news with a clear stance. Stack: news hook + how it affects a real team + implication + next move. Add concrete implication and a practical next move.",
   },
   {
     pattern: /poll|quiz|engagement farming/i,
     directive:
-      "Ask a specific high-signal question with clear options and a short context block that makes voting easy and meaningful.",
+      "Ask a specific high-signal question. Stack: context block + clear options + why it matters. Make voting easy and meaningful.",
   },
   {
     pattern: /case study|social proof/i,
     directive:
-      "Tell the story: before and after framing with baseline, intervention, and measurable result. Keep claims concrete and scoped.",
+      "Tell the story. Stack: before + intervention + after + measurable result. Keep claims concrete and scoped.",
   },
   {
     pattern: /hiring|team culture/i,
     directive:
-      "Highlight role context, ownership, and why this team environment is compelling. A short story about the team or a moment that defines culture helps. Keep tone human and specific.",
+      "Highlight role context and why this team is compelling. Stack: moment that defines culture + ownership + human detail. Keep tone human and specific.",
   },
   {
     pattern: /milestone|company update/i,
     directive:
-      "Share the milestone, why it matters, and a brief story of what changed operationally to get there. Prefer specific numbers over hype.",
+      "Share the milestone and what changed operationally. Stack: milestone + brief story of how + why it matters. Prefer specific numbers over hype.",
   },
   {
     pattern: /controversial hot take/i,
     directive:
-      "Take a strong stance on a real industry habit. A short story that illustrates your point helps. Back with mechanics, caveats, and a practical alternative.",
+      "Take a strong stance on a real industry habit. Stack: contrarian claim + story that illustrates + mechanics + alternative. Back with caveats and a practical alternative.",
   },
   {
     pattern: /curated roundup/i,
     directive:
-      "Organize items into a clear digest with one practical takeaway per item and a short recommendation on what to read first.",
+      "Organize items into a clear digest. Stack: one takeaway per item + short recommendation on what to read first. Make each item reward reading.",
   },
 ];
 
@@ -201,6 +208,22 @@ function parsePositiveIntEnv(value: string | undefined, fallbackValue: number, m
     return fallbackValue;
   }
   return Math.min(maxValue, parsed);
+}
+
+function parseBooleanEnv(value: string | undefined, fallbackValue: boolean): boolean {
+  if (!value) {
+    return fallbackValue;
+  }
+
+  const normalized = value.trim().toLowerCase();
+  if (["1", "true", "yes", "on"].includes(normalized)) {
+    return true;
+  }
+  if (["0", "false", "no", "off"].includes(normalized)) {
+    return false;
+  }
+
+  return fallbackValue;
 }
 
 type NumericClaimKind = "percent" | "multiplier" | "unit" | "number";
@@ -401,6 +424,42 @@ function buildAllowedNumericClaimSet(contexts: string[]): Set<string> {
   return allowed;
 }
 
+function parseCanonicalToNumber(canonical: string): number | null {
+  const s = canonical.trim().replace(/,/g, "");
+  const withoutSuffix = s.replace(/%$/, "").replace(/x$/i, "").split(/\s/)[0];
+  const n = Number.parseFloat(withoutSuffix);
+  return Number.isFinite(n) ? n : null;
+}
+
+function numericValuesWithinTolerance(a: number, b: number): boolean {
+  const scale = Math.max(Math.abs(a), Math.abs(b), 1e-6);
+  return Math.abs(a - b) / scale < 0.02;
+}
+
+function isNumericClaimAllowed(
+  claim: NumericClaim,
+  allowedClaims: Set<string>,
+  allowApproximate: boolean,
+): boolean {
+  if (allowedClaims.has(claim.canonical)) {
+    return true;
+  }
+  if (!allowApproximate) {
+    return false;
+  }
+  const claimVal = parseCanonicalToNumber(claim.canonical);
+  if (claimVal === null) {
+    return false;
+  }
+  for (const allowed of allowedClaims) {
+    const allowedVal = parseCanonicalToNumber(allowed);
+    if (allowedVal !== null && numericValuesWithinTolerance(claimVal, allowedVal)) {
+      return true;
+    }
+  }
+  return false;
+}
+
 function countAllowedNumericClaims(value: string, allowedClaims: Set<string>): number {
   if (!allowedClaims.size) {
     return 0;
@@ -441,6 +500,132 @@ function collectBenchmarkEvidenceSnippets(contexts: string[], maxSnippets = 60):
   }
 
   return snippets;
+}
+
+type SauceTopicPillar = {
+  key: string;
+  label: string;
+  categories: string[];
+  pattern: RegExp;
+};
+
+const SAUCE_TOPIC_PILLARS: SauceTopicPillar[] = [
+  {
+    key: "pricing",
+    label: "Pricing strategy",
+    categories: ["pricing"],
+    pattern: /\b(price|pricing|usd|annual|monthly|weekly|plan)\b/i,
+  },
+  {
+    key: "conversions",
+    label: "Trial-to-paid conversion",
+    categories: ["conversions"],
+    pattern: /\b(trial|install to paid|download to paid|direct rate|conversion)\b/i,
+  },
+  {
+    key: "retention",
+    label: "Retention and renewals",
+    categories: ["retention"],
+    pattern: /\b(retention|renewal|churn|cohort)\b/i,
+  },
+  {
+    key: "paywalls",
+    label: "Paywall and placement mechanics",
+    categories: ["paywalls"],
+    pattern: /\b(paywall|placement|onboarding|experiment)\b/i,
+  },
+  {
+    key: "ltv",
+    label: "LTV and revenue quality",
+    categories: ["ltv"],
+    pattern: /\b(ltv|lifetime value|arpu|revenue)\b/i,
+  },
+  {
+    key: "market",
+    label: "Market dynamics",
+    categories: ["market"],
+    pattern: /\b(market|region|category|share|concentration|competition)\b/i,
+  },
+];
+
+function clipTextAtWordBoundary(value: string, maxChars: number): string {
+  if (value.length <= maxChars) {
+    return value;
+  }
+
+  const clipped = value.slice(0, maxChars + 1).replace(/\s+\S*$/, "").trim();
+  const fallback = value.slice(0, maxChars).trim();
+  return `${clipped || fallback}...`;
+}
+
+function compactSoisEvidenceAnchor(text: string): string {
+  const normalized = normalizeNoEmDash(text.replace(/\s*\n+\s*/g, " | ").replace(/\s+/g, " ").trim());
+  return clipTextAtWordBoundary(normalized, SAUCE_TOPIC_ANCHOR_MAX_CHARS);
+}
+
+function extractSauceAnchorFromItem(item: SoisContextItem): string {
+  const segments = item.text
+    .split(/\n|\|/)
+    .map((segment) => normalizeNoEmDash(segment.replace(/^[-*]\s*/, "").replace(/\s+/g, " ").trim()))
+    .filter(Boolean);
+
+  const withNumbers = segments.find((segment) => /\d/.test(segment));
+  const fallback = segments[0] ?? `${item.categoryLabel} ${item.subcategoryLabel}`;
+  return compactSoisEvidenceAnchor(withNumbers ?? fallback);
+}
+
+function sauceItemMatchesPillar(item: SoisContextItem, pillar: SauceTopicPillar): boolean {
+  if (pillar.categories.includes(item.category)) {
+    return true;
+  }
+
+  const haystack = `${item.categoryLabel} ${item.subcategoryLabel} ${item.text}`;
+  return pillar.pattern.test(haystack);
+}
+
+function buildSauceAutoTopicPlan(items: SoisContextItem[], postCount: number): string[] {
+  if (postCount <= 0) {
+    return [];
+  }
+
+  const sortedItems = [...items].sort((a, b) => a.id.localeCompare(b.id));
+  const rankedPillars = SAUCE_TOPIC_PILLARS
+    .map((pillar, index) => {
+      const matchedItems = sortedItems.filter((item) => sauceItemMatchesPillar(item, pillar));
+      const maxRows = matchedItems.reduce((maxRowsValue, item) => Math.max(maxRowsValue, item.rows), 0);
+      const score = matchedItems.length * 100 + maxRows;
+
+      return {
+        pillar,
+        index,
+        matchedItems,
+        score,
+      };
+    })
+    .sort((a, b) => b.score - a.score || a.index - b.index);
+
+  const cyclePillars = rankedPillars.filter((entry) => entry.matchedItems.length > 0);
+  const activePillars = cyclePillars.length ? cyclePillars : rankedPillars;
+  const usageByPillar = new Map<string, number>();
+
+  return Array.from({ length: postCount }, (_, index) => {
+    const entry = activePillars[index % activePillars.length];
+    const usedCount = usageByPillar.get(entry.pillar.key) ?? 0;
+    usageByPillar.set(entry.pillar.key, usedCount + 1);
+
+    const evidenceItem = entry.matchedItems.length ? entry.matchedItems[usedCount % entry.matchedItems.length] : null;
+
+    if (!evidenceItem) {
+      return `Post ${index + 1}: ${entry.pillar.label}
+- Primary pillar: ${entry.pillar.label}
+- Anchor: No SOIS evidence matched this pillar in current retrieval results. Keep this post qualitative and mechanism-focused.`;
+    }
+
+    return `Post ${index + 1}: ${entry.pillar.label}
+- Primary pillar: ${evidenceItem.categoryLabel} / ${evidenceItem.subcategoryLabel}
+- Anchor: ${extractSauceAnchorFromItem(evidenceItem)}
+- Source: ${evidenceItem.sourceUrl}`;
+  });
 }
 
 function toPluralUnit(unit: string): string {
@@ -576,12 +761,18 @@ function contextAwareNumericSplice(
     .trim();
 }
 
-function rewriteUnsupportedNumericClaims(value: string, allowedClaims: Set<string>): {
+function rewriteUnsupportedNumericClaims(
+  value: string,
+  allowedClaims: Set<string>,
+  allowApproximate = false,
+): {
   value: string;
   unsupportedClaims: NumericClaim[];
 } {
   const claims = extractNumericClaims(value);
-  const unsupportedClaims = claims.filter((claim) => !allowedClaims.has(claim.canonical));
+  const unsupportedClaims = claims.filter(
+    (claim) => !isNumericClaimAllowed(claim, allowedClaims, allowApproximate),
+  );
 
   if (!unsupportedClaims.length) {
     return {
@@ -713,13 +904,17 @@ function sanitizeHookNumericClaimRepetition(
   };
 }
 
-function sanitizeHookSuggestionsNumericClaims(hooks: string[], allowedClaims: Set<string>): {
+function sanitizeHookSuggestionsNumericClaims(
+  hooks: string[],
+  allowedClaims: Set<string>,
+  allowApproximate = false,
+): {
   hooks: string[];
   unsupportedClaims: NumericClaim[];
 } {
   const unsupportedClaims: NumericClaim[] = [];
   const sanitizedHooks = hooks.map((hook) => {
-    const result = rewriteUnsupportedNumericClaims(hook, allowedClaims);
+    const result = rewriteUnsupportedNumericClaims(hook, allowedClaims, allowApproximate);
     unsupportedClaims.push(...result.unsupportedClaims);
     return result.value;
   });
@@ -733,15 +928,16 @@ function sanitizeHookSuggestionsNumericClaims(hooks: string[], allowedClaims: Se
 function sanitizeGeneratedPostsNumericClaims<T extends { hook: string; body: string; cta: string }>(
   posts: T[],
   allowedClaims: Set<string>,
+  allowApproximate = false,
 ): {
   posts: T[];
   unsupportedClaims: NumericClaim[];
 } {
   const unsupportedClaims: NumericClaim[] = [];
   const sanitizedPosts = posts.map((post) => {
-    const hookResult = rewriteUnsupportedNumericClaims(post.hook, allowedClaims);
-    const bodyResult = rewriteUnsupportedNumericClaims(post.body, allowedClaims);
-    const ctaResult = rewriteUnsupportedNumericClaims(post.cta, allowedClaims);
+    const hookResult = rewriteUnsupportedNumericClaims(post.hook, allowedClaims, allowApproximate);
+    const bodyResult = rewriteUnsupportedNumericClaims(post.body, allowedClaims, allowApproximate);
+    const ctaResult = rewriteUnsupportedNumericClaims(post.cta, allowedClaims, allowApproximate);
     unsupportedClaims.push(...hookResult.unsupportedClaims, ...bodyResult.unsupportedClaims, ...ctaResult.unsupportedClaims);
     return {
       ...post,
@@ -834,8 +1030,13 @@ function stripAiScaffoldOpeners(paragraph: string): string {
   return stripped || trimmed;
 }
 
+function collapseSingleNewlinesToSpaces(text: string): string {
+  return text.replace(/\n+/g, " ").replace(/\s+/g, " ").trim();
+}
+
 function normalizeBodyRhythm(body: string): string {
-  const paragraphs = splitParagraphs(body).map(stripAiScaffoldOpeners).filter(Boolean);
+  const rawParagraphs = splitParagraphs(body).map(stripAiScaffoldOpeners).filter(Boolean);
+  const paragraphs = rawParagraphs.map((p) => collapseSingleNewlinesToSpaces(p));
   if (paragraphs.length < 4) {
     return paragraphs.join("\n\n");
   }
@@ -1682,7 +1883,12 @@ function resolveAutoHookDirective(params: { style: string; inputType: string; go
       ? " Hook must be one declarative sentence with a concrete fact people suspect but rarely say. Use you/your. Do not start with If."
       : "";
 
-  return `Hook: make it specific, scroll-stopping, and matched to the voice and goal.${clickbaitViralityRule}`;
+  const viralityStackRule =
+    params.goal === "virality"
+      ? " Stack the hook with at least one more dopamine element in the first line or two: scenario, surprise, or payoff."
+      : "";
+
+  return `Hook: make it specific, scroll-stopping, and matched to the voice and goal.${clickbaitViralityRule}${viralityStackRule}`;
 }
 
 function resolvePostTypeDirective(inputType: string): string {
@@ -2109,6 +2315,39 @@ export async function POST(request: Request) {
       DEFAULT_SOIS_BROAD_EVIDENCE_PROMPT_LIMIT,
       80,
     );
+    const fastBatchThreshold = parsePositiveIntEnv(
+      process.env.GENERATION_FAST_BATCH_THRESHOLD,
+      DEFAULT_FAST_BATCH_THRESHOLD,
+      20,
+    );
+    const forceFullPasses = parseBooleanEnv(process.env.GENERATION_FORCE_FULL_PASSES, false);
+    const preferFastPath = input.numberOfPosts >= fastBatchThreshold && !forceFullPasses;
+    const effectiveSoisBroadEvidencePromptLimit = preferFastPath
+      ? Math.min(soisBroadEvidencePromptLimit, FAST_PATH_SOIS_BROAD_EVIDENCE_PROMPT_LIMIT)
+      : soisBroadEvidencePromptLimit;
+    const promptExampleLimit = parsePositiveIntEnv(
+      process.env.PROMPT_EXAMPLE_LIMIT,
+      DEFAULT_PROMPT_EXAMPLE_LIMIT,
+      20,
+    );
+    const promptExampleCharLimit = parsePositiveIntEnv(
+      process.env.PROMPT_EXAMPLE_CHAR_LIMIT,
+      DEFAULT_PROMPT_EXAMPLE_CHAR_LIMIT,
+      5000,
+    );
+    const effectivePromptExampleLimit = preferFastPath
+      ? Math.min(promptExampleLimit, FAST_PATH_PROMPT_EXAMPLE_LIMIT)
+      : promptExampleLimit;
+    const effectivePromptExampleCharLimit = preferFastPath
+      ? Math.min(promptExampleCharLimit, FAST_PATH_PROMPT_EXAMPLE_CHAR_LIMIT)
+      : promptExampleCharLimit;
+
+    if (preferFastPath) {
+      console.info(
+        `Generation fast-path enabled for ${input.numberOfPosts} posts (threshold=${fastBatchThreshold}): trimming prompt context for speed.`,
+      );
+    }
+
     const retrievalQuery = [
       input.goal,
       input.style,
@@ -2169,10 +2408,12 @@ export async function POST(request: Request) {
     ]);
 
     const examplesForPrompt = retrieval.entries
-      .slice(0, 10)
+      .slice(0, effectivePromptExampleLimit)
       .map(
         (entry, index) =>
-          `Example ${index + 1}${formatExampleMetrics(entry)}:\n${normalizeNoEmDash(entry.text.slice(0, 1600))}`,
+          `Example ${index + 1}${formatExampleMetrics(entry)}:\n${normalizeNoEmDash(
+            entry.text.slice(0, effectivePromptExampleCharLimit),
+          )}`,
       )
       .join("\n\n---\n\n");
 
@@ -2244,12 +2485,22 @@ export async function POST(request: Request) {
     const industryNewsTopicPlanSummary = industryNewsTopicPlanLines.length
       ? industryNewsTopicPlanLines.join("\n\n")
       : "(none)";
+    const shouldUseSauceAutoTopicPlan = looksLikeSaucePostType(input.inputType) && !hasSpecificSoisPromptDetails;
+    const sauceTopicPlanLines = shouldUseSauceAutoTopicPlan
+      ? buildSauceAutoTopicPlan(soisContext.items, input.numberOfPosts)
+      : [];
+    const sauceTopicPlanSummary = sauceTopicPlanLines.length ? sauceTopicPlanLines.join("\n\n") : "(none)";
+    const sauceTopicExecutionDirective = shouldUseSauceAutoTopicPlan
+      ? sauceTopicPlanLines.length
+        ? "Sauce auto-topic planner is active because Details is empty. Follow the per-post Sauce topic plan strictly: each post must center on its assigned pillar and anchor."
+        : "Sauce auto-topic planner is active because Details is empty, but no SOIS evidence was retrieved. Follow assigned pillars and keep claims qualitative."
+      : "No Sauce auto-topic plan required.";
     const webEvidenceLines = webFactCheck.evidenceLines
       .slice(0, FACT_CHECK_EVIDENCE_PROMPT_LIMIT)
       .map((line) => normalizeNoEmDash(line));
     const soisEvidencePromptLimit = hasSpecificSoisPromptDetails
       ? DEFAULT_SOIS_EVIDENCE_PROMPT_LIMIT
-      : soisBroadEvidencePromptLimit;
+      : effectiveSoisBroadEvidencePromptLimit;
     const soisEvidenceLines = soisContext.items.slice(0, soisEvidencePromptLimit).map((item, index) => {
       const compactText = normalizeNoEmDash(item.text.replace(/\s*\n+\s*/g, " | "));
       return `${index + 1}. [${item.categoryLabel} ${item.subcategory}] ${item.subcategoryLabel}
@@ -2280,6 +2531,7 @@ export async function POST(request: Request) {
         chartPromptSummary,
         industryNewsContextSummary,
         industryNewsTopicPlanSummary,
+        sauceTopicPlanSummary,
       ].filter(Boolean),
     );
     const sauceBenchmarkNumericClaims = buildAllowedNumericClaimSet(
@@ -2304,8 +2556,8 @@ ${promptGuides.paywall}
 
 Sauce number rule:
 - Default target is 1 to 2 benchmark numbers per post, not a metric dump.
-- Every number must be copied verbatim from the SOIS or web evidence below.
-- If relevant evidence exists, each Sauce post must include at least one benchmark number.
+- Every number or percentage must come from the SOIS evidence below only. Do not use numbers from web fact-check or user input.
+- If relevant SOIS evidence exists, each Sauce post must include at least one benchmark number.
 - Do not repeat the same benchmark number multiple times in the same post or across most hook suggestions.
 `
       : "";
@@ -2338,7 +2590,7 @@ ${promptGuides.factCheck}
 
 Output format:
 - For each post return: hook (first line), body (full post excluding CTA), cta (final action line).
-- Use line breaks between subtopics so posts breathe.
+- Use paragraphs of 2-4 sentences. Add blank lines only between paragraphs, not between sentences. Do not put each sentence on its own line.
 - If CTA link is provided, weave it naturally into the CTA line.
 - For multi-post industry news batches, anchor each post to a different news item.
 - When source metadata says "others", use for structural inspiration, not voice imitation.
@@ -2360,6 +2612,14 @@ ${toBulletedSection(QUALITY_GATE_PROMPT_LINES)}
 - Variants per post: ${memeVariantTarget}
 - GIPHY companions: ${input.giphyEnabled ? "enabled" : "disabled"}
 - GIPHY query hint: ${giphyQueryPreference || "(auto from each post content)"}`
+      : "";
+    const sauceAutoTopicPlanSection = shouldUseSauceAutoTopicPlan
+      ? `
+Sauce topic context:
+${sauceTopicExecutionDirective}
+
+Per-post Sauce topic plan:
+${sauceTopicPlanSummary}`
       : "";
 
     const userPrompt = `
@@ -2385,7 +2645,7 @@ Generation request:
 Required length per post:
 ${lengthPlan.map((length, index) => `${index + 1}. ${length} -> ${lengthGuide(length)}`).join("\n")}
 
-Evidence context (priority order: SOIS > web). Numbers from SOIS are real benchmarks — use them, they make posts more compelling. Copy numbers verbatim from the evidence below. Use each number for its labeled metric only: install_to_paid_rate as %, avg_ltv as $, price_usd as $. When a number is not in the evidence, write the sentence without it. For Sauce posts, use 1-2 benchmark numbers total per post.
+Evidence context (priority order: SOIS > web). Numbers from SOIS are real benchmarks — use them, they make posts more compelling. Copy numbers verbatim from the evidence below. Use each number for its labeled metric only: install_to_paid_rate as %, avg_ltv as $, price_usd as $. When a number is not in the evidence, write the sentence without it. For Sauce posts: only use numbers from the SOIS evidence below (not from web fact-check or user input). Use 1-2 benchmark numbers total per post.
 
 1. SOIS (Adapty State of In-App Subscriptions) — fetched from dags.adpinfra.dev:
 ${soisEvidenceForPrompt}
@@ -2399,6 +2659,7 @@ ${industryNewsExecutionDirective}
 
 Per-post industry topic plan:
 ${industryNewsTopicPlanSummary}
+${sauceAutoTopicPlanSection}
 
 Also generate a list of hook suggestions inspired by this style and request.
 `;
@@ -2502,8 +2763,12 @@ Also generate a list of hook suggestions inspired by this style and request.
     let fallbackUsed = false;
 
     let parsed: GeneratedBatch;
+    const enableIndustryNewsSplit = parseBooleanEnv(process.env.ENABLE_INDUSTRY_NEWS_SPLIT, false);
     const shouldSplitIndustryNewsBatch =
-      looksLikeIndustryNewsReactionPostType(input.inputType) && input.numberOfPosts > 1 && industryNewsContext.items.length > 1;
+      enableIndustryNewsSplit &&
+      looksLikeIndustryNewsReactionPostType(input.inputType) &&
+      input.numberOfPosts > 1 &&
+      industryNewsContext.items.length > 1;
 
     if (shouldSplitIndustryNewsBatch) {
       const batchHooks: string[] = [];
@@ -2637,7 +2902,10 @@ ${rankedContextLines}`;
     let normalizedPosts = normalizeGeneratedPosts(parsed.posts);
     let qualityIssuesByPost = collectQualityIssues(normalizedPosts);
 
-    if (qualityIssuesByPost.length > 0) {
+    const enableQualityRepairPass = parseBooleanEnv(process.env.ENABLE_QUALITY_REPAIR_PASS, false);
+    const shouldRunQualityRepairPass = enableQualityRepairPass && qualityIssuesByPost.length > 0;
+
+    if (shouldRunQualityRepairPass) {
       const qualityIssueSummary = qualityIssuesByPost
         .map(
           (item) =>
@@ -2683,12 +2951,22 @@ ${toBulletedSection(QUALITY_REPAIR_REQUIREMENT_LINES)}
       parsed = repairedBatchRun.parsed;
       normalizedPosts = normalizeGeneratedPosts(parsed.posts);
       qualityIssuesByPost = collectQualityIssues(normalizedPosts);
+    } else if (qualityIssuesByPost.length > 0 && !enableQualityRepairPass) {
+      console.info(
+        `Quality repair pass disabled (ENABLE_QUALITY_REPAIR_PASS=false): proceeding to editor review with ${qualityIssuesByPost.length} post(s) flagged after first draft.`,
+      );
     }
 
     const shouldRunCodexReviewPass = useClaudeWriter && Boolean(oauthCredentials);
-    const shouldRunEditorPass = qualityIssuesByPost.length > 0 || shouldRunCodexReviewPass;
+    const skipEditorForTest = process.env.SKIP_CODEX_EDITOR === "1";
+    const shouldRunEditorPass =
+      !skipEditorForTest && (qualityIssuesByPost.length > 0 || shouldRunCodexReviewPass);
 
     if (shouldRunEditorPass) {
+      const sauceSoisVerificationGoal =
+        looksLikeSaucePostType(input.inputType) && shouldRunCodexReviewPass
+          ? "For Sauce posts: verify every number or percentage appears verbatim in the SOIS evidence above. Replace any number not from SOIS with qualitative phrasing."
+          : "";
       const editorPassGoals = [
         qualityIssuesByPost.length > 0
           ? "Fix the remaining quality-gate issues without changing the core argument."
@@ -2696,6 +2974,7 @@ ${toBulletedSection(QUALITY_REPAIR_REQUIREMENT_LINES)}
         shouldRunCodexReviewPass
           ? "Run a second-pass factual QA pass: verify benchmark numbers and metric labels against evidence, and tighten weak phrasing."
           : "",
+        sauceSoisVerificationGoal,
       ]
         .filter(Boolean)
         .map((line) => `- ${line}`)
@@ -2716,6 +2995,7 @@ Do this:
 - Start with the point. Remove sentences that only frame the next one.
 - Rewrite sentences that restate themselves in two halves separated by a comma or period.
 - Replace stiff phrasing with how someone would actually say it.
+- Keep paragraphs of 2-4 sentences. Add blank lines only between paragraphs, not between sentences. Do not put each sentence on its own line.
 - Say "app makers" or "app founders" instead of "teams" or "operators."
 - Use digits for numbers ("3 things" not "three things").
 - Use hyphens, commas, and periods.
@@ -2725,6 +3005,7 @@ Fact and benchmark rules:
 - Keep a number only if it appears verbatim in the provided evidence context.
 - When a numeric claim is unsupported, rewrite it qualitatively.
 - Use each metric in its correct unit: conversion as %, LTV as currency, price as currency.
+- For Sauce posts: only keep numbers that appear verbatim in the SOIS evidence above (not web evidence). Replace any other number with qualitative phrasing.
 - For Sauce posts with benchmark evidence, use 1-2 benchmark numbers per post.
 - Vary benchmark numbers across posts and hook suggestions.
 
@@ -2835,10 +3116,23 @@ Return ${parsed.hooks.length} hook suggestions as well (keep good ones, tighten 
     }
 
     let normalizedHooks = parsed.hooks.map((hook) => normalizeNoEmDash(hook));
-    const sanitizedHooksResult = sanitizeHookSuggestionsNumericClaims(normalizedHooks, allowedNumericClaims);
+    const sauceUsesSoisOnly =
+      looksLikeSaucePostType(input.inputType) && sauceBenchmarkNumericClaims.size > 0;
+    const hooksAllowedClaims = sauceUsesSoisOnly ? sauceBenchmarkNumericClaims : allowedNumericClaims;
+    const postsAllowedClaims = sauceUsesSoisOnly ? sauceBenchmarkNumericClaims : allowedNumericClaims;
+
+    const sanitizedHooksResult = sanitizeHookSuggestionsNumericClaims(
+      normalizedHooks,
+      hooksAllowedClaims,
+      sauceUsesSoisOnly,
+    );
     normalizedHooks = sanitizedHooksResult.hooks.map((hook) => normalizeNoEmDash(hook));
 
-    const sanitizedPostsResult = sanitizeGeneratedPostsNumericClaims(normalizedPosts, allowedNumericClaims);
+    const sanitizedPostsResult = sanitizeGeneratedPostsNumericClaims(
+      normalizedPosts,
+      postsAllowedClaims,
+      sauceUsesSoisOnly,
+    );
     normalizedPosts = sanitizedPostsResult.posts;
 
     const numericClaimsSanitizedCount =
@@ -2849,8 +3143,12 @@ Return ${parsed.hooks.length} hook suggestions as well (keep good ones, tighten 
       );
     }
 
-    if (looksLikeSaucePostType(input.inputType) && sauceBenchmarkNumericClaims.size > 0) {
-      const sauceHookSanitization = sanitizeHookSuggestionsNumericClaims(normalizedHooks, sauceBenchmarkNumericClaims);
+    if (sauceUsesSoisOnly) {
+      const sauceHookSanitization = sanitizeHookSuggestionsNumericClaims(
+        normalizedHooks,
+        sauceBenchmarkNumericClaims,
+        true,
+      );
       normalizedHooks = sauceHookSanitization.hooks.map((hook) => normalizeNoEmDash(hook));
       const sauceHookRepetitionSanitization = sanitizeHookNumericClaimRepetition(
         normalizedHooks,
@@ -2859,7 +3157,11 @@ Return ${parsed.hooks.length} hook suggestions as well (keep good ones, tighten 
       );
       normalizedHooks = sauceHookRepetitionSanitization.hooks.map((hook) => normalizeNoEmDash(hook));
 
-      const saucePostSanitization = sanitizeGeneratedPostsNumericClaims(normalizedPosts, sauceBenchmarkNumericClaims);
+      const saucePostSanitization = sanitizeGeneratedPostsNumericClaims(
+        normalizedPosts,
+        sauceBenchmarkNumericClaims,
+        true,
+      );
       normalizedPosts = saucePostSanitization.posts;
 
       const sauceStrictSanitizedCount =
@@ -2903,7 +3205,12 @@ Return ${parsed.hooks.length} hook suggestions as well (keep good ones, tighten 
       });
 
       if (injectedBenchmarkAnchors > 0) {
-        const reSanitizedPostsResult = sanitizeGeneratedPostsNumericClaims(normalizedPosts, allowedNumericClaims);
+        const reSanitizedClaims = sauceUsesSoisOnly ? sauceBenchmarkNumericClaims : allowedNumericClaims;
+        const reSanitizedPostsResult = sanitizeGeneratedPostsNumericClaims(
+          normalizedPosts,
+          reSanitizedClaims,
+          sauceUsesSoisOnly,
+        );
         normalizedPosts = reSanitizedPostsResult.posts;
         if (reSanitizedPostsResult.unsupportedClaims.length > 0) {
           console.warn(

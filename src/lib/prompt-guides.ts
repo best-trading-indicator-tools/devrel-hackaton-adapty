@@ -23,7 +23,7 @@ const DEFAULT_GUIDES: PromptGuides = {
     "Use this default flow: observation, why it matters, mechanism/example, practical next move.",
     "Address reader directly at least once with you or your team when natural.",
     "Include one operator action sentence using verbs like test, measure, compare, or fix.",
-    "Use line breaks for readability. Add blank lines between subtopics.",
+    "Use paragraphs of 2-4 sentences. Add blank lines only between paragraphs, not between sentences. Do not put each sentence on its own line.",
     "Use fuller paragraphs with 2-4 sentences. Keep one-line paragraphs occasional.",
     "Include concrete proof units and caveats.",
     "Use the words app makers use in real conversations.",
