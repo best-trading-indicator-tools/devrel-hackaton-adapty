@@ -46,6 +46,7 @@ export const generatePostsRequestSchema = z.object({
   style: z.string().trim().min(1).max(260).default("adapty"),
   goal: z.enum(GOAL_OPTIONS).default("virality"),
   inputType: z.string().trim().min(1).max(120),
+  createXPosts: z.coerce.boolean().default(false),
   chartEnabled: z.coerce.boolean().default(false),
   chartType: z.enum(CHART_TYPE_OPTIONS).default("doughnut"),
   chartTitle: z.string().trim().max(140).default(""),
@@ -77,7 +78,7 @@ export const generatePostsRequestSchema = z.object({
   imageDataUrl: optionalImageDataUrlSchema.default(""),
   imageDataUrls: z.array(imageDataUrlSchema).max(3).default([]),
   inputLength: inputLengthSchema,
-  numberOfPosts: z.coerce.number().int().min(1).max(20).default(3),
+  numberOfPosts: z.coerce.number().int().min(1).max(20).default(1),
   details: z.string().trim().max(3000).default(""),
 });
 
@@ -117,6 +118,7 @@ export type GeneratePostsResponse = {
     hook: string;
     body: string;
     cta: string;
+    xThread?: string[];
     meme?: {
       rank: number;
       templateId: MemeTemplateId;

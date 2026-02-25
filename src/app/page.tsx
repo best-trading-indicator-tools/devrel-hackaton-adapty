@@ -38,6 +38,7 @@ type FormState = {
   style: string;
   goal: ContentGoal;
   inputType: string;
+  createXPosts: boolean;
   chartEnabled: boolean;
   chartType: ChartTypeOption;
   chartTitle: string;
@@ -67,12 +68,13 @@ type FormState = {
 type GeneratedPost = GeneratePostsResponse["posts"][number];
 type MemeCompanion = NonNullable<GeneratedPost["meme"]>;
 type GiphyCompanion = NonNullable<GeneratedPost["giphy"]>;
-type CopyAction = "post_images" | "memes" | "giphy" | "everything";
+type CopyAction = "post_images" | "x_thread" | "memes" | "giphy" | "everything";
 
 const defaultForm: FormState = {
   style: "adapty",
   goal: "virality",
   inputType: POST_TYPE_OPTIONS[1],
+  createXPosts: false,
   chartEnabled: false,
   chartType: "doughnut",
   chartTitle: "",
@@ -95,7 +97,7 @@ const defaultForm: FormState = {
   ctaLink: "",
   imageDataUrl: "",
   inputLength: "medium",
-  numberOfPosts: 3,
+  numberOfPosts: 1,
   details: "",
 };
 
@@ -945,6 +947,7 @@ function sanitizeGenerationResult(result: GeneratePostsResponse): GeneratePostsR
       hook: normalizeNoEmDash(post.hook),
       body: normalizeNoEmDash(post.body),
       cta: normalizeNoEmDash(post.cta),
+      xThread: post.xThread?.map((threadPost) => normalizeNoEmDash(threadPost)),
       meme: post.meme
         ? {
             ...post.meme,
@@ -1356,6 +1359,21 @@ function buildGiphyCompanionsTextForCopy(giphyVariants: GiphyCompanion[]): strin
   return ["GIPHY companions:", ...blocks].join("\n\n");
 }
 
+function normalizeXThreadPosts(threadPosts: string[]): string[] {
+  return threadPosts
+    .map((threadPost) => normalizeNoEmDash(threadPost).trim())
+    .filter(Boolean);
+}
+
+function buildXThreadTextForCopy(threadPosts: string[]): string {
+  const normalizedThreadPosts = normalizeXThreadPosts(threadPosts);
+  if (!normalizedThreadPosts.length) {
+    return "";
+  }
+
+  return normalizedThreadPosts.join("\n\n\n");
+}
+
 function buildRichClipboardHtml(params: {
   textSections: string[];
   sourceUrls: string[];
@@ -1751,6 +1769,15 @@ async function copyPostAndImagesToClipboard(params: {
   return copyTextToClipboard(plainText);
 }
 
+async function copyXThreadToClipboard(threadPosts: string[]): Promise<boolean> {
+  const threadText = buildXThreadTextForCopy(threadPosts);
+  if (!threadText) {
+    return false;
+  }
+
+  return copyTextToClipboard(threadText);
+}
+
 async function copyMemeCompanionsToClipboard(memeVariants: MemeCompanion[]): Promise<boolean> {
   const memeText = buildMemeCompanionsTextForCopy(memeVariants);
   if (!memeText) {
@@ -1810,6 +1837,10 @@ async function copyEverythingToClipboard(params: {
 export default function Home() {
   const baseControlClassName =
     "block w-full rounded-xl border border-black/10 bg-white px-3 py-2 text-sm outline-none transition focus:border-slate-900";
+  const calendarControlButtonClassName =
+    "inline-flex cursor-pointer items-center justify-center rounded-lg border border-slate-300 bg-white px-2 py-1 text-xs font-medium text-slate-800 shadow-sm transition hover:border-slate-400 hover:bg-slate-100 hover:shadow active:scale-[0.99] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-sky-300 disabled:cursor-not-allowed disabled:opacity-45";
+  const calendarPrimaryButtonClassName =
+    "inline-flex cursor-pointer items-center justify-center rounded-lg border border-sky-300 bg-sky-50 px-2 py-1 text-xs font-semibold text-sky-900 shadow-sm transition hover:border-sky-400 hover:bg-sky-100 hover:shadow active:scale-[0.99] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-sky-300 disabled:cursor-not-allowed disabled:opacity-45";
   const selectableCardSelectedClass =
     "border-sky-500 bg-sky-50 shadow-[0_0_0_1px_rgba(56,189,248,0.22)]";
   const selectableCardUnselectedClass = "border-black/10 bg-white hover:border-slate-400 hover:bg-slate-50";
@@ -2147,6 +2178,7 @@ export default function Home() {
       }),
     [],
   );
+  const canCreateXPosts = form.inputLength === "long" || form.inputLength === "very long";
 
   const subtitle = useMemo(() => {
     const scopeParts: string[] = [];
@@ -2488,6 +2520,14 @@ export default function Home() {
 
     setSelectedGeneratedPostsDates((previous) => previous.filter((date) => generatedPostIndicesByDate.has(date)));
   }, [generatedPostDates, generatedPostIndicesByDate]);
+
+  useEffect(() => {
+    if (canCreateXPosts) {
+      return;
+    }
+
+    setForm((prev) => (prev.createXPosts ? { ...prev, createXPosts: false } : prev));
+  }, [canCreateXPosts]);
 
   async function reloadNotionCalendar() {
     setNotionCalendarSyncLoading(true);
@@ -2938,6 +2978,7 @@ export default function Home() {
 
             const requestPayload = {
               ...form,
+              createXPosts: canCreateXPosts ? form.createXPosts : false,
               style: allocation.style,
               goal: allocation.goal,
               inputType: allocation.inputType,
@@ -3811,7 +3852,7 @@ export default function Home() {
       <section className="space-y-6 lg:space-y-8">
         <form onSubmit={onSubmit} className="w-full min-w-0 space-y-5 rounded-3xl border border-black/10 bg-white/90 p-4 shadow-[0_12px_40px_rgba(0,0,0,0.08)] backdrop-blur sm:p-6">
           <header className="space-y-2">
-            <p className="inline-block rounded-full bg-slate-900 px-3 py-1 text-xs tracking-wide text-white">LinkedIn Generator</p>
+            <p className="inline-block rounded-full bg-slate-900 px-3 py-1 text-xs tracking-wide text-white">LinkedIn/X Generator</p>
             <h1 className="text-3xl font-semibold leading-tight md:text-4xl">Adapty Content Studio</h1>
             <p className="text-sm text-slate-600">Generate multiple post variants with hook suggestions, based on your own winning library.</p>
           </header>
@@ -3999,7 +4040,7 @@ export default function Home() {
                 <button
                   type="button"
                   disabled={slackProductUpdatesSyncLoading}
-                  className="rounded-lg border border-black/10 bg-white px-2 py-1 text-xs text-slate-700 hover:bg-slate-50 disabled:opacity-50"
+                  className={calendarControlButtonClassName}
                   onClick={reloadSlackProductUpdates}
                 >
                   {slackProductUpdatesSyncLoading ? "Reloading…" : "Reload"}
@@ -4014,7 +4055,7 @@ export default function Home() {
                     <div className="flex items-center gap-1">
                       <button
                         type="button"
-                        className="rounded-lg border border-black/10 bg-white px-2 py-1 text-xs text-slate-700 hover:bg-slate-50"
+                        className={calendarControlButtonClassName}
                         onClick={showPreviousProductUpdatesMonth}
                         aria-label="Show previous month"
                       >
@@ -4022,14 +4063,14 @@ export default function Home() {
                       </button>
                       <button
                         type="button"
-                        className="rounded-lg border border-black/10 bg-white px-2 py-1 text-xs text-slate-700 hover:bg-slate-50"
+                        className={calendarControlButtonClassName}
                         onClick={jumpToCurrentProductUpdatesMonth}
                       >
                         Today
                       </button>
                       <button
                         type="button"
-                        className="rounded-lg border border-black/10 bg-white px-2 py-1 text-xs text-slate-700 hover:bg-slate-50"
+                        className={calendarControlButtonClassName}
                         onClick={showNextProductUpdatesMonth}
                         aria-label="Show next month"
                       >
@@ -4040,7 +4081,7 @@ export default function Home() {
                     <div className="flex items-center gap-1">
                       <button
                         type="button"
-                        className="rounded-lg border border-black/10 bg-white px-2 py-1 text-xs text-slate-700 hover:bg-slate-50 disabled:opacity-50"
+                        className={calendarPrimaryButtonClassName}
                         disabled={!productUpdateMonthEntries.length}
                         onClick={selectAllProductUpdatesInCurrentMonth}
                       >
@@ -4048,7 +4089,7 @@ export default function Home() {
                       </button>
                       <button
                         type="button"
-                        className="rounded-lg border border-black/10 bg-white px-2 py-1 text-xs text-slate-700 hover:bg-slate-50 disabled:opacity-50"
+                        className={calendarControlButtonClassName}
                         disabled={!productUpdateMonthEntries.length}
                         onClick={clearCurrentProductUpdatesMonthSelections}
                       >
@@ -4061,7 +4102,7 @@ export default function Home() {
                     <span className="text-xs font-medium text-slate-600">Quick week:</span>
                     <button
                       type="button"
-                      className="rounded-lg border border-black/10 bg-white px-2 py-1 text-xs text-slate-700 hover:bg-slate-50 disabled:opacity-50"
+                      className={calendarPrimaryButtonClassName}
                       disabled={!currentWeekProductUpdateEntries.length}
                       onClick={() => selectProductUpdatesForWeek(0)}
                       title={currentWeekRangeLabel}
@@ -4070,7 +4111,7 @@ export default function Home() {
                     </button>
                     <button
                       type="button"
-                      className="rounded-lg border border-black/10 bg-white px-2 py-1 text-xs text-slate-700 hover:bg-slate-50 disabled:opacity-50"
+                      className={calendarPrimaryButtonClassName}
                       disabled={!nextWeekProductUpdateEntries.length}
                       onClick={() => selectProductUpdatesForWeek(1)}
                       title={nextWeekRangeLabel}
@@ -4202,7 +4243,7 @@ export default function Home() {
                 <button
                   type="button"
                   disabled={notionCalendarSyncLoading}
-                  className="rounded-lg border border-black/10 bg-white px-2 py-1 text-xs text-slate-700 hover:bg-slate-50 disabled:opacity-50"
+                  className={calendarControlButtonClassName}
                   onClick={reloadNotionCalendar}
                 >
                   {notionCalendarSyncLoading ? "Reloading…" : "Reload"}
@@ -4239,7 +4280,7 @@ export default function Home() {
                     <div className="flex items-center gap-1">
                       <button
                         type="button"
-                        className="rounded-lg border border-black/10 bg-white px-2 py-1 text-xs text-slate-700 hover:bg-slate-50"
+                        className={calendarControlButtonClassName}
                         onClick={showPreviousCalendarMonth}
                         aria-label="Show previous month"
                       >
@@ -4247,14 +4288,14 @@ export default function Home() {
                       </button>
                       <button
                         type="button"
-                        className="rounded-lg border border-black/10 bg-white px-2 py-1 text-xs text-slate-700 hover:bg-slate-50"
+                        className={calendarControlButtonClassName}
                         onClick={jumpToCurrentCalendarMonth}
                       >
                         Today
                       </button>
                       <button
                         type="button"
-                        className="rounded-lg border border-black/10 bg-white px-2 py-1 text-xs text-slate-700 hover:bg-slate-50"
+                        className={calendarControlButtonClassName}
                         onClick={showNextCalendarMonth}
                         aria-label="Show next month"
                       >
@@ -4266,7 +4307,7 @@ export default function Home() {
                       <button
                         type="button"
                         disabled={!monthEntries.length}
-                        className="rounded-lg border border-black/10 bg-white px-2 py-1 text-xs text-slate-700 hover:bg-slate-50 disabled:opacity-50"
+                        className={calendarPrimaryButtonClassName}
                         onClick={selectAllEntriesInCurrentMonth}
                       >
                         Select month
@@ -4274,7 +4315,7 @@ export default function Home() {
                       <button
                         type="button"
                         disabled={!monthEntries.length}
-                        className="rounded-lg border border-black/10 bg-white px-2 py-1 text-xs text-slate-700 hover:bg-slate-50 disabled:opacity-50"
+                        className={calendarControlButtonClassName}
                         onClick={clearCurrentMonthSelections}
                       >
                         Clear month
@@ -4287,7 +4328,7 @@ export default function Home() {
                     <button
                       type="button"
                       disabled={!currentWeekCalendarEntries.length}
-                      className="rounded-lg border border-black/10 bg-white px-2 py-1 text-xs text-slate-700 hover:bg-slate-50 disabled:opacity-50"
+                      className={calendarPrimaryButtonClassName}
                       onClick={() => selectCalendarEntriesForWeek(0)}
                       title={currentWeekRangeLabel}
                     >
@@ -4296,7 +4337,7 @@ export default function Home() {
                     <button
                       type="button"
                       disabled={!nextWeekCalendarEntries.length}
-                      className="rounded-lg border border-black/10 bg-white px-2 py-1 text-xs text-slate-700 hover:bg-slate-50 disabled:opacity-50"
+                      className={calendarPrimaryButtonClassName}
                       onClick={() => selectCalendarEntriesForWeek(1)}
                       title={nextWeekRangeLabel}
                     >
@@ -5097,7 +5138,15 @@ export default function Home() {
                 className={baseControlClassName}
                 style={{ width: inputLengthSelectWidth }}
                 value={form.inputLength}
-                onChange={(event) => setForm((prev) => ({ ...prev, inputLength: event.target.value as InputLength }))}
+                onChange={(event) => {
+                  const nextLength = event.target.value as InputLength;
+                  const nextCanCreateXPosts = nextLength === "long" || nextLength === "very long";
+                  setForm((prev) => ({
+                    ...prev,
+                    inputLength: nextLength,
+                    createXPosts: nextCanCreateXPosts ? prev.createXPosts : false,
+                  }));
+                }}
               >
                 {INPUT_LENGTH_OPTIONS.map((length) => (
                   <option key={length} value={length}>
@@ -5148,6 +5197,31 @@ export default function Home() {
               ) : null}
             </label>
           </div>
+
+          {canCreateXPosts ? (
+            <div className="space-y-2 rounded-2xl border border-black/10 bg-slate-50 p-3">
+              <label className="flex items-center gap-2">
+                <input
+                  type="checkbox"
+                  className="h-4 w-4 rounded border-black/20"
+                  checked={form.createXPosts}
+                  onChange={(event) =>
+                    setForm((prev) => ({
+                      ...prev,
+                      createXPosts: event.target.checked,
+                    }))
+                  }
+                />
+                <span className="text-sm font-medium">Create X posts</span>
+              </label>
+              <p className="text-xs text-slate-600">
+                For each generated LinkedIn post, also create an X thread split into X-ready posts with a dedicated copy button.
+              </p>
+              <p className="text-xs text-slate-600">
+                Use this for long and very long LinkedIn generation runs.
+              </p>
+            </div>
+          ) : null}
 
           <label className="space-y-1">
             <span className="text-sm font-medium">Extra Prompt Details</span>
@@ -5256,7 +5330,7 @@ export default function Home() {
                 <button
                   type="button"
                   disabled={!selectedGeneratedPostsDates.length}
-                  className="rounded-lg border border-black/10 bg-white px-2 py-1 text-xs text-slate-700 hover:bg-slate-50 disabled:opacity-50"
+                  className={calendarControlButtonClassName}
                   onClick={() => setSelectedGeneratedPostsDates([])}
                 >
                   Show all posts
@@ -5267,7 +5341,7 @@ export default function Home() {
                 <div className="flex items-center gap-1">
                   <button
                     type="button"
-                    className="rounded-lg border border-black/10 bg-white px-2 py-1 text-xs text-slate-700 hover:bg-slate-50"
+                    className={calendarControlButtonClassName}
                     onClick={showPreviousGeneratedPostsMonth}
                     aria-label="Show previous generated-post month"
                   >
@@ -5275,14 +5349,14 @@ export default function Home() {
                   </button>
                   <button
                     type="button"
-                    className="rounded-lg border border-black/10 bg-white px-2 py-1 text-xs text-slate-700 hover:bg-slate-50"
+                    className={calendarControlButtonClassName}
                     onClick={jumpToGeneratedPostsCurrentMonth}
                   >
                     Today
                   </button>
                   <button
                     type="button"
-                    className="rounded-lg border border-black/10 bg-white px-2 py-1 text-xs text-slate-700 hover:bg-slate-50"
+                    className={calendarControlButtonClassName}
                     onClick={showNextGeneratedPostsMonth}
                     aria-label="Show next generated-post month"
                   >
@@ -5380,6 +5454,8 @@ export default function Home() {
               const generatedPostDate = postDateByPostIndex[index];
               const generatedImageDataUrls = postImageDataUrlByPostIndex[index] ?? [];
               const generatedSourceImageUrls = postSourceImageUrlByPostIndex[index] ?? [];
+              const xThreadForPost = normalizeXThreadPosts(post.xThread ?? []);
+              const hasXThreadForPost = xThreadForPost.length > 0;
               const memeVariantsForPost = getMemeVariantsForPost(post);
               const giphyVariantsForPost = getGiphyVariantsForPost(post);
               const hasMemeVariantsForPost = memeVariantsForPost.length > 0;
@@ -5427,6 +5503,17 @@ export default function Home() {
                         }}
                       >
                         {getCopyButtonLabel(index, "post_images", "Copy Post + Images")}
+                      </button>
+                      <button
+                        type="button"
+                        className="shrink-0 rounded-lg border border-black/10 px-2 py-1 text-xs text-slate-600 hover:bg-slate-50 disabled:cursor-not-allowed disabled:opacity-60"
+                        disabled={!hasXThreadForPost}
+                        onClick={async () => {
+                          const copied = await copyXThreadToClipboard(xThreadForPost);
+                          showCopyFeedback(index, "x_thread", copied ? "copied" : "failed");
+                        }}
+                      >
+                        {getCopyButtonLabel(index, "x_thread", "Copy X Thread")}
                       </button>
                       <button
                         type="button"
@@ -5619,6 +5706,42 @@ export default function Home() {
                       ) : null}
                     </div>
                   </div>
+
+                  {hasXThreadForPost ? (
+                    <div className="mt-5 space-y-3 rounded-2xl border border-black/10 bg-slate-50 p-3">
+                      <div className="flex flex-wrap items-center justify-between gap-2">
+                        <p className="text-xs font-semibold uppercase tracking-wide text-slate-600">
+                          X Thread · {xThreadForPost.length} post{xThreadForPost.length === 1 ? "" : "s"}
+                        </p>
+                        <button
+                          type="button"
+                          className="rounded-md border border-black/10 bg-white px-2 py-1 text-xs text-slate-700 hover:bg-slate-100"
+                          onClick={async () => {
+                            const copied = await copyXThreadToClipboard(xThreadForPost);
+                            showCopyFeedback(index, "x_thread", copied ? "copied" : "failed");
+                          }}
+                        >
+                          {getCopyButtonLabel(index, "x_thread", "Copy X Thread")}
+                        </button>
+                      </div>
+                      <p className="text-xs text-slate-600">
+                        Copy and paste into X composer. Thread posts are separated with blank lines for quick posting.
+                      </p>
+                      <div className="space-y-2">
+                        {xThreadForPost.map((threadPost, threadIndex) => (
+                          <div
+                            key={`${index}-x-thread-${threadIndex}`}
+                            className="rounded-xl border border-black/10 bg-white p-2.5"
+                          >
+                            <p className="text-[11px] font-semibold uppercase tracking-wide text-slate-500">
+                              X post {threadIndex + 1}
+                            </p>
+                            <p className="mt-1 whitespace-pre-wrap text-sm leading-relaxed text-slate-800">{threadPost}</p>
+                          </div>
+                        ))}
+                      </div>
+                    </div>
+                  ) : null}
 
                   {generatedImageDataUrls.length || generatedSourceImageUrls.length ? (
                     <div className="mt-5 space-y-2 rounded-2xl border border-black/10 bg-slate-50 p-3">

@@ -74,6 +74,8 @@ const MEME_TEMPLATE_FLOW_RULES: Record<string, string> = {
 const FACT_CHECK_EVIDENCE_PROMPT_LIMIT = 4;
 const DEFAULT_SOIS_EVIDENCE_PROMPT_LIMIT = 8;
 const DEFAULT_SOIS_BROAD_EVIDENCE_PROMPT_LIMIT = 24;
+const MAX_X_THREAD_POST_CHARS = 280;
+const X_THREAD_PACK_TARGET_CHARS = 272;
 const DEFAULT_FAST_BATCH_THRESHOLD = 8;
 const FAST_PATH_SOIS_BROAD_EVIDENCE_PROMPT_LIMIT = 12;
 const DEFAULT_PROMPT_EXAMPLE_LIMIT = 10;
@@ -1020,6 +1022,186 @@ function splitSentenceUnits(paragraph: string): string[] {
     .filter(Boolean);
 
   return matches?.length ? matches : [paragraph.trim()].filter(Boolean);
+}
+
+function normalizeComparisonText(value: string): string {
+  return normalizeNoEmDash(value)
+    .replace(/\s+/g, " ")
+    .trim()
+    .toLowerCase();
+}
+
+function stripLeadingHookFromBody(hook: string, body: string): string {
+  const normalizedHook = normalizeComparisonText(hook);
+  if (!normalizedHook) {
+    return body.trim();
+  }
+
+  const lines = body.split("\n");
+  const firstContentLineIndex = lines.findIndex((line) => line.trim().length > 0);
+  if (firstContentLineIndex < 0) {
+    return body.trim();
+  }
+
+  const firstContentLine = lines[firstContentLineIndex] ?? "";
+  const normalizedFirstContentLine = normalizeComparisonText(firstContentLine);
+  if (normalizedFirstContentLine !== normalizedHook) {
+    return body.trim();
+  }
+
+  const nextLines = [...lines];
+  nextLines.splice(firstContentLineIndex, 1);
+  return nextLines.join("\n").trim();
+}
+
+function splitTextByWordBudget(value: string, maxChars: number): string[] {
+  const trimmed = value.trim();
+  if (!trimmed) {
+    return [];
+  }
+
+  if (trimmed.length <= maxChars) {
+    return [trimmed];
+  }
+
+  const parts: string[] = [];
+  let remaining = trimmed;
+  while (remaining.length > maxChars) {
+    let cutIndex = remaining.lastIndexOf(" ", maxChars);
+    if (cutIndex <= 0) {
+      cutIndex = maxChars;
+    }
+
+    const head = remaining.slice(0, cutIndex).trim();
+    if (head) {
+      parts.push(head);
+    }
+    remaining = remaining.slice(cutIndex).trim();
+  }
+
+  if (remaining) {
+    parts.push(remaining);
+  }
+
+  return parts;
+}
+
+function buildThreadSegmentsFromText(value: string, maxChars: number): string[] {
+  const normalizedParagraphs = value
+    .split(/\n{2,}/)
+    .map((paragraph) => normalizeNoEmDash(paragraph).replace(/\s+/g, " ").trim())
+    .filter(Boolean);
+
+  const segments: string[] = [];
+  for (const paragraph of normalizedParagraphs) {
+    const sentences = splitSentenceUnits(paragraph);
+    if (!sentences.length) {
+      continue;
+    }
+
+    let current = "";
+    for (const sentence of sentences) {
+      const sentenceText = sentence.replace(/\s+/g, " ").trim();
+      if (!sentenceText) {
+        continue;
+      }
+
+      const candidate = current ? `${current} ${sentenceText}` : sentenceText;
+      if (candidate.length <= maxChars) {
+        current = candidate;
+        continue;
+      }
+
+      if (current) {
+        segments.push(current);
+      }
+
+      if (sentenceText.length <= maxChars) {
+        current = sentenceText;
+      } else {
+        const longSentenceParts = splitTextByWordBudget(sentenceText, maxChars);
+        if (longSentenceParts.length > 1) {
+          segments.push(...longSentenceParts.slice(0, -1));
+        }
+        current = longSentenceParts[longSentenceParts.length - 1] ?? "";
+      }
+    }
+
+    if (current) {
+      segments.push(current);
+    }
+  }
+
+  return segments;
+}
+
+function addThreadOrdinals(threadPosts: string[]): string[] {
+  if (threadPosts.length <= 1) {
+    return threadPosts;
+  }
+
+  const total = threadPosts.length;
+  return threadPosts.map((post, index) => {
+    const suffix = ` ${index + 1}/${total}`;
+    if (post.length + suffix.length <= MAX_X_THREAD_POST_CHARS) {
+      return `${post}${suffix}`;
+    }
+
+    const clipped = splitTextByWordBudget(post, Math.max(1, MAX_X_THREAD_POST_CHARS - suffix.length))[0] ?? post;
+    return `${clipped}${suffix}`;
+  });
+}
+
+function buildXThreadFromLinkedInPost(post: { hook: string; body: string; cta: string }): string[] {
+  const hook = normalizeNoEmDash(post.hook).replace(/\s+/g, " ").trim();
+  const body = stripLeadingHookFromBody(post.hook, post.body);
+  const cta = normalizeNoEmDash(post.cta).replace(/\s+/g, " ").trim();
+
+  const sourceBlocks = [hook, body, cta].filter(Boolean);
+  if (!sourceBlocks.length) {
+    return [];
+  }
+
+  const segments = sourceBlocks.flatMap((block) => buildThreadSegmentsFromText(block, X_THREAD_PACK_TARGET_CHARS));
+  if (!segments.length) {
+    return [];
+  }
+
+  const packedPosts: string[] = [];
+  let current = "";
+
+  for (const segment of segments) {
+    const candidate = current ? `${current}\n\n${segment}` : segment;
+    if (candidate.length <= X_THREAD_PACK_TARGET_CHARS) {
+      current = candidate;
+      continue;
+    }
+
+    if (current) {
+      packedPosts.push(current);
+    }
+
+    if (segment.length <= X_THREAD_PACK_TARGET_CHARS) {
+      current = segment;
+      continue;
+    }
+
+    const forcedParts = splitTextByWordBudget(segment, X_THREAD_PACK_TARGET_CHARS);
+    if (forcedParts.length > 1) {
+      packedPosts.push(...forcedParts.slice(0, -1));
+    }
+    current = forcedParts[forcedParts.length - 1] ?? "";
+  }
+
+  if (current) {
+    packedPosts.push(current);
+  }
+
+  const normalizedPackedPosts = packedPosts
+    .map((part) => normalizeNoEmDash(part).trim())
+    .filter(Boolean);
+
+  return addThreadOrdinals(normalizedPackedPosts);
 }
 
 function stripAiScaffoldOpeners(paragraph: string): string {
@@ -3805,6 +3987,32 @@ For each post:
       });
     }
 
+    const shouldCreateXThreads =
+      input.createXPosts && (input.inputLength === "long" || input.inputLength === "very long");
+    const postsWithXThreads: GeneratePostsResponse["posts"] = shouldCreateXThreads
+      ? postsWithMedia.map((post) => {
+          const shouldBuildThread = post.length === "long" || post.length === "very long";
+          if (!shouldBuildThread) {
+            return post;
+          }
+
+          const xThread = buildXThreadFromLinkedInPost({
+            hook: post.hook,
+            body: post.body,
+            cta: post.cta,
+          });
+
+          if (!xThread.length) {
+            return post;
+          }
+
+          return {
+            ...post,
+            xThread,
+          };
+        })
+      : postsWithMedia;
+
     let chartCompanion: GeneratePostsResponse["chart"] | undefined;
 
     if (preparedChartInput) {
@@ -3839,7 +4047,7 @@ For each post:
     const response: GeneratePostsResponse = {
       hooks: normalizedHooks,
       chart: chartCompanion,
-      posts: postsWithMedia,
+      posts: postsWithXThreads,
       generation: {
         modelRequested: requestedModel,
         modelUsed,

@@ -15,8 +15,8 @@ const ibmPlexMono = IBM_Plex_Mono({
 });
 
 export const metadata: Metadata = {
-  title: "Adapty LinkedIn Post Generator",
-  description: "Generate high-performing LinkedIn post variants with hooks using your own content library.",
+  title: "Adapty LinkedIn/X Post Generator",
+  description: "Generate high-performing LinkedIn posts and X-ready thread variants using your own content library.",
 };
 
 export default function RootLayout({
