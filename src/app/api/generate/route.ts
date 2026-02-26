@@ -66,6 +66,10 @@ const KNOWN_MEME_TEMPLATE_LINE_COUNTS: Record<string, number> = {
   db: 3,
   same: 3,
 };
+const MEME_DIALOGUE_TEMPLATE_IDS = new Set<string>(["right", "chair", "anakin"]);
+const MEME_SPEAKER_PREFIX_PATTERN = /^([A-Za-z][A-Za-z0-9 '&/-]{0,24}):\s+/;
+const MEME_SPEAKER_ROLE_HINT_PATTERN =
+  /\b(?:leader|analyst|manager|director|founder|boss|pm|pmm|ceo|cfo|cto|engineer|dev|designer|marketer|sales|finance|legal|team|client|user|ops)\b/i;
 const MEME_TEMPLATE_FLOW_RULES: Record<string, string> = {
   right:
     "5-line dialogue: line1 setup claim, line2 optimistic \"right?\", line3 hidden catch, line4 nervous follow-up question, line5 awkward payoff.",
@@ -181,6 +185,24 @@ function resolveMemeTemplatePromptStrategy(params: {
 
   return `Keep exactly ${params.lineCount} lines mapped to the template visual beats, with setup first and punchline last.`;
 }
+
+function detectSpeakerLabelPrefix(line: string): string | null {
+  const prefixMatch = line.match(MEME_SPEAKER_PREFIX_PATTERN);
+  if (!prefixMatch) {
+    return null;
+  }
+
+  const label = prefixMatch[1]?.trim() ?? "";
+  if (!label) {
+    return null;
+  }
+
+  const compactLabel = label.replace(/\s+/g, "");
+  const isShortAllCaps = compactLabel.length > 0 && compactLabel.length <= 6 && compactLabel === compactLabel.toUpperCase();
+  const looksLikeRoleLabel = MEME_SPEAKER_ROLE_HINT_PATTERN.test(label);
+
+  return isShortAllCaps || looksLikeRoleLabel ? label : null;
+}
 const FACT_CHECK_EVIDENCE_PROMPT_LIMIT = 4;
 const DEFAULT_SOIS_EVIDENCE_PROMPT_LIMIT = 8;
 const DEFAULT_SOIS_BROAD_EVIDENCE_PROMPT_LIMIT = 24;
@@ -232,6 +254,11 @@ const POST_TYPE_PLAYBOOKS: Array<{ pattern: RegExp; directive: string }> = [
     pattern: /event|webinar/i,
     directive:
       "Lead with a real operator pain or short story teams relate to. Stack: relatable scenario + why-now + logistics + takeaway. Include explicit logistics (date/time/place), who should attend, and one practical conversation or takeaway.",
+  },
+  {
+    pattern: /content promo/i,
+    directive:
+      "Promote one specific content asset (especially YouTube). Stack: sharp hook + one concrete takeaway from the video + why it matters + clear 'watch now' CTA tied to the provided link.",
   },
   {
     pattern: /product feature launch|product launch update|product update/i,
@@ -1366,11 +1393,57 @@ function collapseSingleNewlinesToSpaces(text: string): string {
   return text.replace(/\n+/g, " ").replace(/\s+/g, " ").trim();
 }
 
+function enforceReadableParagraphBreaks(body: string): string {
+  const normalizedBody = normalizeNoEmDash(body).trim();
+  if (!normalizedBody) {
+    return "";
+  }
+
+  if (/\n\s*\n/.test(normalizedBody)) {
+    return normalizedBody;
+  }
+
+  const compactBody = collapseSingleNewlinesToSpaces(normalizedBody);
+  const sentenceUnits = splitSentenceUnits(compactBody)
+    .map((sentence) => sentence.replace(/\s+/g, " ").trim())
+    .filter(Boolean);
+
+  if (sentenceUnits.length < 4) {
+    return compactBody;
+  }
+
+  const totalWords = compactBody.split(/\s+/).filter(Boolean).length;
+  const targetSentencesPerParagraph = sentenceUnits.length >= 9 || totalWords >= 180 ? 3 : 2;
+  const paragraphs: string[] = [];
+
+  for (let index = 0; index < sentenceUnits.length; index += targetSentencesPerParagraph) {
+    const chunk = sentenceUnits.slice(index, index + targetSentencesPerParagraph);
+    if (!chunk.length) {
+      continue;
+    }
+
+    const paragraph = chunk.join(" ").replace(/\s+/g, " ").trim();
+    if (!paragraph) {
+      continue;
+    }
+
+    const isFinalChunk = index + targetSentencesPerParagraph >= sentenceUnits.length;
+    if (chunk.length === 1 && isFinalChunk && paragraphs.length > 0) {
+      paragraphs[paragraphs.length - 1] = `${paragraphs[paragraphs.length - 1]} ${paragraph}`.replace(/\s+/g, " ").trim();
+      continue;
+    }
+
+    paragraphs.push(paragraph);
+  }
+
+  return paragraphs.join("\n\n");
+}
+
 function normalizeBodyRhythm(body: string): string {
   const rawParagraphs = splitParagraphs(body).map(stripAiScaffoldOpeners).filter(Boolean);
   const paragraphs = rawParagraphs.map((p) => collapseSingleNewlinesToSpaces(p));
   if (paragraphs.length < 4) {
-    return paragraphs.join("\n\n");
+    return enforceReadableParagraphBreaks(paragraphs.join("\n\n"));
   }
 
   const out: string[] = [];
@@ -1406,7 +1479,7 @@ function normalizeBodyRhythm(body: string): string {
     }
   }
 
-  return out.join("\n\n");
+  return enforceReadableParagraphBreaks(out.join("\n\n"));
 }
 
 function hasAiScaffoldOpener(body: string): boolean {
@@ -1985,6 +2058,13 @@ function resolveMemeTextLines(params: {
       throw new Error(`Template '${normalizedTemplateId}' line ${lineIndex + 1} is empty after cleanup.`);
     }
 
+    const speakerLabel = detectSpeakerLabelPrefix(normalized);
+    if (speakerLabel && !MEME_DIALOGUE_TEMPLATE_IDS.has(normalizedTemplateId)) {
+      throw new Error(
+        `Template '${normalizedTemplateId}' line ${lineIndex + 1} should not start with a speaker label ("${speakerLabel}:").`,
+      );
+    }
+
     return normalized;
   };
 
@@ -2259,7 +2339,7 @@ function resolveBrandVoiceDirective(style: string): string {
 
   if (isBrandVoicePreset(normalizedStyle)) {
     const baseDirective = BRAND_VOICE_PROFILES[normalizedStyle].promptDirective;
-    return `${baseDirective} ${sharedHumanDirective}`;
+    return baseDirective.includes(sharedHumanDirective) ? baseDirective : `${baseDirective} ${sharedHumanDirective}`;
   }
 
   return `Follow custom brand voice: "${style.trim()}". ${sharedHumanDirective}`;
@@ -4265,12 +4345,16 @@ Return ${parsed.hooks.length} hook suggestions as well (keep good ones, tighten 
               meaning,
               flowRule,
             });
+            const speakerLabelRule = MEME_DIALOGUE_TEMPLATE_IDS.has(id.trim().toLowerCase())
+              ? "speaker labels optional (dialogue template)"
+              : "speaker labels forbidden";
             const flowRuleSuffix = flowRule ? ` | flow: ${flowRule}` : "";
             const roleSuffix = lineRoleHint ? ` | line roles: ${lineRoleHint}` : "";
             const strategySuffix = promptStrategy ? ` | caption strategy: ${promptStrategy}` : "";
+            const speakerSuffix = ` | ${speakerLabelRule}`;
             return meaning
-              ? `- ${id}: ${name} (lines: ${lineCount})${flowRuleSuffix}${roleSuffix} - ${meaning}${strategySuffix}`
-              : `- ${id}: ${name} (lines: ${lineCount})${flowRuleSuffix}${roleSuffix}${strategySuffix}`;
+              ? `- ${id}: ${name} (lines: ${lineCount})${flowRuleSuffix}${roleSuffix}${speakerSuffix} - ${meaning}${strategySuffix}`
+              : `- ${id}: ${name} (lines: ${lineCount})${flowRuleSuffix}${roleSuffix}${speakerSuffix}${strategySuffix}`;
           })
           .join("\n");
         const memeTemplateStrategyGuide = allowedTemplateIds
@@ -4285,7 +4369,10 @@ Return ${parsed.hooks.length} hook suggestions as well (keep good ones, tighten 
               meaning,
               flowRule,
             });
-            return `- ${id}: ${promptStrategy} | ${lineRoleHint}`;
+            const speakerLabelRule = MEME_DIALOGUE_TEMPLATE_IDS.has(id.trim().toLowerCase())
+              ? "speaker labels optional"
+              : "no speaker labels";
+            return `- ${id}: ${promptStrategy} | ${lineRoleHint} | ${speakerLabelRule}`;
           })
           .join("\n");
         const memeSelectionSystemPrompt = `
@@ -4302,6 +4389,7 @@ Humor quality rules:
 - If a caption could fit any random SaaS post, rewrite it until it is specific to this post.
 - For every selected template, strictly follow the template's line roles, caption strategy notes, and flow notes from the prompt.
 - Do not swap line roles between slots. Keep line intent tied to its designated slot.
+- Do not use speaker prefixes like "Leader:" or "Analyst:" unless template is right, chair, or anakin.
 Never use em dash punctuation. Use standard hyphen if needed.
 `;
         const memeSelectionUserPrompt = `
@@ -4336,6 +4424,7 @@ For each post:
  }
 3. Keep each text line concise and readable on image memes.
 4. Match caption to template format and visual meaning. Do not paste style labels or meta-commentary.
+   Avoid speaker prefixes (for example "Leader:"/"Analyst:") unless template is right, chair, or anakin.
 5. Special template rule: if templateId is "${GONE_TEMPLATE_ID}", set bottomText and textLines[1] exactly to "${GONE_TEMPLATE_FIXED_BOTTOM_TEXT}".
 6. Always include textLines array in order.
    textLines length must exactly match the selected template's line count from the catalog.

@@ -9,6 +9,7 @@ import {
   BRAND_VOICE_PROFILES,
   CHART_TYPE_LABELS,
   CHART_TYPE_OPTIONS,
+  CONTENT_PROMO_POST_TYPE,
   GOAL_LABELS,
   GOAL_UI_DESCRIPTIONS,
   GOAL_OPTIONS,
@@ -109,6 +110,7 @@ const IMAGE_EXPORT_QUALITY = 0.82;
 const MAX_CONCURRENT_GENERATION_REQUESTS = 3;
 const EVENT_TOPIC_PATTERN = /\b(event|webinar)\b/i;
 const PRODUCT_FEATURE_LAUNCH_PATTERN = /\bproduct feature launch\b/i;
+const YOUTUBE_HOST_PATTERN = /(^|\.)youtube\.com$|(^|\.)youtu\.be$/i;
 const CUSTOM_BRAND_VOICE = "__custom__";
 const CHART_LEGEND_POSITIONS: ChartLegendPosition[] = ["top", "right", "bottom", "left"];
 const CHART_VISUAL_STYLE_OPTIONS = [
@@ -188,6 +190,7 @@ type GenerationAllocation = {
   style: string;
   goal: ContentGoal;
   count: number;
+  forcedCtaLink?: string;
   calendarEntry?: NotionCalendarEntry;
   productUpdateEntry?: SlackProductUpdateEntry;
 };
@@ -383,6 +386,33 @@ function splitMultilineUrls(value: string): string[] {
   return trimTrailingEmpty(
     value.split(/\r?\n/).map((line) => line.trim()),
   );
+}
+
+function findUrls(value: string): string[] {
+  const matches = value.match(/https?:\/\/[^\s)]+/gi);
+  return matches ? matches.map((match) => match.trim()) : [];
+}
+
+function isYouTubeUrl(value: string): boolean {
+  try {
+    const parsed = new URL(value);
+    return YOUTUBE_HOST_PATTERN.test(parsed.hostname);
+  } catch {
+    return false;
+  }
+}
+
+function getYouTubeLinkFromCalendarEntry(entry: NotionCalendarEntry): string {
+  const eventPage = entry.event?.eventPage?.trim() ?? "";
+  const candidateUrls = [...findUrls(entry.content), eventPage].filter(Boolean);
+
+  for (const candidate of candidateUrls) {
+    if (isYouTubeUrl(candidate)) {
+      return candidate;
+    }
+  }
+
+  return "";
 }
 
 function getLegendLabel(position: ChartLegendPosition): string {
@@ -1942,6 +1972,10 @@ export default function Home() {
     () => normalizedSelectedPostTypes.some((type) => needsEventDetails(type)),
     [normalizedSelectedPostTypes],
   );
+  const showNotionCalendarFields = useMemo(
+    () => showEventFields || normalizedSelectedPostTypes.includes(CONTENT_PROMO_POST_TYPE),
+    [normalizedSelectedPostTypes, showEventFields],
+  );
   const showProductLaunchFields = useMemo(
     () => normalizedSelectedPostTypes.some((type) => needsProductFeatureLaunchSelection(type)),
     [normalizedSelectedPostTypes],
@@ -1993,7 +2027,7 @@ export default function Home() {
     [calendarEntries, calendarMonthCursor, todayDate],
   );
   const calendarMonthLabel = useMemo(() => formatCalendarMonthLabel(calendarMonthCursor), [calendarMonthCursor]);
-  const useNotionCalendarForGeneration = showEventFields && selectedCalendarEntries.length > 0;
+  const useNotionCalendarForGeneration = showNotionCalendarFields && selectedCalendarEntries.length > 0;
   const productUpdateEntries = useMemo(() => slackProductUpdates?.entries ?? [], [slackProductUpdates?.entries]);
   const productUpdateMonthEntries = useMemo(
     () => getProductUpdateEntriesForMonth(productUpdateEntries, productUpdatesMonthCursor),
@@ -2410,7 +2444,7 @@ export default function Home() {
   }, [fallbackMemeTemplates]);
 
   useEffect(() => {
-    if (!showEventFields) return;
+    if (!showNotionCalendarFields) return;
     let isCancelled = false;
     setNotionCalendarLoading(true);
     fetch("/api/notion-calendar")
@@ -2427,7 +2461,7 @@ export default function Home() {
     return () => {
       isCancelled = true;
     };
-  }, [showEventFields]);
+  }, [showNotionCalendarFields]);
 
   useEffect(() => {
     if (!showProductLaunchFields) return;
@@ -2842,13 +2876,27 @@ export default function Home() {
 
       if (useNotionCalendarForGeneration) {
         generationAllocations = generationAllocations.concat(
-          selectedCalendarEntries.map((entry) => ({
-            inputType: selectedEventPostType,
-            style: contextStyle,
-            goal: contextGoal,
-            count: committedNumberOfPosts,
-            calendarEntry: entry,
-          })),
+          selectedCalendarEntries.map((entry) => {
+            const youtubeLink = getYouTubeLinkFromCalendarEntry(entry);
+            if (youtubeLink) {
+              return {
+                inputType: CONTENT_PROMO_POST_TYPE,
+                style: contextStyle,
+                goal: "traffic" as ContentGoal,
+                count: committedNumberOfPosts,
+                forcedCtaLink: youtubeLink,
+                calendarEntry: entry,
+              };
+            }
+
+            return {
+              inputType: selectedEventPostType,
+              style: contextStyle,
+              goal: contextGoal,
+              count: committedNumberOfPosts,
+              calendarEntry: entry,
+            };
+          }),
         );
       }
 
@@ -2883,6 +2931,10 @@ export default function Home() {
       const getDefaultCtaLinkForAllocation = (allocation: GenerationAllocation): string => {
         if (!shouldIncludeCta) {
           return "";
+        }
+
+        if (allocation.forcedCtaLink?.trim()) {
+          return allocation.forcedCtaLink.trim();
         }
 
         if (allocation.productUpdateEntry) {
@@ -4298,10 +4350,10 @@ export default function Home() {
             </div>
           ) : null}
 
-          {showEventFields ? (
+          {showNotionCalendarFields ? (
             <div className="space-y-3 rounded-2xl border border-sky-200 bg-sky-50/50 p-4">
               <div className="flex flex-wrap items-center justify-between gap-2">
-                <span className="text-sm font-semibold text-slate-900">Webinar Events Notion calendar (month)</span>
+                <span className="text-sm font-semibold text-slate-900">Notion calendar (month)</span>
                 <button
                   type="button"
                   disabled={notionCalendarSyncLoading}
@@ -4513,13 +4565,17 @@ export default function Home() {
 
                   <p className="text-xs text-slate-600">
                     {selectedCalendarEntries.length
-                      ? `${selectedCalendarEntries.length} selected event${
-                          selectedCalendarEntries.length === 1 ? "" : "s"
+                      ? `${selectedCalendarEntries.length} selected entr${
+                          selectedCalendarEntries.length === 1 ? "y" : "ies"
                         } × ${form.numberOfPosts} post${form.numberOfPosts === 1 ? "" : "s"} each (${selectedCalendarEntries.length * form.numberOfPosts} total).`
-                      : "Select one or more events to generate posts from Notion context."}
+                      : "Select one or more entries to generate posts from Notion context."}
                   </p>
                   <p className="text-xs text-slate-600">
                     Missing fields are highlighted. When event name/details are present, generation will attempt web enrichment for missing event logistics.
+                  </p>
+                  <p className="text-xs text-slate-600">
+                    Entries containing a YouTube link are auto-treated as <strong>Content Promo</strong> with the <strong>Traffic</strong> goal,
+                    and that YouTube link is used as CTA fallback.
                   </p>
                 </>
               ) : notionCalendar?.syncedAt ? (
@@ -5234,7 +5290,7 @@ export default function Home() {
             <label className="space-y-1">
               <span className="text-sm font-medium">
                 {useNotionCalendarForGeneration
-                  ? "Posts Per Selected Event"
+                  ? "Posts Per Selected Notion Entry"
                   : useSlackProductUpdatesForGeneration
                     ? "Posts Per Selected Release"
                     : "Number of Posts"}
@@ -5260,7 +5316,7 @@ export default function Home() {
               {useNotionCalendarForGeneration ? (
                 <p className="text-xs text-slate-600">
                   Total planned: {selectedCalendarEntries.length * form.numberOfPosts} posts (
-                  {selectedCalendarEntries.length} event{selectedCalendarEntries.length === 1 ? "" : "s"} ×{" "}
+                  {selectedCalendarEntries.length} entr{selectedCalendarEntries.length === 1 ? "y" : "ies"} ×{" "}
                   {form.numberOfPosts} each).
                 </p>
               ) : useSlackProductUpdatesForGeneration ? (

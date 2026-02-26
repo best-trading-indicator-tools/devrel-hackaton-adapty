@@ -5,7 +5,7 @@ import path from "node:path";
 import OpenAI from "openai";
 
 const SOIS_BASE_URL = "https://dags.adpinfra.dev/webhook/sois-data";
-const SOIS_LANCEDB_PATH = path.join(process.cwd(), ".lancedb");
+const SOIS_LANCEDB_PATH = process.env.VERCEL ? path.join("/tmp", ".lancedb") : path.join(process.cwd(), ".lancedb");
 const SOIS_LANCEDB_META_PATH = path.join(SOIS_LANCEDB_PATH, "sois_context_meta.json");
 const SOIS_LANCEDB_TABLE_NAME = "sois_context_evidence";
 const SOIS_CACHE_DIR = path.join(SOIS_LANCEDB_PATH, "sois-cache");

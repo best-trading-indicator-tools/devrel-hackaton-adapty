@@ -1,10 +1,10 @@
 export const BRAND_VOICE_PRESETS = [
   "adapty",
   "clickbait",
-  "founder personal",
   "bold / contrarian",
-  "technical breakdown",
-  "playful meme tone",
+  // "founder personal",
+  // "technical breakdown",
+  // "playful meme tone",
 ] as const;
 
 export type BrandVoicePreset = (typeof BRAND_VOICE_PRESETS)[number];
@@ -22,73 +22,78 @@ export const BRAND_VOICE_PROFILES: Record<
     uiDescription:
       "Mirror the proven Adapty LinkedIn voice from your internal library: sharp, practical, data-aware, and actionable.",
     promptDirective:
-      "Match the library examples closely: same rhythm, same formatting, same storytelling style. Stack scenario + mechanism + proof. Keep all copy original. Show why Adapty matters through real mechanisms and facts, not hype.",
+      "Match the library examples closely: same rhythm, same formatting, same storytelling style. Stack scenario + mechanism + proof. Keep all copy original. Show why Adapty matters through real mechanisms and facts, not hype. Always sound like a sharp friend talking to another app maker. Human, direct, relatable.",
   },
   clickbait: {
     label: "Clickbait",
     uiDescription:
       "Use curiosity-heavy hooks and tension that invite clicks, while keeping every claim truthful and specific.",
     promptDirective:
-      "Lead with hooks that make people stop scrolling. Stack curiosity + stakes + payoff. Create real stakes. Keep every claim factual and specific. Make people want to read the next line.",
-  },
-  "founder personal": {
-    label: "Founder Personal",
-    uiDescription:
-      "Write like a founder sharing learned lessons from the field, with first-person insight and concrete examples.",
-    promptDirective:
-      "Write in first person like a founder sharing what they learned the hard way. Stack lived moment + trade-off + honest caveat. Use real observations and concrete examples from operating experience.",
+      "Lead with hooks that make people stop scrolling. Stack curiosity + stakes + payoff. Create real stakes. Keep every claim factual and specific. Make people want to read the next line. Always sound like a sharp friend talking to another app maker. Human, direct, relatable.",
   },
   "bold / contrarian": {
     label: "Bold / Contrarian",
     uiDescription:
       "Challenge common growth assumptions directly, then back the take with mechanics, caveats, and practical alternatives.",
     promptDirective:
-      "Pick a common belief and challenge it directly. Stack contrarian claim + mechanism + better alternative. Back with mechanics and caveats. Critique decisions, not people.",
+      "Pick a common belief and challenge it directly. Stack contrarian claim + mechanism + better alternative. Back with mechanics and caveats. Critique decisions, not people. Always sound like a sharp friend talking to another app maker. Human, direct, relatable.",
   },
-  "technical breakdown": {
-    label: "Technical Breakdown",
-    uiDescription:
-      "Use a clear, step-by-step analytical style with concrete metrics, framework clarity, and implementation detail.",
-    promptDirective:
-      "Write like a builder explaining how something actually works. Stack concrete setup + step-by-step mechanism + surprising result. Use real numbers and clear language.",
-  },
-  "playful meme tone": {
-    label: "Playful Meme Tone",
-    uiDescription:
-      "Keep the tone witty and internet-native while staying relevant to mobile app growth and monetization realities.",
-    promptDirective:
-      "Keep it witty, internet-native, and fun. Stack setup + punchline + relatable pain. Use meme energy while staying relevant to real app monetization pain points.",
-  },
+  // "founder personal": {
+  //   label: "Founder Personal",
+  //   uiDescription:
+  //     "Write like a founder sharing learned lessons from the field, with first-person insight and concrete examples.",
+  //   promptDirective:
+  //     "Write in first person like a founder sharing what they learned the hard way. Stack lived moment + trade-off + honest caveat. Use real observations and concrete examples from operating experience. Always sound like a sharp friend talking to another app maker. Human, direct, relatable.",
+  // },
+  // "technical breakdown": {
+  //   label: "Technical Breakdown",
+  //   uiDescription:
+  //     "Use a clear, step-by-step analytical style with concrete metrics, framework clarity, and implementation detail.",
+  //   promptDirective:
+  //     "Write like a builder explaining how something actually works. Stack concrete setup + step-by-step mechanism + surprising result. Use real numbers and clear language. Always sound like a sharp friend talking to another app maker. Human, direct, relatable.",
+  // },
+  // "playful meme tone": {
+  //   label: "Playful Meme Tone",
+  //   uiDescription:
+  //     "Keep the tone witty and internet-native while staying relevant to mobile app growth and monetization realities.",
+  //   promptDirective:
+  //     "Keep it witty, internet-native, and fun. Stack setup + punchline + relatable pain. Use meme energy while staying relevant to real app monetization pain points. Always sound like a sharp friend talking to another app maker. Human, direct, relatable.",
+  // },
 };
 
 export function isBrandVoicePreset(value: string): value is BrandVoicePreset {
   return (BRAND_VOICE_PRESETS as readonly string[]).includes(value);
 }
 
+export const CONTENT_PROMO_POST_TYPE = "Content Promo" as const;
+
 export const POST_TYPE_OPTIONS = [
   "Product feature launch",
   "Event / webinar promo",
+  CONTENT_PROMO_POST_TYPE,
   "Sauce",
   "Industry news reaction",
-  "Engagement farming: poll/quiz",
-  "Case study / social proof",
-  "Hiring / team culture",
-  "Milestone / company update",
-  "Controversial hot take",
-  "Curated roundup",
+  // "Engagement farming: poll/quiz",
+  // "Case study / social proof",
+  // "Hiring / team culture",
+  // "Milestone / company update",
+  // "Controversial hot take",
+  // "Curated roundup",
 ] as const;
 
 export const POST_TYPE_UI_DESCRIPTIONS: Record<(typeof POST_TYPE_OPTIONS)[number], string> = {
   "Product feature launch": "Announce a new feature or major update with user pain, solution, and concrete impact.",
   "Event / webinar promo": "Promote an upcoming event with clear why-now, logistics, and who should attend.",
+  [CONTENT_PROMO_POST_TYPE]:
+    "Promote a specific content asset (especially YouTube): tease one key insight and drive clicks to watch.",
   Sauce: "Share tactical insights, data-backed mechanics, and practical steps teams can apply this week.",
   "Industry news reaction": "Give a sharp take on recent industry news with clear implications and next moves.",
-  "Engagement farming: poll/quiz": "Ask high-signal questions that invite comments, votes, and operator viewpoints.",
-  "Case study / social proof": "Show before/after outcomes with context, intervention, and measurable result.",
-  "Hiring / team culture": "Share role opportunities, team values, and what working style looks like in practice.",
-  "Milestone / company update": "Communicate progress milestones and what changed operationally to reach them.",
-  "Controversial hot take": "Challenge accepted habits with a strong stance, caveats, and practical alternative.",
-  "Curated roundup": "Publish a digest of top resources, examples, or observations with quick takeaways.",
+  // "Engagement farming: poll/quiz": "Ask high-signal questions that invite comments, votes, and operator viewpoints.",
+  // "Case study / social proof": "Show before/after outcomes with context, intervention, and measurable result.",
+  // "Hiring / team culture": "Share role opportunities, team values, and what working style looks like in practice.",
+  // "Milestone / company update": "Communicate progress milestones and what changed operationally to reach them.",
+  // "Controversial hot take": "Challenge accepted habits with a strong stance, caveats, and practical alternative.",
+  // "Curated roundup": "Publish a digest of top resources, examples, or observations with quick takeaways.",
 };
 
 export const INPUT_LENGTH_OPTIONS = ["short", "medium", "long", "very long", "mix"] as const;

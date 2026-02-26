@@ -11,7 +11,7 @@ const LIBRARY_SOURCES = [
   { source: "adapty", filePath: ADAPTY_LIBRARY_PATH },
   { source: "others", filePath: OTHERS_LIBRARY_PATH },
 ] as const;
-const LANCEDB_PATH = path.join(process.cwd(), ".lancedb");
+const LANCEDB_PATH = process.env.VERCEL ? path.join("/tmp", ".lancedb") : path.join(process.cwd(), ".lancedb");
 const LANCEDB_META_PATH = path.join(LANCEDB_PATH, "linkedin_library_meta.json");
 const LANCEDB_TABLE_NAME = "linkedin_library_examples";
 

@@ -1,4 +1,10 @@
-# Notion Calendar Sync (via MCP)
+# Notion Calendar Sync
+
+## Automated sync (GitHub Actions)
+
+The workflow `.github/workflows/notion-calendar-sync.yml` runs every 6 hours and on manual trigger. Add `NOTION_API_KEY` to repo Secrets (from notion.so/my-integrations; share SMM PLANNING with the integration). Run locally: `npm run notion-sync`.
+
+## Manual sync (via MCP)
 
 When the user asks to sync the Notion calendar:
 

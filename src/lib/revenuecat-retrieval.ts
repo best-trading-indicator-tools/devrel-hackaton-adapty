@@ -5,7 +5,7 @@ import path from "node:path";
 import OpenAI from "openai";
 
 const REVENUECAT_DATA_DIR = path.join(process.cwd(), "revenuecat-data");
-const LANCEDB_PATH = path.join(process.cwd(), ".lancedb");
+const LANCEDB_PATH = process.env.VERCEL ? path.join("/tmp", ".lancedb") : path.join(process.cwd(), ".lancedb");
 const LANCEDB_META_PATH = path.join(LANCEDB_PATH, "revenuecat_meta.json");
 const LANCEDB_TABLE_NAME = "revenuecat_benchmarks";
 

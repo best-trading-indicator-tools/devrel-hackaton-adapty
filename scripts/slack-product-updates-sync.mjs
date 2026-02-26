@@ -61,21 +61,6 @@ function extractText(msg) {
   return "";
 }
 
-function extractReleaseDate(text, fallbackIso) {
-  const m = text.match(/Release date:\s*([A-Za-z]+\s+\d{1,2}(?:st|nd|rd|th)?,?\s+\d{4}|\d{4}-\d{2}-\d{2})/i);
-  if (!m) return fallbackIso?.slice(0, 10) ?? "";
-  let raw = m[1].trim().replace(/(\d)(st|nd|rd|th)\b/gi, "$1");
-  if (/^\d{4}-\d{2}-\d{2}$/.test(raw)) return raw;
-  const parsed = new Date(raw);
-  if (!isNaN(parsed.getTime())) {
-    const y = parsed.getFullYear();
-    const mo = String(parsed.getMonth() + 1).padStart(2, "0");
-    const d = String(parsed.getDate()).padStart(2, "0");
-    return `${y}-${mo}-${d}`;
-  }
-  return fallbackIso?.slice(0, 10) ?? "";
-}
-
 function extractImageUrls(msg) {
   const urls = [];
   const files = msg.files || [];
@@ -217,13 +202,13 @@ async function main() {
     const nameMatch = firstLine.match(/\|([^>]+)>/);
     const name = (nameMatch ? nameMatch[1] : firstLine.replace(/<[^>]+>/g, "").replace(/^Feature:\s*/i, "")).trim().slice(0, 120);
     const allImages = fullThread.flatMap((m) => m.images);
-    const releaseDate = extractReleaseDate(parentText, parentDate);
+    const postDate = parentDate ? parentDate.slice(0, 10) : "";
     entries.push({
       id: parent.ts,
       slackUrl,
       name: name.slice(0, 120),
       message: parentText,
-      releaseDate,
+      releaseDate: postDate,
       thread: fullThread,
       content,
       matchingReplies,

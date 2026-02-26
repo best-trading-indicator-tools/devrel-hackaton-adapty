@@ -20,7 +20,7 @@ export type SlackProductUpdateEntry = {
   name: string;
   /** Parent message text */
   message: string;
-  /** Feature release date (ISO YYYY-MM-DD); parsed from message or post date fallback */
+  /** Post date (ISO YYYY-MM-DD); when the message was posted on Slack */
   releaseDate: string;
   /** Full thread: parent + all replies in chronological order */
   thread: SlackThreadMessage[];

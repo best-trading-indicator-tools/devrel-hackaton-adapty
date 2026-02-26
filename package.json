@@ -8,11 +8,13 @@
     "build": "next build",
     "start": "next start",
     "lint": "eslint",
-    "slack-sync": "node scripts/slack-product-updates-sync.mjs"
+    "slack-sync": "node scripts/slack-product-updates-sync.mjs",
+    "notion-sync": "node scripts/notion-calendar-sync.mjs"
   },
   "dependencies": {
     "@anthropic-ai/sdk": "^0.78.0",
     "@lancedb/lancedb": "^0.26.2",
+    "@notionhq/client": "^5.9.0",
     "next": "16.1.6",
     "openai": "^6.22.0",
     "react": "19.2.3",
