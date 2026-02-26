@@ -219,6 +219,7 @@ const SAUCE_TOPIC_ANCHOR_MAX_CHARS = 220;
 const INDUSTRY_NEWS_REACTION_PATTERN = /\bindustry news reaction\b/i;
 const PRODUCT_UPDATE_PATTERN =
   /\bproduct\s+(?:feature\s+)?(?:launch|lunch)(?:\s+update)?\b|\bproduct\s+update\b/i;
+const YOUTUBE_PROMO_POST_TYPE_PATTERN = /\b(content promo|post[-\s]?event youtube promo|youtube promo)\b/i;
 const SOIS_ACRONYM_PATTERN = /\bsois\b/i;
 const SOIS_EXPANDED_PATTERN = /\bstate of in[-\s]?app subscriptions\b/i;
 const AI_LABEL_STYLE_OPENER_PATTERN = /(?:^|[.!?]\s+)[A-Za-z][A-Za-z ]{1,24}:\s+/i;
@@ -234,6 +235,10 @@ function looksLikeProductUpdatePostType(inputType: string): boolean {
 
 function looksLikeEventOrWebinarPostType(inputType: string): boolean {
   return /\bevent\b|\bwebinar\b/i.test(inputType);
+}
+
+function looksLikeYouTubePromoPostType(inputType: string): boolean {
+  return YOUTUBE_PROMO_POST_TYPE_PATTERN.test(inputType);
 }
 
 const GOAL_PLAYBOOKS: Record<ContentGoal, string> = {
@@ -256,7 +261,7 @@ const POST_TYPE_PLAYBOOKS: Array<{ pattern: RegExp; directive: string }> = [
       "Lead with a real operator pain or short story teams relate to. Stack: relatable scenario + why-now + logistics + takeaway. Include explicit logistics (date/time/place), who should attend, and one practical conversation or takeaway.",
   },
   {
-    pattern: /content promo/i,
+    pattern: /content promo|post[-\s]?event youtube promo|youtube promo/i,
     directive:
       "Promote one specific content asset (especially YouTube). Stack: sharp hook + one concrete takeaway from the video + why it matters + clear 'watch now' CTA tied to the provided link.",
   },
@@ -3252,10 +3257,13 @@ export async function POST(request: Request) {
       .join(" | ");
     const isEventOrWebinarPostType = looksLikeEventOrWebinarPostType(input.inputType);
     const isProductUpdatePostType = looksLikeProductUpdatePostType(input.inputType);
-    const shouldRunWebFactCheck = !isProductUpdatePostType;
+    const isYouTubePromoPostType = looksLikeYouTubePromoPostType(input.inputType);
+    const shouldRunWebFactCheck = !isProductUpdatePostType && !isYouTubePromoPostType;
     const shouldRunSoisContext = !isProductUpdatePostType && !isEventOrWebinarPostType;
     const webFactCheckSkipReason = isProductUpdatePostType
       ? "Web fact-check skipped for product feature launch post type."
+      : isYouTubePromoPostType
+        ? "Web fact-check skipped for YouTube promo post type."
       : "Web fact-check skipped for this post type.";
     const soisContextSkipReason = isProductUpdatePostType
       ? "SOIS context skipped for product feature launch post type."
@@ -3426,7 +3434,7 @@ export async function POST(request: Request) {
         : "State of In-App Subscriptions (SOIS) benchmark evidence is unavailable for this run. Use only numbers and claims from other provided evidence.";
     const eventWebEnrichmentDirective =
       isEventOrWebinarPostType && shouldRunWebFactCheck
-        ? "For event/webinar posts, use web evidence to recover missing logistics (date, time, place, registration URL) when possible. If unresolved, keep it generic instead of guessing."
+        ? "For event/webinar posts, use web evidence to recover missing logistics (date, time, place, registration URL) only when explicitly supported by evidence. If time or place is still missing, assume there is no time or place and do not invent one."
         : "";
     const factCheckEvidenceForPrompt = !shouldRunWebFactCheck
       ? webFactCheckSkipReason
@@ -3601,6 +3609,7 @@ Generation request:
 ${ctaRequestSection}
 - Event time: ${input.time || "(not provided)"}
 - Event place: ${input.place || "(not provided)"}
+- Event logistics rule: if time or place is not provided in request/evidence, assume there is no time or place.
 - Number of posts: ${input.numberOfPosts}
 - Chart: ${chartExecutionDirective} ${chartPromptSummary !== "(not provided)" ? `Summary: ${chartPromptSummary}` : ""}
 - Image context: ${

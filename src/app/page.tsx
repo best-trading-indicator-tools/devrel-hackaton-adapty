@@ -528,7 +528,7 @@ function ensureFinalCtaText(cta: string, ctaLink: string): string {
 function buildDetailsFromProductUpdateEntry(entry: SlackProductUpdateEntry): string {
   const parts: string[] = [];
   if (entry.name.trim()) parts.push(`Feature: ${entry.name.trim()}`);
-  if (entry.releaseDate.trim()) parts.push(`Release date: ${entry.releaseDate.trim()}`);
+  if (entry.releaseDate.trim()) parts.push(`Post date: ${entry.releaseDate.trim()}`);
   if (entry.message.trim()) parts.push(`Main update:\n${entry.message.trim()}`);
   if (entry.matchingReplies.length) {
     const keyReplies = entry.matchingReplies
@@ -4574,7 +4574,7 @@ export default function Home() {
                     Missing fields are highlighted. When event name/details are present, generation will attempt web enrichment for missing event logistics.
                   </p>
                   <p className="text-xs text-slate-600">
-                    Entries containing a YouTube link are auto-treated as <strong>Content Promo</strong> with the <strong>Traffic</strong> goal,
+                    Entries containing a YouTube link are auto-treated as <strong>Post-event YouTube promo</strong> with the <strong>Traffic</strong> goal,
                     and that YouTube link is used as CTA fallback.
                   </p>
                 </>

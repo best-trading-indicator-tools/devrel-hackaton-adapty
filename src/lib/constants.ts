@@ -65,7 +65,7 @@ export function isBrandVoicePreset(value: string): value is BrandVoicePreset {
   return (BRAND_VOICE_PRESETS as readonly string[]).includes(value);
 }
 
-export const CONTENT_PROMO_POST_TYPE = "Content Promo" as const;
+export const CONTENT_PROMO_POST_TYPE = "Post-event YouTube promo" as const;
 
 export const POST_TYPE_OPTIONS = [
   "Product feature launch",
@@ -85,7 +85,7 @@ export const POST_TYPE_UI_DESCRIPTIONS: Record<(typeof POST_TYPE_OPTIONS)[number
   "Product feature launch": "Announce a new feature or major update with user pain, solution, and concrete impact.",
   "Event / webinar promo": "Promote an upcoming event with clear why-now, logistics, and who should attend.",
   [CONTENT_PROMO_POST_TYPE]:
-    "Promote a specific content asset (especially YouTube): tease one key insight and drive clicks to watch.",
+    "Promote the event recording on YouTube: tease one specific takeaway and drive people to watch.",
   Sauce: "Share tactical insights, data-backed mechanics, and practical steps teams can apply this week.",
   "Industry news reaction": "Give a sharp take on recent industry news with clear implications and next moves.",
   // "Engagement farming: poll/quiz": "Ask high-signal questions that invite comments, votes, and operator viewpoints.",
