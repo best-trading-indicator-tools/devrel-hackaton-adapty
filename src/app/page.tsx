@@ -70,6 +70,7 @@ type MemeCompanion = NonNullable<GeneratedPost["meme"]>;
 type GiphyCompanion = NonNullable<GeneratedPost["giphy"]>;
 type CopyAction = "post_images" | "x_thread" | "memes" | "giphy" | "everything";
 type PostContentTab = "linkedin" | "x";
+type RewriteIntensity = "light" | "medium" | "high";
 
 const defaultForm: FormState = {
   style: "adapty",
@@ -118,6 +119,12 @@ const CHART_VISUAL_STYLE_OPTIONS = [
   "minimal monochrome",
   "neon cyberpunk",
 ] as const;
+const REWRITE_INTENSITY_OPTIONS: RewriteIntensity[] = ["light", "medium", "high"];
+const REWRITE_INTENSITY_LABELS: Record<RewriteIntensity, string> = {
+  light: "Light",
+  medium: "Medium",
+  high: "High",
+};
 const CHART_IMAGE_PROMPT_QUICK_SUGGESTIONS = [
   {
     id: "linkedin-clean",
@@ -1881,6 +1888,7 @@ export default function Home() {
   const [error, setError] = useState<string>("");
   const [isLoading, setIsLoading] = useState(false);
   const [rewriteLoadingKey, setRewriteLoadingKey] = useState<string | null>(null);
+  const [rewriteIntensityByPost, setRewriteIntensityByPost] = useState<Record<number, RewriteIntensity>>({});
   const [rewritePromptByPost, setRewritePromptByPost] = useState<Record<number, string>>({});
   const [manualLineDraftByPost, setManualLineDraftByPost] = useState<Record<number, string>>({});
   const [manualCtaDraftByPost, setManualCtaDraftByPost] = useState<Record<number, string>>({});
@@ -2782,6 +2790,7 @@ export default function Home() {
     setError("");
     setResult(null);
     setIsLoading(true);
+    setRewriteIntensityByPost({});
     setRewritePromptByPost({});
     setManualLineDraftByPost({});
     setManualCtaDraftByPost({});
@@ -3487,6 +3496,34 @@ export default function Home() {
     return rewriteContext.ctaLink;
   }
 
+  function getRewriteIntensity(postIndex: number): RewriteIntensity {
+    return rewriteIntensityByPost[postIndex] ?? "medium";
+  }
+
+  function focusEditorById(editorId: string): void {
+    if (typeof document === "undefined") {
+      return;
+    }
+
+    requestAnimationFrame(() => {
+      const element = document.getElementById(editorId);
+      if (!(element instanceof HTMLTextAreaElement)) {
+        return;
+      }
+      element.focus();
+      const cursorPosition = element.value.length;
+      element.setSelectionRange(cursorPosition, cursorPosition);
+    });
+  }
+
+  function focusBodyLineEditor(postIndex: number, lineIndex: number): void {
+    focusEditorById(`body-line-editor-${postIndex}-${lineIndex}`);
+  }
+
+  function focusCtaEditor(postIndex: number): void {
+    focusEditorById(`cta-editor-${postIndex}`);
+  }
+
   async function rewriteEntirePost(postIndex: number) {
     const post = result?.posts[postIndex];
     if (!post) {
@@ -3507,6 +3544,7 @@ export default function Home() {
         },
         body: JSON.stringify({
           mode: "post",
+          rewriteIntensity: getRewriteIntensity(postIndex),
           ...rewriteContext,
           style: getRewriteStyle(postIndex),
           goal: getRewriteGoal(postIndex),
@@ -3616,6 +3654,7 @@ export default function Home() {
         },
         body: JSON.stringify({
           mode: "line",
+          rewriteIntensity: getRewriteIntensity(postIndex),
           ...rewriteContext,
           style: getRewriteStyle(postIndex),
           goal: getRewriteGoal(postIndex),
@@ -3674,20 +3713,20 @@ export default function Home() {
           giphyVariants: undefined,
         };
       });
-      setSelectedLineByPost((prev) => {
-        const next = { ...prev };
-        delete next[postIndex];
-        return next;
-      });
-      setManualLineDraftByPost((prev) => {
-        const next = { ...prev };
-        delete next[postIndex];
-        return next;
-      });
+      const normalizedLine = normalizeNoEmDash(nextLine.trim());
+      setSelectedLineByPost((prev) => ({
+        ...prev,
+        [postIndex]: lineIndex,
+      }));
+      setManualLineDraftByPost((prev) => ({
+        ...prev,
+        [postIndex]: normalizedLine,
+      }));
       setLineFeedbackByPost((prev) => ({
         ...prev,
         [postIndex]: "Line rewritten with AI.",
       }));
+      focusBodyLineEditor(postIndex, lineIndex);
     } catch {
       setRewriteErrorByPost((prev) => ({
         ...prev,
@@ -3723,6 +3762,7 @@ export default function Home() {
         body: JSON.stringify({
           mode: "line",
           lineTarget: "cta",
+          rewriteIntensity: getRewriteIntensity(postIndex),
           ...rewriteContext,
           style: getRewriteStyle(postIndex),
           goal: getRewriteGoal(postIndex),
@@ -3770,20 +3810,20 @@ export default function Home() {
         giphyVariants: undefined,
       }));
 
-      setSelectedCtaByPost((prev) => {
-        const next = { ...prev };
-        delete next[postIndex];
-        return next;
-      });
-      setManualCtaDraftByPost((prev) => {
-        const next = { ...prev };
-        delete next[postIndex];
-        return next;
-      });
+      const normalizedLine = normalizeNoEmDash(nextLine.trim());
+      setSelectedCtaByPost((prev) => ({
+        ...prev,
+        [postIndex]: true,
+      }));
+      setManualCtaDraftByPost((prev) => ({
+        ...prev,
+        [postIndex]: normalizedLine,
+      }));
       setLineFeedbackByPost((prev) => ({
         ...prev,
         [postIndex]: "CTA rewritten with AI.",
       }));
+      focusCtaEditor(postIndex);
     } catch {
       setRewriteErrorByPost((prev) => ({
         ...prev,
@@ -5508,6 +5548,7 @@ export default function Home() {
                 (lineOption) => lineOption.lineIndex === selectedLineByPost[index] && !lineOption.isBlank,
               );
               const isCtaEditing = Boolean(selectedCtaByPost[index]);
+              const rewriteIntensity = rewriteIntensityByPost[index] ?? "medium";
               const manualLineDraft = manualLineDraftByPost[index] ?? selectedLine?.text ?? "";
               const manualCtaDraft = manualCtaDraftByPost[index] ?? post.cta;
               const isPostRewriteLoading = rewriteLoadingKey === `post-${index}`;
@@ -5647,10 +5688,31 @@ export default function Home() {
                     <>
                       <p className="mb-3 text-lg font-semibold leading-snug">{post.hook}</p>
                       <div className="space-y-1 rounded-xl border border-sky-200 bg-linear-to-b from-sky-50/80 to-white p-2.5">
-                        <p className="flex items-center gap-1.5 px-1 text-xs font-medium text-sky-700">
-                          <IconPencil className="h-3.5 w-3.5" />
-                          Click a body line to edit inline.
-                        </p>
+                        <div className="flex flex-wrap items-center justify-between gap-2 px-1">
+                          <p className="flex items-center gap-1.5 text-xs font-medium text-sky-700">
+                            <IconPencil className="h-3.5 w-3.5" />
+                            Click a body line to edit inline.
+                          </p>
+                          <label className="inline-flex items-center gap-1.5 text-[11px] font-medium text-slate-600">
+                            Rewrite strength
+                            <select
+                              value={rewriteIntensity}
+                              onChange={(event) =>
+                                setRewriteIntensityByPost((prev) => ({
+                                  ...prev,
+                                  [index]: event.target.value as RewriteIntensity,
+                                }))
+                              }
+                              className="rounded-md border border-slate-300 bg-white px-1.5 py-1 text-[11px] text-slate-700 outline-none transition focus:border-sky-500"
+                            >
+                              {REWRITE_INTENSITY_OPTIONS.map((option) => (
+                                <option key={option} value={option}>
+                                  {REWRITE_INTENSITY_LABELS[option]}
+                                </option>
+                              ))}
+                            </select>
+                          </label>
+                        </div>
                         {bodyLineOptions.map((lineOption) => {
                           if (lineOption.isBlank) {
                             return <div key={`${index}-${lineOption.lineIndex}`} className="h-2" />;
@@ -5669,6 +5731,7 @@ export default function Home() {
                                   L{lineOption.lineIndex + 1} Editing
                                 </p>
                                 <textarea
+                                  id={`body-line-editor-${index}-${lineOption.lineIndex}`}
                                   rows={2}
                                   autoFocus
                                   className="w-full rounded-lg border border-sky-200 bg-white px-2 py-2 text-sm text-slate-700 outline-none transition focus:border-sky-500"
@@ -5731,6 +5794,7 @@ export default function Home() {
                             {isCtaEditing ? (
                               <div className="rounded-md border border-emerald-200 bg-emerald-50/40 p-2">
                                 <textarea
+                                  id={`cta-editor-${index}`}
                                   rows={2}
                                   autoFocus
                                   className="w-full rounded-lg border border-emerald-200 bg-white px-2 py-2 text-sm font-medium text-slate-900 outline-none transition focus:border-emerald-500"

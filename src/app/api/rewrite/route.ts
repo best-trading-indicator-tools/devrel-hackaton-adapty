@@ -10,9 +10,34 @@ import { getPromptGuides } from "@/lib/prompt-guides";
 
 export const runtime = "nodejs";
 
+const REWRITE_INTENSITY_OPTIONS = ["light", "medium", "high"] as const;
+type RewriteIntensity = (typeof REWRITE_INTENSITY_OPTIONS)[number];
+
+const REWRITE_INTENSITY_LABELS: Record<RewriteIntensity, string> = {
+  light: "Light",
+  medium: "Medium",
+  high: "High",
+};
+
+const REWRITE_INTENSITY_GUIDANCE: Record<RewriteIntensity, string> = {
+  light:
+    "Make minimal edits. Preserve wording, sentence structure, and rhythm as much as possible. Only tighten clarity and obvious awkward phrasing.",
+  medium:
+    "Balance preservation and improvement. Rephrase lines for stronger clarity and flow while keeping the original intent and direction.",
+  high:
+    "Rewrite aggressively for impact. You may substantially rephrase and restructure while preserving core meaning, factual boundaries, and requested context.",
+};
+
+const REWRITE_OPENAI_TEMPERATURE: Record<RewriteIntensity, number> = {
+  light: 0.45,
+  medium: 0.7,
+  high: 0.85,
+};
+
 const rewriteRequestSchema = z.object({
   mode: z.enum(["post", "line"]),
   lineTarget: z.enum(["body", "cta"]).default("body"),
+  rewriteIntensity: z.enum(REWRITE_INTENSITY_OPTIONS).default("medium"),
   style: z.string().trim().min(1).max(260),
   goal: z.enum(GOAL_OPTIONS),
   inputType: z.string().trim().min(1).max(120),
@@ -115,6 +140,7 @@ function looksLikeSaucePostType(inputType: string): boolean {
 async function runOpenAiRewrite<T>(params: {
   token: string;
   model: string;
+  temperature: number;
   systemPrompt: string;
   userPrompt: string;
   responseSchema: z.ZodType<T>;
@@ -123,7 +149,7 @@ async function runOpenAiRewrite<T>(params: {
   const client = getOpenAIClient(params.token);
   const completion = await client.chat.completions.parse({
     model: params.model,
-    temperature: 0.8,
+    temperature: params.temperature,
     messages: [
       { role: "system", content: params.systemPrompt },
       { role: "user", content: params.userPrompt },
@@ -185,6 +211,7 @@ export async function POST(request: Request) {
     }
 
     const input = parsedInput.data;
+    const rewriteIntensity = input.rewriteIntensity;
     const requestedModel = process.env.OPENAI_MODEL ?? "gpt-5.3-codex";
     const fallbackModel = process.env.OPENAI_MODEL_FALLBACK ?? "gpt-5.2";
 
@@ -231,8 +258,16 @@ ${promptGuides.paywall}
     const promptDirective = input.prompt.trim()
       ? input.prompt.trim()
       : input.mode === "line"
-        ? "Regenerate this line to be stronger, clearer, and more human while preserving intent."
-        : "Rewrite the post to improve quality, clarity, and engagement while preserving the core message.";
+        ? rewriteIntensity === "light"
+          ? "Regenerate this line with minimal edits. Keep wording and structure close while improving clarity."
+          : rewriteIntensity === "high"
+            ? "Regenerate this line with a stronger rewrite. You may substantially rephrase for punch and clarity while preserving intent."
+            : "Regenerate this line to be stronger, clearer, and more human while preserving intent."
+        : rewriteIntensity === "light"
+          ? "Rewrite the post lightly: keep structure and wording mostly intact while tightening clarity."
+          : rewriteIntensity === "high"
+            ? "Rewrite the post heavily for stronger clarity and engagement. You may substantially rephrase while preserving core meaning."
+            : "Rewrite the post to improve quality, clarity, and engagement while preserving the core message.";
 
     const commonSystemPrompt = `
 You rewrite LinkedIn content for Adapty.
@@ -246,6 +281,10 @@ Rules:
 - Avoid generic AI-like cadence and buzzword filler.
 - Keep claims concrete and defensible.
 - Use Adapty company voice: "we", "our", and "us". Never use first-person singular pronouns ("I", "me", "my").
+
+Rewrite intensity:
+- Selected intensity: ${REWRITE_INTENSITY_LABELS[rewriteIntensity]}
+- Guidance: ${REWRITE_INTENSITY_GUIDANCE[rewriteIntensity]}
 
 Repository writing guide:
 ${promptGuides.writing}
@@ -305,6 +344,7 @@ Output requirements:
         return runOpenAiRewrite({
           token: openAiApiToken,
           model,
+          temperature: REWRITE_OPENAI_TEMPERATURE[rewriteIntensity],
           systemPrompt: commonSystemPrompt,
           userPrompt,
           responseSchema: rewritePostResponseSchema,
@@ -389,6 +429,7 @@ Output requirements:
       return runOpenAiRewrite({
         token: openAiApiToken,
         model,
+        temperature: REWRITE_OPENAI_TEMPERATURE[rewriteIntensity],
         systemPrompt: commonSystemPrompt,
         userPrompt,
         responseSchema: rewriteLineResponseSchema,

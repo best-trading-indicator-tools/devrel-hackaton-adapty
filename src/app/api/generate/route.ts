@@ -75,6 +75,112 @@ const MEME_TEMPLATE_FLOW_RULES: Record<string, string> = {
   [GONE_TEMPLATE_ID]:
     `2-line format: line1 is setup, line2 must be exactly "${GONE_TEMPLATE_FIXED_BOTTOM_TEXT}".`,
 };
+const MEME_TEMPLATE_PROMPT_STRATEGIES: Record<string, string> = {
+  drake:
+    "Top line states a concrete bad choice. Bottom line names the specific better move. Maximize contrast and keep the payoff immediate.",
+  "woman-cat":
+    "Line 1 is an emotional accusation from one side. Line 2 is a short, deadpan reply from the clueless side that makes the scene funnier.",
+  spiderman:
+    "Use two labels for the same behavior. The joke is that both sides are effectively identical.",
+  both: "Set up a fake either-or choice, then resolve it with a practical \"do both\" payoff.",
+  wonka:
+    "Use dry sarcasm. Bottom line should sound like a condescending comeback to a naive growth take.",
+  buzz:
+    "Line 1 names the thing. Line 2 exaggerates that same thing being everywhere. Keep it short and visual.",
+  fry: "Frame two plausible explanations and keep skeptical uncertainty in the payoff.",
+  stonks:
+    "Describe an obviously questionable move, then frame the bad outcome as if it were genius for ironic effect.",
+  disastergirl:
+    "Setup a situation that is quietly chaotic. Payoff is a smug or knowing reaction as if this was expected.",
+  db:
+    "3-line triangle: line1 what gets ignored, line2 shiny distraction, line3 what should have been prioritized.",
+  dbg: "Top is idealized expectation, bottom is blunt reality with concrete disappointment.",
+  pigeon:
+    "Top line labels the real thing. Bottom line is the deliberately wrong guess in a \"is this\" tone.",
+  spongebob:
+    "Repeat the same core phrase. First line normal, second line mocking or distorted to ridicule the idea.",
+  same: "Use 3 slots to show that different labels all point to the same underlying problem.",
+  kombucha: "Line 1 initial interest, line 2 instant disgust reversal after the second beat.",
+  harold:
+    "Line 1 states painful reality. Line 2 is forced-optimistic coping that clearly hides stress.",
+  rollsafe:
+    "Use flawed smart-sounding logic. Bottom line should be a cheeky \"can't fail if...\" style loophole.",
+  gru: "4 beats: bold plan, expected result, realization it backfires, corrected action.",
+  anakin:
+    "4-line dialogue with mounting confidence and a final worried silence/realization in the last beat.",
+  right:
+    "5 beats: statement, hopeful \"right?\", hidden downside, worried follow-up, awkward truth.",
+  chair:
+    "6 alternating dialogue beats that escalate conflict before ending with a hard reality-check line.",
+  [GONE_TEMPLATE_ID]:
+    `Line 1 sets up the loss. Line 2 must stay exactly "${GONE_TEMPLATE_FIXED_BOTTOM_TEXT}".`,
+};
+const MEME_TEMPLATE_LINE_ROLE_HINTS: Record<string, string[]> = {
+  drake: ["rejected option", "preferred option"],
+  "woman-cat": ["frustrated accusation", "clueless or deadpan response"],
+  spiderman: ["first label", "second label for the same thing"],
+  both: ["either-or setup", "explicit both payoff (usually 'why not both?')"],
+  wonka: ["naive claim or brag", "sarcastic put-down"],
+  buzz: ["thing name", "same thing but 'everywhere'"],
+  fry: ["uncertain first possibility", "second possibility that completes the doubt"],
+  stonks: ["bad move setup", "ironic fake-smart payoff"],
+  disastergirl: ["chaos setup", "smug knowing reaction"],
+  db: ["thing being ignored", "new distraction", "current priority being neglected"],
+  dbg: ["expectation", "reality"],
+  pigeon: ["observer/subject", "object being misread", "wrong-question payoff (often 'Is this ...?')"],
+  spongebob: ["normal quote to mock", "same idea in mocking voice"],
+  same: ["label A", "label B", "they are equivalent verdict"],
+  kombucha: ["first reaction", "immediate reaction reversal"],
+  harold: ["painful situation", "forced-smile coping response"],
+  rollsafe: ["problem setup", "clever-but-flawed loophole"],
+  gru: ["plan", "expected result", "realization it breaks", "awkward consequence"],
+  right: ["bold claim", "optimistic 'right?'", "hidden catch", "worried follow-up", "awkward final beat"],
+  chair: ["claim A", "rebuttal", "counter-rebuttal", "correction", "escalation", "final exasperated line"],
+  [GONE_TEMPLATE_ID]: ["setup before loss", `exactly "${GONE_TEMPLATE_FIXED_BOTTOM_TEXT}"`],
+};
+
+function resolveMemeTemplateLineRoleHint(templateId: string, lineCount: number): string {
+  const key = templateId.trim().toLowerCase();
+  const hints = MEME_TEMPLATE_LINE_ROLE_HINTS[key];
+
+  if (!hints?.length) {
+    return `L1-L${lineCount} must follow the template's visual beat order.`;
+  }
+
+  const clipped = hints.slice(0, lineCount);
+  const normalized = clipped.map((hint, index) => `L${index + 1}: ${normalizeNoEmDash(hint)}`);
+  return normalized.join(" | ");
+}
+
+function resolveMemeTemplatePromptStrategy(params: {
+  templateId: string;
+  lineCount: number;
+  meaning?: string;
+  flowRule?: string;
+}): string {
+  const key = params.templateId.trim().toLowerCase();
+  const explicitRule = MEME_TEMPLATE_PROMPT_STRATEGIES[key];
+  const flowRule = params.flowRule ? normalizeNoEmDash(params.flowRule).trim() : "";
+  const semanticMeaning = params.meaning ? normalizeNoEmDash(params.meaning).trim() : "";
+
+  if (explicitRule && flowRule) {
+    return `${normalizeNoEmDash(explicitRule)} Also follow flow: ${flowRule}`;
+  }
+
+  if (explicitRule) {
+    return normalizeNoEmDash(explicitRule);
+  }
+
+  if (flowRule && semanticMeaning) {
+    return `Respect meaning: ${semanticMeaning}. Follow flow: ${flowRule}`;
+  }
+
+  if (semanticMeaning) {
+    return `Respect meaning: ${semanticMeaning}. Keep exactly ${params.lineCount} lines with a clear setup-to-payoff arc.`;
+  }
+
+  return `Keep exactly ${params.lineCount} lines mapped to the template visual beats, with setup first and punchline last.`;
+}
 const FACT_CHECK_EVIDENCE_PROMPT_LIMIT = 4;
 const DEFAULT_SOIS_EVIDENCE_PROMPT_LIMIT = 8;
 const DEFAULT_SOIS_BROAD_EVIDENCE_PROMPT_LIMIT = 24;
@@ -2559,6 +2665,52 @@ function buildClaudeXThreadJsonSchema(): Record<string, unknown> {
   };
 }
 
+function buildClaudeMemeSelectionJsonSchema(): Record<string, unknown> {
+  return {
+    type: "object",
+    properties: {
+      selections: {
+        type: "array",
+        // Anthropic JSON schema currently allows only minItems 0 or 1.
+        minItems: 1,
+        items: {
+          type: "object",
+          properties: {
+            postIndex: { type: "integer", minimum: 1 },
+            variants: {
+              type: "array",
+              // Anthropic JSON schema currently allows only minItems 0 or 1.
+              minItems: 1,
+              items: {
+                type: "object",
+                properties: {
+                  templateId: { type: "string" },
+                  topText: { type: "string" },
+                  bottomText: { type: "string" },
+                  textLines: {
+                    type: "array",
+                    // Anthropic JSON schema currently allows only minItems 0 or 1.
+                    minItems: 1,
+                    items: { type: "string" },
+                  },
+                  toneFitScore: { type: "integer", minimum: 0, maximum: 100 },
+                  toneFitReason: { type: "string" },
+                },
+                required: ["templateId", "topText", "bottomText", "textLines", "toneFitScore", "toneFitReason"],
+                additionalProperties: false,
+              },
+            },
+          },
+          required: ["postIndex", "variants"],
+          additionalProperties: false,
+        },
+      },
+    },
+    required: ["selections"],
+    additionalProperties: false,
+  };
+}
+
 async function runClaudeXThreadGeneration(params: {
   apiKey: string;
   model: string;
@@ -2669,6 +2821,116 @@ ${sourcePostBlock}`,
   }
 
   return threadsByPostIndex;
+}
+
+async function runClaudeMemeSelection(params: {
+  apiKey: string;
+  model: string;
+  systemPrompt: string;
+  userPrompt: string;
+  responseSchema: ReturnType<typeof makeMemeSelectionResponseSchema>;
+  postCount: number;
+  variantCount: number;
+  defaultTemplateId: MemeTemplateId;
+}) {
+  const client = new Anthropic({ apiKey: params.apiKey });
+  const response = await client.messages.create({
+    model: params.model,
+    max_tokens: 4096,
+    temperature: 0.95,
+    system: params.systemPrompt,
+    messages: [{ role: "user", content: params.userPrompt }],
+    output_config: {
+      format: {
+        type: "json_schema" as const,
+        schema: buildClaudeMemeSelectionJsonSchema(),
+      },
+    },
+  });
+
+  const textBlock = response.content.find((block): block is Anthropic.TextBlock => block.type === "text");
+  if (!textBlock?.text) {
+    throw new Error("Claude returned no text content for meme selection");
+  }
+
+  const parsed = JSON.parse(textBlock.text) as unknown;
+
+  // Keep Claude schema relaxed for compatibility, then tighten shape for strict Zod validation.
+  const normalizedPayload = (() => {
+    if (!parsed || typeof parsed !== "object") {
+      return parsed;
+    }
+
+    const parsedObject = parsed as { selections?: unknown };
+    const rawSelections = Array.isArray(parsedObject.selections) ? parsedObject.selections : [];
+    const selections = rawSelections.slice(0, params.postCount).map((rawSelection, selectionIndex) => {
+      const selection = rawSelection && typeof rawSelection === "object" ? (rawSelection as Record<string, unknown>) : {};
+      const rawPostIndex =
+        typeof selection.postIndex === "number"
+          ? selection.postIndex
+          : Number.isFinite(Number(selection.postIndex))
+            ? Number(selection.postIndex)
+            : selectionIndex + 1;
+      const postIndex = Math.max(1, Math.min(params.postCount, Math.round(rawPostIndex)));
+      const rawVariants = Array.isArray(selection.variants) ? selection.variants : [];
+      const variants = rawVariants.slice(0, params.variantCount).map((rawVariant) => {
+        const variant = rawVariant && typeof rawVariant === "object" ? (rawVariant as Record<string, unknown>) : {};
+        const fallbackTopText = "When the KPI deck says everything is fine";
+        const fallbackBottomText = "and production says absolutely not";
+        const templateId =
+          typeof variant.templateId === "string" && variant.templateId.trim()
+            ? variant.templateId.trim()
+            : params.defaultTemplateId;
+        const topText = clipTextStrictMax(
+          normalizeNoEmDash(typeof variant.topText === "string" ? variant.topText : fallbackTopText).trim() || fallbackTopText,
+          120,
+        );
+        const bottomText = clipTextStrictMax(
+          normalizeNoEmDash(typeof variant.bottomText === "string" ? variant.bottomText : fallbackBottomText).trim() ||
+            fallbackBottomText,
+          120,
+        );
+        const rawTextLines = Array.isArray(variant.textLines) ? variant.textLines : [];
+        const normalizedTextLines = rawTextLines
+          .filter((line): line is string => typeof line === "string")
+          .map((line) => clipTextStrictMax(normalizeNoEmDash(line).trim(), 120))
+          .filter((line) => Boolean(line))
+          .slice(0, MAX_MEME_TEMPLATE_LINE_COUNT);
+        const textLines = normalizedTextLines.length >= 2 ? normalizedTextLines : [topText, bottomText];
+        const toneFitScore =
+          typeof variant.toneFitScore === "number" && Number.isFinite(variant.toneFitScore)
+            ? Math.max(0, Math.min(100, Math.round(variant.toneFitScore)))
+            : 78;
+        const toneFitReason = clipTextStrictMax(
+          normalizeNoEmDash(
+            typeof variant.toneFitReason === "string"
+              ? variant.toneFitReason
+              : "Template meaning and punchline align with the post tension.",
+          ).trim() || "Template meaning and punchline align with the post tension.",
+          220,
+        );
+        return {
+          templateId,
+          topText,
+          bottomText,
+          textLines,
+          toneFitScore,
+          toneFitReason,
+        };
+      });
+
+      return {
+        postIndex,
+        variants,
+      };
+    });
+
+    return {
+      selections,
+    };
+  })();
+
+  return params.responseSchema.parse(normalizedPayload);
 }
 
 async function runOpenAiChatMemeSelection(params: {
@@ -3302,7 +3564,8 @@ Also generate a list of hook suggestions inspired by this style and request.
     };
 
     const anthropicApiKey = process.env.ANTHROPIC_API_KEY?.trim();
-    const useClaudeWriter = Boolean(anthropicApiKey);
+    // Prefer Codex OAuth when available; fall back to Claude only when OAuth is unavailable.
+    const useClaudeWriter = Boolean(anthropicApiKey && !oauthCredentials);
 
     const runGeneration = (params: {
       model: string;
@@ -3310,16 +3573,6 @@ Also generate a list of hook suggestions inspired by this style and request.
       responseSchema: ReturnType<typeof makeGeneratePostsResponseSchema>;
       postCount: number;
     }): Promise<GeneratedBatch> => {
-      if (useClaudeWriter) {
-        return runClaudeWriterGeneration({
-          systemPrompt,
-          userPrompt: params.userPrompt,
-          imageDataUrls: inputImageDataUrls.length ? inputImageDataUrls : undefined,
-          responseSchema: params.responseSchema,
-          postCount: params.postCount,
-        });
-      }
-
       if (oauthCredentials) {
         return runCodexOauthGeneration({
           oauth: oauthCredentials,
@@ -3328,6 +3581,16 @@ Also generate a list of hook suggestions inspired by this style and request.
           userPrompt: params.userPrompt,
           imageDataUrls: inputImageDataUrls.length ? inputImageDataUrls : undefined,
           responseSchema: params.responseSchema,
+        });
+      }
+
+      if (useClaudeWriter) {
+        return runClaudeWriterGeneration({
+          systemPrompt,
+          userPrompt: params.userPrompt,
+          imageDataUrls: inputImageDataUrls.length ? inputImageDataUrls : undefined,
+          responseSchema: params.responseSchema,
+          postCount: params.postCount,
         });
       }
 
@@ -3995,10 +4258,34 @@ Return ${parsed.hooks.length} hook suggestions as well (keep good ones, tighten 
             const meaning = MEME_TEMPLATE_MEANINGS[id];
             const lineCount = templateLineCountById.get(id.trim().toLowerCase()) ?? getKnownMemeTemplateLineCount(id);
             const flowRule = MEME_TEMPLATE_FLOW_RULES[id.trim().toLowerCase()];
+            const lineRoleHint = resolveMemeTemplateLineRoleHint(id, lineCount);
+            const promptStrategy = resolveMemeTemplatePromptStrategy({
+              templateId: id,
+              lineCount,
+              meaning,
+              flowRule,
+            });
             const flowRuleSuffix = flowRule ? ` | flow: ${flowRule}` : "";
+            const roleSuffix = lineRoleHint ? ` | line roles: ${lineRoleHint}` : "";
+            const strategySuffix = promptStrategy ? ` | caption strategy: ${promptStrategy}` : "";
             return meaning
-              ? `- ${id}: ${name} (lines: ${lineCount})${flowRuleSuffix} — ${meaning}`
-              : `- ${id}: ${name} (lines: ${lineCount})${flowRuleSuffix}`;
+              ? `- ${id}: ${name} (lines: ${lineCount})${flowRuleSuffix}${roleSuffix} - ${meaning}${strategySuffix}`
+              : `- ${id}: ${name} (lines: ${lineCount})${flowRuleSuffix}${roleSuffix}${strategySuffix}`;
+          })
+          .join("\n");
+        const memeTemplateStrategyGuide = allowedTemplateIds
+          .map((id) => {
+            const lineCount = templateLineCountById.get(id.trim().toLowerCase()) ?? getKnownMemeTemplateLineCount(id);
+            const meaning = MEME_TEMPLATE_MEANINGS[id];
+            const flowRule = MEME_TEMPLATE_FLOW_RULES[id.trim().toLowerCase()];
+            const lineRoleHint = resolveMemeTemplateLineRoleHint(id, lineCount);
+            const promptStrategy = resolveMemeTemplatePromptStrategy({
+              templateId: id,
+              lineCount,
+              meaning,
+              flowRule,
+            });
+            return `- ${id}: ${promptStrategy} | ${lineRoleHint}`;
           })
           .join("\n");
         const memeSelectionSystemPrompt = `
@@ -4008,6 +4295,13 @@ You must choose only from the provided template IDs and produce ranked variants.
 CRITICAL: The caption (top/bottom text) must semantically match the meme image. Each template has a specific visual meaning and format. Choose templates whose meaning fits your joke, and write captions that are the actual joke a viewer would see — not meta-commentary about the post style, tone, or "Adapty-style humor." The text overlay IS the punchline.
 
 The caption must be funny (it's a meme) and relevant to the specific post. Derive the joke from the post's hook and body — the meme should illustrate or punch up a point from that post, not generic filler. Make sense and land the joke.
+Humor quality rules:
+- Use tension then payoff: line 1 sets expectation, line 2 flips it with a concrete punchline.
+- Prefer specific operator pain (paywall tests, churn, trial drop-off, analytics chaos) over abstract "business struggle" phrasing.
+- Reject bland meme cliches ("when you realize", "nobody talks about this", "optimize your funnel") unless rewritten into a novel, post-specific joke.
+- If a caption could fit any random SaaS post, rewrite it until it is specific to this post.
+- For every selected template, strictly follow the template's line roles, caption strategy notes, and flow notes from the prompt.
+- Do not swap line roles between slots. Keep line intent tied to its designated slot.
 Never use em dash punctuation. Use standard hyphen if needed.
 `;
         const memeSelectionUserPrompt = `
@@ -4019,6 +4313,9 @@ Meme selection request:
 
 Allowed Memegen templates:
 ${memeTemplateCatalog}
+
+Template-specific writing strategy (mandatory when template is selected):
+${memeTemplateStrategyGuide}
 
 Posts to adapt into meme captions:
 ${normalizedPosts
@@ -4046,8 +4343,12 @@ For each post:
    For standard templates: textLines has 2 lines matching topText and bottomText.
    For templates with more slots (for example Gru, Anakin/Padme, or American Chopper): include every slot in order.
 7. Joke must be funny and relevant to the post — extract the humor from the hook/body, not generic one-liners.
-8. Score tone fit from 0 to 100 and explain briefly.
+8. Each variant needs a distinct joke angle (for example: metric irony, team-process pain, founder expectation vs reality).
+9. Score tone fit from 0 to 100 and explain briefly.
 `;
+
+        const claudeMemeModel =
+          process.env.CLAUDE_MEME_MODEL?.trim() || process.env.CLAUDE_WRITER_MODEL?.trim() || CLAUDE_WRITER_MODEL;
 
         const runMemeSelection = (model: string) => {
           if (oauthCredentials) {
@@ -4075,33 +4376,58 @@ For each post:
         };
 
         let parsedMemeSelection: z.infer<typeof memeSelectionSchema> | null = null;
-        const memeModelCandidates: string[] = [];
-        const pushMemeModelCandidate = (candidate: string) => {
-          const normalized = candidate.trim();
-          if (!normalized) {
-            return;
-          }
-          if (oauthCredentials && !isCodexOauthModelSupported(normalized)) {
-            return;
-          }
-          if (!memeModelCandidates.includes(normalized)) {
-            memeModelCandidates.push(normalized);
-          }
-        };
-
-        pushMemeModelCandidate(oauthCredentials ? requestedModel : modelUsed);
-        pushMemeModelCandidate(fallbackModel);
-        if (oauthCredentials && memeModelCandidates.length === 0) {
-          pushMemeModelCandidate("gpt-5.2");
-        }
-
         let memeSelectionError: unknown = null;
-        for (const candidateModel of memeModelCandidates) {
+
+        if (useClaudeWriter && anthropicApiKey) {
           try {
-            parsedMemeSelection = await runMemeSelection(candidateModel);
-            break;
+            parsedMemeSelection = await runClaudeMemeSelection({
+              apiKey: anthropicApiKey,
+              model: claudeMemeModel,
+              systemPrompt: memeSelectionSystemPrompt,
+              userPrompt: memeSelectionUserPrompt,
+              responseSchema: memeSelectionSchema,
+              postCount: normalizedPosts.length,
+              variantCount: memeVariantTarget,
+              defaultTemplateId: allowedTemplateIds[0] ?? "drake",
+            });
           } catch (memeError) {
             memeSelectionError = memeError;
+            console.warn(
+              `Claude meme selection failed; trying OpenAI/Codex fallback. ${
+                memeError instanceof Error ? memeError.message : String(memeError)
+              }`,
+            );
+          }
+        }
+
+        if (!parsedMemeSelection) {
+          const memeModelCandidates: string[] = [];
+          const pushMemeModelCandidate = (candidate: string) => {
+            const normalized = candidate.trim();
+            if (!normalized) {
+              return;
+            }
+            if (oauthCredentials && !isCodexOauthModelSupported(normalized)) {
+              return;
+            }
+            if (!memeModelCandidates.includes(normalized)) {
+              memeModelCandidates.push(normalized);
+            }
+          };
+
+          pushMemeModelCandidate(requestedModel);
+          pushMemeModelCandidate(fallbackModel);
+          if (oauthCredentials && memeModelCandidates.length === 0) {
+            pushMemeModelCandidate("gpt-5.2");
+          }
+
+          for (const candidateModel of memeModelCandidates) {
+            try {
+              parsedMemeSelection = await runMemeSelection(candidateModel);
+              break;
+            } catch (memeError) {
+              memeSelectionError = memeError;
+            }
           }
         }
 
@@ -4276,7 +4602,7 @@ For each post:
       : [];
 
     let claudeXThreadsByPostIndex = new Map<number, string[]>();
-    if (eligibleXThreadPostIndices.length && anthropicApiKey) {
+    if (eligibleXThreadPostIndices.length && useClaudeWriter && anthropicApiKey) {
       try {
         const sourcePostsForXThreads = eligibleXThreadPostIndices.map((postIndex) => {
           const post = postsWithMedia[postIndex];
