@@ -1,21 +1,21 @@
 # Sync SMM PLANNING from Notion to data/notion-calendar.json
-# Runs every 6 hours and on manual trigger. Commits updated JSON if changed.
-# Prerequisite: Add NOTION_API_KEY to repo Secrets (from notion.so/my-integrations).
+# Runs every 6 hours; commits updated JSON if changed
+# Requires NOTION_API_KEY in repo Secrets (integration token from notion.so/my-integrations)
 name: Notion Calendar Sync
 
 permissions:
-  contents: write  # Required to push commits
+  contents: write
 
 on:
   schedule:
     - cron: "0 */6 * * *"  # Every 6 hours
-  workflow_dispatch:  # Manual trigger
+  workflow_dispatch:
 
 jobs:
   sync:
     runs-on: ubuntu-latest
     env:
-      NOTION_API_KEY: ${{ secrets.NOTION_API_KEY }}
+      NOTION_API_KEY: ${{ secrets['NOTION_API_KEY'] }}
     steps:
       - uses: actions/checkout@v4
 
