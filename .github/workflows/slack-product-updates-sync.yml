@@ -14,7 +14,9 @@ jobs:
   sync:
     runs-on: ubuntu-latest
     env:
-      SLACK_BOT_TOKEN: ${{ secrets['SLACK_BOT_TOKEN'] }}
+      SLACK_BOT_TOKEN: ${{ secrets.SLACK_BOT_TOKEN || secrets.SLACK_TOKEN || vars.SLACK_BOT_TOKEN || vars.SLACK_TOKEN }}
+      SLACK_PRODUCT_RELEASE_CHANNEL: ${{ vars.SLACK_PRODUCT_RELEASE_CHANNEL }}
+      SLACK_WORKSPACE: ${{ vars.SLACK_WORKSPACE }}
     steps:
       - uses: actions/checkout@v4
 
@@ -24,6 +26,13 @@ jobs:
           cache: "npm"
 
       - run: npm ci
+
+      - name: Validate Slack configuration
+        run: |
+          if [ -z "${SLACK_BOT_TOKEN}" ]; then
+            echo "::error::Missing SLACK_BOT_TOKEN. Add repo secret SLACK_BOT_TOKEN (or SLACK_TOKEN)."
+            exit 1
+          fi
 
       - name: Sync Slack product updates
         run: npm run slack-sync

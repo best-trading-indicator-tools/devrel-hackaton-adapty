@@ -1,7 +1,8 @@
 #!/usr/bin/env node
 /**
  * Sync SMM PLANNING database from Notion to data/notion-calendar.json.
- * Uses Notion REST API (NOTION_API_KEY). For tagging incomplete entries, use Cursor + Notion MCP.
+ * Uses Notion REST API (NOTION_API_KEY in environment); .env is optional for local development.
+ * For tagging incomplete entries, use Cursor + Notion MCP.
  *
  * Prerequisite: Create integration at notion.so/my-integrations, share SMM PLANNING database with it.
  */
@@ -13,7 +14,7 @@ import { fileURLToPath } from "url";
 const __dirname = dirname(fileURLToPath(import.meta.url));
 const ROOT = join(__dirname, "..");
 
-const SMM_PLANNING_DATA_SOURCE_ID = "2851ca43-55c3-81d0-a585-000bd290877f";
+const DEFAULT_SMM_PLANNING_DATA_SOURCE_ID = "2851ca43-55c3-81d0-a585-000bd290877f";
 
 const AHMET_ID = "1f8d872b-594c-8141-9a7f-00023792fa71";
 const JULIA_ID = "5ac0c36e-9df9-4fc6-a067-f42a71e42cca";
@@ -41,7 +42,10 @@ function loadEnv() {
     const raw = readFileSync(envPath, "utf-8");
     for (const line of raw.split("\n")) {
       const m = line.match(/^([^#=]+)=(.*)$/);
-      if (m) process.env[m[1].trim()] = m[2].trim().replace(/^["']|["']$/g, "");
+      if (!m) continue;
+      const key = m[1].trim();
+      const value = m[2].trim().replace(/^["']|["']$/g, "");
+      if (!process.env[key]) process.env[key] = value;
     }
   } catch {
     // .env optional in CI
@@ -131,9 +135,11 @@ async function main() {
   const token = process.env.NOTION_API_KEY;
   if (!token) {
     throw new Error(
-      "NOTION_API_KEY not set. Create an integration at notion.so/my-integrations, share SMM PLANNING with it, and add the token to .env or GitHub Secrets."
+      "NOTION_API_KEY not set in environment. Create an integration at notion.so/my-integrations, share SMM PLANNING with it, and add the token to GitHub Secrets."
     );
   }
+  const dataSourceId =
+    process.env.NOTION_DATA_SOURCE_ID?.trim() || DEFAULT_SMM_PLANNING_DATA_SOURCE_ID;
 
   const { Client } = await import("@notionhq/client");
   const notion = new Client({ auth: token });
@@ -143,7 +149,7 @@ async function main() {
   let cursor;
   do {
     const res = await notion.dataSources.query({
-      data_source_id: SMM_PLANNING_DATA_SOURCE_ID,
+      data_source_id: dataSourceId,
       page_size: 100,
       sorts: [{ property: "Date", direction: "ascending" }],
       ...(cursor && { start_cursor: cursor }),

@@ -1,7 +1,8 @@
 #!/usr/bin/env node
 /**
  * Sync product updates from #product-release via Slack Web API.
- * Requires SLACK_BOT_TOKEN in .env with channels:history (and user token for thread replies).
+ * Requires SLACK_BOT_TOKEN in environment; .env is optional for local development.
+ * Bot token needs channels:history (and user token for thread replies).
  *
  * Filter: posts with thread replies (≥80 chars) from @Kir, @Mykola Martynovets, @Maxim Borisik
  *         OR mentions of @sales-team, @cs-team
@@ -16,16 +17,23 @@ const ROOT = join(__dirname, "..");
 
 function loadEnv() {
   const envPath = join(ROOT, ".env");
-  const raw = readFileSync(envPath, "utf-8");
-  for (const line of raw.split("\n")) {
-    const m = line.match(/^([^#=]+)=(.*)$/);
-    if (m) process.env[m[1].trim()] = m[2].trim().replace(/^["']|["']$/g, "");
+  try {
+    const raw = readFileSync(envPath, "utf-8");
+    for (const line of raw.split("\n")) {
+      const m = line.match(/^([^#=]+)=(.*)$/);
+      if (!m) continue;
+      const key = m[1].trim();
+      const value = m[2].trim().replace(/^["']|["']$/g, "");
+      if (!process.env[key]) process.env[key] = value;
+    }
+  } catch {
+    // .env is optional in CI
   }
 }
 
 async function slackApi(method, params = {}) {
   const token = process.env.SLACK_BOT_TOKEN;
-  if (!token) throw new Error("SLACK_BOT_TOKEN not set in .env");
+  if (!token) throw new Error("SLACK_BOT_TOKEN not set in environment.");
   const url = `https://slack.com/api/${method}?${new URLSearchParams(params)}`;
   const res = await fetch(url, {
     headers: { Authorization: `Bearer ${token}` },
@@ -37,7 +45,7 @@ async function slackApi(method, params = {}) {
 
 async function slackApiPost(method, body) {
   const token = process.env.SLACK_BOT_TOKEN;
-  if (!token) throw new Error("SLACK_BOT_TOKEN not set in .env");
+  if (!token) throw new Error("SLACK_BOT_TOKEN not set in environment.");
   const res = await fetch(`https://slack.com/api/${method}`, {
     method: "POST",
     headers: {
