@@ -223,7 +223,7 @@ Each generation request goes through 3 passes:
 
 Priority order:
 
-1. Codex OAuth credentials (`OPENAI_OAUTH_TOKEN` or `~/.codex/auth.json`)
+1. Codex OAuth credentials (`OPENAI_CODEX_ACCESS_TOKEN` / `OPENAI_OAUTH_TOKEN` or `~/.codex/auth.json`)
 2. API key (`OPENAI_API_KEY` or `OPENAI_ACCESS_TOKEN`)
 
 Codex OAuth path details:
@@ -242,6 +242,11 @@ Use `.env` (local) and set same keys in Vercel project settings.
 
 - `OPENAI_MODEL` (default `gpt-5.3-codex`)
 - `OPENAI_MODEL_FALLBACK` (default `gpt-5.2`)
+- `OPENAI_CODEX_AUTH_MODE` (optional; usually `chatgpt`)
+- `OPENAI_CODEX_ACCESS_TOKEN`
+- `OPENAI_CODEX_REFRESH_TOKEN` (optional)
+- `OPENAI_CODEX_ACCOUNT_ID` (optional if derivable)
+- `OPENAI_CODEX_EXPIRES_AT` or `OPENAI_CODEX_EXPIRES_AT_ISO` (optional)
 - `OPENAI_OAUTH_TOKEN`
 - `OPENAI_OAUTH_REFRESH_TOKEN` (optional)
 - `OPENAI_OAUTH_ACCOUNT_ID` (optional if derivable)

@@ -73,9 +73,20 @@ function parseExpiry(raw: string | undefined): number | undefined {
     return undefined;
   }
 
-  const num = Number(raw);
-  if (!Number.isFinite(num) || num <= 0) {
+  const trimmed = raw.trim();
+
+  if (!trimmed) {
     return undefined;
+  }
+
+  const num = Number(trimmed);
+  if (!Number.isFinite(num) || num <= 0) {
+    const timestamp = Date.parse(trimmed);
+    if (!Number.isFinite(timestamp) || timestamp <= 0) {
+      return undefined;
+    }
+
+    return timestamp;
   }
 
   // Treat small values as Unix seconds.
@@ -171,19 +182,26 @@ async function writeCodexAuthFile(filePath: string, data: CodexAuthFile): Promis
 }
 
 async function getEnvCodexOAuthCredentials(): Promise<CodexOAuthCredentials | null> {
-  const accessToken = process.env.OPENAI_OAUTH_TOKEN?.trim();
+  const accessToken = process.env.OPENAI_CODEX_ACCESS_TOKEN?.trim() || process.env.OPENAI_OAUTH_TOKEN?.trim();
 
   if (!accessToken) {
     return null;
   }
 
-  const refreshToken = process.env.OPENAI_OAUTH_REFRESH_TOKEN?.trim() || undefined;
-  const accountIdFromEnv = process.env.OPENAI_OAUTH_ACCOUNT_ID?.trim();
+  const refreshToken =
+    process.env.OPENAI_CODEX_REFRESH_TOKEN?.trim() || process.env.OPENAI_OAUTH_REFRESH_TOKEN?.trim() || undefined;
+  const accountIdFromEnv = process.env.OPENAI_CODEX_ACCOUNT_ID?.trim() || process.env.OPENAI_OAUTH_ACCOUNT_ID?.trim();
   const accountId = accountIdFromEnv || getAccountIdFromToken(accessToken);
-  const expiresAt = parseExpiry(process.env.OPENAI_OAUTH_EXPIRES_AT) ?? getExpiresAtFromToken(accessToken);
+  const expiresAt =
+    parseExpiry(process.env.OPENAI_CODEX_EXPIRES_AT) ||
+    parseExpiry(process.env.OPENAI_CODEX_EXPIRES_AT_ISO) ||
+    parseExpiry(process.env.OPENAI_OAUTH_EXPIRES_AT) ||
+    getExpiresAtFromToken(accessToken);
 
   if (!accountId) {
-    throw new Error("OPENAI_OAUTH_TOKEN is set but account id is missing. Set OPENAI_OAUTH_ACCOUNT_ID.");
+    throw new Error(
+      "Codex token is set but account id is missing. Set OPENAI_CODEX_ACCOUNT_ID or OPENAI_OAUTH_ACCOUNT_ID.",
+    );
   }
 
   if (refreshToken && shouldRefresh(expiresAt)) {

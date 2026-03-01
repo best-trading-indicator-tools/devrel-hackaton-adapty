@@ -187,7 +187,7 @@ export async function POST(request: Request) {
       return NextResponse.json(
         {
           error:
-            "Missing credentials. Set OPENAI_OAUTH_TOKEN (recommended) or OPENAI_API_KEY / OPENAI_ACCESS_TOKEN.",
+            "Missing credentials. Set OPENAI_CODEX_ACCESS_TOKEN or OPENAI_OAUTH_TOKEN (recommended), or OPENAI_API_KEY / OPENAI_ACCESS_TOKEN.",
         },
         { status: 500 },
       );
@@ -286,4 +286,3 @@ Output JSON with field "prompt" only.
     );
   }
 }
-
