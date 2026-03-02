@@ -10,6 +10,7 @@ type CodexResponsesOptions = {
   imageDataUrls?: string[];
   schemaName: string;
   jsonSchema: Record<string, unknown>;
+  verbosity?: "low" | "medium" | "high";
   baseUrl?: string;
   signal?: AbortSignal;
 };
@@ -180,7 +181,7 @@ export async function createCodexStructuredCompletion<T>(options: CodexResponses
         },
       ],
       text: {
-        verbosity: "medium",
+        verbosity: options.verbosity ?? "medium",
         format: {
           type: "json_schema",
           name: options.schemaName,

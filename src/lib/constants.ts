@@ -100,6 +100,7 @@ export const INPUT_LENGTH_OPTIONS = ["short", "medium", "long", "very long", "mi
 
 export type InputLength = (typeof INPUT_LENGTH_OPTIONS)[number];
 export type OutputLength = Exclude<InputLength, "mix">;
+export type EffectiveOutputLength = Exclude<OutputLength | "standard", "standard">;
 
 export const GOAL_OPTIONS = ["virality", "engagement", "traffic", "awareness", "balanced"] as const;
 export type ContentGoal = (typeof GOAL_OPTIONS)[number];
@@ -226,5 +227,26 @@ export function lengthGuide(length: OutputLength): string {
       return "36-90 sentences.";
     default:
       return "Natural LinkedIn length.";
+  }
+}
+
+export function normalizeOutputLength(length: OutputLength | "standard"): EffectiveOutputLength {
+  return length === "standard" ? "medium" : length;
+}
+
+export function lengthSentenceRange(length: OutputLength | "standard"): { min: number; max: number } {
+  const normalized = normalizeOutputLength(length);
+
+  switch (normalized) {
+    case "short":
+      return { min: 2, max: 4 };
+    case "medium":
+      return { min: 5, max: 9 };
+    case "long":
+      return { min: 18, max: 35 };
+    case "very long":
+      return { min: 36, max: 90 };
+    default:
+      return { min: 5, max: 9 };
   }
 }

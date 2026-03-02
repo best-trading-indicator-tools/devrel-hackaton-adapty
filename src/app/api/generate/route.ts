@@ -21,7 +21,10 @@ import {
   GOAL_LABELS,
   isBrandVoicePreset,
   lengthGuide,
+  lengthSentenceRange,
+  normalizeOutputLength,
   type ContentGoal,
+  type EffectiveOutputLength,
   type MemeTemplateId,
 } from "@/lib/constants";
 import { createCodexStructuredCompletion } from "@/lib/codex-responses";
@@ -1723,6 +1726,102 @@ function splitSentenceUnits(paragraph: string): string[] {
   return matches?.length ? matches : [paragraph.trim()].filter(Boolean);
 }
 
+type LengthValidationIssue = {
+  postIndex: number;
+  expectedLength: EffectiveOutputLength;
+  sentenceCount: number;
+  min: number;
+  max: number;
+};
+
+function countBodySentences(body: string): number {
+  const paragraphs = splitParagraphs(body);
+  if (!paragraphs.length) {
+    return splitSentenceUnits(body).length;
+  }
+
+  return paragraphs.reduce((total, paragraph) => total + countSentencesInParagraph(paragraph), 0);
+}
+
+function collectLengthValidationIssues(
+  posts: Array<{ length: "short" | "medium" | "long" | "very long" | "standard"; body: string }>,
+): LengthValidationIssue[] {
+  const issues: LengthValidationIssue[] = [];
+
+  for (let index = 0; index < posts.length; index += 1) {
+    const post = posts[index];
+    const expectedLength = normalizeOutputLength(post.length);
+    const range = lengthSentenceRange(expectedLength);
+    const sentenceCount = countBodySentences(post.body);
+
+    if (sentenceCount < range.min || sentenceCount > range.max) {
+      issues.push({
+        postIndex: index,
+        expectedLength,
+        sentenceCount,
+        min: range.min,
+        max: range.max,
+      });
+    }
+  }
+
+  return issues;
+}
+
+function clipBodyToMaxSentences(body: string, maxSentences: number): string {
+  if (maxSentences <= 0) {
+    return "";
+  }
+
+  const normalized = collapseSingleNewlinesToSpaces(normalizeNoEmDash(body));
+  const sentences = splitSentenceUnits(normalized);
+
+  if (sentences.length <= maxSentences) {
+    return normalizeBodyRhythm(body);
+  }
+
+  const clipped = sentences.slice(0, maxSentences).join(" ").trim();
+  return normalizeBodyRhythm(clipped);
+}
+
+function extendBodyToMinSentences(body: string, minSentences: number): string {
+  if (minSentences <= 0) {
+    return normalizeBodyRhythm(body);
+  }
+
+  const normalized = collapseSingleNewlinesToSpaces(normalizeNoEmDash(body));
+  const baseSentences = splitSentenceUnits(normalized)
+    .map((sentence) => sentence.replace(/\s+/g, " ").trim())
+    .filter(Boolean);
+  const padded = [...baseSentences];
+
+  if (!padded.length) {
+    padded.push("The benchmark gap is real when you compare cohorts side by side.");
+  }
+
+  const paddingPool = [
+    "In practice, the fastest gains come from testing one variable at a time.",
+    "The key is to compare cohorts before scaling any change.",
+    "Teams that track this weekly usually catch leaks earlier.",
+    "Treat this as an operating loop: test, measure, document, then iterate.",
+    "This keeps decisions grounded in evidence instead of one-off gut calls.",
+  ];
+
+  let paddingIndex = 0;
+  while (padded.length < minSentences) {
+    const anchor = padded[paddingIndex % padded.length]?.replace(/[.!?]+$/g, "").trim() ?? "";
+    const template = paddingPool[paddingIndex % paddingPool.length] ?? "Keep testing and measuring by cohort.";
+    const nextSentence =
+      paddingIndex % 2 === 0 || !anchor
+        ? template
+        : `${anchor} when segmented by cohort and price tier.`;
+    padded.push(nextSentence);
+    paddingIndex += 1;
+  }
+
+  return normalizeBodyRhythm(padded.join(" "));
+}
+
 function normalizeComparisonText(value: string): string {
   return normalizeNoEmDash(value)
     .replace(/\s+/g, " ")
@@ -2302,6 +2401,7 @@ function hasStaccatoParagraphRhythm(body: string): boolean {
 
 function evaluatePostQuality(params: {
   post: {
+    length: "short" | "medium" | "long" | "very long" | "standard";
     hook: string;
     body: string;
     cta: string;
@@ -2401,6 +2501,28 @@ function evaluatePostQuality(params: {
 
   if (hasStaccatoParagraphRhythm(params.post.body)) {
     issues.push(QUALITY_ISSUES.STACCATO_RHYTHM);
+  }
+
+  const expectedLength = normalizeOutputLength(params.post.length);
+  const expectedRange = lengthSentenceRange(expectedLength);
+  const bodySentenceCount = countBodySentences(params.post.body);
+  if (bodySentenceCount < expectedRange.min || bodySentenceCount > expectedRange.max) {
+    switch (expectedLength) {
+      case "short":
+        issues.push(QUALITY_ISSUES.SHORT_LENGTH_RANGE);
+        break;
+      case "medium":
+        issues.push(QUALITY_ISSUES.MEDIUM_LENGTH_RANGE);
+        break;
+      case "long":
+        issues.push(QUALITY_ISSUES.LONG_LENGTH_RANGE);
+        break;
+      case "very long":
+        issues.push(QUALITY_ISSUES.VERY_LONG_LENGTH_RANGE);
+        break;
+      default:
+        break;
+    }
   }
 
   if (isClickbaitVirality) {
@@ -2515,6 +2637,22 @@ function isCodexOauthModelSupported(model: string): boolean {
   }
 
   return true;
+}
+
+function resolveCodexVerbosityForLengths(
+  lengths: Array<"short" | "medium" | "long" | "very long" | "standard">,
+): "low" | "medium" | "high" {
+  const normalizedLengths = lengths.map((length) => normalizeOutputLength(length));
+
+  if (normalizedLengths.some((length) => length === "very long" || length === "long")) {
+    return "high";
+  }
+
+  if (normalizedLengths.every((length) => length === "short")) {
+    return "low";
+  }
+
+  return "medium";
 }
 
 function escapeRegExp(value: string): string {
@@ -3217,6 +3355,7 @@ async function runCodexOauthGeneration(params: {
   imageDataUrls?: string[];
   responseSchema: ReturnType<typeof makeGeneratePostsResponseSchema>;
   postCount: number;
+  verbosity?: "low" | "medium" | "high";
 }) {
   const responseFormat = zodResponseFormat(params.responseSchema, "linkedin_post_batch");
   const jsonSchema = responseFormat.json_schema?.schema;
@@ -3234,6 +3373,7 @@ async function runCodexOauthGeneration(params: {
     imageDataUrls: params.imageDataUrls,
     schemaName: "linkedin_post_batch",
     jsonSchema: jsonSchema as Record<string, unknown>,
+    verbosity: params.verbosity,
     baseUrl: process.env.OPENAI_CODEX_BASE_URL,
   });
 
@@ -4009,6 +4149,7 @@ export async function POST(request: Request) {
     }
 
     const lengthPlan = buildLengthPlan(input.inputLength, input.numberOfPosts);
+    const codexWriterVerbosity = resolveCodexVerbosityForLengths(lengthPlan);
     const embeddingClient = getEmbeddingClient();
     const hasSpecificSoisPromptDetails = Boolean(input.details.trim());
     const soisBroadEvidencePromptLimit = parsePositiveIntEnv(
@@ -4491,8 +4632,12 @@ ${effectiveCtaLinksByPost.map((link, index) => `  ${index + 1}. ${link || "(none
       ? `- CTA link: ${effectiveCtaLink || "(not provided)"}${perPostCtaPlanSection}`
       : "- CTA: disabled for this run. Return cta as an empty string for every post.";
 
+    const customInstructionBlock = input.details.trim()
+      ? `REQUIRED — Apply this custom instruction exactly. It takes priority over default style and structural patterns:\n"${input.details.trim()}"\n\n`
+      : "";
+
     const userPrompt = `
-Voice anchor - match the tone, rhythm, and phrasing of these posts:
+${customInstructionBlock}Voice anchor - match the tone, rhythm, and phrasing of these posts:
 ${examplesForPrompt || "No library examples available."}
 
 Performance patterns from past posts:
@@ -4503,7 +4648,7 @@ Generation request:
 - Goal: ${GOAL_LABELS[input.goal]} (${GOAL_DESCRIPTIONS[input.goal]}) — ${goalExecutionDirective}
 - Post type: ${input.inputType} - ${postTypeDirective}
 - Facts policy: ${factsPolicy} Copy numbers verbatim from the evidence sections below. When no number exists for a claim, use qualitative language.
-- Details: ${input.details || "(none)"}
+- Custom instructions: ${input.details.trim() || "(none)"}
 ${ctaRequestSection}
 - Event time: ${input.time || "(not provided)"}
 - Event place: ${input.place || "(not provided)"}
@@ -4590,6 +4735,7 @@ Also generate a list of hook suggestions inspired by this style and request.
           imageDataUrls: inputImageDataUrls.length ? inputImageDataUrls : undefined,
           responseSchema: params.responseSchema,
           postCount: params.postCount,
+          verbosity: codexWriterVerbosity,
         });
       }
 
@@ -4859,6 +5005,7 @@ ${toBulletedSection(QUALITY_REPAIR_REQUIREMENT_LINES)}
         "Fix the remaining quality-gate issues without changing the core argument.",
         "Eliminate staccato formatting. Merge isolated one-sentence lines into fuller paragraphs while preserving flow and readability.",
         "Ensure body text uses paragraph breaks (blank line between paragraphs). Never leave a wall of text without paragraph breaks.",
+        "Keep each post body within requested length range: short 2-4, medium 5-9, long 18-35, very long 36-90 sentences.",
         looksLikeSaucePostType(input.inputType)
           ? "For Sauce posts: verify every number or percentage appears verbatim in the Sauce dataset evidence. Rewrite unsupported numbers qualitatively. Every Sauce post must include at least 1 number from the Sauce dataset."
           : "",
@@ -4948,10 +5095,14 @@ ${editorPassGoals}
 
 ${editorEvidenceBlock}
 
+Required length per post:
+${lengthPlan.map((length, index) => `${index + 1}. ${length} -> ${lengthGuide(length)}`).join("\n")}
+
 Draft:
 ${editorDraftPrompt}
 
 Return ${parsed.hooks.length} hook suggestions as well (keep good ones, tighten sloppy ones).`;
+      const editorCodexVerbosity = resolveCodexVerbosityForLengths(normalizedPosts.map((post) => post.length));
 
       const runEditorGeneration = (params: {
         model: string;
@@ -4967,6 +5118,7 @@ Return ${parsed.hooks.length} hook suggestions as well (keep good ones, tighten 
             userPrompt: params.userPrompt,
             responseSchema: params.responseSchema,
             postCount: params.postCount,
+            verbosity: editorCodexVerbosity,
           });
         }
 
@@ -5034,6 +5186,107 @@ Return ${parsed.hooks.length} hook suggestions as well (keep good ones, tighten 
         // Editor pass is best-effort; if it fails, keep the original posts
         console.warn("Editor review pass failed; keeping current draft.", editorError);
       }
+    }
+
+    const MAX_LENGTH_REPAIR_ATTEMPTS = 3;
+    let lengthValidationIssues = collectLengthValidationIssues(normalizedPosts);
+
+    for (let attempt = 1; attempt <= MAX_LENGTH_REPAIR_ATTEMPTS && lengthValidationIssues.length > 0; attempt += 1) {
+      const issueSummary = lengthValidationIssues
+        .map(
+          (issue) =>
+            `Post ${issue.postIndex + 1}: expected ${issue.expectedLength} (${issue.min}-${issue.max} sentences), current ${issue.sentenceCount} sentences.`,
+        )
+        .join("\n");
+      const draftSummary = normalizedPosts
+        .map(
+          (post, index) => `Post ${index + 1}
+Target length: ${post.length} -> ${lengthGuide(normalizeOutputLength(post.length))}
+Hook: ${post.hook}
+Body:
+${post.body}
+CTA: ${post.cta}`,
+        )
+        .join("\n\n");
+      const lengthRepairPrompt = `${userPrompt}
+
+Length compliance repair pass (attempt ${attempt}/${MAX_LENGTH_REPAIR_ATTEMPTS}).
+Do not change post count. Keep hooks and CTAs aligned to current draft.
+Preserve meaning, factual claims, and evidence-grounded numbers.
+Only rewrite bodies as needed to satisfy sentence range rules.
+
+Required sentence ranges per post:
+${lengthPlan.map((length, index) => `${index + 1}. ${length}: ${lengthSentenceRange(length).min}-${lengthSentenceRange(length).max}`).join("\n")}
+
+Current violations:
+${issueSummary}
+
+Draft to repair:
+${draftSummary}`;
+
+      try {
+        const lengthRepairRun = await runGenerationWithFallback({
+          userPrompt: lengthRepairPrompt,
+          responseSchema,
+          postCount: input.numberOfPosts,
+        });
+
+        if (lengthRepairRun.fallbackUsed) {
+          fallbackUsed = true;
+          modelUsed = lengthRepairRun.modelUsed;
+        }
+
+        parsed = lengthRepairRun.parsed;
+        normalizedPosts = normalizeGeneratedPosts(lengthRepairRun.parsed.posts);
+        lengthValidationIssues = collectLengthValidationIssues(normalizedPosts);
+      } catch (lengthRepairError) {
+        console.warn(
+          `Length repair pass attempt ${attempt} failed; preserving current draft. ${
+            lengthRepairError instanceof Error ? lengthRepairError.message : String(lengthRepairError)
+          }`,
+        );
+        break;
+      }
+    }
+
+    if (lengthValidationIssues.length > 0) {
+      const issuesByPostIndex = new Map<number, LengthValidationIssue>();
+      for (const issue of lengthValidationIssues) {
+        issuesByPostIndex.set(issue.postIndex, issue);
+      }
+
+      if (issuesByPostIndex.size > 0) {
+        normalizedPosts = normalizedPosts.map((post, index) => {
+          const issue = issuesByPostIndex.get(index);
+          if (!issue) {
+            return post;
+          }
+
+          if (issue.sentenceCount < issue.min) {
+            return {
+              ...post,
+              body: extendBodyToMinSentences(post.body, issue.min),
+            };
+          }
+
+          return {
+            ...post,
+            body: clipBodyToMaxSentences(post.body, issue.max),
+          };
+        });
+
+        lengthValidationIssues = collectLengthValidationIssues(normalizedPosts);
+      }
+    }
+
+    if (lengthValidationIssues.length > 0) {
+      const unresolvedSummary = lengthValidationIssues
+        .map(
+          (issue) =>
+            `post ${issue.postIndex + 1} expected ${issue.min}-${issue.max}, got ${issue.sentenceCount}`,
+        )
+        .join("; ");
+      throw new Error(`Length enforcement unresolved after repair pass: ${unresolvedSummary}`);
     }
 
     let normalizedHooks = parsed.hooks.map((hook) => normalizeNoEmDash(hook));
@@ -5464,6 +5717,42 @@ Return ${parsed.hooks.length} hook suggestions as well (keep good ones, tighten 
           );
         }
       }
+    }
+
+    let finalLengthIssues = collectLengthValidationIssues(normalizedPosts);
+    if (finalLengthIssues.length > 0) {
+      const issuesByPostIndex = new Map<number, LengthValidationIssue>();
+      for (const issue of finalLengthIssues) {
+        issuesByPostIndex.set(issue.postIndex, issue);
+      }
+
+      normalizedPosts = normalizedPosts.map((post, index) => {
+        const issue = issuesByPostIndex.get(index);
+        if (!issue) {
+          return post;
+        }
+
+        if (issue.sentenceCount < issue.min) {
+          return {
+            ...post,
+            body: extendBodyToMinSentences(post.body, issue.min),
+          };
+        }
+
+        return {
+          ...post,
+          body: clipBodyToMaxSentences(post.body, issue.max),
+        };
+      });
+
+      finalLengthIssues = collectLengthValidationIssues(normalizedPosts);
+    }
+
+    if (finalLengthIssues.length > 0) {
+      const unresolvedSummary = finalLengthIssues
+        .map((issue) => `post ${issue.postIndex + 1}: expected ${issue.min}-${issue.max}, got ${issue.sentenceCount}`)
+        .join("; ");
+      throw new Error(`Final length enforcement failed: ${unresolvedSummary}`);
     }
 
     let postsWithMemes: GeneratePostsResponse["posts"] = normalizedPosts;

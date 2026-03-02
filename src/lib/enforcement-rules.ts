@@ -25,6 +25,10 @@ export const QUALITY_ISSUES = {
   SHORT_LINE_STACK: "Use fuller paragraphs. Mix short and longer lines.",
   STACCATO_RHYTHM:
     "Use fuller paragraphs with mostly 2-4 sentences. Keep one-line paragraphs occasional.",
+  SHORT_LENGTH_RANGE: "Short length must keep body between 2 and 4 sentences.",
+  MEDIUM_LENGTH_RANGE: "Medium length must keep body between 5 and 9 sentences.",
+  LONG_LENGTH_RANGE: "Long length must keep body between 18 and 35 sentences.",
+  VERY_LONG_LENGTH_RANGE: "Very long length must keep body between 36 and 90 sentences.",
   CLICKBAIT_HOOK_ONE_SENTENCE: "For clickbait plus virality, hook must be one sentence.",
   CLICKBAIT_HOOK_DECLARATIVE:
     "For clickbait plus virality, hook should be a declarative statement.",
@@ -49,6 +53,7 @@ export const QUALITY_GATE_PROMPT_LINES = [
   "For events: include date, place, and who should come.",
   "Use hyphens, commas, and periods.",
   "For clickbait plus virality: hook must be one declarative factual sentence, starting with the claim or scene.",
+  "Respect the requested length for each post exactly: short 2-4, medium 5-9, long 18-35, very long 36-90 body sentences.",
 ] as const;
 
 export const QUALITY_REPAIR_REQUIREMENT_LINES = [
@@ -58,6 +63,7 @@ export const QUALITY_REPAIR_REQUIREMENT_LINES = [
   "Talk to the reader directly at least once: you, your app, or your team.",
   "Include one practical action with a clear verb: test, measure, compare, fix, or ship.",
   "Include at least one real numeric anchor from provided evidence when available. Use only grounded numbers.",
+  "Keep each post body in its requested sentence range: short 2-4, medium 5-9, long 18-35, very long 36-90.",
   "Use hyphens, commas, and periods.",
   "For events: include logistics and who should attend.",
   "For clickbait plus virality: hook must be one declarative factual sentence using you or your, starting with the claim or scene.",
