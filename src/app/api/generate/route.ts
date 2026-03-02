@@ -1398,6 +1398,88 @@ function collapseSingleNewlinesToSpaces(text: string): string {
   return text.replace(/\n+/g, " ").replace(/\s+/g, " ").trim();
 }
 
+function isListLikeParagraph(paragraph: string): boolean {
+  return /^(?:first|second|third|fourth|fifth|finally|lastly|\d+[.)]|-)\b/i.test(paragraph.trim());
+}
+
+function mergeThinParagraphRuns(paragraphs: string[]): string[] {
+  if (paragraphs.length < 6) {
+    return paragraphs;
+  }
+
+  const merged: string[] = [];
+  let index = 0;
+
+  while (index < paragraphs.length) {
+    const paragraph = paragraphs[index];
+    const sentenceCount = countSentencesInParagraph(paragraph);
+    const words = paragraph.split(/\s+/).filter(Boolean).length;
+    const isThin = sentenceCount <= 2 && words <= 55 && !isListLikeParagraph(paragraph);
+
+    if (!isThin) {
+      merged.push(paragraph);
+      index += 1;
+      continue;
+    }
+
+    const run: string[] = [];
+    while (index < paragraphs.length) {
+      const candidate = paragraphs[index];
+      const candidateSentences = countSentencesInParagraph(candidate);
+      const candidateWords = candidate.split(/\s+/).filter(Boolean).length;
+      const candidateIsThin =
+        candidateSentences <= 2 && candidateWords <= 55 && !isListLikeParagraph(candidate);
+      if (!candidateIsThin) {
+        break;
+      }
+      run.push(candidate);
+      index += 1;
+    }
+
+    if (run.length < 3) {
+      merged.push(...run);
+      continue;
+    }
+
+    let runIndex = 0;
+    while (runIndex < run.length) {
+      const chunk: string[] = [];
+      let chunkSentences = 0;
+
+      while (runIndex < run.length) {
+        const nextParagraph = run[runIndex];
+        const nextSentences = countSentencesInParagraph(nextParagraph);
+        const nextTotal = chunkSentences + nextSentences;
+
+        if (chunkSentences >= 2 && nextTotal > 4) {
+          break;
+        }
+
+        chunk.push(nextParagraph);
+        chunkSentences = nextTotal;
+        runIndex += 1;
+
+        if (chunkSentences >= 3) {
+          break;
+        }
+      }
+
+      if (!chunk.length) {
+        break;
+      }
+
+      if (chunk.length === 1 && runIndex < run.length) {
+        chunk.push(run[runIndex]);
+        runIndex += 1;
+      }
+
+      merged.push(chunk.join(" ").replace(/\s+/g, " ").trim());
+    }
+  }
+
+  return merged;
+}
+
 function enforceReadableParagraphBreaks(body: string): string {
   const normalizedBody = normalizeNoEmDash(body).trim();
   if (!normalizedBody) {
@@ -1484,7 +1566,8 @@ function normalizeBodyRhythm(body: string): string {
     }
   }
 
-  return enforceReadableParagraphBreaks(out.join("\n\n"));
+  const rebalanced = mergeThinParagraphRuns(out);
+  return enforceReadableParagraphBreaks(rebalanced.join("\n\n"));
 }
 
 function hasAiScaffoldOpener(body: string): boolean {
