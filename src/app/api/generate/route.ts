@@ -3172,6 +3172,7 @@ async function runOpenAiChatGeneration(params: {
   userPrompt: string;
   imageDataUrls?: string[];
   responseSchema: ReturnType<typeof makeGeneratePostsResponseSchema>;
+  postCount: number;
   temperature?: number;
 }) {
   const { client } = getOpenAIClient(params.token);
@@ -3205,7 +3206,7 @@ async function runOpenAiChatGeneration(params: {
     throw new Error("Model returned no parsable output.");
   }
 
-  return parsed;
+  return params.responseSchema.parse(normalizeGeneratedBatchPayload(parsed, params.postCount));
 }
 
 async function runCodexOauthGeneration(params: {
@@ -3215,6 +3216,7 @@ async function runCodexOauthGeneration(params: {
   userPrompt: string;
   imageDataUrls?: string[];
   responseSchema: ReturnType<typeof makeGeneratePostsResponseSchema>;
+  postCount: number;
 }) {
   const responseFormat = zodResponseFormat(params.responseSchema, "linkedin_post_batch");
   const jsonSchema = responseFormat.json_schema?.schema;
@@ -3235,7 +3237,7 @@ async function runCodexOauthGeneration(params: {
     baseUrl: process.env.OPENAI_CODEX_BASE_URL,
   });
 
-  return params.responseSchema.parse(parsedJson);
+  return params.responseSchema.parse(normalizeGeneratedBatchPayload(parsedJson, params.postCount));
 }
 
 const CLAUDE_WRITER_MODEL = "claude-sonnet-4-5";
@@ -3299,6 +3301,98 @@ function buildClaudeFallbackPost(length: "short" | "medium" | "long" | "very lon
     hook: normalizeClaudeBoundedString(CLAUDE_FALLBACK_HOOK, CLAUDE_POST_HOOK_LIMITS, CLAUDE_FALLBACK_HOOK),
     body: normalizeClaudeBoundedString(CLAUDE_FALLBACK_BODY, CLAUDE_POST_BODY_LIMITS, CLAUDE_FALLBACK_BODY),
     cta: normalizeClaudeBoundedString(CLAUDE_FALLBACK_CTA, CLAUDE_POST_CTA_LIMITS, CLAUDE_FALLBACK_CTA),
+  };
+}
+
+function normalizeGeneratedBatchPayload(
+  payload: unknown,
+  postCount: number,
+): {
+  hooks: string[];
+  posts: Array<{
+    length: "short" | "medium" | "long" | "very long" | "standard";
+    hook: string;
+    body: string;
+    cta: string;
+  }>;
+} {
+  const requiredHookCount = Math.max(5, postCount);
+  const normalizedPayload =
+    payload && typeof payload === "object" ? (payload as Record<string, unknown>) : {};
+  const rawHooks = Array.isArray(normalizedPayload.hooks) ? normalizedPayload.hooks : [];
+
+  const rawPosts = (() => {
+    if (Array.isArray(payload)) {
+      return payload;
+    }
+    if (Array.isArray(normalizedPayload.posts)) {
+      return normalizedPayload.posts;
+    }
+    if (Array.isArray(normalizedPayload.items)) {
+      return normalizedPayload.items;
+    }
+    if (Array.isArray(normalizedPayload.data)) {
+      return normalizedPayload.data;
+    }
+    return [];
+  })();
+
+  const clippedPosts = rawPosts.slice(0, postCount);
+  const sanitizedPosts = clippedPosts.map((post) => {
+    const rawPost = post && typeof post === "object" ? (post as Record<string, unknown>) : {};
+    const rawLength = typeof rawPost.length === "string" ? rawPost.length.trim().toLowerCase() : "";
+    const safeLength = CLAUDE_ALLOWED_LENGTHS.has(rawLength) ? rawLength : "medium";
+
+    return {
+      length: safeLength as "short" | "medium" | "long" | "very long" | "standard",
+      hook: normalizeClaudeBoundedString(rawPost.hook, CLAUDE_POST_HOOK_LIMITS, CLAUDE_FALLBACK_HOOK),
+      body: normalizeClaudeBoundedString(rawPost.body, CLAUDE_POST_BODY_LIMITS, CLAUDE_FALLBACK_BODY),
+      cta: normalizeClaudeBoundedString(rawPost.cta, CLAUDE_POST_CTA_LIMITS, CLAUDE_FALLBACK_CTA),
+    };
+  });
+
+  if (!sanitizedPosts.length) {
+    sanitizedPosts.push(buildClaudeFallbackPost("medium"));
+  }
+
+  while (sanitizedPosts.length < postCount) {
+    const templatePost = sanitizedPosts[sanitizedPosts.length - 1] ?? buildClaudeFallbackPost("medium");
+    sanitizedPosts.push({ ...templatePost });
+  }
+
+  const hookCandidatesFromResponse = rawHooks
+    .map((hook) => normalizeClaudeBoundedString(hook, CLAUDE_HOOK_LIMITS, CLAUDE_FALLBACK_HOOK))
+    .filter((hook) => hook.length >= CLAUDE_HOOK_LIMITS.min);
+
+  const postHooks = sanitizedPosts
+    .map((post) => normalizeClaudeBoundedString(post.hook, CLAUDE_HOOK_LIMITS, CLAUDE_FALLBACK_HOOK))
+    .filter((hook) => hook.length >= CLAUDE_HOOK_LIMITS.min);
+
+  const dedupedHookCandidates: string[] = [];
+  for (const hook of [...hookCandidatesFromResponse, ...postHooks]) {
+    if (dedupedHookCandidates.includes(hook)) {
+      continue;
+    }
+    dedupedHookCandidates.push(hook);
+    if (dedupedHookCandidates.length >= 20) {
+      break;
+    }
+  }
+
+  const finalizedHooks = dedupedHookCandidates.length
+    ? [...dedupedHookCandidates]
+    : [normalizeClaudeBoundedString(CLAUDE_FALLBACK_HOOK, CLAUDE_HOOK_LIMITS, CLAUDE_FALLBACK_HOOK)];
+  const hookCycleSource = finalizedHooks.length ? finalizedHooks : [CLAUDE_FALLBACK_HOOK];
+
+  while (finalizedHooks.length < requiredHookCount) {
+    finalizedHooks.push(hookCycleSource[finalizedHooks.length % hookCycleSource.length] ?? hookCycleSource[0]);
+  }
+
+  return {
+    hooks: finalizedHooks
+      .slice(0, 20)
+      .map((hook) => normalizeClaudeBoundedString(hook, CLAUDE_HOOK_LIMITS, CLAUDE_FALLBACK_HOOK)),
+    posts: sanitizedPosts,
   };
 }
 
@@ -3437,73 +3531,7 @@ async function runClaudeWriterGeneration(params: {
       };
     })();
 
-  // Claude can occasionally over-generate array items even with JSON schema guidance.
-  if (parsed && typeof parsed === "object") {
-    const normalized = parsed as { hooks?: unknown[]; posts?: unknown[] };
-    const requiredHookCount = Math.max(5, params.postCount);
-
-    const rawPosts = Array.isArray(normalized.posts) ? normalized.posts : [];
-    const clippedPosts = rawPosts.slice(0, params.postCount);
-    const sanitizedPosts = clippedPosts.map((post) => {
-      const rawPost = post && typeof post === "object" ? (post as Record<string, unknown>) : {};
-      const rawLength = typeof rawPost.length === "string" ? rawPost.length.trim().toLowerCase() : "";
-      const safeLength = CLAUDE_ALLOWED_LENGTHS.has(rawLength) ? rawLength : "medium";
-
-      return {
-        length: safeLength as "short" | "medium" | "long" | "very long" | "standard",
-        hook: normalizeClaudeBoundedString(rawPost.hook, CLAUDE_POST_HOOK_LIMITS, CLAUDE_FALLBACK_HOOK),
-        body: normalizeClaudeBoundedString(rawPost.body, CLAUDE_POST_BODY_LIMITS, CLAUDE_FALLBACK_BODY),
-        cta: normalizeClaudeBoundedString(rawPost.cta, CLAUDE_POST_CTA_LIMITS, CLAUDE_FALLBACK_CTA),
-      };
-    });
-
-    if (!sanitizedPosts.length) {
-      sanitizedPosts.push(buildClaudeFallbackPost("medium"));
-    }
-
-    while (sanitizedPosts.length < params.postCount) {
-      const templatePost = sanitizedPosts[sanitizedPosts.length - 1] ?? buildClaudeFallbackPost("medium");
-      sanitizedPosts.push({ ...templatePost });
-    }
-
-    normalized.posts = sanitizedPosts;
-
-    const hookCandidatesFromResponse = Array.isArray(normalized.hooks)
-      ? normalized.hooks
-          .map((hook) => normalizeClaudeBoundedString(hook, CLAUDE_HOOK_LIMITS, CLAUDE_FALLBACK_HOOK))
-          .filter((hook) => hook.length >= CLAUDE_HOOK_LIMITS.min)
-      : [];
-
-    const postHooks = sanitizedPosts
-      .map((post) => normalizeClaudeBoundedString(post.hook, CLAUDE_HOOK_LIMITS, CLAUDE_FALLBACK_HOOK))
-      .filter((hook) => hook.length >= CLAUDE_HOOK_LIMITS.min);
-
-    const dedupedHookCandidates: string[] = [];
-    for (const hook of [...hookCandidatesFromResponse, ...postHooks]) {
-      if (dedupedHookCandidates.includes(hook)) {
-        continue;
-      }
-      dedupedHookCandidates.push(hook);
-      if (dedupedHookCandidates.length >= 20) {
-        break;
-      }
-    }
-
-    const finalizedHooks = dedupedHookCandidates.length
-      ? [...dedupedHookCandidates]
-      : [normalizeClaudeBoundedString(CLAUDE_FALLBACK_HOOK, CLAUDE_HOOK_LIMITS, CLAUDE_FALLBACK_HOOK)];
-    const hookCycleSource = finalizedHooks.length ? finalizedHooks : [CLAUDE_FALLBACK_HOOK];
-
-    while (finalizedHooks.length < requiredHookCount) {
-      finalizedHooks.push(hookCycleSource[finalizedHooks.length % hookCycleSource.length] ?? hookCycleSource[0]);
-    }
-
-    normalized.hooks = finalizedHooks
-      .slice(0, 20)
-      .map((hook) => normalizeClaudeBoundedString(hook, CLAUDE_HOOK_LIMITS, CLAUDE_FALLBACK_HOOK));
-  }
-
-  return params.responseSchema.parse(parsed);
+  return params.responseSchema.parse(normalizeGeneratedBatchPayload(parsed, params.postCount));
 }
 
 type XThreadSourcePost = {
@@ -4561,6 +4589,7 @@ Also generate a list of hook suggestions inspired by this style and request.
           userPrompt: params.userPrompt,
           imageDataUrls: inputImageDataUrls.length ? inputImageDataUrls : undefined,
           responseSchema: params.responseSchema,
+          postCount: params.postCount,
         });
       }
 
@@ -4575,6 +4604,7 @@ Also generate a list of hook suggestions inspired by this style and request.
         userPrompt: params.userPrompt,
         imageDataUrls: inputImageDataUrls.length ? inputImageDataUrls : undefined,
         responseSchema: params.responseSchema,
+        postCount: params.postCount,
       });
     };
 
@@ -4936,6 +4966,7 @@ Return ${parsed.hooks.length} hook suggestions as well (keep good ones, tighten 
             systemPrompt: editorSystemPrompt,
             userPrompt: params.userPrompt,
             responseSchema: params.responseSchema,
+            postCount: params.postCount,
           });
         }
 
@@ -4946,6 +4977,7 @@ Return ${parsed.hooks.length} hook suggestions as well (keep good ones, tighten 
             systemPrompt: editorSystemPrompt,
             userPrompt: params.userPrompt,
             responseSchema: params.responseSchema,
+            postCount: params.postCount,
             temperature: 0.4,
           });
         }
@@ -4966,6 +4998,7 @@ Return ${parsed.hooks.length} hook suggestions as well (keep good ones, tighten 
             systemPrompt: editorSystemPrompt,
             userPrompt: params.userPrompt,
             responseSchema: params.responseSchema,
+            postCount: params.postCount,
             temperature: 0.4,
           });
         }
