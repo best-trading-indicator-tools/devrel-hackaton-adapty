@@ -1954,6 +1954,99 @@ function collapseSingleNewlinesToSpaces(text: string): string {
   return text.replace(/\n+/g, " ").replace(/\s+/g, " ").trim();
 }
 
+function splitParagraphIntoBalancedChunks(paragraph: string): string[] {
+  const compactParagraph = collapseSingleNewlinesToSpaces(paragraph);
+  if (!compactParagraph) {
+    return [];
+  }
+
+  if (isListLikeParagraph(compactParagraph)) {
+    return [compactParagraph];
+  }
+
+  const sentences = splitSentenceUnits(compactParagraph)
+    .map((sentence) => sentence.replace(/\s+/g, " ").trim())
+    .filter(Boolean);
+
+  if (!sentences.length) {
+    return [];
+  }
+
+  if (sentences.length <= 4) {
+    return [sentences.join(" ")];
+  }
+
+  const chunks: string[] = [];
+  let index = 0;
+
+  while (index < sentences.length) {
+    const remaining = sentences.length - index;
+    let size = 3;
+
+    if (remaining <= 4) {
+      size = remaining;
+    } else if (remaining === 5) {
+      size = 2;
+    } else if (remaining === 8) {
+      size = 4;
+    } else if (remaining % 3 === 1 && remaining >= 4) {
+      size = 4;
+    }
+
+    const chunk = sentences
+      .slice(index, index + size)
+      .join(" ")
+      .replace(/\s+/g, " ")
+      .trim();
+    if (chunk) {
+      chunks.push(chunk);
+    }
+    index += size;
+  }
+
+  if (chunks.length >= 2) {
+    const lastChunk = chunks[chunks.length - 1] ?? "";
+    const lastChunkSentenceCount = countSentencesInParagraph(lastChunk);
+
+    if (lastChunkSentenceCount === 1) {
+      const previousChunk = chunks[chunks.length - 2] ?? "";
+      const previousSentenceCount = countSentencesInParagraph(previousChunk);
+      if (previousChunk && previousSentenceCount < 4) {
+        chunks[chunks.length - 2] = `${previousChunk} ${lastChunk}`.replace(/\s+/g, " ").trim();
+        chunks.pop();
+      }
+    }
+  }
+
+  return chunks;
+}
+
+function stabilizeParagraphCadence(paragraphs: string[]): string[] {
+  const out: string[] = [];
+
+  for (const paragraph of paragraphs) {
+    const cleanParagraph = paragraph.replace(/\s+/g, " ").trim();
+    if (!cleanParagraph) {
+      continue;
+    }
+
+    const sentenceCount = countSentencesInParagraph(cleanParagraph);
+    if (
+      sentenceCount === 1 &&
+      out.length > 0 &&
+      !isListLikeParagraph(cleanParagraph) &&
+      countSentencesInParagraph(out[out.length - 1] ?? "") < 4
+    ) {
+      out[out.length - 1] = `${out[out.length - 1]} ${cleanParagraph}`.replace(/\s+/g, " ").trim();
+      continue;
+    }
+
+    out.push(cleanParagraph);
+  }
+
+  return out;
+}
+
 function isListLikeParagraph(paragraph: string): boolean {
   return /^(?:first|second|third|fourth|fifth|finally|lastly|\d+[.)]|-)\b/i.test(paragraph.trim());
 }
@@ -2042,44 +2135,21 @@ function enforceReadableParagraphBreaks(body: string): string {
     return "";
   }
 
-  if (/\n\s*\n/.test(normalizedBody)) {
-    return normalizedBody;
+  const sourceParagraphs = splitParagraphs(normalizedBody);
+  const seedParagraphs = sourceParagraphs.length ? sourceParagraphs : [normalizedBody];
+  const balancedParagraphs = seedParagraphs.flatMap((paragraph) => splitParagraphIntoBalancedChunks(paragraph));
+  const cadenceStabilized = stabilizeParagraphCadence(balancedParagraphs);
+  const nonEmptyParagraphs = cadenceStabilized.filter(Boolean);
+
+  if (!nonEmptyParagraphs.length) {
+    return collapseSingleNewlinesToSpaces(normalizedBody);
   }
 
-  const compactBody = collapseSingleNewlinesToSpaces(normalizedBody);
-  const sentenceUnits = splitSentenceUnits(compactBody)
-    .map((sentence) => sentence.replace(/\s+/g, " ").trim())
-    .filter(Boolean);
-
-  if (sentenceUnits.length < 4) {
-    return compactBody;
+  if (nonEmptyParagraphs.length === 1) {
+    return nonEmptyParagraphs[0] ?? "";
   }
 
-  const totalWords = compactBody.split(/\s+/).filter(Boolean).length;
-  const targetSentencesPerParagraph = sentenceUnits.length >= 9 || totalWords >= 180 ? 3 : 2;
-  const paragraphs: string[] = [];
-
-  for (let index = 0; index < sentenceUnits.length; index += targetSentencesPerParagraph) {
-    const chunk = sentenceUnits.slice(index, index + targetSentencesPerParagraph);
-    if (!chunk.length) {
-      continue;
-    }
-
-    const paragraph = chunk.join(" ").replace(/\s+/g, " ").trim();
-    if (!paragraph) {
-      continue;
-    }
-
-    const isFinalChunk = index + targetSentencesPerParagraph >= sentenceUnits.length;
-    if (chunk.length === 1 && isFinalChunk && paragraphs.length > 0) {
-      paragraphs[paragraphs.length - 1] = `${paragraphs[paragraphs.length - 1]} ${paragraph}`.replace(/\s+/g, " ").trim();
-      continue;
-    }
-
-    paragraphs.push(paragraph);
-  }
-
-  return paragraphs.join("\n\n");
+  return nonEmptyParagraphs.join("\n\n");
 }
 
 function normalizeBodyRhythm(body: string): string {
@@ -4460,6 +4530,7 @@ Also generate a list of hook suggestions inspired by this style and request.
     );
     const useClaudeWriter = Boolean(anthropicApiKey && preferClaudeWriter);
     const useCodexReviewer = Boolean(oauthCredentials && preferCodexReviewer);
+    const hasCodexReviewerPath = Boolean((useCodexReviewer || openAiApiToken) && preferCodexReviewer);
 
     const runGeneration = (params: {
       model: string;
@@ -4745,7 +4816,7 @@ ${toBulletedSection(QUALITY_REPAIR_REQUIREMENT_LINES)}
     }
 
     const skipEditorForTest = process.env.SKIP_CODEX_EDITOR === "1";
-    const shouldForceCodexReviewerPass = forceCodexReviewerPass && useCodexReviewer;
+    const shouldForceCodexReviewerPass = forceCodexReviewerPass && hasCodexReviewerPath;
     const shouldRunEditorPass = !skipEditorForTest && (qualityIssuesByPost.length > 0 || shouldForceCodexReviewerPass);
 
     if (shouldRunEditorPass) {
@@ -4862,6 +4933,17 @@ Return ${parsed.hooks.length} hook suggestions as well (keep good ones, tighten 
           });
         }
 
+        if (openAiApiToken && preferCodexReviewer) {
+          return runOpenAiChatGeneration({
+            token: openAiApiToken,
+            model: params.model,
+            systemPrompt: editorSystemPrompt,
+            userPrompt: params.userPrompt,
+            responseSchema: params.responseSchema,
+            temperature: 0.4,
+          });
+        }
+
         if (useClaudeWriter && anthropicApiKey) {
           return runClaudeWriterGeneration({
             systemPrompt: editorSystemPrompt,
@@ -4871,28 +4953,18 @@ Return ${parsed.hooks.length} hook suggestions as well (keep good ones, tighten 
           });
         }
 
-        if (oauthCredentials) {
-          return runCodexOauthGeneration({
-            oauth: oauthCredentials,
+        if (openAiApiToken) {
+          return runOpenAiChatGeneration({
+            token: openAiApiToken,
             model: params.model,
             systemPrompt: editorSystemPrompt,
             userPrompt: params.userPrompt,
             responseSchema: params.responseSchema,
+            temperature: 0.4,
           });
         }
 
-        if (!openAiApiToken) {
-          throw new Error("OpenAI API token is missing");
-        }
-
-        return runOpenAiChatGeneration({
-          token: openAiApiToken,
-          model: params.model,
-          systemPrompt: editorSystemPrompt,
-          userPrompt: params.userPrompt,
-          responseSchema: params.responseSchema,
-          temperature: 0.4,
-        });
+        throw new Error("No reviewer model credentials available (Codex/OpenAI/Claude).");
       };
 
       try {
