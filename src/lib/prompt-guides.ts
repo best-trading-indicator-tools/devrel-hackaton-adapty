@@ -73,6 +73,27 @@ async function loadGuide(key: PromptGuideKey): Promise<string> {
   }
 }
 
+const SAUCE_DATASET_PATH =
+  process.env.SAUCE_DATASET_PATH?.trim() || path.join(process.cwd(), "data", "sauce-dataset.md");
+const SAUCE_DATASET_MAX_CHARS = 50_000;
+
+let sauceDatasetCache: string | null = null;
+
+export async function getSauceDataset(): Promise<string> {
+  if (sauceDatasetCache !== null) {
+    return sauceDatasetCache;
+  }
+  try {
+    const raw = await readFile(SAUCE_DATASET_PATH, "utf8");
+    const text = raw.replace(/\r\n?/g, "\n").trim().slice(0, SAUCE_DATASET_MAX_CHARS);
+    sauceDatasetCache = text;
+    return text;
+  } catch {
+    sauceDatasetCache = "";
+    return "";
+  }
+}
+
 export async function getPromptGuides(): Promise<PromptGuides> {
   if (guideCache) {
     return guideCache;

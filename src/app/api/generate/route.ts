@@ -38,8 +38,9 @@ import {
   fetchGiphyVariants,
 } from "@/lib/giphy";
 import { retrieveLibraryContext, type LibraryEntry } from "@/lib/library-retrieval";
-import { getProductUpdateToneContext, getPromptGuides } from "@/lib/prompt-guides";
+import { getProductUpdateToneContext, getPromptGuides, getSauceDataset } from "@/lib/prompt-guides";
 import { runIndustryNewsContext } from "@/lib/rss-news";
+import { retrieveSauceContext } from "@/lib/sauce-context";
 import { retrieveSoisContext, type SoisContextItem } from "@/lib/sois-context";
 import {
   generatePostsRequestSchema,
@@ -1375,6 +1376,17 @@ function pickStrictSauceBenchmarkSnippet(
       continue;
     }
     if (extractMetricLabelFromBenchmarkSnippet(snippet)) {
+      return snippet;
+    }
+  }
+
+  for (let index = 0; index < snippets.length; index += 1) {
+    const snippet = snippets[(offset + index) % snippets.length]?.replace(/\s+/g, " ").trim();
+    if (!snippet) {
+      continue;
+    }
+    const claims = extractNumericClaims(snippet);
+    if (claims.length && claims.some((claim) => allowedClaims.has(claim.canonical))) {
       return snippet;
     }
   }
@@ -3252,6 +3264,47 @@ function buildClaudePostsJsonSchema(): Record<string, unknown> {
   };
 }
 
+function stripMarkdownCodeFence(value: string): string {
+  const trimmed = value.trim();
+  const fencedMatch = trimmed.match(/^```(?:json)?\s*([\s\S]*?)\s*```$/i);
+  if (fencedMatch?.[1]) {
+    return fencedMatch[1].trim();
+  }
+  return trimmed;
+}
+
+function parseClaudeJsonBestEffort(value: string): unknown | null {
+  const candidates = new Set<string>();
+  const trimmed = value.trim();
+
+  if (trimmed) {
+    candidates.add(trimmed);
+    candidates.add(stripMarkdownCodeFence(trimmed));
+
+    const firstObjectIndex = trimmed.indexOf("{");
+    const lastObjectIndex = trimmed.lastIndexOf("}");
+    if (firstObjectIndex >= 0 && lastObjectIndex > firstObjectIndex) {
+      candidates.add(trimmed.slice(firstObjectIndex, lastObjectIndex + 1));
+    }
+
+    const firstArrayIndex = trimmed.indexOf("[");
+    const lastArrayIndex = trimmed.lastIndexOf("]");
+    if (firstArrayIndex >= 0 && lastArrayIndex > firstArrayIndex) {
+      candidates.add(trimmed.slice(firstArrayIndex, lastArrayIndex + 1));
+    }
+  }
+
+  for (const candidate of candidates) {
+    try {
+      return JSON.parse(candidate);
+    } catch {
+      // Try next candidate
+    }
+  }
+
+  return null;
+}
+
 async function runClaudeWriterGeneration(params: {
   systemPrompt: string;
   userPrompt: string;
@@ -3301,7 +3354,18 @@ async function runClaudeWriterGeneration(params: {
     throw new Error("Claude returned no text content");
   }
 
-  const parsed = JSON.parse(textBlock.text) as unknown;
+  const parsed =
+    parseClaudeJsonBestEffort(textBlock.text) ??
+    (() => {
+      console.warn(
+        "Claude writer returned non-parseable JSON; using fallback post skeleton.",
+        textBlock.text.slice(0, 240),
+      );
+      return {
+        hooks: [CLAUDE_FALLBACK_HOOK],
+        posts: Array.from({ length: params.postCount }, () => buildClaudeFallbackPost("medium")),
+      };
+    })();
 
   // Claude can occasionally over-generate array items even with JSON schema guidance.
   if (parsed && typeof parsed === "object") {
@@ -3523,10 +3587,11 @@ ${sourcePostBlock}`,
     throw new Error("Claude returned no text content for X thread generation");
   }
 
-  const parsed = JSON.parse(textBlock.text) as unknown;
+  const parsed = parseClaudeJsonBestEffort(textBlock.text);
   const threadsByPostIndex = new Map<number, string[]>();
 
   if (!parsed || typeof parsed !== "object") {
+    console.warn("Claude X-thread output was non-parseable JSON; skipping X-thread conversion.");
     return threadsByPostIndex;
   }
 
@@ -3596,7 +3661,7 @@ async function runClaudeMemeSelection(params: {
     throw new Error("Claude returned no text content for meme selection");
   }
 
-  const parsed = JSON.parse(textBlock.text) as unknown;
+  const parsed = parseClaudeJsonBestEffort(textBlock.text) ?? {};
 
   // Keep Claude schema relaxed for compatibility, then tighten shape for strict Zod validation.
   const normalizedPayload = (() => {
@@ -3946,23 +4011,70 @@ export async function POST(request: Request) {
           evidenceLines: [],
           warning: webFactCheckSkipReason,
         });
-    const soisContextPromise = shouldRunSoisContext
-      ? retrieveSoisContext({
-          client: embeddingClient,
-          query: soisRetrievalQuery || retrievalQuery,
-          details: input.details,
-          preferBroadCoverage: !hasSpecificSoisPromptDetails,
-          inputType: input.inputType,
-          limit: Math.min(12, Math.max(6, input.numberOfPosts * 2)),
+    const sauceLimit = Math.min(12, Math.max(6, input.numberOfPosts * 3));
+    const soisContextPromise = looksLikeSaucePostType(input.inputType)
+      ? (embeddingClient
+          ? retrieveSauceContext({
+              client: embeddingClient,
+              query: retrievalQuery,
+              details: input.details,
+              limit: sauceLimit,
+            })
+          : Promise.resolve<{ items: { id: string; text: string }[]; method: "none" }>({ items: [], method: "none" })
+        ).then(async (sauce) => {
+          let items = sauce.items.map((item) => ({
+            id: item.id,
+            category: "market" as const,
+            categoryLabel: "Sauce",
+            subcategory: 1,
+            subcategoryLabel: item.id,
+            sourceUrl: "https://appstate2.vercel.app/",
+            rows: 0,
+            text: item.text,
+          }));
+          if (items.length === 0) {
+            const fallback = await getSauceDataset();
+            if (fallback.trim()) {
+              items = [
+                {
+                  id: "sauce-fallback",
+                  category: "market" as const,
+                  categoryLabel: "Sauce",
+                  subcategory: 1,
+                  subcategoryLabel: "Sauce dataset",
+                  sourceUrl: "https://appstate2.vercel.app/",
+                  rows: 0,
+                  text: fallback.slice(0, 25_000),
+                },
+              ];
+            }
+          }
+          return {
+            enabled: items.length > 0,
+            method: items.length ? sauce.method : ("none" as const),
+            items,
+            warning: undefined,
+            fetchedSections: items.length,
+            availableSections: items.length,
+          };
         })
-      : Promise.resolve({
-          enabled: false,
-          method: "none" as const,
-          items: [],
-          warning: soisContextSkipReason,
-          fetchedSections: 0,
-          availableSections: 0,
-        });
+      : shouldRunSoisContext
+        ? retrieveSoisContext({
+            client: embeddingClient,
+            query: soisRetrievalQuery || retrievalQuery,
+            details: input.details,
+            preferBroadCoverage: !hasSpecificSoisPromptDetails,
+            inputType: input.inputType,
+            limit: Math.min(12, Math.max(6, input.numberOfPosts * 2)),
+          })
+        : Promise.resolve({
+            enabled: false,
+            method: "none" as const,
+            items: [],
+            warning: soisContextSkipReason,
+            fetchedSections: 0,
+            availableSections: 0,
+          });
     const [retrieval, soisContext, webFactCheck, industryNewsContext] = await Promise.all([
       retrieveLibraryContext({
         client: embeddingClient,
@@ -4060,8 +4172,8 @@ export async function POST(request: Request) {
       : "(none)";
     const shouldUseSauceAutoTopicPlan = looksLikeSaucePostType(input.inputType) && !hasSpecificSoisPromptDetails;
     const sauceSoisItems = looksLikeSaucePostType(input.inputType)
-      ? soisContext.items.filter((item) => item.id.startsWith("all-"))
-      : soisContext.items;
+      ? soisContext.items
+      : soisContext.items.filter((item) => item.id.startsWith("all-"));
     const sauceTopicPlanResult = shouldUseSauceAutoTopicPlan
       ? buildSauceAutoTopicPlan(sauceSoisItems, input.numberOfPosts)
       : { planLines: [] as string[], assignedSectionKeys: new Set<string>() };
@@ -4122,14 +4234,18 @@ export async function POST(request: Request) {
         ? "web > internal context"
         : "internal context";
     const evidenceContextGuidance = shouldRunSoisContext
-      ? `Evidence context (priority order: ${evidencePriorityOrder}). Numbers from SOIS are real benchmarks - use them, they make posts more compelling. Copy numbers verbatim from the evidence below. Use each number for its labeled metric only: install_to_paid_rate as %, avg_ltv as $, price_usd as $. When a number is not in the evidence, write the sentence without it. For Sauce posts: only use numbers from the SOIS evidence below (not from web fact-check or user input). REQUIRED: Each Sauce post body must include at least 1 concrete number from the evidence (e.g. X%, $Y, Z rate). Never output a Sauce post with zero numbers.`
+      ? looksLikeSaucePostType(input.inputType)
+        ? `Evidence context: Sauce dataset (TOP 35 INSIGHTS) below. MANDATORY: Every Sauce post body MUST include at least 1 concrete number from the Sauce dataset (e.g. 1.7x, 55.5%, $54.17, 46.2%). Copy numbers verbatim. Zero numbers in a Sauce post = invalid output. Do not use numbers from web fact-check or user input.`
+        : `Evidence context (priority order: ${evidencePriorityOrder}). Numbers from SOIS are real benchmarks - use them, they make posts more compelling. Copy numbers verbatim from the evidence below. Use each number for its labeled metric only: install_to_paid_rate as %, avg_ltv as $, price_usd as $. When a number is not in the evidence, write the sentence without it. For Sauce posts: only use numbers from the SOIS evidence or Sauce dataset below (not from web fact-check or user input). REQUIRED: Each Sauce post body must include at least 1 concrete number from the evidence (e.g. X%, $Y, Z rate). Never output a Sauce post with zero numbers.`
       : shouldRunWebFactCheck
         ? `Evidence context (priority order: ${evidencePriorityOrder}). Use web evidence to fill factual gaps when available (especially for event logistics). If a detail is not supported by evidence, keep phrasing qualitative and avoid invented specifics. Do not introduce SOIS benchmark claims.`
         : `Evidence context (priority order: ${evidencePriorityOrder}). Use internal request context only (details, event data, date/time/place${
             shouldIncludeCta ? ", and CTA link" : ""
           }). Do not introduce SOIS benchmark claims.`;
     const soisSectionTitle = shouldRunSoisContext
-      ? "1. SOIS (Adapty State of In-App Subscriptions) - fetched from dags.adpinfra.dev:"
+      ? looksLikeSaucePostType(input.inputType)
+        ? "1. Sauce dataset (TOP 35 INSIGHTS - use at least 1 number from here in every post):"
+        : "1. SOIS (Adapty State of In-App Subscriptions) - fetched from dags.adpinfra.dev:"
       : `1. SOIS benchmark context: ${soisContextSkipReason}`;
     const webFactCheckSectionTitle = shouldRunWebFactCheck
       ? shouldRunSoisContext
@@ -4156,11 +4272,24 @@ export async function POST(request: Request) {
         sauceTopicPlanSummary,
       ].filter(Boolean),
     );
-    const sauceBenchmarkSnippets = collectBenchmarkEvidenceSnippets(
-      soisItemsForEvidence.map((item) => item.text),
-    );
+    const sauceItemTexts = soisItemsForEvidence.map((item) => item.text);
+    let sauceBenchmarkSnippets = collectBenchmarkEvidenceSnippets(sauceItemTexts);
+    if (looksLikeSaucePostType(input.inputType) && sauceBenchmarkSnippets.length === 0 && sauceItemTexts.length > 0) {
+      const fallbackSnippets: string[] = [];
+      for (const text of sauceItemTexts) {
+        for (const line of text.split(/\n/)) {
+          const trimmed = line.replace(/\s+/g, " ").trim();
+          if (/\d/.test(trimmed) && /[$%]|\d+(?:\.\d+)?x/.test(trimmed) && trimmed.length < 400) {
+            fallbackSnippets.push(trimmed);
+          }
+        }
+      }
+      sauceBenchmarkSnippets = [...new Set(fallbackSnippets)].slice(0, 60);
+    }
     const sauceBenchmarkNumericClaims = buildSauceAllowedNumericClaimSet(
-      [...sauceBenchmarkSnippets, ...effectiveCtaLinksByPost, effectiveCtaLink].filter(Boolean),
+      looksLikeSaucePostType(input.inputType) && sauceItemTexts.length > 0
+        ? [...sauceBenchmarkSnippets, ...sauceItemTexts, ...effectiveCtaLinksByPost, effectiveCtaLink].filter(Boolean)
+        : [...sauceBenchmarkSnippets, ...effectiveCtaLinksByPost, effectiveCtaLink].filter(Boolean),
     );
 
     const responseSchema = makeGeneratePostsResponseSchema(input.numberOfPosts, {
@@ -4180,11 +4309,10 @@ ${promptGuides.aso}
 
 Paywall guide from repository prompt file:
 ${promptGuides.paywall}
-
-Sauce number rule (MANDATORY):
-- Every Sauce post body MUST include at least 1 concrete number from the SOIS evidence (e.g. 2.4%, $46, 1.78% conversion). Never output a Sauce post with zero numbers when SOIS evidence is provided.
-- Target 1-2 benchmark numbers per post. Copy numbers verbatim from the evidence.
-- Every number must come from the SOIS evidence below only. Do not use numbers from web fact-check or user input.
+Sauce number rule (MANDATORY - non-negotiable):
+- Every Sauce post body MUST include at least 1 concrete number from the Sauce dataset below (e.g. 1.7x, 7.4x, 55.5%, $54.17, 46.2%, 58.1%). A Sauce post with zero numbers is invalid.
+- Target 1-2 benchmark numbers per post. Copy numbers verbatim from the Sauce dataset evidence.
+- Every number must come from the Sauce dataset below. Do not use numbers from web fact-check or user input.
 - Do not repeat the same benchmark number multiple times in the same post or across most hook suggestions.
 `
       : "";
@@ -4626,13 +4754,22 @@ ${toBulletedSection(QUALITY_REPAIR_REQUIREMENT_LINES)}
         "Eliminate staccato formatting. Merge isolated one-sentence lines into fuller paragraphs while preserving flow and readability.",
         "Ensure body text uses paragraph breaks (blank line between paragraphs). Never leave a wall of text without paragraph breaks.",
         looksLikeSaucePostType(input.inputType)
-          ? "For Sauce posts: verify every number or percentage appears verbatim in SOIS evidence. Rewrite unsupported numbers qualitatively."
+          ? "For Sauce posts: verify every number or percentage appears verbatim in the Sauce dataset evidence. Rewrite unsupported numbers qualitatively. Every Sauce post must include at least 1 number from the Sauce dataset."
           : "",
       ]
         .filter(Boolean)
         .map((line) => `- ${line}`)
         .join("\n");
-      const editorEvidenceBlock = `Evidence context for factual QA (SOIS > web):
+      const editorEvidenceBlock = looksLikeSaucePostType(input.inputType)
+        ? `Evidence context for factual QA - Sauce dataset (use numbers from here):
+Sauce dataset:
+${soisEvidenceForPrompt.slice(0, 2400)}
+
+If a Sauce post has ZERO numbers, you MUST add at least 1 number from the Sauce dataset above (e.g. 1.7x, 55.5%, $54.17, 46.2%). Do not output a Sauce post without a number.
+
+Web evidence (secondary):
+${factCheckEvidenceForPrompt.slice(0, 1400)}`
+        : `Evidence context for factual QA (SOIS > web):
 SOIS evidence:
 ${soisEvidenceForPrompt.slice(0, 2400)}
 
@@ -4661,8 +4798,8 @@ Fact and benchmark rules:
 - Keep a number only if it appears verbatim in the provided evidence context.
 - When a numeric claim is unsupported, rewrite it qualitatively.
 - Use each metric in its correct unit: conversion as %, LTV as currency, price as currency.
-- For Sauce posts: only keep numbers that appear verbatim in the SOIS evidence above (not web evidence). Replace any other number with qualitative phrasing.
-- For Sauce posts with benchmark evidence: each post body MUST include at least 1 concrete number from the evidence. Never output a Sauce post with zero numbers when evidence is provided.
+- For Sauce posts: only keep numbers that appear verbatim in the Sauce dataset evidence above (not web evidence). Replace any other number with qualitative phrasing.
+- For Sauce posts: each post body MUST include at least 1 concrete number from the Sauce dataset. Never output a Sauce post with zero numbers.
 - Vary benchmark numbers across posts and hook suggestions.
 
 Rewrite to concrete anchors:
@@ -4851,10 +4988,18 @@ Return ${parsed.hooks.length} hook suggestions as well (keep good ones, tighten 
       }
     }
 
+    const sauceSnippetsForInjection =
+      sauceBenchmarkSnippets.length > 0
+        ? sauceBenchmarkSnippets
+        : looksLikeSaucePostType(input.inputType)
+          ? sauceItemTexts.flatMap((t) =>
+              t.split(/\n/).filter((line) => /\d/.test(line) && /[$%]|\d+(?:\.\d+)?x/.test(line)),
+            )
+          : [];
     const shouldEnforceSauceBenchmarkAnchor =
       looksLikeSaucePostType(input.inputType) &&
       sauceBenchmarkNumericClaims.size > 0 &&
-      sauceBenchmarkSnippets.length > 0;
+      sauceSnippetsForInjection.length > 0;
 
     if (shouldEnforceSauceBenchmarkAnchor) {
       let injectedBenchmarkAnchors = 0;
@@ -4865,7 +5010,7 @@ Return ${parsed.hooks.length} hook suggestions as well (keep good ones, tighten 
         }
 
         const benchmarkSnippet = pickStrictSauceBenchmarkSnippet(
-          sauceBenchmarkSnippets,
+          sauceSnippetsForInjection,
           sauceBenchmarkNumericClaims,
           index,
         );
@@ -5043,7 +5188,7 @@ Return ${parsed.hooks.length} hook suggestions as well (keep good ones, tighten 
       normalizedPosts = normalizedPosts.map((post, index) => {
         const ctaLinkForPost = effectiveCtaLinksByPost[index] ?? effectiveCtaLink;
         const benchmarkSnippet = pickStrictSauceBenchmarkSnippet(
-          sauceBenchmarkSnippets,
+          sauceSnippetsForInjection,
           sauceBenchmarkNumericClaims,
           index,
         );
@@ -5101,7 +5246,7 @@ Return ${parsed.hooks.length} hook suggestions as well (keep good ones, tighten 
 
       let strictHookRewrites = 0;
       normalizedHooks = normalizedHooks.map((hook, index) => {
-        const benchmarkSnippet = pickStrictSauceBenchmarkSnippet(sauceBenchmarkSnippets, sauceBenchmarkNumericClaims, index);
+        const benchmarkSnippet = pickStrictSauceBenchmarkSnippet(sauceSnippetsForInjection, sauceBenchmarkNumericClaims, index);
         const sanitized = sanitizeSauceTextStrict(hook, {
           allowedClaims: sauceBenchmarkNumericClaims,
           allowAnecdotes,
@@ -5140,7 +5285,7 @@ Return ${parsed.hooks.length} hook suggestions as well (keep good ones, tighten 
 
         normalizedHooks = normalizedHooks.map((hook, index) => {
           const benchmarkSnippet = pickStrictSauceBenchmarkSnippet(
-            sauceBenchmarkSnippets,
+            sauceSnippetsForInjection,
             sauceBenchmarkNumericClaims,
             index,
           );

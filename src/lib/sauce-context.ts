@@ -1,0 +1,65 @@
+import path from "node:path";
+
+import OpenAI from "openai";
+
+const SAUCE_LANCEDB_PATH = process.env.VERCEL ? path.join("/tmp", ".lancedb") : path.join(process.cwd(), ".lancedb");
+const SAUCE_LANCEDB_TABLE_NAME = "sauce_insights";
+
+type LanceDbConnection = import("@lancedb/lancedb").Connection;
+
+async function connectLanceDb(): Promise<LanceDbConnection> {
+  const lancedb = await import("@lancedb/lancedb");
+  return lancedb.connect(SAUCE_LANCEDB_PATH);
+}
+
+const SAUCE_EMBEDDING_MODEL = "text-embedding-3-small";
+
+async function embedTexts(client: OpenAI, texts: string[]): Promise<number[][]> {
+  const model = process.env.OPENAI_SAUCE_EMBEDDING_MODEL ?? SAUCE_EMBEDDING_MODEL;
+  const embeddings: number[][] = [];
+  const batchSize = 40;
+
+  for (let index = 0; index < texts.length; index += batchSize) {
+    const batch = texts.slice(index, index + batchSize).map((text) => text.slice(0, 3500));
+    const response = await client.embeddings.create({ model, input: batch });
+    const ordered = [...response.data].sort((a, b) => a.index - b.index);
+    for (const item of ordered) embeddings.push(item.embedding);
+  }
+
+  return embeddings;
+}
+
+export async function retrieveSauceContext(params: {
+  client: OpenAI;
+  query: string;
+  details?: string;
+  limit: number;
+}): Promise<{ items: { id: string; text: string }[]; method: "lancedb" | "none" }> {
+  const db = await connectLanceDb();
+
+  try {
+    const tableNames = await db.tableNames();
+    if (!tableNames.includes(SAUCE_LANCEDB_TABLE_NAME)) {
+      return { items: [], method: "none" };
+    }
+
+    const table = await db.openTable(SAUCE_LANCEDB_TABLE_NAME);
+    const count = await table.countRows();
+    if (count === 0) {
+      return { items: [], method: "none" };
+    }
+
+    const focusQuery = [params.details?.trim(), params.query].filter(Boolean).join(" | ").trim() || params.query;
+    const [queryVector] = await embedTexts(params.client, [focusQuery]);
+    const rows = await table.vectorSearch(queryVector).limit(params.limit).toArray();
+
+    const items = (rows as Array<Record<string, unknown>>).map((row) => ({
+      id: String(row.insightId ?? ""),
+      text: String(row.text ?? ""),
+    }));
+
+    return { items, method: "lancedb" };
+  } finally {
+    db.close();
+  }
+}
