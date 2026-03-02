@@ -396,6 +396,15 @@ const SAUCE_BLOCKED_ANECDOTE_PATTERN =
   /\b(?:one|another|third)\s+app\b|\b(?:we|our team)\s+(?:support(?:ed)?|work(?:ed)? with|had a client|helped)\b/i;
 const SAUCE_DETAILS_ANECDOTE_ALLOW_PATTERN =
   /\b(one app|another app|third app|client story|customer story|case study|we support|we worked with|we saw|we tested)\b/i;
+const SAUCE_BENCHMARK_NOISE_SEGMENT_PATTERN =
+  /^(?:rows analyzed|columns|global row snapshot|state of in[-\s]?app subscriptions|benchmark anchor|highlights?)\b/i;
+const SAUCE_BENCHMARK_LOW_SIGNAL_PREFIX_PATTERN = /^(?:top|low|sample size)\s*:/i;
+const SAUCE_BENCHMARK_METRIC_SIGNAL_PATTERN =
+  /\b(install|trial|paid|renewal|refund|retention|churn|ltv|arpu|revenue|pricing|price|paywall|conversion|direct|cohort|region|country|category|annual|monthly|weekly|plan)\b/i;
+const SAUCE_BENCHMARK_UNIT_SIGNAL_PATTERN =
+  /(?:[$€£]\s*\d)|(?:\b\d{1,3}(?:,\d{3})*(?:\.\d+)?\s*%)|(?:\b\d{1,3}(?:,\d{3})*(?:\.\d+)?\s*(?:x|day|days|week|weeks|month|months|year|years|k|m|b|million|billion|thousand)\b)/i;
+const SAUCE_WEAK_HOOK_PATTERN =
+  /^(?:sois(?:\s+benchmark)?|benchmark|rows analyzed|top|low|max|min|median|p90)\b[:\s-]*/i;
 
 const NUMERIC_CLAIM_EXTRACTORS: Array<{ kind: NumericClaimKind; regex: RegExp }> = [
   {
@@ -616,7 +625,33 @@ function isNumericClaimAllowed(
   if (claimVal === null) {
     return false;
   }
+
+  const isClaimShapeCompatible = (claimValue: NumericClaim, allowedCanonical: string): boolean => {
+    const allowed = allowedCanonical.trim().toLowerCase();
+
+    if (claimValue.kind === "percent") {
+      return allowed.endsWith("%");
+    }
+
+    if (claimValue.kind === "multiplier") {
+      return allowed.endsWith("x");
+    }
+
+    if (claimValue.kind === "unit") {
+      const unitMatch = allowed.match(/^\d+(?:\.\d+)?\s+([a-z]+)$/i);
+      if (!unitMatch) {
+        return false;
+      }
+      return normalizeNumericUnit(unitMatch[1]) === (claimValue.unit ?? "");
+    }
+
+    return /^\d+(?:\.\d+)?$/.test(allowed);
+  };
+
   for (const allowed of allowedClaims) {
+    if (!isClaimShapeCompatible(claim, allowed)) {
+      continue;
+    }
     const allowedVal = parseCanonicalToNumber(allowed);
     if (allowedVal !== null && numericValuesWithinTolerance(claimVal, allowedVal)) {
       return true;
@@ -640,15 +675,36 @@ function collectBenchmarkEvidenceSnippets(contexts: string[], maxSnippets = 60):
 
   for (const context of contexts) {
     const segments = context
-      .split(/\n|\|/)
+      .split(/\n/)
       .map((segment) => normalizeNoEmDash(segment.replace(/^[-*]\s*/, "").trim()))
       .filter(Boolean);
 
-    for (const segment of segments) {
+    for (let index = 0; index < segments.length; index += 1) {
+      const rawSegment = segments[index];
+      let segment = rawSegment;
+
       if (!/\d/.test(segment)) {
         continue;
       }
       if (/(app[_\s-]?id|obfuscated|hash|token|uuid)/i.test(segment)) {
+        continue;
+      }
+      if (SAUCE_BENCHMARK_NOISE_SEGMENT_PATTERN.test(segment)) {
+        continue;
+      }
+      if (SAUCE_BENCHMARK_LOW_SIGNAL_PREFIX_PATTERN.test(segment)) {
+        continue;
+      }
+      if (/^median\s*:/i.test(segment) && index > 0) {
+        const previous = segments[index - 1] ?? "";
+        if (SAUCE_BENCHMARK_METRIC_SIGNAL_PATTERN.test(previous) && !/\d/.test(previous)) {
+          segment = `${previous}. ${segment}`;
+        }
+      }
+      if (!SAUCE_BENCHMARK_METRIC_SIGNAL_PATTERN.test(segment)) {
+        continue;
+      }
+      if (!SAUCE_BENCHMARK_UNIT_SIGNAL_PATTERN.test(segment)) {
         continue;
       }
       if (/\b\d{1,3}(?:,\d{3}){6,}(?:\.\d+)?\b/.test(segment)) {
@@ -680,6 +736,23 @@ function collectBenchmarkEvidenceSnippets(contexts: string[], maxSnippets = 60):
   }
 
   return snippets;
+}
+
+function buildSauceAllowedNumericClaimSet(contexts: string[]): Set<string> {
+  const raw = buildAllowedNumericClaimSet(contexts);
+  const filtered = new Set<string>();
+
+  for (const canonical of raw) {
+    if (/^\d+(?:\.\d+)?$/.test(canonical)) {
+      continue;
+    }
+    if (/^\d{4}$/.test(canonical)) {
+      continue;
+    }
+    filtered.add(canonical);
+  }
+
+  return filtered;
 }
 
 type SauceTopicPillar = {
@@ -1251,6 +1324,9 @@ function pickStrictSauceBenchmarkSnippet(
     if (!snippet) {
       continue;
     }
+    if (!extractMetricLabelFromBenchmarkSnippet(snippet)) {
+      continue;
+    }
     const claims = extractNumericClaims(snippet);
     if (!claims.length) {
       continue;
@@ -1260,14 +1336,238 @@ function pickStrictSauceBenchmarkSnippet(
     }
   }
 
-  const fallback = snippets[offset]?.replace(/\s+/g, " ").trim();
-  return fallback || null;
+  for (let index = 0; index < snippets.length; index += 1) {
+    const snippet = snippets[(offset + index) % snippets.length]?.replace(/\s+/g, " ").trim();
+    if (!snippet) {
+      continue;
+    }
+    if (extractMetricLabelFromBenchmarkSnippet(snippet)) {
+      return snippet;
+    }
+  }
+
+  return null;
 }
 
 function buildStrictSauceBenchmarkSentence(snippet: string): string {
   const compact = snippet.replace(/\s+/g, " ").trim();
-  const base = compact.endsWith(".") ? compact : `${compact}.`;
-  return `SOIS benchmark: ${base}`;
+  const metricLabelRaw = extractMetricLabelFromBenchmarkSnippet(compact);
+  const metricLabel = metricLabelRaw ? normalizeHookMetricLabel(metricLabelRaw) : "";
+  const stats = extractBenchmarkStatClaims(compact);
+  const topClaim = pickTopBenchmarkClaim(stats);
+  const typical = formatBenchmarkClaim(stats.median) ?? formatBenchmarkClaim(stats.min);
+  const top = formatBenchmarkClaim(topClaim);
+  const primaryValues = extractBenchmarkPrimaryValues(compact);
+  const first = typical ?? primaryValues[0];
+
+  if (metricLabel && first && top && first !== top) {
+    return `${metricLabel} is typically around ${first}, while top-performing apps reach about ${top}.`;
+  }
+  if (metricLabel && first) {
+    return `Typical ${metricLabel.toLowerCase()} is around ${first}.`;
+  }
+  if (metricLabel) {
+    return `${metricLabel} shows meaningful variance by cohort and region.`;
+  }
+  if (first && top && first !== top) {
+    return `SOIS shows a meaningful spread: typical apps are around ${first}, while top performers reach about ${top}.`;
+  }
+  if (first) {
+    return `SOIS shows typical performance around ${first}.`;
+  }
+  return compact.endsWith(".") ? compact : `${compact}.`;
+}
+
+function normalizeHookMetricLabel(value: string): string {
+  return value
+    .replace(/[_-]+/g, " ")
+    .replace(/\s+/g, " ")
+    .trim()
+    .replace(/\b\w/g, (char) => char.toUpperCase());
+}
+
+function cleanBenchmarkMetricLabel(value: string): string {
+  let label = value
+    .replace(/[_-]+/g, " ")
+    .replace(/\s+/g, " ")
+    .trim();
+
+  if (!label) {
+    return "";
+  }
+
+  if (label.includes(" - ")) {
+    const parts = label.split(/\s+-\s+/);
+    label = parts[parts.length - 1] ?? label;
+  }
+
+  const coreMetricMatch = label.match(
+    /\b(install to|trial to|paid to|retention|renewal|refund|churn|ltv|arpu|price|pricing|revenue)\b[\s\S]*$/i,
+  );
+  if (coreMetricMatch) {
+    label = coreMetricMatch[0];
+  }
+
+  label = label
+    .replace(/\((?:rate:[^)]+|usd[^)]*|[^)]*log scale[^)]*)\)/gi, "")
+    .replace(/^\b(conversions?|pricing|retention|refunds?|ltv|market|paywalls?|ai|stores?)\b\s+\b\1\b\s*/i, "")
+    .replace(/^\b(conversions?|pricing|retention|refunds?|ltv|market|paywalls?|ai|stores?)\b\s*\([^)]+\)\s*/i, "")
+    .replace(/^\b(conversions?|pricing|retention|refunds?|ltv|market|paywalls?|ai|stores?)\b\s*/i, "")
+    .replace(/\brate\b/gi, "rate")
+    .replace(/\s+/g, " ")
+    .trim();
+
+  return label;
+}
+
+function extractMetricLabelFromBenchmarkSnippet(snippet: string): string {
+  const compact = snippet.replace(/\s+/g, " ").trim();
+  const colonMedianMatch = compact.match(/^(.+?):\s*median\b/i);
+  if (colonMedianMatch) {
+    return cleanBenchmarkMetricLabel(colonMedianMatch[1]);
+  }
+
+  const periodMedianMatch = compact.match(/^(.+?)\.\s*median\s*:/i);
+  if (periodMedianMatch) {
+    return cleanBenchmarkMetricLabel(periodMedianMatch[1]);
+  }
+
+  return "";
+}
+
+function extractBenchmarkPrimaryValues(snippet: string): string[] {
+  const claims = extractNumericClaims(snippet)
+    .filter((claim) => claim.kind !== "number")
+    .map((claim) => claim.raw.replace(/\s+/g, " ").trim())
+    .filter(Boolean);
+
+  return claims.slice(0, 2);
+}
+
+function formatBenchmarkClaim(claim: NumericClaim | null | undefined): string | null {
+  if (!claim) {
+    return null;
+  }
+  const value = claim.raw.replace(/\s+/g, " ").trim();
+  return value || null;
+}
+
+function findLabeledBenchmarkClaim(params: {
+  snippet: string;
+  labelPattern: RegExp;
+  claims: NumericClaim[];
+  usedClaimStarts: Set<number>;
+  maxDistance?: number;
+}): NumericClaim | null {
+  const maxDistance = params.maxDistance ?? 28;
+  const labelRegex = new RegExp(params.labelPattern.source, params.labelPattern.flags);
+  let match: RegExpExecArray | null;
+
+  while ((match = labelRegex.exec(params.snippet)) !== null) {
+    const labelEnd = match.index + match[0].length;
+    const candidate = params.claims.find(
+      (claim) =>
+        !params.usedClaimStarts.has(claim.start) &&
+        claim.start >= labelEnd &&
+        claim.start - labelEnd <= maxDistance,
+    );
+    if (!candidate) {
+      continue;
+    }
+    params.usedClaimStarts.add(candidate.start);
+    return candidate;
+  }
+
+  return null;
+}
+
+function extractBenchmarkStatClaims(snippet: string): {
+  median: NumericClaim | null;
+  p90: NumericClaim | null;
+  max: NumericClaim | null;
+  min: NumericClaim | null;
+} {
+  const claims = extractNumericClaims(snippet).filter((claim) => claim.kind !== "number");
+  const usedClaimStarts = new Set<number>();
+
+  return {
+    median: findLabeledBenchmarkClaim({
+      snippet,
+      labelPattern: /\bmedian\b\s*:?/gi,
+      claims,
+      usedClaimStarts,
+    }),
+    p90: findLabeledBenchmarkClaim({
+      snippet,
+      labelPattern: /\bp90\b\s*:?/gi,
+      claims,
+      usedClaimStarts,
+    }),
+    max: findLabeledBenchmarkClaim({
+      snippet,
+      labelPattern: /\bmax\b\s*:?/gi,
+      claims,
+      usedClaimStarts,
+    }),
+    min: findLabeledBenchmarkClaim({
+      snippet,
+      labelPattern: /\bmin\b\s*:?/gi,
+      claims,
+      usedClaimStarts,
+    }),
+  };
+}
+
+function pickTopBenchmarkClaim(stats: {
+  median: NumericClaim | null;
+  p90: NumericClaim | null;
+  max: NumericClaim | null;
+}): NumericClaim | null {
+  const medianValue = stats.median ? parseCanonicalToNumber(stats.median.canonical) : null;
+  const highCandidates = [stats.p90, stats.max].filter((claim): claim is NumericClaim => Boolean(claim));
+
+  if (medianValue !== null) {
+    for (const candidate of highCandidates) {
+      const candidateValue = parseCanonicalToNumber(candidate.canonical);
+      if (candidateValue !== null && candidateValue > medianValue) {
+        return candidate;
+      }
+    }
+    return null;
+  }
+
+  return highCandidates[0] ?? null;
+}
+
+function buildStrictSauceFallbackHook(snippet: string | null): string {
+  const compact = snippet?.replace(/\s+/g, " ").trim() ?? "";
+  const metricLabel = extractMetricLabelFromBenchmarkSnippet(compact);
+  const stats = extractBenchmarkStatClaims(compact);
+  const topClaim = pickTopBenchmarkClaim(stats);
+  const primaryValue = formatBenchmarkClaim(stats.median) ?? formatBenchmarkClaim(stats.min);
+  const topValue = formatBenchmarkClaim(topClaim);
+
+  if (metricLabel && primaryValue && topValue && primaryValue !== topValue) {
+    return `${normalizeHookMetricLabel(metricLabel)} has a bigger gap than most app makers expect: typical performance is near ${primaryValue}, while top apps reach about ${topValue}.`;
+  }
+
+  if (metricLabel && primaryValue) {
+    return `${normalizeHookMetricLabel(metricLabel)} varies more by cohort than most app makers assume, with typical performance near ${primaryValue}.`;
+  }
+
+  if (metricLabel) {
+    return `${normalizeHookMetricLabel(metricLabel)} benchmarks vary more by cohort than most app makers assume.`;
+  }
+
+  return "Most app makers have bigger benchmark variance by cohort than their dashboards suggest.";
+}
+
+function sanitizeSauceHookFallback(hook: string, benchmarkSnippet: string | null): string {
+  const cleaned = hook.replace(/\s+/g, " ").trim();
+  if (!cleaned || SAUCE_WEAK_HOOK_PATTERN.test(cleaned)) {
+    return buildStrictSauceFallbackHook(benchmarkSnippet);
+  }
+  return cleaned;
 }
 
 function countStrictSauceOutputViolations(
@@ -2102,6 +2402,18 @@ function isCodexOauthModelSupported(model: string): boolean {
   return true;
 }
 
+function escapeRegExp(value: string): string {
+  return value.replace(/[.*+?^${}()|[\]\\]/g, "\\$&");
+}
+
+function buildLooseLinkPattern(link: string): RegExp {
+  const pattern = link
+    .split("")
+    .map((char) => `${escapeRegExp(char)}\\s*`)
+    .join("");
+  return new RegExp(pattern, "gi");
+}
+
 function ensureFinalCta(cta: string, ctaLink: string): string {
   const cleanCta = cta.trim();
   const cleanLink = ctaLink.trim();
@@ -2114,8 +2426,15 @@ function ensureFinalCta(cta: string, ctaLink: string): string {
     return cleanLink;
   }
 
-  if (cleanCta.includes(cleanLink)) {
-    return cleanCta;
+  const ctaWithoutLink = cleanCta.replace(buildLooseLinkPattern(cleanLink), " ");
+  const hadLink = ctaWithoutLink !== cleanCta;
+
+  if (hadLink) {
+    const strippedCta = ctaWithoutLink
+      .replace(/\s+/g, " ")
+      .trim()
+      .replace(/[-\u2013\u2014\s.,;:!?]+$/g, "");
+    return strippedCta ? `${strippedCta}. ${cleanLink}` : cleanLink;
   }
 
   return `${cleanCta.replace(/[.\s]+$/g, "")}. ${cleanLink}`;
@@ -2817,6 +3136,18 @@ const CLAUDE_FALLBACK_CTA = "Share your main blocker in the comments.";
 
 function clipTextStrictMax(value: string, maxChars: number): string {
   const normalized = normalizeNoEmDash(value).replace(/\s+/g, " ").trim();
+  if (normalized.length <= maxChars) {
+    return normalized;
+  }
+
+  const clipped = normalized.slice(0, maxChars + 1).replace(/\s+\S*$/, "").trim();
+  const fallback = normalized.slice(0, maxChars).trim();
+  const resolved = clipped || fallback;
+  return resolved.length <= maxChars ? resolved : resolved.slice(0, maxChars).trim();
+}
+
+function clipMultilineTextStrictMax(value: string, maxChars: number): string {
+  const normalized = normalizeNoEmDash(value).replace(/\r\n?/g, "\n").trim();
   if (normalized.length <= maxChars) {
     return normalized;
   }
@@ -3782,11 +4113,11 @@ export async function POST(request: Request) {
         sauceTopicPlanSummary,
       ].filter(Boolean),
     );
-    const sauceBenchmarkNumericClaims = buildAllowedNumericClaimSet(
-      [...soisContext.items.map((item) => item.text), ...effectiveCtaLinksByPost, effectiveCtaLink].filter(Boolean),
-    );
     const sauceBenchmarkSnippets = collectBenchmarkEvidenceSnippets(
       soisContext.items.map((item) => item.text),
+    );
+    const sauceBenchmarkNumericClaims = buildSauceAllowedNumericClaimSet(
+      [...sauceBenchmarkSnippets, ...effectiveCtaLinksByPost, effectiveCtaLink].filter(Boolean),
     );
 
     const responseSchema = makeGeneratePostsResponseSchema(input.numberOfPosts, {
@@ -4488,16 +4819,20 @@ Return ${parsed.hooks.length} hook suggestions as well (keep good ones, tighten 
           return post;
         }
 
-        const rawSnippet = sauceBenchmarkSnippets[index % sauceBenchmarkSnippets.length];
-        const compactSnippet = rawSnippet.replace(/\s+/g, " ").trim();
-        const safeSnippet =
-          compactSnippet.length > 220 ? `${compactSnippet.slice(0, 217).trimEnd()}...` : compactSnippet;
-        const benchmarkSentence = safeSnippet.endsWith(".") ? safeSnippet : `${safeSnippet}.`;
+        const benchmarkSnippet = pickStrictSauceBenchmarkSnippet(
+          sauceBenchmarkSnippets,
+          sauceBenchmarkNumericClaims,
+          index,
+        );
+        if (!benchmarkSnippet) {
+          return post;
+        }
+        const benchmarkSentence = buildStrictSauceBenchmarkSentence(benchmarkSnippet);
 
         injectedBenchmarkAnchors += 1;
         return {
           ...post,
-          body: `${post.body.trim()}\n\nBenchmark anchor: ${benchmarkSentence}`,
+          body: `${post.body.trim()}\n\n${benchmarkSentence}`,
         };
       });
 
@@ -4661,6 +4996,7 @@ Return ${parsed.hooks.length} hook suggestions as well (keep good ones, tighten 
 
       let strictPostRewrites = 0;
       normalizedPosts = normalizedPosts.map((post, index) => {
+        const ctaLinkForPost = effectiveCtaLinksByPost[index] ?? effectiveCtaLink;
         const benchmarkSnippet = pickStrictSauceBenchmarkSnippet(
           sauceBenchmarkSnippets,
           sauceBenchmarkNumericClaims,
@@ -4676,10 +5012,6 @@ Return ${parsed.hooks.length} hook suggestions as well (keep good ones, tighten 
           allowedClaims: sauceBenchmarkNumericClaims,
           allowAnecdotes,
         });
-        const ctaSanitized = sanitizeSauceTextStrict(post.cta, {
-          allowedClaims: sauceBenchmarkNumericClaims,
-          allowAnecdotes,
-        });
 
         strictPostRewrites +=
           hookSanitized.removedUnsupportedNumericSentences +
@@ -4687,18 +5019,17 @@ Return ${parsed.hooks.length} hook suggestions as well (keep good ones, tighten 
           hookSanitized.removedAnecdoteSentences +
           bodySanitized.removedUnsupportedNumericSentences +
           bodySanitized.removedFuzzyPlaceholderSentences +
-          bodySanitized.removedAnecdoteSentences +
-          ctaSanitized.removedUnsupportedNumericSentences +
-          ctaSanitized.removedFuzzyPlaceholderSentences +
-          ctaSanitized.removedAnecdoteSentences;
+          bodySanitized.removedAnecdoteSentences;
 
         let hook = hookSanitized.value;
         let body = bodySanitized.value;
-        let cta = ctaSanitized.value;
+        let cta = shouldIncludeCta
+          ? normalizeNoEmDash(ensureFinalCta(post.cta || strictFallbackCta, ctaLinkForPost))
+              .replace(/\s+/g, " ")
+              .trim()
+          : "";
 
-        if (!hook && benchmarkSentence) {
-          hook = clipTextStrictMax(benchmarkSentence, CLAUDE_POST_HOOK_LIMITS.max);
-        }
+        hook = sanitizeSauceHookFallback(hook, benchmarkSnippet);
         if (!body) {
           body = benchmarkSentence || "SOIS evidence shows clear benchmark differences by segment and setup.";
         }
@@ -4713,10 +5044,12 @@ Return ${parsed.hooks.length} hook suggestions as well (keep good ones, tighten 
           body = `${body}\n\n${benchmarkSentence}`;
         }
 
+        body = normalizeBodyRhythm(body);
+
         return {
           ...post,
           hook: clipTextStrictMax(hook, CLAUDE_POST_HOOK_LIMITS.max),
-          body: clipTextStrictMax(body, CLAUDE_POST_BODY_LIMITS.max),
+          body: clipMultilineTextStrictMax(body, CLAUDE_POST_BODY_LIMITS.max),
           cta: shouldIncludeCta ? clipTextStrictMax(cta || strictFallbackCta, CLAUDE_POST_CTA_LIMITS.max) : "",
         };
       });
@@ -4724,7 +5057,6 @@ Return ${parsed.hooks.length} hook suggestions as well (keep good ones, tighten 
       let strictHookRewrites = 0;
       normalizedHooks = normalizedHooks.map((hook, index) => {
         const benchmarkSnippet = pickStrictSauceBenchmarkSnippet(sauceBenchmarkSnippets, sauceBenchmarkNumericClaims, index);
-        const benchmarkSentence = benchmarkSnippet ? buildStrictSauceBenchmarkSentence(benchmarkSnippet) : "";
         const sanitized = sanitizeSauceTextStrict(hook, {
           allowedClaims: sauceBenchmarkNumericClaims,
           allowAnecdotes,
@@ -4733,8 +5065,8 @@ Return ${parsed.hooks.length} hook suggestions as well (keep good ones, tighten 
           sanitized.removedUnsupportedNumericSentences +
           sanitized.removedFuzzyPlaceholderSentences +
           sanitized.removedAnecdoteSentences;
-        const fallbackHook = benchmarkSentence || "SOIS benchmark: measurable variance by segment.";
-        return clipTextStrictMax(sanitized.value || fallbackHook, CLAUDE_HOOK_LIMITS.max);
+        const fallbackHook = sanitizeSauceHookFallback(sanitized.value, benchmarkSnippet);
+        return clipTextStrictMax(fallbackHook, CLAUDE_HOOK_LIMITS.max);
       });
 
       const strictValuesToCheck = [
@@ -4757,9 +5089,52 @@ Return ${parsed.hooks.length} hook suggestions as well (keep good ones, tighten 
         strictViolations.fuzzyPlaceholderSentences > 0 ||
         strictViolations.blockedAnecdoteSentences > 0
       ) {
-        throw new Error(
-          `Strict Sauce evidence gate failed: unsupported_numeric=${strictViolations.unsupportedNumericClaims}, fuzzy_placeholders=${strictViolations.fuzzyPlaceholderSentences}, blocked_anecdotes=${strictViolations.blockedAnecdoteSentences}.`,
+        console.warn(
+          `Strict Sauce evidence gate triggered cleanup: unsupported_numeric=${strictViolations.unsupportedNumericClaims}, fuzzy_placeholders=${strictViolations.fuzzyPlaceholderSentences}, blocked_anecdotes=${strictViolations.blockedAnecdoteSentences}.`,
         );
+
+        normalizedHooks = normalizedHooks.map((hook, index) => {
+          const benchmarkSnippet = pickStrictSauceBenchmarkSnippet(
+            sauceBenchmarkSnippets,
+            sauceBenchmarkNumericClaims,
+            index,
+          );
+          const rewrittenHook = rewriteUnsupportedNumericClaims(hook, sauceBenchmarkNumericClaims, false).value;
+          return clipTextStrictMax(
+            sanitizeSauceHookFallback(rewrittenHook, benchmarkSnippet),
+            CLAUDE_HOOK_LIMITS.max,
+          );
+        });
+
+        normalizedPosts = normalizedPosts.map((post, index) => {
+          const benchmarkSnippet = pickStrictSauceBenchmarkSnippet(
+            sauceBenchmarkSnippets,
+            sauceBenchmarkNumericClaims,
+            index,
+          );
+          const benchmarkSentence = benchmarkSnippet ? buildStrictSauceBenchmarkSentence(benchmarkSnippet) : "";
+          const hookRewrite = rewriteUnsupportedNumericClaims(post.hook, sauceBenchmarkNumericClaims, false).value;
+          const bodyRewrite = rewriteUnsupportedNumericClaims(post.body, sauceBenchmarkNumericClaims, false).value;
+          const ctaRewrite = rewriteUnsupportedNumericClaims(post.cta, sauceBenchmarkNumericClaims, false).value;
+          const nextHook = clipTextStrictMax(
+            sanitizeSauceHookFallback(hookRewrite, benchmarkSnippet),
+            CLAUDE_POST_HOOK_LIMITS.max,
+          );
+          const nextBody = clipMultilineTextStrictMax(
+            normalizeBodyRhythm((bodyRewrite || benchmarkSentence).trim()),
+            CLAUDE_POST_BODY_LIMITS.max,
+          );
+          const nextCta = shouldIncludeCta
+            ? clipTextStrictMax(ctaRewrite || strictFallbackCta, CLAUDE_POST_CTA_LIMITS.max)
+            : "";
+
+          return {
+            ...post,
+            hook: nextHook,
+            body: nextBody,
+            cta: nextCta,
+          };
+        });
       }
     }
 

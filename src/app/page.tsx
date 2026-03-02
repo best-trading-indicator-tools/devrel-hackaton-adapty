@@ -506,6 +506,18 @@ function normalizeCtaLink(rawLink: string): string {
   }
 }
 
+function escapeRegExp(value: string): string {
+  return value.replace(/[.*+?^${}()|[\]\\]/g, "\\$&");
+}
+
+function buildLooseLinkPattern(link: string): RegExp {
+  const pattern = link
+    .split("")
+    .map((char) => `${escapeRegExp(char)}\\s*`)
+    .join("");
+  return new RegExp(pattern, "gi");
+}
+
 function ensureFinalCtaText(cta: string, ctaLink: string): string {
   const cleanCta = cta.trim();
   const cleanLink = ctaLink.trim();
@@ -518,8 +530,15 @@ function ensureFinalCtaText(cta: string, ctaLink: string): string {
     return cleanLink;
   }
 
-  if (cleanCta.includes(cleanLink)) {
-    return cleanCta;
+  const ctaWithoutLink = cleanCta.replace(buildLooseLinkPattern(cleanLink), " ");
+  const hadLink = ctaWithoutLink !== cleanCta;
+
+  if (hadLink) {
+    const strippedCta = ctaWithoutLink
+      .replace(/\s+/g, " ")
+      .trim()
+      .replace(/[-\u2013\u2014\s.,;:!?]+$/g, "");
+    return strippedCta ? `${strippedCta}. ${cleanLink}` : cleanLink;
   }
 
   return `${cleanCta.replace(/[.\s]+$/g, "")}. ${cleanLink}`;
