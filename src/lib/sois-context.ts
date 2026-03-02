@@ -527,11 +527,46 @@ function isScalar(value: unknown): value is string | number | boolean {
   return ["string", "number", "boolean"].includes(typeof value);
 }
 
+const OPAQUE_IDENTIFIER_KEY_PATTERN = /(app[_\s-]?id|obfuscated|hash|token|uuid|user[_\s-]?id|device[_\s-]?id)/i;
+const NON_METRIC_NUMERIC_KEY_PATTERN = /(timestamp|date|year|month|day)/i;
+const MAX_REASONABLE_SOIS_METRIC_ABS = 1e15;
+
+function isOpaqueIdentifierKey(key: string): boolean {
+  return OPAQUE_IDENTIFIER_KEY_PATTERN.test(key);
+}
+
+function isNonMetricNumericKey(key: string): boolean {
+  return NON_METRIC_NUMERIC_KEY_PATTERN.test(key);
+}
+
+function isLikelyOpaqueIdentifierValue(value: string): boolean {
+  const trimmed = value.trim();
+  if (!trimmed || trimmed.length < 20) {
+    return false;
+  }
+
+  if (/^[a-f0-9_-]{20,}$/i.test(trimmed) && /\d/.test(trimmed) && /[a-f]/i.test(trimmed)) {
+    return true;
+  }
+
+  return false;
+}
+
 function toNumeric(value: unknown): number | null {
   if (typeof value === "number" && Number.isFinite(value)) return value;
   if (typeof value === "string" && value.trim()) {
-    const n = Number.parseFloat(value);
-    return Number.isFinite(n) ? n : null;
+    const normalized = value.trim().replace(/,/g, "");
+    if (!/^[+-]?(?:\d+\.?\d*|\.\d+)(?:e[+-]?\d+)?$/i.test(normalized)) {
+      return null;
+    }
+    const n = Number.parseFloat(normalized);
+    if (!Number.isFinite(n)) {
+      return null;
+    }
+    if (Math.abs(n) > MAX_REASONABLE_SOIS_METRIC_ABS) {
+      return null;
+    }
+    return n;
   }
   return null;
 }
@@ -554,7 +589,9 @@ function collectNumericKeys(rows: Array<Record<string, unknown>>): string[] {
     .filter(([, stat]) => stat.numeric >= Math.max(4, Math.floor(stat.total * 0.35)))
     .sort((a, b) => b[1].numeric - a[1].numeric)
     .map(([key]) => key)
-    .filter((key) => key !== "subcategory");
+    .filter((key) => key !== "subcategory")
+    .filter((key) => !isOpaqueIdentifierKey(key))
+    .filter((key) => !isNonMetricNumericKey(key));
 }
 
 function collectDimensionKeys(rows: Array<Record<string, unknown>>): string[] {
@@ -562,7 +599,13 @@ function collectDimensionKeys(rows: Array<Record<string, unknown>>): string[] {
 
   for (const row of rows) {
     for (const [key, value] of Object.entries(row)) {
-      if (typeof value === "string" && value.trim() && value.length <= 80 && !/app_id|obfuscated/i.test(key)) {
+      if (
+        typeof value === "string" &&
+        value.trim() &&
+        value.length <= 80 &&
+        !isOpaqueIdentifierKey(key) &&
+        !isLikelyOpaqueIdentifierValue(value)
+      ) {
         stringKeyCounts.set(key, (stringKeyCounts.get(key) ?? 0) + 1);
       }
     }
@@ -589,6 +632,12 @@ function describeRow(row: Record<string, unknown>, dimensionKeys: string[]): str
 
   if (!pairs.length) {
     for (const [key, value] of Object.entries(row)) {
+      if (isOpaqueIdentifierKey(key)) {
+        continue;
+      }
+      if (typeof value === "string" && isLikelyOpaqueIdentifierValue(value)) {
+        continue;
+      }
       if (isScalar(value)) {
         pairs.push(`${normalizeLabel(key)}=${String(value)}`);
       }
@@ -647,7 +696,9 @@ function buildEvidenceChunks(params: {
 
   const overviewColumns = Array.from(
     new Set(rows.flatMap((row) => Object.keys(row))),
-  ).slice(0, 16);
+  )
+    .filter((key) => !isOpaqueIdentifierKey(key))
+    .slice(0, 16);
 
   const globalRow = rows.find((row) => {
     const values = Object.values(row)

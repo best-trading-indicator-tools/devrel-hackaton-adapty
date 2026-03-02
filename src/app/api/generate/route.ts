@@ -388,6 +388,8 @@ type NumericClaim = {
   unit?: string;
 };
 
+const MAX_ALLOWED_NUMERIC_CLAIM_ABS = 1e15;
+
 const NUMERIC_CLAIM_EXTRACTORS: Array<{ kind: NumericClaimKind; regex: RegExp }> = [
   {
     kind: "percent",
@@ -566,9 +568,14 @@ function buildAllowedNumericClaimSet(contexts: string[]): Set<string> {
 
   for (const context of contexts) {
     for (const claim of extractNumericClaims(context)) {
-      if (claim.canonical) {
-        allowed.add(claim.canonical);
+      if (!claim.canonical) {
+        continue;
       }
+      const numericValue = parseCanonicalToNumber(claim.canonical);
+      if (numericValue !== null && Math.abs(numericValue) > MAX_ALLOWED_NUMERIC_CLAIM_ABS) {
+        continue;
+      }
+      allowed.add(claim.canonical);
     }
   }
 
@@ -632,6 +639,21 @@ function collectBenchmarkEvidenceSnippets(contexts: string[], maxSnippets = 60):
 
     for (const segment of segments) {
       if (!/\d/.test(segment)) {
+        continue;
+      }
+      if (/(app[_\s-]?id|obfuscated|hash|token|uuid)/i.test(segment)) {
+        continue;
+      }
+      if (/\b\d{1,3}(?:,\d{3}){6,}(?:\.\d+)?\b/.test(segment)) {
+        continue;
+      }
+      const claims = extractNumericClaims(segment);
+      if (
+        claims.some((claim) => {
+          const value = parseCanonicalToNumber(claim.canonical);
+          return value !== null && Math.abs(value) > MAX_ALLOWED_NUMERIC_CLAIM_ABS;
+        })
+      ) {
         continue;
       }
 
