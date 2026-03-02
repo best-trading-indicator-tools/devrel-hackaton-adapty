@@ -3,7 +3,7 @@
 import fs from "node:fs/promises";
 import path from "node:path";
 
-const SOIS_SITE_ORIGIN = process.env.SOIS_SITE_ORIGIN?.trim() || "https://adapty-state-of-appsubs.vercel.app";
+const SOIS_SITE_ORIGIN = process.env.SOIS_SITE_ORIGIN?.trim() || "https://appstate2.vercel.app";
 const OUTPUT_DIR = path.join(process.cwd(), "data", "sois-site");
 const RAW_DIR = path.join(OUTPUT_DIR, "raw");
 const CONTEXT_JSON_PATH = path.join(OUTPUT_DIR, "context.json");
@@ -33,6 +33,28 @@ const DATASET_CATEGORY_HINTS = {
   "install-to-trial-time": "market",
   "install-to-paid-time": "market",
 };
+
+const KNOWN_SOIS_DATA_PATHS = [
+  "/data/conversions-direct.json",
+  "/data/conversions-trial.json",
+  "/data/discount-usage.json",
+  "/data/fastest-growing-countries.json",
+  "/data/install-ltv.json",
+  "/data/install-to-paid-time.json",
+  "/data/install-to-trial-time.json",
+  "/data/ltv-analytics.json",
+  "/data/ltv-by-region.json",
+  "/data/pricing-conversion.json",
+  "/data/pricing-data.json",
+  "/data/pricing-ltv.json",
+  "/data/refund-share.json",
+  "/data/renewal-by-price.json",
+  "/data/retention.json",
+  "/data/revenue-by-product-type.json",
+  "/data/revenue-by-region.json",
+  "/data/revenue-concentration.json",
+  "/data/trial-usage.json",
+];
 
 const DATASET_TITLE_OVERRIDES = {
   "ltv-analytics": "LTV Dashboard",
@@ -306,16 +328,23 @@ async function discoverSiteDataFiles() {
   const dataPaths = new Set();
   const dataRegex = /\/data\/[a-z0-9-]+\.json/gi;
   for (const scriptUrl of scriptUrls) {
-    const body = await fetchText(scriptUrl);
-    let dataMatch;
-    while ((dataMatch = dataRegex.exec(body)) !== null) {
-      dataPaths.add(dataMatch[0]);
+    try {
+      const body = await fetchText(scriptUrl);
+      let dataMatch;
+      while ((dataMatch = dataRegex.exec(body)) !== null) {
+        dataPaths.add(dataMatch[0]);
+      }
+    } catch {
+      // Skip failed script fetch
     }
   }
 
+  const discoveredDataFiles =
+    dataPaths.size > 0 ? [...dataPaths].sort() : KNOWN_SOIS_DATA_PATHS;
+
   return {
     html,
-    discoveredDataFiles: [...dataPaths].sort(),
+    discoveredDataFiles,
   };
 }
 

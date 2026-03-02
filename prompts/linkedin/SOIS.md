@@ -1,17 +1,12 @@
 # SOIS Website Dataset Snapshot
 
-Generated: 2026-03-02T13:39:05.789Z
-Source: https://adapty-state-of-appsubs.vercel.app
+Generated: 2026-03-02T14:42:29.809Z
+Source: https://appstate2.vercel.app
 Discovered data files: 19
 
 ## Methodology Facts
-- Apps analyzed: 16,000
-- Revenue analyzed: $2.2B
-- Report period: 2025-2026
-- Focus: iOS, with one section comparing iOS and Android performance
-- Adapty platform tracked revenue: $2.2B
+- Adapty platform tracked revenue: $3B
 - Adapty apps connected: 16K+
-- Adapty transactions: 215M
 - Adapty historical SLA: 99.99%
 
 ## Usage Notes
@@ -22,7 +17,7 @@ Discovered data files: 19
 ## Direct Conversion Benchmarks
 - Dataset: `conversions-direct`
 - Category hint: `conversions`
-- Source URL: https://adapty-state-of-appsubs.vercel.app/data/conversions-direct.json
+- Source URL: https://appstate2.vercel.app/data/conversions-direct.json
 - Rows: 54
 - Columns: `country`, `region`, `category`, `cohort_type`, `install_to_direct_rate`, `install_to_paid_rate`, `paid_to_renewal1_rate`, `paid_to_renewal2_rate`, `paid_to_renewal3_rate`, `paid_to_renewal4_rate`, `paid_to_renewal5_rate`, `paid_to_refund_rate`
 - Filter examples: country=All ; region=Global | APAC | Europe | LATAM | MEA ; category=All | EDUCATION | ENTERTAINMENT | GRAPHICS_AND_DESIGN | HEALTH_AND_FITNESS ; cohort_type=direct
@@ -35,7 +30,7 @@ Discovered data files: 19
 ## Trial Conversion Benchmarks
 - Dataset: `conversions-trial`
 - Category hint: `conversions`
-- Source URL: https://adapty-state-of-appsubs.vercel.app/data/conversions-trial.json
+- Source URL: https://appstate2.vercel.app/data/conversions-trial.json
 - Rows: 54
 - Columns: `country`, `region`, `category`, `cohort_type`, `install_to_trial_rate`, `trial_to_paid_rate`, `paid_to_renewal1_rate`, `paid_to_renewal2_rate`, `paid_to_renewal3_rate`, `paid_to_renewal4_rate`, `paid_to_renewal5_rate`, `paid_to_refund_rate`
 - Filter examples: country=All ; region=Global | APAC | Europe | LATAM | MEA ; category=All | EDUCATION | ENTERTAINMENT | GRAPHICS_AND_DESIGN | HEALTH_AND_FITNESS ; cohort_type=trial
@@ -48,7 +43,7 @@ Discovered data files: 19
 ## Discount Usage by Category
 - Dataset: `discount-usage`
 - Category hint: `market`
-- Source URL: https://adapty-state-of-appsubs.vercel.app/data/discount-usage.json
+- Source URL: https://appstate2.vercel.app/data/discount-usage.json
 - Rows: 16
 - Columns: `year`, `category`, `discount_share`, `no_discount_share`
 - Filter examples: category=EDUCATION | ENTERTAINMENT | GRAPHICS_AND_DESIGN | HEALTH_AND_FITNESS | LIFESTYLE
@@ -60,7 +55,7 @@ Discovered data files: 19
 ## Fastest Growing Countries YoY
 - Dataset: `fastest-growing-countries`
 - Category hint: `market`
-- Source URL: https://adapty-state-of-appsubs.vercel.app/data/fastest-growing-countries.json
+- Source URL: https://appstate2.vercel.app/data/fastest-growing-countries.json
 - Rows: 16
 - Columns: `store`, `region`, `country`, `growth_rate`
 - Filter examples: store=app_store | play_store ; region=APAC | Europe | LATAM | MEA | North America ; country=Australia | Japan | France | Germany | Italy
@@ -70,7 +65,7 @@ Discovered data files: 19
 ## Install LTV by Category
 - Dataset: `install-ltv`
 - Category hint: `ltv`
-- Source URL: https://adapty-state-of-appsubs.vercel.app/data/install-ltv.json
+- Source URL: https://appstate2.vercel.app/data/install-ltv.json
 - Rows: 53
 - Columns: `country`, `region`, `category`, `avg_ltv_380`, `install_to_direct_rate`, `install_to_paid_rate`, `install_ltv`
 - Filter examples: country=All ; region=Global | APAC | Europe | LATAM | MEA ; category=All | EDUCATION | ENTERTAINMENT | GRAPHICS_AND_DESIGN | HEALTH_AND_FITNESS
@@ -83,7 +78,7 @@ Discovered data files: 19
 ## Install-to-Paid Time
 - Dataset: `install-to-paid-time`
 - Category hint: `market`
-- Source URL: https://adapty-state-of-appsubs.vercel.app/data/install-to-paid-time.json
+- Source URL: https://appstate2.vercel.app/data/install-to-paid-time.json
 - Rows: 324
 - Columns: `country`, `region`, `category`, `time_bucket`, `bucket_share`
 - Filter examples: country=All ; region=Global | APAC | Europe | LATAM | MEA ; category=All | EDUCATION | ENTERTAINMENT | GRAPHICS_AND_DESIGN | HEALTH_AND_FITNESS ; time_bucket=Day0 | Day15_30 | Day1_3 | Day31_plus | Day4_7
@@ -93,7 +88,7 @@ Discovered data files: 19
 ## Install-to-Trial Time
 - Dataset: `install-to-trial-time`
 - Category hint: `market`
-- Source URL: https://adapty-state-of-appsubs.vercel.app/data/install-to-trial-time.json
+- Source URL: https://appstate2.vercel.app/data/install-to-trial-time.json
 - Rows: 324
 - Columns: `country`, `region`, `category`, `time_bucket`, `bucket_share`
 - Filter examples: country=All ; region=Global | APAC | Europe | LATAM | MEA ; category=All | EDUCATION | ENTERTAINMENT | GRAPHICS_AND_DESIGN | HEALTH_AND_FITNESS ; time_bucket=Day0 | Day15_30 | Day1_3 | Day31_plus | Day4_7
@@ -103,7 +98,7 @@ Discovered data files: 19
 ## LTV Dashboard
 - Dataset: `ltv-analytics`
 - Category hint: `ltv`
-- Source URL: https://adapty-state-of-appsubs.vercel.app/data/ltv-analytics.json
+- Source URL: https://appstate2.vercel.app/data/ltv-analytics.json
 - Rows: 1,620
 - Columns: `country`, `region`, `category`, `product_set`, `cohort_type`, `days_after_first_purchase`, `avg_ltv`
 - Filter examples: country=All ; region=Global | APAC | Europe | LATAM | MEA ; category=All | EDUCATION | ENTERTAINMENT | GRAPHICS_AND_DESIGN | HEALTH_AND_FITNESS ; product_set=annual | monthly | weekly ; cohort_type=direct | trial
@@ -114,7 +109,7 @@ Discovered data files: 19
 ## Top Countries by LTV
 - Dataset: `ltv-by-region`
 - Category hint: `ltv`
-- Source URL: https://adapty-state-of-appsubs.vercel.app/data/ltv-by-region.json
+- Source URL: https://appstate2.vercel.app/data/ltv-by-region.json
 - Rows: 14
 - Columns: `country`, `region`, `category`, `avg_ltv`
 - Filter examples: country=Japan | Singapore | Australia | Norway | Denmark ; region=APAC | Europe | LATAM | MEA | North America ; category=All
@@ -124,7 +119,7 @@ Discovered data files: 19
 ## Conversion by Price Buckets
 - Dataset: `pricing-conversion`
 - Category hint: `pricing`
-- Source URL: https://adapty-state-of-appsubs.vercel.app/data/pricing-conversion.json
+- Source URL: https://appstate2.vercel.app/data/pricing-conversion.json
 - Rows: 1,732
 - Columns: `country`, `region`, `category`, `product_set`, `price_bucket`, `metric_name`, `metric_value`
 - Filter examples: country=All ; region=Global | APAC | Europe | LATAM | MEA ; category=All | EDUCATION | ENTERTAINMENT | GRAPHICS_AND_DESIGN | HEALTH_AND_FITNESS ; product_set=annual | monthly | weekly ; price_bucket=High price | Low price | Lower mid price | Upper mid price
@@ -134,7 +129,7 @@ Discovered data files: 19
 ## Price Distribution by Region and Category
 - Dataset: `pricing-data`
 - Category hint: `pricing`
-- Source URL: https://adapty-state-of-appsubs.vercel.app/data/pricing-data.json
+- Source URL: https://appstate2.vercel.app/data/pricing-data.json
 - Rows: 15,635
 - Columns: `year`, `country`, `region`, `category`, `product_set`, `quantile_type`, `price_usd`
 - Filter examples: country=Argentina | Australia | Brazil | Canada | Chile ; region=LATAM | APAC | North America | Europe | MEA ; category=All | EDUCATION | ENTERTAINMENT | GRAPHICS_AND_DESIGN | HEALTH_AND_FITNESS ; product_set=annual | monthly | weekly ; quantile_type=p10_app | p25_app | p50_app | p75_app | p90_app
@@ -145,7 +140,7 @@ Discovered data files: 19
 ## LTV by Price Buckets
 - Dataset: `pricing-ltv`
 - Category hint: `pricing`
-- Source URL: https://adapty-state-of-appsubs.vercel.app/data/pricing-ltv.json
+- Source URL: https://appstate2.vercel.app/data/pricing-ltv.json
 - Rows: 643
 - Columns: `country`, `region`, `category`, `product_set`, `price_bucket`, `median_ltv_380`, `avg_ltv_380`
 - Filter examples: country=All ; region=Global | APAC | Europe | LATAM | MEA ; category=All | EDUCATION | ENTERTAINMENT | GRAPHICS_AND_DESIGN | HEALTH_AND_FITNESS ; product_set=annual | monthly | weekly ; price_bucket=High price | Low price | Lower mid price | Upper mid price
@@ -156,7 +151,7 @@ Discovered data files: 19
 ## Refund Share by Region and Category
 - Dataset: `refund-share`
 - Category hint: `refunds`
-- Source URL: https://adapty-state-of-appsubs.vercel.app/data/refund-share.json
+- Source URL: https://appstate2.vercel.app/data/refund-share.json
 - Rows: 108
 - Columns: `country`, `region`, `category`, `cohort_type`, `refunded_revenue_share`
 - Filter examples: country=All ; region=Global | APAC | Europe | LATAM | MEA ; category=All | EDUCATION | ENTERTAINMENT | GRAPHICS_AND_DESIGN | HEALTH_AND_FITNESS ; cohort_type=non_trial | trial
@@ -166,7 +161,7 @@ Discovered data files: 19
 ## Renewal by Price Bucket
 - Dataset: `renewal-by-price`
 - Category hint: `retention`
-- Source URL: https://adapty-state-of-appsubs.vercel.app/data/renewal-by-price.json
+- Source URL: https://appstate2.vercel.app/data/renewal-by-price.json
 - Rows: 427
 - Columns: `country`, `region`, `category`, `product_set`, `price_bucket`, `renewal1_to_renewal2_rate`, `renewal2_to_renewal3_rate`
 - Filter examples: country=All ; region=Global | APAC | Europe | LATAM | MEA ; category=All | EDUCATION | ENTERTAINMENT | GRAPHICS_AND_DESIGN | HEALTH_AND_FITNESS ; product_set=monthly | weekly ; price_bucket=Tier 1 (lowest 25%) | Tier 2 (25-50%) | Tier 3 (50-75%) | Tier 4 (highest 25%)
@@ -177,7 +172,7 @@ Discovered data files: 19
 ## Retention by Category and Plan
 - Dataset: `retention`
 - Category hint: `retention`
-- Source URL: https://adapty-state-of-appsubs.vercel.app/data/retention.json
+- Source URL: https://appstate2.vercel.app/data/retention.json
 - Rows: 1,296
 - Columns: `country`, `region`, `category`, `product_set`, `is_trial`, `metric_category`, `retention_rate`
 - Filter examples: country=All ; region=Global | APAC | Europe | LATAM | MEA ; category=All | EDUCATION | ENTERTAINMENT | GRAPHICS_AND_DESIGN | HEALTH_AND_FITNESS ; product_set=annual | monthly | weekly ; is_trial=non_trial | trial
@@ -188,7 +183,7 @@ Discovered data files: 19
 ## Revenue Share by Product Type
 - Dataset: `revenue-by-product-type`
 - Category hint: `market`
-- Source URL: https://adapty-state-of-appsubs.vercel.app/data/revenue-by-product-type.json
+- Source URL: https://appstate2.vercel.app/data/revenue-by-product-type.json
 - Rows: 810
 - Columns: `year`, `region`, `category`, `product_type`, `plan_revenue_share`
 - Filter examples: region=Global | APAC | Europe | LATAM | MEA ; category=All | UTILITIES | PRODUCTIVITY | PHOTO_AND_VIDEO | ENTERTAINMENT ; product_type=weekly | annual | monthly | other | one_time_purchase
@@ -199,7 +194,7 @@ Discovered data files: 19
 ## Revenue by Region
 - Dataset: `revenue-by-region`
 - Category hint: `market`
-- Source URL: https://adapty-state-of-appsubs.vercel.app/data/revenue-by-region.json
+- Source URL: https://appstate2.vercel.app/data/revenue-by-region.json
 - Rows: 15
 - Columns: `year`, `region`, `share`
 - Filter examples: region=North America | Europe | APAC | MEA | LATAM
@@ -210,7 +205,7 @@ Discovered data files: 19
 ## Revenue Concentration (Top 10%)
 - Dataset: `revenue-concentration`
 - Category hint: `market`
-- Source URL: https://adapty-state-of-appsubs.vercel.app/data/revenue-concentration.json
+- Source URL: https://appstate2.vercel.app/data/revenue-concentration.json
 - Rows: 162
 - Columns: `year`, `region`, `category`, `top_10pct_apps`, `top_10pct_revenue`, `revenue_share_top_10pct`
 - Filter examples: region=APAC | Europe | Global | LATAM | MEA ; category=All | EDUCATION | ENTERTAINMENT | GRAPHICS_AND_DESIGN | HEALTH_AND_FITNESS
@@ -223,7 +218,7 @@ Discovered data files: 19
 ## Trial Usage by Category
 - Dataset: `trial-usage`
 - Category hint: `market`
-- Source URL: https://adapty-state-of-appsubs.vercel.app/data/trial-usage.json
+- Source URL: https://appstate2.vercel.app/data/trial-usage.json
 - Rows: 16
 - Columns: `year`, `category`, `trial_share`, `no_trial_share`
 - Filter examples: category=EDUCATION | ENTERTAINMENT | GRAPHICS_AND_DESIGN | HEALTH_AND_FITNESS | LIFESTYLE

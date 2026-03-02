@@ -50,4 +50,4 @@ Source: [SOIS promo | Social media marketing strategy](https://www.notion.so/ada
 - Educational: "3 pricing mistakes that cost you 40% of revenue", "How to choose trial length using SOIS benchmarks", "5-step framework to audit your paywall strategy"
 - Category deep dive: "What top 1% of [category] apps do differently" — 3–4 specific tactics backed by data
 
-**Report link:** https://adapty-state-of-appsubs.vercel.app/
+**Report link:** https://appstate2.vercel.app/

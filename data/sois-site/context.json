@@ -1,7 +1,7 @@
 {
   "version": 1,
-  "generatedAtIso": "2026-03-02T13:39:05.789Z",
-  "sourceOrigin": "https://adapty-state-of-appsubs.vercel.app",
+  "generatedAtIso": "2026-03-02T14:42:29.809Z",
+  "sourceOrigin": "https://appstate2.vercel.app",
   "discoveredDataFiles": [
     "/data/conversions-direct.json",
     "/data/conversions-trial.json",
@@ -25,15 +25,15 @@
   ],
   "siteFacts": {
     "methodology": {
-      "appsAnalyzed": "16,000",
-      "revenueAnalyzed": "$2.2B",
-      "period": "2025-2026",
-      "platformFocus": "iOS, with one section comparing iOS and Android performance"
+      "appsAnalyzed": null,
+      "revenueAnalyzed": null,
+      "period": null,
+      "platformFocus": null
     },
     "platform": {
-      "trackedRevenue": "$2.2B",
+      "trackedRevenue": "$3B",
       "appsConnected": "16K+",
-      "transactions": "215M",
+      "transactions": null,
       "historicalSla": "99.99%"
     }
   },
@@ -44,7 +44,7 @@
       "id": "conversions-direct",
       "title": "Direct Conversion Benchmarks",
       "categoryHint": "conversions",
-      "sourceUrl": "https://adapty-state-of-appsubs.vercel.app/data/conversions-direct.json",
+      "sourceUrl": "https://appstate2.vercel.app/data/conversions-direct.json",
       "rowCount": 54,
       "columns": [
         "country",
@@ -219,7 +219,7 @@
       "id": "conversions-trial",
       "title": "Trial Conversion Benchmarks",
       "categoryHint": "conversions",
-      "sourceUrl": "https://adapty-state-of-appsubs.vercel.app/data/conversions-trial.json",
+      "sourceUrl": "https://appstate2.vercel.app/data/conversions-trial.json",
       "rowCount": 54,
       "columns": [
         "country",
@@ -394,7 +394,7 @@
       "id": "discount-usage",
       "title": "Discount Usage by Category",
       "categoryHint": "market",
-      "sourceUrl": "https://adapty-state-of-appsubs.vercel.app/data/discount-usage.json",
+      "sourceUrl": "https://appstate2.vercel.app/data/discount-usage.json",
       "rowCount": 16,
       "columns": [
         "year",
@@ -482,7 +482,7 @@
       "id": "fastest-growing-countries",
       "title": "Fastest Growing Countries YoY",
       "categoryHint": "market",
-      "sourceUrl": "https://adapty-state-of-appsubs.vercel.app/data/fastest-growing-countries.json",
+      "sourceUrl": "https://appstate2.vercel.app/data/fastest-growing-countries.json",
       "rowCount": 16,
       "columns": [
         "store",
@@ -563,7 +563,7 @@
       "id": "install-ltv",
       "title": "Install LTV by Category",
       "categoryHint": "ltv",
-      "sourceUrl": "https://adapty-state-of-appsubs.vercel.app/data/install-ltv.json",
+      "sourceUrl": "https://appstate2.vercel.app/data/install-ltv.json",
       "rowCount": 53,
       "columns": [
         "country",
@@ -689,7 +689,7 @@
       "id": "install-to-paid-time",
       "title": "Install-to-Paid Time",
       "categoryHint": "market",
-      "sourceUrl": "https://adapty-state-of-appsubs.vercel.app/data/install-to-paid-time.json",
+      "sourceUrl": "https://appstate2.vercel.app/data/install-to-paid-time.json",
       "rowCount": 324,
       "columns": [
         "country",
@@ -784,7 +784,7 @@
       "id": "install-to-trial-time",
       "title": "Install-to-Trial Time",
       "categoryHint": "market",
-      "sourceUrl": "https://adapty-state-of-appsubs.vercel.app/data/install-to-trial-time.json",
+      "sourceUrl": "https://appstate2.vercel.app/data/install-to-trial-time.json",
       "rowCount": 324,
       "columns": [
         "country",
@@ -879,7 +879,7 @@
       "id": "ltv-analytics",
       "title": "LTV Dashboard",
       "categoryHint": "ltv",
-      "sourceUrl": "https://adapty-state-of-appsubs.vercel.app/data/ltv-analytics.json",
+      "sourceUrl": "https://appstate2.vercel.app/data/ltv-analytics.json",
       "rowCount": 1620,
       "columns": [
         "country",
@@ -996,7 +996,7 @@
       "id": "ltv-by-region",
       "title": "Top Countries by LTV",
       "categoryHint": "ltv",
-      "sourceUrl": "https://adapty-state-of-appsubs.vercel.app/data/ltv-by-region.json",
+      "sourceUrl": "https://appstate2.vercel.app/data/ltv-by-region.json",
       "rowCount": 14,
       "columns": [
         "country",
@@ -1076,7 +1076,7 @@
       "id": "pricing-conversion",
       "title": "Conversion by Price Buckets",
       "categoryHint": "pricing",
-      "sourceUrl": "https://adapty-state-of-appsubs.vercel.app/data/pricing-conversion.json",
+      "sourceUrl": "https://appstate2.vercel.app/data/pricing-conversion.json",
       "rowCount": 1732,
       "columns": [
         "country",
@@ -1191,7 +1191,7 @@
       "id": "pricing-data",
       "title": "Price Distribution by Region and Category",
       "categoryHint": "pricing",
-      "sourceUrl": "https://adapty-state-of-appsubs.vercel.app/data/pricing-data.json",
+      "sourceUrl": "https://appstate2.vercel.app/data/pricing-data.json",
       "rowCount": 15635,
       "columns": [
         "year",
@@ -1319,7 +1319,7 @@
       "id": "pricing-ltv",
       "title": "LTV by Price Buckets",
       "categoryHint": "pricing",
-      "sourceUrl": "https://adapty-state-of-appsubs.vercel.app/data/pricing-ltv.json",
+      "sourceUrl": "https://appstate2.vercel.app/data/pricing-ltv.json",
       "rowCount": 643,
       "columns": [
         "country",
@@ -1438,7 +1438,7 @@
       "id": "refund-share",
       "title": "Refund Share by Region and Category",
       "categoryHint": "refunds",
-      "sourceUrl": "https://adapty-state-of-appsubs.vercel.app/data/refund-share.json",
+      "sourceUrl": "https://appstate2.vercel.app/data/refund-share.json",
       "rowCount": 108,
       "columns": [
         "country",
@@ -1529,7 +1529,7 @@
       "id": "renewal-by-price",
       "title": "Renewal by Price Bucket",
       "categoryHint": "retention",
-      "sourceUrl": "https://adapty-state-of-appsubs.vercel.app/data/renewal-by-price.json",
+      "sourceUrl": "https://appstate2.vercel.app/data/renewal-by-price.json",
       "rowCount": 427,
       "columns": [
         "country",
@@ -1647,7 +1647,7 @@
       "id": "retention",
       "title": "Retention by Category and Plan",
       "categoryHint": "retention",
-      "sourceUrl": "https://adapty-state-of-appsubs.vercel.app/data/retention.json",
+      "sourceUrl": "https://appstate2.vercel.app/data/retention.json",
       "rowCount": 1296,
       "columns": [
         "country",
@@ -1764,7 +1764,7 @@
       "id": "revenue-by-product-type",
       "title": "Revenue Share by Product Type",
       "categoryHint": "market",
-      "sourceUrl": "https://adapty-state-of-appsubs.vercel.app/data/revenue-by-product-type.json",
+      "sourceUrl": "https://appstate2.vercel.app/data/revenue-by-product-type.json",
       "rowCount": 810,
       "columns": [
         "year",
@@ -1864,7 +1864,7 @@
       "id": "revenue-by-region",
       "title": "Revenue by Region",
       "categoryHint": "market",
-      "sourceUrl": "https://adapty-state-of-appsubs.vercel.app/data/revenue-by-region.json",
+      "sourceUrl": "https://appstate2.vercel.app/data/revenue-by-region.json",
       "rowCount": 15,
       "columns": [
         "year",
@@ -1934,7 +1934,7 @@
       "id": "revenue-concentration",
       "title": "Revenue Concentration (Top 10%)",
       "categoryHint": "market",
-      "sourceUrl": "https://adapty-state-of-appsubs.vercel.app/data/revenue-concentration.json",
+      "sourceUrl": "https://appstate2.vercel.app/data/revenue-concentration.json",
       "rowCount": 162,
       "columns": [
         "year",
@@ -2051,7 +2051,7 @@
       "id": "trial-usage",
       "title": "Trial Usage by Category",
       "categoryHint": "market",
-      "sourceUrl": "https://adapty-state-of-appsubs.vercel.app/data/trial-usage.json",
+      "sourceUrl": "https://appstate2.vercel.app/data/trial-usage.json",
       "rowCount": 16,
       "columns": [
         "year",

@@ -836,49 +836,82 @@ function sauceItemMatchesPillar(item: SoisContextItem, pillar: SauceTopicPillar)
   return pillar.pattern.test(haystack);
 }
 
-function buildSauceAutoTopicPlan(items: SoisContextItem[], postCount: number): string[] {
+function sectionKeyFromItemId(itemId: string): string {
+  const overviewSuffix = "-overview";
+  const metricMarker = "-metric-";
+  if (itemId.endsWith(overviewSuffix)) {
+    return itemId.slice(0, -overviewSuffix.length);
+  }
+  const markerIndex = itemId.indexOf(metricMarker);
+  if (markerIndex > 0) {
+    return itemId.slice(0, markerIndex);
+  }
+  return itemId;
+}
+
+function shuffleArray<T>(arr: T[]): T[] {
+  const out = [...arr];
+  for (let i = out.length - 1; i > 0; i--) {
+    const j = Math.floor(Math.random() * (i + 1));
+    [out[i], out[j]] = [out[j]!, out[i]!];
+  }
+  return out;
+}
+
+function buildSauceAutoTopicPlan(
+  items: SoisContextItem[],
+  postCount: number,
+): { planLines: string[]; assignedSectionKeys: Set<string> } {
+  const empty = { planLines: [], assignedSectionKeys: new Set<string>() };
   if (postCount <= 0) {
-    return [];
+    return empty;
   }
 
-  const sortedItems = [...items].sort((a, b) => a.id.localeCompare(b.id));
-  const rankedPillars = SAUCE_TOPIC_PILLARS
-    .map((pillar, index) => {
-      const matchedItems = sortedItems.filter((item) => sauceItemMatchesPillar(item, pillar));
-      const maxRows = matchedItems.reduce((maxRowsValue, item) => Math.max(maxRowsValue, item.rows), 0);
-      const score = matchedItems.length * 100 + maxRows;
+  const bySection = new Map<string, SoisContextItem[]>();
+  for (const item of items) {
+    const key = sectionKeyFromItemId(item.id);
+    const existing = bySection.get(key);
+    if (existing) {
+      existing.push(item);
+    } else {
+      bySection.set(key, [item]);
+    }
+  }
 
-      return {
-        pillar,
-        index,
-        matchedItems,
-        score,
-      };
-    })
-    .sort((a, b) => b.score - a.score || a.index - b.index);
+  const sections = shuffleArray([...bySection.keys()]);
+  const assignedSectionKeys = new Set<string>();
 
-  const cyclePillars = rankedPillars.filter((entry) => entry.matchedItems.length > 0);
-  const activePillars = cyclePillars.length ? cyclePillars : rankedPillars;
-  const usageByPillar = new Map<string, number>();
+  if (!sections.length) {
+    return {
+      planLines: Array.from({ length: postCount }, (_, index) =>
+        `Post ${index + 1}: ${SAUCE_TOPIC_PILLARS[index % SAUCE_TOPIC_PILLARS.length]!.label}
+- Primary pillar: ${SAUCE_TOPIC_PILLARS[index % SAUCE_TOPIC_PILLARS.length]!.label}
+- Anchor: No SOIS evidence retrieved. Keep this post qualitative and mechanism-focused.`,
+      ),
+      assignedSectionKeys,
+    };
+  }
 
-  return Array.from({ length: postCount }, (_, index) => {
-    const entry = activePillars[index % activePillars.length];
-    const usedCount = usageByPillar.get(entry.pillar.key) ?? 0;
-    usageByPillar.set(entry.pillar.key, usedCount + 1);
-
-    const evidenceItem = entry.matchedItems.length ? entry.matchedItems[usedCount % entry.matchedItems.length] : null;
+  const planLines = Array.from({ length: postCount }, (_, index) => {
+    const sectionKey = sections[index % sections.length]!;
+    assignedSectionKeys.add(sectionKey);
+    const sectionItems = bySection.get(sectionKey) ?? [];
+    const evidenceItem = sectionItems[Math.floor(Math.random() * sectionItems.length)] ?? sectionItems[0];
 
     if (!evidenceItem) {
-      return `Post ${index + 1}: ${entry.pillar.label}
-- Primary pillar: ${entry.pillar.label}
-- Anchor: No SOIS evidence matched this pillar in current retrieval results. Keep this post qualitative and mechanism-focused.`;
+      const fallbackPillar = SAUCE_TOPIC_PILLARS[index % SAUCE_TOPIC_PILLARS.length]!;
+      return `Post ${index + 1}: ${fallbackPillar.label}
+- Primary pillar: ${fallbackPillar.label}
+- Anchor: No SOIS evidence matched. Keep this post qualitative and mechanism-focused.`;
     }
 
-    return `Post ${index + 1}: ${entry.pillar.label}
+    return `Post ${index + 1}: ${evidenceItem.categoryLabel} / ${evidenceItem.subcategoryLabel}
 - Primary pillar: ${evidenceItem.categoryLabel} / ${evidenceItem.subcategoryLabel}
 - Anchor: ${extractSauceAnchorFromItem(evidenceItem)}
 - Source: ${evidenceItem.sourceUrl}`;
   });
+
+  return { planLines, assignedSectionKeys };
 }
 
 function toPluralUnit(unit: string): string {
@@ -4026,9 +4059,10 @@ export async function POST(request: Request) {
       ? industryNewsTopicPlanLines.join("\n\n")
       : "(none)";
     const shouldUseSauceAutoTopicPlan = looksLikeSaucePostType(input.inputType) && !hasSpecificSoisPromptDetails;
-    const sauceTopicPlanLines = shouldUseSauceAutoTopicPlan
+    const sauceTopicPlanResult = shouldUseSauceAutoTopicPlan
       ? buildSauceAutoTopicPlan(soisContext.items, input.numberOfPosts)
-      : [];
+      : { planLines: [] as string[], assignedSectionKeys: new Set<string>() };
+    const sauceTopicPlanLines = sauceTopicPlanResult.planLines;
     const sauceTopicPlanSummary = sauceTopicPlanLines.length ? sauceTopicPlanLines.join("\n\n") : "(none)";
     const sauceTopicExecutionDirective = shouldUseSauceAutoTopicPlan
       ? sauceTopicPlanLines.length
@@ -4581,6 +4615,7 @@ ${toBulletedSection(QUALITY_REPAIR_REQUIREMENT_LINES)}
       const editorPassGoals = [
         "Fix the remaining quality-gate issues without changing the core argument.",
         "Eliminate staccato formatting. Merge isolated one-sentence lines into fuller paragraphs while preserving flow and readability.",
+        "Ensure body text uses paragraph breaks (blank line between paragraphs). Never leave a wall of text without paragraph breaks.",
         looksLikeSaucePostType(input.inputType)
           ? "For Sauce posts: verify every number or percentage appears verbatim in SOIS evidence. Rewrite unsupported numbers qualitatively."
           : "",
@@ -4604,6 +4639,7 @@ Do this:
 - Start with the point. Remove sentences that only frame the next one.
 - Rewrite sentences that restate themselves in two halves separated by a comma or period.
 - Replace stiff phrasing with how someone would actually say it.
+- Format body with clear paragraphs: 2-4 sentences per paragraph, blank line (double newline) between paragraphs. Never return a wall of text without paragraph breaks.
 - Keep paragraphs of 2-4 sentences. Add blank lines only between paragraphs, not between sentences. Do not put each sentence on its own line.
 - Never return consecutive one-sentence paragraphs. At most one one-sentence paragraph in the whole body, and only if it is a deliberate punch line.
 - Say "app makers" or "app founders" instead of "teams" or "operators."
