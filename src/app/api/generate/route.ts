@@ -878,7 +878,7 @@ function buildSauceAutoTopicPlan(
     }
   }
 
-  const sections = shuffleArray([...bySection.keys()]);
+  const sections = [...bySection.keys()];
   const assignedSectionKeys = new Set<string>();
 
   if (!sections.length) {
@@ -893,7 +893,7 @@ function buildSauceAutoTopicPlan(
   }
 
   const planLines = Array.from({ length: postCount }, (_, index) => {
-    const sectionKey = sections[index % sections.length]!;
+    const sectionKey = sections[Math.floor(Math.random() * sections.length)]!;
     assignedSectionKeys.add(sectionKey);
     const sectionItems = bySection.get(sectionKey) ?? [];
     const evidenceItem = sectionItems[Math.floor(Math.random() * sectionItems.length)] ?? sectionItems[0];
@@ -4059,8 +4059,11 @@ export async function POST(request: Request) {
       ? industryNewsTopicPlanLines.join("\n\n")
       : "(none)";
     const shouldUseSauceAutoTopicPlan = looksLikeSaucePostType(input.inputType) && !hasSpecificSoisPromptDetails;
+    const sauceSoisItems = looksLikeSaucePostType(input.inputType)
+      ? soisContext.items.filter((item) => item.id.startsWith("all-"))
+      : soisContext.items;
     const sauceTopicPlanResult = shouldUseSauceAutoTopicPlan
-      ? buildSauceAutoTopicPlan(soisContext.items, input.numberOfPosts)
+      ? buildSauceAutoTopicPlan(sauceSoisItems, input.numberOfPosts)
       : { planLines: [] as string[], assignedSectionKeys: new Set<string>() };
     const sauceTopicPlanLines = sauceTopicPlanResult.planLines;
     const sauceTopicPlanSummary = sauceTopicPlanLines.length ? sauceTopicPlanLines.join("\n\n") : "(none)";
@@ -4075,7 +4078,13 @@ export async function POST(request: Request) {
     const soisEvidencePromptLimit = hasSpecificSoisPromptDetails
       ? DEFAULT_SOIS_EVIDENCE_PROMPT_LIMIT
       : effectiveSoisBroadEvidencePromptLimit;
-    const soisEvidenceLines = soisContext.items.slice(0, soisEvidencePromptLimit).map((item, index) => {
+    const soisItemsForEvidence =
+      shouldUseSauceAutoTopicPlan && sauceTopicPlanResult.assignedSectionKeys.size > 0
+        ? sauceSoisItems.filter((item) =>
+            sauceTopicPlanResult.assignedSectionKeys.has(sectionKeyFromItemId(item.id)),
+          )
+        : sauceSoisItems;
+    const soisEvidenceLines = soisItemsForEvidence.slice(0, soisEvidencePromptLimit).map((item, index) => {
       const compactText = normalizeNoEmDash(item.text.replace(/\s*\n+\s*/g, " | "));
       return `${index + 1}. [${item.categoryLabel} ${item.subcategory}] ${item.subcategoryLabel}
 - Source: ${item.sourceUrl}
@@ -4113,7 +4122,7 @@ export async function POST(request: Request) {
         ? "web > internal context"
         : "internal context";
     const evidenceContextGuidance = shouldRunSoisContext
-      ? `Evidence context (priority order: ${evidencePriorityOrder}). Numbers from SOIS are real benchmarks - use them, they make posts more compelling. Copy numbers verbatim from the evidence below. Use each number for its labeled metric only: install_to_paid_rate as %, avg_ltv as $, price_usd as $. When a number is not in the evidence, write the sentence without it. For Sauce posts: only use numbers from the SOIS evidence below (not from web fact-check or user input). Use 1-2 benchmark numbers total per post.`
+      ? `Evidence context (priority order: ${evidencePriorityOrder}). Numbers from SOIS are real benchmarks - use them, they make posts more compelling. Copy numbers verbatim from the evidence below. Use each number for its labeled metric only: install_to_paid_rate as %, avg_ltv as $, price_usd as $. When a number is not in the evidence, write the sentence without it. For Sauce posts: only use numbers from the SOIS evidence below (not from web fact-check or user input). REQUIRED: Each Sauce post body must include at least 1 concrete number from the evidence (e.g. X%, $Y, Z rate). Never output a Sauce post with zero numbers.`
       : shouldRunWebFactCheck
         ? `Evidence context (priority order: ${evidencePriorityOrder}). Use web evidence to fill factual gaps when available (especially for event logistics). If a detail is not supported by evidence, keep phrasing qualitative and avoid invented specifics. Do not introduce SOIS benchmark claims.`
         : `Evidence context (priority order: ${evidencePriorityOrder}). Use internal request context only (details, event data, date/time/place${
@@ -4148,7 +4157,7 @@ export async function POST(request: Request) {
       ].filter(Boolean),
     );
     const sauceBenchmarkSnippets = collectBenchmarkEvidenceSnippets(
-      soisContext.items.map((item) => item.text),
+      soisItemsForEvidence.map((item) => item.text),
     );
     const sauceBenchmarkNumericClaims = buildSauceAllowedNumericClaimSet(
       [...sauceBenchmarkSnippets, ...effectiveCtaLinksByPost, effectiveCtaLink].filter(Boolean),
@@ -4172,10 +4181,10 @@ ${promptGuides.aso}
 Paywall guide from repository prompt file:
 ${promptGuides.paywall}
 
-Sauce number rule:
-- Default target is 1 to 2 benchmark numbers per post, not a metric dump.
-- Every number or percentage must come from the SOIS evidence below only. Do not use numbers from web fact-check or user input.
-- If relevant SOIS evidence exists, each Sauce post must include at least one benchmark number.
+Sauce number rule (MANDATORY):
+- Every Sauce post body MUST include at least 1 concrete number from the SOIS evidence (e.g. 2.4%, $46, 1.78% conversion). Never output a Sauce post with zero numbers when SOIS evidence is provided.
+- Target 1-2 benchmark numbers per post. Copy numbers verbatim from the evidence.
+- Every number must come from the SOIS evidence below only. Do not use numbers from web fact-check or user input.
 - Do not repeat the same benchmark number multiple times in the same post or across most hook suggestions.
 `
       : "";
@@ -4653,7 +4662,7 @@ Fact and benchmark rules:
 - When a numeric claim is unsupported, rewrite it qualitatively.
 - Use each metric in its correct unit: conversion as %, LTV as currency, price as currency.
 - For Sauce posts: only keep numbers that appear verbatim in the SOIS evidence above (not web evidence). Replace any other number with qualitative phrasing.
-- For Sauce posts with benchmark evidence, use 1-2 benchmark numbers per post.
+- For Sauce posts with benchmark evidence: each post body MUST include at least 1 concrete number from the evidence. Never output a Sauce post with zero numbers when evidence is provided.
 - Vary benchmark numbers across posts and hook suggestions.
 
 Rewrite to concrete anchors:

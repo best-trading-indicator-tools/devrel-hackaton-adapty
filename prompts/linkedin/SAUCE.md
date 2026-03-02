@@ -7,7 +7,7 @@ Goal:
 Preferred shape:
 1. Open with a hard, real question teams keep asking.
 2. Name the hidden mechanism behind the problem.
-3. Add concrete evidence: numbers, thresholds, examples, or operating signals.
+3. Add concrete evidence: numbers, thresholds, examples, or operating signals. Every Sauce post must include at least 1 benchmark number from SOIS (e.g. 2.4%, $46, 1.78%).
 4. Give practical actions teams can apply this week.
 5. Add caveats and exceptions so advice sounds earned.
 6. Close with a clear next step or event-style CTA when relevant.
