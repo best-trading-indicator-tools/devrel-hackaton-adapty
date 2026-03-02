@@ -4428,7 +4428,8 @@ ${ctaGuidanceDirective}
 - Back any Adapty positioning with proof or mechanism, not empty superlatives.
 - Voice perspective: speak as Adapty company voice. Use "we", "our", and "us". Never use first-person singular pronouns ("I", "me", "my").
 
-Numbers: copy every number verbatim from the evidence sections in the user prompt. When a number exists in the evidence, use it. When it does not, use qualitative language ("significantly higher", "most apps"). Omit sample sizes when the evidence does not state them.
+Numbers: copy every number verbatim from the evidence sections in the user prompt. When a number exists in the evidence, use it. When it does not, rewrite naturally with qualitative language ("higher than peers", "lower than baseline", "most apps"). Omit sample sizes when the evidence does not state them.
+Do not use vague filler fragments like "significantly", "meaningful", or "premium" without a concrete noun.
 
 Before returning, read each post out loud in your head. Rewrite any sentence that sounds unnatural spoken.
 ${toBulletedSection(QUALITY_GATE_PROMPT_LINES)}
@@ -4531,6 +4532,10 @@ Also generate a list of hook suggestions inspired by this style and request.
     const useClaudeWriter = Boolean(anthropicApiKey && preferClaudeWriter);
     const useCodexReviewer = Boolean(oauthCredentials && preferCodexReviewer);
     const hasCodexReviewerPath = Boolean((useCodexReviewer || openAiApiToken) && preferCodexReviewer);
+    const enableNumericSanitizerRewrite = parseBooleanEnv(
+      process.env.ENABLE_NUMERIC_SANITIZER_REWRITE,
+      false,
+    );
 
     const runGeneration = (params: {
       model: string;
@@ -4856,6 +4861,7 @@ Do this:
 - Start with the point. Remove sentences that only frame the next one.
 - Rewrite sentences that restate themselves in two halves separated by a comma or period.
 - Replace stiff phrasing with how someone would actually say it.
+- Replace vague filler wording ("significantly", "meaningful", "premium") with concrete language or remove it.
 - Format body with clear paragraphs: 2-4 sentences per paragraph, blank line (double newline) between paragraphs. Never return a wall of text without paragraph breaks.
 - Keep paragraphs of 2-4 sentences. Add blank lines only between paragraphs, not between sentences. Do not put each sentence on its own line.
 - Never return consecutive one-sentence paragraphs. At most one one-sentence paragraph in the whole body, and only if it is a deliberate punch line.
@@ -5003,29 +5009,35 @@ Return ${parsed.hooks.length} hook suggestions as well (keep good ones, tighten 
     const hooksAllowedClaims = sauceUsesSoisOnly ? sauceBenchmarkNumericClaims : allowedNumericClaims;
     const postsAllowedClaims = sauceUsesSoisOnly ? sauceBenchmarkNumericClaims : allowedNumericClaims;
 
-    const sanitizedHooksResult = sanitizeHookSuggestionsNumericClaims(
-      normalizedHooks,
-      hooksAllowedClaims,
-      sauceUsesSoisOnly,
-    );
-    normalizedHooks = sanitizedHooksResult.hooks.map((hook) => normalizeNoEmDash(hook));
+    if (enableNumericSanitizerRewrite) {
+      const sanitizedHooksResult = sanitizeHookSuggestionsNumericClaims(
+        normalizedHooks,
+        hooksAllowedClaims,
+        sauceUsesSoisOnly,
+      );
+      normalizedHooks = sanitizedHooksResult.hooks.map((hook) => normalizeNoEmDash(hook));
 
-    const sanitizedPostsResult = sanitizeGeneratedPostsNumericClaims(
-      normalizedPosts,
-      postsAllowedClaims,
-      sauceUsesSoisOnly,
-    );
-    normalizedPosts = sanitizedPostsResult.posts;
+      const sanitizedPostsResult = sanitizeGeneratedPostsNumericClaims(
+        normalizedPosts,
+        postsAllowedClaims,
+        sauceUsesSoisOnly,
+      );
+      normalizedPosts = sanitizedPostsResult.posts;
 
-    const numericClaimsSanitizedCount =
-      sanitizedHooksResult.unsupportedClaims.length + sanitizedPostsResult.unsupportedClaims.length;
-    if (numericClaimsSanitizedCount > 0) {
-      console.warn(
-        `Numeric safety pass rewrote ${numericClaimsSanitizedCount} unsupported number claim(s) to qualitative phrasing.`,
+      const numericClaimsSanitizedCount =
+        sanitizedHooksResult.unsupportedClaims.length + sanitizedPostsResult.unsupportedClaims.length;
+      if (numericClaimsSanitizedCount > 0) {
+        console.warn(
+          `Numeric safety pass rewrote ${numericClaimsSanitizedCount} unsupported number claim(s) to qualitative phrasing.`,
+        );
+      }
+    } else {
+      console.info(
+        "Numeric sanitizer rewrite pass disabled (ENABLE_NUMERIC_SANITIZER_REWRITE=false): relying on prompt+reviewer quality passes.",
       );
     }
 
-    if (sauceUsesSoisOnly) {
+    if (sauceUsesSoisOnly && enableNumericSanitizerRewrite) {
       const sauceHookSanitization = sanitizeHookSuggestionsNumericClaims(
         normalizedHooks,
         sauceBenchmarkNumericClaims,
@@ -5099,17 +5111,19 @@ Return ${parsed.hooks.length} hook suggestions as well (keep good ones, tighten 
       });
 
       if (injectedBenchmarkAnchors > 0) {
-        const reSanitizedClaims = sauceUsesSoisOnly ? sauceBenchmarkNumericClaims : allowedNumericClaims;
-        const reSanitizedPostsResult = sanitizeGeneratedPostsNumericClaims(
-          normalizedPosts,
-          reSanitizedClaims,
-          sauceUsesSoisOnly,
-        );
-        normalizedPosts = reSanitizedPostsResult.posts;
-        if (reSanitizedPostsResult.unsupportedClaims.length > 0) {
-          console.warn(
-            `Numeric safety pass rewrote ${reSanitizedPostsResult.unsupportedClaims.length} unsupported number claim(s) after benchmark injection.`,
+        if (enableNumericSanitizerRewrite) {
+          const reSanitizedClaims = sauceUsesSoisOnly ? sauceBenchmarkNumericClaims : allowedNumericClaims;
+          const reSanitizedPostsResult = sanitizeGeneratedPostsNumericClaims(
+            normalizedPosts,
+            reSanitizedClaims,
+            sauceUsesSoisOnly,
           );
+          normalizedPosts = reSanitizedPostsResult.posts;
+          if (reSanitizedPostsResult.unsupportedClaims.length > 0) {
+            console.warn(
+              `Numeric safety pass rewrote ${reSanitizedPostsResult.unsupportedClaims.length} unsupported number claim(s) after benchmark injection.`,
+            );
+          }
         }
         console.warn(
           `Sauce benchmark guard injected evidence-backed numeric anchors into ${injectedBenchmarkAnchors} post(s).`,
@@ -5117,7 +5131,11 @@ Return ${parsed.hooks.length} hook suggestions as well (keep good ones, tighten 
       }
     }
 
-    if (looksLikeSaucePostType(input.inputType) && sauceBenchmarkNumericClaims.size > 0) {
+    if (
+      enableNumericSanitizerRewrite &&
+      looksLikeSaucePostType(input.inputType) &&
+      sauceBenchmarkNumericClaims.size > 0
+    ) {
       const sauceBenchmarkMaxUniqueNumbers = 2;
       let sauceBudgetRewriteCount = 0;
 
@@ -5152,7 +5170,11 @@ Return ${parsed.hooks.length} hook suggestions as well (keep good ones, tighten 
       }
     }
 
-    if (looksLikeSaucePostType(input.inputType) && sauceBenchmarkNumericClaims.size > 0) {
+    if (
+      enableNumericSanitizerRewrite &&
+      looksLikeSaucePostType(input.inputType) &&
+      sauceBenchmarkNumericClaims.size > 0
+    ) {
       const sauceBenchmarkMaxRepeatsPerPost = 1;
       let sauceRepeatRewriteCount = 0;
 
@@ -5197,7 +5219,12 @@ Return ${parsed.hooks.length} hook suggestions as well (keep good ones, tighten 
       }
     }
 
-    if (looksLikeSaucePostType(input.inputType) && sauceBenchmarkNumericClaims.size > 0 && normalizedPosts.length > 1) {
+    if (
+      enableNumericSanitizerRewrite &&
+      looksLikeSaucePostType(input.inputType) &&
+      sauceBenchmarkNumericClaims.size > 0 &&
+      normalizedPosts.length > 1
+    ) {
       const sauceBenchmarkMaxRepeatsAcrossPosts = Math.max(1, Math.ceil(normalizedPosts.length / 2));
       let sauceCrossPostRewriteCount = 0;
       const seenAllowedClaimCounts = new Map<string, number>();
@@ -5355,48 +5382,54 @@ Return ${parsed.hooks.length} hook suggestions as well (keep good ones, tighten 
           `Strict Sauce evidence gate triggered cleanup: unsupported_numeric=${strictViolations.unsupportedNumericClaims}, fuzzy_placeholders=${strictViolations.fuzzyPlaceholderSentences}, blocked_anecdotes=${strictViolations.blockedAnecdoteSentences}.`,
         );
 
-        normalizedHooks = normalizedHooks.map((hook, index) => {
-          const benchmarkSnippet = pickStrictSauceBenchmarkSnippet(
-            sauceSnippetsForInjection,
-            sauceBenchmarkNumericClaims,
-            index,
-          );
-          const rewrittenHook = rewriteUnsupportedNumericClaims(hook, sauceBenchmarkNumericClaims, false).value;
-          return clipTextStrictMax(
-            sanitizeSauceHookFallback(rewrittenHook, benchmarkSnippet),
-            CLAUDE_HOOK_LIMITS.max,
-          );
-        });
+        if (enableNumericSanitizerRewrite) {
+          normalizedHooks = normalizedHooks.map((hook, index) => {
+            const benchmarkSnippet = pickStrictSauceBenchmarkSnippet(
+              sauceSnippetsForInjection,
+              sauceBenchmarkNumericClaims,
+              index,
+            );
+            const rewrittenHook = rewriteUnsupportedNumericClaims(hook, sauceBenchmarkNumericClaims, false).value;
+            return clipTextStrictMax(
+              sanitizeSauceHookFallback(rewrittenHook, benchmarkSnippet),
+              CLAUDE_HOOK_LIMITS.max,
+            );
+          });
 
-        normalizedPosts = normalizedPosts.map((post, index) => {
-          const benchmarkSnippet = pickStrictSauceBenchmarkSnippet(
-            sauceBenchmarkSnippets,
-            sauceBenchmarkNumericClaims,
-            index,
-          );
-          const benchmarkSentence = benchmarkSnippet ? buildStrictSauceBenchmarkSentence(benchmarkSnippet) : "";
-          const hookRewrite = rewriteUnsupportedNumericClaims(post.hook, sauceBenchmarkNumericClaims, false).value;
-          const bodyRewrite = rewriteUnsupportedNumericClaims(post.body, sauceBenchmarkNumericClaims, false).value;
-          const ctaRewrite = rewriteUnsupportedNumericClaims(post.cta, sauceBenchmarkNumericClaims, false).value;
-          const nextHook = clipTextStrictMax(
-            sanitizeSauceHookFallback(hookRewrite, benchmarkSnippet),
-            CLAUDE_POST_HOOK_LIMITS.max,
-          );
-          const nextBody = clipMultilineTextStrictMax(
-            normalizeBodyRhythm((bodyRewrite || benchmarkSentence).trim()),
-            CLAUDE_POST_BODY_LIMITS.max,
-          );
-          const nextCta = shouldIncludeCta
-            ? clipTextStrictMax(ctaRewrite || strictFallbackCta, CLAUDE_POST_CTA_LIMITS.max)
-            : "";
+          normalizedPosts = normalizedPosts.map((post, index) => {
+            const benchmarkSnippet = pickStrictSauceBenchmarkSnippet(
+              sauceBenchmarkSnippets,
+              sauceBenchmarkNumericClaims,
+              index,
+            );
+            const benchmarkSentence = benchmarkSnippet ? buildStrictSauceBenchmarkSentence(benchmarkSnippet) : "";
+            const hookRewrite = rewriteUnsupportedNumericClaims(post.hook, sauceBenchmarkNumericClaims, false).value;
+            const bodyRewrite = rewriteUnsupportedNumericClaims(post.body, sauceBenchmarkNumericClaims, false).value;
+            const ctaRewrite = rewriteUnsupportedNumericClaims(post.cta, sauceBenchmarkNumericClaims, false).value;
+            const nextHook = clipTextStrictMax(
+              sanitizeSauceHookFallback(hookRewrite, benchmarkSnippet),
+              CLAUDE_POST_HOOK_LIMITS.max,
+            );
+            const nextBody = clipMultilineTextStrictMax(
+              normalizeBodyRhythm((bodyRewrite || benchmarkSentence).trim()),
+              CLAUDE_POST_BODY_LIMITS.max,
+            );
+            const nextCta = shouldIncludeCta
+              ? clipTextStrictMax(ctaRewrite || strictFallbackCta, CLAUDE_POST_CTA_LIMITS.max)
+              : "";
 
-          return {
-            ...post,
-            hook: nextHook,
-            body: nextBody,
-            cta: nextCta,
-          };
-        });
+            return {
+              ...post,
+              hook: nextHook,
+              body: nextBody,
+              cta: nextCta,
+            };
+          });
+        } else {
+          console.info(
+            "Strict Sauce fallback numeric rewriter disabled (ENABLE_NUMERIC_SANITIZER_REWRITE=false); keeping prompt-reviewed copy.",
+          );
+        }
       }
     }
 
