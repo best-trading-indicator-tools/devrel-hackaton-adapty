@@ -5374,10 +5374,10 @@ export default function Home() {
           ) : null}
 
           <label className="space-y-1">
-            <span className="text-sm font-medium">Extra Prompt Details</span>
+            <span className="text-sm font-medium">Custom prompt</span>
             <textarea
               rows={5}
-              placeholder="Audience, feature details, angle, constraints, examples to imitate..."
+              placeholder="Any instructions: e.g. 'Start each post with: [specific hook]' — or audience, angle, constraints, examples to imitate..."
               className={baseControlClassName}
               value={form.details}
               onChange={(event) => setForm((prev) => ({ ...prev, details: event.target.value }))}
