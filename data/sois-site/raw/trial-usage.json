@@ -1,0 +1,98 @@
+[
+  {
+    "year": 2024,
+    "category": "EDUCATION",
+    "trial_share": 0.8158,
+    "no_trial_share": 0.1842
+  },
+  {
+    "year": 2024,
+    "category": "ENTERTAINMENT",
+    "trial_share": 0.6053,
+    "no_trial_share": 0.3947
+  },
+  {
+    "year": 2024,
+    "category": "GRAPHICS_AND_DESIGN",
+    "trial_share": 0.646,
+    "no_trial_share": 0.354
+  },
+  {
+    "year": 2024,
+    "category": "HEALTH_AND_FITNESS",
+    "trial_share": 0.7904,
+    "no_trial_share": 0.2096
+  },
+  {
+    "year": 2024,
+    "category": "LIFESTYLE",
+    "trial_share": 0.6471,
+    "no_trial_share": 0.3529
+  },
+  {
+    "year": 2024,
+    "category": "PHOTO_AND_VIDEO",
+    "trial_share": 0.7254,
+    "no_trial_share": 0.2746
+  },
+  {
+    "year": 2024,
+    "category": "PRODUCTIVITY",
+    "trial_share": 0.7443,
+    "no_trial_share": 0.2557
+  },
+  {
+    "year": 2024,
+    "category": "UTILITIES",
+    "trial_share": 0.7939,
+    "no_trial_share": 0.2061
+  },
+  {
+    "year": 2025,
+    "category": "EDUCATION",
+    "trial_share": 0.8207,
+    "no_trial_share": 0.1793
+  },
+  {
+    "year": 2025,
+    "category": "ENTERTAINMENT",
+    "trial_share": 0.6048,
+    "no_trial_share": 0.3952
+  },
+  {
+    "year": 2025,
+    "category": "GRAPHICS_AND_DESIGN",
+    "trial_share": 0.5852,
+    "no_trial_share": 0.4148
+  },
+  {
+    "year": 2025,
+    "category": "HEALTH_AND_FITNESS",
+    "trial_share": 0.7602,
+    "no_trial_share": 0.2398
+  },
+  {
+    "year": 2025,
+    "category": "LIFESTYLE",
+    "trial_share": 0.5714,
+    "no_trial_share": 0.4286
+  },
+  {
+    "year": 2025,
+    "category": "PHOTO_AND_VIDEO",
+    "trial_share": 0.6223,
+    "no_trial_share": 0.3777
+  },
+  {
+    "year": 2025,
+    "category": "PRODUCTIVITY",
+    "trial_share": 0.7123,
+    "no_trial_share": 0.2877
+  },
+  {
+    "year": 2025,
+    "category": "UTILITIES",
+    "trial_share": 0.8427,
+    "no_trial_share": 0.1573
+  }
+]

@@ -1,0 +1,2140 @@
+{
+  "version": 1,
+  "generatedAtIso": "2026-03-02T13:39:05.789Z",
+  "sourceOrigin": "https://adapty-state-of-appsubs.vercel.app",
+  "discoveredDataFiles": [
+    "/data/conversions-direct.json",
+    "/data/conversions-trial.json",
+    "/data/discount-usage.json",
+    "/data/fastest-growing-countries.json",
+    "/data/install-ltv.json",
+    "/data/install-to-paid-time.json",
+    "/data/install-to-trial-time.json",
+    "/data/ltv-analytics.json",
+    "/data/ltv-by-region.json",
+    "/data/pricing-conversion.json",
+    "/data/pricing-data.json",
+    "/data/pricing-ltv.json",
+    "/data/refund-share.json",
+    "/data/renewal-by-price.json",
+    "/data/retention.json",
+    "/data/revenue-by-product-type.json",
+    "/data/revenue-by-region.json",
+    "/data/revenue-concentration.json",
+    "/data/trial-usage.json"
+  ],
+  "siteFacts": {
+    "methodology": {
+      "appsAnalyzed": "16,000",
+      "revenueAnalyzed": "$2.2B",
+      "period": "2025-2026",
+      "platformFocus": "iOS, with one section comparing iOS and Android performance"
+    },
+    "platform": {
+      "trackedRevenue": "$2.2B",
+      "appsConnected": "16K+",
+      "transactions": "215M",
+      "historicalSla": "99.99%"
+    }
+  },
+  "datasetCount": 19,
+  "totalRows": 23319,
+  "datasets": [
+    {
+      "id": "conversions-direct",
+      "title": "Direct Conversion Benchmarks",
+      "categoryHint": "conversions",
+      "sourceUrl": "https://adapty-state-of-appsubs.vercel.app/data/conversions-direct.json",
+      "rowCount": 54,
+      "columns": [
+        "country",
+        "region",
+        "category",
+        "cohort_type",
+        "install_to_direct_rate",
+        "install_to_paid_rate",
+        "paid_to_renewal1_rate",
+        "paid_to_renewal2_rate",
+        "paid_to_renewal3_rate",
+        "paid_to_renewal4_rate",
+        "paid_to_renewal5_rate",
+        "paid_to_refund_rate"
+      ],
+      "dimensionSamples": {
+        "country": [
+          "All"
+        ],
+        "region": [
+          "Global",
+          "APAC",
+          "Europe",
+          "LATAM",
+          "MEA",
+          "North America"
+        ],
+        "category": [
+          "All",
+          "EDUCATION",
+          "ENTERTAINMENT",
+          "GRAPHICS_AND_DESIGN",
+          "HEALTH_AND_FITNESS",
+          "LIFESTYLE",
+          "PHOTO_AND_VIDEO",
+          "PRODUCTIVITY"
+        ],
+        "cohort_type": [
+          "direct"
+        ]
+      },
+      "numericMetrics": [
+        {
+          "key": "install_to_direct_rate",
+          "count": 54,
+          "min": 0.0012,
+          "p50": 0.0142,
+          "p90": 0.0377,
+          "max": 0.0731
+        },
+        {
+          "key": "install_to_paid_rate",
+          "count": 54,
+          "min": 0.0035,
+          "p50": 0.0295,
+          "p90": 0.0562,
+          "max": 0.0933
+        },
+        {
+          "key": "paid_to_renewal1_rate",
+          "count": 54,
+          "min": 0.1974,
+          "p50": 0.2743,
+          "p90": 0.3219,
+          "max": 0.3705
+        },
+        {
+          "key": "paid_to_renewal2_rate",
+          "count": 54,
+          "min": 0.1045,
+          "p50": 0.1726,
+          "p90": 0.2066,
+          "max": 0.2683
+        },
+        {
+          "key": "paid_to_renewal3_rate",
+          "count": 54,
+          "min": 0.0696,
+          "p50": 0.1324,
+          "p90": 0.1625,
+          "max": 0.2214
+        },
+        {
+          "key": "paid_to_renewal4_rate",
+          "count": 54,
+          "min": 0.0508,
+          "p50": 0.106,
+          "p90": 0.1326,
+          "max": 0.1899
+        }
+      ],
+      "summaryLines": [
+        "Install To Direct Rate: median 1.42% | p90 3.77% | max 7.31%",
+        "Install To Paid Rate: median 2.95% | p90 5.62% | max 9.33%",
+        "Paid To Renewal1 Rate: median 27.43% | p90 32.19% | max 37.05%",
+        "Paid To Renewal2 Rate: median 17.26% | p90 20.66% | max 26.83%"
+      ],
+      "sampleRows": [
+        {
+          "country": "All",
+          "region": "Global",
+          "category": "All",
+          "cohort_type": "direct",
+          "install_to_direct_rate": 0.0124,
+          "install_to_paid_rate": 0.0224,
+          "paid_to_renewal1_rate": 0.2816,
+          "paid_to_renewal2_rate": 0.1771,
+          "paid_to_renewal3_rate": 0.1361,
+          "paid_to_renewal4_rate": 0.1107,
+          "paid_to_renewal5_rate": 0.0923,
+          "paid_to_refund_rate": 0.0407
+        },
+        {
+          "country": "All",
+          "region": "Global",
+          "category": "EDUCATION",
+          "cohort_type": "direct",
+          "install_to_direct_rate": 0.0088,
+          "install_to_paid_rate": 0.0363,
+          "paid_to_renewal1_rate": 0.265,
+          "paid_to_renewal2_rate": 0.1482,
+          "paid_to_renewal3_rate": 0.1066,
+          "paid_to_renewal4_rate": 0.083,
+          "paid_to_renewal5_rate": 0.0666,
+          "paid_to_refund_rate": 0.0371
+        },
+        {
+          "country": "All",
+          "region": "Global",
+          "category": "ENTERTAINMENT",
+          "cohort_type": "direct",
+          "install_to_direct_rate": 0.0235,
+          "install_to_paid_rate": 0.0386,
+          "paid_to_renewal1_rate": 0.2899,
+          "paid_to_renewal2_rate": 0.192,
+          "paid_to_renewal3_rate": 0.1496,
+          "paid_to_renewal4_rate": 0.1229,
+          "paid_to_renewal5_rate": 0.1029,
+          "paid_to_refund_rate": 0.0391
+        },
+        {
+          "country": "All",
+          "region": "Global",
+          "category": "GRAPHICS_AND_DESIGN",
+          "cohort_type": "direct",
+          "install_to_direct_rate": 0.0318,
+          "install_to_paid_rate": 0.0452,
+          "paid_to_renewal1_rate": 0.2693,
+          "paid_to_renewal2_rate": 0.172,
+          "paid_to_renewal3_rate": 0.135,
+          "paid_to_renewal4_rate": 0.1116,
+          "paid_to_renewal5_rate": 0.0942,
+          "paid_to_refund_rate": 0.0378
+        },
+        {
+          "country": "All",
+          "region": "Global",
+          "category": "HEALTH_AND_FITNESS",
+          "cohort_type": "direct",
+          "install_to_direct_rate": 0.016,
+          "install_to_paid_rate": 0.0455,
+          "paid_to_renewal1_rate": 0.2537,
+          "paid_to_renewal2_rate": 0.1386,
+          "paid_to_renewal3_rate": 0.0976,
+          "paid_to_renewal4_rate": 0.0707,
+          "paid_to_renewal5_rate": 0.0548,
+          "paid_to_refund_rate": 0.0281
+        }
+      ]
+    },
+    {
+      "id": "conversions-trial",
+      "title": "Trial Conversion Benchmarks",
+      "categoryHint": "conversions",
+      "sourceUrl": "https://adapty-state-of-appsubs.vercel.app/data/conversions-trial.json",
+      "rowCount": 54,
+      "columns": [
+        "country",
+        "region",
+        "category",
+        "cohort_type",
+        "install_to_trial_rate",
+        "trial_to_paid_rate",
+        "paid_to_renewal1_rate",
+        "paid_to_renewal2_rate",
+        "paid_to_renewal3_rate",
+        "paid_to_renewal4_rate",
+        "paid_to_renewal5_rate",
+        "paid_to_refund_rate"
+      ],
+      "dimensionSamples": {
+        "country": [
+          "All"
+        ],
+        "region": [
+          "Global",
+          "APAC",
+          "Europe",
+          "LATAM",
+          "MEA",
+          "North America"
+        ],
+        "category": [
+          "All",
+          "EDUCATION",
+          "ENTERTAINMENT",
+          "GRAPHICS_AND_DESIGN",
+          "HEALTH_AND_FITNESS",
+          "LIFESTYLE",
+          "PHOTO_AND_VIDEO",
+          "PRODUCTIVITY"
+        ],
+        "cohort_type": [
+          "trial"
+        ]
+      },
+      "numericMetrics": [
+        {
+          "key": "install_to_trial_rate",
+          "count": 54,
+          "min": 0.0131,
+          "p50": 0.0744,
+          "p90": 0.1195,
+          "max": 0.1581
+        },
+        {
+          "key": "trial_to_paid_rate",
+          "count": 54,
+          "min": 0.1192,
+          "p50": 0.2033,
+          "p90": 0.3244,
+          "max": 0.4332
+        },
+        {
+          "key": "paid_to_renewal1_rate",
+          "count": 54,
+          "min": 0.207,
+          "p50": 0.4591,
+          "p90": 0.5479,
+          "max": 0.6012
+        },
+        {
+          "key": "paid_to_renewal2_rate",
+          "count": 54,
+          "min": 0.1086,
+          "p50": 0.3212,
+          "p90": 0.409,
+          "max": 0.4589
+        },
+        {
+          "key": "paid_to_renewal3_rate",
+          "count": 54,
+          "min": 0.0844,
+          "p50": 0.2531,
+          "p90": 0.3349,
+          "max": 0.3719
+        },
+        {
+          "key": "paid_to_renewal4_rate",
+          "count": 54,
+          "min": 0.0664,
+          "p50": 0.211,
+          "p90": 0.2842,
+          "max": 0.3155
+        }
+      ],
+      "summaryLines": [
+        "Install To Trial Rate: median 7.44% | p90 11.95% | max 15.81%",
+        "Trial To Paid Rate: median 20.33% | p90 32.44% | max 43.32%",
+        "Paid To Renewal1 Rate: median 45.91% | p90 54.79% | max 60.12%",
+        "Paid To Renewal2 Rate: median 32.12% | p90 40.90% | max 45.89%"
+      ],
+      "sampleRows": [
+        {
+          "country": "All",
+          "region": "Global",
+          "category": "All",
+          "cohort_type": "trial",
+          "install_to_trial_rate": 0.0534,
+          "trial_to_paid_rate": 0.2246,
+          "paid_to_renewal1_rate": 0.4874,
+          "paid_to_renewal2_rate": 0.3531,
+          "paid_to_renewal3_rate": 0.2869,
+          "paid_to_renewal4_rate": 0.2425,
+          "paid_to_renewal5_rate": 0.2086,
+          "paid_to_refund_rate": 0.0718
+        },
+        {
+          "country": "All",
+          "region": "Global",
+          "category": "EDUCATION",
+          "cohort_type": "trial",
+          "install_to_trial_rate": 0.1175,
+          "trial_to_paid_rate": 0.2547,
+          "paid_to_renewal1_rate": 0.5301,
+          "paid_to_renewal2_rate": 0.3892,
+          "paid_to_renewal3_rate": 0.3122,
+          "paid_to_renewal4_rate": 0.2633,
+          "paid_to_renewal5_rate": 0.2279,
+          "paid_to_refund_rate": 0.0481
+        },
+        {
+          "country": "All",
+          "region": "Global",
+          "category": "ENTERTAINMENT",
+          "cohort_type": "trial",
+          "install_to_trial_rate": 0.1195,
+          "trial_to_paid_rate": 0.1951,
+          "paid_to_renewal1_rate": 0.5076,
+          "paid_to_renewal2_rate": 0.3612,
+          "paid_to_renewal3_rate": 0.2846,
+          "paid_to_renewal4_rate": 0.2335,
+          "paid_to_renewal5_rate": 0.19,
+          "paid_to_refund_rate": 0.0781
+        },
+        {
+          "country": "All",
+          "region": "Global",
+          "category": "GRAPHICS_AND_DESIGN",
+          "cohort_type": "trial",
+          "install_to_trial_rate": 0.0839,
+          "trial_to_paid_rate": 0.2024,
+          "paid_to_renewal1_rate": 0.3973,
+          "paid_to_renewal2_rate": 0.2653,
+          "paid_to_renewal3_rate": 0.2091,
+          "paid_to_renewal4_rate": 0.1728,
+          "paid_to_renewal5_rate": 0.146,
+          "paid_to_refund_rate": 0.0722
+        },
+        {
+          "country": "All",
+          "region": "Global",
+          "category": "HEALTH_AND_FITNESS",
+          "cohort_type": "trial",
+          "install_to_trial_rate": 0.0804,
+          "trial_to_paid_rate": 0.3845,
+          "paid_to_renewal1_rate": 0.2576,
+          "paid_to_renewal2_rate": 0.1394,
+          "paid_to_renewal3_rate": 0.1092,
+          "paid_to_renewal4_rate": 0.09,
+          "paid_to_renewal5_rate": 0.0757,
+          "paid_to_refund_rate": 0.0603
+        }
+      ]
+    },
+    {
+      "id": "discount-usage",
+      "title": "Discount Usage by Category",
+      "categoryHint": "market",
+      "sourceUrl": "https://adapty-state-of-appsubs.vercel.app/data/discount-usage.json",
+      "rowCount": 16,
+      "columns": [
+        "year",
+        "category",
+        "discount_share",
+        "no_discount_share"
+      ],
+      "dimensionSamples": {
+        "category": [
+          "EDUCATION",
+          "ENTERTAINMENT",
+          "GRAPHICS_AND_DESIGN",
+          "HEALTH_AND_FITNESS",
+          "LIFESTYLE",
+          "PHOTO_AND_VIDEO",
+          "PRODUCTIVITY",
+          "UTILITIES"
+        ]
+      },
+      "numericMetrics": [
+        {
+          "key": "year",
+          "count": 16,
+          "min": 2024,
+          "p50": 2025,
+          "p90": 2025,
+          "max": 2025
+        },
+        {
+          "key": "discount_share",
+          "count": 16,
+          "min": 0.0134,
+          "p50": 0.0918,
+          "p90": 0.1142,
+          "max": 0.1448
+        },
+        {
+          "key": "no_discount_share",
+          "count": 16,
+          "min": 0.8552,
+          "p50": 0.9102,
+          "p90": 0.9856,
+          "max": 0.9866
+        }
+      ],
+      "summaryLines": [
+        "Year: median 2,025 | p90 2,025 | max 2,025",
+        "Discount Share: median 9.18% | p90 11.42% | max 14.48%",
+        "No Discount Share: median 91.02% | p90 98.56% | max 98.66%"
+      ],
+      "sampleRows": [
+        {
+          "year": 2024,
+          "category": "EDUCATION",
+          "discount_share": 0.1053,
+          "no_discount_share": 0.8947
+        },
+        {
+          "year": 2024,
+          "category": "ENTERTAINMENT",
+          "discount_share": 0.0421,
+          "no_discount_share": 0.9579
+        },
+        {
+          "year": 2024,
+          "category": "GRAPHICS_AND_DESIGN",
+          "discount_share": 0.0973,
+          "no_discount_share": 0.9027
+        },
+        {
+          "year": 2024,
+          "category": "HEALTH_AND_FITNESS",
+          "discount_share": 0.0898,
+          "no_discount_share": 0.9102
+        },
+        {
+          "year": 2024,
+          "category": "LIFESTYLE",
+          "discount_share": 0.0588,
+          "no_discount_share": 0.9412
+        }
+      ]
+    },
+    {
+      "id": "fastest-growing-countries",
+      "title": "Fastest Growing Countries YoY",
+      "categoryHint": "market",
+      "sourceUrl": "https://adapty-state-of-appsubs.vercel.app/data/fastest-growing-countries.json",
+      "rowCount": 16,
+      "columns": [
+        "store",
+        "region",
+        "country",
+        "growth_rate"
+      ],
+      "dimensionSamples": {
+        "store": [
+          "app_store",
+          "play_store"
+        ],
+        "region": [
+          "APAC",
+          "Europe",
+          "LATAM",
+          "MEA",
+          "North America"
+        ],
+        "country": [
+          "Australia",
+          "Japan",
+          "France",
+          "Germany",
+          "Italy",
+          "Netherlands",
+          "Switzerland",
+          "United Kingdom"
+        ]
+      },
+      "numericMetrics": [
+        {
+          "key": "growth_rate",
+          "count": 16,
+          "min": 0.2081,
+          "p50": 0.5808,
+          "p90": 0.8916,
+          "max": 0.9559
+        }
+      ],
+      "summaryLines": [
+        "Growth Rate: median 58.08% | p90 89.16% | max 95.59%"
+      ],
+      "sampleRows": [
+        {
+          "store": "app_store",
+          "region": "APAC",
+          "country": "Australia",
+          "growth_rate": 0.5843
+        },
+        {
+          "store": "app_store",
+          "region": "APAC",
+          "country": "Japan",
+          "growth_rate": 0.9559
+        },
+        {
+          "store": "app_store",
+          "region": "Europe",
+          "country": "France",
+          "growth_rate": 0.5527
+        },
+        {
+          "store": "app_store",
+          "region": "Europe",
+          "country": "Germany",
+          "growth_rate": 0.5657
+        },
+        {
+          "store": "app_store",
+          "region": "Europe",
+          "country": "Italy",
+          "growth_rate": 0.5557
+        }
+      ]
+    },
+    {
+      "id": "install-ltv",
+      "title": "Install LTV by Category",
+      "categoryHint": "ltv",
+      "sourceUrl": "https://adapty-state-of-appsubs.vercel.app/data/install-ltv.json",
+      "rowCount": 53,
+      "columns": [
+        "country",
+        "region",
+        "category",
+        "avg_ltv_380",
+        "install_to_direct_rate",
+        "install_to_paid_rate",
+        "install_ltv"
+      ],
+      "dimensionSamples": {
+        "country": [
+          "All"
+        ],
+        "region": [
+          "Global",
+          "APAC",
+          "Europe",
+          "LATAM",
+          "MEA",
+          "North America"
+        ],
+        "category": [
+          "All",
+          "EDUCATION",
+          "ENTERTAINMENT",
+          "GRAPHICS_AND_DESIGN",
+          "HEALTH_AND_FITNESS",
+          "LIFESTYLE",
+          "PHOTO_AND_VIDEO",
+          "PRODUCTIVITY"
+        ]
+      },
+      "numericMetrics": [
+        {
+          "key": "avg_ltv_380",
+          "count": 53,
+          "min": 15.2242,
+          "p50": 25.2157,
+          "p90": 36.9758,
+          "max": 45.7644
+        },
+        {
+          "key": "install_to_direct_rate",
+          "count": 53,
+          "min": 0.0012,
+          "p50": 0.0142,
+          "p90": 0.0377,
+          "max": 0.0731
+        },
+        {
+          "key": "install_to_paid_rate",
+          "count": 53,
+          "min": 0.0035,
+          "p50": 0.0295,
+          "p90": 0.0562,
+          "max": 0.0933
+        },
+        {
+          "key": "install_ltv",
+          "count": 53,
+          "min": 0.0914,
+          "p50": 0.7546,
+          "p90": 1.8793,
+          "max": 3.691
+        }
+      ],
+      "summaryLines": [
+        "Avg Ltv 380: median 25.216 | p90 36.976 | max 45.764",
+        "Install To Direct Rate: median 1.42% | p90 3.77% | max 7.31%",
+        "Install To Paid Rate: median 2.95% | p90 5.62% | max 9.33%",
+        "Install Ltv: median 0.755 | p90 1.879 | max 3.691"
+      ],
+      "sampleRows": [
+        {
+          "country": "All",
+          "region": "Global",
+          "category": "All",
+          "avg_ltv_380": 26.7922,
+          "install_to_direct_rate": 0.0124,
+          "install_to_paid_rate": 0.0224,
+          "install_ltv": 0.5997
+        },
+        {
+          "country": "All",
+          "region": "Global",
+          "category": "EDUCATION",
+          "avg_ltv_380": 34.6569,
+          "install_to_direct_rate": 0.0088,
+          "install_to_paid_rate": 0.0363,
+          "install_ltv": 1.2583
+        },
+        {
+          "country": "All",
+          "region": "Global",
+          "category": "ENTERTAINMENT",
+          "avg_ltv_380": 26.5877,
+          "install_to_direct_rate": 0.0235,
+          "install_to_paid_rate": 0.0386,
+          "install_ltv": 1.0265
+        },
+        {
+          "country": "All",
+          "region": "Global",
+          "category": "GRAPHICS_AND_DESIGN",
+          "avg_ltv_380": 25.0304,
+          "install_to_direct_rate": 0.0318,
+          "install_to_paid_rate": 0.0452,
+          "install_ltv": 1.1306
+        },
+        {
+          "country": "All",
+          "region": "Global",
+          "category": "HEALTH_AND_FITNESS",
+          "avg_ltv_380": 24.6195,
+          "install_to_direct_rate": 0.016,
+          "install_to_paid_rate": 0.0455,
+          "install_ltv": 1.119
+        }
+      ]
+    },
+    {
+      "id": "install-to-paid-time",
+      "title": "Install-to-Paid Time",
+      "categoryHint": "market",
+      "sourceUrl": "https://adapty-state-of-appsubs.vercel.app/data/install-to-paid-time.json",
+      "rowCount": 324,
+      "columns": [
+        "country",
+        "region",
+        "category",
+        "time_bucket",
+        "bucket_share"
+      ],
+      "dimensionSamples": {
+        "country": [
+          "All"
+        ],
+        "region": [
+          "Global",
+          "APAC",
+          "Europe",
+          "LATAM",
+          "MEA",
+          "North America"
+        ],
+        "category": [
+          "All",
+          "EDUCATION",
+          "ENTERTAINMENT",
+          "GRAPHICS_AND_DESIGN",
+          "HEALTH_AND_FITNESS",
+          "LIFESTYLE",
+          "PHOTO_AND_VIDEO",
+          "PRODUCTIVITY"
+        ],
+        "time_bucket": [
+          "Day0",
+          "Day15_30",
+          "Day1_3",
+          "Day31_plus",
+          "Day4_7",
+          "Day8_14"
+        ]
+      },
+      "numericMetrics": [
+        {
+          "key": "bucket_share",
+          "count": 324,
+          "min": 0.0108,
+          "p50": 0.0367,
+          "p90": 0.8355,
+          "max": 0.9018
+        }
+      ],
+      "summaryLines": [
+        "Bucket Share: median 3.67% | p90 83.55% | max 90.18%"
+      ],
+      "sampleRows": [
+        {
+          "country": "All",
+          "region": "Global",
+          "category": "All",
+          "time_bucket": "Day0",
+          "bucket_share": 0.8421
+        },
+        {
+          "country": "All",
+          "region": "Global",
+          "category": "All",
+          "time_bucket": "Day15_30",
+          "bucket_share": 0.0197
+        },
+        {
+          "country": "All",
+          "region": "Global",
+          "category": "All",
+          "time_bucket": "Day1_3",
+          "bucket_share": 0.0504
+        },
+        {
+          "country": "All",
+          "region": "Global",
+          "category": "All",
+          "time_bucket": "Day31_plus",
+          "bucket_share": 0.0519
+        },
+        {
+          "country": "All",
+          "region": "Global",
+          "category": "All",
+          "time_bucket": "Day4_7",
+          "bucket_share": 0.0191
+        }
+      ]
+    },
+    {
+      "id": "install-to-trial-time",
+      "title": "Install-to-Trial Time",
+      "categoryHint": "market",
+      "sourceUrl": "https://adapty-state-of-appsubs.vercel.app/data/install-to-trial-time.json",
+      "rowCount": 324,
+      "columns": [
+        "country",
+        "region",
+        "category",
+        "time_bucket",
+        "bucket_share"
+      ],
+      "dimensionSamples": {
+        "country": [
+          "All"
+        ],
+        "region": [
+          "Global",
+          "APAC",
+          "Europe",
+          "LATAM",
+          "MEA",
+          "North America"
+        ],
+        "category": [
+          "All",
+          "EDUCATION",
+          "ENTERTAINMENT",
+          "GRAPHICS_AND_DESIGN",
+          "HEALTH_AND_FITNESS",
+          "LIFESTYLE",
+          "PHOTO_AND_VIDEO",
+          "PRODUCTIVITY"
+        ],
+        "time_bucket": [
+          "Day0",
+          "Day15_30",
+          "Day1_3",
+          "Day31_plus",
+          "Day4_7",
+          "Day8_14"
+        ]
+      },
+      "numericMetrics": [
+        {
+          "key": "bucket_share",
+          "count": 324,
+          "min": 0.0053,
+          "p50": 0.0191,
+          "p90": 0.8762,
+          "max": 0.9527
+        }
+      ],
+      "summaryLines": [
+        "Bucket Share: median 1.91% | p90 87.62% | max 95.27%"
+      ],
+      "sampleRows": [
+        {
+          "country": "All",
+          "region": "Global",
+          "category": "All",
+          "time_bucket": "Day0",
+          "bucket_share": 0.8971
+        },
+        {
+          "country": "All",
+          "region": "Global",
+          "category": "All",
+          "time_bucket": "Day15_30",
+          "bucket_share": 0.0133
+        },
+        {
+          "country": "All",
+          "region": "Global",
+          "category": "All",
+          "time_bucket": "Day1_3",
+          "bucket_share": 0.0275
+        },
+        {
+          "country": "All",
+          "region": "Global",
+          "category": "All",
+          "time_bucket": "Day31_plus",
+          "bucket_share": 0.0401
+        },
+        {
+          "country": "All",
+          "region": "Global",
+          "category": "All",
+          "time_bucket": "Day4_7",
+          "bucket_share": 0.0113
+        }
+      ]
+    },
+    {
+      "id": "ltv-analytics",
+      "title": "LTV Dashboard",
+      "categoryHint": "ltv",
+      "sourceUrl": "https://adapty-state-of-appsubs.vercel.app/data/ltv-analytics.json",
+      "rowCount": 1620,
+      "columns": [
+        "country",
+        "region",
+        "category",
+        "product_set",
+        "cohort_type",
+        "days_after_first_purchase",
+        "avg_ltv"
+      ],
+      "dimensionSamples": {
+        "country": [
+          "All"
+        ],
+        "region": [
+          "Global",
+          "APAC",
+          "Europe",
+          "LATAM",
+          "MEA",
+          "North America"
+        ],
+        "category": [
+          "All",
+          "EDUCATION",
+          "ENTERTAINMENT",
+          "GRAPHICS_AND_DESIGN",
+          "HEALTH_AND_FITNESS",
+          "LIFESTYLE",
+          "PHOTO_AND_VIDEO",
+          "PRODUCTIVITY"
+        ],
+        "product_set": [
+          "annual",
+          "monthly",
+          "weekly"
+        ],
+        "cohort_type": [
+          "direct",
+          "trial"
+        ]
+      },
+      "numericMetrics": [
+        {
+          "key": "days_after_first_purchase",
+          "count": 1620,
+          "min": 0,
+          "p50": 99,
+          "p90": 380,
+          "max": 380
+        },
+        {
+          "key": "avg_ltv",
+          "count": 1620,
+          "min": 2.9183,
+          "p50": 26.0811,
+          "p90": 44.9224,
+          "max": 83.0918
+        }
+      ],
+      "summaryLines": [
+        "Days After First Purchase: median 99 | p90 380.0 | max 380.0",
+        "Avg Ltv: median 26.081 | p90 44.922 | max 83.092"
+      ],
+      "sampleRows": [
+        {
+          "country": "All",
+          "region": "Global",
+          "category": "All",
+          "product_set": "annual",
+          "cohort_type": "direct",
+          "days_after_first_purchase": 0,
+          "avg_ltv": 35.34
+        },
+        {
+          "country": "All",
+          "region": "Global",
+          "category": "All",
+          "product_set": "annual",
+          "cohort_type": "direct",
+          "days_after_first_purchase": 33,
+          "avg_ltv": 35.3766
+        },
+        {
+          "country": "All",
+          "region": "Global",
+          "category": "All",
+          "product_set": "annual",
+          "cohort_type": "direct",
+          "days_after_first_purchase": 99,
+          "avg_ltv": 35.3991
+        },
+        {
+          "country": "All",
+          "region": "Global",
+          "category": "All",
+          "product_set": "annual",
+          "cohort_type": "direct",
+          "days_after_first_purchase": 190,
+          "avg_ltv": 35.4185
+        },
+        {
+          "country": "All",
+          "region": "Global",
+          "category": "All",
+          "product_set": "annual",
+          "cohort_type": "direct",
+          "days_after_first_purchase": 380,
+          "avg_ltv": 42.32
+        }
+      ]
+    },
+    {
+      "id": "ltv-by-region",
+      "title": "Top Countries by LTV",
+      "categoryHint": "ltv",
+      "sourceUrl": "https://adapty-state-of-appsubs.vercel.app/data/ltv-by-region.json",
+      "rowCount": 14,
+      "columns": [
+        "country",
+        "region",
+        "category",
+        "avg_ltv"
+      ],
+      "dimensionSamples": {
+        "country": [
+          "Japan",
+          "Singapore",
+          "Australia",
+          "Norway",
+          "Denmark",
+          "Switzerland",
+          "Argentina",
+          "Mexico"
+        ],
+        "region": [
+          "APAC",
+          "Europe",
+          "LATAM",
+          "MEA",
+          "North America"
+        ],
+        "category": [
+          "All"
+        ]
+      },
+      "numericMetrics": [
+        {
+          "key": "avg_ltv",
+          "count": 14,
+          "min": 35.19,
+          "p50": 44.02,
+          "p90": 47.98,
+          "max": 50.17
+        }
+      ],
+      "summaryLines": [
+        "Avg Ltv: median 44.02 | p90 47.98 | max 50.17"
+      ],
+      "sampleRows": [
+        {
+          "country": "Japan",
+          "region": "APAC",
+          "category": "All",
+          "avg_ltv": 45.03
+        },
+        {
+          "country": "Singapore",
+          "region": "APAC",
+          "category": "All",
+          "avg_ltv": 42.55
+        },
+        {
+          "country": "Australia",
+          "region": "APAC",
+          "category": "All",
+          "avg_ltv": 39.59
+        },
+        {
+          "country": "Norway",
+          "region": "Europe",
+          "category": "All",
+          "avg_ltv": 47.98
+        },
+        {
+          "country": "Denmark",
+          "region": "Europe",
+          "category": "All",
+          "avg_ltv": 44.02
+        }
+      ]
+    },
+    {
+      "id": "pricing-conversion",
+      "title": "Conversion by Price Buckets",
+      "categoryHint": "pricing",
+      "sourceUrl": "https://adapty-state-of-appsubs.vercel.app/data/pricing-conversion.json",
+      "rowCount": 1732,
+      "columns": [
+        "country",
+        "region",
+        "category",
+        "product_set",
+        "price_bucket",
+        "metric_name",
+        "metric_value"
+      ],
+      "dimensionSamples": {
+        "country": [
+          "All"
+        ],
+        "region": [
+          "Global",
+          "APAC",
+          "Europe",
+          "LATAM",
+          "MEA",
+          "North America"
+        ],
+        "category": [
+          "All",
+          "EDUCATION",
+          "ENTERTAINMENT",
+          "GRAPHICS_AND_DESIGN",
+          "HEALTH_AND_FITNESS",
+          "LIFESTYLE",
+          "PHOTO_AND_VIDEO",
+          "PRODUCTIVITY"
+        ],
+        "product_set": [
+          "annual",
+          "monthly",
+          "weekly"
+        ],
+        "price_bucket": [
+          "High price",
+          "Low price",
+          "Lower mid price",
+          "Upper mid price"
+        ],
+        "metric_name": [
+          "install_to_direct",
+          "install_to_paid",
+          "install_to_trial"
+        ]
+      },
+      "numericMetrics": [
+        {
+          "key": "metric_value",
+          "count": 1732,
+          "min": 0,
+          "p50": 0.0085,
+          "p90": 0.0477,
+          "max": 0.237
+        }
+      ],
+      "summaryLines": [
+        "Metric Value: median 0.009 | p90 0.048 | max 0.237"
+      ],
+      "sampleRows": [
+        {
+          "country": "All",
+          "region": "Global",
+          "category": "All",
+          "product_set": "annual",
+          "price_bucket": "High price",
+          "metric_name": "install_to_direct",
+          "metric_value": 0.0015
+        },
+        {
+          "country": "All",
+          "region": "Global",
+          "category": "All",
+          "product_set": "annual",
+          "price_bucket": "High price",
+          "metric_name": "install_to_paid",
+          "metric_value": 0.003
+        },
+        {
+          "country": "All",
+          "region": "Global",
+          "category": "All",
+          "product_set": "annual",
+          "price_bucket": "High price",
+          "metric_name": "install_to_trial",
+          "metric_value": 0.0085
+        },
+        {
+          "country": "All",
+          "region": "Global",
+          "category": "All",
+          "product_set": "annual",
+          "price_bucket": "Low price",
+          "metric_name": "install_to_direct",
+          "metric_value": 0.0065
+        },
+        {
+          "country": "All",
+          "region": "Global",
+          "category": "All",
+          "product_set": "annual",
+          "price_bucket": "Low price",
+          "metric_name": "install_to_paid",
+          "metric_value": 0.0142
+        }
+      ]
+    },
+    {
+      "id": "pricing-data",
+      "title": "Price Distribution by Region and Category",
+      "categoryHint": "pricing",
+      "sourceUrl": "https://adapty-state-of-appsubs.vercel.app/data/pricing-data.json",
+      "rowCount": 15635,
+      "columns": [
+        "year",
+        "country",
+        "region",
+        "category",
+        "product_set",
+        "quantile_type",
+        "price_usd"
+      ],
+      "dimensionSamples": {
+        "country": [
+          "Argentina",
+          "Australia",
+          "Brazil",
+          "Canada",
+          "Chile",
+          "Colombia",
+          "France",
+          "Germany"
+        ],
+        "region": [
+          "LATAM",
+          "APAC",
+          "North America",
+          "Europe",
+          "MEA",
+          "Global",
+          "Other"
+        ],
+        "category": [
+          "All",
+          "EDUCATION",
+          "ENTERTAINMENT",
+          "GRAPHICS_AND_DESIGN",
+          "HEALTH_AND_FITNESS",
+          "LIFESTYLE",
+          "PHOTO_AND_VIDEO",
+          "PRODUCTIVITY"
+        ],
+        "product_set": [
+          "annual",
+          "monthly",
+          "weekly"
+        ],
+        "quantile_type": [
+          "p10_app",
+          "p25_app",
+          "p50_app",
+          "p75_app",
+          "p90_app"
+        ]
+      },
+      "numericMetrics": [
+        {
+          "key": "year",
+          "count": 15635,
+          "min": 2023,
+          "p50": 2024,
+          "p90": 2026,
+          "max": 2026
+        },
+        {
+          "key": "price_usd",
+          "count": 15635,
+          "min": 0.35,
+          "p50": 10.52,
+          "p90": 47.13,
+          "max": 159.99
+        }
+      ],
+      "summaryLines": [
+        "Year: median 2,024 | p90 2,026 | max 2,026",
+        "Price Usd: median 10.52 | p90 47.13 | max 160.0"
+      ],
+      "sampleRows": [
+        {
+          "year": 2023,
+          "country": "Argentina",
+          "region": "LATAM",
+          "category": "All",
+          "product_set": "annual",
+          "quantile_type": "p10_app",
+          "price_usd": 9.99
+        },
+        {
+          "year": 2023,
+          "country": "Argentina",
+          "region": "LATAM",
+          "category": "All",
+          "product_set": "annual",
+          "quantile_type": "p25_app",
+          "price_usd": 19.99
+        },
+        {
+          "year": 2023,
+          "country": "Argentina",
+          "region": "LATAM",
+          "category": "All",
+          "product_set": "annual",
+          "quantile_type": "p50_app",
+          "price_usd": 29.99
+        },
+        {
+          "year": 2023,
+          "country": "Argentina",
+          "region": "LATAM",
+          "category": "All",
+          "product_set": "annual",
+          "quantile_type": "p75_app",
+          "price_usd": 39.99
+        },
+        {
+          "year": 2023,
+          "country": "Argentina",
+          "region": "LATAM",
+          "category": "All",
+          "product_set": "annual",
+          "quantile_type": "p90_app",
+          "price_usd": 56.99
+        }
+      ]
+    },
+    {
+      "id": "pricing-ltv",
+      "title": "LTV by Price Buckets",
+      "categoryHint": "pricing",
+      "sourceUrl": "https://adapty-state-of-appsubs.vercel.app/data/pricing-ltv.json",
+      "rowCount": 643,
+      "columns": [
+        "country",
+        "region",
+        "category",
+        "product_set",
+        "price_bucket",
+        "median_ltv_380",
+        "avg_ltv_380"
+      ],
+      "dimensionSamples": {
+        "country": [
+          "All"
+        ],
+        "region": [
+          "Global",
+          "APAC",
+          "Europe",
+          "LATAM",
+          "MEA",
+          "North America"
+        ],
+        "category": [
+          "All",
+          "EDUCATION",
+          "ENTERTAINMENT",
+          "GRAPHICS_AND_DESIGN",
+          "HEALTH_AND_FITNESS",
+          "LIFESTYLE",
+          "PHOTO_AND_VIDEO",
+          "PRODUCTIVITY"
+        ],
+        "product_set": [
+          "annual",
+          "monthly",
+          "weekly"
+        ],
+        "price_bucket": [
+          "High price",
+          "Low price",
+          "Lower mid price",
+          "Upper mid price"
+        ]
+      },
+      "numericMetrics": [
+        {
+          "key": "median_ltv_380",
+          "count": 643,
+          "min": 0.5275,
+          "p50": 16.045,
+          "p90": 48.338,
+          "max": 116.99
+        },
+        {
+          "key": "avg_ltv_380",
+          "count": 643,
+          "min": 5.5003,
+          "p50": 36.1989,
+          "p90": 65.6531,
+          "max": 117.0979
+        }
+      ],
+      "summaryLines": [
+        "Median Ltv 380: median 16.045 | p90 48.338 | max 117.0",
+        "Avg Ltv 380: median 36.199 | p90 65.653 | max 117.1"
+      ],
+      "sampleRows": [
+        {
+          "country": "All",
+          "region": "Global",
+          "category": "All",
+          "product_set": "annual",
+          "price_bucket": "High price",
+          "median_ltv_380": 72.552,
+          "avg_ltv_380": 86.423
+        },
+        {
+          "country": "All",
+          "region": "Global",
+          "category": "All",
+          "product_set": "annual",
+          "price_bucket": "Low price",
+          "median_ltv_380": 19.99,
+          "avg_ltv_380": 23.467
+        },
+        {
+          "country": "All",
+          "region": "Global",
+          "category": "All",
+          "product_set": "annual",
+          "price_bucket": "Lower mid price",
+          "median_ltv_380": 32.471,
+          "avg_ltv_380": 37.1909
+        },
+        {
+          "country": "All",
+          "region": "Global",
+          "category": "All",
+          "product_set": "annual",
+          "price_bucket": "Upper mid price",
+          "median_ltv_380": 39.99,
+          "avg_ltv_380": 49.4909
+        },
+        {
+          "country": "All",
+          "region": "Global",
+          "category": "All",
+          "product_set": "monthly",
+          "price_bucket": "High price",
+          "median_ltv_380": 26.1976,
+          "avg_ltv_380": 54.0903
+        }
+      ]
+    },
+    {
+      "id": "refund-share",
+      "title": "Refund Share by Region and Category",
+      "categoryHint": "refunds",
+      "sourceUrl": "https://adapty-state-of-appsubs.vercel.app/data/refund-share.json",
+      "rowCount": 108,
+      "columns": [
+        "country",
+        "region",
+        "category",
+        "cohort_type",
+        "refunded_revenue_share"
+      ],
+      "dimensionSamples": {
+        "country": [
+          "All"
+        ],
+        "region": [
+          "Global",
+          "APAC",
+          "Europe",
+          "LATAM",
+          "MEA",
+          "North America"
+        ],
+        "category": [
+          "All",
+          "EDUCATION",
+          "ENTERTAINMENT",
+          "GRAPHICS_AND_DESIGN",
+          "HEALTH_AND_FITNESS",
+          "LIFESTYLE",
+          "PHOTO_AND_VIDEO",
+          "PRODUCTIVITY"
+        ],
+        "cohort_type": [
+          "non_trial",
+          "trial"
+        ]
+      },
+      "numericMetrics": [
+        {
+          "key": "refunded_revenue_share",
+          "count": 108,
+          "min": 0.0114,
+          "p50": 0.0323,
+          "p90": 0.0545,
+          "max": 0.1398
+        }
+      ],
+      "summaryLines": [
+        "Refunded Revenue Share: median 3.23% | p90 5.45% | max 13.98%"
+      ],
+      "sampleRows": [
+        {
+          "country": "All",
+          "region": "Global",
+          "category": "All",
+          "cohort_type": "non_trial",
+          "refunded_revenue_share": 0.0314
+        },
+        {
+          "country": "All",
+          "region": "Global",
+          "category": "All",
+          "cohort_type": "trial",
+          "refunded_revenue_share": 0.0373
+        },
+        {
+          "country": "All",
+          "region": "Global",
+          "category": "EDUCATION",
+          "cohort_type": "non_trial",
+          "refunded_revenue_share": 0.0286
+        },
+        {
+          "country": "All",
+          "region": "Global",
+          "category": "EDUCATION",
+          "cohort_type": "trial",
+          "refunded_revenue_share": 0.03
+        },
+        {
+          "country": "All",
+          "region": "Global",
+          "category": "ENTERTAINMENT",
+          "cohort_type": "non_trial",
+          "refunded_revenue_share": 0.0273
+        }
+      ]
+    },
+    {
+      "id": "renewal-by-price",
+      "title": "Renewal by Price Bucket",
+      "categoryHint": "retention",
+      "sourceUrl": "https://adapty-state-of-appsubs.vercel.app/data/renewal-by-price.json",
+      "rowCount": 427,
+      "columns": [
+        "country",
+        "region",
+        "category",
+        "product_set",
+        "price_bucket",
+        "renewal1_to_renewal2_rate",
+        "renewal2_to_renewal3_rate"
+      ],
+      "dimensionSamples": {
+        "country": [
+          "All"
+        ],
+        "region": [
+          "Global",
+          "APAC",
+          "Europe",
+          "LATAM",
+          "MEA",
+          "North America"
+        ],
+        "category": [
+          "All",
+          "EDUCATION",
+          "ENTERTAINMENT",
+          "GRAPHICS_AND_DESIGN",
+          "HEALTH_AND_FITNESS",
+          "LIFESTYLE",
+          "PHOTO_AND_VIDEO",
+          "PRODUCTIVITY"
+        ],
+        "product_set": [
+          "monthly",
+          "weekly"
+        ],
+        "price_bucket": [
+          "Tier 1 (lowest 25%)",
+          "Tier 2 (25-50%)",
+          "Tier 3 (50-75%)",
+          "Tier 4 (highest 25%)"
+        ]
+      },
+      "numericMetrics": [
+        {
+          "key": "renewal1_to_renewal2_rate",
+          "count": 427,
+          "min": 0.1358,
+          "p50": 0.4783,
+          "p90": 0.5928,
+          "max": 0.7839
+        },
+        {
+          "key": "renewal2_to_renewal3_rate",
+          "count": 427,
+          "min": 0.3127,
+          "p50": 0.7776,
+          "p90": 0.8253,
+          "max": 0.9035
+        }
+      ],
+      "summaryLines": [
+        "Renewal1 To Renewal2 Rate: median 47.83% | p90 59.28% | max 78.39%",
+        "Renewal2 To Renewal3 Rate: median 77.76% | p90 82.53% | max 90.35%"
+      ],
+      "sampleRows": [
+        {
+          "country": "All",
+          "region": "Global",
+          "category": "All",
+          "product_set": "monthly",
+          "price_bucket": "Tier 1 (lowest 25%)",
+          "renewal1_to_renewal2_rate": 0.4997,
+          "renewal2_to_renewal3_rate": 0.769
+        },
+        {
+          "country": "All",
+          "region": "Global",
+          "category": "All",
+          "product_set": "monthly",
+          "price_bucket": "Tier 2 (25-50%)",
+          "renewal1_to_renewal2_rate": 0.4721,
+          "renewal2_to_renewal3_rate": 0.7299
+        },
+        {
+          "country": "All",
+          "region": "Global",
+          "category": "All",
+          "product_set": "monthly",
+          "price_bucket": "Tier 3 (50-75%)",
+          "renewal1_to_renewal2_rate": 0.4555,
+          "renewal2_to_renewal3_rate": 0.7334
+        },
+        {
+          "country": "All",
+          "region": "Global",
+          "category": "All",
+          "product_set": "monthly",
+          "price_bucket": "Tier 4 (highest 25%)",
+          "renewal1_to_renewal2_rate": 0.4191,
+          "renewal2_to_renewal3_rate": 0.7242
+        },
+        {
+          "country": "All",
+          "region": "Global",
+          "category": "All",
+          "product_set": "weekly",
+          "price_bucket": "Tier 1 (lowest 25%)",
+          "renewal1_to_renewal2_rate": 0.4747,
+          "renewal2_to_renewal3_rate": 0.814
+        }
+      ]
+    },
+    {
+      "id": "retention",
+      "title": "Retention by Category and Plan",
+      "categoryHint": "retention",
+      "sourceUrl": "https://adapty-state-of-appsubs.vercel.app/data/retention.json",
+      "rowCount": 1296,
+      "columns": [
+        "country",
+        "region",
+        "category",
+        "product_set",
+        "is_trial",
+        "metric_category",
+        "retention_rate"
+      ],
+      "dimensionSamples": {
+        "country": [
+          "All"
+        ],
+        "region": [
+          "Global",
+          "APAC",
+          "Europe",
+          "LATAM",
+          "MEA",
+          "North America"
+        ],
+        "category": [
+          "All",
+          "EDUCATION",
+          "ENTERTAINMENT",
+          "GRAPHICS_AND_DESIGN",
+          "HEALTH_AND_FITNESS",
+          "LIFESTYLE",
+          "PHOTO_AND_VIDEO",
+          "PRODUCTIVITY"
+        ],
+        "product_set": [
+          "annual",
+          "monthly",
+          "weekly"
+        ],
+        "is_trial": [
+          "non_trial",
+          "trial"
+        ]
+      },
+      "numericMetrics": [
+        {
+          "key": "metric_category",
+          "count": 1296,
+          "min": 33,
+          "p50": 190,
+          "p90": 380,
+          "max": 380
+        },
+        {
+          "key": "retention_rate",
+          "count": 1296,
+          "min": 0.0045,
+          "p50": 0.243,
+          "p90": 0.9981,
+          "max": 1
+        }
+      ],
+      "summaryLines": [
+        "Metric Category: median 190.0 | p90 380.0 | max 380.0",
+        "Retention Rate: median 24.30% | p90 99.81% | max 100.00%"
+      ],
+      "sampleRows": [
+        {
+          "country": "All",
+          "region": "Global",
+          "category": "All",
+          "product_set": "annual",
+          "is_trial": "non_trial",
+          "metric_category": 33,
+          "retention_rate": 0.9989
+        },
+        {
+          "country": "All",
+          "region": "Global",
+          "category": "All",
+          "product_set": "annual",
+          "is_trial": "non_trial",
+          "metric_category": 99,
+          "retention_rate": 0.9988
+        },
+        {
+          "country": "All",
+          "region": "Global",
+          "category": "All",
+          "product_set": "annual",
+          "is_trial": "non_trial",
+          "metric_category": 190,
+          "retention_rate": 0.9984
+        },
+        {
+          "country": "All",
+          "region": "Global",
+          "category": "All",
+          "product_set": "annual",
+          "is_trial": "non_trial",
+          "metric_category": 380,
+          "retention_rate": 0.2039
+        },
+        {
+          "country": "All",
+          "region": "Global",
+          "category": "All",
+          "product_set": "annual",
+          "is_trial": "trial",
+          "metric_category": 33,
+          "retention_rate": 0.9586
+        }
+      ]
+    },
+    {
+      "id": "revenue-by-product-type",
+      "title": "Revenue Share by Product Type",
+      "categoryHint": "market",
+      "sourceUrl": "https://adapty-state-of-appsubs.vercel.app/data/revenue-by-product-type.json",
+      "rowCount": 810,
+      "columns": [
+        "year",
+        "region",
+        "category",
+        "product_type",
+        "plan_revenue_share"
+      ],
+      "dimensionSamples": {
+        "region": [
+          "Global",
+          "APAC",
+          "Europe",
+          "LATAM",
+          "MEA",
+          "North America"
+        ],
+        "category": [
+          "All",
+          "UTILITIES",
+          "PRODUCTIVITY",
+          "PHOTO_AND_VIDEO",
+          "ENTERTAINMENT",
+          "LIFESTYLE",
+          "EDUCATION",
+          "GRAPHICS_AND_DESIGN"
+        ],
+        "product_type": [
+          "weekly",
+          "annual",
+          "monthly",
+          "other",
+          "one_time_purchase"
+        ]
+      },
+      "numericMetrics": [
+        {
+          "key": "year",
+          "count": 810,
+          "min": 2023,
+          "p50": 2024,
+          "p90": 2025,
+          "max": 2025
+        },
+        {
+          "key": "plan_revenue_share",
+          "count": 810,
+          "min": 0.04,
+          "p50": 13.02,
+          "p90": 52.3,
+          "max": 86.06
+        }
+      ],
+      "summaryLines": [
+        "Year: median 2,024 | p90 2,025 | max 2,025",
+        "Plan Revenue Share: median 13.02 | p90 52.3 | max 86.06"
+      ],
+      "sampleRows": [
+        {
+          "year": 2025,
+          "region": "Global",
+          "category": "All",
+          "product_type": "weekly",
+          "plan_revenue_share": 59.21
+        },
+        {
+          "year": 2025,
+          "region": "Global",
+          "category": "UTILITIES",
+          "product_type": "weekly",
+          "plan_revenue_share": 75.52
+        },
+        {
+          "year": 2025,
+          "region": "Global",
+          "category": "All",
+          "product_type": "annual",
+          "plan_revenue_share": 22.04
+        },
+        {
+          "year": 2025,
+          "region": "Global",
+          "category": "All",
+          "product_type": "monthly",
+          "plan_revenue_share": 11.29
+        },
+        {
+          "year": 2025,
+          "region": "Global",
+          "category": "PRODUCTIVITY",
+          "product_type": "weekly",
+          "plan_revenue_share": 65.21
+        }
+      ]
+    },
+    {
+      "id": "revenue-by-region",
+      "title": "Revenue by Region",
+      "categoryHint": "market",
+      "sourceUrl": "https://adapty-state-of-appsubs.vercel.app/data/revenue-by-region.json",
+      "rowCount": 15,
+      "columns": [
+        "year",
+        "region",
+        "share"
+      ],
+      "dimensionSamples": {
+        "region": [
+          "North America",
+          "Europe",
+          "APAC",
+          "MEA",
+          "LATAM"
+        ]
+      },
+      "numericMetrics": [
+        {
+          "key": "year",
+          "count": 15,
+          "min": 2023,
+          "p50": 2024,
+          "p90": 2025,
+          "max": 2025
+        },
+        {
+          "key": "share",
+          "count": 15,
+          "min": 5.06,
+          "p50": 9.5,
+          "p90": 56.84,
+          "max": 58.84
+        }
+      ],
+      "summaryLines": [
+        "Year: median 2,024 | p90 2,025 | max 2,025",
+        "Share: median 9.5 | p90 56.84 | max 58.84"
+      ],
+      "sampleRows": [
+        {
+          "year": 2023,
+          "region": "North America",
+          "share": 58.84
+        },
+        {
+          "year": 2023,
+          "region": "Europe",
+          "share": 21.88
+        },
+        {
+          "year": 2023,
+          "region": "APAC",
+          "share": 8.63
+        },
+        {
+          "year": 2023,
+          "region": "MEA",
+          "share": 5.56
+        },
+        {
+          "year": 2023,
+          "region": "LATAM",
+          "share": 5.06
+        }
+      ]
+    },
+    {
+      "id": "revenue-concentration",
+      "title": "Revenue Concentration (Top 10%)",
+      "categoryHint": "market",
+      "sourceUrl": "https://adapty-state-of-appsubs.vercel.app/data/revenue-concentration.json",
+      "rowCount": 162,
+      "columns": [
+        "year",
+        "region",
+        "category",
+        "top_10pct_apps",
+        "top_10pct_revenue",
+        "revenue_share_top_10pct"
+      ],
+      "dimensionSamples": {
+        "region": [
+          "APAC",
+          "Europe",
+          "Global",
+          "LATAM",
+          "MEA",
+          "North America"
+        ],
+        "category": [
+          "All",
+          "EDUCATION",
+          "ENTERTAINMENT",
+          "GRAPHICS_AND_DESIGN",
+          "HEALTH_AND_FITNESS",
+          "LIFESTYLE",
+          "PHOTO_AND_VIDEO",
+          "PRODUCTIVITY"
+        ]
+      },
+      "numericMetrics": [
+        {
+          "key": "year",
+          "count": 162,
+          "min": 2023,
+          "p50": 2024,
+          "p90": 2025,
+          "max": 2025
+        },
+        {
+          "key": "top_10pct_apps",
+          "count": 162,
+          "min": 8,
+          "p50": 32,
+          "p90": 200,
+          "max": 1843
+        },
+        {
+          "key": "top_10pct_revenue",
+          "count": 162,
+          "min": 318214.648,
+          "p50": 12360857.1998,
+          "p90": 88205083.5408,
+          "max": 849780943.0329
+        },
+        {
+          "key": "revenue_share_top_10pct",
+          "count": 162,
+          "min": 0.7933,
+          "p50": 0.9293,
+          "p90": 0.9598,
+          "max": 0.979
+        }
+      ],
+      "summaryLines": [
+        "Year: median 2,024 | p90 2,025 | max 2,025",
+        "Top 10pct Apps: median 32 | p90 200.0 | max 1,843",
+        "Top 10pct Revenue: median 12,360,857.2 | p90 88,205,083.54 | max 849,780,943.03",
+        "Revenue Share Top 10pct: median 92.93% | p90 95.98% | max 97.90%"
+      ],
+      "sampleRows": [
+        {
+          "year": 2023,
+          "region": "APAC",
+          "category": "All",
+          "top_10pct_apps": 140,
+          "top_10pct_revenue": 26187372.112,
+          "revenue_share_top_10pct": 0.8982
+        },
+        {
+          "year": 2023,
+          "region": "APAC",
+          "category": "EDUCATION",
+          "top_10pct_apps": 11,
+          "top_10pct_revenue": 1327613.1316,
+          "revenue_share_top_10pct": 0.8801
+        },
+        {
+          "year": 2023,
+          "region": "APAC",
+          "category": "ENTERTAINMENT",
+          "top_10pct_apps": 17,
+          "top_10pct_revenue": 1164392.8588,
+          "revenue_share_top_10pct": 0.7933
+        },
+        {
+          "year": 2023,
+          "region": "APAC",
+          "category": "GRAPHICS_AND_DESIGN",
+          "top_10pct_apps": 12,
+          "top_10pct_revenue": 1958717.4357,
+          "revenue_share_top_10pct": 0.9576
+        },
+        {
+          "year": 2023,
+          "region": "APAC",
+          "category": "HEALTH_AND_FITNESS",
+          "top_10pct_apps": 24,
+          "top_10pct_revenue": 1900802.2761,
+          "revenue_share_top_10pct": 0.7986
+        }
+      ]
+    },
+    {
+      "id": "trial-usage",
+      "title": "Trial Usage by Category",
+      "categoryHint": "market",
+      "sourceUrl": "https://adapty-state-of-appsubs.vercel.app/data/trial-usage.json",
+      "rowCount": 16,
+      "columns": [
+        "year",
+        "category",
+        "trial_share",
+        "no_trial_share"
+      ],
+      "dimensionSamples": {
+        "category": [
+          "EDUCATION",
+          "ENTERTAINMENT",
+          "GRAPHICS_AND_DESIGN",
+          "HEALTH_AND_FITNESS",
+          "LIFESTYLE",
+          "PHOTO_AND_VIDEO",
+          "PRODUCTIVITY",
+          "UTILITIES"
+        ]
+      },
+      "numericMetrics": [
+        {
+          "key": "year",
+          "count": 16,
+          "min": 2024,
+          "p50": 2025,
+          "p90": 2025,
+          "max": 2025
+        },
+        {
+          "key": "trial_share",
+          "count": 16,
+          "min": 0.5714,
+          "p50": 0.7254,
+          "p90": 0.8207,
+          "max": 0.8427
+        },
+        {
+          "key": "no_trial_share",
+          "count": 16,
+          "min": 0.1573,
+          "p50": 0.2877,
+          "p90": 0.4148,
+          "max": 0.4286
+        }
+      ],
+      "summaryLines": [
+        "Year: median 2,025 | p90 2,025 | max 2,025",
+        "Trial Share: median 72.54% | p90 82.07% | max 84.27%",
+        "No Trial Share: median 28.77% | p90 41.48% | max 42.86%"
+      ],
+      "sampleRows": [
+        {
+          "year": 2024,
+          "category": "EDUCATION",
+          "trial_share": 0.8158,
+          "no_trial_share": 0.1842
+        },
+        {
+          "year": 2024,
+          "category": "ENTERTAINMENT",
+          "trial_share": 0.6053,
+          "no_trial_share": 0.3947
+        },
+        {
+          "year": 2024,
+          "category": "GRAPHICS_AND_DESIGN",
+          "trial_share": 0.646,
+          "no_trial_share": 0.354
+        },
+        {
+          "year": 2024,
+          "category": "HEALTH_AND_FITNESS",
+          "trial_share": 0.7904,
+          "no_trial_share": 0.2096
+        },
+        {
+          "year": 2024,
+          "category": "LIFESTYLE",
+          "trial_share": 0.6471,
+          "no_trial_share": 0.3529
+        }
+      ]
+    }
+  ],
+  "errors": []
+}

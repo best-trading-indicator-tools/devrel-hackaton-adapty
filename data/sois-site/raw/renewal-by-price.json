@@ -1,0 +1,3845 @@
+[
+  {
+    "country": "All",
+    "region": "Global",
+    "category": "All",
+    "product_set": "monthly",
+    "price_bucket": "Tier 1 (lowest 25%)",
+    "renewal1_to_renewal2_rate": 0.4997,
+    "renewal2_to_renewal3_rate": 0.769
+  },
+  {
+    "country": "All",
+    "region": "Global",
+    "category": "All",
+    "product_set": "monthly",
+    "price_bucket": "Tier 2 (25-50%)",
+    "renewal1_to_renewal2_rate": 0.4721,
+    "renewal2_to_renewal3_rate": 0.7299
+  },
+  {
+    "country": "All",
+    "region": "Global",
+    "category": "All",
+    "product_set": "monthly",
+    "price_bucket": "Tier 3 (50-75%)",
+    "renewal1_to_renewal2_rate": 0.4555,
+    "renewal2_to_renewal3_rate": 0.7334
+  },
+  {
+    "country": "All",
+    "region": "Global",
+    "category": "All",
+    "product_set": "monthly",
+    "price_bucket": "Tier 4 (highest 25%)",
+    "renewal1_to_renewal2_rate": 0.4191,
+    "renewal2_to_renewal3_rate": 0.7242
+  },
+  {
+    "country": "All",
+    "region": "Global",
+    "category": "All",
+    "product_set": "weekly",
+    "price_bucket": "Tier 1 (lowest 25%)",
+    "renewal1_to_renewal2_rate": 0.4747,
+    "renewal2_to_renewal3_rate": 0.814
+  },
+  {
+    "country": "All",
+    "region": "Global",
+    "category": "All",
+    "product_set": "weekly",
+    "price_bucket": "Tier 2 (25-50%)",
+    "renewal1_to_renewal2_rate": 0.4899,
+    "renewal2_to_renewal3_rate": 0.8062
+  },
+  {
+    "country": "All",
+    "region": "Global",
+    "category": "All",
+    "product_set": "weekly",
+    "price_bucket": "Tier 3 (50-75%)",
+    "renewal1_to_renewal2_rate": 0.5313,
+    "renewal2_to_renewal3_rate": 0.8126
+  },
+  {
+    "country": "All",
+    "region": "Global",
+    "category": "All",
+    "product_set": "weekly",
+    "price_bucket": "Tier 4 (highest 25%)",
+    "renewal1_to_renewal2_rate": 0.4882,
+    "renewal2_to_renewal3_rate": 0.8094
+  },
+  {
+    "country": "All",
+    "region": "Global",
+    "category": "EDUCATION",
+    "product_set": "monthly",
+    "price_bucket": "Tier 1 (lowest 25%)",
+    "renewal1_to_renewal2_rate": 0.5354,
+    "renewal2_to_renewal3_rate": 0.6733
+  },
+  {
+    "country": "All",
+    "region": "Global",
+    "category": "EDUCATION",
+    "product_set": "monthly",
+    "price_bucket": "Tier 2 (25-50%)",
+    "renewal1_to_renewal2_rate": 0.5126,
+    "renewal2_to_renewal3_rate": 0.4377
+  },
+  {
+    "country": "All",
+    "region": "Global",
+    "category": "EDUCATION",
+    "product_set": "monthly",
+    "price_bucket": "Tier 3 (50-75%)",
+    "renewal1_to_renewal2_rate": 0.5088,
+    "renewal2_to_renewal3_rate": 0.6601
+  },
+  {
+    "country": "All",
+    "region": "Global",
+    "category": "EDUCATION",
+    "product_set": "monthly",
+    "price_bucket": "Tier 4 (highest 25%)",
+    "renewal1_to_renewal2_rate": 0.5379,
+    "renewal2_to_renewal3_rate": 0.6499
+  },
+  {
+    "country": "All",
+    "region": "Global",
+    "category": "EDUCATION",
+    "product_set": "weekly",
+    "price_bucket": "Tier 1 (lowest 25%)",
+    "renewal1_to_renewal2_rate": 0.7326,
+    "renewal2_to_renewal3_rate": 0.8555
+  },
+  {
+    "country": "All",
+    "region": "Global",
+    "category": "EDUCATION",
+    "product_set": "weekly",
+    "price_bucket": "Tier 2 (25-50%)",
+    "renewal1_to_renewal2_rate": 0.6488,
+    "renewal2_to_renewal3_rate": 0.8266
+  },
+  {
+    "country": "All",
+    "region": "Global",
+    "category": "EDUCATION",
+    "product_set": "weekly",
+    "price_bucket": "Tier 3 (50-75%)",
+    "renewal1_to_renewal2_rate": 0.623,
+    "renewal2_to_renewal3_rate": 0.8174
+  },
+  {
+    "country": "All",
+    "region": "Global",
+    "category": "EDUCATION",
+    "product_set": "weekly",
+    "price_bucket": "Tier 4 (highest 25%)",
+    "renewal1_to_renewal2_rate": 0.6033,
+    "renewal2_to_renewal3_rate": 0.8036
+  },
+  {
+    "country": "All",
+    "region": "Global",
+    "category": "ENTERTAINMENT",
+    "product_set": "monthly",
+    "price_bucket": "Tier 1 (lowest 25%)",
+    "renewal1_to_renewal2_rate": 0.5638,
+    "renewal2_to_renewal3_rate": 0.7927
+  },
+  {
+    "country": "All",
+    "region": "Global",
+    "category": "ENTERTAINMENT",
+    "product_set": "monthly",
+    "price_bucket": "Tier 2 (25-50%)",
+    "renewal1_to_renewal2_rate": 0.3317,
+    "renewal2_to_renewal3_rate": 0.7151
+  },
+  {
+    "country": "All",
+    "region": "Global",
+    "category": "ENTERTAINMENT",
+    "product_set": "monthly",
+    "price_bucket": "Tier 3 (50-75%)",
+    "renewal1_to_renewal2_rate": 0.2451,
+    "renewal2_to_renewal3_rate": 0.7117
+  },
+  {
+    "country": "All",
+    "region": "Global",
+    "category": "ENTERTAINMENT",
+    "product_set": "monthly",
+    "price_bucket": "Tier 4 (highest 25%)",
+    "renewal1_to_renewal2_rate": 0.1545,
+    "renewal2_to_renewal3_rate": 0.6923
+  },
+  {
+    "country": "All",
+    "region": "Global",
+    "category": "ENTERTAINMENT",
+    "product_set": "weekly",
+    "price_bucket": "Tier 1 (lowest 25%)",
+    "renewal1_to_renewal2_rate": 0.4343,
+    "renewal2_to_renewal3_rate": 0.7975
+  },
+  {
+    "country": "All",
+    "region": "Global",
+    "category": "ENTERTAINMENT",
+    "product_set": "weekly",
+    "price_bucket": "Tier 2 (25-50%)",
+    "renewal1_to_renewal2_rate": 0.4494,
+    "renewal2_to_renewal3_rate": 0.7865
+  },
+  {
+    "country": "All",
+    "region": "Global",
+    "category": "ENTERTAINMENT",
+    "product_set": "weekly",
+    "price_bucket": "Tier 3 (50-75%)",
+    "renewal1_to_renewal2_rate": 0.4608,
+    "renewal2_to_renewal3_rate": 0.7805
+  },
+  {
+    "country": "All",
+    "region": "Global",
+    "category": "ENTERTAINMENT",
+    "product_set": "weekly",
+    "price_bucket": "Tier 4 (highest 25%)",
+    "renewal1_to_renewal2_rate": 0.4721,
+    "renewal2_to_renewal3_rate": 0.7793
+  },
+  {
+    "country": "All",
+    "region": "Global",
+    "category": "GRAPHICS_AND_DESIGN",
+    "product_set": "monthly",
+    "price_bucket": "Tier 1 (lowest 25%)",
+    "renewal1_to_renewal2_rate": 0.5134,
+    "renewal2_to_renewal3_rate": 0.7796
+  },
+  {
+    "country": "All",
+    "region": "Global",
+    "category": "GRAPHICS_AND_DESIGN",
+    "product_set": "monthly",
+    "price_bucket": "Tier 2 (25-50%)",
+    "renewal1_to_renewal2_rate": 0.4954,
+    "renewal2_to_renewal3_rate": 0.7706
+  },
+  {
+    "country": "All",
+    "region": "Global",
+    "category": "GRAPHICS_AND_DESIGN",
+    "product_set": "monthly",
+    "price_bucket": "Tier 3 (50-75%)",
+    "renewal1_to_renewal2_rate": 0.4633,
+    "renewal2_to_renewal3_rate": 0.7655
+  },
+  {
+    "country": "All",
+    "region": "Global",
+    "category": "GRAPHICS_AND_DESIGN",
+    "product_set": "monthly",
+    "price_bucket": "Tier 4 (highest 25%)",
+    "renewal1_to_renewal2_rate": 0.4068,
+    "renewal2_to_renewal3_rate": 0.7621
+  },
+  {
+    "country": "All",
+    "region": "Global",
+    "category": "GRAPHICS_AND_DESIGN",
+    "product_set": "weekly",
+    "price_bucket": "Tier 1 (lowest 25%)",
+    "renewal1_to_renewal2_rate": 0.3866,
+    "renewal2_to_renewal3_rate": 0.7893
+  },
+  {
+    "country": "All",
+    "region": "Global",
+    "category": "GRAPHICS_AND_DESIGN",
+    "product_set": "weekly",
+    "price_bucket": "Tier 2 (25-50%)",
+    "renewal1_to_renewal2_rate": 0.4131,
+    "renewal2_to_renewal3_rate": 0.7812
+  },
+  {
+    "country": "All",
+    "region": "Global",
+    "category": "GRAPHICS_AND_DESIGN",
+    "product_set": "weekly",
+    "price_bucket": "Tier 3 (50-75%)",
+    "renewal1_to_renewal2_rate": 0.4118,
+    "renewal2_to_renewal3_rate": 0.7792
+  },
+  {
+    "country": "All",
+    "region": "Global",
+    "category": "GRAPHICS_AND_DESIGN",
+    "product_set": "weekly",
+    "price_bucket": "Tier 4 (highest 25%)",
+    "renewal1_to_renewal2_rate": 0.4224,
+    "renewal2_to_renewal3_rate": 0.797
+  },
+  {
+    "country": "All",
+    "region": "Global",
+    "category": "HEALTH_AND_FITNESS",
+    "product_set": "monthly",
+    "price_bucket": "Tier 1 (lowest 25%)",
+    "renewal1_to_renewal2_rate": 0.5296,
+    "renewal2_to_renewal3_rate": 0.7158
+  },
+  {
+    "country": "All",
+    "region": "Global",
+    "category": "HEALTH_AND_FITNESS",
+    "product_set": "monthly",
+    "price_bucket": "Tier 2 (25-50%)",
+    "renewal1_to_renewal2_rate": 0.4954,
+    "renewal2_to_renewal3_rate": 0.7038
+  },
+  {
+    "country": "All",
+    "region": "Global",
+    "category": "HEALTH_AND_FITNESS",
+    "product_set": "monthly",
+    "price_bucket": "Tier 3 (50-75%)",
+    "renewal1_to_renewal2_rate": 0.5054,
+    "renewal2_to_renewal3_rate": 0.7312
+  },
+  {
+    "country": "All",
+    "region": "Global",
+    "category": "HEALTH_AND_FITNESS",
+    "product_set": "monthly",
+    "price_bucket": "Tier 4 (highest 25%)",
+    "renewal1_to_renewal2_rate": 0.519,
+    "renewal2_to_renewal3_rate": 0.7244
+  },
+  {
+    "country": "All",
+    "region": "Global",
+    "category": "HEALTH_AND_FITNESS",
+    "product_set": "weekly",
+    "price_bucket": "Tier 1 (lowest 25%)",
+    "renewal1_to_renewal2_rate": 0.6274,
+    "renewal2_to_renewal3_rate": 0.8177
+  },
+  {
+    "country": "All",
+    "region": "Global",
+    "category": "HEALTH_AND_FITNESS",
+    "product_set": "weekly",
+    "price_bucket": "Tier 2 (25-50%)",
+    "renewal1_to_renewal2_rate": 0.5988,
+    "renewal2_to_renewal3_rate": 0.8017
+  },
+  {
+    "country": "All",
+    "region": "Global",
+    "category": "HEALTH_AND_FITNESS",
+    "product_set": "weekly",
+    "price_bucket": "Tier 3 (50-75%)",
+    "renewal1_to_renewal2_rate": 0.5717,
+    "renewal2_to_renewal3_rate": 0.7913
+  },
+  {
+    "country": "All",
+    "region": "Global",
+    "category": "HEALTH_AND_FITNESS",
+    "product_set": "weekly",
+    "price_bucket": "Tier 4 (highest 25%)",
+    "renewal1_to_renewal2_rate": 0.5613,
+    "renewal2_to_renewal3_rate": 0.8115
+  },
+  {
+    "country": "All",
+    "region": "Global",
+    "category": "LIFESTYLE",
+    "product_set": "monthly",
+    "price_bucket": "Tier 1 (lowest 25%)",
+    "renewal1_to_renewal2_rate": 0.5504,
+    "renewal2_to_renewal3_rate": 0.8409
+  },
+  {
+    "country": "All",
+    "region": "Global",
+    "category": "LIFESTYLE",
+    "product_set": "monthly",
+    "price_bucket": "Tier 2 (25-50%)",
+    "renewal1_to_renewal2_rate": 0.501,
+    "renewal2_to_renewal3_rate": 0.8168
+  },
+  {
+    "country": "All",
+    "region": "Global",
+    "category": "LIFESTYLE",
+    "product_set": "monthly",
+    "price_bucket": "Tier 3 (50-75%)",
+    "renewal1_to_renewal2_rate": 0.4543,
+    "renewal2_to_renewal3_rate": 0.7817
+  },
+  {
+    "country": "All",
+    "region": "Global",
+    "category": "LIFESTYLE",
+    "product_set": "monthly",
+    "price_bucket": "Tier 4 (highest 25%)",
+    "renewal1_to_renewal2_rate": 0.4039,
+    "renewal2_to_renewal3_rate": 0.7222
+  },
+  {
+    "country": "All",
+    "region": "Global",
+    "category": "LIFESTYLE",
+    "product_set": "weekly",
+    "price_bucket": "Tier 1 (lowest 25%)",
+    "renewal1_to_renewal2_rate": 0.4108,
+    "renewal2_to_renewal3_rate": 0.8061
+  },
+  {
+    "country": "All",
+    "region": "Global",
+    "category": "LIFESTYLE",
+    "product_set": "weekly",
+    "price_bucket": "Tier 2 (25-50%)",
+    "renewal1_to_renewal2_rate": 0.4604,
+    "renewal2_to_renewal3_rate": 0.8099
+  },
+  {
+    "country": "All",
+    "region": "Global",
+    "category": "LIFESTYLE",
+    "product_set": "weekly",
+    "price_bucket": "Tier 3 (50-75%)",
+    "renewal1_to_renewal2_rate": 0.4903,
+    "renewal2_to_renewal3_rate": 0.7844
+  },
+  {
+    "country": "All",
+    "region": "Global",
+    "category": "LIFESTYLE",
+    "product_set": "weekly",
+    "price_bucket": "Tier 4 (highest 25%)",
+    "renewal1_to_renewal2_rate": 0.4822,
+    "renewal2_to_renewal3_rate": 0.8148
+  },
+  {
+    "country": "All",
+    "region": "Global",
+    "category": "PHOTO_AND_VIDEO",
+    "product_set": "monthly",
+    "price_bucket": "Tier 1 (lowest 25%)",
+    "renewal1_to_renewal2_rate": 0.4531,
+    "renewal2_to_renewal3_rate": 0.7561
+  },
+  {
+    "country": "All",
+    "region": "Global",
+    "category": "PHOTO_AND_VIDEO",
+    "product_set": "monthly",
+    "price_bucket": "Tier 2 (25-50%)",
+    "renewal1_to_renewal2_rate": 0.426,
+    "renewal2_to_renewal3_rate": 0.756
+  },
+  {
+    "country": "All",
+    "region": "Global",
+    "category": "PHOTO_AND_VIDEO",
+    "product_set": "monthly",
+    "price_bucket": "Tier 3 (50-75%)",
+    "renewal1_to_renewal2_rate": 0.4494,
+    "renewal2_to_renewal3_rate": 0.7215
+  },
+  {
+    "country": "All",
+    "region": "Global",
+    "category": "PHOTO_AND_VIDEO",
+    "product_set": "monthly",
+    "price_bucket": "Tier 4 (highest 25%)",
+    "renewal1_to_renewal2_rate": 0.3845,
+    "renewal2_to_renewal3_rate": 0.6846
+  },
+  {
+    "country": "All",
+    "region": "Global",
+    "category": "PHOTO_AND_VIDEO",
+    "product_set": "weekly",
+    "price_bucket": "Tier 1 (lowest 25%)",
+    "renewal1_to_renewal2_rate": 0.3695,
+    "renewal2_to_renewal3_rate": 0.7836
+  },
+  {
+    "country": "All",
+    "region": "Global",
+    "category": "PHOTO_AND_VIDEO",
+    "product_set": "weekly",
+    "price_bucket": "Tier 2 (25-50%)",
+    "renewal1_to_renewal2_rate": 0.3664,
+    "renewal2_to_renewal3_rate": 0.7756
+  },
+  {
+    "country": "All",
+    "region": "Global",
+    "category": "PHOTO_AND_VIDEO",
+    "product_set": "weekly",
+    "price_bucket": "Tier 3 (50-75%)",
+    "renewal1_to_renewal2_rate": 0.3369,
+    "renewal2_to_renewal3_rate": 0.7706
+  },
+  {
+    "country": "All",
+    "region": "Global",
+    "category": "PHOTO_AND_VIDEO",
+    "product_set": "weekly",
+    "price_bucket": "Tier 4 (highest 25%)",
+    "renewal1_to_renewal2_rate": 0.3803,
+    "renewal2_to_renewal3_rate": 0.7788
+  },
+  {
+    "country": "All",
+    "region": "Global",
+    "category": "PRODUCTIVITY",
+    "product_set": "monthly",
+    "price_bucket": "Tier 1 (lowest 25%)",
+    "renewal1_to_renewal2_rate": 0.4832,
+    "renewal2_to_renewal3_rate": 0.7232
+  },
+  {
+    "country": "All",
+    "region": "Global",
+    "category": "PRODUCTIVITY",
+    "product_set": "monthly",
+    "price_bucket": "Tier 2 (25-50%)",
+    "renewal1_to_renewal2_rate": 0.4672,
+    "renewal2_to_renewal3_rate": 0.7458
+  },
+  {
+    "country": "All",
+    "region": "Global",
+    "category": "PRODUCTIVITY",
+    "product_set": "monthly",
+    "price_bucket": "Tier 3 (50-75%)",
+    "renewal1_to_renewal2_rate": 0.4679,
+    "renewal2_to_renewal3_rate": 0.7327
+  },
+  {
+    "country": "All",
+    "region": "Global",
+    "category": "PRODUCTIVITY",
+    "product_set": "monthly",
+    "price_bucket": "Tier 4 (highest 25%)",
+    "renewal1_to_renewal2_rate": 0.5419,
+    "renewal2_to_renewal3_rate": 0.7996
+  },
+  {
+    "country": "All",
+    "region": "Global",
+    "category": "PRODUCTIVITY",
+    "product_set": "weekly",
+    "price_bucket": "Tier 1 (lowest 25%)",
+    "renewal1_to_renewal2_rate": 0.3274,
+    "renewal2_to_renewal3_rate": 0.7924
+  },
+  {
+    "country": "All",
+    "region": "Global",
+    "category": "PRODUCTIVITY",
+    "product_set": "weekly",
+    "price_bucket": "Tier 2 (25-50%)",
+    "renewal1_to_renewal2_rate": 0.5559,
+    "renewal2_to_renewal3_rate": 0.826
+  },
+  {
+    "country": "All",
+    "region": "Global",
+    "category": "PRODUCTIVITY",
+    "product_set": "weekly",
+    "price_bucket": "Tier 3 (50-75%)",
+    "renewal1_to_renewal2_rate": 0.5952,
+    "renewal2_to_renewal3_rate": 0.8222
+  },
+  {
+    "country": "All",
+    "region": "Global",
+    "category": "PRODUCTIVITY",
+    "product_set": "weekly",
+    "price_bucket": "Tier 4 (highest 25%)",
+    "renewal1_to_renewal2_rate": 0.5691,
+    "renewal2_to_renewal3_rate": 0.8318
+  },
+  {
+    "country": "All",
+    "region": "Global",
+    "category": "UTILITIES",
+    "product_set": "monthly",
+    "price_bucket": "Tier 1 (lowest 25%)",
+    "renewal1_to_renewal2_rate": 0.5017,
+    "renewal2_to_renewal3_rate": 0.7764
+  },
+  {
+    "country": "All",
+    "region": "Global",
+    "category": "UTILITIES",
+    "product_set": "monthly",
+    "price_bucket": "Tier 2 (25-50%)",
+    "renewal1_to_renewal2_rate": 0.4753,
+    "renewal2_to_renewal3_rate": 0.7481
+  },
+  {
+    "country": "All",
+    "region": "Global",
+    "category": "UTILITIES",
+    "product_set": "monthly",
+    "price_bucket": "Tier 3 (50-75%)",
+    "renewal1_to_renewal2_rate": 0.4936,
+    "renewal2_to_renewal3_rate": 0.7121
+  },
+  {
+    "country": "All",
+    "region": "Global",
+    "category": "UTILITIES",
+    "product_set": "monthly",
+    "price_bucket": "Tier 4 (highest 25%)",
+    "renewal1_to_renewal2_rate": 0.4201,
+    "renewal2_to_renewal3_rate": 0.7226
+  },
+  {
+    "country": "All",
+    "region": "Global",
+    "category": "UTILITIES",
+    "product_set": "weekly",
+    "price_bucket": "Tier 1 (lowest 25%)",
+    "renewal1_to_renewal2_rate": 0.5915,
+    "renewal2_to_renewal3_rate": 0.8272
+  },
+  {
+    "country": "All",
+    "region": "Global",
+    "category": "UTILITIES",
+    "product_set": "weekly",
+    "price_bucket": "Tier 2 (25-50%)",
+    "renewal1_to_renewal2_rate": 0.5711,
+    "renewal2_to_renewal3_rate": 0.8136
+  },
+  {
+    "country": "All",
+    "region": "Global",
+    "category": "UTILITIES",
+    "product_set": "weekly",
+    "price_bucket": "Tier 3 (50-75%)",
+    "renewal1_to_renewal2_rate": 0.6203,
+    "renewal2_to_renewal3_rate": 0.8321
+  },
+  {
+    "country": "All",
+    "region": "Global",
+    "category": "UTILITIES",
+    "product_set": "weekly",
+    "price_bucket": "Tier 4 (highest 25%)",
+    "renewal1_to_renewal2_rate": 0.596,
+    "renewal2_to_renewal3_rate": 0.8318
+  },
+  {
+    "country": "All",
+    "region": "APAC",
+    "category": "All",
+    "product_set": "monthly",
+    "price_bucket": "Tier 1 (lowest 25%)",
+    "renewal1_to_renewal2_rate": 0.4868,
+    "renewal2_to_renewal3_rate": 0.7231
+  },
+  {
+    "country": "All",
+    "region": "APAC",
+    "category": "All",
+    "product_set": "monthly",
+    "price_bucket": "Tier 2 (25-50%)",
+    "renewal1_to_renewal2_rate": 0.4699,
+    "renewal2_to_renewal3_rate": 0.7344
+  },
+  {
+    "country": "All",
+    "region": "APAC",
+    "category": "All",
+    "product_set": "monthly",
+    "price_bucket": "Tier 3 (50-75%)",
+    "renewal1_to_renewal2_rate": 0.4914,
+    "renewal2_to_renewal3_rate": 0.7491
+  },
+  {
+    "country": "All",
+    "region": "APAC",
+    "category": "All",
+    "product_set": "monthly",
+    "price_bucket": "Tier 4 (highest 25%)",
+    "renewal1_to_renewal2_rate": 0.4291,
+    "renewal2_to_renewal3_rate": 0.7172
+  },
+  {
+    "country": "All",
+    "region": "APAC",
+    "category": "All",
+    "product_set": "weekly",
+    "price_bucket": "Tier 1 (lowest 25%)",
+    "renewal1_to_renewal2_rate": 0.4182,
+    "renewal2_to_renewal3_rate": 0.7916
+  },
+  {
+    "country": "All",
+    "region": "APAC",
+    "category": "All",
+    "product_set": "weekly",
+    "price_bucket": "Tier 2 (25-50%)",
+    "renewal1_to_renewal2_rate": 0.4711,
+    "renewal2_to_renewal3_rate": 0.7882
+  },
+  {
+    "country": "All",
+    "region": "APAC",
+    "category": "All",
+    "product_set": "weekly",
+    "price_bucket": "Tier 3 (50-75%)",
+    "renewal1_to_renewal2_rate": 0.4767,
+    "renewal2_to_renewal3_rate": 0.7907
+  },
+  {
+    "country": "All",
+    "region": "APAC",
+    "category": "All",
+    "product_set": "weekly",
+    "price_bucket": "Tier 4 (highest 25%)",
+    "renewal1_to_renewal2_rate": 0.5021,
+    "renewal2_to_renewal3_rate": 0.8034
+  },
+  {
+    "country": "All",
+    "region": "APAC",
+    "category": "EDUCATION",
+    "product_set": "monthly",
+    "price_bucket": "Tier 1 (lowest 25%)",
+    "renewal1_to_renewal2_rate": 0.4654,
+    "renewal2_to_renewal3_rate": 0.6065
+  },
+  {
+    "country": "All",
+    "region": "APAC",
+    "category": "EDUCATION",
+    "product_set": "monthly",
+    "price_bucket": "Tier 2 (25-50%)",
+    "renewal1_to_renewal2_rate": 0.4089,
+    "renewal2_to_renewal3_rate": 0.5389
+  },
+  {
+    "country": "All",
+    "region": "APAC",
+    "category": "EDUCATION",
+    "product_set": "monthly",
+    "price_bucket": "Tier 3 (50-75%)",
+    "renewal1_to_renewal2_rate": 0.3517,
+    "renewal2_to_renewal3_rate": 0.5325
+  },
+  {
+    "country": "All",
+    "region": "APAC",
+    "category": "EDUCATION",
+    "product_set": "monthly",
+    "price_bucket": "Tier 4 (highest 25%)",
+    "renewal1_to_renewal2_rate": 0.489,
+    "renewal2_to_renewal3_rate": 0.6582
+  },
+  {
+    "country": "All",
+    "region": "APAC",
+    "category": "EDUCATION",
+    "product_set": "weekly",
+    "price_bucket": "Tier 1 (lowest 25%)",
+    "renewal1_to_renewal2_rate": 0.7767,
+    "renewal2_to_renewal3_rate": 0.8677
+  },
+  {
+    "country": "All",
+    "region": "APAC",
+    "category": "EDUCATION",
+    "product_set": "weekly",
+    "price_bucket": "Tier 2 (25-50%)",
+    "renewal1_to_renewal2_rate": 0.6201,
+    "renewal2_to_renewal3_rate": 0.8003
+  },
+  {
+    "country": "All",
+    "region": "APAC",
+    "category": "EDUCATION",
+    "product_set": "weekly",
+    "price_bucket": "Tier 3 (50-75%)",
+    "renewal1_to_renewal2_rate": 0.5978,
+    "renewal2_to_renewal3_rate": 0.7881
+  },
+  {
+    "country": "All",
+    "region": "APAC",
+    "category": "EDUCATION",
+    "product_set": "weekly",
+    "price_bucket": "Tier 4 (highest 25%)",
+    "renewal1_to_renewal2_rate": 0.5826,
+    "renewal2_to_renewal3_rate": 0.7932
+  },
+  {
+    "country": "All",
+    "region": "APAC",
+    "category": "ENTERTAINMENT",
+    "product_set": "monthly",
+    "price_bucket": "Tier 1 (lowest 25%)",
+    "renewal1_to_renewal2_rate": 0.5846,
+    "renewal2_to_renewal3_rate": 0.8064
+  },
+  {
+    "country": "All",
+    "region": "APAC",
+    "category": "ENTERTAINMENT",
+    "product_set": "monthly",
+    "price_bucket": "Tier 2 (25-50%)",
+    "renewal1_to_renewal2_rate": 0.4464,
+    "renewal2_to_renewal3_rate": 0.7329
+  },
+  {
+    "country": "All",
+    "region": "APAC",
+    "category": "ENTERTAINMENT",
+    "product_set": "monthly",
+    "price_bucket": "Tier 3 (50-75%)",
+    "renewal1_to_renewal2_rate": 0.2922,
+    "renewal2_to_renewal3_rate": 0.7223
+  },
+  {
+    "country": "All",
+    "region": "APAC",
+    "category": "ENTERTAINMENT",
+    "product_set": "monthly",
+    "price_bucket": "Tier 4 (highest 25%)",
+    "renewal1_to_renewal2_rate": 0.18,
+    "renewal2_to_renewal3_rate": 0.7107
+  },
+  {
+    "country": "All",
+    "region": "APAC",
+    "category": "ENTERTAINMENT",
+    "product_set": "weekly",
+    "price_bucket": "Tier 1 (lowest 25%)",
+    "renewal1_to_renewal2_rate": 0.4167,
+    "renewal2_to_renewal3_rate": 0.792
+  },
+  {
+    "country": "All",
+    "region": "APAC",
+    "category": "ENTERTAINMENT",
+    "product_set": "weekly",
+    "price_bucket": "Tier 2 (25-50%)",
+    "renewal1_to_renewal2_rate": 0.4418,
+    "renewal2_to_renewal3_rate": 0.7709
+  },
+  {
+    "country": "All",
+    "region": "APAC",
+    "category": "ENTERTAINMENT",
+    "product_set": "weekly",
+    "price_bucket": "Tier 3 (50-75%)",
+    "renewal1_to_renewal2_rate": 0.4357,
+    "renewal2_to_renewal3_rate": 0.7571
+  },
+  {
+    "country": "All",
+    "region": "APAC",
+    "category": "ENTERTAINMENT",
+    "product_set": "weekly",
+    "price_bucket": "Tier 4 (highest 25%)",
+    "renewal1_to_renewal2_rate": 0.4098,
+    "renewal2_to_renewal3_rate": 0.7079
+  },
+  {
+    "country": "All",
+    "region": "APAC",
+    "category": "GRAPHICS_AND_DESIGN",
+    "product_set": "monthly",
+    "price_bucket": "Tier 1 (lowest 25%)",
+    "renewal1_to_renewal2_rate": 0.5434,
+    "renewal2_to_renewal3_rate": 0.7499
+  },
+  {
+    "country": "All",
+    "region": "APAC",
+    "category": "GRAPHICS_AND_DESIGN",
+    "product_set": "monthly",
+    "price_bucket": "Tier 2 (25-50%)",
+    "renewal1_to_renewal2_rate": 0.6176,
+    "renewal2_to_renewal3_rate": 0.7877
+  },
+  {
+    "country": "All",
+    "region": "APAC",
+    "category": "GRAPHICS_AND_DESIGN",
+    "product_set": "monthly",
+    "price_bucket": "Tier 3 (50-75%)",
+    "renewal1_to_renewal2_rate": 0.448,
+    "renewal2_to_renewal3_rate": 0.7764
+  },
+  {
+    "country": "All",
+    "region": "APAC",
+    "category": "GRAPHICS_AND_DESIGN",
+    "product_set": "monthly",
+    "price_bucket": "Tier 4 (highest 25%)",
+    "renewal1_to_renewal2_rate": 0.3823,
+    "renewal2_to_renewal3_rate": 0.7816
+  },
+  {
+    "country": "All",
+    "region": "APAC",
+    "category": "GRAPHICS_AND_DESIGN",
+    "product_set": "weekly",
+    "price_bucket": "Tier 1 (lowest 25%)",
+    "renewal1_to_renewal2_rate": 0.4131,
+    "renewal2_to_renewal3_rate": 0.7832
+  },
+  {
+    "country": "All",
+    "region": "APAC",
+    "category": "GRAPHICS_AND_DESIGN",
+    "product_set": "weekly",
+    "price_bucket": "Tier 2 (25-50%)",
+    "renewal1_to_renewal2_rate": 0.3376,
+    "renewal2_to_renewal3_rate": 0.7533
+  },
+  {
+    "country": "All",
+    "region": "APAC",
+    "category": "GRAPHICS_AND_DESIGN",
+    "product_set": "weekly",
+    "price_bucket": "Tier 3 (50-75%)",
+    "renewal1_to_renewal2_rate": 0.4411,
+    "renewal2_to_renewal3_rate": 0.7756
+  },
+  {
+    "country": "All",
+    "region": "APAC",
+    "category": "GRAPHICS_AND_DESIGN",
+    "product_set": "weekly",
+    "price_bucket": "Tier 4 (highest 25%)",
+    "renewal1_to_renewal2_rate": 0.3945,
+    "renewal2_to_renewal3_rate": 0.7894
+  },
+  {
+    "country": "All",
+    "region": "APAC",
+    "category": "HEALTH_AND_FITNESS",
+    "product_set": "monthly",
+    "price_bucket": "Tier 1 (lowest 25%)",
+    "renewal1_to_renewal2_rate": 0.5242,
+    "renewal2_to_renewal3_rate": 0.7379
+  },
+  {
+    "country": "All",
+    "region": "APAC",
+    "category": "HEALTH_AND_FITNESS",
+    "product_set": "monthly",
+    "price_bucket": "Tier 2 (25-50%)",
+    "renewal1_to_renewal2_rate": 0.5479,
+    "renewal2_to_renewal3_rate": 0.7362
+  },
+  {
+    "country": "All",
+    "region": "APAC",
+    "category": "HEALTH_AND_FITNESS",
+    "product_set": "monthly",
+    "price_bucket": "Tier 3 (50-75%)",
+    "renewal1_to_renewal2_rate": 0.5697,
+    "renewal2_to_renewal3_rate": 0.7368
+  },
+  {
+    "country": "All",
+    "region": "APAC",
+    "category": "HEALTH_AND_FITNESS",
+    "product_set": "monthly",
+    "price_bucket": "Tier 4 (highest 25%)",
+    "renewal1_to_renewal2_rate": 0.4615,
+    "renewal2_to_renewal3_rate": 0.6904
+  },
+  {
+    "country": "All",
+    "region": "APAC",
+    "category": "HEALTH_AND_FITNESS",
+    "product_set": "weekly",
+    "price_bucket": "Tier 1 (lowest 25%)",
+    "renewal1_to_renewal2_rate": 0.5329,
+    "renewal2_to_renewal3_rate": 0.7872
+  },
+  {
+    "country": "All",
+    "region": "APAC",
+    "category": "HEALTH_AND_FITNESS",
+    "product_set": "weekly",
+    "price_bucket": "Tier 2 (25-50%)",
+    "renewal1_to_renewal2_rate": 0.5286,
+    "renewal2_to_renewal3_rate": 0.7749
+  },
+  {
+    "country": "All",
+    "region": "APAC",
+    "category": "HEALTH_AND_FITNESS",
+    "product_set": "weekly",
+    "price_bucket": "Tier 3 (50-75%)",
+    "renewal1_to_renewal2_rate": 0.5309,
+    "renewal2_to_renewal3_rate": 0.7744
+  },
+  {
+    "country": "All",
+    "region": "APAC",
+    "category": "HEALTH_AND_FITNESS",
+    "product_set": "weekly",
+    "price_bucket": "Tier 4 (highest 25%)",
+    "renewal1_to_renewal2_rate": 0.542,
+    "renewal2_to_renewal3_rate": 0.792
+  },
+  {
+    "country": "All",
+    "region": "APAC",
+    "category": "LIFESTYLE",
+    "product_set": "monthly",
+    "price_bucket": "Tier 1 (lowest 25%)",
+    "renewal1_to_renewal2_rate": 0.5243,
+    "renewal2_to_renewal3_rate": 0.6984
+  },
+  {
+    "country": "All",
+    "region": "APAC",
+    "category": "LIFESTYLE",
+    "product_set": "monthly",
+    "price_bucket": "Tier 2 (25-50%)",
+    "renewal1_to_renewal2_rate": 0.4509,
+    "renewal2_to_renewal3_rate": 0.7593
+  },
+  {
+    "country": "All",
+    "region": "APAC",
+    "category": "LIFESTYLE",
+    "product_set": "monthly",
+    "price_bucket": "Tier 3 (50-75%)",
+    "renewal1_to_renewal2_rate": 0.5933,
+    "renewal2_to_renewal3_rate": 0.8542
+  },
+  {
+    "country": "All",
+    "region": "APAC",
+    "category": "LIFESTYLE",
+    "product_set": "monthly",
+    "price_bucket": "Tier 4 (highest 25%)",
+    "renewal1_to_renewal2_rate": 0.4299,
+    "renewal2_to_renewal3_rate": 0.7447
+  },
+  {
+    "country": "All",
+    "region": "APAC",
+    "category": "LIFESTYLE",
+    "product_set": "weekly",
+    "price_bucket": "Tier 1 (lowest 25%)",
+    "renewal1_to_renewal2_rate": 0.3897,
+    "renewal2_to_renewal3_rate": 0.7693
+  },
+  {
+    "country": "All",
+    "region": "APAC",
+    "category": "LIFESTYLE",
+    "product_set": "weekly",
+    "price_bucket": "Tier 2 (25-50%)",
+    "renewal1_to_renewal2_rate": 0.3683,
+    "renewal2_to_renewal3_rate": 0.7807
+  },
+  {
+    "country": "All",
+    "region": "APAC",
+    "category": "LIFESTYLE",
+    "product_set": "weekly",
+    "price_bucket": "Tier 3 (50-75%)",
+    "renewal1_to_renewal2_rate": 0.4237,
+    "renewal2_to_renewal3_rate": 0.7809
+  },
+  {
+    "country": "All",
+    "region": "APAC",
+    "category": "LIFESTYLE",
+    "product_set": "weekly",
+    "price_bucket": "Tier 4 (highest 25%)",
+    "renewal1_to_renewal2_rate": 0.4449,
+    "renewal2_to_renewal3_rate": 0.7751
+  },
+  {
+    "country": "All",
+    "region": "APAC",
+    "category": "PHOTO_AND_VIDEO",
+    "product_set": "monthly",
+    "price_bucket": "Tier 1 (lowest 25%)",
+    "renewal1_to_renewal2_rate": 0.3767,
+    "renewal2_to_renewal3_rate": 0.6698
+  },
+  {
+    "country": "All",
+    "region": "APAC",
+    "category": "PHOTO_AND_VIDEO",
+    "product_set": "monthly",
+    "price_bucket": "Tier 2 (25-50%)",
+    "renewal1_to_renewal2_rate": 0.4333,
+    "renewal2_to_renewal3_rate": 0.739
+  },
+  {
+    "country": "All",
+    "region": "APAC",
+    "category": "PHOTO_AND_VIDEO",
+    "product_set": "monthly",
+    "price_bucket": "Tier 3 (50-75%)",
+    "renewal1_to_renewal2_rate": 0.4276,
+    "renewal2_to_renewal3_rate": 0.7306
+  },
+  {
+    "country": "All",
+    "region": "APAC",
+    "category": "PHOTO_AND_VIDEO",
+    "product_set": "monthly",
+    "price_bucket": "Tier 4 (highest 25%)",
+    "renewal1_to_renewal2_rate": 0.4317,
+    "renewal2_to_renewal3_rate": 0.6833
+  },
+  {
+    "country": "All",
+    "region": "APAC",
+    "category": "PHOTO_AND_VIDEO",
+    "product_set": "weekly",
+    "price_bucket": "Tier 1 (lowest 25%)",
+    "renewal1_to_renewal2_rate": 0.399,
+    "renewal2_to_renewal3_rate": 0.7749
+  },
+  {
+    "country": "All",
+    "region": "APAC",
+    "category": "PHOTO_AND_VIDEO",
+    "product_set": "weekly",
+    "price_bucket": "Tier 2 (25-50%)",
+    "renewal1_to_renewal2_rate": 0.3904,
+    "renewal2_to_renewal3_rate": 0.7743
+  },
+  {
+    "country": "All",
+    "region": "APAC",
+    "category": "PHOTO_AND_VIDEO",
+    "product_set": "weekly",
+    "price_bucket": "Tier 3 (50-75%)",
+    "renewal1_to_renewal2_rate": 0.3185,
+    "renewal2_to_renewal3_rate": 0.74
+  },
+  {
+    "country": "All",
+    "region": "APAC",
+    "category": "PHOTO_AND_VIDEO",
+    "product_set": "weekly",
+    "price_bucket": "Tier 4 (highest 25%)",
+    "renewal1_to_renewal2_rate": 0.4086,
+    "renewal2_to_renewal3_rate": 0.8098
+  },
+  {
+    "country": "All",
+    "region": "APAC",
+    "category": "PRODUCTIVITY",
+    "product_set": "monthly",
+    "price_bucket": "Tier 1 (lowest 25%)",
+    "renewal1_to_renewal2_rate": 0.4826,
+    "renewal2_to_renewal3_rate": 0.6876
+  },
+  {
+    "country": "All",
+    "region": "APAC",
+    "category": "PRODUCTIVITY",
+    "product_set": "monthly",
+    "price_bucket": "Tier 2 (25-50%)",
+    "renewal1_to_renewal2_rate": 0.466,
+    "renewal2_to_renewal3_rate": 0.7477
+  },
+  {
+    "country": "All",
+    "region": "APAC",
+    "category": "PRODUCTIVITY",
+    "product_set": "monthly",
+    "price_bucket": "Tier 3 (50-75%)",
+    "renewal1_to_renewal2_rate": 0.449,
+    "renewal2_to_renewal3_rate": 0.7181
+  },
+  {
+    "country": "All",
+    "region": "APAC",
+    "category": "PRODUCTIVITY",
+    "product_set": "monthly",
+    "price_bucket": "Tier 4 (highest 25%)",
+    "renewal1_to_renewal2_rate": 0.4436,
+    "renewal2_to_renewal3_rate": 0.7327
+  },
+  {
+    "country": "All",
+    "region": "APAC",
+    "category": "PRODUCTIVITY",
+    "product_set": "weekly",
+    "price_bucket": "Tier 1 (lowest 25%)",
+    "renewal1_to_renewal2_rate": 0.3023,
+    "renewal2_to_renewal3_rate": 0.7793
+  },
+  {
+    "country": "All",
+    "region": "APAC",
+    "category": "PRODUCTIVITY",
+    "product_set": "weekly",
+    "price_bucket": "Tier 2 (25-50%)",
+    "renewal1_to_renewal2_rate": 0.5373,
+    "renewal2_to_renewal3_rate": 0.8264
+  },
+  {
+    "country": "All",
+    "region": "APAC",
+    "category": "PRODUCTIVITY",
+    "product_set": "weekly",
+    "price_bucket": "Tier 3 (50-75%)",
+    "renewal1_to_renewal2_rate": 0.5796,
+    "renewal2_to_renewal3_rate": 0.82
+  },
+  {
+    "country": "All",
+    "region": "APAC",
+    "category": "PRODUCTIVITY",
+    "product_set": "weekly",
+    "price_bucket": "Tier 4 (highest 25%)",
+    "renewal1_to_renewal2_rate": 0.5822,
+    "renewal2_to_renewal3_rate": 0.8234
+  },
+  {
+    "country": "All",
+    "region": "APAC",
+    "category": "UTILITIES",
+    "product_set": "monthly",
+    "price_bucket": "Tier 1 (lowest 25%)",
+    "renewal1_to_renewal2_rate": 0.4522,
+    "renewal2_to_renewal3_rate": 0.7343
+  },
+  {
+    "country": "All",
+    "region": "APAC",
+    "category": "UTILITIES",
+    "product_set": "monthly",
+    "price_bucket": "Tier 2 (25-50%)",
+    "renewal1_to_renewal2_rate": 0.415,
+    "renewal2_to_renewal3_rate": 0.7198
+  },
+  {
+    "country": "All",
+    "region": "APAC",
+    "category": "UTILITIES",
+    "product_set": "monthly",
+    "price_bucket": "Tier 3 (50-75%)",
+    "renewal1_to_renewal2_rate": 0.4847,
+    "renewal2_to_renewal3_rate": 0.7203
+  },
+  {
+    "country": "All",
+    "region": "APAC",
+    "category": "UTILITIES",
+    "product_set": "monthly",
+    "price_bucket": "Tier 4 (highest 25%)",
+    "renewal1_to_renewal2_rate": 0.4545,
+    "renewal2_to_renewal3_rate": 0.7174
+  },
+  {
+    "country": "All",
+    "region": "APAC",
+    "category": "UTILITIES",
+    "product_set": "weekly",
+    "price_bucket": "Tier 1 (lowest 25%)",
+    "renewal1_to_renewal2_rate": 0.4782,
+    "renewal2_to_renewal3_rate": 0.8013
+  },
+  {
+    "country": "All",
+    "region": "APAC",
+    "category": "UTILITIES",
+    "product_set": "weekly",
+    "price_bucket": "Tier 2 (25-50%)",
+    "renewal1_to_renewal2_rate": 0.5421,
+    "renewal2_to_renewal3_rate": 0.782
+  },
+  {
+    "country": "All",
+    "region": "APAC",
+    "category": "UTILITIES",
+    "product_set": "weekly",
+    "price_bucket": "Tier 3 (50-75%)",
+    "renewal1_to_renewal2_rate": 0.5251,
+    "renewal2_to_renewal3_rate": 0.7976
+  },
+  {
+    "country": "All",
+    "region": "APAC",
+    "category": "UTILITIES",
+    "product_set": "weekly",
+    "price_bucket": "Tier 4 (highest 25%)",
+    "renewal1_to_renewal2_rate": 0.5775,
+    "renewal2_to_renewal3_rate": 0.8198
+  },
+  {
+    "country": "All",
+    "region": "Europe",
+    "category": "All",
+    "product_set": "monthly",
+    "price_bucket": "Tier 1 (lowest 25%)",
+    "renewal1_to_renewal2_rate": 0.4827,
+    "renewal2_to_renewal3_rate": 0.7702
+  },
+  {
+    "country": "All",
+    "region": "Europe",
+    "category": "All",
+    "product_set": "monthly",
+    "price_bucket": "Tier 2 (25-50%)",
+    "renewal1_to_renewal2_rate": 0.5082,
+    "renewal2_to_renewal3_rate": 0.7868
+  },
+  {
+    "country": "All",
+    "region": "Europe",
+    "category": "All",
+    "product_set": "monthly",
+    "price_bucket": "Tier 3 (50-75%)",
+    "renewal1_to_renewal2_rate": 0.4482,
+    "renewal2_to_renewal3_rate": 0.7335
+  },
+  {
+    "country": "All",
+    "region": "Europe",
+    "category": "All",
+    "product_set": "monthly",
+    "price_bucket": "Tier 4 (highest 25%)",
+    "renewal1_to_renewal2_rate": 0.4142,
+    "renewal2_to_renewal3_rate": 0.7241
+  },
+  {
+    "country": "All",
+    "region": "Europe",
+    "category": "All",
+    "product_set": "weekly",
+    "price_bucket": "Tier 1 (lowest 25%)",
+    "renewal1_to_renewal2_rate": 0.401,
+    "renewal2_to_renewal3_rate": 0.7988
+  },
+  {
+    "country": "All",
+    "region": "Europe",
+    "category": "All",
+    "product_set": "weekly",
+    "price_bucket": "Tier 2 (25-50%)",
+    "renewal1_to_renewal2_rate": 0.4146,
+    "renewal2_to_renewal3_rate": 0.7955
+  },
+  {
+    "country": "All",
+    "region": "Europe",
+    "category": "All",
+    "product_set": "weekly",
+    "price_bucket": "Tier 3 (50-75%)",
+    "renewal1_to_renewal2_rate": 0.427,
+    "renewal2_to_renewal3_rate": 0.7907
+  },
+  {
+    "country": "All",
+    "region": "Europe",
+    "category": "All",
+    "product_set": "weekly",
+    "price_bucket": "Tier 4 (highest 25%)",
+    "renewal1_to_renewal2_rate": 0.4511,
+    "renewal2_to_renewal3_rate": 0.7997
+  },
+  {
+    "country": "All",
+    "region": "Europe",
+    "category": "EDUCATION",
+    "product_set": "monthly",
+    "price_bucket": "Tier 1 (lowest 25%)",
+    "renewal1_to_renewal2_rate": 0.5926,
+    "renewal2_to_renewal3_rate": 0.7122
+  },
+  {
+    "country": "All",
+    "region": "Europe",
+    "category": "EDUCATION",
+    "product_set": "monthly",
+    "price_bucket": "Tier 2 (25-50%)",
+    "renewal1_to_renewal2_rate": 0.6058,
+    "renewal2_to_renewal3_rate": 0.6516
+  },
+  {
+    "country": "All",
+    "region": "Europe",
+    "category": "EDUCATION",
+    "product_set": "monthly",
+    "price_bucket": "Tier 3 (50-75%)",
+    "renewal1_to_renewal2_rate": 0.589,
+    "renewal2_to_renewal3_rate": 0.7045
+  },
+  {
+    "country": "All",
+    "region": "Europe",
+    "category": "EDUCATION",
+    "product_set": "monthly",
+    "price_bucket": "Tier 4 (highest 25%)",
+    "renewal1_to_renewal2_rate": 0.5045,
+    "renewal2_to_renewal3_rate": 0.6402
+  },
+  {
+    "country": "All",
+    "region": "Europe",
+    "category": "EDUCATION",
+    "product_set": "weekly",
+    "price_bucket": "Tier 1 (lowest 25%)",
+    "renewal1_to_renewal2_rate": 0.7035,
+    "renewal2_to_renewal3_rate": 0.8389
+  },
+  {
+    "country": "All",
+    "region": "Europe",
+    "category": "EDUCATION",
+    "product_set": "weekly",
+    "price_bucket": "Tier 2 (25-50%)",
+    "renewal1_to_renewal2_rate": 0.6572,
+    "renewal2_to_renewal3_rate": 0.8367
+  },
+  {
+    "country": "All",
+    "region": "Europe",
+    "category": "EDUCATION",
+    "product_set": "weekly",
+    "price_bucket": "Tier 3 (50-75%)",
+    "renewal1_to_renewal2_rate": 0.5147,
+    "renewal2_to_renewal3_rate": 0.7913
+  },
+  {
+    "country": "All",
+    "region": "Europe",
+    "category": "EDUCATION",
+    "product_set": "weekly",
+    "price_bucket": "Tier 4 (highest 25%)",
+    "renewal1_to_renewal2_rate": 0.5387,
+    "renewal2_to_renewal3_rate": 0.7864
+  },
+  {
+    "country": "All",
+    "region": "Europe",
+    "category": "ENTERTAINMENT",
+    "product_set": "monthly",
+    "price_bucket": "Tier 1 (lowest 25%)",
+    "renewal1_to_renewal2_rate": 0.488,
+    "renewal2_to_renewal3_rate": 0.7769
+  },
+  {
+    "country": "All",
+    "region": "Europe",
+    "category": "ENTERTAINMENT",
+    "product_set": "monthly",
+    "price_bucket": "Tier 2 (25-50%)",
+    "renewal1_to_renewal2_rate": 0.4309,
+    "renewal2_to_renewal3_rate": 0.7297
+  },
+  {
+    "country": "All",
+    "region": "Europe",
+    "category": "ENTERTAINMENT",
+    "product_set": "monthly",
+    "price_bucket": "Tier 3 (50-75%)",
+    "renewal1_to_renewal2_rate": 0.2111,
+    "renewal2_to_renewal3_rate": 0.6689
+  },
+  {
+    "country": "All",
+    "region": "Europe",
+    "category": "ENTERTAINMENT",
+    "product_set": "monthly",
+    "price_bucket": "Tier 4 (highest 25%)",
+    "renewal1_to_renewal2_rate": 0.1358,
+    "renewal2_to_renewal3_rate": 0.6472
+  },
+  {
+    "country": "All",
+    "region": "Europe",
+    "category": "ENTERTAINMENT",
+    "product_set": "weekly",
+    "price_bucket": "Tier 1 (lowest 25%)",
+    "renewal1_to_renewal2_rate": 0.4185,
+    "renewal2_to_renewal3_rate": 0.7981
+  },
+  {
+    "country": "All",
+    "region": "Europe",
+    "category": "ENTERTAINMENT",
+    "product_set": "weekly",
+    "price_bucket": "Tier 2 (25-50%)",
+    "renewal1_to_renewal2_rate": 0.3776,
+    "renewal2_to_renewal3_rate": 0.7869
+  },
+  {
+    "country": "All",
+    "region": "Europe",
+    "category": "ENTERTAINMENT",
+    "product_set": "weekly",
+    "price_bucket": "Tier 3 (50-75%)",
+    "renewal1_to_renewal2_rate": 0.3852,
+    "renewal2_to_renewal3_rate": 0.7766
+  },
+  {
+    "country": "All",
+    "region": "Europe",
+    "category": "ENTERTAINMENT",
+    "product_set": "weekly",
+    "price_bucket": "Tier 4 (highest 25%)",
+    "renewal1_to_renewal2_rate": 0.4401,
+    "renewal2_to_renewal3_rate": 0.7785
+  },
+  {
+    "country": "All",
+    "region": "Europe",
+    "category": "GRAPHICS_AND_DESIGN",
+    "product_set": "monthly",
+    "price_bucket": "Tier 1 (lowest 25%)",
+    "renewal1_to_renewal2_rate": 0.4895,
+    "renewal2_to_renewal3_rate": 0.767
+  },
+  {
+    "country": "All",
+    "region": "Europe",
+    "category": "GRAPHICS_AND_DESIGN",
+    "product_set": "monthly",
+    "price_bucket": "Tier 2 (25-50%)",
+    "renewal1_to_renewal2_rate": 0.5182,
+    "renewal2_to_renewal3_rate": 0.7846
+  },
+  {
+    "country": "All",
+    "region": "Europe",
+    "category": "GRAPHICS_AND_DESIGN",
+    "product_set": "monthly",
+    "price_bucket": "Tier 3 (50-75%)",
+    "renewal1_to_renewal2_rate": 0.5107,
+    "renewal2_to_renewal3_rate": 0.7943
+  },
+  {
+    "country": "All",
+    "region": "Europe",
+    "category": "GRAPHICS_AND_DESIGN",
+    "product_set": "monthly",
+    "price_bucket": "Tier 4 (highest 25%)",
+    "renewal1_to_renewal2_rate": 0.4009,
+    "renewal2_to_renewal3_rate": 0.7409
+  },
+  {
+    "country": "All",
+    "region": "Europe",
+    "category": "GRAPHICS_AND_DESIGN",
+    "product_set": "weekly",
+    "price_bucket": "Tier 1 (lowest 25%)",
+    "renewal1_to_renewal2_rate": 0.3547,
+    "renewal2_to_renewal3_rate": 0.7744
+  },
+  {
+    "country": "All",
+    "region": "Europe",
+    "category": "GRAPHICS_AND_DESIGN",
+    "product_set": "weekly",
+    "price_bucket": "Tier 2 (25-50%)",
+    "renewal1_to_renewal2_rate": 0.318,
+    "renewal2_to_renewal3_rate": 0.7625
+  },
+  {
+    "country": "All",
+    "region": "Europe",
+    "category": "GRAPHICS_AND_DESIGN",
+    "product_set": "weekly",
+    "price_bucket": "Tier 3 (50-75%)",
+    "renewal1_to_renewal2_rate": 0.3833,
+    "renewal2_to_renewal3_rate": 0.7732
+  },
+  {
+    "country": "All",
+    "region": "Europe",
+    "category": "GRAPHICS_AND_DESIGN",
+    "product_set": "weekly",
+    "price_bucket": "Tier 4 (highest 25%)",
+    "renewal1_to_renewal2_rate": 0.3304,
+    "renewal2_to_renewal3_rate": 0.7831
+  },
+  {
+    "country": "All",
+    "region": "Europe",
+    "category": "HEALTH_AND_FITNESS",
+    "product_set": "monthly",
+    "price_bucket": "Tier 1 (lowest 25%)",
+    "renewal1_to_renewal2_rate": 0.5533,
+    "renewal2_to_renewal3_rate": 0.7442
+  },
+  {
+    "country": "All",
+    "region": "Europe",
+    "category": "HEALTH_AND_FITNESS",
+    "product_set": "monthly",
+    "price_bucket": "Tier 2 (25-50%)",
+    "renewal1_to_renewal2_rate": 0.4883,
+    "renewal2_to_renewal3_rate": 0.687
+  },
+  {
+    "country": "All",
+    "region": "Europe",
+    "category": "HEALTH_AND_FITNESS",
+    "product_set": "monthly",
+    "price_bucket": "Tier 3 (50-75%)",
+    "renewal1_to_renewal2_rate": 0.5036,
+    "renewal2_to_renewal3_rate": 0.7269
+  },
+  {
+    "country": "All",
+    "region": "Europe",
+    "category": "HEALTH_AND_FITNESS",
+    "product_set": "monthly",
+    "price_bucket": "Tier 4 (highest 25%)",
+    "renewal1_to_renewal2_rate": 0.5388,
+    "renewal2_to_renewal3_rate": 0.7389
+  },
+  {
+    "country": "All",
+    "region": "Europe",
+    "category": "HEALTH_AND_FITNESS",
+    "product_set": "weekly",
+    "price_bucket": "Tier 1 (lowest 25%)",
+    "renewal1_to_renewal2_rate": 0.5021,
+    "renewal2_to_renewal3_rate": 0.7786
+  },
+  {
+    "country": "All",
+    "region": "Europe",
+    "category": "HEALTH_AND_FITNESS",
+    "product_set": "weekly",
+    "price_bucket": "Tier 2 (25-50%)",
+    "renewal1_to_renewal2_rate": 0.5463,
+    "renewal2_to_renewal3_rate": 0.7862
+  },
+  {
+    "country": "All",
+    "region": "Europe",
+    "category": "HEALTH_AND_FITNESS",
+    "product_set": "weekly",
+    "price_bucket": "Tier 3 (50-75%)",
+    "renewal1_to_renewal2_rate": 0.54,
+    "renewal2_to_renewal3_rate": 0.7952
+  },
+  {
+    "country": "All",
+    "region": "Europe",
+    "category": "HEALTH_AND_FITNESS",
+    "product_set": "weekly",
+    "price_bucket": "Tier 4 (highest 25%)",
+    "renewal1_to_renewal2_rate": 0.5623,
+    "renewal2_to_renewal3_rate": 0.8139
+  },
+  {
+    "country": "All",
+    "region": "Europe",
+    "category": "LIFESTYLE",
+    "product_set": "monthly",
+    "price_bucket": "Tier 1 (lowest 25%)",
+    "renewal1_to_renewal2_rate": 0.5067,
+    "renewal2_to_renewal3_rate": 0.8235
+  },
+  {
+    "country": "All",
+    "region": "Europe",
+    "category": "LIFESTYLE",
+    "product_set": "monthly",
+    "price_bucket": "Tier 2 (25-50%)",
+    "renewal1_to_renewal2_rate": 0.5657,
+    "renewal2_to_renewal3_rate": 0.8757
+  },
+  {
+    "country": "All",
+    "region": "Europe",
+    "category": "LIFESTYLE",
+    "product_set": "monthly",
+    "price_bucket": "Tier 3 (50-75%)",
+    "renewal1_to_renewal2_rate": 0.4262,
+    "renewal2_to_renewal3_rate": 0.75
+  },
+  {
+    "country": "All",
+    "region": "Europe",
+    "category": "LIFESTYLE",
+    "product_set": "monthly",
+    "price_bucket": "Tier 4 (highest 25%)",
+    "renewal1_to_renewal2_rate": 0.4169,
+    "renewal2_to_renewal3_rate": 0.7681
+  },
+  {
+    "country": "All",
+    "region": "Europe",
+    "category": "LIFESTYLE",
+    "product_set": "weekly",
+    "price_bucket": "Tier 1 (lowest 25%)",
+    "renewal1_to_renewal2_rate": 0.3564,
+    "renewal2_to_renewal3_rate": 0.7907
+  },
+  {
+    "country": "All",
+    "region": "Europe",
+    "category": "LIFESTYLE",
+    "product_set": "weekly",
+    "price_bucket": "Tier 2 (25-50%)",
+    "renewal1_to_renewal2_rate": 0.4512,
+    "renewal2_to_renewal3_rate": 0.8156
+  },
+  {
+    "country": "All",
+    "region": "Europe",
+    "category": "LIFESTYLE",
+    "product_set": "weekly",
+    "price_bucket": "Tier 3 (50-75%)",
+    "renewal1_to_renewal2_rate": 0.4426,
+    "renewal2_to_renewal3_rate": 0.8028
+  },
+  {
+    "country": "All",
+    "region": "Europe",
+    "category": "LIFESTYLE",
+    "product_set": "weekly",
+    "price_bucket": "Tier 4 (highest 25%)",
+    "renewal1_to_renewal2_rate": 0.4791,
+    "renewal2_to_renewal3_rate": 0.7966
+  },
+  {
+    "country": "All",
+    "region": "Europe",
+    "category": "PHOTO_AND_VIDEO",
+    "product_set": "monthly",
+    "price_bucket": "Tier 1 (lowest 25%)",
+    "renewal1_to_renewal2_rate": 0.4626,
+    "renewal2_to_renewal3_rate": 0.7776
+  },
+  {
+    "country": "All",
+    "region": "Europe",
+    "category": "PHOTO_AND_VIDEO",
+    "product_set": "monthly",
+    "price_bucket": "Tier 2 (25-50%)",
+    "renewal1_to_renewal2_rate": 0.4326,
+    "renewal2_to_renewal3_rate": 0.7866
+  },
+  {
+    "country": "All",
+    "region": "Europe",
+    "category": "PHOTO_AND_VIDEO",
+    "product_set": "monthly",
+    "price_bucket": "Tier 3 (50-75%)",
+    "renewal1_to_renewal2_rate": 0.3891,
+    "renewal2_to_renewal3_rate": 0.7268
+  },
+  {
+    "country": "All",
+    "region": "Europe",
+    "category": "PHOTO_AND_VIDEO",
+    "product_set": "monthly",
+    "price_bucket": "Tier 4 (highest 25%)",
+    "renewal1_to_renewal2_rate": 0.3649,
+    "renewal2_to_renewal3_rate": 0.6811
+  },
+  {
+    "country": "All",
+    "region": "Europe",
+    "category": "PHOTO_AND_VIDEO",
+    "product_set": "weekly",
+    "price_bucket": "Tier 1 (lowest 25%)",
+    "renewal1_to_renewal2_rate": 0.3619,
+    "renewal2_to_renewal3_rate": 0.7902
+  },
+  {
+    "country": "All",
+    "region": "Europe",
+    "category": "PHOTO_AND_VIDEO",
+    "product_set": "weekly",
+    "price_bucket": "Tier 2 (25-50%)",
+    "renewal1_to_renewal2_rate": 0.3231,
+    "renewal2_to_renewal3_rate": 0.7618
+  },
+  {
+    "country": "All",
+    "region": "Europe",
+    "category": "PHOTO_AND_VIDEO",
+    "product_set": "weekly",
+    "price_bucket": "Tier 3 (50-75%)",
+    "renewal1_to_renewal2_rate": 0.3072,
+    "renewal2_to_renewal3_rate": 0.7587
+  },
+  {
+    "country": "All",
+    "region": "Europe",
+    "category": "PHOTO_AND_VIDEO",
+    "product_set": "weekly",
+    "price_bucket": "Tier 4 (highest 25%)",
+    "renewal1_to_renewal2_rate": 0.3348,
+    "renewal2_to_renewal3_rate": 0.7644
+  },
+  {
+    "country": "All",
+    "region": "Europe",
+    "category": "PRODUCTIVITY",
+    "product_set": "monthly",
+    "price_bucket": "Tier 1 (lowest 25%)",
+    "renewal1_to_renewal2_rate": 0.4872,
+    "renewal2_to_renewal3_rate": 0.7421
+  },
+  {
+    "country": "All",
+    "region": "Europe",
+    "category": "PRODUCTIVITY",
+    "product_set": "monthly",
+    "price_bucket": "Tier 2 (25-50%)",
+    "renewal1_to_renewal2_rate": 0.4712,
+    "renewal2_to_renewal3_rate": 0.7634
+  },
+  {
+    "country": "All",
+    "region": "Europe",
+    "category": "PRODUCTIVITY",
+    "product_set": "monthly",
+    "price_bucket": "Tier 3 (50-75%)",
+    "renewal1_to_renewal2_rate": 0.4391,
+    "renewal2_to_renewal3_rate": 0.6885
+  },
+  {
+    "country": "All",
+    "region": "Europe",
+    "category": "PRODUCTIVITY",
+    "product_set": "monthly",
+    "price_bucket": "Tier 4 (highest 25%)",
+    "renewal1_to_renewal2_rate": 0.4439,
+    "renewal2_to_renewal3_rate": 0.726
+  },
+  {
+    "country": "All",
+    "region": "Europe",
+    "category": "PRODUCTIVITY",
+    "product_set": "weekly",
+    "price_bucket": "Tier 1 (lowest 25%)",
+    "renewal1_to_renewal2_rate": 0.2724,
+    "renewal2_to_renewal3_rate": 0.7584
+  },
+  {
+    "country": "All",
+    "region": "Europe",
+    "category": "PRODUCTIVITY",
+    "product_set": "weekly",
+    "price_bucket": "Tier 2 (25-50%)",
+    "renewal1_to_renewal2_rate": 0.4535,
+    "renewal2_to_renewal3_rate": 0.8062
+  },
+  {
+    "country": "All",
+    "region": "Europe",
+    "category": "PRODUCTIVITY",
+    "product_set": "weekly",
+    "price_bucket": "Tier 3 (50-75%)",
+    "renewal1_to_renewal2_rate": 0.5286,
+    "renewal2_to_renewal3_rate": 0.8053
+  },
+  {
+    "country": "All",
+    "region": "Europe",
+    "category": "PRODUCTIVITY",
+    "product_set": "weekly",
+    "price_bucket": "Tier 4 (highest 25%)",
+    "renewal1_to_renewal2_rate": 0.5457,
+    "renewal2_to_renewal3_rate": 0.8143
+  },
+  {
+    "country": "All",
+    "region": "Europe",
+    "category": "UTILITIES",
+    "product_set": "monthly",
+    "price_bucket": "Tier 1 (lowest 25%)",
+    "renewal1_to_renewal2_rate": 0.4008,
+    "renewal2_to_renewal3_rate": 0.7361
+  },
+  {
+    "country": "All",
+    "region": "Europe",
+    "category": "UTILITIES",
+    "product_set": "monthly",
+    "price_bucket": "Tier 2 (25-50%)",
+    "renewal1_to_renewal2_rate": 0.4873,
+    "renewal2_to_renewal3_rate": 0.7609
+  },
+  {
+    "country": "All",
+    "region": "Europe",
+    "category": "UTILITIES",
+    "product_set": "monthly",
+    "price_bucket": "Tier 3 (50-75%)",
+    "renewal1_to_renewal2_rate": 0.4853,
+    "renewal2_to_renewal3_rate": 0.7233
+  },
+  {
+    "country": "All",
+    "region": "Europe",
+    "category": "UTILITIES",
+    "product_set": "monthly",
+    "price_bucket": "Tier 4 (highest 25%)",
+    "renewal1_to_renewal2_rate": 0.4218,
+    "renewal2_to_renewal3_rate": 0.7014
+  },
+  {
+    "country": "All",
+    "region": "Europe",
+    "category": "UTILITIES",
+    "product_set": "weekly",
+    "price_bucket": "Tier 1 (lowest 25%)",
+    "renewal1_to_renewal2_rate": 0.5603,
+    "renewal2_to_renewal3_rate": 0.8241
+  },
+  {
+    "country": "All",
+    "region": "Europe",
+    "category": "UTILITIES",
+    "product_set": "weekly",
+    "price_bucket": "Tier 2 (25-50%)",
+    "renewal1_to_renewal2_rate": 0.5401,
+    "renewal2_to_renewal3_rate": 0.8082
+  },
+  {
+    "country": "All",
+    "region": "Europe",
+    "category": "UTILITIES",
+    "product_set": "weekly",
+    "price_bucket": "Tier 3 (50-75%)",
+    "renewal1_to_renewal2_rate": 0.5383,
+    "renewal2_to_renewal3_rate": 0.8047
+  },
+  {
+    "country": "All",
+    "region": "Europe",
+    "category": "UTILITIES",
+    "product_set": "weekly",
+    "price_bucket": "Tier 4 (highest 25%)",
+    "renewal1_to_renewal2_rate": 0.5752,
+    "renewal2_to_renewal3_rate": 0.8265
+  },
+  {
+    "country": "All",
+    "region": "LATAM",
+    "category": "All",
+    "product_set": "monthly",
+    "price_bucket": "Tier 1 (lowest 25%)",
+    "renewal1_to_renewal2_rate": 0.4647,
+    "renewal2_to_renewal3_rate": 0.7483
+  },
+  {
+    "country": "All",
+    "region": "LATAM",
+    "category": "All",
+    "product_set": "monthly",
+    "price_bucket": "Tier 2 (25-50%)",
+    "renewal1_to_renewal2_rate": 0.4333,
+    "renewal2_to_renewal3_rate": 0.7073
+  },
+  {
+    "country": "All",
+    "region": "LATAM",
+    "category": "All",
+    "product_set": "monthly",
+    "price_bucket": "Tier 3 (50-75%)",
+    "renewal1_to_renewal2_rate": 0.4152,
+    "renewal2_to_renewal3_rate": 0.6915
+  },
+  {
+    "country": "All",
+    "region": "LATAM",
+    "category": "All",
+    "product_set": "monthly",
+    "price_bucket": "Tier 4 (highest 25%)",
+    "renewal1_to_renewal2_rate": 0.4088,
+    "renewal2_to_renewal3_rate": 0.7218
+  },
+  {
+    "country": "All",
+    "region": "LATAM",
+    "category": "All",
+    "product_set": "weekly",
+    "price_bucket": "Tier 1 (lowest 25%)",
+    "renewal1_to_renewal2_rate": 0.4402,
+    "renewal2_to_renewal3_rate": 0.7991
+  },
+  {
+    "country": "All",
+    "region": "LATAM",
+    "category": "All",
+    "product_set": "weekly",
+    "price_bucket": "Tier 2 (25-50%)",
+    "renewal1_to_renewal2_rate": 0.4954,
+    "renewal2_to_renewal3_rate": 0.8079
+  },
+  {
+    "country": "All",
+    "region": "LATAM",
+    "category": "All",
+    "product_set": "weekly",
+    "price_bucket": "Tier 3 (50-75%)",
+    "renewal1_to_renewal2_rate": 0.5015,
+    "renewal2_to_renewal3_rate": 0.8029
+  },
+  {
+    "country": "All",
+    "region": "LATAM",
+    "category": "All",
+    "product_set": "weekly",
+    "price_bucket": "Tier 4 (highest 25%)",
+    "renewal1_to_renewal2_rate": 0.5156,
+    "renewal2_to_renewal3_rate": 0.8069
+  },
+  {
+    "country": "All",
+    "region": "LATAM",
+    "category": "EDUCATION",
+    "product_set": "monthly",
+    "price_bucket": "Tier 1 (lowest 25%)",
+    "renewal1_to_renewal2_rate": 0.4891,
+    "renewal2_to_renewal3_rate": 0.6525
+  },
+  {
+    "country": "All",
+    "region": "LATAM",
+    "category": "EDUCATION",
+    "product_set": "monthly",
+    "price_bucket": "Tier 2 (25-50%)",
+    "renewal1_to_renewal2_rate": 0.4202,
+    "renewal2_to_renewal3_rate": 0.3183
+  },
+  {
+    "country": "All",
+    "region": "LATAM",
+    "category": "EDUCATION",
+    "product_set": "monthly",
+    "price_bucket": "Tier 3 (50-75%)",
+    "renewal1_to_renewal2_rate": 0.4214,
+    "renewal2_to_renewal3_rate": 0.3868
+  },
+  {
+    "country": "All",
+    "region": "LATAM",
+    "category": "EDUCATION",
+    "product_set": "monthly",
+    "price_bucket": "Tier 4 (highest 25%)",
+    "renewal1_to_renewal2_rate": 0.474,
+    "renewal2_to_renewal3_rate": 0.6298
+  },
+  {
+    "country": "All",
+    "region": "LATAM",
+    "category": "EDUCATION",
+    "product_set": "weekly",
+    "price_bucket": "Tier 1 (lowest 25%)",
+    "renewal1_to_renewal2_rate": 0.718,
+    "renewal2_to_renewal3_rate": 0.8479
+  },
+  {
+    "country": "All",
+    "region": "LATAM",
+    "category": "EDUCATION",
+    "product_set": "weekly",
+    "price_bucket": "Tier 2 (25-50%)",
+    "renewal1_to_renewal2_rate": 0.675,
+    "renewal2_to_renewal3_rate": 0.8358
+  },
+  {
+    "country": "All",
+    "region": "LATAM",
+    "category": "EDUCATION",
+    "product_set": "weekly",
+    "price_bucket": "Tier 3 (50-75%)",
+    "renewal1_to_renewal2_rate": 0.5738,
+    "renewal2_to_renewal3_rate": 0.8214
+  },
+  {
+    "country": "All",
+    "region": "LATAM",
+    "category": "EDUCATION",
+    "product_set": "weekly",
+    "price_bucket": "Tier 4 (highest 25%)",
+    "renewal1_to_renewal2_rate": 0.6183,
+    "renewal2_to_renewal3_rate": 0.8251
+  },
+  {
+    "country": "All",
+    "region": "LATAM",
+    "category": "ENTERTAINMENT",
+    "product_set": "monthly",
+    "price_bucket": "Tier 1 (lowest 25%)",
+    "renewal1_to_renewal2_rate": 0.4778,
+    "renewal2_to_renewal3_rate": 0.678
+  },
+  {
+    "country": "All",
+    "region": "LATAM",
+    "category": "ENTERTAINMENT",
+    "product_set": "monthly",
+    "price_bucket": "Tier 2 (25-50%)",
+    "renewal1_to_renewal2_rate": 0.4861,
+    "renewal2_to_renewal3_rate": 0.6975
+  },
+  {
+    "country": "All",
+    "region": "LATAM",
+    "category": "ENTERTAINMENT",
+    "product_set": "monthly",
+    "price_bucket": "Tier 3 (50-75%)",
+    "renewal1_to_renewal2_rate": 0.2363,
+    "renewal2_to_renewal3_rate": 0.6407
+  },
+  {
+    "country": "All",
+    "region": "LATAM",
+    "category": "ENTERTAINMENT",
+    "product_set": "monthly",
+    "price_bucket": "Tier 4 (highest 25%)",
+    "renewal1_to_renewal2_rate": 0.1623,
+    "renewal2_to_renewal3_rate": 0.6725
+  },
+  {
+    "country": "All",
+    "region": "LATAM",
+    "category": "ENTERTAINMENT",
+    "product_set": "weekly",
+    "price_bucket": "Tier 1 (lowest 25%)",
+    "renewal1_to_renewal2_rate": 0.4788,
+    "renewal2_to_renewal3_rate": 0.7872
+  },
+  {
+    "country": "All",
+    "region": "LATAM",
+    "category": "ENTERTAINMENT",
+    "product_set": "weekly",
+    "price_bucket": "Tier 2 (25-50%)",
+    "renewal1_to_renewal2_rate": 0.393,
+    "renewal2_to_renewal3_rate": 0.7773
+  },
+  {
+    "country": "All",
+    "region": "LATAM",
+    "category": "ENTERTAINMENT",
+    "product_set": "weekly",
+    "price_bucket": "Tier 3 (50-75%)",
+    "renewal1_to_renewal2_rate": 0.4813,
+    "renewal2_to_renewal3_rate": 0.7824
+  },
+  {
+    "country": "All",
+    "region": "LATAM",
+    "category": "ENTERTAINMENT",
+    "product_set": "weekly",
+    "price_bucket": "Tier 4 (highest 25%)",
+    "renewal1_to_renewal2_rate": 0.4813,
+    "renewal2_to_renewal3_rate": 0.7539
+  },
+  {
+    "country": "All",
+    "region": "LATAM",
+    "category": "GRAPHICS_AND_DESIGN",
+    "product_set": "monthly",
+    "price_bucket": "Tier 1 (lowest 25%)",
+    "renewal1_to_renewal2_rate": 0.5569,
+    "renewal2_to_renewal3_rate": 0.7859
+  },
+  {
+    "country": "All",
+    "region": "LATAM",
+    "category": "GRAPHICS_AND_DESIGN",
+    "product_set": "monthly",
+    "price_bucket": "Tier 2 (25-50%)",
+    "renewal1_to_renewal2_rate": 0.5013,
+    "renewal2_to_renewal3_rate": 0.79
+  },
+  {
+    "country": "All",
+    "region": "LATAM",
+    "category": "GRAPHICS_AND_DESIGN",
+    "product_set": "monthly",
+    "price_bucket": "Tier 3 (50-75%)",
+    "renewal1_to_renewal2_rate": 0.4964,
+    "renewal2_to_renewal3_rate": 0.7715
+  },
+  {
+    "country": "All",
+    "region": "LATAM",
+    "category": "GRAPHICS_AND_DESIGN",
+    "product_set": "monthly",
+    "price_bucket": "Tier 4 (highest 25%)",
+    "renewal1_to_renewal2_rate": 0.3861,
+    "renewal2_to_renewal3_rate": 0.7497
+  },
+  {
+    "country": "All",
+    "region": "LATAM",
+    "category": "GRAPHICS_AND_DESIGN",
+    "product_set": "weekly",
+    "price_bucket": "Tier 1 (lowest 25%)",
+    "renewal1_to_renewal2_rate": 0.3679,
+    "renewal2_to_renewal3_rate": 0.7657
+  },
+  {
+    "country": "All",
+    "region": "LATAM",
+    "category": "GRAPHICS_AND_DESIGN",
+    "product_set": "weekly",
+    "price_bucket": "Tier 2 (25-50%)",
+    "renewal1_to_renewal2_rate": 0.3821,
+    "renewal2_to_renewal3_rate": 0.7747
+  },
+  {
+    "country": "All",
+    "region": "LATAM",
+    "category": "GRAPHICS_AND_DESIGN",
+    "product_set": "weekly",
+    "price_bucket": "Tier 3 (50-75%)",
+    "renewal1_to_renewal2_rate": 0.4507,
+    "renewal2_to_renewal3_rate": 0.7862
+  },
+  {
+    "country": "All",
+    "region": "LATAM",
+    "category": "GRAPHICS_AND_DESIGN",
+    "product_set": "weekly",
+    "price_bucket": "Tier 4 (highest 25%)",
+    "renewal1_to_renewal2_rate": 0.4349,
+    "renewal2_to_renewal3_rate": 0.7869
+  },
+  {
+    "country": "All",
+    "region": "LATAM",
+    "category": "HEALTH_AND_FITNESS",
+    "product_set": "monthly",
+    "price_bucket": "Tier 1 (lowest 25%)",
+    "renewal1_to_renewal2_rate": 0.4877,
+    "renewal2_to_renewal3_rate": 0.6972
+  },
+  {
+    "country": "All",
+    "region": "LATAM",
+    "category": "HEALTH_AND_FITNESS",
+    "product_set": "monthly",
+    "price_bucket": "Tier 2 (25-50%)",
+    "renewal1_to_renewal2_rate": 0.4484,
+    "renewal2_to_renewal3_rate": 0.6964
+  },
+  {
+    "country": "All",
+    "region": "LATAM",
+    "category": "HEALTH_AND_FITNESS",
+    "product_set": "monthly",
+    "price_bucket": "Tier 3 (50-75%)",
+    "renewal1_to_renewal2_rate": 0.5014,
+    "renewal2_to_renewal3_rate": 0.7366
+  },
+  {
+    "country": "All",
+    "region": "LATAM",
+    "category": "HEALTH_AND_FITNESS",
+    "product_set": "monthly",
+    "price_bucket": "Tier 4 (highest 25%)",
+    "renewal1_to_renewal2_rate": 0.5457,
+    "renewal2_to_renewal3_rate": 0.7369
+  },
+  {
+    "country": "All",
+    "region": "LATAM",
+    "category": "HEALTH_AND_FITNESS",
+    "product_set": "weekly",
+    "price_bucket": "Tier 1 (lowest 25%)",
+    "renewal1_to_renewal2_rate": 0.6041,
+    "renewal2_to_renewal3_rate": 0.8207
+  },
+  {
+    "country": "All",
+    "region": "LATAM",
+    "category": "HEALTH_AND_FITNESS",
+    "product_set": "weekly",
+    "price_bucket": "Tier 2 (25-50%)",
+    "renewal1_to_renewal2_rate": 0.6141,
+    "renewal2_to_renewal3_rate": 0.797
+  },
+  {
+    "country": "All",
+    "region": "LATAM",
+    "category": "HEALTH_AND_FITNESS",
+    "product_set": "weekly",
+    "price_bucket": "Tier 3 (50-75%)",
+    "renewal1_to_renewal2_rate": 0.5976,
+    "renewal2_to_renewal3_rate": 0.7843
+  },
+  {
+    "country": "All",
+    "region": "LATAM",
+    "category": "HEALTH_AND_FITNESS",
+    "product_set": "weekly",
+    "price_bucket": "Tier 4 (highest 25%)",
+    "renewal1_to_renewal2_rate": 0.5867,
+    "renewal2_to_renewal3_rate": 0.8061
+  },
+  {
+    "country": "All",
+    "region": "LATAM",
+    "category": "LIFESTYLE",
+    "product_set": "monthly",
+    "price_bucket": "Tier 1 (lowest 25%)",
+    "renewal1_to_renewal2_rate": 0.3755,
+    "renewal2_to_renewal3_rate": 0.7668
+  },
+  {
+    "country": "All",
+    "region": "LATAM",
+    "category": "LIFESTYLE",
+    "product_set": "monthly",
+    "price_bucket": "Tier 2 (25-50%)",
+    "renewal1_to_renewal2_rate": 0.4731,
+    "renewal2_to_renewal3_rate": 0.7055
+  },
+  {
+    "country": "All",
+    "region": "LATAM",
+    "category": "LIFESTYLE",
+    "product_set": "monthly",
+    "price_bucket": "Tier 3 (50-75%)",
+    "renewal1_to_renewal2_rate": 0.4317,
+    "renewal2_to_renewal3_rate": 0.7587
+  },
+  {
+    "country": "All",
+    "region": "LATAM",
+    "category": "LIFESTYLE",
+    "product_set": "monthly",
+    "price_bucket": "Tier 4 (highest 25%)",
+    "renewal1_to_renewal2_rate": 0.3682,
+    "renewal2_to_renewal3_rate": 0.7463
+  },
+  {
+    "country": "All",
+    "region": "LATAM",
+    "category": "LIFESTYLE",
+    "product_set": "weekly",
+    "price_bucket": "Tier 1 (lowest 25%)",
+    "renewal1_to_renewal2_rate": 0.3748,
+    "renewal2_to_renewal3_rate": 0.7739
+  },
+  {
+    "country": "All",
+    "region": "LATAM",
+    "category": "LIFESTYLE",
+    "product_set": "weekly",
+    "price_bucket": "Tier 2 (25-50%)",
+    "renewal1_to_renewal2_rate": 0.3961,
+    "renewal2_to_renewal3_rate": 0.807
+  },
+  {
+    "country": "All",
+    "region": "LATAM",
+    "category": "LIFESTYLE",
+    "product_set": "weekly",
+    "price_bucket": "Tier 3 (50-75%)",
+    "renewal1_to_renewal2_rate": 0.5075,
+    "renewal2_to_renewal3_rate": 0.8064
+  },
+  {
+    "country": "All",
+    "region": "LATAM",
+    "category": "LIFESTYLE",
+    "product_set": "weekly",
+    "price_bucket": "Tier 4 (highest 25%)",
+    "renewal1_to_renewal2_rate": 0.4914,
+    "renewal2_to_renewal3_rate": 0.8003
+  },
+  {
+    "country": "All",
+    "region": "LATAM",
+    "category": "PHOTO_AND_VIDEO",
+    "product_set": "monthly",
+    "price_bucket": "Tier 1 (lowest 25%)",
+    "renewal1_to_renewal2_rate": 0.438,
+    "renewal2_to_renewal3_rate": 0.7464
+  },
+  {
+    "country": "All",
+    "region": "LATAM",
+    "category": "PHOTO_AND_VIDEO",
+    "product_set": "monthly",
+    "price_bucket": "Tier 2 (25-50%)",
+    "renewal1_to_renewal2_rate": 0.4031,
+    "renewal2_to_renewal3_rate": 0.7139
+  },
+  {
+    "country": "All",
+    "region": "LATAM",
+    "category": "PHOTO_AND_VIDEO",
+    "product_set": "monthly",
+    "price_bucket": "Tier 3 (50-75%)",
+    "renewal1_to_renewal2_rate": 0.423,
+    "renewal2_to_renewal3_rate": 0.7055
+  },
+  {
+    "country": "All",
+    "region": "LATAM",
+    "category": "PHOTO_AND_VIDEO",
+    "product_set": "monthly",
+    "price_bucket": "Tier 4 (highest 25%)",
+    "renewal1_to_renewal2_rate": 0.4168,
+    "renewal2_to_renewal3_rate": 0.732
+  },
+  {
+    "country": "All",
+    "region": "LATAM",
+    "category": "PHOTO_AND_VIDEO",
+    "product_set": "weekly",
+    "price_bucket": "Tier 1 (lowest 25%)",
+    "renewal1_to_renewal2_rate": 0.3814,
+    "renewal2_to_renewal3_rate": 0.7797
+  },
+  {
+    "country": "All",
+    "region": "LATAM",
+    "category": "PHOTO_AND_VIDEO",
+    "product_set": "weekly",
+    "price_bucket": "Tier 2 (25-50%)",
+    "renewal1_to_renewal2_rate": 0.4017,
+    "renewal2_to_renewal3_rate": 0.7815
+  },
+  {
+    "country": "All",
+    "region": "LATAM",
+    "category": "PHOTO_AND_VIDEO",
+    "product_set": "weekly",
+    "price_bucket": "Tier 3 (50-75%)",
+    "renewal1_to_renewal2_rate": 0.3388,
+    "renewal2_to_renewal3_rate": 0.7645
+  },
+  {
+    "country": "All",
+    "region": "LATAM",
+    "category": "PHOTO_AND_VIDEO",
+    "product_set": "weekly",
+    "price_bucket": "Tier 4 (highest 25%)",
+    "renewal1_to_renewal2_rate": 0.367,
+    "renewal2_to_renewal3_rate": 0.7649
+  },
+  {
+    "country": "All",
+    "region": "LATAM",
+    "category": "PRODUCTIVITY",
+    "product_set": "monthly",
+    "price_bucket": "Tier 1 (lowest 25%)",
+    "renewal1_to_renewal2_rate": 0.439,
+    "renewal2_to_renewal3_rate": 0.7275
+  },
+  {
+    "country": "All",
+    "region": "LATAM",
+    "category": "PRODUCTIVITY",
+    "product_set": "monthly",
+    "price_bucket": "Tier 2 (25-50%)",
+    "renewal1_to_renewal2_rate": 0.4275,
+    "renewal2_to_renewal3_rate": 0.7026
+  },
+  {
+    "country": "All",
+    "region": "LATAM",
+    "category": "PRODUCTIVITY",
+    "product_set": "monthly",
+    "price_bucket": "Tier 3 (50-75%)",
+    "renewal1_to_renewal2_rate": 0.532,
+    "renewal2_to_renewal3_rate": 0.7633
+  },
+  {
+    "country": "All",
+    "region": "LATAM",
+    "category": "PRODUCTIVITY",
+    "product_set": "monthly",
+    "price_bucket": "Tier 4 (highest 25%)",
+    "renewal1_to_renewal2_rate": 0.4794,
+    "renewal2_to_renewal3_rate": 0.7561
+  },
+  {
+    "country": "All",
+    "region": "LATAM",
+    "category": "PRODUCTIVITY",
+    "product_set": "weekly",
+    "price_bucket": "Tier 1 (lowest 25%)",
+    "renewal1_to_renewal2_rate": 0.2772,
+    "renewal2_to_renewal3_rate": 0.7768
+  },
+  {
+    "country": "All",
+    "region": "LATAM",
+    "category": "PRODUCTIVITY",
+    "product_set": "weekly",
+    "price_bucket": "Tier 2 (25-50%)",
+    "renewal1_to_renewal2_rate": 0.5746,
+    "renewal2_to_renewal3_rate": 0.83
+  },
+  {
+    "country": "All",
+    "region": "LATAM",
+    "category": "PRODUCTIVITY",
+    "product_set": "weekly",
+    "price_bucket": "Tier 3 (50-75%)",
+    "renewal1_to_renewal2_rate": 0.5799,
+    "renewal2_to_renewal3_rate": 0.8152
+  },
+  {
+    "country": "All",
+    "region": "LATAM",
+    "category": "PRODUCTIVITY",
+    "product_set": "weekly",
+    "price_bucket": "Tier 4 (highest 25%)",
+    "renewal1_to_renewal2_rate": 0.5903,
+    "renewal2_to_renewal3_rate": 0.8378
+  },
+  {
+    "country": "All",
+    "region": "LATAM",
+    "category": "UTILITIES",
+    "product_set": "monthly",
+    "price_bucket": "Tier 1 (lowest 25%)",
+    "renewal1_to_renewal2_rate": 0.4305,
+    "renewal2_to_renewal3_rate": 0.7357
+  },
+  {
+    "country": "All",
+    "region": "LATAM",
+    "category": "UTILITIES",
+    "product_set": "monthly",
+    "price_bucket": "Tier 2 (25-50%)",
+    "renewal1_to_renewal2_rate": 0.438,
+    "renewal2_to_renewal3_rate": 0.7122
+  },
+  {
+    "country": "All",
+    "region": "LATAM",
+    "category": "UTILITIES",
+    "product_set": "monthly",
+    "price_bucket": "Tier 3 (50-75%)",
+    "renewal1_to_renewal2_rate": 0.4397,
+    "renewal2_to_renewal3_rate": 0.6487
+  },
+  {
+    "country": "All",
+    "region": "LATAM",
+    "category": "UTILITIES",
+    "product_set": "monthly",
+    "price_bucket": "Tier 4 (highest 25%)",
+    "renewal1_to_renewal2_rate": 0.4302,
+    "renewal2_to_renewal3_rate": 0.7166
+  },
+  {
+    "country": "All",
+    "region": "LATAM",
+    "category": "UTILITIES",
+    "product_set": "weekly",
+    "price_bucket": "Tier 1 (lowest 25%)",
+    "renewal1_to_renewal2_rate": 0.5714,
+    "renewal2_to_renewal3_rate": 0.8211
+  },
+  {
+    "country": "All",
+    "region": "LATAM",
+    "category": "UTILITIES",
+    "product_set": "weekly",
+    "price_bucket": "Tier 2 (25-50%)",
+    "renewal1_to_renewal2_rate": 0.5791,
+    "renewal2_to_renewal3_rate": 0.8158
+  },
+  {
+    "country": "All",
+    "region": "LATAM",
+    "category": "UTILITIES",
+    "product_set": "weekly",
+    "price_bucket": "Tier 3 (50-75%)",
+    "renewal1_to_renewal2_rate": 0.5772,
+    "renewal2_to_renewal3_rate": 0.8184
+  },
+  {
+    "country": "All",
+    "region": "LATAM",
+    "category": "UTILITIES",
+    "product_set": "weekly",
+    "price_bucket": "Tier 4 (highest 25%)",
+    "renewal1_to_renewal2_rate": 0.5854,
+    "renewal2_to_renewal3_rate": 0.8168
+  },
+  {
+    "country": "All",
+    "region": "MEA",
+    "category": "All",
+    "product_set": "monthly",
+    "price_bucket": "Tier 1 (lowest 25%)",
+    "renewal1_to_renewal2_rate": 0.4831,
+    "renewal2_to_renewal3_rate": 0.7368
+  },
+  {
+    "country": "All",
+    "region": "MEA",
+    "category": "All",
+    "product_set": "monthly",
+    "price_bucket": "Tier 2 (25-50%)",
+    "renewal1_to_renewal2_rate": 0.4701,
+    "renewal2_to_renewal3_rate": 0.7321
+  },
+  {
+    "country": "All",
+    "region": "MEA",
+    "category": "All",
+    "product_set": "monthly",
+    "price_bucket": "Tier 3 (50-75%)",
+    "renewal1_to_renewal2_rate": 0.5052,
+    "renewal2_to_renewal3_rate": 0.7522
+  },
+  {
+    "country": "All",
+    "region": "MEA",
+    "category": "All",
+    "product_set": "monthly",
+    "price_bucket": "Tier 4 (highest 25%)",
+    "renewal1_to_renewal2_rate": 0.4507,
+    "renewal2_to_renewal3_rate": 0.7282
+  },
+  {
+    "country": "All",
+    "region": "MEA",
+    "category": "All",
+    "product_set": "weekly",
+    "price_bucket": "Tier 1 (lowest 25%)",
+    "renewal1_to_renewal2_rate": 0.4683,
+    "renewal2_to_renewal3_rate": 0.8277
+  },
+  {
+    "country": "All",
+    "region": "MEA",
+    "category": "All",
+    "product_set": "weekly",
+    "price_bucket": "Tier 2 (25-50%)",
+    "renewal1_to_renewal2_rate": 0.4949,
+    "renewal2_to_renewal3_rate": 0.8168
+  },
+  {
+    "country": "All",
+    "region": "MEA",
+    "category": "All",
+    "product_set": "weekly",
+    "price_bucket": "Tier 3 (50-75%)",
+    "renewal1_to_renewal2_rate": 0.5148,
+    "renewal2_to_renewal3_rate": 0.8124
+  },
+  {
+    "country": "All",
+    "region": "MEA",
+    "category": "All",
+    "product_set": "weekly",
+    "price_bucket": "Tier 4 (highest 25%)",
+    "renewal1_to_renewal2_rate": 0.5061,
+    "renewal2_to_renewal3_rate": 0.8103
+  },
+  {
+    "country": "All",
+    "region": "MEA",
+    "category": "EDUCATION",
+    "product_set": "monthly",
+    "price_bucket": "Tier 1 (lowest 25%)",
+    "renewal1_to_renewal2_rate": 0.5165,
+    "renewal2_to_renewal3_rate": 0.6682
+  },
+  {
+    "country": "All",
+    "region": "MEA",
+    "category": "EDUCATION",
+    "product_set": "monthly",
+    "price_bucket": "Tier 2 (25-50%)",
+    "renewal1_to_renewal2_rate": 0.5132,
+    "renewal2_to_renewal3_rate": 0.6541
+  },
+  {
+    "country": "All",
+    "region": "MEA",
+    "category": "EDUCATION",
+    "product_set": "monthly",
+    "price_bucket": "Tier 3 (50-75%)",
+    "renewal1_to_renewal2_rate": 0.4586,
+    "renewal2_to_renewal3_rate": 0.6585
+  },
+  {
+    "country": "All",
+    "region": "MEA",
+    "category": "EDUCATION",
+    "product_set": "monthly",
+    "price_bucket": "Tier 4 (highest 25%)",
+    "renewal1_to_renewal2_rate": 0.4655,
+    "renewal2_to_renewal3_rate": 0.6302
+  },
+  {
+    "country": "All",
+    "region": "MEA",
+    "category": "EDUCATION",
+    "product_set": "weekly",
+    "price_bucket": "Tier 1 (lowest 25%)",
+    "renewal1_to_renewal2_rate": 0.5354,
+    "renewal2_to_renewal3_rate": 0.8336
+  },
+  {
+    "country": "All",
+    "region": "MEA",
+    "category": "EDUCATION",
+    "product_set": "weekly",
+    "price_bucket": "Tier 2 (25-50%)",
+    "renewal1_to_renewal2_rate": 0.6452,
+    "renewal2_to_renewal3_rate": 0.8384
+  },
+  {
+    "country": "All",
+    "region": "MEA",
+    "category": "EDUCATION",
+    "product_set": "weekly",
+    "price_bucket": "Tier 3 (50-75%)",
+    "renewal1_to_renewal2_rate": 0.6104,
+    "renewal2_to_renewal3_rate": 0.8196
+  },
+  {
+    "country": "All",
+    "region": "MEA",
+    "category": "EDUCATION",
+    "product_set": "weekly",
+    "price_bucket": "Tier 4 (highest 25%)",
+    "renewal1_to_renewal2_rate": 0.6122,
+    "renewal2_to_renewal3_rate": 0.8094
+  },
+  {
+    "country": "All",
+    "region": "MEA",
+    "category": "ENTERTAINMENT",
+    "product_set": "monthly",
+    "price_bucket": "Tier 1 (lowest 25%)",
+    "renewal1_to_renewal2_rate": 0.4783,
+    "renewal2_to_renewal3_rate": 0.7264
+  },
+  {
+    "country": "All",
+    "region": "MEA",
+    "category": "ENTERTAINMENT",
+    "product_set": "monthly",
+    "price_bucket": "Tier 2 (25-50%)",
+    "renewal1_to_renewal2_rate": 0.205,
+    "renewal2_to_renewal3_rate": 0.6991
+  },
+  {
+    "country": "All",
+    "region": "MEA",
+    "category": "ENTERTAINMENT",
+    "product_set": "monthly",
+    "price_bucket": "Tier 3 (50-75%)",
+    "renewal1_to_renewal2_rate": 0.187,
+    "renewal2_to_renewal3_rate": 0.6751
+  },
+  {
+    "country": "All",
+    "region": "MEA",
+    "category": "ENTERTAINMENT",
+    "product_set": "monthly",
+    "price_bucket": "Tier 4 (highest 25%)",
+    "renewal1_to_renewal2_rate": 0.1543,
+    "renewal2_to_renewal3_rate": 0.7127
+  },
+  {
+    "country": "All",
+    "region": "MEA",
+    "category": "ENTERTAINMENT",
+    "product_set": "weekly",
+    "price_bucket": "Tier 1 (lowest 25%)",
+    "renewal1_to_renewal2_rate": 0.5601,
+    "renewal2_to_renewal3_rate": 0.857
+  },
+  {
+    "country": "All",
+    "region": "MEA",
+    "category": "ENTERTAINMENT",
+    "product_set": "weekly",
+    "price_bucket": "Tier 2 (25-50%)",
+    "renewal1_to_renewal2_rate": 0.4719,
+    "renewal2_to_renewal3_rate": 0.8177
+  },
+  {
+    "country": "All",
+    "region": "MEA",
+    "category": "ENTERTAINMENT",
+    "product_set": "weekly",
+    "price_bucket": "Tier 3 (50-75%)",
+    "renewal1_to_renewal2_rate": 0.4355,
+    "renewal2_to_renewal3_rate": 0.8107
+  },
+  {
+    "country": "All",
+    "region": "MEA",
+    "category": "ENTERTAINMENT",
+    "product_set": "weekly",
+    "price_bucket": "Tier 4 (highest 25%)",
+    "renewal1_to_renewal2_rate": 0.4506,
+    "renewal2_to_renewal3_rate": 0.785
+  },
+  {
+    "country": "All",
+    "region": "MEA",
+    "category": "GRAPHICS_AND_DESIGN",
+    "product_set": "monthly",
+    "price_bucket": "Tier 1 (lowest 25%)",
+    "renewal1_to_renewal2_rate": 0.504,
+    "renewal2_to_renewal3_rate": 0.7816
+  },
+  {
+    "country": "All",
+    "region": "MEA",
+    "category": "GRAPHICS_AND_DESIGN",
+    "product_set": "monthly",
+    "price_bucket": "Tier 2 (25-50%)",
+    "renewal1_to_renewal2_rate": 0.4726,
+    "renewal2_to_renewal3_rate": 0.7763
+  },
+  {
+    "country": "All",
+    "region": "MEA",
+    "category": "GRAPHICS_AND_DESIGN",
+    "product_set": "monthly",
+    "price_bucket": "Tier 3 (50-75%)",
+    "renewal1_to_renewal2_rate": 0.3666,
+    "renewal2_to_renewal3_rate": 0.7416
+  },
+  {
+    "country": "All",
+    "region": "MEA",
+    "category": "GRAPHICS_AND_DESIGN",
+    "product_set": "monthly",
+    "price_bucket": "Tier 4 (highest 25%)",
+    "renewal1_to_renewal2_rate": 0.442,
+    "renewal2_to_renewal3_rate": 0.7104
+  },
+  {
+    "country": "All",
+    "region": "MEA",
+    "category": "GRAPHICS_AND_DESIGN",
+    "product_set": "weekly",
+    "price_bucket": "Tier 1 (lowest 25%)",
+    "renewal1_to_renewal2_rate": 0.3985,
+    "renewal2_to_renewal3_rate": 0.8023
+  },
+  {
+    "country": "All",
+    "region": "MEA",
+    "category": "GRAPHICS_AND_DESIGN",
+    "product_set": "weekly",
+    "price_bucket": "Tier 2 (25-50%)",
+    "renewal1_to_renewal2_rate": 0.4097,
+    "renewal2_to_renewal3_rate": 0.7747
+  },
+  {
+    "country": "All",
+    "region": "MEA",
+    "category": "GRAPHICS_AND_DESIGN",
+    "product_set": "weekly",
+    "price_bucket": "Tier 3 (50-75%)",
+    "renewal1_to_renewal2_rate": 0.4181,
+    "renewal2_to_renewal3_rate": 0.7912
+  },
+  {
+    "country": "All",
+    "region": "MEA",
+    "category": "GRAPHICS_AND_DESIGN",
+    "product_set": "weekly",
+    "price_bucket": "Tier 4 (highest 25%)",
+    "renewal1_to_renewal2_rate": 0.4594,
+    "renewal2_to_renewal3_rate": 0.8043
+  },
+  {
+    "country": "All",
+    "region": "MEA",
+    "category": "HEALTH_AND_FITNESS",
+    "product_set": "monthly",
+    "price_bucket": "Tier 1 (lowest 25%)",
+    "renewal1_to_renewal2_rate": 0.5074,
+    "renewal2_to_renewal3_rate": 0.7081
+  },
+  {
+    "country": "All",
+    "region": "MEA",
+    "category": "HEALTH_AND_FITNESS",
+    "product_set": "monthly",
+    "price_bucket": "Tier 2 (25-50%)",
+    "renewal1_to_renewal2_rate": 0.5155,
+    "renewal2_to_renewal3_rate": 0.7095
+  },
+  {
+    "country": "All",
+    "region": "MEA",
+    "category": "HEALTH_AND_FITNESS",
+    "product_set": "monthly",
+    "price_bucket": "Tier 3 (50-75%)",
+    "renewal1_to_renewal2_rate": 0.4776,
+    "renewal2_to_renewal3_rate": 0.6972
+  },
+  {
+    "country": "All",
+    "region": "MEA",
+    "category": "HEALTH_AND_FITNESS",
+    "product_set": "monthly",
+    "price_bucket": "Tier 4 (highest 25%)",
+    "renewal1_to_renewal2_rate": 0.4907,
+    "renewal2_to_renewal3_rate": 0.7145
+  },
+  {
+    "country": "All",
+    "region": "MEA",
+    "category": "HEALTH_AND_FITNESS",
+    "product_set": "weekly",
+    "price_bucket": "Tier 1 (lowest 25%)",
+    "renewal1_to_renewal2_rate": 0.5575,
+    "renewal2_to_renewal3_rate": 0.8068
+  },
+  {
+    "country": "All",
+    "region": "MEA",
+    "category": "HEALTH_AND_FITNESS",
+    "product_set": "weekly",
+    "price_bucket": "Tier 2 (25-50%)",
+    "renewal1_to_renewal2_rate": 0.6327,
+    "renewal2_to_renewal3_rate": 0.8246
+  },
+  {
+    "country": "All",
+    "region": "MEA",
+    "category": "HEALTH_AND_FITNESS",
+    "product_set": "weekly",
+    "price_bucket": "Tier 3 (50-75%)",
+    "renewal1_to_renewal2_rate": 0.6275,
+    "renewal2_to_renewal3_rate": 0.8278
+  },
+  {
+    "country": "All",
+    "region": "MEA",
+    "category": "HEALTH_AND_FITNESS",
+    "product_set": "weekly",
+    "price_bucket": "Tier 4 (highest 25%)",
+    "renewal1_to_renewal2_rate": 0.5715,
+    "renewal2_to_renewal3_rate": 0.8191
+  },
+  {
+    "country": "All",
+    "region": "MEA",
+    "category": "LIFESTYLE",
+    "product_set": "monthly",
+    "price_bucket": "Tier 1 (lowest 25%)",
+    "renewal1_to_renewal2_rate": 0.5652,
+    "renewal2_to_renewal3_rate": 0.7874
+  },
+  {
+    "country": "All",
+    "region": "MEA",
+    "category": "LIFESTYLE",
+    "product_set": "monthly",
+    "price_bucket": "Tier 2 (25-50%)",
+    "renewal1_to_renewal2_rate": 0.3421,
+    "renewal2_to_renewal3_rate": 0.7028
+  },
+  {
+    "country": "All",
+    "region": "MEA",
+    "category": "LIFESTYLE",
+    "product_set": "monthly",
+    "price_bucket": "Tier 3 (50-75%)",
+    "renewal1_to_renewal2_rate": 0.5571,
+    "renewal2_to_renewal3_rate": 0.7663
+  },
+  {
+    "country": "All",
+    "region": "MEA",
+    "category": "LIFESTYLE",
+    "product_set": "monthly",
+    "price_bucket": "Tier 4 (highest 25%)",
+    "renewal1_to_renewal2_rate": 0.4743,
+    "renewal2_to_renewal3_rate": 0.7777
+  },
+  {
+    "country": "All",
+    "region": "MEA",
+    "category": "LIFESTYLE",
+    "product_set": "weekly",
+    "price_bucket": "Tier 1 (lowest 25%)",
+    "renewal1_to_renewal2_rate": 0.4939,
+    "renewal2_to_renewal3_rate": 0.8592
+  },
+  {
+    "country": "All",
+    "region": "MEA",
+    "category": "LIFESTYLE",
+    "product_set": "weekly",
+    "price_bucket": "Tier 2 (25-50%)",
+    "renewal1_to_renewal2_rate": 0.446,
+    "renewal2_to_renewal3_rate": 0.8152
+  },
+  {
+    "country": "All",
+    "region": "MEA",
+    "category": "LIFESTYLE",
+    "product_set": "weekly",
+    "price_bucket": "Tier 3 (50-75%)",
+    "renewal1_to_renewal2_rate": 0.5185,
+    "renewal2_to_renewal3_rate": 0.8141
+  },
+  {
+    "country": "All",
+    "region": "MEA",
+    "category": "LIFESTYLE",
+    "product_set": "weekly",
+    "price_bucket": "Tier 4 (highest 25%)",
+    "renewal1_to_renewal2_rate": 0.5357,
+    "renewal2_to_renewal3_rate": 0.8117
+  },
+  {
+    "country": "All",
+    "region": "MEA",
+    "category": "PHOTO_AND_VIDEO",
+    "product_set": "monthly",
+    "price_bucket": "Tier 1 (lowest 25%)",
+    "renewal1_to_renewal2_rate": 0.5055,
+    "renewal2_to_renewal3_rate": 0.7695
+  },
+  {
+    "country": "All",
+    "region": "MEA",
+    "category": "PHOTO_AND_VIDEO",
+    "product_set": "monthly",
+    "price_bucket": "Tier 2 (25-50%)",
+    "renewal1_to_renewal2_rate": 0.5236,
+    "renewal2_to_renewal3_rate": 0.7742
+  },
+  {
+    "country": "All",
+    "region": "MEA",
+    "category": "PHOTO_AND_VIDEO",
+    "product_set": "monthly",
+    "price_bucket": "Tier 3 (50-75%)",
+    "renewal1_to_renewal2_rate": 0.5287,
+    "renewal2_to_renewal3_rate": 0.75
+  },
+  {
+    "country": "All",
+    "region": "MEA",
+    "category": "PHOTO_AND_VIDEO",
+    "product_set": "monthly",
+    "price_bucket": "Tier 4 (highest 25%)",
+    "renewal1_to_renewal2_rate": 0.4536,
+    "renewal2_to_renewal3_rate": 0.6984
+  },
+  {
+    "country": "All",
+    "region": "MEA",
+    "category": "PHOTO_AND_VIDEO",
+    "product_set": "weekly",
+    "price_bucket": "Tier 1 (lowest 25%)",
+    "renewal1_to_renewal2_rate": 0.4376,
+    "renewal2_to_renewal3_rate": 0.8128
+  },
+  {
+    "country": "All",
+    "region": "MEA",
+    "category": "PHOTO_AND_VIDEO",
+    "product_set": "weekly",
+    "price_bucket": "Tier 2 (25-50%)",
+    "renewal1_to_renewal2_rate": 0.4465,
+    "renewal2_to_renewal3_rate": 0.8088
+  },
+  {
+    "country": "All",
+    "region": "MEA",
+    "category": "PHOTO_AND_VIDEO",
+    "product_set": "weekly",
+    "price_bucket": "Tier 3 (50-75%)",
+    "renewal1_to_renewal2_rate": 0.4075,
+    "renewal2_to_renewal3_rate": 0.8029
+  },
+  {
+    "country": "All",
+    "region": "MEA",
+    "category": "PHOTO_AND_VIDEO",
+    "product_set": "weekly",
+    "price_bucket": "Tier 4 (highest 25%)",
+    "renewal1_to_renewal2_rate": 0.4078,
+    "renewal2_to_renewal3_rate": 0.7889
+  },
+  {
+    "country": "All",
+    "region": "MEA",
+    "category": "PRODUCTIVITY",
+    "product_set": "monthly",
+    "price_bucket": "Tier 1 (lowest 25%)",
+    "renewal1_to_renewal2_rate": 0.4396,
+    "renewal2_to_renewal3_rate": 0.6929
+  },
+  {
+    "country": "All",
+    "region": "MEA",
+    "category": "PRODUCTIVITY",
+    "product_set": "monthly",
+    "price_bucket": "Tier 2 (25-50%)",
+    "renewal1_to_renewal2_rate": 0.4982,
+    "renewal2_to_renewal3_rate": 0.728
+  },
+  {
+    "country": "All",
+    "region": "MEA",
+    "category": "PRODUCTIVITY",
+    "product_set": "monthly",
+    "price_bucket": "Tier 3 (50-75%)",
+    "renewal1_to_renewal2_rate": 0.4753,
+    "renewal2_to_renewal3_rate": 0.7075
+  },
+  {
+    "country": "All",
+    "region": "MEA",
+    "category": "PRODUCTIVITY",
+    "product_set": "monthly",
+    "price_bucket": "Tier 4 (highest 25%)",
+    "renewal1_to_renewal2_rate": 0.4188,
+    "renewal2_to_renewal3_rate": 0.7081
+  },
+  {
+    "country": "All",
+    "region": "MEA",
+    "category": "PRODUCTIVITY",
+    "product_set": "weekly",
+    "price_bucket": "Tier 1 (lowest 25%)",
+    "renewal1_to_renewal2_rate": 0.2658,
+    "renewal2_to_renewal3_rate": 0.7959
+  },
+  {
+    "country": "All",
+    "region": "MEA",
+    "category": "PRODUCTIVITY",
+    "product_set": "weekly",
+    "price_bucket": "Tier 2 (25-50%)",
+    "renewal1_to_renewal2_rate": 0.5768,
+    "renewal2_to_renewal3_rate": 0.8266
+  },
+  {
+    "country": "All",
+    "region": "MEA",
+    "category": "PRODUCTIVITY",
+    "product_set": "weekly",
+    "price_bucket": "Tier 3 (50-75%)",
+    "renewal1_to_renewal2_rate": 0.6094,
+    "renewal2_to_renewal3_rate": 0.8363
+  },
+  {
+    "country": "All",
+    "region": "MEA",
+    "category": "PRODUCTIVITY",
+    "product_set": "weekly",
+    "price_bucket": "Tier 4 (highest 25%)",
+    "renewal1_to_renewal2_rate": 0.5485,
+    "renewal2_to_renewal3_rate": 0.8277
+  },
+  {
+    "country": "All",
+    "region": "MEA",
+    "category": "UTILITIES",
+    "product_set": "monthly",
+    "price_bucket": "Tier 1 (lowest 25%)",
+    "renewal1_to_renewal2_rate": 0.4989,
+    "renewal2_to_renewal3_rate": 0.7828
+  },
+  {
+    "country": "All",
+    "region": "MEA",
+    "category": "UTILITIES",
+    "product_set": "monthly",
+    "price_bucket": "Tier 2 (25-50%)",
+    "renewal1_to_renewal2_rate": 0.5337,
+    "renewal2_to_renewal3_rate": 0.7653
+  },
+  {
+    "country": "All",
+    "region": "MEA",
+    "category": "UTILITIES",
+    "product_set": "monthly",
+    "price_bucket": "Tier 3 (50-75%)",
+    "renewal1_to_renewal2_rate": 0.5744,
+    "renewal2_to_renewal3_rate": 0.7779
+  },
+  {
+    "country": "All",
+    "region": "MEA",
+    "category": "UTILITIES",
+    "product_set": "monthly",
+    "price_bucket": "Tier 4 (highest 25%)",
+    "renewal1_to_renewal2_rate": 0.5377,
+    "renewal2_to_renewal3_rate": 0.7509
+  },
+  {
+    "country": "All",
+    "region": "MEA",
+    "category": "UTILITIES",
+    "product_set": "weekly",
+    "price_bucket": "Tier 1 (lowest 25%)",
+    "renewal1_to_renewal2_rate": 0.5653,
+    "renewal2_to_renewal3_rate": 0.8402
+  },
+  {
+    "country": "All",
+    "region": "MEA",
+    "category": "UTILITIES",
+    "product_set": "weekly",
+    "price_bucket": "Tier 2 (25-50%)",
+    "renewal1_to_renewal2_rate": 0.5511,
+    "renewal2_to_renewal3_rate": 0.8359
+  },
+  {
+    "country": "All",
+    "region": "MEA",
+    "category": "UTILITIES",
+    "product_set": "weekly",
+    "price_bucket": "Tier 3 (50-75%)",
+    "renewal1_to_renewal2_rate": 0.595,
+    "renewal2_to_renewal3_rate": 0.8179
+  },
+  {
+    "country": "All",
+    "region": "MEA",
+    "category": "UTILITIES",
+    "product_set": "weekly",
+    "price_bucket": "Tier 4 (highest 25%)",
+    "renewal1_to_renewal2_rate": 0.5798,
+    "renewal2_to_renewal3_rate": 0.8309
+  },
+  {
+    "country": "All",
+    "region": "North America",
+    "category": "All",
+    "product_set": "monthly",
+    "price_bucket": "Tier 1 (lowest 25%)",
+    "renewal1_to_renewal2_rate": 0.5101,
+    "renewal2_to_renewal3_rate": 0.7789
+  },
+  {
+    "country": "All",
+    "region": "North America",
+    "category": "All",
+    "product_set": "monthly",
+    "price_bucket": "Tier 2 (25-50%)",
+    "renewal1_to_renewal2_rate": 0.4409,
+    "renewal2_to_renewal3_rate": 0.6503
+  },
+  {
+    "country": "All",
+    "region": "North America",
+    "category": "All",
+    "product_set": "monthly",
+    "price_bucket": "Tier 3 (50-75%)",
+    "renewal1_to_renewal2_rate": 0.4425,
+    "renewal2_to_renewal3_rate": 0.728
+  },
+  {
+    "country": "All",
+    "region": "North America",
+    "category": "All",
+    "product_set": "monthly",
+    "price_bucket": "Tier 4 (highest 25%)",
+    "renewal1_to_renewal2_rate": 0.4106,
+    "renewal2_to_renewal3_rate": 0.7263
+  },
+  {
+    "country": "All",
+    "region": "North America",
+    "category": "All",
+    "product_set": "weekly",
+    "price_bucket": "Tier 1 (lowest 25%)",
+    "renewal1_to_renewal2_rate": 0.505,
+    "renewal2_to_renewal3_rate": 0.8199
+  },
+  {
+    "country": "All",
+    "region": "North America",
+    "category": "All",
+    "product_set": "weekly",
+    "price_bucket": "Tier 2 (25-50%)",
+    "renewal1_to_renewal2_rate": 0.5297,
+    "renewal2_to_renewal3_rate": 0.8126
+  },
+  {
+    "country": "All",
+    "region": "North America",
+    "category": "All",
+    "product_set": "weekly",
+    "price_bucket": "Tier 3 (50-75%)",
+    "renewal1_to_renewal2_rate": 0.5984,
+    "renewal2_to_renewal3_rate": 0.8252
+  },
+  {
+    "country": "All",
+    "region": "North America",
+    "category": "All",
+    "product_set": "weekly",
+    "price_bucket": "Tier 4 (highest 25%)",
+    "renewal1_to_renewal2_rate": 0.4967,
+    "renewal2_to_renewal3_rate": 0.821
+  },
+  {
+    "country": "All",
+    "region": "North America",
+    "category": "EDUCATION",
+    "product_set": "monthly",
+    "price_bucket": "Tier 1 (lowest 25%)",
+    "renewal1_to_renewal2_rate": 0.5291,
+    "renewal2_to_renewal3_rate": 0.6661
+  },
+  {
+    "country": "All",
+    "region": "North America",
+    "category": "EDUCATION",
+    "product_set": "monthly",
+    "price_bucket": "Tier 2 (25-50%)",
+    "renewal1_to_renewal2_rate": 0.501,
+    "renewal2_to_renewal3_rate": 0.3127
+  },
+  {
+    "country": "All",
+    "region": "North America",
+    "category": "EDUCATION",
+    "product_set": "monthly",
+    "price_bucket": "Tier 3 (50-75%)",
+    "renewal1_to_renewal2_rate": 0.5337,
+    "renewal2_to_renewal3_rate": 0.7101
+  },
+  {
+    "country": "All",
+    "region": "North America",
+    "category": "EDUCATION",
+    "product_set": "monthly",
+    "price_bucket": "Tier 4 (highest 25%)",
+    "renewal1_to_renewal2_rate": 0.5928,
+    "renewal2_to_renewal3_rate": 0.6587
+  },
+  {
+    "country": "All",
+    "region": "North America",
+    "category": "EDUCATION",
+    "product_set": "weekly",
+    "price_bucket": "Tier 1 (lowest 25%)",
+    "renewal1_to_renewal2_rate": 0.7381,
+    "renewal2_to_renewal3_rate": 0.8565
+  },
+  {
+    "country": "All",
+    "region": "North America",
+    "category": "EDUCATION",
+    "product_set": "weekly",
+    "price_bucket": "Tier 3 (50-75%)",
+    "renewal1_to_renewal2_rate": 0.6454,
+    "renewal2_to_renewal3_rate": 0.8229
+  },
+  {
+    "country": "All",
+    "region": "North America",
+    "category": "EDUCATION",
+    "product_set": "weekly",
+    "price_bucket": "Tier 4 (highest 25%)",
+    "renewal1_to_renewal2_rate": 0.6176,
+    "renewal2_to_renewal3_rate": 0.8058
+  },
+  {
+    "country": "All",
+    "region": "North America",
+    "category": "ENTERTAINMENT",
+    "product_set": "monthly",
+    "price_bucket": "Tier 1 (lowest 25%)",
+    "renewal1_to_renewal2_rate": 0.5866,
+    "renewal2_to_renewal3_rate": 0.8022
+  },
+  {
+    "country": "All",
+    "region": "North America",
+    "category": "ENTERTAINMENT",
+    "product_set": "monthly",
+    "price_bucket": "Tier 2 (25-50%)",
+    "renewal1_to_renewal2_rate": 0.2164,
+    "renewal2_to_renewal3_rate": 0.6928
+  },
+  {
+    "country": "All",
+    "region": "North America",
+    "category": "ENTERTAINMENT",
+    "product_set": "monthly",
+    "price_bucket": "Tier 3 (50-75%)",
+    "renewal1_to_renewal2_rate": 0.2545,
+    "renewal2_to_renewal3_rate": 0.7303
+  },
+  {
+    "country": "All",
+    "region": "North America",
+    "category": "ENTERTAINMENT",
+    "product_set": "monthly",
+    "price_bucket": "Tier 4 (highest 25%)",
+    "renewal1_to_renewal2_rate": 0.1563,
+    "renewal2_to_renewal3_rate": 0.7066
+  },
+  {
+    "country": "All",
+    "region": "North America",
+    "category": "ENTERTAINMENT",
+    "product_set": "weekly",
+    "price_bucket": "Tier 1 (lowest 25%)",
+    "renewal1_to_renewal2_rate": 0.4255,
+    "renewal2_to_renewal3_rate": 0.7932
+  },
+  {
+    "country": "All",
+    "region": "North America",
+    "category": "ENTERTAINMENT",
+    "product_set": "weekly",
+    "price_bucket": "Tier 2 (25-50%)",
+    "renewal1_to_renewal2_rate": 0.4717,
+    "renewal2_to_renewal3_rate": 0.7871
+  },
+  {
+    "country": "All",
+    "region": "North America",
+    "category": "ENTERTAINMENT",
+    "product_set": "weekly",
+    "price_bucket": "Tier 3 (50-75%)",
+    "renewal1_to_renewal2_rate": 0.5108,
+    "renewal2_to_renewal3_rate": 0.7838
+  },
+  {
+    "country": "All",
+    "region": "North America",
+    "category": "ENTERTAINMENT",
+    "product_set": "weekly",
+    "price_bucket": "Tier 4 (highest 25%)",
+    "renewal1_to_renewal2_rate": 0.5219,
+    "renewal2_to_renewal3_rate": 0.8057
+  },
+  {
+    "country": "All",
+    "region": "North America",
+    "category": "GRAPHICS_AND_DESIGN",
+    "product_set": "monthly",
+    "price_bucket": "Tier 1 (lowest 25%)",
+    "renewal1_to_renewal2_rate": 0.5111,
+    "renewal2_to_renewal3_rate": 0.8011
+  },
+  {
+    "country": "All",
+    "region": "North America",
+    "category": "GRAPHICS_AND_DESIGN",
+    "product_set": "monthly",
+    "price_bucket": "Tier 2 (25-50%)",
+    "renewal1_to_renewal2_rate": 0.4066,
+    "renewal2_to_renewal3_rate": 0.7315
+  },
+  {
+    "country": "All",
+    "region": "North America",
+    "category": "GRAPHICS_AND_DESIGN",
+    "product_set": "monthly",
+    "price_bucket": "Tier 3 (50-75%)",
+    "renewal1_to_renewal2_rate": 0.4522,
+    "renewal2_to_renewal3_rate": 0.7469
+  },
+  {
+    "country": "All",
+    "region": "North America",
+    "category": "GRAPHICS_AND_DESIGN",
+    "product_set": "monthly",
+    "price_bucket": "Tier 4 (highest 25%)",
+    "renewal1_to_renewal2_rate": 0.4504,
+    "renewal2_to_renewal3_rate": 0.8177
+  },
+  {
+    "country": "All",
+    "region": "North America",
+    "category": "GRAPHICS_AND_DESIGN",
+    "product_set": "weekly",
+    "price_bucket": "Tier 1 (lowest 25%)",
+    "renewal1_to_renewal2_rate": 0.3948,
+    "renewal2_to_renewal3_rate": 0.7963
+  },
+  {
+    "country": "All",
+    "region": "North America",
+    "category": "GRAPHICS_AND_DESIGN",
+    "product_set": "weekly",
+    "price_bucket": "Tier 2 (25-50%)",
+    "renewal1_to_renewal2_rate": 0.4495,
+    "renewal2_to_renewal3_rate": 0.7881
+  },
+  {
+    "country": "All",
+    "region": "North America",
+    "category": "GRAPHICS_AND_DESIGN",
+    "product_set": "weekly",
+    "price_bucket": "Tier 4 (highest 25%)",
+    "renewal1_to_renewal2_rate": 0.4626,
+    "renewal2_to_renewal3_rate": 0.8034
+  },
+  {
+    "country": "All",
+    "region": "North America",
+    "category": "HEALTH_AND_FITNESS",
+    "product_set": "monthly",
+    "price_bucket": "Tier 1 (lowest 25%)",
+    "renewal1_to_renewal2_rate": 0.5262,
+    "renewal2_to_renewal3_rate": 0.6903
+  },
+  {
+    "country": "All",
+    "region": "North America",
+    "category": "HEALTH_AND_FITNESS",
+    "product_set": "monthly",
+    "price_bucket": "Tier 2 (25-50%)",
+    "renewal1_to_renewal2_rate": 0.477,
+    "renewal2_to_renewal3_rate": 0.6975
+  },
+  {
+    "country": "All",
+    "region": "North America",
+    "category": "HEALTH_AND_FITNESS",
+    "product_set": "monthly",
+    "price_bucket": "Tier 3 (50-75%)",
+    "renewal1_to_renewal2_rate": 0.4811,
+    "renewal2_to_renewal3_rate": 0.7375
+  },
+  {
+    "country": "All",
+    "region": "North America",
+    "category": "HEALTH_AND_FITNESS",
+    "product_set": "monthly",
+    "price_bucket": "Tier 4 (highest 25%)",
+    "renewal1_to_renewal2_rate": 0.5437,
+    "renewal2_to_renewal3_rate": 0.7312
+  },
+  {
+    "country": "All",
+    "region": "North America",
+    "category": "HEALTH_AND_FITNESS",
+    "product_set": "weekly",
+    "price_bucket": "Tier 1 (lowest 25%)",
+    "renewal1_to_renewal2_rate": 0.6808,
+    "renewal2_to_renewal3_rate": 0.8286
+  },
+  {
+    "country": "All",
+    "region": "North America",
+    "category": "HEALTH_AND_FITNESS",
+    "product_set": "weekly",
+    "price_bucket": "Tier 2 (25-50%)",
+    "renewal1_to_renewal2_rate": 0.6191,
+    "renewal2_to_renewal3_rate": 0.8087
+  },
+  {
+    "country": "All",
+    "region": "North America",
+    "category": "HEALTH_AND_FITNESS",
+    "product_set": "weekly",
+    "price_bucket": "Tier 3 (50-75%)",
+    "renewal1_to_renewal2_rate": 0.5778,
+    "renewal2_to_renewal3_rate": 0.7923
+  },
+  {
+    "country": "All",
+    "region": "North America",
+    "category": "HEALTH_AND_FITNESS",
+    "product_set": "weekly",
+    "price_bucket": "Tier 4 (highest 25%)",
+    "renewal1_to_renewal2_rate": 0.5462,
+    "renewal2_to_renewal3_rate": 0.833
+  },
+  {
+    "country": "All",
+    "region": "North America",
+    "category": "LIFESTYLE",
+    "product_set": "monthly",
+    "price_bucket": "Tier 1 (lowest 25%)",
+    "renewal1_to_renewal2_rate": 0.5755,
+    "renewal2_to_renewal3_rate": 0.8686
+  },
+  {
+    "country": "All",
+    "region": "North America",
+    "category": "LIFESTYLE",
+    "product_set": "monthly",
+    "price_bucket": "Tier 2 (25-50%)",
+    "renewal1_to_renewal2_rate": 0.4356,
+    "renewal2_to_renewal3_rate": 0.7076
+  },
+  {
+    "country": "All",
+    "region": "North America",
+    "category": "LIFESTYLE",
+    "product_set": "monthly",
+    "price_bucket": "Tier 3 (50-75%)",
+    "renewal1_to_renewal2_rate": 0.4364,
+    "renewal2_to_renewal3_rate": 0.7865
+  },
+  {
+    "country": "All",
+    "region": "North America",
+    "category": "LIFESTYLE",
+    "product_set": "monthly",
+    "price_bucket": "Tier 4 (highest 25%)",
+    "renewal1_to_renewal2_rate": 0.3769,
+    "renewal2_to_renewal3_rate": 0.6577
+  },
+  {
+    "country": "All",
+    "region": "North America",
+    "category": "LIFESTYLE",
+    "product_set": "weekly",
+    "price_bucket": "Tier 1 (lowest 25%)",
+    "renewal1_to_renewal2_rate": 0.4318,
+    "renewal2_to_renewal3_rate": 0.8131
+  },
+  {
+    "country": "All",
+    "region": "North America",
+    "category": "LIFESTYLE",
+    "product_set": "weekly",
+    "price_bucket": "Tier 2 (25-50%)",
+    "renewal1_to_renewal2_rate": 0.4891,
+    "renewal2_to_renewal3_rate": 0.811
+  },
+  {
+    "country": "All",
+    "region": "North America",
+    "category": "LIFESTYLE",
+    "product_set": "weekly",
+    "price_bucket": "Tier 3 (50-75%)",
+    "renewal1_to_renewal2_rate": 0.5102,
+    "renewal2_to_renewal3_rate": 0.77
+  },
+  {
+    "country": "All",
+    "region": "North America",
+    "category": "LIFESTYLE",
+    "product_set": "weekly",
+    "price_bucket": "Tier 4 (highest 25%)",
+    "renewal1_to_renewal2_rate": 0.473,
+    "renewal2_to_renewal3_rate": 0.8627
+  },
+  {
+    "country": "All",
+    "region": "North America",
+    "category": "PHOTO_AND_VIDEO",
+    "product_set": "monthly",
+    "price_bucket": "Tier 1 (lowest 25%)",
+    "renewal1_to_renewal2_rate": 0.4801,
+    "renewal2_to_renewal3_rate": 0.7792
+  },
+  {
+    "country": "All",
+    "region": "North America",
+    "category": "PHOTO_AND_VIDEO",
+    "product_set": "monthly",
+    "price_bucket": "Tier 2 (25-50%)",
+    "renewal1_to_renewal2_rate": 0.4048,
+    "renewal2_to_renewal3_rate": 0.7518
+  },
+  {
+    "country": "All",
+    "region": "North America",
+    "category": "PHOTO_AND_VIDEO",
+    "product_set": "monthly",
+    "price_bucket": "Tier 3 (50-75%)",
+    "renewal1_to_renewal2_rate": 0.4964,
+    "renewal2_to_renewal3_rate": 0.7066
+  },
+  {
+    "country": "All",
+    "region": "North America",
+    "category": "PHOTO_AND_VIDEO",
+    "product_set": "monthly",
+    "price_bucket": "Tier 4 (highest 25%)",
+    "renewal1_to_renewal2_rate": 0.3248,
+    "renewal2_to_renewal3_rate": 0.664
+  },
+  {
+    "country": "All",
+    "region": "North America",
+    "category": "PHOTO_AND_VIDEO",
+    "product_set": "weekly",
+    "price_bucket": "Tier 1 (lowest 25%)",
+    "renewal1_to_renewal2_rate": 0.3633,
+    "renewal2_to_renewal3_rate": 0.7811
+  },
+  {
+    "country": "All",
+    "region": "North America",
+    "category": "PHOTO_AND_VIDEO",
+    "product_set": "weekly",
+    "price_bucket": "Tier 3 (50-75%)",
+    "renewal1_to_renewal2_rate": 0.3541,
+    "renewal2_to_renewal3_rate": 0.7838
+  },
+  {
+    "country": "All",
+    "region": "North America",
+    "category": "PHOTO_AND_VIDEO",
+    "product_set": "weekly",
+    "price_bucket": "Tier 4 (highest 25%)",
+    "renewal1_to_renewal2_rate": 0.4015,
+    "renewal2_to_renewal3_rate": 0.7799
+  },
+  {
+    "country": "All",
+    "region": "North America",
+    "category": "PRODUCTIVITY",
+    "product_set": "monthly",
+    "price_bucket": "Tier 1 (lowest 25%)",
+    "renewal1_to_renewal2_rate": 0.4878,
+    "renewal2_to_renewal3_rate": 0.7244
+  },
+  {
+    "country": "All",
+    "region": "North America",
+    "category": "PRODUCTIVITY",
+    "product_set": "monthly",
+    "price_bucket": "Tier 3 (50-75%)",
+    "renewal1_to_renewal2_rate": 0.4788,
+    "renewal2_to_renewal3_rate": 0.7637
+  },
+  {
+    "country": "All",
+    "region": "North America",
+    "category": "PRODUCTIVITY",
+    "product_set": "monthly",
+    "price_bucket": "Tier 4 (highest 25%)",
+    "renewal1_to_renewal2_rate": 0.6441,
+    "renewal2_to_renewal3_rate": 0.8507
+  },
+  {
+    "country": "All",
+    "region": "North America",
+    "category": "PRODUCTIVITY",
+    "product_set": "weekly",
+    "price_bucket": "Tier 1 (lowest 25%)",
+    "renewal1_to_renewal2_rate": 0.3772,
+    "renewal2_to_renewal3_rate": 0.8083
+  },
+  {
+    "country": "All",
+    "region": "North America",
+    "category": "PRODUCTIVITY",
+    "product_set": "weekly",
+    "price_bucket": "Tier 2 (25-50%)",
+    "renewal1_to_renewal2_rate": 0.5952,
+    "renewal2_to_renewal3_rate": 0.831
+  },
+  {
+    "country": "All",
+    "region": "North America",
+    "category": "PRODUCTIVITY",
+    "product_set": "weekly",
+    "price_bucket": "Tier 3 (50-75%)",
+    "renewal1_to_renewal2_rate": 0.624,
+    "renewal2_to_renewal3_rate": 0.8276
+  },
+  {
+    "country": "All",
+    "region": "North America",
+    "category": "PRODUCTIVITY",
+    "product_set": "weekly",
+    "price_bucket": "Tier 4 (highest 25%)",
+    "renewal1_to_renewal2_rate": 0.5802,
+    "renewal2_to_renewal3_rate": 0.8523
+  },
+  {
+    "country": "All",
+    "region": "North America",
+    "category": "UTILITIES",
+    "product_set": "monthly",
+    "price_bucket": "Tier 1 (lowest 25%)",
+    "renewal1_to_renewal2_rate": 0.5268,
+    "renewal2_to_renewal3_rate": 0.7857
+  },
+  {
+    "country": "All",
+    "region": "North America",
+    "category": "UTILITIES",
+    "product_set": "monthly",
+    "price_bucket": "Tier 3 (50-75%)",
+    "renewal1_to_renewal2_rate": 0.4827,
+    "renewal2_to_renewal3_rate": 0.6867
+  },
+  {
+    "country": "All",
+    "region": "North America",
+    "category": "UTILITIES",
+    "product_set": "monthly",
+    "price_bucket": "Tier 4 (highest 25%)",
+    "renewal1_to_renewal2_rate": 0.3474,
+    "renewal2_to_renewal3_rate": 0.7312
+  },
+  {
+    "country": "All",
+    "region": "North America",
+    "category": "UTILITIES",
+    "product_set": "weekly",
+    "price_bucket": "Tier 1 (lowest 25%)",
+    "renewal1_to_renewal2_rate": 0.6229,
+    "renewal2_to_renewal3_rate": 0.8309
+  },
+  {
+    "country": "All",
+    "region": "North America",
+    "category": "UTILITIES",
+    "product_set": "weekly",
+    "price_bucket": "Tier 2 (25-50%)",
+    "renewal1_to_renewal2_rate": 0.6105,
+    "renewal2_to_renewal3_rate": 0.8253
+  },
+  {
+    "country": "All",
+    "region": "North America",
+    "category": "UTILITIES",
+    "product_set": "weekly",
+    "price_bucket": "Tier 3 (50-75%)",
+    "renewal1_to_renewal2_rate": 0.6614,
+    "renewal2_to_renewal3_rate": 0.8442
+  },
+  {
+    "country": "All",
+    "region": "North America",
+    "category": "UTILITIES",
+    "product_set": "weekly",
+    "price_bucket": "Tier 4 (highest 25%)",
+    "renewal1_to_renewal2_rate": 0.7839,
+    "renewal2_to_renewal3_rate": 0.9035
+  }
+]

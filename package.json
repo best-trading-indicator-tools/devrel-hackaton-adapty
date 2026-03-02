@@ -8,6 +8,7 @@
     "build": "next build",
     "start": "next start",
     "lint": "eslint",
+    "sois-site-sync": "node scripts/build-sois-site-context.mjs",
     "slack-sync": "node scripts/slack-product-updates-sync.mjs",
     "notion-sync": "node scripts/notion-calendar-sync.mjs"
   },

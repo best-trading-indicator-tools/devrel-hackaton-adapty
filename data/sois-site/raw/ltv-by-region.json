@@ -1,0 +1,86 @@
+[
+  {
+    "country": "Japan",
+    "region": "APAC",
+    "category": "All",
+    "avg_ltv": 45.03
+  },
+  {
+    "country": "Singapore",
+    "region": "APAC",
+    "category": "All",
+    "avg_ltv": 42.55
+  },
+  {
+    "country": "Australia",
+    "region": "APAC",
+    "category": "All",
+    "avg_ltv": 39.59
+  },
+  {
+    "country": "Norway",
+    "region": "Europe",
+    "category": "All",
+    "avg_ltv": 47.98
+  },
+  {
+    "country": "Denmark",
+    "region": "Europe",
+    "category": "All",
+    "avg_ltv": 44.02
+  },
+  {
+    "country": "Switzerland",
+    "region": "Europe",
+    "category": "All",
+    "avg_ltv": 43.94
+  },
+  {
+    "country": "Argentina",
+    "region": "LATAM",
+    "category": "All",
+    "avg_ltv": 37.79
+  },
+  {
+    "country": "Mexico",
+    "region": "LATAM",
+    "category": "All",
+    "avg_ltv": 36.3
+  },
+  {
+    "country": "Costa Rica",
+    "region": "LATAM",
+    "category": "All",
+    "avg_ltv": 36.07
+  },
+  {
+    "country": "Qatar",
+    "region": "MEA",
+    "category": "All",
+    "avg_ltv": 50.17
+  },
+  {
+    "country": "Israel",
+    "region": "MEA",
+    "category": "All",
+    "avg_ltv": 47.68
+  },
+  {
+    "country": "United Arab Emirates",
+    "region": "MEA",
+    "category": "All",
+    "avg_ltv": 44.12
+  },
+  {
+    "country": "United States of America",
+    "region": "North America",
+    "category": "All",
+    "avg_ltv": 44.54
+  },
+  {
+    "country": "Canada",
+    "region": "North America",
+    "category": "All",
+    "avg_ltv": 35.19
+  }
+]

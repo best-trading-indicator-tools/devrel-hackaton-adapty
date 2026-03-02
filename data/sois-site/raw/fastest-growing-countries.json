@@ -1,0 +1,98 @@
+[
+  {
+    "store": "app_store",
+    "region": "APAC",
+    "country": "Australia",
+    "growth_rate": 0.5843
+  },
+  {
+    "store": "app_store",
+    "region": "APAC",
+    "country": "Japan",
+    "growth_rate": 0.9559
+  },
+  {
+    "store": "app_store",
+    "region": "Europe",
+    "country": "France",
+    "growth_rate": 0.5527
+  },
+  {
+    "store": "app_store",
+    "region": "Europe",
+    "country": "Germany",
+    "growth_rate": 0.5657
+  },
+  {
+    "store": "app_store",
+    "region": "Europe",
+    "country": "Italy",
+    "growth_rate": 0.5557
+  },
+  {
+    "store": "app_store",
+    "region": "Europe",
+    "country": "Netherlands",
+    "growth_rate": 0.5668
+  },
+  {
+    "store": "app_store",
+    "region": "Europe",
+    "country": "Switzerland",
+    "growth_rate": 0.53
+  },
+  {
+    "store": "app_store",
+    "region": "Europe",
+    "country": "United Kingdom",
+    "growth_rate": 0.5339
+  },
+  {
+    "store": "app_store",
+    "region": "LATAM",
+    "country": "Brazil",
+    "growth_rate": 0.6062
+  },
+  {
+    "store": "app_store",
+    "region": "LATAM",
+    "country": "Mexico",
+    "growth_rate": 0.8835
+  },
+  {
+    "store": "app_store",
+    "region": "MEA",
+    "country": "Saudi Arabia",
+    "growth_rate": 0.2081
+  },
+  {
+    "store": "app_store",
+    "region": "MEA",
+    "country": "Turkey",
+    "growth_rate": 0.723
+  },
+  {
+    "store": "app_store",
+    "region": "North America",
+    "country": "Canada",
+    "growth_rate": 0.5808
+  },
+  {
+    "store": "app_store",
+    "region": "North America",
+    "country": "United States of America",
+    "growth_rate": 0.5021
+  },
+  {
+    "store": "play_store",
+    "region": "Europe",
+    "country": "United Kingdom",
+    "growth_rate": 0.6886
+  },
+  {
+    "store": "play_store",
+    "region": "North America",
+    "country": "United States of America",
+    "growth_rate": 0.8916
+  }
+]

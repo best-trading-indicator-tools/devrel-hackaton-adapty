@@ -389,6 +389,13 @@ type NumericClaim = {
 };
 
 const MAX_ALLOWED_NUMERIC_CLAIM_ABS = 1e15;
+const SAUCE_FUZZY_NUMERIC_PLACEHOLDER_PATTERN = /\b(a few|meaningful share|broad range|a low threshold)\b/i;
+const SAUCE_FUZZY_QUANTIFIER_PATTERN =
+  /\bseveral\s+(?:days?|weeks?|months?|years?|hours?|minutes?|apps?|users?|installs?|downloads?|trials?|tests?|experiments?|placements?|paywalls?|countries?|markets?|segments?|cohorts?|regions?|categories?)\b/i;
+const SAUCE_BLOCKED_ANECDOTE_PATTERN =
+  /\b(?:one|another|third)\s+app\b|\b(?:we|our team)\s+(?:support(?:ed)?|work(?:ed)? with|had a client|helped)\b/i;
+const SAUCE_DETAILS_ANECDOTE_ALLOW_PATTERN =
+  /\b(one app|another app|third app|client story|customer story|case study|we support|we worked with|we saw|we tested)\b/i;
 
 const NUMERIC_CLAIM_EXTRACTORS: Array<{ kind: NumericClaimKind; regex: RegExp }> = [
   {
@@ -1123,6 +1130,188 @@ function sanitizeGeneratedPostsNumericClaims<T extends { hook: string; body: str
   return {
     posts: sanitizedPosts,
     unsupportedClaims,
+  };
+}
+
+function sentenceHasUnsupportedNumericClaim(sentence: string, allowedClaims: Set<string>): boolean {
+  const claims = extractNumericClaims(sentence);
+  if (!claims.length) {
+    return false;
+  }
+  return claims.some((claim) => !allowedClaims.has(claim.canonical));
+}
+
+function sentenceHasFuzzyNumericPlaceholder(sentence: string): boolean {
+  return SAUCE_FUZZY_NUMERIC_PLACEHOLDER_PATTERN.test(sentence) || SAUCE_FUZZY_QUANTIFIER_PATTERN.test(sentence);
+}
+
+function sentenceHasBlockedAnecdote(sentence: string): boolean {
+  return SAUCE_BLOCKED_ANECDOTE_PATTERN.test(sentence);
+}
+
+function sentenceIsDegenerateNumericArtifact(sentence: string): boolean {
+  const trimmed = sentence.trim();
+  if (!trimmed) {
+    return false;
+  }
+
+  if (/^0+[.,;:!?-]*$/i.test(trimmed)) {
+    return true;
+  }
+
+  const stripped = trimmed.replace(/[()]/g, "").replace(/\s+/g, " ");
+  if (stripped.length <= 8 && /^[0-9.%$€£:-]+$/i.test(stripped)) {
+    return true;
+  }
+
+  return false;
+}
+
+function detailsAllowSauceAnecdotes(details: string): boolean {
+  return SAUCE_DETAILS_ANECDOTE_ALLOW_PATTERN.test(details);
+}
+
+function sanitizeSauceTextStrict(
+  value: string,
+  options: {
+    allowedClaims: Set<string>;
+    allowAnecdotes: boolean;
+  },
+): {
+  value: string;
+  removedUnsupportedNumericSentences: number;
+  removedFuzzyPlaceholderSentences: number;
+  removedAnecdoteSentences: number;
+} {
+  const paragraphs = splitParagraphs(value);
+  const keptParagraphs: string[] = [];
+  let removedUnsupportedNumericSentences = 0;
+  let removedFuzzyPlaceholderSentences = 0;
+  let removedAnecdoteSentences = 0;
+
+  for (const paragraph of paragraphs) {
+    const sentenceUnits = splitSentenceUnits(paragraph)
+      .map((sentence) => sentence.replace(/\s+/g, " ").trim())
+      .filter(Boolean);
+    const sentences = sentenceUnits.length ? sentenceUnits : [paragraph.replace(/\s+/g, " ").trim()];
+    const keptSentences: string[] = [];
+
+    for (const sentence of sentences) {
+      if (!sentence) {
+        continue;
+      }
+
+      const hasUnsupportedNumeric = sentenceHasUnsupportedNumericClaim(sentence, options.allowedClaims);
+      const hasFuzzyPlaceholder = sentenceHasFuzzyNumericPlaceholder(sentence);
+      const hasBlockedAnecdote = !options.allowAnecdotes && sentenceHasBlockedAnecdote(sentence);
+      const hasDegenerateArtifact = sentenceIsDegenerateNumericArtifact(sentence);
+
+      if (hasUnsupportedNumeric || hasFuzzyPlaceholder || hasBlockedAnecdote || hasDegenerateArtifact) {
+        if (hasUnsupportedNumeric) {
+          removedUnsupportedNumericSentences += 1;
+        }
+        if (hasFuzzyPlaceholder) {
+          removedFuzzyPlaceholderSentences += 1;
+        }
+        if (hasBlockedAnecdote) {
+          removedAnecdoteSentences += 1;
+        }
+        continue;
+      }
+
+      keptSentences.push(sentence);
+    }
+
+    if (keptSentences.length > 0) {
+      keptParagraphs.push(keptSentences.join(" "));
+    }
+  }
+
+  const sanitized = normalizeNoEmDash(keptParagraphs.join("\n\n").replace(/\s+\n/g, "\n").trim());
+  return {
+    value: sanitized,
+    removedUnsupportedNumericSentences,
+    removedFuzzyPlaceholderSentences,
+    removedAnecdoteSentences,
+  };
+}
+
+function pickStrictSauceBenchmarkSnippet(
+  snippets: string[],
+  allowedClaims: Set<string>,
+  seedIndex: number,
+): string | null {
+  if (!snippets.length) {
+    return null;
+  }
+
+  const offset = Math.max(0, seedIndex) % snippets.length;
+  for (let index = 0; index < snippets.length; index += 1) {
+    const snippet = snippets[(offset + index) % snippets.length]?.replace(/\s+/g, " ").trim();
+    if (!snippet) {
+      continue;
+    }
+    const claims = extractNumericClaims(snippet);
+    if (!claims.length) {
+      continue;
+    }
+    if (claims.some((claim) => allowedClaims.has(claim.canonical))) {
+      return snippet;
+    }
+  }
+
+  const fallback = snippets[offset]?.replace(/\s+/g, " ").trim();
+  return fallback || null;
+}
+
+function buildStrictSauceBenchmarkSentence(snippet: string): string {
+  const compact = snippet.replace(/\s+/g, " ").trim();
+  const base = compact.endsWith(".") ? compact : `${compact}.`;
+  return `SOIS benchmark: ${base}`;
+}
+
+function countStrictSauceOutputViolations(
+  values: string[],
+  options: { allowedClaims: Set<string>; allowAnecdotes: boolean },
+): { unsupportedNumericClaims: number; fuzzyPlaceholderSentences: number; blockedAnecdoteSentences: number } {
+  let unsupportedNumericClaims = 0;
+  let fuzzyPlaceholderSentences = 0;
+  let blockedAnecdoteSentences = 0;
+
+  for (const value of values) {
+    const text = value.trim();
+    if (!text) {
+      continue;
+    }
+
+    const claims = extractNumericClaims(text);
+    unsupportedNumericClaims += claims.filter((claim) => !options.allowedClaims.has(claim.canonical)).length;
+
+    const paragraphs = splitParagraphs(text);
+    for (const paragraph of paragraphs) {
+      const sentenceUnits = splitSentenceUnits(paragraph)
+        .map((sentence) => sentence.replace(/\s+/g, " ").trim())
+        .filter(Boolean);
+      const sentences = sentenceUnits.length ? sentenceUnits : [paragraph.replace(/\s+/g, " ").trim()];
+
+      for (const sentence of sentences) {
+        if (!sentence) {
+          continue;
+        }
+        if (sentenceHasFuzzyNumericPlaceholder(sentence)) {
+          fuzzyPlaceholderSentences += 1;
+        }
+        if (!options.allowAnecdotes && sentenceHasBlockedAnecdote(sentence)) {
+          blockedAnecdoteSentences += 1;
+        }
+      }
+    }
+  }
+
+  return {
+    unsupportedNumericClaims,
+    fuzzyPlaceholderSentences,
+    blockedAnecdoteSentences,
   };
 }
 
@@ -3609,6 +3798,9 @@ export async function POST(request: Request) {
 Sauce guide from repository prompt file:
 ${promptGuides.sauce}
 
+SOIS website context guide from repository prompt file:
+${promptGuides.sois}
+
 ASO guide from repository prompt file:
 ${promptGuides.aso}
 
@@ -4447,6 +4639,126 @@ Return ${parsed.hooks.length} hook suggestions as well (keep good ones, tighten 
       if (sauceCrossPostRewriteCount > 0) {
         console.warn(
           `Sauce cross-post diversity pass rewrote ${sauceCrossPostRewriteCount} repeated benchmark number mention(s) across posts.`,
+        );
+      }
+    }
+
+    const enforceStrictSauceEvidenceMode =
+      looksLikeSaucePostType(input.inputType) &&
+      sauceBenchmarkNumericClaims.size > 0 &&
+      parseBooleanEnv(process.env.ENABLE_SAUCE_STRICT_EVIDENCE_MODE, true);
+
+    if (enforceStrictSauceEvidenceMode) {
+      const allowAnecdotes = detailsAllowSauceAnecdotes(input.details);
+      const strictFallbackCta = shouldIncludeCta
+        ? clipTextStrictMax(
+            effectiveCtaLink
+              ? `See full SOIS benchmarks here: ${effectiveCtaLink}`
+              : "See full SOIS benchmarks in State of In-App Subscriptions.",
+            CLAUDE_POST_CTA_LIMITS.max,
+          )
+        : "";
+
+      let strictPostRewrites = 0;
+      normalizedPosts = normalizedPosts.map((post, index) => {
+        const benchmarkSnippet = pickStrictSauceBenchmarkSnippet(
+          sauceBenchmarkSnippets,
+          sauceBenchmarkNumericClaims,
+          index,
+        );
+        const benchmarkSentence = benchmarkSnippet ? buildStrictSauceBenchmarkSentence(benchmarkSnippet) : "";
+
+        const hookSanitized = sanitizeSauceTextStrict(post.hook, {
+          allowedClaims: sauceBenchmarkNumericClaims,
+          allowAnecdotes,
+        });
+        const bodySanitized = sanitizeSauceTextStrict(post.body, {
+          allowedClaims: sauceBenchmarkNumericClaims,
+          allowAnecdotes,
+        });
+        const ctaSanitized = sanitizeSauceTextStrict(post.cta, {
+          allowedClaims: sauceBenchmarkNumericClaims,
+          allowAnecdotes,
+        });
+
+        strictPostRewrites +=
+          hookSanitized.removedUnsupportedNumericSentences +
+          hookSanitized.removedFuzzyPlaceholderSentences +
+          hookSanitized.removedAnecdoteSentences +
+          bodySanitized.removedUnsupportedNumericSentences +
+          bodySanitized.removedFuzzyPlaceholderSentences +
+          bodySanitized.removedAnecdoteSentences +
+          ctaSanitized.removedUnsupportedNumericSentences +
+          ctaSanitized.removedFuzzyPlaceholderSentences +
+          ctaSanitized.removedAnecdoteSentences;
+
+        let hook = hookSanitized.value;
+        let body = bodySanitized.value;
+        let cta = ctaSanitized.value;
+
+        if (!hook && benchmarkSentence) {
+          hook = clipTextStrictMax(benchmarkSentence, CLAUDE_POST_HOOK_LIMITS.max);
+        }
+        if (!body) {
+          body = benchmarkSentence || "SOIS evidence shows clear benchmark differences by segment and setup.";
+        }
+        if (!shouldIncludeCta) {
+          cta = "";
+        } else if (!cta) {
+          cta = strictFallbackCta;
+        }
+
+        const combined = `${hook}\n${body}\n${cta}`;
+        if (countAllowedNumericClaims(combined, sauceBenchmarkNumericClaims) === 0 && benchmarkSentence) {
+          body = `${body}\n\n${benchmarkSentence}`;
+        }
+
+        return {
+          ...post,
+          hook: clipTextStrictMax(hook, CLAUDE_POST_HOOK_LIMITS.max),
+          body: clipTextStrictMax(body, CLAUDE_POST_BODY_LIMITS.max),
+          cta: shouldIncludeCta ? clipTextStrictMax(cta || strictFallbackCta, CLAUDE_POST_CTA_LIMITS.max) : "",
+        };
+      });
+
+      let strictHookRewrites = 0;
+      normalizedHooks = normalizedHooks.map((hook, index) => {
+        const benchmarkSnippet = pickStrictSauceBenchmarkSnippet(sauceBenchmarkSnippets, sauceBenchmarkNumericClaims, index);
+        const benchmarkSentence = benchmarkSnippet ? buildStrictSauceBenchmarkSentence(benchmarkSnippet) : "";
+        const sanitized = sanitizeSauceTextStrict(hook, {
+          allowedClaims: sauceBenchmarkNumericClaims,
+          allowAnecdotes,
+        });
+        strictHookRewrites +=
+          sanitized.removedUnsupportedNumericSentences +
+          sanitized.removedFuzzyPlaceholderSentences +
+          sanitized.removedAnecdoteSentences;
+        const fallbackHook = benchmarkSentence || "SOIS benchmark: measurable variance by segment.";
+        return clipTextStrictMax(sanitized.value || fallbackHook, CLAUDE_HOOK_LIMITS.max);
+      });
+
+      const strictValuesToCheck = [
+        ...normalizedHooks,
+        ...normalizedPosts.flatMap((post) => [post.hook, post.body, post.cta]),
+      ];
+      const strictViolations = countStrictSauceOutputViolations(strictValuesToCheck, {
+        allowedClaims: sauceBenchmarkNumericClaims,
+        allowAnecdotes,
+      });
+
+      if (strictPostRewrites > 0 || strictHookRewrites > 0) {
+        console.warn(
+          `Strict Sauce evidence pass rewrote ${strictPostRewrites} post sentence(s) and ${strictHookRewrites} hook sentence(s).`,
+        );
+      }
+
+      if (
+        strictViolations.unsupportedNumericClaims > 0 ||
+        strictViolations.fuzzyPlaceholderSentences > 0 ||
+        strictViolations.blockedAnecdoteSentences > 0
+      ) {
+        throw new Error(
+          `Strict Sauce evidence gate failed: unsupported_numeric=${strictViolations.unsupportedNumericClaims}, fuzzy_placeholders=${strictViolations.fuzzyPlaceholderSentences}, blocked_anecdotes=${strictViolations.blockedAnecdoteSentences}.`,
         );
       }
     }

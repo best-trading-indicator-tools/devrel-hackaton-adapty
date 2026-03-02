@@ -1,0 +1,758 @@
+[
+  {
+    "country": "All",
+    "region": "Global",
+    "category": "All",
+    "cohort_type": "non_trial",
+    "refunded_revenue_share": 0.0314
+  },
+  {
+    "country": "All",
+    "region": "Global",
+    "category": "All",
+    "cohort_type": "trial",
+    "refunded_revenue_share": 0.0373
+  },
+  {
+    "country": "All",
+    "region": "Global",
+    "category": "EDUCATION",
+    "cohort_type": "non_trial",
+    "refunded_revenue_share": 0.0286
+  },
+  {
+    "country": "All",
+    "region": "Global",
+    "category": "EDUCATION",
+    "cohort_type": "trial",
+    "refunded_revenue_share": 0.03
+  },
+  {
+    "country": "All",
+    "region": "Global",
+    "category": "ENTERTAINMENT",
+    "cohort_type": "non_trial",
+    "refunded_revenue_share": 0.0273
+  },
+  {
+    "country": "All",
+    "region": "Global",
+    "category": "ENTERTAINMENT",
+    "cohort_type": "trial",
+    "refunded_revenue_share": 0.0223
+  },
+  {
+    "country": "All",
+    "region": "Global",
+    "category": "GRAPHICS_AND_DESIGN",
+    "cohort_type": "non_trial",
+    "refunded_revenue_share": 0.0361
+  },
+  {
+    "country": "All",
+    "region": "Global",
+    "category": "GRAPHICS_AND_DESIGN",
+    "cohort_type": "trial",
+    "refunded_revenue_share": 0.0432
+  },
+  {
+    "country": "All",
+    "region": "Global",
+    "category": "HEALTH_AND_FITNESS",
+    "cohort_type": "non_trial",
+    "refunded_revenue_share": 0.0275
+  },
+  {
+    "country": "All",
+    "region": "Global",
+    "category": "HEALTH_AND_FITNESS",
+    "cohort_type": "trial",
+    "refunded_revenue_share": 0.0494
+  },
+  {
+    "country": "All",
+    "region": "Global",
+    "category": "LIFESTYLE",
+    "cohort_type": "non_trial",
+    "refunded_revenue_share": 0.0272
+  },
+  {
+    "country": "All",
+    "region": "Global",
+    "category": "LIFESTYLE",
+    "cohort_type": "trial",
+    "refunded_revenue_share": 0.0341
+  },
+  {
+    "country": "All",
+    "region": "Global",
+    "category": "PHOTO_AND_VIDEO",
+    "cohort_type": "non_trial",
+    "refunded_revenue_share": 0.0277
+  },
+  {
+    "country": "All",
+    "region": "Global",
+    "category": "PHOTO_AND_VIDEO",
+    "cohort_type": "trial",
+    "refunded_revenue_share": 0.0632
+  },
+  {
+    "country": "All",
+    "region": "Global",
+    "category": "PRODUCTIVITY",
+    "cohort_type": "non_trial",
+    "refunded_revenue_share": 0.0309
+  },
+  {
+    "country": "All",
+    "region": "Global",
+    "category": "PRODUCTIVITY",
+    "cohort_type": "trial",
+    "refunded_revenue_share": 0.0263
+  },
+  {
+    "country": "All",
+    "region": "Global",
+    "category": "UTILITIES",
+    "cohort_type": "non_trial",
+    "refunded_revenue_share": 0.0435
+  },
+  {
+    "country": "All",
+    "region": "Global",
+    "category": "UTILITIES",
+    "cohort_type": "trial",
+    "refunded_revenue_share": 0.0399
+  },
+  {
+    "country": "All",
+    "region": "APAC",
+    "category": "All",
+    "cohort_type": "non_trial",
+    "refunded_revenue_share": 0.0343
+  },
+  {
+    "country": "All",
+    "region": "APAC",
+    "category": "All",
+    "cohort_type": "trial",
+    "refunded_revenue_share": 0.0534
+  },
+  {
+    "country": "All",
+    "region": "APAC",
+    "category": "EDUCATION",
+    "cohort_type": "non_trial",
+    "refunded_revenue_share": 0.0339
+  },
+  {
+    "country": "All",
+    "region": "APAC",
+    "category": "EDUCATION",
+    "cohort_type": "trial",
+    "refunded_revenue_share": 0.0612
+  },
+  {
+    "country": "All",
+    "region": "APAC",
+    "category": "ENTERTAINMENT",
+    "cohort_type": "non_trial",
+    "refunded_revenue_share": 0.0261
+  },
+  {
+    "country": "All",
+    "region": "APAC",
+    "category": "ENTERTAINMENT",
+    "cohort_type": "trial",
+    "refunded_revenue_share": 0.0699
+  },
+  {
+    "country": "All",
+    "region": "APAC",
+    "category": "GRAPHICS_AND_DESIGN",
+    "cohort_type": "non_trial",
+    "refunded_revenue_share": 0.0332
+  },
+  {
+    "country": "All",
+    "region": "APAC",
+    "category": "GRAPHICS_AND_DESIGN",
+    "cohort_type": "trial",
+    "refunded_revenue_share": 0.0863
+  },
+  {
+    "country": "All",
+    "region": "APAC",
+    "category": "HEALTH_AND_FITNESS",
+    "cohort_type": "non_trial",
+    "refunded_revenue_share": 0.0301
+  },
+  {
+    "country": "All",
+    "region": "APAC",
+    "category": "HEALTH_AND_FITNESS",
+    "cohort_type": "trial",
+    "refunded_revenue_share": 0.0614
+  },
+  {
+    "country": "All",
+    "region": "APAC",
+    "category": "LIFESTYLE",
+    "cohort_type": "non_trial",
+    "refunded_revenue_share": 0.0302
+  },
+  {
+    "country": "All",
+    "region": "APAC",
+    "category": "LIFESTYLE",
+    "cohort_type": "trial",
+    "refunded_revenue_share": 0.028
+  },
+  {
+    "country": "All",
+    "region": "APAC",
+    "category": "PHOTO_AND_VIDEO",
+    "cohort_type": "non_trial",
+    "refunded_revenue_share": 0.0248
+  },
+  {
+    "country": "All",
+    "region": "APAC",
+    "category": "PHOTO_AND_VIDEO",
+    "cohort_type": "trial",
+    "refunded_revenue_share": 0.1398
+  },
+  {
+    "country": "All",
+    "region": "APAC",
+    "category": "PRODUCTIVITY",
+    "cohort_type": "non_trial",
+    "refunded_revenue_share": 0.0368
+  },
+  {
+    "country": "All",
+    "region": "APAC",
+    "category": "PRODUCTIVITY",
+    "cohort_type": "trial",
+    "refunded_revenue_share": 0.0308
+  },
+  {
+    "country": "All",
+    "region": "APAC",
+    "category": "UTILITIES",
+    "cohort_type": "non_trial",
+    "refunded_revenue_share": 0.0545
+  },
+  {
+    "country": "All",
+    "region": "APAC",
+    "category": "UTILITIES",
+    "cohort_type": "trial",
+    "refunded_revenue_share": 0.0467
+  },
+  {
+    "country": "All",
+    "region": "Europe",
+    "category": "All",
+    "cohort_type": "non_trial",
+    "refunded_revenue_share": 0.0302
+  },
+  {
+    "country": "All",
+    "region": "Europe",
+    "category": "All",
+    "cohort_type": "trial",
+    "refunded_revenue_share": 0.0323
+  },
+  {
+    "country": "All",
+    "region": "Europe",
+    "category": "EDUCATION",
+    "cohort_type": "non_trial",
+    "refunded_revenue_share": 0.0281
+  },
+  {
+    "country": "All",
+    "region": "Europe",
+    "category": "EDUCATION",
+    "cohort_type": "trial",
+    "refunded_revenue_share": 0.032
+  },
+  {
+    "country": "All",
+    "region": "Europe",
+    "category": "ENTERTAINMENT",
+    "cohort_type": "non_trial",
+    "refunded_revenue_share": 0.0303
+  },
+  {
+    "country": "All",
+    "region": "Europe",
+    "category": "ENTERTAINMENT",
+    "cohort_type": "trial",
+    "refunded_revenue_share": 0.0114
+  },
+  {
+    "country": "All",
+    "region": "Europe",
+    "category": "GRAPHICS_AND_DESIGN",
+    "cohort_type": "non_trial",
+    "refunded_revenue_share": 0.0416
+  },
+  {
+    "country": "All",
+    "region": "Europe",
+    "category": "GRAPHICS_AND_DESIGN",
+    "cohort_type": "trial",
+    "refunded_revenue_share": 0.0402
+  },
+  {
+    "country": "All",
+    "region": "Europe",
+    "category": "HEALTH_AND_FITNESS",
+    "cohort_type": "non_trial",
+    "refunded_revenue_share": 0.0279
+  },
+  {
+    "country": "All",
+    "region": "Europe",
+    "category": "HEALTH_AND_FITNESS",
+    "cohort_type": "trial",
+    "refunded_revenue_share": 0.054
+  },
+  {
+    "country": "All",
+    "region": "Europe",
+    "category": "LIFESTYLE",
+    "cohort_type": "non_trial",
+    "refunded_revenue_share": 0.0271
+  },
+  {
+    "country": "All",
+    "region": "Europe",
+    "category": "LIFESTYLE",
+    "cohort_type": "trial",
+    "refunded_revenue_share": 0.0279
+  },
+  {
+    "country": "All",
+    "region": "Europe",
+    "category": "PHOTO_AND_VIDEO",
+    "cohort_type": "non_trial",
+    "refunded_revenue_share": 0.0259
+  },
+  {
+    "country": "All",
+    "region": "Europe",
+    "category": "PHOTO_AND_VIDEO",
+    "cohort_type": "trial",
+    "refunded_revenue_share": 0.0521
+  },
+  {
+    "country": "All",
+    "region": "Europe",
+    "category": "PRODUCTIVITY",
+    "cohort_type": "non_trial",
+    "refunded_revenue_share": 0.0296
+  },
+  {
+    "country": "All",
+    "region": "Europe",
+    "category": "PRODUCTIVITY",
+    "cohort_type": "trial",
+    "refunded_revenue_share": 0.0211
+  },
+  {
+    "country": "All",
+    "region": "Europe",
+    "category": "UTILITIES",
+    "cohort_type": "non_trial",
+    "refunded_revenue_share": 0.0396
+  },
+  {
+    "country": "All",
+    "region": "Europe",
+    "category": "UTILITIES",
+    "cohort_type": "trial",
+    "refunded_revenue_share": 0.0337
+  },
+  {
+    "country": "All",
+    "region": "LATAM",
+    "category": "All",
+    "cohort_type": "non_trial",
+    "refunded_revenue_share": 0.0486
+  },
+  {
+    "country": "All",
+    "region": "LATAM",
+    "category": "All",
+    "cohort_type": "trial",
+    "refunded_revenue_share": 0.043
+  },
+  {
+    "country": "All",
+    "region": "LATAM",
+    "category": "EDUCATION",
+    "cohort_type": "non_trial",
+    "refunded_revenue_share": 0.0345
+  },
+  {
+    "country": "All",
+    "region": "LATAM",
+    "category": "EDUCATION",
+    "cohort_type": "trial",
+    "refunded_revenue_share": 0.0317
+  },
+  {
+    "country": "All",
+    "region": "LATAM",
+    "category": "ENTERTAINMENT",
+    "cohort_type": "non_trial",
+    "refunded_revenue_share": 0.0405
+  },
+  {
+    "country": "All",
+    "region": "LATAM",
+    "category": "ENTERTAINMENT",
+    "cohort_type": "trial",
+    "refunded_revenue_share": 0.0322
+  },
+  {
+    "country": "All",
+    "region": "LATAM",
+    "category": "GRAPHICS_AND_DESIGN",
+    "cohort_type": "non_trial",
+    "refunded_revenue_share": 0.0516
+  },
+  {
+    "country": "All",
+    "region": "LATAM",
+    "category": "GRAPHICS_AND_DESIGN",
+    "cohort_type": "trial",
+    "refunded_revenue_share": 0.0677
+  },
+  {
+    "country": "All",
+    "region": "LATAM",
+    "category": "HEALTH_AND_FITNESS",
+    "cohort_type": "non_trial",
+    "refunded_revenue_share": 0.0288
+  },
+  {
+    "country": "All",
+    "region": "LATAM",
+    "category": "HEALTH_AND_FITNESS",
+    "cohort_type": "trial",
+    "refunded_revenue_share": 0.0387
+  },
+  {
+    "country": "All",
+    "region": "LATAM",
+    "category": "LIFESTYLE",
+    "cohort_type": "non_trial",
+    "refunded_revenue_share": 0.0735
+  },
+  {
+    "country": "All",
+    "region": "LATAM",
+    "category": "LIFESTYLE",
+    "cohort_type": "trial",
+    "refunded_revenue_share": 0.0298
+  },
+  {
+    "country": "All",
+    "region": "LATAM",
+    "category": "PHOTO_AND_VIDEO",
+    "cohort_type": "non_trial",
+    "refunded_revenue_share": 0.0394
+  },
+  {
+    "country": "All",
+    "region": "LATAM",
+    "category": "PHOTO_AND_VIDEO",
+    "cohort_type": "trial",
+    "refunded_revenue_share": 0.0695
+  },
+  {
+    "country": "All",
+    "region": "LATAM",
+    "category": "PRODUCTIVITY",
+    "cohort_type": "non_trial",
+    "refunded_revenue_share": 0.0547
+  },
+  {
+    "country": "All",
+    "region": "LATAM",
+    "category": "PRODUCTIVITY",
+    "cohort_type": "trial",
+    "refunded_revenue_share": 0.0448
+  },
+  {
+    "country": "All",
+    "region": "LATAM",
+    "category": "UTILITIES",
+    "cohort_type": "non_trial",
+    "refunded_revenue_share": 0.0605
+  },
+  {
+    "country": "All",
+    "region": "LATAM",
+    "category": "UTILITIES",
+    "cohort_type": "trial",
+    "refunded_revenue_share": 0.0403
+  },
+  {
+    "country": "All",
+    "region": "MEA",
+    "category": "All",
+    "cohort_type": "non_trial",
+    "refunded_revenue_share": 0.0253
+  },
+  {
+    "country": "All",
+    "region": "MEA",
+    "category": "All",
+    "cohort_type": "trial",
+    "refunded_revenue_share": 0.0313
+  },
+  {
+    "country": "All",
+    "region": "MEA",
+    "category": "EDUCATION",
+    "cohort_type": "non_trial",
+    "refunded_revenue_share": 0.0361
+  },
+  {
+    "country": "All",
+    "region": "MEA",
+    "category": "EDUCATION",
+    "cohort_type": "trial",
+    "refunded_revenue_share": 0.0408
+  },
+  {
+    "country": "All",
+    "region": "MEA",
+    "category": "ENTERTAINMENT",
+    "cohort_type": "non_trial",
+    "refunded_revenue_share": 0.0223
+  },
+  {
+    "country": "All",
+    "region": "MEA",
+    "category": "ENTERTAINMENT",
+    "cohort_type": "trial",
+    "refunded_revenue_share": 0.0161
+  },
+  {
+    "country": "All",
+    "region": "MEA",
+    "category": "GRAPHICS_AND_DESIGN",
+    "cohort_type": "non_trial",
+    "refunded_revenue_share": 0.0238
+  },
+  {
+    "country": "All",
+    "region": "MEA",
+    "category": "GRAPHICS_AND_DESIGN",
+    "cohort_type": "trial",
+    "refunded_revenue_share": 0.0407
+  },
+  {
+    "country": "All",
+    "region": "MEA",
+    "category": "HEALTH_AND_FITNESS",
+    "cohort_type": "non_trial",
+    "refunded_revenue_share": 0.0238
+  },
+  {
+    "country": "All",
+    "region": "MEA",
+    "category": "HEALTH_AND_FITNESS",
+    "cohort_type": "trial",
+    "refunded_revenue_share": 0.0424
+  },
+  {
+    "country": "All",
+    "region": "MEA",
+    "category": "LIFESTYLE",
+    "cohort_type": "non_trial",
+    "refunded_revenue_share": 0.0251
+  },
+  {
+    "country": "All",
+    "region": "MEA",
+    "category": "LIFESTYLE",
+    "cohort_type": "trial",
+    "refunded_revenue_share": 0.0213
+  },
+  {
+    "country": "All",
+    "region": "MEA",
+    "category": "PHOTO_AND_VIDEO",
+    "cohort_type": "non_trial",
+    "refunded_revenue_share": 0.0195
+  },
+  {
+    "country": "All",
+    "region": "MEA",
+    "category": "PHOTO_AND_VIDEO",
+    "cohort_type": "trial",
+    "refunded_revenue_share": 0.0521
+  },
+  {
+    "country": "All",
+    "region": "MEA",
+    "category": "PRODUCTIVITY",
+    "cohort_type": "non_trial",
+    "refunded_revenue_share": 0.0265
+  },
+  {
+    "country": "All",
+    "region": "MEA",
+    "category": "PRODUCTIVITY",
+    "cohort_type": "trial",
+    "refunded_revenue_share": 0.0281
+  },
+  {
+    "country": "All",
+    "region": "MEA",
+    "category": "UTILITIES",
+    "cohort_type": "non_trial",
+    "refunded_revenue_share": 0.0283
+  },
+  {
+    "country": "All",
+    "region": "MEA",
+    "category": "UTILITIES",
+    "cohort_type": "trial",
+    "refunded_revenue_share": 0.031
+  },
+  {
+    "country": "All",
+    "region": "North America",
+    "category": "All",
+    "cohort_type": "non_trial",
+    "refunded_revenue_share": 0.0302
+  },
+  {
+    "country": "All",
+    "region": "North America",
+    "category": "All",
+    "cohort_type": "trial",
+    "refunded_revenue_share": 0.0357
+  },
+  {
+    "country": "All",
+    "region": "North America",
+    "category": "EDUCATION",
+    "cohort_type": "non_trial",
+    "refunded_revenue_share": 0.0253
+  },
+  {
+    "country": "All",
+    "region": "North America",
+    "category": "EDUCATION",
+    "cohort_type": "trial",
+    "refunded_revenue_share": 0.0244
+  },
+  {
+    "country": "All",
+    "region": "North America",
+    "category": "ENTERTAINMENT",
+    "cohort_type": "non_trial",
+    "refunded_revenue_share": 0.0258
+  },
+  {
+    "country": "All",
+    "region": "North America",
+    "category": "ENTERTAINMENT",
+    "cohort_type": "trial",
+    "refunded_revenue_share": 0.0168
+  },
+  {
+    "country": "All",
+    "region": "North America",
+    "category": "GRAPHICS_AND_DESIGN",
+    "cohort_type": "non_trial",
+    "refunded_revenue_share": 0.0335
+  },
+  {
+    "country": "All",
+    "region": "North America",
+    "category": "GRAPHICS_AND_DESIGN",
+    "cohort_type": "trial",
+    "refunded_revenue_share": 0.0342
+  },
+  {
+    "country": "All",
+    "region": "North America",
+    "category": "HEALTH_AND_FITNESS",
+    "cohort_type": "non_trial",
+    "refunded_revenue_share": 0.027
+  },
+  {
+    "country": "All",
+    "region": "North America",
+    "category": "HEALTH_AND_FITNESS",
+    "cohort_type": "trial",
+    "refunded_revenue_share": 0.0456
+  },
+  {
+    "country": "All",
+    "region": "North America",
+    "category": "LIFESTYLE",
+    "cohort_type": "non_trial",
+    "refunded_revenue_share": 0.0244
+  },
+  {
+    "country": "All",
+    "region": "North America",
+    "category": "LIFESTYLE",
+    "cohort_type": "trial",
+    "refunded_revenue_share": 0.0406
+  },
+  {
+    "country": "All",
+    "region": "North America",
+    "category": "PHOTO_AND_VIDEO",
+    "cohort_type": "non_trial",
+    "refunded_revenue_share": 0.0286
+  },
+  {
+    "country": "All",
+    "region": "North America",
+    "category": "PHOTO_AND_VIDEO",
+    "cohort_type": "trial",
+    "refunded_revenue_share": 0.0489
+  },
+  {
+    "country": "All",
+    "region": "North America",
+    "category": "PRODUCTIVITY",
+    "cohort_type": "non_trial",
+    "refunded_revenue_share": 0.0276
+  },
+  {
+    "country": "All",
+    "region": "North America",
+    "category": "PRODUCTIVITY",
+    "cohort_type": "trial",
+    "refunded_revenue_share": 0.0239
+  },
+  {
+    "country": "All",
+    "region": "North America",
+    "category": "UTILITIES",
+    "cohort_type": "non_trial",
+    "refunded_revenue_share": 0.044
+  },
+  {
+    "country": "All",
+    "region": "North America",
+    "category": "UTILITIES",
+    "cohort_type": "trial",
+    "refunded_revenue_share": 0.041
+  }
+]

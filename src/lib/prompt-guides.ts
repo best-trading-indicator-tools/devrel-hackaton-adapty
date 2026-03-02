@@ -5,13 +5,14 @@ const ADAPTY_CHANGELOG_JSON_FEED = "https://changelog.adapty.io/jsonfeed.json";
 const CHANGELOG_CACHE_TTL_MS = 60 * 60 * 1000; // 1 hour
 let changelogCache: { text: string; fetchedAt: number } | null = null;
 
-type PromptGuideKey = "writing" | "sauce" | "aso" | "paywall" | "factCheck";
+type PromptGuideKey = "writing" | "sauce" | "sois" | "aso" | "paywall" | "factCheck";
 
 export type PromptGuides = Record<PromptGuideKey, string>;
 
 const GUIDE_PATHS: Record<PromptGuideKey, string> = {
   writing: path.join(process.cwd(), "prompts", "linkedin", "WRITING.md"),
   sauce: path.join(process.cwd(), "prompts", "linkedin", "SAUCE.md"),
+  sois: path.join(process.cwd(), "prompts", "linkedin", "SOIS.md"),
   aso: path.join(process.cwd(), "prompts", "linkedin", "ASO.md"),
   paywall: path.join(process.cwd(), "prompts", "linkedin", "PAYWALL.md"),
   factCheck: path.join(process.cwd(), "prompts", "linkedin", "FACT_CHECK.md"),
@@ -34,6 +35,11 @@ const DEFAULT_GUIDES: PromptGuides = {
     "For Sauce posts, combine practical breakdown and data insight.",
     "Lead with a hard question, explain mechanism, add concrete evidence, give actions, include caveats.",
     "Keep concrete density high and include at least one lived observation line in company voice (we saw, we tested).",
+  ].join("\n"),
+  sois: [
+    "SOIS website context can be used for directional patterns, filters, and hypothesis generation.",
+    "For strict numeric claims in Sauce posts, keep only values present in SOIS evidence context for the current run.",
+    "Prefer category/region/plan-specific benchmarks over global generic statements.",
   ].join("\n"),
   aso: [
     "For ASO topics, focus on intent fit, conversion levers, and practical diagnostics before tool chatter.",
@@ -72,9 +78,10 @@ export async function getPromptGuides(): Promise<PromptGuides> {
     return guideCache;
   }
 
-  const [writing, sauce, aso, paywall, factCheck] = await Promise.all([
+  const [writing, sauce, sois, aso, paywall, factCheck] = await Promise.all([
     loadGuide("writing"),
     loadGuide("sauce"),
+    loadGuide("sois"),
     loadGuide("aso"),
     loadGuide("paywall"),
     loadGuide("factCheck"),
@@ -83,6 +90,7 @@ export async function getPromptGuides(): Promise<PromptGuides> {
   guideCache = {
     writing,
     sauce,
+    sois,
     aso,
     paywall,
     factCheck,

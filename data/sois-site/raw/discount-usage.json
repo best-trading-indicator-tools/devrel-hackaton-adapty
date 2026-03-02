@@ -1,0 +1,98 @@
+[
+  {
+    "year": 2024,
+    "category": "EDUCATION",
+    "discount_share": 0.1053,
+    "no_discount_share": 0.8947
+  },
+  {
+    "year": 2024,
+    "category": "ENTERTAINMENT",
+    "discount_share": 0.0421,
+    "no_discount_share": 0.9579
+  },
+  {
+    "year": 2024,
+    "category": "GRAPHICS_AND_DESIGN",
+    "discount_share": 0.0973,
+    "no_discount_share": 0.9027
+  },
+  {
+    "year": 2024,
+    "category": "HEALTH_AND_FITNESS",
+    "discount_share": 0.0898,
+    "no_discount_share": 0.9102
+  },
+  {
+    "year": 2024,
+    "category": "LIFESTYLE",
+    "discount_share": 0.0588,
+    "no_discount_share": 0.9412
+  },
+  {
+    "year": 2024,
+    "category": "PHOTO_AND_VIDEO",
+    "discount_share": 0.0986,
+    "no_discount_share": 0.9014
+  },
+  {
+    "year": 2024,
+    "category": "PRODUCTIVITY",
+    "discount_share": 0.0966,
+    "no_discount_share": 0.9034
+  },
+  {
+    "year": 2024,
+    "category": "UTILITIES",
+    "discount_share": 0.0134,
+    "no_discount_share": 0.9866
+  },
+  {
+    "year": 2025,
+    "category": "EDUCATION",
+    "discount_share": 0.1448,
+    "no_discount_share": 0.8552
+  },
+  {
+    "year": 2025,
+    "category": "ENTERTAINMENT",
+    "discount_share": 0.0571,
+    "no_discount_share": 0.9429
+  },
+  {
+    "year": 2025,
+    "category": "GRAPHICS_AND_DESIGN",
+    "discount_share": 0.1111,
+    "no_discount_share": 0.8889
+  },
+  {
+    "year": 2025,
+    "category": "HEALTH_AND_FITNESS",
+    "discount_share": 0.0918,
+    "no_discount_share": 0.9082
+  },
+  {
+    "year": 2025,
+    "category": "LIFESTYLE",
+    "discount_share": 0.0429,
+    "no_discount_share": 0.9571
+  },
+  {
+    "year": 2025,
+    "category": "PHOTO_AND_VIDEO",
+    "discount_share": 0.0745,
+    "no_discount_share": 0.9255
+  },
+  {
+    "year": 2025,
+    "category": "PRODUCTIVITY",
+    "discount_share": 0.1142,
+    "no_discount_share": 0.8858
+  },
+  {
+    "year": 2025,
+    "category": "UTILITIES",
+    "discount_share": 0.0144,
+    "no_discount_share": 0.9856
+  }
+]

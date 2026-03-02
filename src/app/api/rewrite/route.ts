@@ -248,6 +248,9 @@ export async function POST(request: Request) {
 Sauce guide from repository prompt file:
 ${promptGuides.sauce}
 
+SOIS website context guide from repository prompt file:
+${promptGuides.sois}
+
 ASO guide from repository prompt file:
 ${promptGuides.aso}
 

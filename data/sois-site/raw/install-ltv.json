@@ -1,0 +1,479 @@
+[
+  {
+    "country": "All",
+    "region": "Global",
+    "category": "All",
+    "avg_ltv_380": 26.7922,
+    "install_to_direct_rate": 0.0124,
+    "install_to_paid_rate": 0.0224,
+    "install_ltv": 0.5997
+  },
+  {
+    "country": "All",
+    "region": "Global",
+    "category": "EDUCATION",
+    "avg_ltv_380": 34.6569,
+    "install_to_direct_rate": 0.0088,
+    "install_to_paid_rate": 0.0363,
+    "install_ltv": 1.2583
+  },
+  {
+    "country": "All",
+    "region": "Global",
+    "category": "ENTERTAINMENT",
+    "avg_ltv_380": 26.5877,
+    "install_to_direct_rate": 0.0235,
+    "install_to_paid_rate": 0.0386,
+    "install_ltv": 1.0265
+  },
+  {
+    "country": "All",
+    "region": "Global",
+    "category": "GRAPHICS_AND_DESIGN",
+    "avg_ltv_380": 25.0304,
+    "install_to_direct_rate": 0.0318,
+    "install_to_paid_rate": 0.0452,
+    "install_ltv": 1.1306
+  },
+  {
+    "country": "All",
+    "region": "Global",
+    "category": "HEALTH_AND_FITNESS",
+    "avg_ltv_380": 24.6195,
+    "install_to_direct_rate": 0.016,
+    "install_to_paid_rate": 0.0455,
+    "install_ltv": 1.119
+  },
+  {
+    "country": "All",
+    "region": "Global",
+    "category": "LIFESTYLE",
+    "avg_ltv_380": 30.9875,
+    "install_to_direct_rate": 0.0152,
+    "install_to_paid_rate": 0.0244,
+    "install_ltv": 0.7546
+  },
+  {
+    "country": "All",
+    "region": "Global",
+    "category": "PHOTO_AND_VIDEO",
+    "avg_ltv_380": 23.7023,
+    "install_to_direct_rate": 0.0443,
+    "install_to_paid_rate": 0.0562,
+    "install_ltv": 1.3312
+  },
+  {
+    "country": "All",
+    "region": "Global",
+    "category": "PRODUCTIVITY",
+    "avg_ltv_380": 41.8126,
+    "install_to_direct_rate": 0.0153,
+    "install_to_paid_rate": 0.0326,
+    "install_ltv": 1.3628
+  },
+  {
+    "country": "All",
+    "region": "Global",
+    "category": "UTILITIES",
+    "avg_ltv_380": 29.7734,
+    "install_to_direct_rate": 0.003,
+    "install_to_paid_rate": 0.0107,
+    "install_ltv": 0.3174
+  },
+  {
+    "country": "All",
+    "region": "APAC",
+    "category": "All",
+    "avg_ltv_380": 22.9732,
+    "install_to_direct_rate": 0.0066,
+    "install_to_paid_rate": 0.0128,
+    "install_ltv": 0.2943
+  },
+  {
+    "country": "All",
+    "region": "APAC",
+    "category": "EDUCATION",
+    "avg_ltv_380": 32.2704,
+    "install_to_direct_rate": 0.005,
+    "install_to_paid_rate": 0.0219,
+    "install_ltv": 0.7068
+  },
+  {
+    "country": "All",
+    "region": "APAC",
+    "category": "ENTERTAINMENT",
+    "avg_ltv_380": 20.6423,
+    "install_to_direct_rate": 0.0114,
+    "install_to_paid_rate": 0.0223,
+    "install_ltv": 0.46
+  },
+  {
+    "country": "All",
+    "region": "APAC",
+    "category": "GRAPHICS_AND_DESIGN",
+    "avg_ltv_380": 21.3541,
+    "install_to_direct_rate": 0.0197,
+    "install_to_paid_rate": 0.029,
+    "install_ltv": 0.6193
+  },
+  {
+    "country": "All",
+    "region": "APAC",
+    "category": "HEALTH_AND_FITNESS",
+    "avg_ltv_380": 20.4952,
+    "install_to_direct_rate": 0.0123,
+    "install_to_paid_rate": 0.0387,
+    "install_ltv": 0.7931
+  },
+  {
+    "country": "All",
+    "region": "APAC",
+    "category": "LIFESTYLE",
+    "avg_ltv_380": 24.9075,
+    "install_to_direct_rate": 0.013,
+    "install_to_paid_rate": 0.022,
+    "install_ltv": 0.5484
+  },
+  {
+    "country": "All",
+    "region": "APAC",
+    "category": "PHOTO_AND_VIDEO",
+    "avg_ltv_380": 21.422,
+    "install_to_direct_rate": 0.028,
+    "install_to_paid_rate": 0.0362,
+    "install_ltv": 0.775
+  },
+  {
+    "country": "All",
+    "region": "APAC",
+    "category": "PRODUCTIVITY",
+    "avg_ltv_380": 37.1964,
+    "install_to_direct_rate": 0.0045,
+    "install_to_paid_rate": 0.01,
+    "install_ltv": 0.3712
+  },
+  {
+    "country": "All",
+    "region": "APAC",
+    "category": "UTILITIES",
+    "avg_ltv_380": 26.7137,
+    "install_to_direct_rate": 0.0018,
+    "install_to_paid_rate": 0.0069,
+    "install_ltv": 0.1839
+  },
+  {
+    "country": "All",
+    "region": "Europe",
+    "category": "All",
+    "avg_ltv_380": 26.9734,
+    "install_to_direct_rate": 0.0142,
+    "install_to_paid_rate": 0.0228,
+    "install_ltv": 0.6146
+  },
+  {
+    "country": "All",
+    "region": "Europe",
+    "category": "EDUCATION",
+    "avg_ltv_380": 30.9746,
+    "install_to_direct_rate": 0.0069,
+    "install_to_paid_rate": 0.0229,
+    "install_ltv": 0.7087
+  },
+  {
+    "country": "All",
+    "region": "Europe",
+    "category": "ENTERTAINMENT",
+    "avg_ltv_380": 24.79,
+    "install_to_direct_rate": 0.0215,
+    "install_to_paid_rate": 0.0322,
+    "install_ltv": 0.7975
+  },
+  {
+    "country": "All",
+    "region": "Europe",
+    "category": "GRAPHICS_AND_DESIGN",
+    "avg_ltv_380": 25.2157,
+    "install_to_direct_rate": 0.0265,
+    "install_to_paid_rate": 0.0374,
+    "install_ltv": 0.9424
+  },
+  {
+    "country": "All",
+    "region": "Europe",
+    "category": "HEALTH_AND_FITNESS",
+    "avg_ltv_380": 24.9301,
+    "install_to_direct_rate": 0.0141,
+    "install_to_paid_rate": 0.0299,
+    "install_ltv": 0.7462
+  },
+  {
+    "country": "All",
+    "region": "Europe",
+    "category": "LIFESTYLE",
+    "avg_ltv_380": 34.2529,
+    "install_to_direct_rate": 0.0131,
+    "install_to_paid_rate": 0.0188,
+    "install_ltv": 0.6427
+  },
+  {
+    "country": "All",
+    "region": "Europe",
+    "category": "PHOTO_AND_VIDEO",
+    "avg_ltv_380": 24.042,
+    "install_to_direct_rate": 0.0424,
+    "install_to_paid_rate": 0.0528,
+    "install_ltv": 1.2683
+  },
+  {
+    "country": "All",
+    "region": "Europe",
+    "category": "PRODUCTIVITY",
+    "avg_ltv_380": 39.5375,
+    "install_to_direct_rate": 0.0185,
+    "install_to_paid_rate": 0.0349,
+    "install_ltv": 1.3804
+  },
+  {
+    "country": "All",
+    "region": "Europe",
+    "category": "UTILITIES",
+    "avg_ltv_380": 30.779,
+    "install_to_direct_rate": 0.0034,
+    "install_to_paid_rate": 0.0106,
+    "install_ltv": 0.3269
+  },
+  {
+    "country": "All",
+    "region": "LATAM",
+    "category": "All",
+    "avg_ltv_380": 22.7939,
+    "install_to_direct_rate": 0.012,
+    "install_to_paid_rate": 0.0246,
+    "install_ltv": 0.5613
+  },
+  {
+    "country": "All",
+    "region": "LATAM",
+    "category": "ENTERTAINMENT",
+    "avg_ltv_380": 15.6332,
+    "install_to_direct_rate": 0.0114,
+    "install_to_paid_rate": 0.0206,
+    "install_ltv": 0.3225
+  },
+  {
+    "country": "All",
+    "region": "LATAM",
+    "category": "GRAPHICS_AND_DESIGN",
+    "avg_ltv_380": 24.6952,
+    "install_to_direct_rate": 0.0206,
+    "install_to_paid_rate": 0.0295,
+    "install_ltv": 0.7281
+  },
+  {
+    "country": "All",
+    "region": "LATAM",
+    "category": "HEALTH_AND_FITNESS",
+    "avg_ltv_380": 21.7758,
+    "install_to_direct_rate": 0.0082,
+    "install_to_paid_rate": 0.0215,
+    "install_ltv": 0.4687
+  },
+  {
+    "country": "All",
+    "region": "LATAM",
+    "category": "LIFESTYLE",
+    "avg_ltv_380": 23.5175,
+    "install_to_direct_rate": 0.0131,
+    "install_to_paid_rate": 0.026,
+    "install_ltv": 0.6114
+  },
+  {
+    "country": "All",
+    "region": "LATAM",
+    "category": "PHOTO_AND_VIDEO",
+    "avg_ltv_380": 21.6937,
+    "install_to_direct_rate": 0.0325,
+    "install_to_paid_rate": 0.0415,
+    "install_ltv": 0.9013
+  },
+  {
+    "country": "All",
+    "region": "LATAM",
+    "category": "PRODUCTIVITY",
+    "avg_ltv_380": 36.1566,
+    "install_to_direct_rate": 0.015,
+    "install_to_paid_rate": 0.0393,
+    "install_ltv": 1.4198
+  },
+  {
+    "country": "All",
+    "region": "LATAM",
+    "category": "UTILITIES",
+    "avg_ltv_380": 24.9558,
+    "install_to_direct_rate": 0.0034,
+    "install_to_paid_rate": 0.0178,
+    "install_ltv": 0.4436
+  },
+  {
+    "country": "All",
+    "region": "MEA",
+    "category": "All",
+    "avg_ltv_380": 21.6417,
+    "install_to_direct_rate": 0.0053,
+    "install_to_paid_rate": 0.0085,
+    "install_ltv": 0.184
+  },
+  {
+    "country": "All",
+    "region": "MEA",
+    "category": "EDUCATION",
+    "avg_ltv_380": 25.3462,
+    "install_to_direct_rate": 0.0233,
+    "install_to_paid_rate": 0.0385,
+    "install_ltv": 0.9747
+  },
+  {
+    "country": "All",
+    "region": "MEA",
+    "category": "ENTERTAINMENT",
+    "avg_ltv_380": 24.0906,
+    "install_to_direct_rate": 0.0132,
+    "install_to_paid_rate": 0.0184,
+    "install_ltv": 0.4427
+  },
+  {
+    "country": "All",
+    "region": "MEA",
+    "category": "GRAPHICS_AND_DESIGN",
+    "avg_ltv_380": 24.5615,
+    "install_to_direct_rate": 0.0311,
+    "install_to_paid_rate": 0.0364,
+    "install_ltv": 0.8939
+  },
+  {
+    "country": "All",
+    "region": "MEA",
+    "category": "HEALTH_AND_FITNESS",
+    "avg_ltv_380": 15.2242,
+    "install_to_direct_rate": 0.0147,
+    "install_to_paid_rate": 0.0221,
+    "install_ltv": 0.3372
+  },
+  {
+    "country": "All",
+    "region": "MEA",
+    "category": "LIFESTYLE",
+    "avg_ltv_380": 18.0869,
+    "install_to_direct_rate": 0.0105,
+    "install_to_paid_rate": 0.0175,
+    "install_ltv": 0.3166
+  },
+  {
+    "country": "All",
+    "region": "MEA",
+    "category": "PHOTO_AND_VIDEO",
+    "avg_ltv_380": 24.5331,
+    "install_to_direct_rate": 0.0271,
+    "install_to_paid_rate": 0.0336,
+    "install_ltv": 0.8251
+  },
+  {
+    "country": "All",
+    "region": "MEA",
+    "category": "PRODUCTIVITY",
+    "avg_ltv_380": 36.9758,
+    "install_to_direct_rate": 0.0118,
+    "install_to_paid_rate": 0.0247,
+    "install_ltv": 0.9124
+  },
+  {
+    "country": "All",
+    "region": "MEA",
+    "category": "UTILITIES",
+    "avg_ltv_380": 26.0353,
+    "install_to_direct_rate": 0.0012,
+    "install_to_paid_rate": 0.0035,
+    "install_ltv": 0.0914
+  },
+  {
+    "country": "All",
+    "region": "North America",
+    "category": "All",
+    "avg_ltv_380": 29.1966,
+    "install_to_direct_rate": 0.0211,
+    "install_to_paid_rate": 0.0396,
+    "install_ltv": 1.1555
+  },
+  {
+    "country": "All",
+    "region": "North America",
+    "category": "EDUCATION",
+    "avg_ltv_380": 42.2796,
+    "install_to_direct_rate": 0.0095,
+    "install_to_paid_rate": 0.0502,
+    "install_ltv": 2.1226
+  },
+  {
+    "country": "All",
+    "region": "North America",
+    "category": "ENTERTAINMENT",
+    "avg_ltv_380": 29.3296,
+    "install_to_direct_rate": 0.0422,
+    "install_to_paid_rate": 0.0689,
+    "install_ltv": 2.0221
+  },
+  {
+    "country": "All",
+    "region": "North America",
+    "category": "GRAPHICS_AND_DESIGN",
+    "avg_ltv_380": 25.8438,
+    "install_to_direct_rate": 0.0495,
+    "install_to_paid_rate": 0.0727,
+    "install_ltv": 1.8793
+  },
+  {
+    "country": "All",
+    "region": "North America",
+    "category": "HEALTH_AND_FITNESS",
+    "avg_ltv_380": 28.3756,
+    "install_to_direct_rate": 0.0228,
+    "install_to_paid_rate": 0.0787,
+    "install_ltv": 2.232
+  },
+  {
+    "country": "All",
+    "region": "North America",
+    "category": "LIFESTYLE",
+    "avg_ltv_380": 33.3242,
+    "install_to_direct_rate": 0.0201,
+    "install_to_paid_rate": 0.0325,
+    "install_ltv": 1.0828
+  },
+  {
+    "country": "All",
+    "region": "North America",
+    "category": "PHOTO_AND_VIDEO",
+    "avg_ltv_380": 24.3633,
+    "install_to_direct_rate": 0.0731,
+    "install_to_paid_rate": 0.0933,
+    "install_ltv": 2.2732
+  },
+  {
+    "country": "All",
+    "region": "North America",
+    "category": "PRODUCTIVITY",
+    "avg_ltv_380": 45.7644,
+    "install_to_direct_rate": 0.0377,
+    "install_to_paid_rate": 0.0807,
+    "install_ltv": 3.691
+  },
+  {
+    "country": "All",
+    "region": "North America",
+    "category": "UTILITIES",
+    "avg_ltv_380": 31.9338,
+    "install_to_direct_rate": 0.0059,
+    "install_to_paid_rate": 0.0212,
+    "install_ltv": 0.6763
+  }
+]

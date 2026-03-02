@@ -272,6 +272,8 @@ Use `.env` (local) and set same keys in Vercel project settings.
 - `SOIS_DATA_URL` (default: `https://dags.adpinfra.dev/webhook/sois-data`)
 - `SOIS_DATA_USERNAME`
 - `SOIS_DATA_PASSWORD`
+- `ENABLE_SOIS_SITE_CONTEXT=true|false` (default: true; include local SOIS website snapshot in retrieval evidence)
+- `SOIS_SITE_CONTEXT_PATH` (optional path override; default `data/sois-site/context.json`)
 
 ### Memes
 
@@ -296,6 +298,21 @@ Use `.env` (local) and set same keys in Vercel project settings.
 
 Recommendation:
 - Use `text-embedding-3-large` in production when output quality is the priority and library updates are not extremely frequent.
+
+## SOIS website snapshot sync
+
+Use this when you want to refresh context from the public SOIS website:
+
+```bash
+npm run sois-site-sync
+```
+
+The command:
+
+- Discovers all `/data/*.json` files referenced by the SOIS frontend bundle
+- Downloads raw datasets into `data/sois-site/raw/`
+- Builds normalized machine context at `data/sois-site/context.json`
+- Regenerates `prompts/linkedin/SOIS.md`
 
 ## Content library format
 

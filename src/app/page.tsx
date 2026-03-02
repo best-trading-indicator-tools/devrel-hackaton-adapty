@@ -3193,7 +3193,7 @@ export default function Home() {
           }
           mergedPosts.push({
             ...post,
-            cta: shouldIncludeCta ? ensureFinalCtaText(post.cta, ctaLinkForPost) : "",
+            cta: shouldIncludeCta ? ensureFinalCtaText(post.cta, ctaLinkForPost) : (post.cta || "").trim(),
           });
           postCursor += 1;
         }
@@ -3642,7 +3642,7 @@ export default function Home() {
         ...currentPost,
         hook: normalizeNoEmDash(String(nextPost.hook ?? currentPost.hook)),
         body: normalizeNoEmDash(String(nextPost.body ?? currentPost.body)),
-        cta: ctaLinkMode === "none" ? "" : normalizeNoEmDash(String(nextPost.cta ?? currentPost.cta)),
+        cta: normalizeNoEmDash(String(nextPost.cta ?? currentPost.cta)),
         meme: undefined,
         memeVariants: undefined,
         giphy: undefined,

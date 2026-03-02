@@ -1,0 +1,5789 @@
+[
+  {
+    "country": "All",
+    "region": "Global",
+    "category": "All",
+    "product_set": "annual",
+    "price_bucket": "High price",
+    "median_ltv_380": 72.552,
+    "avg_ltv_380": 86.423
+  },
+  {
+    "country": "All",
+    "region": "Global",
+    "category": "All",
+    "product_set": "annual",
+    "price_bucket": "Low price",
+    "median_ltv_380": 19.99,
+    "avg_ltv_380": 23.467
+  },
+  {
+    "country": "All",
+    "region": "Global",
+    "category": "All",
+    "product_set": "annual",
+    "price_bucket": "Lower mid price",
+    "median_ltv_380": 32.471,
+    "avg_ltv_380": 37.1909
+  },
+  {
+    "country": "All",
+    "region": "Global",
+    "category": "All",
+    "product_set": "annual",
+    "price_bucket": "Upper mid price",
+    "median_ltv_380": 39.99,
+    "avg_ltv_380": 49.4909
+  },
+  {
+    "country": "All",
+    "region": "Global",
+    "category": "All",
+    "product_set": "monthly",
+    "price_bucket": "High price",
+    "median_ltv_380": 26.1976,
+    "avg_ltv_380": 54.0903
+  },
+  {
+    "country": "All",
+    "region": "Global",
+    "category": "All",
+    "product_set": "monthly",
+    "price_bucket": "Low price",
+    "median_ltv_380": 5.4187,
+    "avg_ltv_380": 13.3817
+  },
+  {
+    "country": "All",
+    "region": "Global",
+    "category": "All",
+    "product_set": "monthly",
+    "price_bucket": "Lower mid price",
+    "median_ltv_380": 11.99,
+    "avg_ltv_380": 31.0909
+  },
+  {
+    "country": "All",
+    "region": "Global",
+    "category": "All",
+    "product_set": "monthly",
+    "price_bucket": "Upper mid price",
+    "median_ltv_380": 17.985,
+    "avg_ltv_380": 43.5203
+  },
+  {
+    "country": "All",
+    "region": "Global",
+    "category": "All",
+    "product_set": "weekly",
+    "price_bucket": "High price",
+    "median_ltv_380": 18.3161,
+    "avg_ltv_380": 64.8056
+  },
+  {
+    "country": "All",
+    "region": "Global",
+    "category": "All",
+    "product_set": "weekly",
+    "price_bucket": "Low price",
+    "median_ltv_380": 5.99,
+    "avg_ltv_380": 27.6722
+  },
+  {
+    "country": "All",
+    "region": "Global",
+    "category": "All",
+    "product_set": "weekly",
+    "price_bucket": "Lower mid price",
+    "median_ltv_380": 9.98,
+    "avg_ltv_380": 38.6665
+  },
+  {
+    "country": "All",
+    "region": "Global",
+    "category": "All",
+    "product_set": "weekly",
+    "price_bucket": "Upper mid price",
+    "median_ltv_380": 8.673,
+    "avg_ltv_380": 40.8583
+  },
+  {
+    "country": "All",
+    "region": "Global",
+    "category": "EDUCATION",
+    "product_set": "annual",
+    "price_bucket": "High price",
+    "median_ltv_380": 80.7288,
+    "avg_ltv_380": 96.8076
+  },
+  {
+    "country": "All",
+    "region": "Global",
+    "category": "EDUCATION",
+    "product_set": "annual",
+    "price_bucket": "Low price",
+    "median_ltv_380": 29.99,
+    "avg_ltv_380": 30.7337
+  },
+  {
+    "country": "All",
+    "region": "Global",
+    "category": "EDUCATION",
+    "product_set": "annual",
+    "price_bucket": "Lower mid price",
+    "median_ltv_380": 38.99,
+    "avg_ltv_380": 41.9097
+  },
+  {
+    "country": "All",
+    "region": "Global",
+    "category": "EDUCATION",
+    "product_set": "annual",
+    "price_bucket": "Upper mid price",
+    "median_ltv_380": 49.99,
+    "avg_ltv_380": 58.1445
+  },
+  {
+    "country": "All",
+    "region": "Global",
+    "category": "EDUCATION",
+    "product_set": "monthly",
+    "price_bucket": "High price",
+    "median_ltv_380": 34.98,
+    "avg_ltv_380": 64.3725
+  },
+  {
+    "country": "All",
+    "region": "Global",
+    "category": "EDUCATION",
+    "product_set": "monthly",
+    "price_bucket": "Low price",
+    "median_ltv_380": 7.4784,
+    "avg_ltv_380": 15.7928
+  },
+  {
+    "country": "All",
+    "region": "Global",
+    "category": "EDUCATION",
+    "product_set": "monthly",
+    "price_bucket": "Lower mid price",
+    "median_ltv_380": 18.8343,
+    "avg_ltv_380": 34.5141
+  },
+  {
+    "country": "All",
+    "region": "Global",
+    "category": "EDUCATION",
+    "product_set": "monthly",
+    "price_bucket": "Upper mid price",
+    "median_ltv_380": 23.4467,
+    "avg_ltv_380": 42.7728
+  },
+  {
+    "country": "All",
+    "region": "Global",
+    "category": "EDUCATION",
+    "product_set": "weekly",
+    "price_bucket": "High price",
+    "median_ltv_380": 25.2203,
+    "avg_ltv_380": 62.6931
+  },
+  {
+    "country": "All",
+    "region": "Global",
+    "category": "EDUCATION",
+    "product_set": "weekly",
+    "price_bucket": "Low price",
+    "median_ltv_380": 19.96,
+    "avg_ltv_380": 48.4627
+  },
+  {
+    "country": "All",
+    "region": "Global",
+    "category": "EDUCATION",
+    "product_set": "weekly",
+    "price_bucket": "Lower mid price",
+    "median_ltv_380": 13.98,
+    "avg_ltv_380": 47.0967
+  },
+  {
+    "country": "All",
+    "region": "Global",
+    "category": "EDUCATION",
+    "product_set": "weekly",
+    "price_bucket": "Upper mid price",
+    "median_ltv_380": 15.98,
+    "avg_ltv_380": 39.6462
+  },
+  {
+    "country": "All",
+    "region": "Global",
+    "category": "ENTERTAINMENT",
+    "product_set": "annual",
+    "price_bucket": "High price",
+    "median_ltv_380": 69.99,
+    "avg_ltv_380": 90.3538
+  },
+  {
+    "country": "All",
+    "region": "Global",
+    "category": "ENTERTAINMENT",
+    "product_set": "annual",
+    "price_bucket": "Low price",
+    "median_ltv_380": 18.98,
+    "avg_ltv_380": 21.7336
+  },
+  {
+    "country": "All",
+    "region": "Global",
+    "category": "ENTERTAINMENT",
+    "product_set": "annual",
+    "price_bucket": "Lower mid price",
+    "median_ltv_380": 39.99,
+    "avg_ltv_380": 39.8115
+  },
+  {
+    "country": "All",
+    "region": "Global",
+    "category": "ENTERTAINMENT",
+    "product_set": "annual",
+    "price_bucket": "Upper mid price",
+    "median_ltv_380": 48.49,
+    "avg_ltv_380": 53.0475
+  },
+  {
+    "country": "All",
+    "region": "Global",
+    "category": "ENTERTAINMENT",
+    "product_set": "monthly",
+    "price_bucket": "High price",
+    "median_ltv_380": 24.99,
+    "avg_ltv_380": 40.5747
+  },
+  {
+    "country": "All",
+    "region": "Global",
+    "category": "ENTERTAINMENT",
+    "product_set": "monthly",
+    "price_bucket": "Low price",
+    "median_ltv_380": 5.99,
+    "avg_ltv_380": 16.0381
+  },
+  {
+    "country": "All",
+    "region": "Global",
+    "category": "ENTERTAINMENT",
+    "product_set": "monthly",
+    "price_bucket": "Lower mid price",
+    "median_ltv_380": 19.98,
+    "avg_ltv_380": 43.3705
+  },
+  {
+    "country": "All",
+    "region": "Global",
+    "category": "ENTERTAINMENT",
+    "product_set": "monthly",
+    "price_bucket": "Upper mid price",
+    "median_ltv_380": 14.99,
+    "avg_ltv_380": 28.4854
+  },
+  {
+    "country": "All",
+    "region": "Global",
+    "category": "ENTERTAINMENT",
+    "product_set": "weekly",
+    "price_bucket": "High price",
+    "median_ltv_380": 15.98,
+    "avg_ltv_380": 49.4026
+  },
+  {
+    "country": "All",
+    "region": "Global",
+    "category": "ENTERTAINMENT",
+    "product_set": "weekly",
+    "price_bucket": "Low price",
+    "median_ltv_380": 5.373,
+    "avg_ltv_380": 22.3744
+  },
+  {
+    "country": "All",
+    "region": "Global",
+    "category": "ENTERTAINMENT",
+    "product_set": "weekly",
+    "price_bucket": "Lower mid price",
+    "median_ltv_380": 9.4249,
+    "avg_ltv_380": 29.8203
+  },
+  {
+    "country": "All",
+    "region": "Global",
+    "category": "ENTERTAINMENT",
+    "product_set": "weekly",
+    "price_bucket": "Upper mid price",
+    "median_ltv_380": 8.1935,
+    "avg_ltv_380": 31.7837
+  },
+  {
+    "country": "All",
+    "region": "Global",
+    "category": "GRAPHICS_AND_DESIGN",
+    "product_set": "annual",
+    "price_bucket": "High price",
+    "median_ltv_380": 49.99,
+    "avg_ltv_380": 59.9553
+  },
+  {
+    "country": "All",
+    "region": "Global",
+    "category": "GRAPHICS_AND_DESIGN",
+    "product_set": "annual",
+    "price_bucket": "Low price",
+    "median_ltv_380": 19.99,
+    "avg_ltv_380": 20.8657
+  },
+  {
+    "country": "All",
+    "region": "Global",
+    "category": "GRAPHICS_AND_DESIGN",
+    "product_set": "annual",
+    "price_bucket": "Lower mid price",
+    "median_ltv_380": 33.8942,
+    "avg_ltv_380": 36.6231
+  },
+  {
+    "country": "All",
+    "region": "Global",
+    "category": "GRAPHICS_AND_DESIGN",
+    "product_set": "annual",
+    "price_bucket": "Upper mid price",
+    "median_ltv_380": 39.99,
+    "avg_ltv_380": 46.4608
+  },
+  {
+    "country": "All",
+    "region": "Global",
+    "category": "GRAPHICS_AND_DESIGN",
+    "product_set": "monthly",
+    "price_bucket": "High price",
+    "median_ltv_380": 15.7831,
+    "avg_ltv_380": 35.9941
+  },
+  {
+    "country": "All",
+    "region": "Global",
+    "category": "GRAPHICS_AND_DESIGN",
+    "product_set": "monthly",
+    "price_bucket": "Low price",
+    "median_ltv_380": 6.145,
+    "avg_ltv_380": 16.9008
+  },
+  {
+    "country": "All",
+    "region": "Global",
+    "category": "GRAPHICS_AND_DESIGN",
+    "product_set": "monthly",
+    "price_bucket": "Lower mid price",
+    "median_ltv_380": 12.872,
+    "avg_ltv_380": 27.9244
+  },
+  {
+    "country": "All",
+    "region": "Global",
+    "category": "GRAPHICS_AND_DESIGN",
+    "product_set": "monthly",
+    "price_bucket": "Upper mid price",
+    "median_ltv_380": 12.0623,
+    "avg_ltv_380": 32.6726
+  },
+  {
+    "country": "All",
+    "region": "Global",
+    "category": "GRAPHICS_AND_DESIGN",
+    "product_set": "weekly",
+    "price_bucket": "High price",
+    "median_ltv_380": 10.9635,
+    "avg_ltv_380": 46.9353
+  },
+  {
+    "country": "All",
+    "region": "Global",
+    "category": "GRAPHICS_AND_DESIGN",
+    "product_set": "weekly",
+    "price_bucket": "Low price",
+    "median_ltv_380": 4.99,
+    "avg_ltv_380": 21.2506
+  },
+  {
+    "country": "All",
+    "region": "Global",
+    "category": "GRAPHICS_AND_DESIGN",
+    "product_set": "weekly",
+    "price_bucket": "Lower mid price",
+    "median_ltv_380": 6.2406,
+    "avg_ltv_380": 22.5783
+  },
+  {
+    "country": "All",
+    "region": "Global",
+    "category": "GRAPHICS_AND_DESIGN",
+    "product_set": "weekly",
+    "price_bucket": "Upper mid price",
+    "median_ltv_380": 7.6443,
+    "avg_ltv_380": 31.8472
+  },
+  {
+    "country": "All",
+    "region": "Global",
+    "category": "HEALTH_AND_FITNESS",
+    "product_set": "annual",
+    "price_bucket": "High price",
+    "median_ltv_380": 76.5767,
+    "avg_ltv_380": 100.6368
+  },
+  {
+    "country": "All",
+    "region": "Global",
+    "category": "HEALTH_AND_FITNESS",
+    "product_set": "annual",
+    "price_bucket": "Low price",
+    "median_ltv_380": 18.99,
+    "avg_ltv_380": 20.7311
+  },
+  {
+    "country": "All",
+    "region": "Global",
+    "category": "HEALTH_AND_FITNESS",
+    "product_set": "annual",
+    "price_bucket": "Lower mid price",
+    "median_ltv_380": 37.7882,
+    "avg_ltv_380": 39.8379
+  },
+  {
+    "country": "All",
+    "region": "Global",
+    "category": "HEALTH_AND_FITNESS",
+    "product_set": "annual",
+    "price_bucket": "Upper mid price",
+    "median_ltv_380": 49.99,
+    "avg_ltv_380": 59.3367
+  },
+  {
+    "country": "All",
+    "region": "Global",
+    "category": "HEALTH_AND_FITNESS",
+    "product_set": "monthly",
+    "price_bucket": "High price",
+    "median_ltv_380": 29.98,
+    "avg_ltv_380": 59.0132
+  },
+  {
+    "country": "All",
+    "region": "Global",
+    "category": "HEALTH_AND_FITNESS",
+    "product_set": "monthly",
+    "price_bucket": "Low price",
+    "median_ltv_380": 4.99,
+    "avg_ltv_380": 11.5124
+  },
+  {
+    "country": "All",
+    "region": "Global",
+    "category": "HEALTH_AND_FITNESS",
+    "product_set": "monthly",
+    "price_bucket": "Lower mid price",
+    "median_ltv_380": 9.99,
+    "avg_ltv_380": 21.2089
+  },
+  {
+    "country": "All",
+    "region": "Global",
+    "category": "HEALTH_AND_FITNESS",
+    "product_set": "monthly",
+    "price_bucket": "Upper mid price",
+    "median_ltv_380": 21.5629,
+    "avg_ltv_380": 37.9088
+  },
+  {
+    "country": "All",
+    "region": "Global",
+    "category": "HEALTH_AND_FITNESS",
+    "product_set": "weekly",
+    "price_bucket": "High price",
+    "median_ltv_380": 15.98,
+    "avg_ltv_380": 58.2446
+  },
+  {
+    "country": "All",
+    "region": "Global",
+    "category": "HEALTH_AND_FITNESS",
+    "product_set": "weekly",
+    "price_bucket": "Low price",
+    "median_ltv_380": 3.98,
+    "avg_ltv_380": 14.7273
+  },
+  {
+    "country": "All",
+    "region": "Global",
+    "category": "HEALTH_AND_FITNESS",
+    "product_set": "weekly",
+    "price_bucket": "Lower mid price",
+    "median_ltv_380": 11.1376,
+    "avg_ltv_380": 39.5854
+  },
+  {
+    "country": "All",
+    "region": "Global",
+    "category": "HEALTH_AND_FITNESS",
+    "product_set": "weekly",
+    "price_bucket": "Upper mid price",
+    "median_ltv_380": 13.98,
+    "avg_ltv_380": 43.9674
+  },
+  {
+    "country": "All",
+    "region": "Global",
+    "category": "LIFESTYLE",
+    "product_set": "annual",
+    "price_bucket": "High price",
+    "median_ltv_380": 69.99,
+    "avg_ltv_380": 75.2321
+  },
+  {
+    "country": "All",
+    "region": "Global",
+    "category": "LIFESTYLE",
+    "product_set": "annual",
+    "price_bucket": "Low price",
+    "median_ltv_380": 12.5067,
+    "avg_ltv_380": 15.3649
+  },
+  {
+    "country": "All",
+    "region": "Global",
+    "category": "LIFESTYLE",
+    "product_set": "annual",
+    "price_bucket": "Lower mid price",
+    "median_ltv_380": 29.99,
+    "avg_ltv_380": 32.4533
+  },
+  {
+    "country": "All",
+    "region": "Global",
+    "category": "LIFESTYLE",
+    "product_set": "annual",
+    "price_bucket": "Upper mid price",
+    "median_ltv_380": 39.99,
+    "avg_ltv_380": 45.3573
+  },
+  {
+    "country": "All",
+    "region": "Global",
+    "category": "LIFESTYLE",
+    "product_set": "monthly",
+    "price_bucket": "High price",
+    "median_ltv_380": 28.4805,
+    "avg_ltv_380": 55.9828
+  },
+  {
+    "country": "All",
+    "region": "Global",
+    "category": "LIFESTYLE",
+    "product_set": "monthly",
+    "price_bucket": "Low price",
+    "median_ltv_380": 4.3563,
+    "avg_ltv_380": 10.6951
+  },
+  {
+    "country": "All",
+    "region": "Global",
+    "category": "LIFESTYLE",
+    "product_set": "monthly",
+    "price_bucket": "Lower mid price",
+    "median_ltv_380": 11.0224,
+    "avg_ltv_380": 31.259
+  },
+  {
+    "country": "All",
+    "region": "Global",
+    "category": "LIFESTYLE",
+    "product_set": "monthly",
+    "price_bucket": "Upper mid price",
+    "median_ltv_380": 34.1295,
+    "avg_ltv_380": 58.1975
+  },
+  {
+    "country": "All",
+    "region": "Global",
+    "category": "LIFESTYLE",
+    "product_set": "weekly",
+    "price_bucket": "High price",
+    "median_ltv_380": 20.0415,
+    "avg_ltv_380": 59.9199
+  },
+  {
+    "country": "All",
+    "region": "Global",
+    "category": "LIFESTYLE",
+    "product_set": "weekly",
+    "price_bucket": "Low price",
+    "median_ltv_380": 4.99,
+    "avg_ltv_380": 19.333
+  },
+  {
+    "country": "All",
+    "region": "Global",
+    "category": "LIFESTYLE",
+    "product_set": "weekly",
+    "price_bucket": "Lower mid price",
+    "median_ltv_380": 6.99,
+    "avg_ltv_380": 30.9806
+  },
+  {
+    "country": "All",
+    "region": "Global",
+    "category": "LIFESTYLE",
+    "product_set": "weekly",
+    "price_bucket": "Upper mid price",
+    "median_ltv_380": 14.7122,
+    "avg_ltv_380": 47.0167
+  },
+  {
+    "country": "All",
+    "region": "Global",
+    "category": "PHOTO_AND_VIDEO",
+    "product_set": "annual",
+    "price_bucket": "High price",
+    "median_ltv_380": 52.0246,
+    "avg_ltv_380": 69.1697
+  },
+  {
+    "country": "All",
+    "region": "Global",
+    "category": "PHOTO_AND_VIDEO",
+    "product_set": "annual",
+    "price_bucket": "Low price",
+    "median_ltv_380": 17.1944,
+    "avg_ltv_380": 20.7715
+  },
+  {
+    "country": "All",
+    "region": "Global",
+    "category": "PHOTO_AND_VIDEO",
+    "product_set": "annual",
+    "price_bucket": "Lower mid price",
+    "median_ltv_380": 29.99,
+    "avg_ltv_380": 30.881
+  },
+  {
+    "country": "All",
+    "region": "Global",
+    "category": "PHOTO_AND_VIDEO",
+    "product_set": "annual",
+    "price_bucket": "Upper mid price",
+    "median_ltv_380": 39.99,
+    "avg_ltv_380": 44.6653
+  },
+  {
+    "country": "All",
+    "region": "Global",
+    "category": "PHOTO_AND_VIDEO",
+    "product_set": "monthly",
+    "price_bucket": "High price",
+    "median_ltv_380": 19.1863,
+    "avg_ltv_380": 37.3054
+  },
+  {
+    "country": "All",
+    "region": "Global",
+    "category": "PHOTO_AND_VIDEO",
+    "product_set": "monthly",
+    "price_bucket": "Low price",
+    "median_ltv_380": 4.99,
+    "avg_ltv_380": 14.1494
+  },
+  {
+    "country": "All",
+    "region": "Global",
+    "category": "PHOTO_AND_VIDEO",
+    "product_set": "monthly",
+    "price_bucket": "Lower mid price",
+    "median_ltv_380": 6.99,
+    "avg_ltv_380": 19.8473
+  },
+  {
+    "country": "All",
+    "region": "Global",
+    "category": "PHOTO_AND_VIDEO",
+    "product_set": "monthly",
+    "price_bucket": "Upper mid price",
+    "median_ltv_380": 10.7038,
+    "avg_ltv_380": 27.7323
+  },
+  {
+    "country": "All",
+    "region": "Global",
+    "category": "PHOTO_AND_VIDEO",
+    "product_set": "weekly",
+    "price_bucket": "High price",
+    "median_ltv_380": 9.99,
+    "avg_ltv_380": 32.4225
+  },
+  {
+    "country": "All",
+    "region": "Global",
+    "category": "PHOTO_AND_VIDEO",
+    "product_set": "weekly",
+    "price_bucket": "Low price",
+    "median_ltv_380": 1.49,
+    "avg_ltv_380": 13.3632
+  },
+  {
+    "country": "All",
+    "region": "Global",
+    "category": "PHOTO_AND_VIDEO",
+    "product_set": "weekly",
+    "price_bucket": "Lower mid price",
+    "median_ltv_380": 6.4517,
+    "avg_ltv_380": 27.0261
+  },
+  {
+    "country": "All",
+    "region": "Global",
+    "category": "PHOTO_AND_VIDEO",
+    "product_set": "weekly",
+    "price_bucket": "Upper mid price",
+    "median_ltv_380": 6.99,
+    "avg_ltv_380": 27.1096
+  },
+  {
+    "country": "All",
+    "region": "Global",
+    "category": "PRODUCTIVITY",
+    "product_set": "annual",
+    "price_bucket": "High price",
+    "median_ltv_380": 70.6717,
+    "avg_ltv_380": 99.9172
+  },
+  {
+    "country": "All",
+    "region": "Global",
+    "category": "PRODUCTIVITY",
+    "product_set": "annual",
+    "price_bucket": "Low price",
+    "median_ltv_380": 27.49,
+    "avg_ltv_380": 28.0495
+  },
+  {
+    "country": "All",
+    "region": "Global",
+    "category": "PRODUCTIVITY",
+    "product_set": "annual",
+    "price_bucket": "Lower mid price",
+    "median_ltv_380": 39.99,
+    "avg_ltv_380": 44.5293
+  },
+  {
+    "country": "All",
+    "region": "Global",
+    "category": "PRODUCTIVITY",
+    "product_set": "annual",
+    "price_bucket": "Upper mid price",
+    "median_ltv_380": 49.99,
+    "avg_ltv_380": 59.2492
+  },
+  {
+    "country": "All",
+    "region": "Global",
+    "category": "PRODUCTIVITY",
+    "product_set": "monthly",
+    "price_bucket": "High price",
+    "median_ltv_380": 43.98,
+    "avg_ltv_380": 97.8727
+  },
+  {
+    "country": "All",
+    "region": "Global",
+    "category": "PRODUCTIVITY",
+    "product_set": "monthly",
+    "price_bucket": "Low price",
+    "median_ltv_380": 7.98,
+    "avg_ltv_380": 16.099
+  },
+  {
+    "country": "All",
+    "region": "Global",
+    "category": "PRODUCTIVITY",
+    "product_set": "monthly",
+    "price_bucket": "Lower mid price",
+    "median_ltv_380": 9.99,
+    "avg_ltv_380": 28.6855
+  },
+  {
+    "country": "All",
+    "region": "Global",
+    "category": "PRODUCTIVITY",
+    "product_set": "monthly",
+    "price_bucket": "Upper mid price",
+    "median_ltv_380": 19.5901,
+    "avg_ltv_380": 44.6681
+  },
+  {
+    "country": "All",
+    "region": "Global",
+    "category": "PRODUCTIVITY",
+    "product_set": "weekly",
+    "price_bucket": "High price",
+    "median_ltv_380": 19.9531,
+    "avg_ltv_380": 65.6531
+  },
+  {
+    "country": "All",
+    "region": "Global",
+    "category": "PRODUCTIVITY",
+    "product_set": "weekly",
+    "price_bucket": "Low price",
+    "median_ltv_380": 4.4113,
+    "avg_ltv_380": 31.4819
+  },
+  {
+    "country": "All",
+    "region": "Global",
+    "category": "PRODUCTIVITY",
+    "product_set": "weekly",
+    "price_bucket": "Lower mid price",
+    "median_ltv_380": 12.5764,
+    "avg_ltv_380": 39.8765
+  },
+  {
+    "country": "All",
+    "region": "Global",
+    "category": "PRODUCTIVITY",
+    "product_set": "weekly",
+    "price_bucket": "Upper mid price",
+    "median_ltv_380": 16.7825,
+    "avg_ltv_380": 55.695
+  },
+  {
+    "country": "All",
+    "region": "Global",
+    "category": "UTILITIES",
+    "product_set": "annual",
+    "price_bucket": "High price",
+    "median_ltv_380": 93.2606,
+    "avg_ltv_380": 103.3479
+  },
+  {
+    "country": "All",
+    "region": "Global",
+    "category": "UTILITIES",
+    "product_set": "annual",
+    "price_bucket": "Low price",
+    "median_ltv_380": 19.99,
+    "avg_ltv_380": 25.7326
+  },
+  {
+    "country": "All",
+    "region": "Global",
+    "category": "UTILITIES",
+    "product_set": "annual",
+    "price_bucket": "Lower mid price",
+    "median_ltv_380": 29.99,
+    "avg_ltv_380": 34.6809
+  },
+  {
+    "country": "All",
+    "region": "Global",
+    "category": "UTILITIES",
+    "product_set": "annual",
+    "price_bucket": "Upper mid price",
+    "median_ltv_380": 39.99,
+    "avg_ltv_380": 49.9322
+  },
+  {
+    "country": "All",
+    "region": "Global",
+    "category": "UTILITIES",
+    "product_set": "monthly",
+    "price_bucket": "High price",
+    "median_ltv_380": 24.99,
+    "avg_ltv_380": 50.3536
+  },
+  {
+    "country": "All",
+    "region": "Global",
+    "category": "UTILITIES",
+    "product_set": "monthly",
+    "price_bucket": "Low price",
+    "median_ltv_380": 5.0088,
+    "avg_ltv_380": 12.2536
+  },
+  {
+    "country": "All",
+    "region": "Global",
+    "category": "UTILITIES",
+    "product_set": "monthly",
+    "price_bucket": "Lower mid price",
+    "median_ltv_380": 16.6135,
+    "avg_ltv_380": 38.2815
+  },
+  {
+    "country": "All",
+    "region": "Global",
+    "category": "UTILITIES",
+    "product_set": "monthly",
+    "price_bucket": "Upper mid price",
+    "median_ltv_380": 19.2466,
+    "avg_ltv_380": 42.0853
+  },
+  {
+    "country": "All",
+    "region": "Global",
+    "category": "UTILITIES",
+    "product_set": "weekly",
+    "price_bucket": "High price",
+    "median_ltv_380": 25.0546,
+    "avg_ltv_380": 87.7338
+  },
+  {
+    "country": "All",
+    "region": "Global",
+    "category": "UTILITIES",
+    "product_set": "weekly",
+    "price_bucket": "Low price",
+    "median_ltv_380": 9.98,
+    "avg_ltv_380": 35.0009
+  },
+  {
+    "country": "All",
+    "region": "Global",
+    "category": "UTILITIES",
+    "product_set": "weekly",
+    "price_bucket": "Lower mid price",
+    "median_ltv_380": 13.98,
+    "avg_ltv_380": 52.049
+  },
+  {
+    "country": "All",
+    "region": "Global",
+    "category": "UTILITIES",
+    "product_set": "weekly",
+    "price_bucket": "Upper mid price",
+    "median_ltv_380": 15.98,
+    "avg_ltv_380": 56.7213
+  },
+  {
+    "country": "All",
+    "region": "APAC",
+    "category": "All",
+    "product_set": "annual",
+    "price_bucket": "High price",
+    "median_ltv_380": 62.4937,
+    "avg_ltv_380": 75.4931
+  },
+  {
+    "country": "All",
+    "region": "APAC",
+    "category": "All",
+    "product_set": "annual",
+    "price_bucket": "Low price",
+    "median_ltv_380": 16.3613,
+    "avg_ltv_380": 20.0578
+  },
+  {
+    "country": "All",
+    "region": "APAC",
+    "category": "All",
+    "product_set": "annual",
+    "price_bucket": "Lower mid price",
+    "median_ltv_380": 29.3019,
+    "avg_ltv_380": 32.5379
+  },
+  {
+    "country": "All",
+    "region": "APAC",
+    "category": "All",
+    "product_set": "annual",
+    "price_bucket": "Upper mid price",
+    "median_ltv_380": 39.99,
+    "avg_ltv_380": 46.4849
+  },
+  {
+    "country": "All",
+    "region": "APAC",
+    "category": "All",
+    "product_set": "monthly",
+    "price_bucket": "High price",
+    "median_ltv_380": 20.3842,
+    "avg_ltv_380": 38.5348
+  },
+  {
+    "country": "All",
+    "region": "APAC",
+    "category": "All",
+    "product_set": "monthly",
+    "price_bucket": "Low price",
+    "median_ltv_380": 4.7281,
+    "avg_ltv_380": 10.6796
+  },
+  {
+    "country": "All",
+    "region": "APAC",
+    "category": "All",
+    "product_set": "monthly",
+    "price_bucket": "Lower mid price",
+    "median_ltv_380": 9.5425,
+    "avg_ltv_380": 21.2578
+  },
+  {
+    "country": "All",
+    "region": "APAC",
+    "category": "All",
+    "product_set": "monthly",
+    "price_bucket": "Upper mid price",
+    "median_ltv_380": 14.0982,
+    "avg_ltv_380": 35.1678
+  },
+  {
+    "country": "All",
+    "region": "APAC",
+    "category": "All",
+    "product_set": "weekly",
+    "price_bucket": "High price",
+    "median_ltv_380": 13.9173,
+    "avg_ltv_380": 53.8232
+  },
+  {
+    "country": "All",
+    "region": "APAC",
+    "category": "All",
+    "product_set": "weekly",
+    "price_bucket": "Low price",
+    "median_ltv_380": 5.245,
+    "avg_ltv_380": 21.3394
+  },
+  {
+    "country": "All",
+    "region": "APAC",
+    "category": "All",
+    "product_set": "weekly",
+    "price_bucket": "Lower mid price",
+    "median_ltv_380": 9.4004,
+    "avg_ltv_380": 34.9463
+  },
+  {
+    "country": "All",
+    "region": "APAC",
+    "category": "All",
+    "product_set": "weekly",
+    "price_bucket": "Upper mid price",
+    "median_ltv_380": 8.526,
+    "avg_ltv_380": 39.1537
+  },
+  {
+    "country": "All",
+    "region": "APAC",
+    "category": "EDUCATION",
+    "product_set": "annual",
+    "price_bucket": "High price",
+    "median_ltv_380": 77.7324,
+    "avg_ltv_380": 89.2353
+  },
+  {
+    "country": "All",
+    "region": "APAC",
+    "category": "EDUCATION",
+    "product_set": "annual",
+    "price_bucket": "Low price",
+    "median_ltv_380": 18.7079,
+    "avg_ltv_380": 24.7993
+  },
+  {
+    "country": "All",
+    "region": "APAC",
+    "category": "EDUCATION",
+    "product_set": "annual",
+    "price_bucket": "Lower mid price",
+    "median_ltv_380": 33.0184,
+    "avg_ltv_380": 42.5451
+  },
+  {
+    "country": "All",
+    "region": "APAC",
+    "category": "EDUCATION",
+    "product_set": "annual",
+    "price_bucket": "Upper mid price",
+    "median_ltv_380": 48.338,
+    "avg_ltv_380": 53.2974
+  },
+  {
+    "country": "All",
+    "region": "APAC",
+    "category": "EDUCATION",
+    "product_set": "monthly",
+    "price_bucket": "High price",
+    "median_ltv_380": 22.8052,
+    "avg_ltv_380": 45.268
+  },
+  {
+    "country": "All",
+    "region": "APAC",
+    "category": "EDUCATION",
+    "product_set": "monthly",
+    "price_bucket": "Low price",
+    "median_ltv_380": 6.512,
+    "avg_ltv_380": 14.2515
+  },
+  {
+    "country": "All",
+    "region": "APAC",
+    "category": "EDUCATION",
+    "product_set": "monthly",
+    "price_bucket": "Lower mid price",
+    "median_ltv_380": 9.014,
+    "avg_ltv_380": 20.1211
+  },
+  {
+    "country": "All",
+    "region": "APAC",
+    "category": "EDUCATION",
+    "product_set": "monthly",
+    "price_bucket": "Upper mid price",
+    "median_ltv_380": 21.1088,
+    "avg_ltv_380": 33.2882
+  },
+  {
+    "country": "All",
+    "region": "APAC",
+    "category": "EDUCATION",
+    "product_set": "weekly",
+    "price_bucket": "High price",
+    "median_ltv_380": 24.531,
+    "avg_ltv_380": 57.803
+  },
+  {
+    "country": "All",
+    "region": "APAC",
+    "category": "EDUCATION",
+    "product_set": "weekly",
+    "price_bucket": "Low price",
+    "median_ltv_380": 18.8019,
+    "avg_ltv_380": 43.9757
+  },
+  {
+    "country": "All",
+    "region": "APAC",
+    "category": "EDUCATION",
+    "product_set": "weekly",
+    "price_bucket": "Lower mid price",
+    "median_ltv_380": 11.1279,
+    "avg_ltv_380": 38.1586
+  },
+  {
+    "country": "All",
+    "region": "APAC",
+    "category": "EDUCATION",
+    "product_set": "weekly",
+    "price_bucket": "Upper mid price",
+    "median_ltv_380": 14.4752,
+    "avg_ltv_380": 47.9538
+  },
+  {
+    "country": "All",
+    "region": "APAC",
+    "category": "ENTERTAINMENT",
+    "product_set": "annual",
+    "price_bucket": "High price",
+    "median_ltv_380": 66.4974,
+    "avg_ltv_380": 79.0327
+  },
+  {
+    "country": "All",
+    "region": "APAC",
+    "category": "ENTERTAINMENT",
+    "product_set": "annual",
+    "price_bucket": "Low price",
+    "median_ltv_380": 14.9142,
+    "avg_ltv_380": 17.5282
+  },
+  {
+    "country": "All",
+    "region": "APAC",
+    "category": "ENTERTAINMENT",
+    "product_set": "annual",
+    "price_bucket": "Lower mid price",
+    "median_ltv_380": 32.3553,
+    "avg_ltv_380": 34.9631
+  },
+  {
+    "country": "All",
+    "region": "APAC",
+    "category": "ENTERTAINMENT",
+    "product_set": "annual",
+    "price_bucket": "Upper mid price",
+    "median_ltv_380": 40.6232,
+    "avg_ltv_380": 46.6981
+  },
+  {
+    "country": "All",
+    "region": "APAC",
+    "category": "ENTERTAINMENT",
+    "product_set": "monthly",
+    "price_bucket": "High price",
+    "median_ltv_380": 24.99,
+    "avg_ltv_380": 35.6693
+  },
+  {
+    "country": "All",
+    "region": "APAC",
+    "category": "ENTERTAINMENT",
+    "product_set": "monthly",
+    "price_bucket": "Low price",
+    "median_ltv_380": 5.6805,
+    "avg_ltv_380": 12.1208
+  },
+  {
+    "country": "All",
+    "region": "APAC",
+    "category": "ENTERTAINMENT",
+    "product_set": "monthly",
+    "price_bucket": "Lower mid price",
+    "median_ltv_380": 9.6729,
+    "avg_ltv_380": 28.9087
+  },
+  {
+    "country": "All",
+    "region": "APAC",
+    "category": "ENTERTAINMENT",
+    "product_set": "monthly",
+    "price_bucket": "Upper mid price",
+    "median_ltv_380": 14.5122,
+    "avg_ltv_380": 30.6081
+  },
+  {
+    "country": "All",
+    "region": "APAC",
+    "category": "ENTERTAINMENT",
+    "product_set": "weekly",
+    "price_bucket": "High price",
+    "median_ltv_380": 10.2481,
+    "avg_ltv_380": 39.7882
+  },
+  {
+    "country": "All",
+    "region": "APAC",
+    "category": "ENTERTAINMENT",
+    "product_set": "weekly",
+    "price_bucket": "Low price",
+    "median_ltv_380": 4.5631,
+    "avg_ltv_380": 20.009
+  },
+  {
+    "country": "All",
+    "region": "APAC",
+    "category": "ENTERTAINMENT",
+    "product_set": "weekly",
+    "price_bucket": "Lower mid price",
+    "median_ltv_380": 6.1849,
+    "avg_ltv_380": 28.108
+  },
+  {
+    "country": "All",
+    "region": "APAC",
+    "category": "ENTERTAINMENT",
+    "product_set": "weekly",
+    "price_bucket": "Upper mid price",
+    "median_ltv_380": 6.7387,
+    "avg_ltv_380": 33.0661
+  },
+  {
+    "country": "All",
+    "region": "APAC",
+    "category": "GRAPHICS_AND_DESIGN",
+    "product_set": "annual",
+    "price_bucket": "High price",
+    "median_ltv_380": 44.5504,
+    "avg_ltv_380": 52.8389
+  },
+  {
+    "country": "All",
+    "region": "APAC",
+    "category": "GRAPHICS_AND_DESIGN",
+    "product_set": "annual",
+    "price_bucket": "Low price",
+    "median_ltv_380": 19.2872,
+    "avg_ltv_380": 21.8891
+  },
+  {
+    "country": "All",
+    "region": "APAC",
+    "category": "GRAPHICS_AND_DESIGN",
+    "product_set": "annual",
+    "price_bucket": "Lower mid price",
+    "median_ltv_380": 28.2797,
+    "avg_ltv_380": 31.9953
+  },
+  {
+    "country": "All",
+    "region": "APAC",
+    "category": "GRAPHICS_AND_DESIGN",
+    "product_set": "annual",
+    "price_bucket": "Upper mid price",
+    "median_ltv_380": 39.4788,
+    "avg_ltv_380": 44.8567
+  },
+  {
+    "country": "All",
+    "region": "APAC",
+    "category": "GRAPHICS_AND_DESIGN",
+    "product_set": "monthly",
+    "price_bucket": "High price",
+    "median_ltv_380": 13.3862,
+    "avg_ltv_380": 31.4318
+  },
+  {
+    "country": "All",
+    "region": "APAC",
+    "category": "GRAPHICS_AND_DESIGN",
+    "product_set": "monthly",
+    "price_bucket": "Low price",
+    "median_ltv_380": 5.0978,
+    "avg_ltv_380": 17.2345
+  },
+  {
+    "country": "All",
+    "region": "APAC",
+    "category": "GRAPHICS_AND_DESIGN",
+    "product_set": "monthly",
+    "price_bucket": "Lower mid price",
+    "median_ltv_380": 14.684,
+    "avg_ltv_380": 28.1399
+  },
+  {
+    "country": "All",
+    "region": "APAC",
+    "category": "GRAPHICS_AND_DESIGN",
+    "product_set": "monthly",
+    "price_bucket": "Upper mid price",
+    "median_ltv_380": 11.1791,
+    "avg_ltv_380": 30.2352
+  },
+  {
+    "country": "All",
+    "region": "APAC",
+    "category": "GRAPHICS_AND_DESIGN",
+    "product_set": "weekly",
+    "price_bucket": "High price",
+    "median_ltv_380": 9.8155,
+    "avg_ltv_380": 38.4837
+  },
+  {
+    "country": "All",
+    "region": "APAC",
+    "category": "GRAPHICS_AND_DESIGN",
+    "product_set": "weekly",
+    "price_bucket": "Low price",
+    "median_ltv_380": 4.581,
+    "avg_ltv_380": 24.5058
+  },
+  {
+    "country": "All",
+    "region": "APAC",
+    "category": "GRAPHICS_AND_DESIGN",
+    "product_set": "weekly",
+    "price_bucket": "Lower mid price",
+    "median_ltv_380": 5.2062,
+    "avg_ltv_380": 20.0083
+  },
+  {
+    "country": "All",
+    "region": "APAC",
+    "category": "GRAPHICS_AND_DESIGN",
+    "product_set": "weekly",
+    "price_bucket": "Upper mid price",
+    "median_ltv_380": 6.6171,
+    "avg_ltv_380": 26.4023
+  },
+  {
+    "country": "All",
+    "region": "APAC",
+    "category": "HEALTH_AND_FITNESS",
+    "product_set": "annual",
+    "price_bucket": "High price",
+    "median_ltv_380": 60.1724,
+    "avg_ltv_380": 75.6094
+  },
+  {
+    "country": "All",
+    "region": "APAC",
+    "category": "HEALTH_AND_FITNESS",
+    "product_set": "annual",
+    "price_bucket": "Low price",
+    "median_ltv_380": 10.2076,
+    "avg_ltv_380": 14.9928
+  },
+  {
+    "country": "All",
+    "region": "APAC",
+    "category": "HEALTH_AND_FITNESS",
+    "product_set": "annual",
+    "price_bucket": "Lower mid price",
+    "median_ltv_380": 29.99,
+    "avg_ltv_380": 32.2126
+  },
+  {
+    "country": "All",
+    "region": "APAC",
+    "category": "HEALTH_AND_FITNESS",
+    "product_set": "annual",
+    "price_bucket": "Upper mid price",
+    "median_ltv_380": 40.1396,
+    "avg_ltv_380": 47.5682
+  },
+  {
+    "country": "All",
+    "region": "APAC",
+    "category": "HEALTH_AND_FITNESS",
+    "product_set": "monthly",
+    "price_bucket": "High price",
+    "median_ltv_380": 26.1311,
+    "avg_ltv_380": 48.7539
+  },
+  {
+    "country": "All",
+    "region": "APAC",
+    "category": "HEALTH_AND_FITNESS",
+    "product_set": "monthly",
+    "price_bucket": "Low price",
+    "median_ltv_380": 5.5346,
+    "avg_ltv_380": 10.237
+  },
+  {
+    "country": "All",
+    "region": "APAC",
+    "category": "HEALTH_AND_FITNESS",
+    "product_set": "monthly",
+    "price_bucket": "Lower mid price",
+    "median_ltv_380": 10.6645,
+    "avg_ltv_380": 18.7331
+  },
+  {
+    "country": "All",
+    "region": "APAC",
+    "category": "HEALTH_AND_FITNESS",
+    "product_set": "monthly",
+    "price_bucket": "Upper mid price",
+    "median_ltv_380": 12.9609,
+    "avg_ltv_380": 28.0086
+  },
+  {
+    "country": "All",
+    "region": "APAC",
+    "category": "HEALTH_AND_FITNESS",
+    "product_set": "weekly",
+    "price_bucket": "High price",
+    "median_ltv_380": 29.4902,
+    "avg_ltv_380": 89.5014
+  },
+  {
+    "country": "All",
+    "region": "APAC",
+    "category": "HEALTH_AND_FITNESS",
+    "product_set": "weekly",
+    "price_bucket": "Low price",
+    "median_ltv_380": 2.7579,
+    "avg_ltv_380": 11.7431
+  },
+  {
+    "country": "All",
+    "region": "APAC",
+    "category": "HEALTH_AND_FITNESS",
+    "product_set": "weekly",
+    "price_bucket": "Lower mid price",
+    "median_ltv_380": 9.9739,
+    "avg_ltv_380": 33.3524
+  },
+  {
+    "country": "All",
+    "region": "APAC",
+    "category": "HEALTH_AND_FITNESS",
+    "product_set": "weekly",
+    "price_bucket": "Upper mid price",
+    "median_ltv_380": 11.6438,
+    "avg_ltv_380": 35.5199
+  },
+  {
+    "country": "All",
+    "region": "APAC",
+    "category": "LIFESTYLE",
+    "product_set": "annual",
+    "price_bucket": "High price",
+    "median_ltv_380": 47.3379,
+    "avg_ltv_380": 59.7009
+  },
+  {
+    "country": "All",
+    "region": "APAC",
+    "category": "LIFESTYLE",
+    "product_set": "annual",
+    "price_bucket": "Low price",
+    "median_ltv_380": 14.8172,
+    "avg_ltv_380": 16.5001
+  },
+  {
+    "country": "All",
+    "region": "APAC",
+    "category": "LIFESTYLE",
+    "product_set": "annual",
+    "price_bucket": "Lower mid price",
+    "median_ltv_380": 28.2515,
+    "avg_ltv_380": 30.0701
+  },
+  {
+    "country": "All",
+    "region": "APAC",
+    "category": "LIFESTYLE",
+    "product_set": "annual",
+    "price_bucket": "Upper mid price",
+    "median_ltv_380": 36.9387,
+    "avg_ltv_380": 41.0976
+  },
+  {
+    "country": "All",
+    "region": "APAC",
+    "category": "LIFESTYLE",
+    "product_set": "monthly",
+    "price_bucket": "High price",
+    "median_ltv_380": 27.5209,
+    "avg_ltv_380": 48.5197
+  },
+  {
+    "country": "All",
+    "region": "APAC",
+    "category": "LIFESTYLE",
+    "product_set": "monthly",
+    "price_bucket": "Low price",
+    "median_ltv_380": 3.9992,
+    "avg_ltv_380": 9.054
+  },
+  {
+    "country": "All",
+    "region": "APAC",
+    "category": "LIFESTYLE",
+    "product_set": "monthly",
+    "price_bucket": "Lower mid price",
+    "median_ltv_380": 10.98,
+    "avg_ltv_380": 21.8146
+  },
+  {
+    "country": "All",
+    "region": "APAC",
+    "category": "LIFESTYLE",
+    "product_set": "monthly",
+    "price_bucket": "Upper mid price",
+    "median_ltv_380": 27.0474,
+    "avg_ltv_380": 45.8279
+  },
+  {
+    "country": "All",
+    "region": "APAC",
+    "category": "LIFESTYLE",
+    "product_set": "weekly",
+    "price_bucket": "High price",
+    "median_ltv_380": 18.5416,
+    "avg_ltv_380": 56.1608
+  },
+  {
+    "country": "All",
+    "region": "APAC",
+    "category": "LIFESTYLE",
+    "product_set": "weekly",
+    "price_bucket": "Low price",
+    "median_ltv_380": 3.9378,
+    "avg_ltv_380": 13.1249
+  },
+  {
+    "country": "All",
+    "region": "APAC",
+    "category": "LIFESTYLE",
+    "product_set": "weekly",
+    "price_bucket": "Lower mid price",
+    "median_ltv_380": 5.9213,
+    "avg_ltv_380": 21.3628
+  },
+  {
+    "country": "All",
+    "region": "APAC",
+    "category": "LIFESTYLE",
+    "product_set": "weekly",
+    "price_bucket": "Upper mid price",
+    "median_ltv_380": 8.3507,
+    "avg_ltv_380": 36.8482
+  },
+  {
+    "country": "All",
+    "region": "APAC",
+    "category": "PHOTO_AND_VIDEO",
+    "product_set": "annual",
+    "price_bucket": "High price",
+    "median_ltv_380": 49.8909,
+    "avg_ltv_380": 64.1698
+  },
+  {
+    "country": "All",
+    "region": "APAC",
+    "category": "PHOTO_AND_VIDEO",
+    "product_set": "annual",
+    "price_bucket": "Low price",
+    "median_ltv_380": 16.2597,
+    "avg_ltv_380": 18.658
+  },
+  {
+    "country": "All",
+    "region": "APAC",
+    "category": "PHOTO_AND_VIDEO",
+    "product_set": "annual",
+    "price_bucket": "Lower mid price",
+    "median_ltv_380": 26.4962,
+    "avg_ltv_380": 28.2593
+  },
+  {
+    "country": "All",
+    "region": "APAC",
+    "category": "PHOTO_AND_VIDEO",
+    "product_set": "annual",
+    "price_bucket": "Upper mid price",
+    "median_ltv_380": 37.5862,
+    "avg_ltv_380": 41.6345
+  },
+  {
+    "country": "All",
+    "region": "APAC",
+    "category": "PHOTO_AND_VIDEO",
+    "product_set": "monthly",
+    "price_bucket": "High price",
+    "median_ltv_380": 13.3679,
+    "avg_ltv_380": 31.3528
+  },
+  {
+    "country": "All",
+    "region": "APAC",
+    "category": "PHOTO_AND_VIDEO",
+    "product_set": "monthly",
+    "price_bucket": "Low price",
+    "median_ltv_380": 4.4224,
+    "avg_ltv_380": 10.7005
+  },
+  {
+    "country": "All",
+    "region": "APAC",
+    "category": "PHOTO_AND_VIDEO",
+    "product_set": "monthly",
+    "price_bucket": "Lower mid price",
+    "median_ltv_380": 5.3505,
+    "avg_ltv_380": 14.5465
+  },
+  {
+    "country": "All",
+    "region": "APAC",
+    "category": "PHOTO_AND_VIDEO",
+    "product_set": "monthly",
+    "price_bucket": "Upper mid price",
+    "median_ltv_380": 9.99,
+    "avg_ltv_380": 23.4525
+  },
+  {
+    "country": "All",
+    "region": "APAC",
+    "category": "PHOTO_AND_VIDEO",
+    "product_set": "weekly",
+    "price_bucket": "High price",
+    "median_ltv_380": 9.5574,
+    "avg_ltv_380": 29.493
+  },
+  {
+    "country": "All",
+    "region": "APAC",
+    "category": "PHOTO_AND_VIDEO",
+    "product_set": "weekly",
+    "price_bucket": "Low price",
+    "median_ltv_380": 0.7885,
+    "avg_ltv_380": 9.8729
+  },
+  {
+    "country": "All",
+    "region": "APAC",
+    "category": "PHOTO_AND_VIDEO",
+    "product_set": "weekly",
+    "price_bucket": "Lower mid price",
+    "median_ltv_380": 5.2157,
+    "avg_ltv_380": 22.578
+  },
+  {
+    "country": "All",
+    "region": "APAC",
+    "category": "PHOTO_AND_VIDEO",
+    "product_set": "weekly",
+    "price_bucket": "Upper mid price",
+    "median_ltv_380": 6.6447,
+    "avg_ltv_380": 24.6549
+  },
+  {
+    "country": "All",
+    "region": "APAC",
+    "category": "PRODUCTIVITY",
+    "product_set": "annual",
+    "price_bucket": "High price",
+    "median_ltv_380": 65.7383,
+    "avg_ltv_380": 81.6182
+  },
+  {
+    "country": "All",
+    "region": "APAC",
+    "category": "PRODUCTIVITY",
+    "product_set": "annual",
+    "price_bucket": "Low price",
+    "median_ltv_380": 17.6369,
+    "avg_ltv_380": 20.4084
+  },
+  {
+    "country": "All",
+    "region": "APAC",
+    "category": "PRODUCTIVITY",
+    "product_set": "annual",
+    "price_bucket": "Lower mid price",
+    "median_ltv_380": 34.4731,
+    "avg_ltv_380": 39.6054
+  },
+  {
+    "country": "All",
+    "region": "APAC",
+    "category": "PRODUCTIVITY",
+    "product_set": "annual",
+    "price_bucket": "Upper mid price",
+    "median_ltv_380": 43.63,
+    "avg_ltv_380": 53.6451
+  },
+  {
+    "country": "All",
+    "region": "APAC",
+    "category": "PRODUCTIVITY",
+    "product_set": "monthly",
+    "price_bucket": "High price",
+    "median_ltv_380": 23.7588,
+    "avg_ltv_380": 50.8528
+  },
+  {
+    "country": "All",
+    "region": "APAC",
+    "category": "PRODUCTIVITY",
+    "product_set": "monthly",
+    "price_bucket": "Low price",
+    "median_ltv_380": 4.874,
+    "avg_ltv_380": 10.5379
+  },
+  {
+    "country": "All",
+    "region": "APAC",
+    "category": "PRODUCTIVITY",
+    "product_set": "monthly",
+    "price_bucket": "Lower mid price",
+    "median_ltv_380": 9.5414,
+    "avg_ltv_380": 20.1491
+  },
+  {
+    "country": "All",
+    "region": "APAC",
+    "category": "PRODUCTIVITY",
+    "product_set": "monthly",
+    "price_bucket": "Upper mid price",
+    "median_ltv_380": 11.3222,
+    "avg_ltv_380": 34.5913
+  },
+  {
+    "country": "All",
+    "region": "APAC",
+    "category": "PRODUCTIVITY",
+    "product_set": "weekly",
+    "price_bucket": "High price",
+    "median_ltv_380": 16.2151,
+    "avg_ltv_380": 50.6638
+  },
+  {
+    "country": "All",
+    "region": "APAC",
+    "category": "PRODUCTIVITY",
+    "product_set": "weekly",
+    "price_bucket": "Low price",
+    "median_ltv_380": 3.4701,
+    "avg_ltv_380": 30.2363
+  },
+  {
+    "country": "All",
+    "region": "APAC",
+    "category": "PRODUCTIVITY",
+    "product_set": "weekly",
+    "price_bucket": "Lower mid price",
+    "median_ltv_380": 10.6237,
+    "avg_ltv_380": 40.7606
+  },
+  {
+    "country": "All",
+    "region": "APAC",
+    "category": "PRODUCTIVITY",
+    "product_set": "weekly",
+    "price_bucket": "Upper mid price",
+    "median_ltv_380": 13.6995,
+    "avg_ltv_380": 54.613
+  },
+  {
+    "country": "All",
+    "region": "APAC",
+    "category": "UTILITIES",
+    "product_set": "annual",
+    "price_bucket": "High price",
+    "median_ltv_380": 76.7788,
+    "avg_ltv_380": 90.9671
+  },
+  {
+    "country": "All",
+    "region": "APAC",
+    "category": "UTILITIES",
+    "product_set": "annual",
+    "price_bucket": "Low price",
+    "median_ltv_380": 17.0712,
+    "avg_ltv_380": 24.7805
+  },
+  {
+    "country": "All",
+    "region": "APAC",
+    "category": "UTILITIES",
+    "product_set": "annual",
+    "price_bucket": "Lower mid price",
+    "median_ltv_380": 22.3752,
+    "avg_ltv_380": 27.4897
+  },
+  {
+    "country": "All",
+    "region": "APAC",
+    "category": "UTILITIES",
+    "product_set": "annual",
+    "price_bucket": "Upper mid price",
+    "median_ltv_380": 37.4135,
+    "avg_ltv_380": 42.2957
+  },
+  {
+    "country": "All",
+    "region": "APAC",
+    "category": "UTILITIES",
+    "product_set": "monthly",
+    "price_bucket": "High price",
+    "median_ltv_380": 20.0307,
+    "avg_ltv_380": 43.4378
+  },
+  {
+    "country": "All",
+    "region": "APAC",
+    "category": "UTILITIES",
+    "product_set": "monthly",
+    "price_bucket": "Low price",
+    "median_ltv_380": 3.7795,
+    "avg_ltv_380": 8.4287
+  },
+  {
+    "country": "All",
+    "region": "APAC",
+    "category": "UTILITIES",
+    "product_set": "monthly",
+    "price_bucket": "Lower mid price",
+    "median_ltv_380": 9.3069,
+    "avg_ltv_380": 24.9026
+  },
+  {
+    "country": "All",
+    "region": "APAC",
+    "category": "UTILITIES",
+    "product_set": "monthly",
+    "price_bucket": "Upper mid price",
+    "median_ltv_380": 14.1067,
+    "avg_ltv_380": 36.7204
+  },
+  {
+    "country": "All",
+    "region": "APAC",
+    "category": "UTILITIES",
+    "product_set": "weekly",
+    "price_bucket": "High price",
+    "median_ltv_380": 19.3494,
+    "avg_ltv_380": 73.4921
+  },
+  {
+    "country": "All",
+    "region": "APAC",
+    "category": "UTILITIES",
+    "product_set": "weekly",
+    "price_bucket": "Low price",
+    "median_ltv_380": 5.865,
+    "avg_ltv_380": 22.8038
+  },
+  {
+    "country": "All",
+    "region": "APAC",
+    "category": "UTILITIES",
+    "product_set": "weekly",
+    "price_bucket": "Lower mid price",
+    "median_ltv_380": 12.6428,
+    "avg_ltv_380": 46.4217
+  },
+  {
+    "country": "All",
+    "region": "APAC",
+    "category": "UTILITIES",
+    "product_set": "weekly",
+    "price_bucket": "Upper mid price",
+    "median_ltv_380": 13.6708,
+    "avg_ltv_380": 45.2595
+  },
+  {
+    "country": "All",
+    "region": "Europe",
+    "category": "All",
+    "product_set": "annual",
+    "price_bucket": "High price",
+    "median_ltv_380": 73.4368,
+    "avg_ltv_380": 87.3176
+  },
+  {
+    "country": "All",
+    "region": "Europe",
+    "category": "All",
+    "product_set": "annual",
+    "price_bucket": "Low price",
+    "median_ltv_380": 21.1251,
+    "avg_ltv_380": 23.5129
+  },
+  {
+    "country": "All",
+    "region": "Europe",
+    "category": "All",
+    "product_set": "annual",
+    "price_bucket": "Lower mid price",
+    "median_ltv_380": 33.7966,
+    "avg_ltv_380": 38.1878
+  },
+  {
+    "country": "All",
+    "region": "Europe",
+    "category": "All",
+    "product_set": "annual",
+    "price_bucket": "Upper mid price",
+    "median_ltv_380": 47.5255,
+    "avg_ltv_380": 55.0071
+  },
+  {
+    "country": "All",
+    "region": "Europe",
+    "category": "All",
+    "product_set": "monthly",
+    "price_bucket": "High price",
+    "median_ltv_380": 27.8044,
+    "avg_ltv_380": 55.4
+  },
+  {
+    "country": "All",
+    "region": "Europe",
+    "category": "All",
+    "product_set": "monthly",
+    "price_bucket": "Low price",
+    "median_ltv_380": 5.9111,
+    "avg_ltv_380": 13.3373
+  },
+  {
+    "country": "All",
+    "region": "Europe",
+    "category": "All",
+    "product_set": "monthly",
+    "price_bucket": "Lower mid price",
+    "median_ltv_380": 10.9005,
+    "avg_ltv_380": 27.2855
+  },
+  {
+    "country": "All",
+    "region": "Europe",
+    "category": "All",
+    "product_set": "monthly",
+    "price_bucket": "Upper mid price",
+    "median_ltv_380": 18.5761,
+    "avg_ltv_380": 43.2974
+  },
+  {
+    "country": "All",
+    "region": "Europe",
+    "category": "All",
+    "product_set": "weekly",
+    "price_bucket": "High price",
+    "median_ltv_380": 13.0424,
+    "avg_ltv_380": 53.5425
+  },
+  {
+    "country": "All",
+    "region": "Europe",
+    "category": "All",
+    "product_set": "weekly",
+    "price_bucket": "Low price",
+    "median_ltv_380": 5.035,
+    "avg_ltv_380": 22.9577
+  },
+  {
+    "country": "All",
+    "region": "Europe",
+    "category": "All",
+    "product_set": "weekly",
+    "price_bucket": "Lower mid price",
+    "median_ltv_380": 8.3076,
+    "avg_ltv_380": 32.6287
+  },
+  {
+    "country": "All",
+    "region": "Europe",
+    "category": "All",
+    "product_set": "weekly",
+    "price_bucket": "Upper mid price",
+    "median_ltv_380": 8.708,
+    "avg_ltv_380": 37.6861
+  },
+  {
+    "country": "All",
+    "region": "Europe",
+    "category": "EDUCATION",
+    "product_set": "annual",
+    "price_bucket": "High price",
+    "median_ltv_380": 86.2221,
+    "avg_ltv_380": 103.1586
+  },
+  {
+    "country": "All",
+    "region": "Europe",
+    "category": "EDUCATION",
+    "product_set": "annual",
+    "price_bucket": "Low price",
+    "median_ltv_380": 20.98,
+    "avg_ltv_380": 25.365
+  },
+  {
+    "country": "All",
+    "region": "Europe",
+    "category": "EDUCATION",
+    "product_set": "annual",
+    "price_bucket": "Lower mid price",
+    "median_ltv_380": 35.3309,
+    "avg_ltv_380": 41.8014
+  },
+  {
+    "country": "All",
+    "region": "Europe",
+    "category": "EDUCATION",
+    "product_set": "annual",
+    "price_bucket": "Upper mid price",
+    "median_ltv_380": 54.334,
+    "avg_ltv_380": 63.2662
+  },
+  {
+    "country": "All",
+    "region": "Europe",
+    "category": "EDUCATION",
+    "product_set": "monthly",
+    "price_bucket": "High price",
+    "median_ltv_380": 30.1395,
+    "avg_ltv_380": 52.9638
+  },
+  {
+    "country": "All",
+    "region": "Europe",
+    "category": "EDUCATION",
+    "product_set": "monthly",
+    "price_bucket": "Low price",
+    "median_ltv_380": 7.67,
+    "avg_ltv_380": 14.9972
+  },
+  {
+    "country": "All",
+    "region": "Europe",
+    "category": "EDUCATION",
+    "product_set": "monthly",
+    "price_bucket": "Lower mid price",
+    "median_ltv_380": 17.434,
+    "avg_ltv_380": 30.8523
+  },
+  {
+    "country": "All",
+    "region": "Europe",
+    "category": "EDUCATION",
+    "product_set": "monthly",
+    "price_bucket": "Upper mid price",
+    "median_ltv_380": 22.8527,
+    "avg_ltv_380": 42.7797
+  },
+  {
+    "country": "All",
+    "region": "Europe",
+    "category": "EDUCATION",
+    "product_set": "weekly",
+    "price_bucket": "High price",
+    "median_ltv_380": 18.394,
+    "avg_ltv_380": 56.4617
+  },
+  {
+    "country": "All",
+    "region": "Europe",
+    "category": "EDUCATION",
+    "product_set": "weekly",
+    "price_bucket": "Low price",
+    "median_ltv_380": 10.0241,
+    "avg_ltv_380": 29.6671
+  },
+  {
+    "country": "All",
+    "region": "Europe",
+    "category": "EDUCATION",
+    "product_set": "weekly",
+    "price_bucket": "Lower mid price",
+    "median_ltv_380": 18.9598,
+    "avg_ltv_380": 47.9262
+  },
+  {
+    "country": "All",
+    "region": "Europe",
+    "category": "EDUCATION",
+    "product_set": "weekly",
+    "price_bucket": "Upper mid price",
+    "median_ltv_380": 17.4002,
+    "avg_ltv_380": 56.0529
+  },
+  {
+    "country": "All",
+    "region": "Europe",
+    "category": "ENTERTAINMENT",
+    "product_set": "annual",
+    "price_bucket": "High price",
+    "median_ltv_380": 76.602,
+    "avg_ltv_380": 87.6014
+  },
+  {
+    "country": "All",
+    "region": "Europe",
+    "category": "ENTERTAINMENT",
+    "product_set": "annual",
+    "price_bucket": "Low price",
+    "median_ltv_380": 18.9188,
+    "avg_ltv_380": 22.1418
+  },
+  {
+    "country": "All",
+    "region": "Europe",
+    "category": "ENTERTAINMENT",
+    "product_set": "annual",
+    "price_bucket": "Lower mid price",
+    "median_ltv_380": 37.5186,
+    "avg_ltv_380": 39.7745
+  },
+  {
+    "country": "All",
+    "region": "Europe",
+    "category": "ENTERTAINMENT",
+    "product_set": "annual",
+    "price_bucket": "Upper mid price",
+    "median_ltv_380": 49.2992,
+    "avg_ltv_380": 55.7784
+  },
+  {
+    "country": "All",
+    "region": "Europe",
+    "category": "ENTERTAINMENT",
+    "product_set": "monthly",
+    "price_bucket": "High price",
+    "median_ltv_380": 31.2445,
+    "avg_ltv_380": 41.8249
+  },
+  {
+    "country": "All",
+    "region": "Europe",
+    "category": "ENTERTAINMENT",
+    "product_set": "monthly",
+    "price_bucket": "Low price",
+    "median_ltv_380": 6.0355,
+    "avg_ltv_380": 14.0109
+  },
+  {
+    "country": "All",
+    "region": "Europe",
+    "category": "ENTERTAINMENT",
+    "product_set": "monthly",
+    "price_bucket": "Lower mid price",
+    "median_ltv_380": 16.9928,
+    "avg_ltv_380": 37.0359
+  },
+  {
+    "country": "All",
+    "region": "Europe",
+    "category": "ENTERTAINMENT",
+    "product_set": "monthly",
+    "price_bucket": "Upper mid price",
+    "median_ltv_380": 18.257,
+    "avg_ltv_380": 32.8827
+  },
+  {
+    "country": "All",
+    "region": "Europe",
+    "category": "ENTERTAINMENT",
+    "product_set": "weekly",
+    "price_bucket": "High price",
+    "median_ltv_380": 10.5657,
+    "avg_ltv_380": 44.217
+  },
+  {
+    "country": "All",
+    "region": "Europe",
+    "category": "ENTERTAINMENT",
+    "product_set": "weekly",
+    "price_bucket": "Low price",
+    "median_ltv_380": 5.5242,
+    "avg_ltv_380": 18.6314
+  },
+  {
+    "country": "All",
+    "region": "Europe",
+    "category": "ENTERTAINMENT",
+    "product_set": "weekly",
+    "price_bucket": "Lower mid price",
+    "median_ltv_380": 6.7588,
+    "avg_ltv_380": 28.4472
+  },
+  {
+    "country": "All",
+    "region": "Europe",
+    "category": "ENTERTAINMENT",
+    "product_set": "weekly",
+    "price_bucket": "Upper mid price",
+    "median_ltv_380": 8.6346,
+    "avg_ltv_380": 31.4274
+  },
+  {
+    "country": "All",
+    "region": "Europe",
+    "category": "GRAPHICS_AND_DESIGN",
+    "product_set": "annual",
+    "price_bucket": "High price",
+    "median_ltv_380": 50.5825,
+    "avg_ltv_380": 60.3427
+  },
+  {
+    "country": "All",
+    "region": "Europe",
+    "category": "GRAPHICS_AND_DESIGN",
+    "product_set": "annual",
+    "price_bucket": "Low price",
+    "median_ltv_380": 15.802,
+    "avg_ltv_380": 19.1942
+  },
+  {
+    "country": "All",
+    "region": "Europe",
+    "category": "GRAPHICS_AND_DESIGN",
+    "product_set": "annual",
+    "price_bucket": "Lower mid price",
+    "median_ltv_380": 30.7723,
+    "avg_ltv_380": 36.244
+  },
+  {
+    "country": "All",
+    "region": "Europe",
+    "category": "GRAPHICS_AND_DESIGN",
+    "product_set": "annual",
+    "price_bucket": "Upper mid price",
+    "median_ltv_380": 46.123,
+    "avg_ltv_380": 52.0848
+  },
+  {
+    "country": "All",
+    "region": "Europe",
+    "category": "GRAPHICS_AND_DESIGN",
+    "product_set": "monthly",
+    "price_bucket": "High price",
+    "median_ltv_380": 16.7661,
+    "avg_ltv_380": 40.9715
+  },
+  {
+    "country": "All",
+    "region": "Europe",
+    "category": "GRAPHICS_AND_DESIGN",
+    "product_set": "monthly",
+    "price_bucket": "Low price",
+    "median_ltv_380": 6.2851,
+    "avg_ltv_380": 17.642
+  },
+  {
+    "country": "All",
+    "region": "Europe",
+    "category": "GRAPHICS_AND_DESIGN",
+    "product_set": "monthly",
+    "price_bucket": "Lower mid price",
+    "median_ltv_380": 15.317,
+    "avg_ltv_380": 32.2985
+  },
+  {
+    "country": "All",
+    "region": "Europe",
+    "category": "GRAPHICS_AND_DESIGN",
+    "product_set": "monthly",
+    "price_bucket": "Upper mid price",
+    "median_ltv_380": 12.8451,
+    "avg_ltv_380": 38.9979
+  },
+  {
+    "country": "All",
+    "region": "Europe",
+    "category": "GRAPHICS_AND_DESIGN",
+    "product_set": "weekly",
+    "price_bucket": "High price",
+    "median_ltv_380": 10.5594,
+    "avg_ltv_380": 41.0261
+  },
+  {
+    "country": "All",
+    "region": "Europe",
+    "category": "GRAPHICS_AND_DESIGN",
+    "product_set": "weekly",
+    "price_bucket": "Low price",
+    "median_ltv_380": 4.8961,
+    "avg_ltv_380": 16.1692
+  },
+  {
+    "country": "All",
+    "region": "Europe",
+    "category": "GRAPHICS_AND_DESIGN",
+    "product_set": "weekly",
+    "price_bucket": "Lower mid price",
+    "median_ltv_380": 6.3171,
+    "avg_ltv_380": 22.6677
+  },
+  {
+    "country": "All",
+    "region": "Europe",
+    "category": "GRAPHICS_AND_DESIGN",
+    "product_set": "weekly",
+    "price_bucket": "Upper mid price",
+    "median_ltv_380": 8.2411,
+    "avg_ltv_380": 25.8176
+  },
+  {
+    "country": "All",
+    "region": "Europe",
+    "category": "HEALTH_AND_FITNESS",
+    "product_set": "annual",
+    "price_bucket": "High price",
+    "median_ltv_380": 91.0659,
+    "avg_ltv_380": 117.0979
+  },
+  {
+    "country": "All",
+    "region": "Europe",
+    "category": "HEALTH_AND_FITNESS",
+    "product_set": "annual",
+    "price_bucket": "Low price",
+    "median_ltv_380": 16.4616,
+    "avg_ltv_380": 20.1084
+  },
+  {
+    "country": "All",
+    "region": "Europe",
+    "category": "HEALTH_AND_FITNESS",
+    "product_set": "annual",
+    "price_bucket": "Lower mid price",
+    "median_ltv_380": 36.2822,
+    "avg_ltv_380": 40.5496
+  },
+  {
+    "country": "All",
+    "region": "Europe",
+    "category": "HEALTH_AND_FITNESS",
+    "product_set": "annual",
+    "price_bucket": "Upper mid price",
+    "median_ltv_380": 53.6602,
+    "avg_ltv_380": 64.5693
+  },
+  {
+    "country": "All",
+    "region": "Europe",
+    "category": "HEALTH_AND_FITNESS",
+    "product_set": "monthly",
+    "price_bucket": "High price",
+    "median_ltv_380": 33.7496,
+    "avg_ltv_380": 61.6385
+  },
+  {
+    "country": "All",
+    "region": "Europe",
+    "category": "HEALTH_AND_FITNESS",
+    "product_set": "monthly",
+    "price_bucket": "Low price",
+    "median_ltv_380": 5.5722,
+    "avg_ltv_380": 10.7079
+  },
+  {
+    "country": "All",
+    "region": "Europe",
+    "category": "HEALTH_AND_FITNESS",
+    "product_set": "monthly",
+    "price_bucket": "Lower mid price",
+    "median_ltv_380": 10.7523,
+    "avg_ltv_380": 22.6613
+  },
+  {
+    "country": "All",
+    "region": "Europe",
+    "category": "HEALTH_AND_FITNESS",
+    "product_set": "monthly",
+    "price_bucket": "Upper mid price",
+    "median_ltv_380": 21.4851,
+    "avg_ltv_380": 33.6619
+  },
+  {
+    "country": "All",
+    "region": "Europe",
+    "category": "HEALTH_AND_FITNESS",
+    "product_set": "weekly",
+    "price_bucket": "High price",
+    "median_ltv_380": 20.5777,
+    "avg_ltv_380": 73.5625
+  },
+  {
+    "country": "All",
+    "region": "Europe",
+    "category": "HEALTH_AND_FITNESS",
+    "product_set": "weekly",
+    "price_bucket": "Low price",
+    "median_ltv_380": 4.3859,
+    "avg_ltv_380": 16.0129
+  },
+  {
+    "country": "All",
+    "region": "Europe",
+    "category": "HEALTH_AND_FITNESS",
+    "product_set": "weekly",
+    "price_bucket": "Lower mid price",
+    "median_ltv_380": 9.998,
+    "avg_ltv_380": 34.9785
+  },
+  {
+    "country": "All",
+    "region": "Europe",
+    "category": "HEALTH_AND_FITNESS",
+    "product_set": "weekly",
+    "price_bucket": "Upper mid price",
+    "median_ltv_380": 12.8636,
+    "avg_ltv_380": 43.1191
+  },
+  {
+    "country": "All",
+    "region": "Europe",
+    "category": "LIFESTYLE",
+    "product_set": "annual",
+    "price_bucket": "High price",
+    "median_ltv_380": 65.6477,
+    "avg_ltv_380": 77.9107
+  },
+  {
+    "country": "All",
+    "region": "Europe",
+    "category": "LIFESTYLE",
+    "product_set": "annual",
+    "price_bucket": "Low price",
+    "median_ltv_380": 16.6289,
+    "avg_ltv_380": 19.3488
+  },
+  {
+    "country": "All",
+    "region": "Europe",
+    "category": "LIFESTYLE",
+    "product_set": "annual",
+    "price_bucket": "Lower mid price",
+    "median_ltv_380": 28.8546,
+    "avg_ltv_380": 34.0287
+  },
+  {
+    "country": "All",
+    "region": "Europe",
+    "category": "LIFESTYLE",
+    "product_set": "annual",
+    "price_bucket": "Upper mid price",
+    "median_ltv_380": 45.1579,
+    "avg_ltv_380": 50.7086
+  },
+  {
+    "country": "All",
+    "region": "Europe",
+    "category": "LIFESTYLE",
+    "product_set": "monthly",
+    "price_bucket": "High price",
+    "median_ltv_380": 27.9785,
+    "avg_ltv_380": 62.053
+  },
+  {
+    "country": "All",
+    "region": "Europe",
+    "category": "LIFESTYLE",
+    "product_set": "monthly",
+    "price_bucket": "Low price",
+    "median_ltv_380": 4.5566,
+    "avg_ltv_380": 12.0062
+  },
+  {
+    "country": "All",
+    "region": "Europe",
+    "category": "LIFESTYLE",
+    "product_set": "monthly",
+    "price_bucket": "Lower mid price",
+    "median_ltv_380": 10.6806,
+    "avg_ltv_380": 36.4424
+  },
+  {
+    "country": "All",
+    "region": "Europe",
+    "category": "LIFESTYLE",
+    "product_set": "monthly",
+    "price_bucket": "Upper mid price",
+    "median_ltv_380": 31.8692,
+    "avg_ltv_380": 53.7464
+  },
+  {
+    "country": "All",
+    "region": "Europe",
+    "category": "LIFESTYLE",
+    "product_set": "weekly",
+    "price_bucket": "High price",
+    "median_ltv_380": 21.7677,
+    "avg_ltv_380": 61.5876
+  },
+  {
+    "country": "All",
+    "region": "Europe",
+    "category": "LIFESTYLE",
+    "product_set": "weekly",
+    "price_bucket": "Low price",
+    "median_ltv_380": 4.6915,
+    "avg_ltv_380": 14.585
+  },
+  {
+    "country": "All",
+    "region": "Europe",
+    "category": "LIFESTYLE",
+    "product_set": "weekly",
+    "price_bucket": "Lower mid price",
+    "median_ltv_380": 6.5865,
+    "avg_ltv_380": 24.1897
+  },
+  {
+    "country": "All",
+    "region": "Europe",
+    "category": "LIFESTYLE",
+    "product_set": "weekly",
+    "price_bucket": "Upper mid price",
+    "median_ltv_380": 9.1972,
+    "avg_ltv_380": 42.1042
+  },
+  {
+    "country": "All",
+    "region": "Europe",
+    "category": "PHOTO_AND_VIDEO",
+    "product_set": "annual",
+    "price_bucket": "High price",
+    "median_ltv_380": 51.2232,
+    "avg_ltv_380": 68.3398
+  },
+  {
+    "country": "All",
+    "region": "Europe",
+    "category": "PHOTO_AND_VIDEO",
+    "product_set": "annual",
+    "price_bucket": "Low price",
+    "median_ltv_380": 20.2981,
+    "avg_ltv_380": 23.4684
+  },
+  {
+    "country": "All",
+    "region": "Europe",
+    "category": "PHOTO_AND_VIDEO",
+    "product_set": "annual",
+    "price_bucket": "Lower mid price",
+    "median_ltv_380": 32.5805,
+    "avg_ltv_380": 34.4605
+  },
+  {
+    "country": "All",
+    "region": "Europe",
+    "category": "PHOTO_AND_VIDEO",
+    "product_set": "annual",
+    "price_bucket": "Upper mid price",
+    "median_ltv_380": 43.1417,
+    "avg_ltv_380": 48.6098
+  },
+  {
+    "country": "All",
+    "region": "Europe",
+    "category": "PHOTO_AND_VIDEO",
+    "product_set": "monthly",
+    "price_bucket": "High price",
+    "median_ltv_380": 16.045,
+    "avg_ltv_380": 37.2115
+  },
+  {
+    "country": "All",
+    "region": "Europe",
+    "category": "PHOTO_AND_VIDEO",
+    "product_set": "monthly",
+    "price_bucket": "Low price",
+    "median_ltv_380": 5.4058,
+    "avg_ltv_380": 12.957
+  },
+  {
+    "country": "All",
+    "region": "Europe",
+    "category": "PHOTO_AND_VIDEO",
+    "product_set": "monthly",
+    "price_bucket": "Lower mid price",
+    "median_ltv_380": 6.6845,
+    "avg_ltv_380": 21.141
+  },
+  {
+    "country": "All",
+    "region": "Europe",
+    "category": "PHOTO_AND_VIDEO",
+    "product_set": "monthly",
+    "price_bucket": "Upper mid price",
+    "median_ltv_380": 10.8771,
+    "avg_ltv_380": 30.643
+  },
+  {
+    "country": "All",
+    "region": "Europe",
+    "category": "PHOTO_AND_VIDEO",
+    "product_set": "weekly",
+    "price_bucket": "High price",
+    "median_ltv_380": 10.3897,
+    "avg_ltv_380": 30.0607
+  },
+  {
+    "country": "All",
+    "region": "Europe",
+    "category": "PHOTO_AND_VIDEO",
+    "product_set": "weekly",
+    "price_bucket": "Low price",
+    "median_ltv_380": 0.7605,
+    "avg_ltv_380": 12.7922
+  },
+  {
+    "country": "All",
+    "region": "Europe",
+    "category": "PHOTO_AND_VIDEO",
+    "product_set": "weekly",
+    "price_bucket": "Lower mid price",
+    "median_ltv_380": 6.5027,
+    "avg_ltv_380": 27.2296
+  },
+  {
+    "country": "All",
+    "region": "Europe",
+    "category": "PHOTO_AND_VIDEO",
+    "product_set": "weekly",
+    "price_bucket": "Upper mid price",
+    "median_ltv_380": 8.6113,
+    "avg_ltv_380": 25.2841
+  },
+  {
+    "country": "All",
+    "region": "Europe",
+    "category": "PRODUCTIVITY",
+    "product_set": "annual",
+    "price_bucket": "High price",
+    "median_ltv_380": 77.9481,
+    "avg_ltv_380": 100.9875
+  },
+  {
+    "country": "All",
+    "region": "Europe",
+    "category": "PRODUCTIVITY",
+    "product_set": "annual",
+    "price_bucket": "Low price",
+    "median_ltv_380": 21.5295,
+    "avg_ltv_380": 26.6918
+  },
+  {
+    "country": "All",
+    "region": "Europe",
+    "category": "PRODUCTIVITY",
+    "product_set": "annual",
+    "price_bucket": "Lower mid price",
+    "median_ltv_380": 38.3737,
+    "avg_ltv_380": 46.4731
+  },
+  {
+    "country": "All",
+    "region": "Europe",
+    "category": "PRODUCTIVITY",
+    "product_set": "annual",
+    "price_bucket": "Upper mid price",
+    "median_ltv_380": 50.0022,
+    "avg_ltv_380": 62.8378
+  },
+  {
+    "country": "All",
+    "region": "Europe",
+    "category": "PRODUCTIVITY",
+    "product_set": "monthly",
+    "price_bucket": "High price",
+    "median_ltv_380": 33.0689,
+    "avg_ltv_380": 75.8652
+  },
+  {
+    "country": "All",
+    "region": "Europe",
+    "category": "PRODUCTIVITY",
+    "product_set": "monthly",
+    "price_bucket": "Low price",
+    "median_ltv_380": 8.6138,
+    "avg_ltv_380": 16.7692
+  },
+  {
+    "country": "All",
+    "region": "Europe",
+    "category": "PRODUCTIVITY",
+    "product_set": "monthly",
+    "price_bucket": "Lower mid price",
+    "median_ltv_380": 9.8139,
+    "avg_ltv_380": 27.3525
+  },
+  {
+    "country": "All",
+    "region": "Europe",
+    "category": "PRODUCTIVITY",
+    "product_set": "monthly",
+    "price_bucket": "Upper mid price",
+    "median_ltv_380": 20.3693,
+    "avg_ltv_380": 43.1945
+  },
+  {
+    "country": "All",
+    "region": "Europe",
+    "category": "PRODUCTIVITY",
+    "product_set": "weekly",
+    "price_bucket": "High price",
+    "median_ltv_380": 18.956,
+    "avg_ltv_380": 59.0289
+  },
+  {
+    "country": "All",
+    "region": "Europe",
+    "category": "PRODUCTIVITY",
+    "product_set": "weekly",
+    "price_bucket": "Low price",
+    "median_ltv_380": 1.2981,
+    "avg_ltv_380": 30.263
+  },
+  {
+    "country": "All",
+    "region": "Europe",
+    "category": "PRODUCTIVITY",
+    "product_set": "weekly",
+    "price_bucket": "Lower mid price",
+    "median_ltv_380": 12.5213,
+    "avg_ltv_380": 39.4829
+  },
+  {
+    "country": "All",
+    "region": "Europe",
+    "category": "PRODUCTIVITY",
+    "product_set": "weekly",
+    "price_bucket": "Upper mid price",
+    "median_ltv_380": 16.625,
+    "avg_ltv_380": 54.0524
+  },
+  {
+    "country": "All",
+    "region": "Europe",
+    "category": "UTILITIES",
+    "product_set": "annual",
+    "price_bucket": "High price",
+    "median_ltv_380": 87.6062,
+    "avg_ltv_380": 108.942
+  },
+  {
+    "country": "All",
+    "region": "Europe",
+    "category": "UTILITIES",
+    "product_set": "annual",
+    "price_bucket": "Low price",
+    "median_ltv_380": 22.086,
+    "avg_ltv_380": 28.1436
+  },
+  {
+    "country": "All",
+    "region": "Europe",
+    "category": "UTILITIES",
+    "product_set": "annual",
+    "price_bucket": "Lower mid price",
+    "median_ltv_380": 32.44,
+    "avg_ltv_380": 37.2031
+  },
+  {
+    "country": "All",
+    "region": "Europe",
+    "category": "UTILITIES",
+    "product_set": "annual",
+    "price_bucket": "Upper mid price",
+    "median_ltv_380": 48.5885,
+    "avg_ltv_380": 53.3248
+  },
+  {
+    "country": "All",
+    "region": "Europe",
+    "category": "UTILITIES",
+    "product_set": "monthly",
+    "price_bucket": "High price",
+    "median_ltv_380": 25.3849,
+    "avg_ltv_380": 53.309
+  },
+  {
+    "country": "All",
+    "region": "Europe",
+    "category": "UTILITIES",
+    "product_set": "monthly",
+    "price_bucket": "Low price",
+    "median_ltv_380": 5.5048,
+    "avg_ltv_380": 10.156
+  },
+  {
+    "country": "All",
+    "region": "Europe",
+    "category": "UTILITIES",
+    "product_set": "monthly",
+    "price_bucket": "Lower mid price",
+    "median_ltv_380": 11.099,
+    "avg_ltv_380": 24.5136
+  },
+  {
+    "country": "All",
+    "region": "Europe",
+    "category": "UTILITIES",
+    "product_set": "monthly",
+    "price_bucket": "Upper mid price",
+    "median_ltv_380": 18.4323,
+    "avg_ltv_380": 43.7576
+  },
+  {
+    "country": "All",
+    "region": "Europe",
+    "category": "UTILITIES",
+    "product_set": "weekly",
+    "price_bucket": "High price",
+    "median_ltv_380": 21.752,
+    "avg_ltv_380": 75.1997
+  },
+  {
+    "country": "All",
+    "region": "Europe",
+    "category": "UTILITIES",
+    "product_set": "weekly",
+    "price_bucket": "Low price",
+    "median_ltv_380": 11.1588,
+    "avg_ltv_380": 39.9345
+  },
+  {
+    "country": "All",
+    "region": "Europe",
+    "category": "UTILITIES",
+    "product_set": "weekly",
+    "price_bucket": "Lower mid price",
+    "median_ltv_380": 16.0546,
+    "avg_ltv_380": 50.0835
+  },
+  {
+    "country": "All",
+    "region": "Europe",
+    "category": "UTILITIES",
+    "product_set": "weekly",
+    "price_bucket": "Upper mid price",
+    "median_ltv_380": 17.5581,
+    "avg_ltv_380": 54.9069
+  },
+  {
+    "country": "All",
+    "region": "LATAM",
+    "category": "All",
+    "product_set": "annual",
+    "price_bucket": "High price",
+    "median_ltv_380": 54.5917,
+    "avg_ltv_380": 67.8148
+  },
+  {
+    "country": "All",
+    "region": "LATAM",
+    "category": "All",
+    "product_set": "annual",
+    "price_bucket": "Low price",
+    "median_ltv_380": 16.99,
+    "avg_ltv_380": 18.7672
+  },
+  {
+    "country": "All",
+    "region": "LATAM",
+    "category": "All",
+    "product_set": "annual",
+    "price_bucket": "Lower mid price",
+    "median_ltv_380": 27.37,
+    "avg_ltv_380": 31.9105
+  },
+  {
+    "country": "All",
+    "region": "LATAM",
+    "category": "All",
+    "product_set": "annual",
+    "price_bucket": "Upper mid price",
+    "median_ltv_380": 39.99,
+    "avg_ltv_380": 45.1324
+  },
+  {
+    "country": "All",
+    "region": "LATAM",
+    "category": "All",
+    "product_set": "monthly",
+    "price_bucket": "High price",
+    "median_ltv_380": 23.6324,
+    "avg_ltv_380": 45.734
+  },
+  {
+    "country": "All",
+    "region": "LATAM",
+    "category": "All",
+    "product_set": "monthly",
+    "price_bucket": "Low price",
+    "median_ltv_380": 4.2707,
+    "avg_ltv_380": 9.9244
+  },
+  {
+    "country": "All",
+    "region": "LATAM",
+    "category": "All",
+    "product_set": "monthly",
+    "price_bucket": "Lower mid price",
+    "median_ltv_380": 9.1568,
+    "avg_ltv_380": 21.4825
+  },
+  {
+    "country": "All",
+    "region": "LATAM",
+    "category": "All",
+    "product_set": "monthly",
+    "price_bucket": "Upper mid price",
+    "median_ltv_380": 12.8239,
+    "avg_ltv_380": 31.0605
+  },
+  {
+    "country": "All",
+    "region": "LATAM",
+    "category": "All",
+    "product_set": "weekly",
+    "price_bucket": "High price",
+    "median_ltv_380": 16.0141,
+    "avg_ltv_380": 55.6272
+  },
+  {
+    "country": "All",
+    "region": "LATAM",
+    "category": "All",
+    "product_set": "weekly",
+    "price_bucket": "Low price",
+    "median_ltv_380": 7.336,
+    "avg_ltv_380": 25.7257
+  },
+  {
+    "country": "All",
+    "region": "LATAM",
+    "category": "All",
+    "product_set": "weekly",
+    "price_bucket": "Lower mid price",
+    "median_ltv_380": 9.9103,
+    "avg_ltv_380": 33.7451
+  },
+  {
+    "country": "All",
+    "region": "LATAM",
+    "category": "All",
+    "product_set": "weekly",
+    "price_bucket": "Upper mid price",
+    "median_ltv_380": 7.99,
+    "avg_ltv_380": 39.5801
+  },
+  {
+    "country": "All",
+    "region": "LATAM",
+    "category": "EDUCATION",
+    "product_set": "annual",
+    "price_bucket": "High price",
+    "median_ltv_380": 69.9168,
+    "avg_ltv_380": 76.4701
+  },
+  {
+    "country": "All",
+    "region": "LATAM",
+    "category": "EDUCATION",
+    "product_set": "annual",
+    "price_bucket": "Low price",
+    "median_ltv_380": 16.4299,
+    "avg_ltv_380": 18.3728
+  },
+  {
+    "country": "All",
+    "region": "LATAM",
+    "category": "EDUCATION",
+    "product_set": "annual",
+    "price_bucket": "Lower mid price",
+    "median_ltv_380": 31.2451,
+    "avg_ltv_380": 39.8797
+  },
+  {
+    "country": "All",
+    "region": "LATAM",
+    "category": "EDUCATION",
+    "product_set": "annual",
+    "price_bucket": "Upper mid price",
+    "median_ltv_380": 41.311,
+    "avg_ltv_380": 48.7149
+  },
+  {
+    "country": "All",
+    "region": "LATAM",
+    "category": "EDUCATION",
+    "product_set": "weekly",
+    "price_bucket": "High price",
+    "median_ltv_380": 19.6481,
+    "avg_ltv_380": 69.1658
+  },
+  {
+    "country": "All",
+    "region": "LATAM",
+    "category": "EDUCATION",
+    "product_set": "weekly",
+    "price_bucket": "Low price",
+    "median_ltv_380": 10.2656,
+    "avg_ltv_380": 34.1396
+  },
+  {
+    "country": "All",
+    "region": "LATAM",
+    "category": "EDUCATION",
+    "product_set": "weekly",
+    "price_bucket": "Lower mid price",
+    "median_ltv_380": 13.98,
+    "avg_ltv_380": 49.1533
+  },
+  {
+    "country": "All",
+    "region": "LATAM",
+    "category": "EDUCATION",
+    "product_set": "weekly",
+    "price_bucket": "Upper mid price",
+    "median_ltv_380": 20.8772,
+    "avg_ltv_380": 62.0834
+  },
+  {
+    "country": "All",
+    "region": "LATAM",
+    "category": "ENTERTAINMENT",
+    "product_set": "annual",
+    "price_bucket": "High price",
+    "median_ltv_380": 62.99,
+    "avg_ltv_380": 75.0647
+  },
+  {
+    "country": "All",
+    "region": "LATAM",
+    "category": "ENTERTAINMENT",
+    "product_set": "annual",
+    "price_bucket": "Low price",
+    "median_ltv_380": 14.5381,
+    "avg_ltv_380": 16.1896
+  },
+  {
+    "country": "All",
+    "region": "LATAM",
+    "category": "ENTERTAINMENT",
+    "product_set": "annual",
+    "price_bucket": "Lower mid price",
+    "median_ltv_380": 28.9038,
+    "avg_ltv_380": 31.5883
+  },
+  {
+    "country": "All",
+    "region": "LATAM",
+    "category": "ENTERTAINMENT",
+    "product_set": "annual",
+    "price_bucket": "Upper mid price",
+    "median_ltv_380": 39.99,
+    "avg_ltv_380": 45.7432
+  },
+  {
+    "country": "All",
+    "region": "LATAM",
+    "category": "ENTERTAINMENT",
+    "product_set": "monthly",
+    "price_bucket": "High price",
+    "median_ltv_380": 24.99,
+    "avg_ltv_380": 30.2983
+  },
+  {
+    "country": "All",
+    "region": "LATAM",
+    "category": "ENTERTAINMENT",
+    "product_set": "monthly",
+    "price_bucket": "Low price",
+    "median_ltv_380": 5.3216,
+    "avg_ltv_380": 12.3153
+  },
+  {
+    "country": "All",
+    "region": "LATAM",
+    "category": "ENTERTAINMENT",
+    "product_set": "monthly",
+    "price_bucket": "Lower mid price",
+    "median_ltv_380": 9.728,
+    "avg_ltv_380": 32.088
+  },
+  {
+    "country": "All",
+    "region": "LATAM",
+    "category": "ENTERTAINMENT",
+    "product_set": "monthly",
+    "price_bucket": "Upper mid price",
+    "median_ltv_380": 14.99,
+    "avg_ltv_380": 26.2622
+  },
+  {
+    "country": "All",
+    "region": "LATAM",
+    "category": "ENTERTAINMENT",
+    "product_set": "weekly",
+    "price_bucket": "High price",
+    "median_ltv_380": 9.3583,
+    "avg_ltv_380": 40.273
+  },
+  {
+    "country": "All",
+    "region": "LATAM",
+    "category": "ENTERTAINMENT",
+    "product_set": "weekly",
+    "price_bucket": "Low price",
+    "median_ltv_380": 4.0234,
+    "avg_ltv_380": 14.9089
+  },
+  {
+    "country": "All",
+    "region": "LATAM",
+    "category": "ENTERTAINMENT",
+    "product_set": "weekly",
+    "price_bucket": "Lower mid price",
+    "median_ltv_380": 5.9679,
+    "avg_ltv_380": 26.8968
+  },
+  {
+    "country": "All",
+    "region": "LATAM",
+    "category": "ENTERTAINMENT",
+    "product_set": "weekly",
+    "price_bucket": "Upper mid price",
+    "median_ltv_380": 7.2815,
+    "avg_ltv_380": 29.6542
+  },
+  {
+    "country": "All",
+    "region": "LATAM",
+    "category": "GRAPHICS_AND_DESIGN",
+    "product_set": "annual",
+    "price_bucket": "High price",
+    "median_ltv_380": 49.99,
+    "avg_ltv_380": 58.5369
+  },
+  {
+    "country": "All",
+    "region": "LATAM",
+    "category": "GRAPHICS_AND_DESIGN",
+    "product_set": "annual",
+    "price_bucket": "Low price",
+    "median_ltv_380": 19.1929,
+    "avg_ltv_380": 19.2751
+  },
+  {
+    "country": "All",
+    "region": "LATAM",
+    "category": "GRAPHICS_AND_DESIGN",
+    "product_set": "annual",
+    "price_bucket": "Lower mid price",
+    "median_ltv_380": 26.2555,
+    "avg_ltv_380": 29.903
+  },
+  {
+    "country": "All",
+    "region": "LATAM",
+    "category": "GRAPHICS_AND_DESIGN",
+    "product_set": "annual",
+    "price_bucket": "Upper mid price",
+    "median_ltv_380": 39.9568,
+    "avg_ltv_380": 43.2353
+  },
+  {
+    "country": "All",
+    "region": "LATAM",
+    "category": "GRAPHICS_AND_DESIGN",
+    "product_set": "monthly",
+    "price_bucket": "High price",
+    "median_ltv_380": 15.9401,
+    "avg_ltv_380": 34.5022
+  },
+  {
+    "country": "All",
+    "region": "LATAM",
+    "category": "GRAPHICS_AND_DESIGN",
+    "product_set": "monthly",
+    "price_bucket": "Low price",
+    "median_ltv_380": 4.99,
+    "avg_ltv_380": 14.3251
+  },
+  {
+    "country": "All",
+    "region": "LATAM",
+    "category": "GRAPHICS_AND_DESIGN",
+    "product_set": "monthly",
+    "price_bucket": "Lower mid price",
+    "median_ltv_380": 12.6233,
+    "avg_ltv_380": 25.3665
+  },
+  {
+    "country": "All",
+    "region": "LATAM",
+    "category": "GRAPHICS_AND_DESIGN",
+    "product_set": "monthly",
+    "price_bucket": "Upper mid price",
+    "median_ltv_380": 10.6756,
+    "avg_ltv_380": 32.6446
+  },
+  {
+    "country": "All",
+    "region": "LATAM",
+    "category": "GRAPHICS_AND_DESIGN",
+    "product_set": "weekly",
+    "price_bucket": "High price",
+    "median_ltv_380": 13.9711,
+    "avg_ltv_380": 42.6507
+  },
+  {
+    "country": "All",
+    "region": "LATAM",
+    "category": "GRAPHICS_AND_DESIGN",
+    "product_set": "weekly",
+    "price_bucket": "Low price",
+    "median_ltv_380": 4.4121,
+    "avg_ltv_380": 16.6476
+  },
+  {
+    "country": "All",
+    "region": "LATAM",
+    "category": "GRAPHICS_AND_DESIGN",
+    "product_set": "weekly",
+    "price_bucket": "Lower mid price",
+    "median_ltv_380": 5.1771,
+    "avg_ltv_380": 24.5144
+  },
+  {
+    "country": "All",
+    "region": "LATAM",
+    "category": "GRAPHICS_AND_DESIGN",
+    "product_set": "weekly",
+    "price_bucket": "Upper mid price",
+    "median_ltv_380": 7.3293,
+    "avg_ltv_380": 31.7589
+  },
+  {
+    "country": "All",
+    "region": "LATAM",
+    "category": "HEALTH_AND_FITNESS",
+    "product_set": "annual",
+    "price_bucket": "High price",
+    "median_ltv_380": 60.1145,
+    "avg_ltv_380": 72.792
+  },
+  {
+    "country": "All",
+    "region": "LATAM",
+    "category": "HEALTH_AND_FITNESS",
+    "product_set": "annual",
+    "price_bucket": "Low price",
+    "median_ltv_380": 9.8179,
+    "avg_ltv_380": 11.7238
+  },
+  {
+    "country": "All",
+    "region": "LATAM",
+    "category": "HEALTH_AND_FITNESS",
+    "product_set": "annual",
+    "price_bucket": "Lower mid price",
+    "median_ltv_380": 25.5706,
+    "avg_ltv_380": 29.7599
+  },
+  {
+    "country": "All",
+    "region": "LATAM",
+    "category": "HEALTH_AND_FITNESS",
+    "product_set": "annual",
+    "price_bucket": "Upper mid price",
+    "median_ltv_380": 37.7035,
+    "avg_ltv_380": 43.5905
+  },
+  {
+    "country": "All",
+    "region": "LATAM",
+    "category": "HEALTH_AND_FITNESS",
+    "product_set": "monthly",
+    "price_bucket": "High price",
+    "median_ltv_380": 30.4087,
+    "avg_ltv_380": 57.5412
+  },
+  {
+    "country": "All",
+    "region": "LATAM",
+    "category": "HEALTH_AND_FITNESS",
+    "product_set": "monthly",
+    "price_bucket": "Low price",
+    "median_ltv_380": 3.169,
+    "avg_ltv_380": 5.5157
+  },
+  {
+    "country": "All",
+    "region": "LATAM",
+    "category": "HEALTH_AND_FITNESS",
+    "product_set": "monthly",
+    "price_bucket": "Lower mid price",
+    "median_ltv_380": 7.3114,
+    "avg_ltv_380": 16.2298
+  },
+  {
+    "country": "All",
+    "region": "LATAM",
+    "category": "HEALTH_AND_FITNESS",
+    "product_set": "monthly",
+    "price_bucket": "Upper mid price",
+    "median_ltv_380": 17.98,
+    "avg_ltv_380": 33.2997
+  },
+  {
+    "country": "All",
+    "region": "LATAM",
+    "category": "HEALTH_AND_FITNESS",
+    "product_set": "weekly",
+    "price_bucket": "High price",
+    "median_ltv_380": 36.1174,
+    "avg_ltv_380": 111.7326
+  },
+  {
+    "country": "All",
+    "region": "LATAM",
+    "category": "HEALTH_AND_FITNESS",
+    "product_set": "weekly",
+    "price_bucket": "Low price",
+    "median_ltv_380": 2.8487,
+    "avg_ltv_380": 10.3637
+  },
+  {
+    "country": "All",
+    "region": "LATAM",
+    "category": "HEALTH_AND_FITNESS",
+    "product_set": "weekly",
+    "price_bucket": "Lower mid price",
+    "median_ltv_380": 8.6445,
+    "avg_ltv_380": 26.5279
+  },
+  {
+    "country": "All",
+    "region": "LATAM",
+    "category": "HEALTH_AND_FITNESS",
+    "product_set": "weekly",
+    "price_bucket": "Upper mid price",
+    "median_ltv_380": 11.2519,
+    "avg_ltv_380": 36.2434
+  },
+  {
+    "country": "All",
+    "region": "LATAM",
+    "category": "LIFESTYLE",
+    "product_set": "annual",
+    "price_bucket": "High price",
+    "median_ltv_380": 46.1317,
+    "avg_ltv_380": 57.9963
+  },
+  {
+    "country": "All",
+    "region": "LATAM",
+    "category": "LIFESTYLE",
+    "product_set": "annual",
+    "price_bucket": "Low price",
+    "median_ltv_380": 16.1433,
+    "avg_ltv_380": 19.4005
+  },
+  {
+    "country": "All",
+    "region": "LATAM",
+    "category": "LIFESTYLE",
+    "product_set": "annual",
+    "price_bucket": "Lower mid price",
+    "median_ltv_380": 23.9773,
+    "avg_ltv_380": 27.342
+  },
+  {
+    "country": "All",
+    "region": "LATAM",
+    "category": "LIFESTYLE",
+    "product_set": "annual",
+    "price_bucket": "Upper mid price",
+    "median_ltv_380": 36.1143,
+    "avg_ltv_380": 42.2391
+  },
+  {
+    "country": "All",
+    "region": "LATAM",
+    "category": "LIFESTYLE",
+    "product_set": "monthly",
+    "price_bucket": "High price",
+    "median_ltv_380": 26.7078,
+    "avg_ltv_380": 49.9082
+  },
+  {
+    "country": "All",
+    "region": "LATAM",
+    "category": "LIFESTYLE",
+    "product_set": "monthly",
+    "price_bucket": "Low price",
+    "median_ltv_380": 6.2928,
+    "avg_ltv_380": 12.6754
+  },
+  {
+    "country": "All",
+    "region": "LATAM",
+    "category": "LIFESTYLE",
+    "product_set": "monthly",
+    "price_bucket": "Lower mid price",
+    "median_ltv_380": 8.6349,
+    "avg_ltv_380": 19.1193
+  },
+  {
+    "country": "All",
+    "region": "LATAM",
+    "category": "LIFESTYLE",
+    "product_set": "monthly",
+    "price_bucket": "Upper mid price",
+    "median_ltv_380": 14.1496,
+    "avg_ltv_380": 31.0973
+  },
+  {
+    "country": "All",
+    "region": "LATAM",
+    "category": "LIFESTYLE",
+    "product_set": "weekly",
+    "price_bucket": "High price",
+    "median_ltv_380": 20.4309,
+    "avg_ltv_380": 72.6355
+  },
+  {
+    "country": "All",
+    "region": "LATAM",
+    "category": "LIFESTYLE",
+    "product_set": "weekly",
+    "price_bucket": "Low price",
+    "median_ltv_380": 4.3919,
+    "avg_ltv_380": 15.7809
+  },
+  {
+    "country": "All",
+    "region": "LATAM",
+    "category": "LIFESTYLE",
+    "product_set": "weekly",
+    "price_bucket": "Lower mid price",
+    "median_ltv_380": 5.6508,
+    "avg_ltv_380": 24.9098
+  },
+  {
+    "country": "All",
+    "region": "LATAM",
+    "category": "LIFESTYLE",
+    "product_set": "weekly",
+    "price_bucket": "Upper mid price",
+    "median_ltv_380": 7.99,
+    "avg_ltv_380": 39.9187
+  },
+  {
+    "country": "All",
+    "region": "LATAM",
+    "category": "PHOTO_AND_VIDEO",
+    "product_set": "annual",
+    "price_bucket": "High price",
+    "median_ltv_380": 50.7354,
+    "avg_ltv_380": 59.8788
+  },
+  {
+    "country": "All",
+    "region": "LATAM",
+    "category": "PHOTO_AND_VIDEO",
+    "product_set": "annual",
+    "price_bucket": "Low price",
+    "median_ltv_380": 16.5332,
+    "avg_ltv_380": 18.3081
+  },
+  {
+    "country": "All",
+    "region": "LATAM",
+    "category": "PHOTO_AND_VIDEO",
+    "product_set": "annual",
+    "price_bucket": "Lower mid price",
+    "median_ltv_380": 24.2333,
+    "avg_ltv_380": 27.0137
+  },
+  {
+    "country": "All",
+    "region": "LATAM",
+    "category": "PHOTO_AND_VIDEO",
+    "product_set": "annual",
+    "price_bucket": "Upper mid price",
+    "median_ltv_380": 38.0139,
+    "avg_ltv_380": 41.657
+  },
+  {
+    "country": "All",
+    "region": "LATAM",
+    "category": "PHOTO_AND_VIDEO",
+    "product_set": "monthly",
+    "price_bucket": "High price",
+    "median_ltv_380": 15.9244,
+    "avg_ltv_380": 34.6402
+  },
+  {
+    "country": "All",
+    "region": "LATAM",
+    "category": "PHOTO_AND_VIDEO",
+    "product_set": "monthly",
+    "price_bucket": "Low price",
+    "median_ltv_380": 4.2842,
+    "avg_ltv_380": 8.7994
+  },
+  {
+    "country": "All",
+    "region": "LATAM",
+    "category": "PHOTO_AND_VIDEO",
+    "product_set": "monthly",
+    "price_bucket": "Lower mid price",
+    "median_ltv_380": 6.0088,
+    "avg_ltv_380": 18.6741
+  },
+  {
+    "country": "All",
+    "region": "LATAM",
+    "category": "PHOTO_AND_VIDEO",
+    "product_set": "monthly",
+    "price_bucket": "Upper mid price",
+    "median_ltv_380": 9.99,
+    "avg_ltv_380": 24.962
+  },
+  {
+    "country": "All",
+    "region": "LATAM",
+    "category": "PHOTO_AND_VIDEO",
+    "product_set": "weekly",
+    "price_bucket": "High price",
+    "median_ltv_380": 8.8999,
+    "avg_ltv_380": 29.7057
+  },
+  {
+    "country": "All",
+    "region": "LATAM",
+    "category": "PHOTO_AND_VIDEO",
+    "product_set": "weekly",
+    "price_bucket": "Low price",
+    "median_ltv_380": 0.5275,
+    "avg_ltv_380": 12.2998
+  },
+  {
+    "country": "All",
+    "region": "LATAM",
+    "category": "PHOTO_AND_VIDEO",
+    "product_set": "weekly",
+    "price_bucket": "Lower mid price",
+    "median_ltv_380": 4.99,
+    "avg_ltv_380": 20.263
+  },
+  {
+    "country": "All",
+    "region": "LATAM",
+    "category": "PHOTO_AND_VIDEO",
+    "product_set": "weekly",
+    "price_bucket": "Upper mid price",
+    "median_ltv_380": 6.99,
+    "avg_ltv_380": 26.4564
+  },
+  {
+    "country": "All",
+    "region": "LATAM",
+    "category": "PRODUCTIVITY",
+    "product_set": "annual",
+    "price_bucket": "High price",
+    "median_ltv_380": 62.9623,
+    "avg_ltv_380": 77.1437
+  },
+  {
+    "country": "All",
+    "region": "LATAM",
+    "category": "PRODUCTIVITY",
+    "product_set": "annual",
+    "price_bucket": "Low price",
+    "median_ltv_380": 17.4367,
+    "avg_ltv_380": 23.3934
+  },
+  {
+    "country": "All",
+    "region": "LATAM",
+    "category": "PRODUCTIVITY",
+    "product_set": "annual",
+    "price_bucket": "Lower mid price",
+    "median_ltv_380": 35.3586,
+    "avg_ltv_380": 40.2823
+  },
+  {
+    "country": "All",
+    "region": "LATAM",
+    "category": "PRODUCTIVITY",
+    "product_set": "annual",
+    "price_bucket": "Upper mid price",
+    "median_ltv_380": 44.8629,
+    "avg_ltv_380": 54.2129
+  },
+  {
+    "country": "All",
+    "region": "LATAM",
+    "category": "PRODUCTIVITY",
+    "product_set": "monthly",
+    "price_bucket": "High price",
+    "median_ltv_380": 27.3533,
+    "avg_ltv_380": 66.861
+  },
+  {
+    "country": "All",
+    "region": "LATAM",
+    "category": "PRODUCTIVITY",
+    "product_set": "monthly",
+    "price_bucket": "Low price",
+    "median_ltv_380": 4.7497,
+    "avg_ltv_380": 11.3725
+  },
+  {
+    "country": "All",
+    "region": "LATAM",
+    "category": "PRODUCTIVITY",
+    "product_set": "monthly",
+    "price_bucket": "Lower mid price",
+    "median_ltv_380": 7.99,
+    "avg_ltv_380": 21.8016
+  },
+  {
+    "country": "All",
+    "region": "LATAM",
+    "category": "PRODUCTIVITY",
+    "product_set": "monthly",
+    "price_bucket": "Upper mid price",
+    "median_ltv_380": 23.5506,
+    "avg_ltv_380": 46.0733
+  },
+  {
+    "country": "All",
+    "region": "LATAM",
+    "category": "PRODUCTIVITY",
+    "product_set": "weekly",
+    "price_bucket": "High price",
+    "median_ltv_380": 19.7299,
+    "avg_ltv_380": 60.816
+  },
+  {
+    "country": "All",
+    "region": "LATAM",
+    "category": "PRODUCTIVITY",
+    "product_set": "weekly",
+    "price_bucket": "Low price",
+    "median_ltv_380": 8.4594,
+    "avg_ltv_380": 26.7742
+  },
+  {
+    "country": "All",
+    "region": "LATAM",
+    "category": "PRODUCTIVITY",
+    "product_set": "weekly",
+    "price_bucket": "Lower mid price",
+    "median_ltv_380": 10.4984,
+    "avg_ltv_380": 35.3176
+  },
+  {
+    "country": "All",
+    "region": "LATAM",
+    "category": "PRODUCTIVITY",
+    "product_set": "weekly",
+    "price_bucket": "Upper mid price",
+    "median_ltv_380": 13.98,
+    "avg_ltv_380": 49.8842
+  },
+  {
+    "country": "All",
+    "region": "LATAM",
+    "category": "UTILITIES",
+    "product_set": "annual",
+    "price_bucket": "High price",
+    "median_ltv_380": 59.1972,
+    "avg_ltv_380": 77.6987
+  },
+  {
+    "country": "All",
+    "region": "LATAM",
+    "category": "UTILITIES",
+    "product_set": "annual",
+    "price_bucket": "Low price",
+    "median_ltv_380": 18.4447,
+    "avg_ltv_380": 21.3684
+  },
+  {
+    "country": "All",
+    "region": "LATAM",
+    "category": "UTILITIES",
+    "product_set": "annual",
+    "price_bucket": "Lower mid price",
+    "median_ltv_380": 24.5589,
+    "avg_ltv_380": 27.7
+  },
+  {
+    "country": "All",
+    "region": "LATAM",
+    "category": "UTILITIES",
+    "product_set": "annual",
+    "price_bucket": "Upper mid price",
+    "median_ltv_380": 36.7119,
+    "avg_ltv_380": 40.8613
+  },
+  {
+    "country": "All",
+    "region": "LATAM",
+    "category": "UTILITIES",
+    "product_set": "monthly",
+    "price_bucket": "High price",
+    "median_ltv_380": 19.99,
+    "avg_ltv_380": 44.2114
+  },
+  {
+    "country": "All",
+    "region": "LATAM",
+    "category": "UTILITIES",
+    "product_set": "monthly",
+    "price_bucket": "Low price",
+    "median_ltv_380": 4.8543,
+    "avg_ltv_380": 10.207
+  },
+  {
+    "country": "All",
+    "region": "LATAM",
+    "category": "UTILITIES",
+    "product_set": "monthly",
+    "price_bucket": "Lower mid price",
+    "median_ltv_380": 9.6342,
+    "avg_ltv_380": 25.9465
+  },
+  {
+    "country": "All",
+    "region": "LATAM",
+    "category": "UTILITIES",
+    "product_set": "monthly",
+    "price_bucket": "Upper mid price",
+    "median_ltv_380": 12.8279,
+    "avg_ltv_380": 32.8812
+  },
+  {
+    "country": "All",
+    "region": "LATAM",
+    "category": "UTILITIES",
+    "product_set": "weekly",
+    "price_bucket": "High price",
+    "median_ltv_380": 20.1012,
+    "avg_ltv_380": 71.6458
+  },
+  {
+    "country": "All",
+    "region": "LATAM",
+    "category": "UTILITIES",
+    "product_set": "weekly",
+    "price_bucket": "Low price",
+    "median_ltv_380": 9.98,
+    "avg_ltv_380": 31.6018
+  },
+  {
+    "country": "All",
+    "region": "LATAM",
+    "category": "UTILITIES",
+    "product_set": "weekly",
+    "price_bucket": "Lower mid price",
+    "median_ltv_380": 13.98,
+    "avg_ltv_380": 45.401
+  },
+  {
+    "country": "All",
+    "region": "LATAM",
+    "category": "UTILITIES",
+    "product_set": "weekly",
+    "price_bucket": "Upper mid price",
+    "median_ltv_380": 14.777,
+    "avg_ltv_380": 51.0472
+  },
+  {
+    "country": "All",
+    "region": "MEA",
+    "category": "All",
+    "product_set": "annual",
+    "price_bucket": "High price",
+    "median_ltv_380": 53.9958,
+    "avg_ltv_380": 71.2047
+  },
+  {
+    "country": "All",
+    "region": "MEA",
+    "category": "All",
+    "product_set": "annual",
+    "price_bucket": "Low price",
+    "median_ltv_380": 10.2804,
+    "avg_ltv_380": 13.8671
+  },
+  {
+    "country": "All",
+    "region": "MEA",
+    "category": "All",
+    "product_set": "annual",
+    "price_bucket": "Lower mid price",
+    "median_ltv_380": 26.3709,
+    "avg_ltv_380": 28.7631
+  },
+  {
+    "country": "All",
+    "region": "MEA",
+    "category": "All",
+    "product_set": "annual",
+    "price_bucket": "Upper mid price",
+    "median_ltv_380": 39.99,
+    "avg_ltv_380": 44.0842
+  },
+  {
+    "country": "All",
+    "region": "MEA",
+    "category": "All",
+    "product_set": "monthly",
+    "price_bucket": "High price",
+    "median_ltv_380": 24.5921,
+    "avg_ltv_380": 44.9338
+  },
+  {
+    "country": "All",
+    "region": "MEA",
+    "category": "All",
+    "product_set": "monthly",
+    "price_bucket": "Low price",
+    "median_ltv_380": 3.9903,
+    "avg_ltv_380": 8.6756
+  },
+  {
+    "country": "All",
+    "region": "MEA",
+    "category": "All",
+    "product_set": "monthly",
+    "price_bucket": "Lower mid price",
+    "median_ltv_380": 7.6417,
+    "avg_ltv_380": 19.2769
+  },
+  {
+    "country": "All",
+    "region": "MEA",
+    "category": "All",
+    "product_set": "monthly",
+    "price_bucket": "Upper mid price",
+    "median_ltv_380": 16.0731,
+    "avg_ltv_380": 36.8283
+  },
+  {
+    "country": "All",
+    "region": "MEA",
+    "category": "All",
+    "product_set": "weekly",
+    "price_bucket": "High price",
+    "median_ltv_380": 15.98,
+    "avg_ltv_380": 54.3696
+  },
+  {
+    "country": "All",
+    "region": "MEA",
+    "category": "All",
+    "product_set": "weekly",
+    "price_bucket": "Low price",
+    "median_ltv_380": 5.327,
+    "avg_ltv_380": 19.2711
+  },
+  {
+    "country": "All",
+    "region": "MEA",
+    "category": "All",
+    "product_set": "weekly",
+    "price_bucket": "Lower mid price",
+    "median_ltv_380": 6.99,
+    "avg_ltv_380": 32.2615
+  },
+  {
+    "country": "All",
+    "region": "MEA",
+    "category": "All",
+    "product_set": "weekly",
+    "price_bucket": "Upper mid price",
+    "median_ltv_380": 10.4562,
+    "avg_ltv_380": 40.01
+  },
+  {
+    "country": "All",
+    "region": "MEA",
+    "category": "EDUCATION",
+    "product_set": "annual",
+    "price_bucket": "High price",
+    "median_ltv_380": 80.6521,
+    "avg_ltv_380": 86.3243
+  },
+  {
+    "country": "All",
+    "region": "MEA",
+    "category": "EDUCATION",
+    "product_set": "annual",
+    "price_bucket": "Low price",
+    "median_ltv_380": 12.8643,
+    "avg_ltv_380": 13.7505
+  },
+  {
+    "country": "All",
+    "region": "MEA",
+    "category": "EDUCATION",
+    "product_set": "annual",
+    "price_bucket": "Lower mid price",
+    "median_ltv_380": 26.5456,
+    "avg_ltv_380": 31.0336
+  },
+  {
+    "country": "All",
+    "region": "MEA",
+    "category": "EDUCATION",
+    "product_set": "annual",
+    "price_bucket": "Upper mid price",
+    "median_ltv_380": 43.3519,
+    "avg_ltv_380": 51.5082
+  },
+  {
+    "country": "All",
+    "region": "MEA",
+    "category": "EDUCATION",
+    "product_set": "monthly",
+    "price_bucket": "High price",
+    "median_ltv_380": 25.98,
+    "avg_ltv_380": 47.7124
+  },
+  {
+    "country": "All",
+    "region": "MEA",
+    "category": "EDUCATION",
+    "product_set": "monthly",
+    "price_bucket": "Low price",
+    "median_ltv_380": 5.6785,
+    "avg_ltv_380": 9.6351
+  },
+  {
+    "country": "All",
+    "region": "MEA",
+    "category": "EDUCATION",
+    "product_set": "monthly",
+    "price_bucket": "Lower mid price",
+    "median_ltv_380": 7.99,
+    "avg_ltv_380": 19.1762
+  },
+  {
+    "country": "All",
+    "region": "MEA",
+    "category": "EDUCATION",
+    "product_set": "monthly",
+    "price_bucket": "Upper mid price",
+    "median_ltv_380": 20.7661,
+    "avg_ltv_380": 33.0306
+  },
+  {
+    "country": "All",
+    "region": "MEA",
+    "category": "EDUCATION",
+    "product_set": "weekly",
+    "price_bucket": "High price",
+    "median_ltv_380": 22.0522,
+    "avg_ltv_380": 58.1669
+  },
+  {
+    "country": "All",
+    "region": "MEA",
+    "category": "EDUCATION",
+    "product_set": "weekly",
+    "price_bucket": "Low price",
+    "median_ltv_380": 4.6504,
+    "avg_ltv_380": 17.571
+  },
+  {
+    "country": "All",
+    "region": "MEA",
+    "category": "EDUCATION",
+    "product_set": "weekly",
+    "price_bucket": "Lower mid price",
+    "median_ltv_380": 11.9853,
+    "avg_ltv_380": 41.899
+  },
+  {
+    "country": "All",
+    "region": "MEA",
+    "category": "EDUCATION",
+    "product_set": "weekly",
+    "price_bucket": "Upper mid price",
+    "median_ltv_380": 21.4659,
+    "avg_ltv_380": 61.8662
+  },
+  {
+    "country": "All",
+    "region": "MEA",
+    "category": "ENTERTAINMENT",
+    "product_set": "annual",
+    "price_bucket": "High price",
+    "median_ltv_380": 55.9257,
+    "avg_ltv_380": 66.2127
+  },
+  {
+    "country": "All",
+    "region": "MEA",
+    "category": "ENTERTAINMENT",
+    "product_set": "annual",
+    "price_bucket": "Low price",
+    "median_ltv_380": 10.5153,
+    "avg_ltv_380": 13.6285
+  },
+  {
+    "country": "All",
+    "region": "MEA",
+    "category": "ENTERTAINMENT",
+    "product_set": "annual",
+    "price_bucket": "Lower mid price",
+    "median_ltv_380": 27.1087,
+    "avg_ltv_380": 30.4721
+  },
+  {
+    "country": "All",
+    "region": "MEA",
+    "category": "ENTERTAINMENT",
+    "product_set": "annual",
+    "price_bucket": "Upper mid price",
+    "median_ltv_380": 40.8359,
+    "avg_ltv_380": 45.5426
+  },
+  {
+    "country": "All",
+    "region": "MEA",
+    "category": "ENTERTAINMENT",
+    "product_set": "monthly",
+    "price_bucket": "High price",
+    "median_ltv_380": 24.4471,
+    "avg_ltv_380": 32.0764
+  },
+  {
+    "country": "All",
+    "region": "MEA",
+    "category": "ENTERTAINMENT",
+    "product_set": "monthly",
+    "price_bucket": "Low price",
+    "median_ltv_380": 4.0404,
+    "avg_ltv_380": 8.3083
+  },
+  {
+    "country": "All",
+    "region": "MEA",
+    "category": "ENTERTAINMENT",
+    "product_set": "monthly",
+    "price_bucket": "Lower mid price",
+    "median_ltv_380": 8.99,
+    "avg_ltv_380": 22.6583
+  },
+  {
+    "country": "All",
+    "region": "MEA",
+    "category": "ENTERTAINMENT",
+    "product_set": "monthly",
+    "price_bucket": "Upper mid price",
+    "median_ltv_380": 13.1443,
+    "avg_ltv_380": 31.3101
+  },
+  {
+    "country": "All",
+    "region": "MEA",
+    "category": "ENTERTAINMENT",
+    "product_set": "weekly",
+    "price_bucket": "High price",
+    "median_ltv_380": 9.3004,
+    "avg_ltv_380": 38.3112
+  },
+  {
+    "country": "All",
+    "region": "MEA",
+    "category": "ENTERTAINMENT",
+    "product_set": "weekly",
+    "price_bucket": "Low price",
+    "median_ltv_380": 4.021,
+    "avg_ltv_380": 13.6612
+  },
+  {
+    "country": "All",
+    "region": "MEA",
+    "category": "ENTERTAINMENT",
+    "product_set": "weekly",
+    "price_bucket": "Lower mid price",
+    "median_ltv_380": 5.6441,
+    "avg_ltv_380": 24.9649
+  },
+  {
+    "country": "All",
+    "region": "MEA",
+    "category": "ENTERTAINMENT",
+    "product_set": "weekly",
+    "price_bucket": "Upper mid price",
+    "median_ltv_380": 7.1902,
+    "avg_ltv_380": 37.8385
+  },
+  {
+    "country": "All",
+    "region": "MEA",
+    "category": "GRAPHICS_AND_DESIGN",
+    "product_set": "annual",
+    "price_bucket": "High price",
+    "median_ltv_380": 47.9555,
+    "avg_ltv_380": 54.5219
+  },
+  {
+    "country": "All",
+    "region": "MEA",
+    "category": "GRAPHICS_AND_DESIGN",
+    "product_set": "annual",
+    "price_bucket": "Low price",
+    "median_ltv_380": 19.99,
+    "avg_ltv_380": 19.5547
+  },
+  {
+    "country": "All",
+    "region": "MEA",
+    "category": "GRAPHICS_AND_DESIGN",
+    "product_set": "annual",
+    "price_bucket": "Lower mid price",
+    "median_ltv_380": 23.9945,
+    "avg_ltv_380": 29.434
+  },
+  {
+    "country": "All",
+    "region": "MEA",
+    "category": "GRAPHICS_AND_DESIGN",
+    "product_set": "annual",
+    "price_bucket": "Upper mid price",
+    "median_ltv_380": 39.99,
+    "avg_ltv_380": 46.7253
+  },
+  {
+    "country": "All",
+    "region": "MEA",
+    "category": "GRAPHICS_AND_DESIGN",
+    "product_set": "monthly",
+    "price_bucket": "High price",
+    "median_ltv_380": 21.7693,
+    "avg_ltv_380": 50.1744
+  },
+  {
+    "country": "All",
+    "region": "MEA",
+    "category": "GRAPHICS_AND_DESIGN",
+    "product_set": "monthly",
+    "price_bucket": "Low price",
+    "median_ltv_380": 5.4713,
+    "avg_ltv_380": 14.0082
+  },
+  {
+    "country": "All",
+    "region": "MEA",
+    "category": "GRAPHICS_AND_DESIGN",
+    "product_set": "monthly",
+    "price_bucket": "Lower mid price",
+    "median_ltv_380": 10.224,
+    "avg_ltv_380": 22.8098
+  },
+  {
+    "country": "All",
+    "region": "MEA",
+    "category": "GRAPHICS_AND_DESIGN",
+    "product_set": "monthly",
+    "price_bucket": "Upper mid price",
+    "median_ltv_380": 11.3119,
+    "avg_ltv_380": 28.6041
+  },
+  {
+    "country": "All",
+    "region": "MEA",
+    "category": "GRAPHICS_AND_DESIGN",
+    "product_set": "weekly",
+    "price_bucket": "High price",
+    "median_ltv_380": 10.6586,
+    "avg_ltv_380": 41.5747
+  },
+  {
+    "country": "All",
+    "region": "MEA",
+    "category": "GRAPHICS_AND_DESIGN",
+    "product_set": "weekly",
+    "price_bucket": "Low price",
+    "median_ltv_380": 4.3079,
+    "avg_ltv_380": 18.8934
+  },
+  {
+    "country": "All",
+    "region": "MEA",
+    "category": "GRAPHICS_AND_DESIGN",
+    "product_set": "weekly",
+    "price_bucket": "Lower mid price",
+    "median_ltv_380": 5.3291,
+    "avg_ltv_380": 23.726
+  },
+  {
+    "country": "All",
+    "region": "MEA",
+    "category": "GRAPHICS_AND_DESIGN",
+    "product_set": "weekly",
+    "price_bucket": "Upper mid price",
+    "median_ltv_380": 6.99,
+    "avg_ltv_380": 30.4189
+  },
+  {
+    "country": "All",
+    "region": "MEA",
+    "category": "HEALTH_AND_FITNESS",
+    "product_set": "annual",
+    "price_bucket": "High price",
+    "median_ltv_380": 55.1616,
+    "avg_ltv_380": 75.6709
+  },
+  {
+    "country": "All",
+    "region": "MEA",
+    "category": "HEALTH_AND_FITNESS",
+    "product_set": "annual",
+    "price_bucket": "Low price",
+    "median_ltv_380": 8.0691,
+    "avg_ltv_380": 9.5992
+  },
+  {
+    "country": "All",
+    "region": "MEA",
+    "category": "HEALTH_AND_FITNESS",
+    "product_set": "annual",
+    "price_bucket": "Lower mid price",
+    "median_ltv_380": 20.5449,
+    "avg_ltv_380": 20.838
+  },
+  {
+    "country": "All",
+    "region": "MEA",
+    "category": "HEALTH_AND_FITNESS",
+    "product_set": "annual",
+    "price_bucket": "Upper mid price",
+    "median_ltv_380": 37.3047,
+    "avg_ltv_380": 41.6816
+  },
+  {
+    "country": "All",
+    "region": "MEA",
+    "category": "HEALTH_AND_FITNESS",
+    "product_set": "monthly",
+    "price_bucket": "High price",
+    "median_ltv_380": 28.4032,
+    "avg_ltv_380": 54.8836
+  },
+  {
+    "country": "All",
+    "region": "MEA",
+    "category": "HEALTH_AND_FITNESS",
+    "product_set": "monthly",
+    "price_bucket": "Low price",
+    "median_ltv_380": 2.9149,
+    "avg_ltv_380": 5.5003
+  },
+  {
+    "country": "All",
+    "region": "MEA",
+    "category": "HEALTH_AND_FITNESS",
+    "product_set": "monthly",
+    "price_bucket": "Lower mid price",
+    "median_ltv_380": 7.7639,
+    "avg_ltv_380": 13.9079
+  },
+  {
+    "country": "All",
+    "region": "MEA",
+    "category": "HEALTH_AND_FITNESS",
+    "product_set": "monthly",
+    "price_bucket": "Upper mid price",
+    "median_ltv_380": 10.8892,
+    "avg_ltv_380": 23.9361
+  },
+  {
+    "country": "All",
+    "region": "MEA",
+    "category": "HEALTH_AND_FITNESS",
+    "product_set": "weekly",
+    "price_bucket": "High price",
+    "median_ltv_380": 21.7752,
+    "avg_ltv_380": 78.5053
+  },
+  {
+    "country": "All",
+    "region": "MEA",
+    "category": "HEALTH_AND_FITNESS",
+    "product_set": "weekly",
+    "price_bucket": "Low price",
+    "median_ltv_380": 3.5383,
+    "avg_ltv_380": 11.4047
+  },
+  {
+    "country": "All",
+    "region": "MEA",
+    "category": "HEALTH_AND_FITNESS",
+    "product_set": "weekly",
+    "price_bucket": "Lower mid price",
+    "median_ltv_380": 4.9556,
+    "avg_ltv_380": 17.8735
+  },
+  {
+    "country": "All",
+    "region": "MEA",
+    "category": "HEALTH_AND_FITNESS",
+    "product_set": "weekly",
+    "price_bucket": "Upper mid price",
+    "median_ltv_380": 14.97,
+    "avg_ltv_380": 41.2647
+  },
+  {
+    "country": "All",
+    "region": "MEA",
+    "category": "LIFESTYLE",
+    "product_set": "annual",
+    "price_bucket": "High price",
+    "median_ltv_380": 44.6979,
+    "avg_ltv_380": 56.1865
+  },
+  {
+    "country": "All",
+    "region": "MEA",
+    "category": "LIFESTYLE",
+    "product_set": "annual",
+    "price_bucket": "Low price",
+    "median_ltv_380": 10.0947,
+    "avg_ltv_380": 10.4116
+  },
+  {
+    "country": "All",
+    "region": "MEA",
+    "category": "LIFESTYLE",
+    "product_set": "annual",
+    "price_bucket": "Lower mid price",
+    "median_ltv_380": 23.4609,
+    "avg_ltv_380": 26.4596
+  },
+  {
+    "country": "All",
+    "region": "MEA",
+    "category": "LIFESTYLE",
+    "product_set": "annual",
+    "price_bucket": "Upper mid price",
+    "median_ltv_380": 31.3075,
+    "avg_ltv_380": 37.9687
+  },
+  {
+    "country": "All",
+    "region": "MEA",
+    "category": "LIFESTYLE",
+    "product_set": "monthly",
+    "price_bucket": "High price",
+    "median_ltv_380": 21.7782,
+    "avg_ltv_380": 40.0338
+  },
+  {
+    "country": "All",
+    "region": "MEA",
+    "category": "LIFESTYLE",
+    "product_set": "monthly",
+    "price_bucket": "Low price",
+    "median_ltv_380": 3.6256,
+    "avg_ltv_380": 8.1629
+  },
+  {
+    "country": "All",
+    "region": "MEA",
+    "category": "LIFESTYLE",
+    "product_set": "monthly",
+    "price_bucket": "Lower mid price",
+    "median_ltv_380": 13.3156,
+    "avg_ltv_380": 23.9816
+  },
+  {
+    "country": "All",
+    "region": "MEA",
+    "category": "LIFESTYLE",
+    "product_set": "monthly",
+    "price_bucket": "Upper mid price",
+    "median_ltv_380": 11.3217,
+    "avg_ltv_380": 31.0175
+  },
+  {
+    "country": "All",
+    "region": "MEA",
+    "category": "LIFESTYLE",
+    "product_set": "weekly",
+    "price_bucket": "High price",
+    "median_ltv_380": 21.3111,
+    "avg_ltv_380": 69.6944
+  },
+  {
+    "country": "All",
+    "region": "MEA",
+    "category": "LIFESTYLE",
+    "product_set": "weekly",
+    "price_bucket": "Low price",
+    "median_ltv_380": 4.1969,
+    "avg_ltv_380": 14.8584
+  },
+  {
+    "country": "All",
+    "region": "MEA",
+    "category": "LIFESTYLE",
+    "product_set": "weekly",
+    "price_bucket": "Lower mid price",
+    "median_ltv_380": 6.6568,
+    "avg_ltv_380": 30.015
+  },
+  {
+    "country": "All",
+    "region": "MEA",
+    "category": "LIFESTYLE",
+    "product_set": "weekly",
+    "price_bucket": "Upper mid price",
+    "median_ltv_380": 13.6072,
+    "avg_ltv_380": 43.8224
+  },
+  {
+    "country": "All",
+    "region": "MEA",
+    "category": "PHOTO_AND_VIDEO",
+    "product_set": "annual",
+    "price_bucket": "High price",
+    "median_ltv_380": 49.2935,
+    "avg_ltv_380": 62.8146
+  },
+  {
+    "country": "All",
+    "region": "MEA",
+    "category": "PHOTO_AND_VIDEO",
+    "product_set": "annual",
+    "price_bucket": "Low price",
+    "median_ltv_380": 9.8999,
+    "avg_ltv_380": 14.6365
+  },
+  {
+    "country": "All",
+    "region": "MEA",
+    "category": "PHOTO_AND_VIDEO",
+    "product_set": "annual",
+    "price_bucket": "Lower mid price",
+    "median_ltv_380": 21.7782,
+    "avg_ltv_380": 25.1233
+  },
+  {
+    "country": "All",
+    "region": "MEA",
+    "category": "PHOTO_AND_VIDEO",
+    "product_set": "annual",
+    "price_bucket": "Upper mid price",
+    "median_ltv_380": 36.262,
+    "avg_ltv_380": 41.9222
+  },
+  {
+    "country": "All",
+    "region": "MEA",
+    "category": "PHOTO_AND_VIDEO",
+    "product_set": "monthly",
+    "price_bucket": "High price",
+    "median_ltv_380": 21.3247,
+    "avg_ltv_380": 38.1602
+  },
+  {
+    "country": "All",
+    "region": "MEA",
+    "category": "PHOTO_AND_VIDEO",
+    "product_set": "monthly",
+    "price_bucket": "Low price",
+    "median_ltv_380": 4.2635,
+    "avg_ltv_380": 10.5859
+  },
+  {
+    "country": "All",
+    "region": "MEA",
+    "category": "PHOTO_AND_VIDEO",
+    "product_set": "monthly",
+    "price_bucket": "Lower mid price",
+    "median_ltv_380": 10.6436,
+    "avg_ltv_380": 20.4452
+  },
+  {
+    "country": "All",
+    "region": "MEA",
+    "category": "PHOTO_AND_VIDEO",
+    "product_set": "monthly",
+    "price_bucket": "Upper mid price",
+    "median_ltv_380": 18.9028,
+    "avg_ltv_380": 33.9323
+  },
+  {
+    "country": "All",
+    "region": "MEA",
+    "category": "PHOTO_AND_VIDEO",
+    "product_set": "weekly",
+    "price_bucket": "High price",
+    "median_ltv_380": 10.6466,
+    "avg_ltv_380": 36.1989
+  },
+  {
+    "country": "All",
+    "region": "MEA",
+    "category": "PHOTO_AND_VIDEO",
+    "product_set": "weekly",
+    "price_bucket": "Low price",
+    "median_ltv_380": 1.9642,
+    "avg_ltv_380": 13.9819
+  },
+  {
+    "country": "All",
+    "region": "MEA",
+    "category": "PHOTO_AND_VIDEO",
+    "product_set": "weekly",
+    "price_bucket": "Lower mid price",
+    "median_ltv_380": 8.2301,
+    "avg_ltv_380": 30.6082
+  },
+  {
+    "country": "All",
+    "region": "MEA",
+    "category": "PHOTO_AND_VIDEO",
+    "product_set": "weekly",
+    "price_bucket": "Upper mid price",
+    "median_ltv_380": 6.99,
+    "avg_ltv_380": 32.4352
+  },
+  {
+    "country": "All",
+    "region": "MEA",
+    "category": "PRODUCTIVITY",
+    "product_set": "annual",
+    "price_bucket": "High price",
+    "median_ltv_380": 68.0621,
+    "avg_ltv_380": 83.9872
+  },
+  {
+    "country": "All",
+    "region": "MEA",
+    "category": "PRODUCTIVITY",
+    "product_set": "annual",
+    "price_bucket": "Low price",
+    "median_ltv_380": 14.6022,
+    "avg_ltv_380": 21.9726
+  },
+  {
+    "country": "All",
+    "region": "MEA",
+    "category": "PRODUCTIVITY",
+    "product_set": "annual",
+    "price_bucket": "Lower mid price",
+    "median_ltv_380": 34.5914,
+    "avg_ltv_380": 36.6057
+  },
+  {
+    "country": "All",
+    "region": "MEA",
+    "category": "PRODUCTIVITY",
+    "product_set": "annual",
+    "price_bucket": "Upper mid price",
+    "median_ltv_380": 41.9296,
+    "avg_ltv_380": 51.379
+  },
+  {
+    "country": "All",
+    "region": "MEA",
+    "category": "PRODUCTIVITY",
+    "product_set": "monthly",
+    "price_bucket": "High price",
+    "median_ltv_380": 31.9551,
+    "avg_ltv_380": 64.0439
+  },
+  {
+    "country": "All",
+    "region": "MEA",
+    "category": "PRODUCTIVITY",
+    "product_set": "monthly",
+    "price_bucket": "Low price",
+    "median_ltv_380": 4.7641,
+    "avg_ltv_380": 12.5291
+  },
+  {
+    "country": "All",
+    "region": "MEA",
+    "category": "PRODUCTIVITY",
+    "product_set": "monthly",
+    "price_bucket": "Lower mid price",
+    "median_ltv_380": 10.6495,
+    "avg_ltv_380": 22.7122
+  },
+  {
+    "country": "All",
+    "region": "MEA",
+    "category": "PRODUCTIVITY",
+    "product_set": "monthly",
+    "price_bucket": "Upper mid price",
+    "median_ltv_380": 20.6872,
+    "avg_ltv_380": 42.6746
+  },
+  {
+    "country": "All",
+    "region": "MEA",
+    "category": "PRODUCTIVITY",
+    "product_set": "weekly",
+    "price_bucket": "High price",
+    "median_ltv_380": 15.9916,
+    "avg_ltv_380": 49.1201
+  },
+  {
+    "country": "All",
+    "region": "MEA",
+    "category": "PRODUCTIVITY",
+    "product_set": "weekly",
+    "price_bucket": "Low price",
+    "median_ltv_380": 6.0518,
+    "avg_ltv_380": 22.2747
+  },
+  {
+    "country": "All",
+    "region": "MEA",
+    "category": "PRODUCTIVITY",
+    "product_set": "weekly",
+    "price_bucket": "Lower mid price",
+    "median_ltv_380": 10.9786,
+    "avg_ltv_380": 41.7552
+  },
+  {
+    "country": "All",
+    "region": "MEA",
+    "category": "PRODUCTIVITY",
+    "product_set": "weekly",
+    "price_bucket": "Upper mid price",
+    "median_ltv_380": 13.98,
+    "avg_ltv_380": 53.0726
+  },
+  {
+    "country": "All",
+    "region": "MEA",
+    "category": "UTILITIES",
+    "product_set": "annual",
+    "price_bucket": "High price",
+    "median_ltv_380": 79.8484,
+    "avg_ltv_380": 83.7973
+  },
+  {
+    "country": "All",
+    "region": "MEA",
+    "category": "UTILITIES",
+    "product_set": "annual",
+    "price_bucket": "Low price",
+    "median_ltv_380": 10.8875,
+    "avg_ltv_380": 19.6089
+  },
+  {
+    "country": "All",
+    "region": "MEA",
+    "category": "UTILITIES",
+    "product_set": "annual",
+    "price_bucket": "Lower mid price",
+    "median_ltv_380": 29.455,
+    "avg_ltv_380": 31.2054
+  },
+  {
+    "country": "All",
+    "region": "MEA",
+    "category": "UTILITIES",
+    "product_set": "annual",
+    "price_bucket": "Upper mid price",
+    "median_ltv_380": 39.99,
+    "avg_ltv_380": 44.0907
+  },
+  {
+    "country": "All",
+    "region": "MEA",
+    "category": "UTILITIES",
+    "product_set": "monthly",
+    "price_bucket": "High price",
+    "median_ltv_380": 27.98,
+    "avg_ltv_380": 47.9608
+  },
+  {
+    "country": "All",
+    "region": "MEA",
+    "category": "UTILITIES",
+    "product_set": "monthly",
+    "price_bucket": "Low price",
+    "median_ltv_380": 3.8815,
+    "avg_ltv_380": 10.4659
+  },
+  {
+    "country": "All",
+    "region": "MEA",
+    "category": "UTILITIES",
+    "product_set": "monthly",
+    "price_bucket": "Lower mid price",
+    "median_ltv_380": 9.0909,
+    "avg_ltv_380": 27.9778
+  },
+  {
+    "country": "All",
+    "region": "MEA",
+    "category": "UTILITIES",
+    "product_set": "monthly",
+    "price_bucket": "Upper mid price",
+    "median_ltv_380": 22.8573,
+    "avg_ltv_380": 43.7142
+  },
+  {
+    "country": "All",
+    "region": "MEA",
+    "category": "UTILITIES",
+    "product_set": "weekly",
+    "price_bucket": "High price",
+    "median_ltv_380": 19.98,
+    "avg_ltv_380": 66.395
+  },
+  {
+    "country": "All",
+    "region": "MEA",
+    "category": "UTILITIES",
+    "product_set": "weekly",
+    "price_bucket": "Low price",
+    "median_ltv_380": 7.7424,
+    "avg_ltv_380": 25.9865
+  },
+  {
+    "country": "All",
+    "region": "MEA",
+    "category": "UTILITIES",
+    "product_set": "weekly",
+    "price_bucket": "Lower mid price",
+    "median_ltv_380": 13.6073,
+    "avg_ltv_380": 46.6007
+  },
+  {
+    "country": "All",
+    "region": "MEA",
+    "category": "UTILITIES",
+    "product_set": "weekly",
+    "price_bucket": "Upper mid price",
+    "median_ltv_380": 16.2958,
+    "avg_ltv_380": 62.1357
+  },
+  {
+    "country": "All",
+    "region": "North America",
+    "category": "All",
+    "product_set": "annual",
+    "price_bucket": "High price",
+    "median_ltv_380": 79.99,
+    "avg_ltv_380": 94.4841
+  },
+  {
+    "country": "All",
+    "region": "North America",
+    "category": "All",
+    "product_set": "annual",
+    "price_bucket": "Low price",
+    "median_ltv_380": 19.99,
+    "avg_ltv_380": 26.7157
+  },
+  {
+    "country": "All",
+    "region": "North America",
+    "category": "All",
+    "product_set": "annual",
+    "price_bucket": "Lower mid price",
+    "median_ltv_380": 34.99,
+    "avg_ltv_380": 40.045
+  },
+  {
+    "country": "All",
+    "region": "North America",
+    "category": "All",
+    "product_set": "annual",
+    "price_bucket": "Upper mid price",
+    "median_ltv_380": 39.99,
+    "avg_ltv_380": 49.0999
+  },
+  {
+    "country": "All",
+    "region": "North America",
+    "category": "All",
+    "product_set": "monthly",
+    "price_bucket": "High price",
+    "median_ltv_380": 25.98,
+    "avg_ltv_380": 60.2014
+  },
+  {
+    "country": "All",
+    "region": "North America",
+    "category": "All",
+    "product_set": "monthly",
+    "price_bucket": "Low price",
+    "median_ltv_380": 6.99,
+    "avg_ltv_380": 17.3298
+  },
+  {
+    "country": "All",
+    "region": "North America",
+    "category": "All",
+    "product_set": "monthly",
+    "price_bucket": "Lower mid price",
+    "median_ltv_380": 12.99,
+    "avg_ltv_380": 38.1537
+  },
+  {
+    "country": "All",
+    "region": "North America",
+    "category": "All",
+    "product_set": "monthly",
+    "price_bucket": "Upper mid price",
+    "median_ltv_380": 19.98,
+    "avg_ltv_380": 49.6206
+  },
+  {
+    "country": "All",
+    "region": "North America",
+    "category": "All",
+    "product_set": "weekly",
+    "price_bucket": "High price",
+    "median_ltv_380": 19.98,
+    "avg_ltv_380": 73.8949
+  },
+  {
+    "country": "All",
+    "region": "North America",
+    "category": "All",
+    "product_set": "weekly",
+    "price_bucket": "Low price",
+    "median_ltv_380": 7.98,
+    "avg_ltv_380": 32.3591
+  },
+  {
+    "country": "All",
+    "region": "North America",
+    "category": "All",
+    "product_set": "weekly",
+    "price_bucket": "Lower mid price",
+    "median_ltv_380": 13.98,
+    "avg_ltv_380": 45.8914
+  },
+  {
+    "country": "All",
+    "region": "North America",
+    "category": "All",
+    "product_set": "weekly",
+    "price_bucket": "Upper mid price",
+    "median_ltv_380": 9.98,
+    "avg_ltv_380": 42.639
+  },
+  {
+    "country": "All",
+    "region": "North America",
+    "category": "EDUCATION",
+    "product_set": "annual",
+    "price_bucket": "High price",
+    "median_ltv_380": 79.99,
+    "avg_ltv_380": 97.5043
+  },
+  {
+    "country": "All",
+    "region": "North America",
+    "category": "EDUCATION",
+    "product_set": "annual",
+    "price_bucket": "Low price",
+    "median_ltv_380": 29.99,
+    "avg_ltv_380": 38.6214
+  },
+  {
+    "country": "All",
+    "region": "North America",
+    "category": "EDUCATION",
+    "product_set": "annual",
+    "price_bucket": "Lower mid price",
+    "median_ltv_380": 39.99,
+    "avg_ltv_380": 49.0782
+  },
+  {
+    "country": "All",
+    "region": "North America",
+    "category": "EDUCATION",
+    "product_set": "annual",
+    "price_bucket": "Upper mid price",
+    "median_ltv_380": 49.99,
+    "avg_ltv_380": 63.249
+  },
+  {
+    "country": "All",
+    "region": "North America",
+    "category": "EDUCATION",
+    "product_set": "monthly",
+    "price_bucket": "High price",
+    "median_ltv_380": 49.98,
+    "avg_ltv_380": 89.4821
+  },
+  {
+    "country": "All",
+    "region": "North America",
+    "category": "EDUCATION",
+    "product_set": "monthly",
+    "price_bucket": "Low price",
+    "median_ltv_380": 9.98,
+    "avg_ltv_380": 22.717
+  },
+  {
+    "country": "All",
+    "region": "North America",
+    "category": "EDUCATION",
+    "product_set": "monthly",
+    "price_bucket": "Lower mid price",
+    "median_ltv_380": 19.98,
+    "avg_ltv_380": 40.6138
+  },
+  {
+    "country": "All",
+    "region": "North America",
+    "category": "EDUCATION",
+    "product_set": "monthly",
+    "price_bucket": "Upper mid price",
+    "median_ltv_380": 28.4834,
+    "avg_ltv_380": 49.817
+  },
+  {
+    "country": "All",
+    "region": "North America",
+    "category": "EDUCATION",
+    "product_set": "weekly",
+    "price_bucket": "High price",
+    "median_ltv_380": 38.97,
+    "avg_ltv_380": 69.1835
+  },
+  {
+    "country": "All",
+    "region": "North America",
+    "category": "EDUCATION",
+    "product_set": "weekly",
+    "price_bucket": "Low price",
+    "median_ltv_380": 19.96,
+    "avg_ltv_380": 49.9096
+  },
+  {
+    "country": "All",
+    "region": "North America",
+    "category": "EDUCATION",
+    "product_set": "weekly",
+    "price_bucket": "Lower mid price",
+    "median_ltv_380": 13.98,
+    "avg_ltv_380": 48.9703
+  },
+  {
+    "country": "All",
+    "region": "North America",
+    "category": "EDUCATION",
+    "product_set": "weekly",
+    "price_bucket": "Upper mid price",
+    "median_ltv_380": 15.98,
+    "avg_ltv_380": 33.202
+  },
+  {
+    "country": "All",
+    "region": "North America",
+    "category": "ENTERTAINMENT",
+    "product_set": "annual",
+    "price_bucket": "High price",
+    "median_ltv_380": 69.99,
+    "avg_ltv_380": 93.1351
+  },
+  {
+    "country": "All",
+    "region": "North America",
+    "category": "ENTERTAINMENT",
+    "product_set": "annual",
+    "price_bucket": "Low price",
+    "median_ltv_380": 19.99,
+    "avg_ltv_380": 24.1583
+  },
+  {
+    "country": "All",
+    "region": "North America",
+    "category": "ENTERTAINMENT",
+    "product_set": "annual",
+    "price_bucket": "Lower mid price",
+    "median_ltv_380": 39.99,
+    "avg_ltv_380": 41.1493
+  },
+  {
+    "country": "All",
+    "region": "North America",
+    "category": "ENTERTAINMENT",
+    "product_set": "annual",
+    "price_bucket": "Upper mid price",
+    "median_ltv_380": 49.99,
+    "avg_ltv_380": 56.1196
+  },
+  {
+    "country": "All",
+    "region": "North America",
+    "category": "ENTERTAINMENT",
+    "product_set": "monthly",
+    "price_bucket": "High price",
+    "median_ltv_380": 24.99,
+    "avg_ltv_380": 42.3162
+  },
+  {
+    "country": "All",
+    "region": "North America",
+    "category": "ENTERTAINMENT",
+    "product_set": "monthly",
+    "price_bucket": "Low price",
+    "median_ltv_380": 6.98,
+    "avg_ltv_380": 23.645
+  },
+  {
+    "country": "All",
+    "region": "North America",
+    "category": "ENTERTAINMENT",
+    "product_set": "monthly",
+    "price_bucket": "Lower mid price",
+    "median_ltv_380": 19.98,
+    "avg_ltv_380": 45.5934
+  },
+  {
+    "country": "All",
+    "region": "North America",
+    "category": "ENTERTAINMENT",
+    "product_set": "monthly",
+    "price_bucket": "Upper mid price",
+    "median_ltv_380": 14.99,
+    "avg_ltv_380": 26.1591
+  },
+  {
+    "country": "All",
+    "region": "North America",
+    "category": "ENTERTAINMENT",
+    "product_set": "weekly",
+    "price_bucket": "High price",
+    "median_ltv_380": 15.98,
+    "avg_ltv_380": 59.6152
+  },
+  {
+    "country": "All",
+    "region": "North America",
+    "category": "ENTERTAINMENT",
+    "product_set": "weekly",
+    "price_bucket": "Low price",
+    "median_ltv_380": 7.98,
+    "avg_ltv_380": 28.4198
+  },
+  {
+    "country": "All",
+    "region": "North America",
+    "category": "ENTERTAINMENT",
+    "product_set": "weekly",
+    "price_bucket": "Lower mid price",
+    "median_ltv_380": 11.98,
+    "avg_ltv_380": 32.6433
+  },
+  {
+    "country": "All",
+    "region": "North America",
+    "category": "ENTERTAINMENT",
+    "product_set": "weekly",
+    "price_bucket": "Upper mid price",
+    "median_ltv_380": 6.99,
+    "avg_ltv_380": 31.6866
+  },
+  {
+    "country": "All",
+    "region": "North America",
+    "category": "GRAPHICS_AND_DESIGN",
+    "product_set": "annual",
+    "price_bucket": "High price",
+    "median_ltv_380": 49.99,
+    "avg_ltv_380": 67.9935
+  },
+  {
+    "country": "All",
+    "region": "North America",
+    "category": "GRAPHICS_AND_DESIGN",
+    "product_set": "annual",
+    "price_bucket": "Low price",
+    "median_ltv_380": 19.99,
+    "avg_ltv_380": 23.3257
+  },
+  {
+    "country": "All",
+    "region": "North America",
+    "category": "GRAPHICS_AND_DESIGN",
+    "product_set": "annual",
+    "price_bucket": "Lower mid price",
+    "median_ltv_380": 34.99,
+    "avg_ltv_380": 39.2779
+  },
+  {
+    "country": "All",
+    "region": "North America",
+    "category": "GRAPHICS_AND_DESIGN",
+    "product_set": "annual",
+    "price_bucket": "Upper mid price",
+    "median_ltv_380": 39.99,
+    "avg_ltv_380": 45.5178
+  },
+  {
+    "country": "All",
+    "region": "North America",
+    "category": "GRAPHICS_AND_DESIGN",
+    "product_set": "monthly",
+    "price_bucket": "High price",
+    "median_ltv_380": 12.99,
+    "avg_ltv_380": 35.8907
+  },
+  {
+    "country": "All",
+    "region": "North America",
+    "category": "GRAPHICS_AND_DESIGN",
+    "product_set": "monthly",
+    "price_bucket": "Low price",
+    "median_ltv_380": 4.99,
+    "avg_ltv_380": 16.6849
+  },
+  {
+    "country": "All",
+    "region": "North America",
+    "category": "GRAPHICS_AND_DESIGN",
+    "product_set": "monthly",
+    "price_bucket": "Lower mid price",
+    "median_ltv_380": 11.98,
+    "avg_ltv_380": 25.5411
+  },
+  {
+    "country": "All",
+    "region": "North America",
+    "category": "GRAPHICS_AND_DESIGN",
+    "product_set": "monthly",
+    "price_bucket": "Upper mid price",
+    "median_ltv_380": 9.99,
+    "avg_ltv_380": 32.154
+  },
+  {
+    "country": "All",
+    "region": "North America",
+    "category": "GRAPHICS_AND_DESIGN",
+    "product_set": "weekly",
+    "price_bucket": "High price",
+    "median_ltv_380": 14.99,
+    "avg_ltv_380": 52.4679
+  },
+  {
+    "country": "All",
+    "region": "North America",
+    "category": "GRAPHICS_AND_DESIGN",
+    "product_set": "weekly",
+    "price_bucket": "Low price",
+    "median_ltv_380": 4.99,
+    "avg_ltv_380": 21.6858
+  },
+  {
+    "country": "All",
+    "region": "North America",
+    "category": "GRAPHICS_AND_DESIGN",
+    "product_set": "weekly",
+    "price_bucket": "Upper mid price",
+    "median_ltv_380": 6.99,
+    "avg_ltv_380": 35.6655
+  },
+  {
+    "country": "All",
+    "region": "North America",
+    "category": "HEALTH_AND_FITNESS",
+    "product_set": "annual",
+    "price_bucket": "High price",
+    "median_ltv_380": 74.99,
+    "avg_ltv_380": 94.5883
+  },
+  {
+    "country": "All",
+    "region": "North America",
+    "category": "HEALTH_AND_FITNESS",
+    "product_set": "annual",
+    "price_bucket": "Low price",
+    "median_ltv_380": 19.99,
+    "avg_ltv_380": 24.2154
+  },
+  {
+    "country": "All",
+    "region": "North America",
+    "category": "HEALTH_AND_FITNESS",
+    "product_set": "annual",
+    "price_bucket": "Lower mid price",
+    "median_ltv_380": 39.99,
+    "avg_ltv_380": 41.9367
+  },
+  {
+    "country": "All",
+    "region": "North America",
+    "category": "HEALTH_AND_FITNESS",
+    "product_set": "annual",
+    "price_bucket": "Upper mid price",
+    "median_ltv_380": 49.99,
+    "avg_ltv_380": 60.8126
+  },
+  {
+    "country": "All",
+    "region": "North America",
+    "category": "HEALTH_AND_FITNESS",
+    "product_set": "monthly",
+    "price_bucket": "High price",
+    "median_ltv_380": 29.98,
+    "avg_ltv_380": 60.1954
+  },
+  {
+    "country": "All",
+    "region": "North America",
+    "category": "HEALTH_AND_FITNESS",
+    "product_set": "monthly",
+    "price_bucket": "Low price",
+    "median_ltv_380": 7.98,
+    "avg_ltv_380": 14.6268
+  },
+  {
+    "country": "All",
+    "region": "North America",
+    "category": "HEALTH_AND_FITNESS",
+    "product_set": "monthly",
+    "price_bucket": "Lower mid price",
+    "median_ltv_380": 13.98,
+    "avg_ltv_380": 29.7362
+  },
+  {
+    "country": "All",
+    "region": "North America",
+    "category": "HEALTH_AND_FITNESS",
+    "product_set": "monthly",
+    "price_bucket": "Upper mid price",
+    "median_ltv_380": 23.98,
+    "avg_ltv_380": 44.7355
+  },
+  {
+    "country": "All",
+    "region": "North America",
+    "category": "HEALTH_AND_FITNESS",
+    "product_set": "weekly",
+    "price_bucket": "High price",
+    "median_ltv_380": 15.98,
+    "avg_ltv_380": 51.4628
+  },
+  {
+    "country": "All",
+    "region": "North America",
+    "category": "HEALTH_AND_FITNESS",
+    "product_set": "weekly",
+    "price_bucket": "Low price",
+    "median_ltv_380": 7.96,
+    "avg_ltv_380": 26.4834
+  },
+  {
+    "country": "All",
+    "region": "North America",
+    "category": "HEALTH_AND_FITNESS",
+    "product_set": "weekly",
+    "price_bucket": "Lower mid price",
+    "median_ltv_380": 14.97,
+    "avg_ltv_380": 46.0369
+  },
+  {
+    "country": "All",
+    "region": "North America",
+    "category": "HEALTH_AND_FITNESS",
+    "product_set": "weekly",
+    "price_bucket": "Upper mid price",
+    "median_ltv_380": 13.98,
+    "avg_ltv_380": 48.3021
+  },
+  {
+    "country": "All",
+    "region": "North America",
+    "category": "LIFESTYLE",
+    "product_set": "annual",
+    "price_bucket": "High price",
+    "median_ltv_380": 69.99,
+    "avg_ltv_380": 87.7872
+  },
+  {
+    "country": "All",
+    "region": "North America",
+    "category": "LIFESTYLE",
+    "product_set": "annual",
+    "price_bucket": "Low price",
+    "median_ltv_380": 19.99,
+    "avg_ltv_380": 21.0538
+  },
+  {
+    "country": "All",
+    "region": "North America",
+    "category": "LIFESTYLE",
+    "product_set": "annual",
+    "price_bucket": "Lower mid price",
+    "median_ltv_380": 29.99,
+    "avg_ltv_380": 34.0811
+  },
+  {
+    "country": "All",
+    "region": "North America",
+    "category": "LIFESTYLE",
+    "product_set": "annual",
+    "price_bucket": "Upper mid price",
+    "median_ltv_380": 39.99,
+    "avg_ltv_380": 46.1691
+  },
+  {
+    "country": "All",
+    "region": "North America",
+    "category": "LIFESTYLE",
+    "product_set": "monthly",
+    "price_bucket": "High price",
+    "median_ltv_380": 24.99,
+    "avg_ltv_380": 52.8547
+  },
+  {
+    "country": "All",
+    "region": "North America",
+    "category": "LIFESTYLE",
+    "product_set": "monthly",
+    "price_bucket": "Low price",
+    "median_ltv_380": 7.98,
+    "avg_ltv_380": 15.4285
+  },
+  {
+    "country": "All",
+    "region": "North America",
+    "category": "LIFESTYLE",
+    "product_set": "monthly",
+    "price_bucket": "Lower mid price",
+    "median_ltv_380": 9.99,
+    "avg_ltv_380": 25.816
+  },
+  {
+    "country": "All",
+    "region": "North America",
+    "category": "LIFESTYLE",
+    "product_set": "monthly",
+    "price_bucket": "Upper mid price",
+    "median_ltv_380": 38.98,
+    "avg_ltv_380": 62.2088
+  },
+  {
+    "country": "All",
+    "region": "North America",
+    "category": "LIFESTYLE",
+    "product_set": "weekly",
+    "price_bucket": "High price",
+    "median_ltv_380": 19.99,
+    "avg_ltv_380": 51.2914
+  },
+  {
+    "country": "All",
+    "region": "North America",
+    "category": "LIFESTYLE",
+    "product_set": "weekly",
+    "price_bucket": "Low price",
+    "median_ltv_380": 4.99,
+    "avg_ltv_380": 21.0407
+  },
+  {
+    "country": "All",
+    "region": "North America",
+    "category": "LIFESTYLE",
+    "product_set": "weekly",
+    "price_bucket": "Lower mid price",
+    "median_ltv_380": 6.99,
+    "avg_ltv_380": 41.1324
+  },
+  {
+    "country": "All",
+    "region": "North America",
+    "category": "LIFESTYLE",
+    "product_set": "weekly",
+    "price_bucket": "Upper mid price",
+    "median_ltv_380": 15.98,
+    "avg_ltv_380": 52.7001
+  },
+  {
+    "country": "All",
+    "region": "North America",
+    "category": "PHOTO_AND_VIDEO",
+    "product_set": "annual",
+    "price_bucket": "High price",
+    "median_ltv_380": 69.99,
+    "avg_ltv_380": 76.2708
+  },
+  {
+    "country": "All",
+    "region": "North America",
+    "category": "PHOTO_AND_VIDEO",
+    "product_set": "annual",
+    "price_bucket": "Low price",
+    "median_ltv_380": 14.99,
+    "avg_ltv_380": 21.1736
+  },
+  {
+    "country": "All",
+    "region": "North America",
+    "category": "PHOTO_AND_VIDEO",
+    "product_set": "annual",
+    "price_bucket": "Lower mid price",
+    "median_ltv_380": 29.99,
+    "avg_ltv_380": 33.4804
+  },
+  {
+    "country": "All",
+    "region": "North America",
+    "category": "PHOTO_AND_VIDEO",
+    "product_set": "annual",
+    "price_bucket": "Upper mid price",
+    "median_ltv_380": 39.99,
+    "avg_ltv_380": 44.2467
+  },
+  {
+    "country": "All",
+    "region": "North America",
+    "category": "PHOTO_AND_VIDEO",
+    "product_set": "monthly",
+    "price_bucket": "High price",
+    "median_ltv_380": 25.98,
+    "avg_ltv_380": 43.1977
+  },
+  {
+    "country": "All",
+    "region": "North America",
+    "category": "PHOTO_AND_VIDEO",
+    "product_set": "monthly",
+    "price_bucket": "Low price",
+    "median_ltv_380": 4.99,
+    "avg_ltv_380": 16.1895
+  },
+  {
+    "country": "All",
+    "region": "North America",
+    "category": "PHOTO_AND_VIDEO",
+    "product_set": "monthly",
+    "price_bucket": "Lower mid price",
+    "median_ltv_380": 6.99,
+    "avg_ltv_380": 20.7924
+  },
+  {
+    "country": "All",
+    "region": "North America",
+    "category": "PHOTO_AND_VIDEO",
+    "product_set": "monthly",
+    "price_bucket": "Upper mid price",
+    "median_ltv_380": 9.99,
+    "avg_ltv_380": 26.6526
+  },
+  {
+    "country": "All",
+    "region": "North America",
+    "category": "PHOTO_AND_VIDEO",
+    "product_set": "weekly",
+    "price_bucket": "High price",
+    "median_ltv_380": 9.99,
+    "avg_ltv_380": 35.0586
+  },
+  {
+    "country": "All",
+    "region": "North America",
+    "category": "PHOTO_AND_VIDEO",
+    "product_set": "weekly",
+    "price_bucket": "Low price",
+    "median_ltv_380": 3.49,
+    "avg_ltv_380": 20.853
+  },
+  {
+    "country": "All",
+    "region": "North America",
+    "category": "PHOTO_AND_VIDEO",
+    "product_set": "weekly",
+    "price_bucket": "Lower mid price",
+    "median_ltv_380": 5.1786,
+    "avg_ltv_380": 28.97
+  },
+  {
+    "country": "All",
+    "region": "North America",
+    "category": "PHOTO_AND_VIDEO",
+    "product_set": "weekly",
+    "price_bucket": "Upper mid price",
+    "median_ltv_380": 6.99,
+    "avg_ltv_380": 27.8284
+  },
+  {
+    "country": "All",
+    "region": "North America",
+    "category": "PRODUCTIVITY",
+    "product_set": "annual",
+    "price_bucket": "High price",
+    "median_ltv_380": 69.99,
+    "avg_ltv_380": 107.4843
+  },
+  {
+    "country": "All",
+    "region": "North America",
+    "category": "PRODUCTIVITY",
+    "product_set": "annual",
+    "price_bucket": "Low price",
+    "median_ltv_380": 28.8268,
+    "avg_ltv_380": 29.7765
+  },
+  {
+    "country": "All",
+    "region": "North America",
+    "category": "PRODUCTIVITY",
+    "product_set": "annual",
+    "price_bucket": "Lower mid price",
+    "median_ltv_380": 39.99,
+    "avg_ltv_380": 49.0731
+  },
+  {
+    "country": "All",
+    "region": "North America",
+    "category": "PRODUCTIVITY",
+    "product_set": "annual",
+    "price_bucket": "Upper mid price",
+    "median_ltv_380": 49.99,
+    "avg_ltv_380": 63.7209
+  },
+  {
+    "country": "All",
+    "region": "North America",
+    "category": "PRODUCTIVITY",
+    "product_set": "monthly",
+    "price_bucket": "High price",
+    "median_ltv_380": 65.97,
+    "avg_ltv_380": 113.3548
+  },
+  {
+    "country": "All",
+    "region": "North America",
+    "category": "PRODUCTIVITY",
+    "product_set": "monthly",
+    "price_bucket": "Low price",
+    "median_ltv_380": 8.38,
+    "avg_ltv_380": 18.3472
+  },
+  {
+    "country": "All",
+    "region": "North America",
+    "category": "PRODUCTIVITY",
+    "product_set": "monthly",
+    "price_bucket": "Lower mid price",
+    "median_ltv_380": 13.98,
+    "avg_ltv_380": 34.2373
+  },
+  {
+    "country": "All",
+    "region": "North America",
+    "category": "PRODUCTIVITY",
+    "product_set": "monthly",
+    "price_bucket": "Upper mid price",
+    "median_ltv_380": 14.99,
+    "avg_ltv_380": 49.7905
+  },
+  {
+    "country": "All",
+    "region": "North America",
+    "category": "PRODUCTIVITY",
+    "product_set": "weekly",
+    "price_bucket": "High price",
+    "median_ltv_380": 19.98,
+    "avg_ltv_380": 70.6268
+  },
+  {
+    "country": "All",
+    "region": "North America",
+    "category": "PRODUCTIVITY",
+    "product_set": "weekly",
+    "price_bucket": "Low price",
+    "median_ltv_380": 2.99,
+    "avg_ltv_380": 36.778
+  },
+  {
+    "country": "All",
+    "region": "North America",
+    "category": "PRODUCTIVITY",
+    "product_set": "weekly",
+    "price_bucket": "Lower mid price",
+    "median_ltv_380": 14.97,
+    "avg_ltv_380": 46.187
+  },
+  {
+    "country": "All",
+    "region": "North America",
+    "category": "PRODUCTIVITY",
+    "product_set": "weekly",
+    "price_bucket": "Upper mid price",
+    "median_ltv_380": 14.3616,
+    "avg_ltv_380": 57.3235
+  },
+  {
+    "country": "All",
+    "region": "North America",
+    "category": "UTILITIES",
+    "product_set": "annual",
+    "price_bucket": "High price",
+    "median_ltv_380": 116.99,
+    "avg_ltv_380": 112.6623
+  },
+  {
+    "country": "All",
+    "region": "North America",
+    "category": "UTILITIES",
+    "product_set": "annual",
+    "price_bucket": "Low price",
+    "median_ltv_380": 19.99,
+    "avg_ltv_380": 25.9275
+  },
+  {
+    "country": "All",
+    "region": "North America",
+    "category": "UTILITIES",
+    "product_set": "annual",
+    "price_bucket": "Lower mid price",
+    "median_ltv_380": 29.99,
+    "avg_ltv_380": 36.937
+  },
+  {
+    "country": "All",
+    "region": "North America",
+    "category": "UTILITIES",
+    "product_set": "annual",
+    "price_bucket": "Upper mid price",
+    "median_ltv_380": 39.99,
+    "avg_ltv_380": 51.0833
+  },
+  {
+    "country": "All",
+    "region": "North America",
+    "category": "UTILITIES",
+    "product_set": "monthly",
+    "price_bucket": "High price",
+    "median_ltv_380": 24.99,
+    "avg_ltv_380": 63.4925
+  },
+  {
+    "country": "All",
+    "region": "North America",
+    "category": "UTILITIES",
+    "product_set": "monthly",
+    "price_bucket": "Low price",
+    "median_ltv_380": 7.2361,
+    "avg_ltv_380": 16.2934
+  },
+  {
+    "country": "All",
+    "region": "North America",
+    "category": "UTILITIES",
+    "product_set": "monthly",
+    "price_bucket": "Lower mid price",
+    "median_ltv_380": 21.98,
+    "avg_ltv_380": 43.8457
+  },
+  {
+    "country": "All",
+    "region": "North America",
+    "category": "UTILITIES",
+    "product_set": "monthly",
+    "price_bucket": "Upper mid price",
+    "median_ltv_380": 14.99,
+    "avg_ltv_380": 44.2272
+  },
+  {
+    "country": "All",
+    "region": "North America",
+    "category": "UTILITIES",
+    "product_set": "weekly",
+    "price_bucket": "High price",
+    "median_ltv_380": 29.97,
+    "avg_ltv_380": 99.8174
+  },
+  {
+    "country": "All",
+    "region": "North America",
+    "category": "UTILITIES",
+    "product_set": "weekly",
+    "price_bucket": "Low price",
+    "median_ltv_380": 11.98,
+    "avg_ltv_380": 49.5515
+  },
+  {
+    "country": "All",
+    "region": "North America",
+    "category": "UTILITIES",
+    "product_set": "weekly",
+    "price_bucket": "Lower mid price",
+    "median_ltv_380": 13.98,
+    "avg_ltv_380": 55.3831
+  },
+  {
+    "country": "All",
+    "region": "North America",
+    "category": "UTILITIES",
+    "product_set": "weekly",
+    "price_bucket": "Upper mid price",
+    "median_ltv_380": 15.98,
+    "avg_ltv_380": 64.1967
+  }
+]

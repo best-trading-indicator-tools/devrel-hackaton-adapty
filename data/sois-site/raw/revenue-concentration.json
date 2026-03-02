@@ -1,0 +1,1298 @@
+[
+  {
+    "year": 2023,
+    "region": "APAC",
+    "category": "All",
+    "top_10pct_apps": 140,
+    "top_10pct_revenue": 26187372.112,
+    "revenue_share_top_10pct": 0.8982
+  },
+  {
+    "year": 2023,
+    "region": "APAC",
+    "category": "EDUCATION",
+    "top_10pct_apps": 11,
+    "top_10pct_revenue": 1327613.1316,
+    "revenue_share_top_10pct": 0.8801
+  },
+  {
+    "year": 2023,
+    "region": "APAC",
+    "category": "ENTERTAINMENT",
+    "top_10pct_apps": 17,
+    "top_10pct_revenue": 1164392.8588,
+    "revenue_share_top_10pct": 0.7933
+  },
+  {
+    "year": 2023,
+    "region": "APAC",
+    "category": "GRAPHICS_AND_DESIGN",
+    "top_10pct_apps": 12,
+    "top_10pct_revenue": 1958717.4357,
+    "revenue_share_top_10pct": 0.9576
+  },
+  {
+    "year": 2023,
+    "region": "APAC",
+    "category": "HEALTH_AND_FITNESS",
+    "top_10pct_apps": 24,
+    "top_10pct_revenue": 1900802.2761,
+    "revenue_share_top_10pct": 0.7986
+  },
+  {
+    "year": 2023,
+    "region": "APAC",
+    "category": "LIFESTYLE",
+    "top_10pct_apps": 14,
+    "top_10pct_revenue": 3243494.7849,
+    "revenue_share_top_10pct": 0.9453
+  },
+  {
+    "year": 2023,
+    "region": "APAC",
+    "category": "PHOTO_AND_VIDEO",
+    "top_10pct_apps": 15,
+    "top_10pct_revenue": 2553456.4991,
+    "revenue_share_top_10pct": 0.8168
+  },
+  {
+    "year": 2023,
+    "region": "APAC",
+    "category": "PRODUCTIVITY",
+    "top_10pct_apps": 20,
+    "top_10pct_revenue": 4788888.5539,
+    "revenue_share_top_10pct": 0.933
+  },
+  {
+    "year": 2023,
+    "region": "APAC",
+    "category": "UTILITIES",
+    "top_10pct_apps": 31,
+    "top_10pct_revenue": 9278773.8661,
+    "revenue_share_top_10pct": 0.9222
+  },
+  {
+    "year": 2023,
+    "region": "Europe",
+    "category": "All",
+    "top_10pct_apps": 159,
+    "top_10pct_revenue": 66901896.9651,
+    "revenue_share_top_10pct": 0.9081
+  },
+  {
+    "year": 2023,
+    "region": "Europe",
+    "category": "EDUCATION",
+    "top_10pct_apps": 14,
+    "top_10pct_revenue": 2418542.1305,
+    "revenue_share_top_10pct": 0.8016
+  },
+  {
+    "year": 2023,
+    "region": "Europe",
+    "category": "ENTERTAINMENT",
+    "top_10pct_apps": 18,
+    "top_10pct_revenue": 4319639.4771,
+    "revenue_share_top_10pct": 0.8622
+  },
+  {
+    "year": 2023,
+    "region": "Europe",
+    "category": "GRAPHICS_AND_DESIGN",
+    "top_10pct_apps": 13,
+    "top_10pct_revenue": 3504451.4288,
+    "revenue_share_top_10pct": 0.9428
+  },
+  {
+    "year": 2023,
+    "region": "Europe",
+    "category": "HEALTH_AND_FITNESS",
+    "top_10pct_apps": 28,
+    "top_10pct_revenue": 7510825.6257,
+    "revenue_share_top_10pct": 0.8335
+  },
+  {
+    "year": 2023,
+    "region": "Europe",
+    "category": "LIFESTYLE",
+    "top_10pct_apps": 16,
+    "top_10pct_revenue": 16907796.4785,
+    "revenue_share_top_10pct": 0.9657
+  },
+  {
+    "year": 2023,
+    "region": "Europe",
+    "category": "PHOTO_AND_VIDEO",
+    "top_10pct_apps": 16,
+    "top_10pct_revenue": 7140499.7582,
+    "revenue_share_top_10pct": 0.8466
+  },
+  {
+    "year": 2023,
+    "region": "Europe",
+    "category": "PRODUCTIVITY",
+    "top_10pct_apps": 23,
+    "top_10pct_revenue": 6706329.7453,
+    "revenue_share_top_10pct": 0.9155
+  },
+  {
+    "year": 2023,
+    "region": "Europe",
+    "category": "UTILITIES",
+    "top_10pct_apps": 34,
+    "top_10pct_revenue": 18194560.5823,
+    "revenue_share_top_10pct": 0.9259
+  },
+  {
+    "year": 2023,
+    "region": "Global",
+    "category": "All",
+    "top_10pct_apps": 729,
+    "top_10pct_revenue": 298500691.7904,
+    "revenue_share_top_10pct": 0.9303
+  },
+  {
+    "year": 2023,
+    "region": "Global",
+    "category": "EDUCATION",
+    "top_10pct_apps": 58,
+    "top_10pct_revenue": 12668477.1802,
+    "revenue_share_top_10pct": 0.9
+  },
+  {
+    "year": 2023,
+    "region": "Global",
+    "category": "ENTERTAINMENT",
+    "top_10pct_apps": 82,
+    "top_10pct_revenue": 18121723.4456,
+    "revenue_share_top_10pct": 0.8882
+  },
+  {
+    "year": 2023,
+    "region": "Global",
+    "category": "GRAPHICS_AND_DESIGN",
+    "top_10pct_apps": 57,
+    "top_10pct_revenue": 15924365.1637,
+    "revenue_share_top_10pct": 0.9503
+  },
+  {
+    "year": 2023,
+    "region": "Global",
+    "category": "HEALTH_AND_FITNESS",
+    "top_10pct_apps": 125,
+    "top_10pct_revenue": 29898765.1454,
+    "revenue_share_top_10pct": 0.8879
+  },
+  {
+    "year": 2023,
+    "region": "Global",
+    "category": "LIFESTYLE",
+    "top_10pct_apps": 71,
+    "top_10pct_revenue": 64942169.1511,
+    "revenue_share_top_10pct": 0.9745
+  },
+  {
+    "year": 2023,
+    "region": "Global",
+    "category": "PHOTO_AND_VIDEO",
+    "top_10pct_apps": 79,
+    "top_10pct_revenue": 26279259.9245,
+    "revenue_share_top_10pct": 0.8821
+  },
+  {
+    "year": 2023,
+    "region": "Global",
+    "category": "PRODUCTIVITY",
+    "top_10pct_apps": 103,
+    "top_10pct_revenue": 41771618.7028,
+    "revenue_share_top_10pct": 0.9478
+  },
+  {
+    "year": 2023,
+    "region": "Global",
+    "category": "UTILITIES",
+    "top_10pct_apps": 157,
+    "top_10pct_revenue": 88205083.5408,
+    "revenue_share_top_10pct": 0.924
+  },
+  {
+    "year": 2023,
+    "region": "LATAM",
+    "category": "All",
+    "top_10pct_apps": 112,
+    "top_10pct_revenue": 15567211.7458,
+    "revenue_share_top_10pct": 0.9027
+  },
+  {
+    "year": 2023,
+    "region": "LATAM",
+    "category": "EDUCATION",
+    "top_10pct_apps": 8,
+    "top_10pct_revenue": 343705.0976,
+    "revenue_share_top_10pct": 0.8451
+  },
+  {
+    "year": 2023,
+    "region": "LATAM",
+    "category": "ENTERTAINMENT",
+    "top_10pct_apps": 13,
+    "top_10pct_revenue": 799573.6488,
+    "revenue_share_top_10pct": 0.8682
+  },
+  {
+    "year": 2023,
+    "region": "LATAM",
+    "category": "GRAPHICS_AND_DESIGN",
+    "top_10pct_apps": 9,
+    "top_10pct_revenue": 559812.1571,
+    "revenue_share_top_10pct": 0.8624
+  },
+  {
+    "year": 2023,
+    "region": "LATAM",
+    "category": "HEALTH_AND_FITNESS",
+    "top_10pct_apps": 19,
+    "top_10pct_revenue": 1405498.4653,
+    "revenue_share_top_10pct": 0.8728
+  },
+  {
+    "year": 2023,
+    "region": "LATAM",
+    "category": "LIFESTYLE",
+    "top_10pct_apps": 11,
+    "top_10pct_revenue": 2408709.9129,
+    "revenue_share_top_10pct": 0.9636
+  },
+  {
+    "year": 2023,
+    "region": "LATAM",
+    "category": "PHOTO_AND_VIDEO",
+    "top_10pct_apps": 14,
+    "top_10pct_revenue": 2313366.7611,
+    "revenue_share_top_10pct": 0.8723
+  },
+  {
+    "year": 2023,
+    "region": "LATAM",
+    "category": "PRODUCTIVITY",
+    "top_10pct_apps": 16,
+    "top_10pct_revenue": 1987745.9026,
+    "revenue_share_top_10pct": 0.9077
+  },
+  {
+    "year": 2023,
+    "region": "LATAM",
+    "category": "UTILITIES",
+    "top_10pct_apps": 24,
+    "top_10pct_revenue": 5620866.7819,
+    "revenue_share_top_10pct": 0.8899
+  },
+  {
+    "year": 2023,
+    "region": "MEA",
+    "category": "All",
+    "top_10pct_apps": 130,
+    "top_10pct_revenue": 17206516.3658,
+    "revenue_share_top_10pct": 0.921
+  },
+  {
+    "year": 2023,
+    "region": "MEA",
+    "category": "EDUCATION",
+    "top_10pct_apps": 11,
+    "top_10pct_revenue": 529461.5663,
+    "revenue_share_top_10pct": 0.8759
+  },
+  {
+    "year": 2023,
+    "region": "MEA",
+    "category": "ENTERTAINMENT",
+    "top_10pct_apps": 15,
+    "top_10pct_revenue": 544263.8234,
+    "revenue_share_top_10pct": 0.8399
+  },
+  {
+    "year": 2023,
+    "region": "MEA",
+    "category": "GRAPHICS_AND_DESIGN",
+    "top_10pct_apps": 10,
+    "top_10pct_revenue": 318214.648,
+    "revenue_share_top_10pct": 0.8715
+  },
+  {
+    "year": 2023,
+    "region": "MEA",
+    "category": "HEALTH_AND_FITNESS",
+    "top_10pct_apps": 22,
+    "top_10pct_revenue": 1054751.0889,
+    "revenue_share_top_10pct": 0.8454
+  },
+  {
+    "year": 2023,
+    "region": "MEA",
+    "category": "LIFESTYLE",
+    "top_10pct_apps": 13,
+    "top_10pct_revenue": 2770197.2034,
+    "revenue_share_top_10pct": 0.9718
+  },
+  {
+    "year": 2023,
+    "region": "MEA",
+    "category": "PHOTO_AND_VIDEO",
+    "top_10pct_apps": 15,
+    "top_10pct_revenue": 1463232.1641,
+    "revenue_share_top_10pct": 0.849
+  },
+  {
+    "year": 2023,
+    "region": "MEA",
+    "category": "PRODUCTIVITY",
+    "top_10pct_apps": 19,
+    "top_10pct_revenue": 2051984.7958,
+    "revenue_share_top_10pct": 0.9257
+  },
+  {
+    "year": 2023,
+    "region": "MEA",
+    "category": "UTILITIES",
+    "top_10pct_apps": 29,
+    "top_10pct_revenue": 8434967.1847,
+    "revenue_share_top_10pct": 0.9345
+  },
+  {
+    "year": 2023,
+    "region": "North America",
+    "category": "All",
+    "top_10pct_apps": 167,
+    "top_10pct_revenue": 164780858.6758,
+    "revenue_share_top_10pct": 0.9054
+  },
+  {
+    "year": 2023,
+    "region": "North America",
+    "category": "EDUCATION",
+    "top_10pct_apps": 15,
+    "top_10pct_revenue": 7583957.2602,
+    "revenue_share_top_10pct": 0.8885
+  },
+  {
+    "year": 2023,
+    "region": "North America",
+    "category": "ENTERTAINMENT",
+    "top_10pct_apps": 19,
+    "top_10pct_revenue": 10323569.585,
+    "revenue_share_top_10pct": 0.8357
+  },
+  {
+    "year": 2023,
+    "region": "North America",
+    "category": "GRAPHICS_AND_DESIGN",
+    "top_10pct_apps": 13,
+    "top_10pct_revenue": 9322963.0465,
+    "revenue_share_top_10pct": 0.9344
+  },
+  {
+    "year": 2023,
+    "region": "North America",
+    "category": "HEALTH_AND_FITNESS",
+    "top_10pct_apps": 29,
+    "top_10pct_revenue": 16553471.4975,
+    "revenue_share_top_10pct": 0.8526
+  },
+  {
+    "year": 2023,
+    "region": "North America",
+    "category": "LIFESTYLE",
+    "top_10pct_apps": 16,
+    "top_10pct_revenue": 39048445.3146,
+    "revenue_share_top_10pct": 0.9688
+  },
+  {
+    "year": 2023,
+    "region": "North America",
+    "category": "PHOTO_AND_VIDEO",
+    "top_10pct_apps": 17,
+    "top_10pct_revenue": 11747167.2725,
+    "revenue_share_top_10pct": 0.8484
+  },
+  {
+    "year": 2023,
+    "region": "North America",
+    "category": "PRODUCTIVITY",
+    "top_10pct_apps": 25,
+    "top_10pct_revenue": 25582965.3488,
+    "revenue_share_top_10pct": 0.9406
+  },
+  {
+    "year": 2023,
+    "region": "North America",
+    "category": "UTILITIES",
+    "top_10pct_apps": 36,
+    "top_10pct_revenue": 44687591.5229,
+    "revenue_share_top_10pct": 0.8873
+  },
+  {
+    "year": 2024,
+    "region": "APAC",
+    "category": "All",
+    "top_10pct_apps": 243,
+    "top_10pct_revenue": 53194833.3089,
+    "revenue_share_top_10pct": 0.9331
+  },
+  {
+    "year": 2024,
+    "region": "APAC",
+    "category": "EDUCATION",
+    "top_10pct_apps": 18,
+    "top_10pct_revenue": 2707420.8792,
+    "revenue_share_top_10pct": 0.9443
+  },
+  {
+    "year": 2024,
+    "region": "APAC",
+    "category": "ENTERTAINMENT",
+    "top_10pct_apps": 29,
+    "top_10pct_revenue": 1860168.4128,
+    "revenue_share_top_10pct": 0.8124
+  },
+  {
+    "year": 2024,
+    "region": "APAC",
+    "category": "GRAPHICS_AND_DESIGN",
+    "top_10pct_apps": 19,
+    "top_10pct_revenue": 3871135.7186,
+    "revenue_share_top_10pct": 0.9584
+  },
+  {
+    "year": 2024,
+    "region": "APAC",
+    "category": "HEALTH_AND_FITNESS",
+    "top_10pct_apps": 30,
+    "top_10pct_revenue": 2349856.8838,
+    "revenue_share_top_10pct": 0.8723
+  },
+  {
+    "year": 2024,
+    "region": "APAC",
+    "category": "LIFESTYLE",
+    "top_10pct_apps": 21,
+    "top_10pct_revenue": 4905318.083,
+    "revenue_share_top_10pct": 0.9422
+  },
+  {
+    "year": 2024,
+    "region": "APAC",
+    "category": "PHOTO_AND_VIDEO",
+    "top_10pct_apps": 24,
+    "top_10pct_revenue": 5773657.2911,
+    "revenue_share_top_10pct": 0.8973
+  },
+  {
+    "year": 2024,
+    "region": "APAC",
+    "category": "PRODUCTIVITY",
+    "top_10pct_apps": 32,
+    "top_10pct_revenue": 10351615.9674,
+    "revenue_share_top_10pct": 0.9356
+  },
+  {
+    "year": 2024,
+    "region": "APAC",
+    "category": "UTILITIES",
+    "top_10pct_apps": 74,
+    "top_10pct_revenue": 21200076.394,
+    "revenue_share_top_10pct": 0.9459
+  },
+  {
+    "year": 2024,
+    "region": "Europe",
+    "category": "All",
+    "top_10pct_apps": 273,
+    "top_10pct_revenue": 118232995.6724,
+    "revenue_share_top_10pct": 0.9333
+  },
+  {
+    "year": 2024,
+    "region": "Europe",
+    "category": "EDUCATION",
+    "top_10pct_apps": 21,
+    "top_10pct_revenue": 4686641.1539,
+    "revenue_share_top_10pct": 0.9004
+  },
+  {
+    "year": 2024,
+    "region": "Europe",
+    "category": "ENTERTAINMENT",
+    "top_10pct_apps": 33,
+    "top_10pct_revenue": 6545268.6993,
+    "revenue_share_top_10pct": 0.8921
+  },
+  {
+    "year": 2024,
+    "region": "Europe",
+    "category": "GRAPHICS_AND_DESIGN",
+    "top_10pct_apps": 19,
+    "top_10pct_revenue": 8741450.6665,
+    "revenue_share_top_10pct": 0.9514
+  },
+  {
+    "year": 2024,
+    "region": "Europe",
+    "category": "HEALTH_AND_FITNESS",
+    "top_10pct_apps": 35,
+    "top_10pct_revenue": 9474491.0827,
+    "revenue_share_top_10pct": 0.8974
+  },
+  {
+    "year": 2024,
+    "region": "Europe",
+    "category": "LIFESTYLE",
+    "top_10pct_apps": 25,
+    "top_10pct_revenue": 23575750.8455,
+    "revenue_share_top_10pct": 0.9675
+  },
+  {
+    "year": 2024,
+    "region": "Europe",
+    "category": "PHOTO_AND_VIDEO",
+    "top_10pct_apps": 25,
+    "top_10pct_revenue": 15108570.9167,
+    "revenue_share_top_10pct": 0.8954
+  },
+  {
+    "year": 2024,
+    "region": "Europe",
+    "category": "PRODUCTIVITY",
+    "top_10pct_apps": 36,
+    "top_10pct_revenue": 17947130.5496,
+    "revenue_share_top_10pct": 0.9333
+  },
+  {
+    "year": 2024,
+    "region": "Europe",
+    "category": "UTILITIES",
+    "top_10pct_apps": 83,
+    "top_10pct_revenue": 31759214.3866,
+    "revenue_share_top_10pct": 0.9363
+  },
+  {
+    "year": 2024,
+    "region": "Global",
+    "category": "All",
+    "top_10pct_apps": 1253,
+    "top_10pct_revenue": 557669604.0866,
+    "revenue_share_top_10pct": 0.9501
+  },
+  {
+    "year": 2024,
+    "region": "Global",
+    "category": "EDUCATION",
+    "top_10pct_apps": 92,
+    "top_10pct_revenue": 28216793.627,
+    "revenue_share_top_10pct": 0.949
+  },
+  {
+    "year": 2024,
+    "region": "Global",
+    "category": "ENTERTAINMENT",
+    "top_10pct_apps": 151,
+    "top_10pct_revenue": 30474752.0828,
+    "revenue_share_top_10pct": 0.9137
+  },
+  {
+    "year": 2024,
+    "region": "Global",
+    "category": "GRAPHICS_AND_DESIGN",
+    "top_10pct_apps": 91,
+    "top_10pct_revenue": 38385877.6821,
+    "revenue_share_top_10pct": 0.9593
+  },
+  {
+    "year": 2024,
+    "region": "Global",
+    "category": "HEALTH_AND_FITNESS",
+    "top_10pct_apps": 152,
+    "top_10pct_revenue": 31637742.5236,
+    "revenue_share_top_10pct": 0.9176
+  },
+  {
+    "year": 2024,
+    "region": "Global",
+    "category": "LIFESTYLE",
+    "top_10pct_apps": 109,
+    "top_10pct_revenue": 85633741.0665,
+    "revenue_share_top_10pct": 0.9725
+  },
+  {
+    "year": 2024,
+    "region": "Global",
+    "category": "PHOTO_AND_VIDEO",
+    "top_10pct_apps": 118,
+    "top_10pct_revenue": 56300595.6147,
+    "revenue_share_top_10pct": 0.9231
+  },
+  {
+    "year": 2024,
+    "region": "Global",
+    "category": "PRODUCTIVITY",
+    "top_10pct_apps": 165,
+    "top_10pct_revenue": 99888162.4472,
+    "revenue_share_top_10pct": 0.9564
+  },
+  {
+    "year": 2024,
+    "region": "Global",
+    "category": "UTILITIES",
+    "top_10pct_apps": 378,
+    "top_10pct_revenue": 186155011.0211,
+    "revenue_share_top_10pct": 0.9504
+  },
+  {
+    "year": 2024,
+    "region": "LATAM",
+    "category": "All",
+    "top_10pct_apps": 193,
+    "top_10pct_revenue": 35016041.0269,
+    "revenue_share_top_10pct": 0.9381
+  },
+  {
+    "year": 2024,
+    "region": "LATAM",
+    "category": "EDUCATION",
+    "top_10pct_apps": 12,
+    "top_10pct_revenue": 816219.829,
+    "revenue_share_top_10pct": 0.9193
+  },
+  {
+    "year": 2024,
+    "region": "LATAM",
+    "category": "ENTERTAINMENT",
+    "top_10pct_apps": 24,
+    "top_10pct_revenue": 1212328.0834,
+    "revenue_share_top_10pct": 0.8494
+  },
+  {
+    "year": 2024,
+    "region": "LATAM",
+    "category": "GRAPHICS_AND_DESIGN",
+    "top_10pct_apps": 15,
+    "top_10pct_revenue": 2221095.7172,
+    "revenue_share_top_10pct": 0.9374
+  },
+  {
+    "year": 2024,
+    "region": "LATAM",
+    "category": "HEALTH_AND_FITNESS",
+    "top_10pct_apps": 22,
+    "top_10pct_revenue": 1112474.2872,
+    "revenue_share_top_10pct": 0.8705
+  },
+  {
+    "year": 2024,
+    "region": "LATAM",
+    "category": "LIFESTYLE",
+    "top_10pct_apps": 16,
+    "top_10pct_revenue": 3282920.3318,
+    "revenue_share_top_10pct": 0.9599
+  },
+  {
+    "year": 2024,
+    "region": "LATAM",
+    "category": "PHOTO_AND_VIDEO",
+    "top_10pct_apps": 20,
+    "top_10pct_revenue": 4886136.2722,
+    "revenue_share_top_10pct": 0.9113
+  },
+  {
+    "year": 2024,
+    "region": "LATAM",
+    "category": "PRODUCTIVITY",
+    "top_10pct_apps": 25,
+    "top_10pct_revenue": 7455728.638,
+    "revenue_share_top_10pct": 0.9491
+  },
+  {
+    "year": 2024,
+    "region": "LATAM",
+    "category": "UTILITIES",
+    "top_10pct_apps": 61,
+    "top_10pct_revenue": 13933873.5788,
+    "revenue_share_top_10pct": 0.9461
+  },
+  {
+    "year": 2024,
+    "region": "MEA",
+    "category": "All",
+    "top_10pct_apps": 221,
+    "top_10pct_revenue": 34061233.2677,
+    "revenue_share_top_10pct": 0.9407
+  },
+  {
+    "year": 2024,
+    "region": "MEA",
+    "category": "EDUCATION",
+    "top_10pct_apps": 17,
+    "top_10pct_revenue": 1368198.443,
+    "revenue_share_top_10pct": 0.9413
+  },
+  {
+    "year": 2024,
+    "region": "MEA",
+    "category": "ENTERTAINMENT",
+    "top_10pct_apps": 27,
+    "top_10pct_revenue": 1239139.4807,
+    "revenue_share_top_10pct": 0.8623
+  },
+  {
+    "year": 2024,
+    "region": "MEA",
+    "category": "GRAPHICS_AND_DESIGN",
+    "top_10pct_apps": 17,
+    "top_10pct_revenue": 1740977.3484,
+    "revenue_share_top_10pct": 0.9326
+  },
+  {
+    "year": 2024,
+    "region": "MEA",
+    "category": "HEALTH_AND_FITNESS",
+    "top_10pct_apps": 27,
+    "top_10pct_revenue": 1074946.4624,
+    "revenue_share_top_10pct": 0.8625
+  },
+  {
+    "year": 2024,
+    "region": "MEA",
+    "category": "LIFESTYLE",
+    "top_10pct_apps": 20,
+    "top_10pct_revenue": 4388112.9125,
+    "revenue_share_top_10pct": 0.9654
+  },
+  {
+    "year": 2024,
+    "region": "MEA",
+    "category": "PHOTO_AND_VIDEO",
+    "top_10pct_apps": 22,
+    "top_10pct_revenue": 3878187.6309,
+    "revenue_share_top_10pct": 0.8985
+  },
+  {
+    "year": 2024,
+    "region": "MEA",
+    "category": "PRODUCTIVITY",
+    "top_10pct_apps": 31,
+    "top_10pct_revenue": 4026744.683,
+    "revenue_share_top_10pct": 0.9289
+  },
+  {
+    "year": 2024,
+    "region": "MEA",
+    "category": "UTILITIES",
+    "top_10pct_apps": 63,
+    "top_10pct_revenue": 16240863.3633,
+    "revenue_share_top_10pct": 0.9549
+  },
+  {
+    "year": 2024,
+    "region": "North America",
+    "category": "All",
+    "top_10pct_apps": 290,
+    "top_10pct_revenue": 306152506.3069,
+    "revenue_share_top_10pct": 0.9293
+  },
+  {
+    "year": 2024,
+    "region": "North America",
+    "category": "EDUCATION",
+    "top_10pct_apps": 24,
+    "top_10pct_revenue": 18182739.2493,
+    "revenue_share_top_10pct": 0.9418
+  },
+  {
+    "year": 2024,
+    "region": "North America",
+    "category": "ENTERTAINMENT",
+    "top_10pct_apps": 35,
+    "top_10pct_revenue": 18604283.7941,
+    "revenue_share_top_10pct": 0.8921
+  },
+  {
+    "year": 2024,
+    "region": "North America",
+    "category": "GRAPHICS_AND_DESIGN",
+    "top_10pct_apps": 20,
+    "top_10pct_revenue": 21410511.2169,
+    "revenue_share_top_10pct": 0.9502
+  },
+  {
+    "year": 2024,
+    "region": "North America",
+    "category": "HEALTH_AND_FITNESS",
+    "top_10pct_apps": 35,
+    "top_10pct_revenue": 16691542.0472,
+    "revenue_share_top_10pct": 0.8927
+  },
+  {
+    "year": 2024,
+    "region": "North America",
+    "category": "LIFESTYLE",
+    "top_10pct_apps": 26,
+    "top_10pct_revenue": 48630226.7189,
+    "revenue_share_top_10pct": 0.9643
+  },
+  {
+    "year": 2024,
+    "region": "North America",
+    "category": "PHOTO_AND_VIDEO",
+    "top_10pct_apps": 26,
+    "top_10pct_revenue": 25432849.9055,
+    "revenue_share_top_10pct": 0.9092
+  },
+  {
+    "year": 2024,
+    "region": "North America",
+    "category": "PRODUCTIVITY",
+    "top_10pct_apps": 38,
+    "top_10pct_revenue": 58720402.7831,
+    "revenue_share_top_10pct": 0.9482
+  },
+  {
+    "year": 2024,
+    "region": "North America",
+    "category": "UTILITIES",
+    "top_10pct_apps": 89,
+    "top_10pct_revenue": 96838069.4033,
+    "revenue_share_top_10pct": 0.8989
+  },
+  {
+    "year": 2025,
+    "region": "APAC",
+    "category": "All",
+    "top_10pct_apps": 353,
+    "top_10pct_revenue": 84130581.5573,
+    "revenue_share_top_10pct": 0.9294
+  },
+  {
+    "year": 2025,
+    "region": "APAC",
+    "category": "EDUCATION",
+    "top_10pct_apps": 25,
+    "top_10pct_revenue": 3940199.5451,
+    "revenue_share_top_10pct": 0.9513
+  },
+  {
+    "year": 2025,
+    "region": "APAC",
+    "category": "ENTERTAINMENT",
+    "top_10pct_apps": 40,
+    "top_10pct_revenue": 6023753.2762,
+    "revenue_share_top_10pct": 0.9053
+  },
+  {
+    "year": 2025,
+    "region": "APAC",
+    "category": "GRAPHICS_AND_DESIGN",
+    "top_10pct_apps": 27,
+    "top_10pct_revenue": 4874447.3168,
+    "revenue_share_top_10pct": 0.9329
+  },
+  {
+    "year": 2025,
+    "region": "APAC",
+    "category": "HEALTH_AND_FITNESS",
+    "top_10pct_apps": 39,
+    "top_10pct_revenue": 5024022.4148,
+    "revenue_share_top_10pct": 0.9266
+  },
+  {
+    "year": 2025,
+    "region": "APAC",
+    "category": "LIFESTYLE",
+    "top_10pct_apps": 27,
+    "top_10pct_revenue": 8503471.2097,
+    "revenue_share_top_10pct": 0.9624
+  },
+  {
+    "year": 2025,
+    "region": "APAC",
+    "category": "PHOTO_AND_VIDEO",
+    "top_10pct_apps": 34,
+    "top_10pct_revenue": 10859563.6445,
+    "revenue_share_top_10pct": 0.9245
+  },
+  {
+    "year": 2025,
+    "region": "APAC",
+    "category": "PRODUCTIVITY",
+    "top_10pct_apps": 46,
+    "top_10pct_revenue": 14514807.6433,
+    "revenue_share_top_10pct": 0.9383
+  },
+  {
+    "year": 2025,
+    "region": "APAC",
+    "category": "UTILITIES",
+    "top_10pct_apps": 117,
+    "top_10pct_revenue": 30156193.3879,
+    "revenue_share_top_10pct": 0.913
+  },
+  {
+    "year": 2025,
+    "region": "Europe",
+    "category": "All",
+    "top_10pct_apps": 405,
+    "top_10pct_revenue": 180799116.7601,
+    "revenue_share_top_10pct": 0.9298
+  },
+  {
+    "year": 2025,
+    "region": "Europe",
+    "category": "EDUCATION",
+    "top_10pct_apps": 31,
+    "top_10pct_revenue": 7292424.536,
+    "revenue_share_top_10pct": 0.9275
+  },
+  {
+    "year": 2025,
+    "region": "Europe",
+    "category": "ENTERTAINMENT",
+    "top_10pct_apps": 45,
+    "top_10pct_revenue": 13798454.3696,
+    "revenue_share_top_10pct": 0.918
+  },
+  {
+    "year": 2025,
+    "region": "Europe",
+    "category": "GRAPHICS_AND_DESIGN",
+    "top_10pct_apps": 29,
+    "top_10pct_revenue": 12360857.1998,
+    "revenue_share_top_10pct": 0.9397
+  },
+  {
+    "year": 2025,
+    "region": "Europe",
+    "category": "HEALTH_AND_FITNESS",
+    "top_10pct_apps": 47,
+    "top_10pct_revenue": 11348942.2084,
+    "revenue_share_top_10pct": 0.8919
+  },
+  {
+    "year": 2025,
+    "region": "Europe",
+    "category": "LIFESTYLE",
+    "top_10pct_apps": 31,
+    "top_10pct_revenue": 36045051.5578,
+    "revenue_share_top_10pct": 0.9721
+  },
+  {
+    "year": 2025,
+    "region": "Europe",
+    "category": "PHOTO_AND_VIDEO",
+    "top_10pct_apps": 40,
+    "top_10pct_revenue": 27641877.7443,
+    "revenue_share_top_10pct": 0.9396
+  },
+  {
+    "year": 2025,
+    "region": "Europe",
+    "category": "PRODUCTIVITY",
+    "top_10pct_apps": 52,
+    "top_10pct_revenue": 29875380.3419,
+    "revenue_share_top_10pct": 0.9417
+  },
+  {
+    "year": 2025,
+    "region": "Europe",
+    "category": "UTILITIES",
+    "top_10pct_apps": 133,
+    "top_10pct_revenue": 42259601.838,
+    "revenue_share_top_10pct": 0.8904
+  },
+  {
+    "year": 2025,
+    "region": "Global",
+    "category": "All",
+    "top_10pct_apps": 1843,
+    "top_10pct_revenue": 849780943.0329,
+    "revenue_share_top_10pct": 0.9471
+  },
+  {
+    "year": 2025,
+    "region": "Global",
+    "category": "EDUCATION",
+    "top_10pct_apps": 136,
+    "top_10pct_revenue": 47744396.4738,
+    "revenue_share_top_10pct": 0.9598
+  },
+  {
+    "year": 2025,
+    "region": "Global",
+    "category": "ENTERTAINMENT",
+    "top_10pct_apps": 206,
+    "top_10pct_revenue": 65573793.1913,
+    "revenue_share_top_10pct": 0.9398
+  },
+  {
+    "year": 2025,
+    "region": "Global",
+    "category": "GRAPHICS_AND_DESIGN",
+    "top_10pct_apps": 138,
+    "top_10pct_revenue": 47661125.4298,
+    "revenue_share_top_10pct": 0.9454
+  },
+  {
+    "year": 2025,
+    "region": "Global",
+    "category": "HEALTH_AND_FITNESS",
+    "top_10pct_apps": 200,
+    "top_10pct_revenue": 42372285.2175,
+    "revenue_share_top_10pct": 0.9256
+  },
+  {
+    "year": 2025,
+    "region": "Global",
+    "category": "LIFESTYLE",
+    "top_10pct_apps": 142,
+    "top_10pct_revenue": 130630602.3736,
+    "revenue_share_top_10pct": 0.979
+  },
+  {
+    "year": 2025,
+    "region": "Global",
+    "category": "PHOTO_AND_VIDEO",
+    "top_10pct_apps": 182,
+    "top_10pct_revenue": 103827299.681,
+    "revenue_share_top_10pct": 0.9464
+  },
+  {
+    "year": 2025,
+    "region": "Global",
+    "category": "PRODUCTIVITY",
+    "top_10pct_apps": 239,
+    "top_10pct_revenue": 140165591.4469,
+    "revenue_share_top_10pct": 0.9557
+  },
+  {
+    "year": 2025,
+    "region": "Global",
+    "category": "UTILITIES",
+    "top_10pct_apps": 603,
+    "top_10pct_revenue": 270264832.6004,
+    "revenue_share_top_10pct": 0.9263
+  },
+  {
+    "year": 2025,
+    "region": "LATAM",
+    "category": "All",
+    "top_10pct_apps": 285,
+    "top_10pct_revenue": 58739605.7021,
+    "revenue_share_top_10pct": 0.9342
+  },
+  {
+    "year": 2025,
+    "region": "LATAM",
+    "category": "EDUCATION",
+    "top_10pct_apps": 17,
+    "top_10pct_revenue": 1602131.4499,
+    "revenue_share_top_10pct": 0.9363
+  },
+  {
+    "year": 2025,
+    "region": "LATAM",
+    "category": "ENTERTAINMENT",
+    "top_10pct_apps": 32,
+    "top_10pct_revenue": 4067162.8893,
+    "revenue_share_top_10pct": 0.9104
+  },
+  {
+    "year": 2025,
+    "region": "LATAM",
+    "category": "GRAPHICS_AND_DESIGN",
+    "top_10pct_apps": 24,
+    "top_10pct_revenue": 3694544.2386,
+    "revenue_share_top_10pct": 0.9391
+  },
+  {
+    "year": 2025,
+    "region": "LATAM",
+    "category": "HEALTH_AND_FITNESS",
+    "top_10pct_apps": 28,
+    "top_10pct_revenue": 1700958.6367,
+    "revenue_share_top_10pct": 0.8833
+  },
+  {
+    "year": 2025,
+    "region": "LATAM",
+    "category": "LIFESTYLE",
+    "top_10pct_apps": 21,
+    "top_10pct_revenue": 6842068.288,
+    "revenue_share_top_10pct": 0.9755
+  },
+  {
+    "year": 2025,
+    "region": "LATAM",
+    "category": "PHOTO_AND_VIDEO",
+    "top_10pct_apps": 30,
+    "top_10pct_revenue": 9100398.03,
+    "revenue_share_top_10pct": 0.9397
+  },
+  {
+    "year": 2025,
+    "region": "LATAM",
+    "category": "PRODUCTIVITY",
+    "top_10pct_apps": 36,
+    "top_10pct_revenue": 11922626.4155,
+    "revenue_share_top_10pct": 0.9469
+  },
+  {
+    "year": 2025,
+    "region": "LATAM",
+    "category": "UTILITIES",
+    "top_10pct_apps": 101,
+    "top_10pct_revenue": 19591244.9732,
+    "revenue_share_top_10pct": 0.9091
+  },
+  {
+    "year": 2025,
+    "region": "MEA",
+    "category": "All",
+    "top_10pct_apps": 321,
+    "top_10pct_revenue": 52092329.286,
+    "revenue_share_top_10pct": 0.9398
+  },
+  {
+    "year": 2025,
+    "region": "MEA",
+    "category": "EDUCATION",
+    "top_10pct_apps": 24,
+    "top_10pct_revenue": 2376798.3306,
+    "revenue_share_top_10pct": 0.9442
+  },
+  {
+    "year": 2025,
+    "region": "MEA",
+    "category": "ENTERTAINMENT",
+    "top_10pct_apps": 37,
+    "top_10pct_revenue": 2451871.6338,
+    "revenue_share_top_10pct": 0.8791
+  },
+  {
+    "year": 2025,
+    "region": "MEA",
+    "category": "GRAPHICS_AND_DESIGN",
+    "top_10pct_apps": 25,
+    "top_10pct_revenue": 3442218.4049,
+    "revenue_share_top_10pct": 0.9481
+  },
+  {
+    "year": 2025,
+    "region": "MEA",
+    "category": "HEALTH_AND_FITNESS",
+    "top_10pct_apps": 35,
+    "top_10pct_revenue": 1476056.2512,
+    "revenue_share_top_10pct": 0.8707
+  },
+  {
+    "year": 2025,
+    "region": "MEA",
+    "category": "LIFESTYLE",
+    "top_10pct_apps": 27,
+    "top_10pct_revenue": 6262667.0226,
+    "revenue_share_top_10pct": 0.9707
+  },
+  {
+    "year": 2025,
+    "region": "MEA",
+    "category": "PHOTO_AND_VIDEO",
+    "top_10pct_apps": 33,
+    "top_10pct_revenue": 8143430.7025,
+    "revenue_share_top_10pct": 0.9254
+  },
+  {
+    "year": 2025,
+    "region": "MEA",
+    "category": "PRODUCTIVITY",
+    "top_10pct_apps": 43,
+    "top_10pct_revenue": 7351485.7669,
+    "revenue_share_top_10pct": 0.9334
+  },
+  {
+    "year": 2025,
+    "region": "MEA",
+    "category": "UTILITIES",
+    "top_10pct_apps": 101,
+    "top_10pct_revenue": 20476845.194,
+    "revenue_share_top_10pct": 0.9449
+  },
+  {
+    "year": 2025,
+    "region": "North America",
+    "category": "All",
+    "top_10pct_apps": 429,
+    "top_10pct_revenue": 454275477.5657,
+    "revenue_share_top_10pct": 0.9201
+  },
+  {
+    "year": 2025,
+    "region": "North America",
+    "category": "EDUCATION",
+    "top_10pct_apps": 38,
+    "top_10pct_revenue": 31833291.6212,
+    "revenue_share_top_10pct": 0.9504
+  },
+  {
+    "year": 2025,
+    "region": "North America",
+    "category": "ENTERTAINMENT",
+    "top_10pct_apps": 49,
+    "top_10pct_revenue": 38511362.9383,
+    "revenue_share_top_10pct": 0.9433
+  },
+  {
+    "year": 2025,
+    "region": "North America",
+    "category": "GRAPHICS_AND_DESIGN",
+    "top_10pct_apps": 30,
+    "top_10pct_revenue": 22295877.1031,
+    "revenue_share_top_10pct": 0.9117
+  },
+  {
+    "year": 2025,
+    "region": "North America",
+    "category": "HEALTH_AND_FITNESS",
+    "top_10pct_apps": 48,
+    "top_10pct_revenue": 21861513.5617,
+    "revenue_share_top_10pct": 0.9108
+  },
+  {
+    "year": 2025,
+    "region": "North America",
+    "category": "LIFESTYLE",
+    "top_10pct_apps": 34,
+    "top_10pct_revenue": 71824384.234,
+    "revenue_share_top_10pct": 0.9707
+  },
+  {
+    "year": 2025,
+    "region": "North America",
+    "category": "PHOTO_AND_VIDEO",
+    "top_10pct_apps": 40,
+    "top_10pct_revenue": 46905944.5623,
+    "revenue_share_top_10pct": 0.9378
+  },
+  {
+    "year": 2025,
+    "region": "North America",
+    "category": "PRODUCTIVITY",
+    "top_10pct_apps": 55,
+    "top_10pct_revenue": 74453238.3606,
+    "revenue_share_top_10pct": 0.9431
+  },
+  {
+    "year": 2025,
+    "region": "North America",
+    "category": "UTILITIES",
+    "top_10pct_apps": 137,
+    "top_10pct_revenue": 140041525.7203,
+    "revenue_share_top_10pct": 0.8337
+  }
+]

@@ -1,0 +1,2270 @@
+[
+  {
+    "country": "All",
+    "region": "Global",
+    "category": "All",
+    "time_bucket": "Day0",
+    "bucket_share": 0.8421
+  },
+  {
+    "country": "All",
+    "region": "Global",
+    "category": "All",
+    "time_bucket": "Day15_30",
+    "bucket_share": 0.0197
+  },
+  {
+    "country": "All",
+    "region": "Global",
+    "category": "All",
+    "time_bucket": "Day1_3",
+    "bucket_share": 0.0504
+  },
+  {
+    "country": "All",
+    "region": "Global",
+    "category": "All",
+    "time_bucket": "Day31_plus",
+    "bucket_share": 0.0519
+  },
+  {
+    "country": "All",
+    "region": "Global",
+    "category": "All",
+    "time_bucket": "Day4_7",
+    "bucket_share": 0.0191
+  },
+  {
+    "country": "All",
+    "region": "Global",
+    "category": "All",
+    "time_bucket": "Day8_14",
+    "bucket_share": 0.0168
+  },
+  {
+    "country": "All",
+    "region": "Global",
+    "category": "EDUCATION",
+    "time_bucket": "Day0",
+    "bucket_share": 0.7477
+  },
+  {
+    "country": "All",
+    "region": "Global",
+    "category": "EDUCATION",
+    "time_bucket": "Day15_30",
+    "bucket_share": 0.0307
+  },
+  {
+    "country": "All",
+    "region": "Global",
+    "category": "EDUCATION",
+    "time_bucket": "Day1_3",
+    "bucket_share": 0.0795
+  },
+  {
+    "country": "All",
+    "region": "Global",
+    "category": "EDUCATION",
+    "time_bucket": "Day31_plus",
+    "bucket_share": 0.0846
+  },
+  {
+    "country": "All",
+    "region": "Global",
+    "category": "EDUCATION",
+    "time_bucket": "Day4_7",
+    "bucket_share": 0.0311
+  },
+  {
+    "country": "All",
+    "region": "Global",
+    "category": "EDUCATION",
+    "time_bucket": "Day8_14",
+    "bucket_share": 0.0265
+  },
+  {
+    "country": "All",
+    "region": "Global",
+    "category": "ENTERTAINMENT",
+    "time_bucket": "Day0",
+    "bucket_share": 0.8408
+  },
+  {
+    "country": "All",
+    "region": "Global",
+    "category": "ENTERTAINMENT",
+    "time_bucket": "Day15_30",
+    "bucket_share": 0.0215
+  },
+  {
+    "country": "All",
+    "region": "Global",
+    "category": "ENTERTAINMENT",
+    "time_bucket": "Day1_3",
+    "bucket_share": 0.0574
+  },
+  {
+    "country": "All",
+    "region": "Global",
+    "category": "ENTERTAINMENT",
+    "time_bucket": "Day31_plus",
+    "bucket_share": 0.0405
+  },
+  {
+    "country": "All",
+    "region": "Global",
+    "category": "ENTERTAINMENT",
+    "time_bucket": "Day4_7",
+    "bucket_share": 0.0216
+  },
+  {
+    "country": "All",
+    "region": "Global",
+    "category": "ENTERTAINMENT",
+    "time_bucket": "Day8_14",
+    "bucket_share": 0.0182
+  },
+  {
+    "country": "All",
+    "region": "Global",
+    "category": "GRAPHICS_AND_DESIGN",
+    "time_bucket": "Day0",
+    "bucket_share": 0.8818
+  },
+  {
+    "country": "All",
+    "region": "Global",
+    "category": "GRAPHICS_AND_DESIGN",
+    "time_bucket": "Day15_30",
+    "bucket_share": 0.0142
+  },
+  {
+    "country": "All",
+    "region": "Global",
+    "category": "GRAPHICS_AND_DESIGN",
+    "time_bucket": "Day1_3",
+    "bucket_share": 0.0413
+  },
+  {
+    "country": "All",
+    "region": "Global",
+    "category": "GRAPHICS_AND_DESIGN",
+    "time_bucket": "Day31_plus",
+    "bucket_share": 0.0344
+  },
+  {
+    "country": "All",
+    "region": "Global",
+    "category": "GRAPHICS_AND_DESIGN",
+    "time_bucket": "Day4_7",
+    "bucket_share": 0.0153
+  },
+  {
+    "country": "All",
+    "region": "Global",
+    "category": "GRAPHICS_AND_DESIGN",
+    "time_bucket": "Day8_14",
+    "bucket_share": 0.013
+  },
+  {
+    "country": "All",
+    "region": "Global",
+    "category": "HEALTH_AND_FITNESS",
+    "time_bucket": "Day0",
+    "bucket_share": 0.8355
+  },
+  {
+    "country": "All",
+    "region": "Global",
+    "category": "HEALTH_AND_FITNESS",
+    "time_bucket": "Day15_30",
+    "bucket_share": 0.0198
+  },
+  {
+    "country": "All",
+    "region": "Global",
+    "category": "HEALTH_AND_FITNESS",
+    "time_bucket": "Day1_3",
+    "bucket_share": 0.0523
+  },
+  {
+    "country": "All",
+    "region": "Global",
+    "category": "HEALTH_AND_FITNESS",
+    "time_bucket": "Day31_plus",
+    "bucket_share": 0.0512
+  },
+  {
+    "country": "All",
+    "region": "Global",
+    "category": "HEALTH_AND_FITNESS",
+    "time_bucket": "Day4_7",
+    "bucket_share": 0.0229
+  },
+  {
+    "country": "All",
+    "region": "Global",
+    "category": "HEALTH_AND_FITNESS",
+    "time_bucket": "Day8_14",
+    "bucket_share": 0.0182
+  },
+  {
+    "country": "All",
+    "region": "Global",
+    "category": "LIFESTYLE",
+    "time_bucket": "Day0",
+    "bucket_share": 0.7389
+  },
+  {
+    "country": "All",
+    "region": "Global",
+    "category": "LIFESTYLE",
+    "time_bucket": "Day15_30",
+    "bucket_share": 0.0335
+  },
+  {
+    "country": "All",
+    "region": "Global",
+    "category": "LIFESTYLE",
+    "time_bucket": "Day1_3",
+    "bucket_share": 0.0863
+  },
+  {
+    "country": "All",
+    "region": "Global",
+    "category": "LIFESTYLE",
+    "time_bucket": "Day31_plus",
+    "bucket_share": 0.0813
+  },
+  {
+    "country": "All",
+    "region": "Global",
+    "category": "LIFESTYLE",
+    "time_bucket": "Day4_7",
+    "bucket_share": 0.0313
+  },
+  {
+    "country": "All",
+    "region": "Global",
+    "category": "LIFESTYLE",
+    "time_bucket": "Day8_14",
+    "bucket_share": 0.0288
+  },
+  {
+    "country": "All",
+    "region": "Global",
+    "category": "PHOTO_AND_VIDEO",
+    "time_bucket": "Day0",
+    "bucket_share": 0.8509
+  },
+  {
+    "country": "All",
+    "region": "Global",
+    "category": "PHOTO_AND_VIDEO",
+    "time_bucket": "Day15_30",
+    "bucket_share": 0.0176
+  },
+  {
+    "country": "All",
+    "region": "Global",
+    "category": "PHOTO_AND_VIDEO",
+    "time_bucket": "Day1_3",
+    "bucket_share": 0.0473
+  },
+  {
+    "country": "All",
+    "region": "Global",
+    "category": "PHOTO_AND_VIDEO",
+    "time_bucket": "Day31_plus",
+    "bucket_share": 0.051
+  },
+  {
+    "country": "All",
+    "region": "Global",
+    "category": "PHOTO_AND_VIDEO",
+    "time_bucket": "Day4_7",
+    "bucket_share": 0.0177
+  },
+  {
+    "country": "All",
+    "region": "Global",
+    "category": "PHOTO_AND_VIDEO",
+    "time_bucket": "Day8_14",
+    "bucket_share": 0.0155
+  },
+  {
+    "country": "All",
+    "region": "Global",
+    "category": "PRODUCTIVITY",
+    "time_bucket": "Day0",
+    "bucket_share": 0.8822
+  },
+  {
+    "country": "All",
+    "region": "Global",
+    "category": "PRODUCTIVITY",
+    "time_bucket": "Day15_30",
+    "bucket_share": 0.0151
+  },
+  {
+    "country": "All",
+    "region": "Global",
+    "category": "PRODUCTIVITY",
+    "time_bucket": "Day1_3",
+    "bucket_share": 0.0328
+  },
+  {
+    "country": "All",
+    "region": "Global",
+    "category": "PRODUCTIVITY",
+    "time_bucket": "Day31_plus",
+    "bucket_share": 0.0433
+  },
+  {
+    "country": "All",
+    "region": "Global",
+    "category": "PRODUCTIVITY",
+    "time_bucket": "Day4_7",
+    "bucket_share": 0.0139
+  },
+  {
+    "country": "All",
+    "region": "Global",
+    "category": "PRODUCTIVITY",
+    "time_bucket": "Day8_14",
+    "bucket_share": 0.0126
+  },
+  {
+    "country": "All",
+    "region": "Global",
+    "category": "UTILITIES",
+    "time_bucket": "Day0",
+    "bucket_share": 0.8585
+  },
+  {
+    "country": "All",
+    "region": "Global",
+    "category": "UTILITIES",
+    "time_bucket": "Day15_30",
+    "bucket_share": 0.0165
+  },
+  {
+    "country": "All",
+    "region": "Global",
+    "category": "UTILITIES",
+    "time_bucket": "Day1_3",
+    "bucket_share": 0.0403
+  },
+  {
+    "country": "All",
+    "region": "Global",
+    "category": "UTILITIES",
+    "time_bucket": "Day31_plus",
+    "bucket_share": 0.0562
+  },
+  {
+    "country": "All",
+    "region": "Global",
+    "category": "UTILITIES",
+    "time_bucket": "Day4_7",
+    "bucket_share": 0.0151
+  },
+  {
+    "country": "All",
+    "region": "Global",
+    "category": "UTILITIES",
+    "time_bucket": "Day8_14",
+    "bucket_share": 0.0134
+  },
+  {
+    "country": "All",
+    "region": "APAC",
+    "category": "All",
+    "time_bucket": "Day0",
+    "bucket_share": 0.8379
+  },
+  {
+    "country": "All",
+    "region": "APAC",
+    "category": "All",
+    "time_bucket": "Day15_30",
+    "bucket_share": 0.0197
+  },
+  {
+    "country": "All",
+    "region": "APAC",
+    "category": "All",
+    "time_bucket": "Day1_3",
+    "bucket_share": 0.0529
+  },
+  {
+    "country": "All",
+    "region": "APAC",
+    "category": "All",
+    "time_bucket": "Day31_plus",
+    "bucket_share": 0.0521
+  },
+  {
+    "country": "All",
+    "region": "APAC",
+    "category": "All",
+    "time_bucket": "Day4_7",
+    "bucket_share": 0.0201
+  },
+  {
+    "country": "All",
+    "region": "APAC",
+    "category": "All",
+    "time_bucket": "Day8_14",
+    "bucket_share": 0.0173
+  },
+  {
+    "country": "All",
+    "region": "APAC",
+    "category": "EDUCATION",
+    "time_bucket": "Day0",
+    "bucket_share": 0.712
+  },
+  {
+    "country": "All",
+    "region": "APAC",
+    "category": "EDUCATION",
+    "time_bucket": "Day15_30",
+    "bucket_share": 0.0356
+  },
+  {
+    "country": "All",
+    "region": "APAC",
+    "category": "EDUCATION",
+    "time_bucket": "Day1_3",
+    "bucket_share": 0.1036
+  },
+  {
+    "country": "All",
+    "region": "APAC",
+    "category": "EDUCATION",
+    "time_bucket": "Day31_plus",
+    "bucket_share": 0.0787
+  },
+  {
+    "country": "All",
+    "region": "APAC",
+    "category": "EDUCATION",
+    "time_bucket": "Day4_7",
+    "bucket_share": 0.0386
+  },
+  {
+    "country": "All",
+    "region": "APAC",
+    "category": "EDUCATION",
+    "time_bucket": "Day8_14",
+    "bucket_share": 0.0315
+  },
+  {
+    "country": "All",
+    "region": "APAC",
+    "category": "ENTERTAINMENT",
+    "time_bucket": "Day0",
+    "bucket_share": 0.828
+  },
+  {
+    "country": "All",
+    "region": "APAC",
+    "category": "ENTERTAINMENT",
+    "time_bucket": "Day15_30",
+    "bucket_share": 0.0228
+  },
+  {
+    "country": "All",
+    "region": "APAC",
+    "category": "ENTERTAINMENT",
+    "time_bucket": "Day1_3",
+    "bucket_share": 0.0617
+  },
+  {
+    "country": "All",
+    "region": "APAC",
+    "category": "ENTERTAINMENT",
+    "time_bucket": "Day31_plus",
+    "bucket_share": 0.0439
+  },
+  {
+    "country": "All",
+    "region": "APAC",
+    "category": "ENTERTAINMENT",
+    "time_bucket": "Day4_7",
+    "bucket_share": 0.0229
+  },
+  {
+    "country": "All",
+    "region": "APAC",
+    "category": "ENTERTAINMENT",
+    "time_bucket": "Day8_14",
+    "bucket_share": 0.0206
+  },
+  {
+    "country": "All",
+    "region": "APAC",
+    "category": "GRAPHICS_AND_DESIGN",
+    "time_bucket": "Day0",
+    "bucket_share": 0.8412
+  },
+  {
+    "country": "All",
+    "region": "APAC",
+    "category": "GRAPHICS_AND_DESIGN",
+    "time_bucket": "Day15_30",
+    "bucket_share": 0.02
+  },
+  {
+    "country": "All",
+    "region": "APAC",
+    "category": "GRAPHICS_AND_DESIGN",
+    "time_bucket": "Day1_3",
+    "bucket_share": 0.0534
+  },
+  {
+    "country": "All",
+    "region": "APAC",
+    "category": "GRAPHICS_AND_DESIGN",
+    "time_bucket": "Day31_plus",
+    "bucket_share": 0.0469
+  },
+  {
+    "country": "All",
+    "region": "APAC",
+    "category": "GRAPHICS_AND_DESIGN",
+    "time_bucket": "Day4_7",
+    "bucket_share": 0.0204
+  },
+  {
+    "country": "All",
+    "region": "APAC",
+    "category": "GRAPHICS_AND_DESIGN",
+    "time_bucket": "Day8_14",
+    "bucket_share": 0.018
+  },
+  {
+    "country": "All",
+    "region": "APAC",
+    "category": "HEALTH_AND_FITNESS",
+    "time_bucket": "Day0",
+    "bucket_share": 0.7803
+  },
+  {
+    "country": "All",
+    "region": "APAC",
+    "category": "HEALTH_AND_FITNESS",
+    "time_bucket": "Day15_30",
+    "bucket_share": 0.0229
+  },
+  {
+    "country": "All",
+    "region": "APAC",
+    "category": "HEALTH_AND_FITNESS",
+    "time_bucket": "Day1_3",
+    "bucket_share": 0.0673
+  },
+  {
+    "country": "All",
+    "region": "APAC",
+    "category": "HEALTH_AND_FITNESS",
+    "time_bucket": "Day31_plus",
+    "bucket_share": 0.0646
+  },
+  {
+    "country": "All",
+    "region": "APAC",
+    "category": "HEALTH_AND_FITNESS",
+    "time_bucket": "Day4_7",
+    "bucket_share": 0.0417
+  },
+  {
+    "country": "All",
+    "region": "APAC",
+    "category": "HEALTH_AND_FITNESS",
+    "time_bucket": "Day8_14",
+    "bucket_share": 0.0233
+  },
+  {
+    "country": "All",
+    "region": "APAC",
+    "category": "LIFESTYLE",
+    "time_bucket": "Day0",
+    "bucket_share": 0.7781
+  },
+  {
+    "country": "All",
+    "region": "APAC",
+    "category": "LIFESTYLE",
+    "time_bucket": "Day15_30",
+    "bucket_share": 0.0284
+  },
+  {
+    "country": "All",
+    "region": "APAC",
+    "category": "LIFESTYLE",
+    "time_bucket": "Day1_3",
+    "bucket_share": 0.0741
+  },
+  {
+    "country": "All",
+    "region": "APAC",
+    "category": "LIFESTYLE",
+    "time_bucket": "Day31_plus",
+    "bucket_share": 0.0695
+  },
+  {
+    "country": "All",
+    "region": "APAC",
+    "category": "LIFESTYLE",
+    "time_bucket": "Day4_7",
+    "bucket_share": 0.0257
+  },
+  {
+    "country": "All",
+    "region": "APAC",
+    "category": "LIFESTYLE",
+    "time_bucket": "Day8_14",
+    "bucket_share": 0.0243
+  },
+  {
+    "country": "All",
+    "region": "APAC",
+    "category": "PHOTO_AND_VIDEO",
+    "time_bucket": "Day0",
+    "bucket_share": 0.8208
+  },
+  {
+    "country": "All",
+    "region": "APAC",
+    "category": "PHOTO_AND_VIDEO",
+    "time_bucket": "Day15_30",
+    "bucket_share": 0.0211
+  },
+  {
+    "country": "All",
+    "region": "APAC",
+    "category": "PHOTO_AND_VIDEO",
+    "time_bucket": "Day1_3",
+    "bucket_share": 0.0576
+  },
+  {
+    "country": "All",
+    "region": "APAC",
+    "category": "PHOTO_AND_VIDEO",
+    "time_bucket": "Day31_plus",
+    "bucket_share": 0.0596
+  },
+  {
+    "country": "All",
+    "region": "APAC",
+    "category": "PHOTO_AND_VIDEO",
+    "time_bucket": "Day4_7",
+    "bucket_share": 0.0221
+  },
+  {
+    "country": "All",
+    "region": "APAC",
+    "category": "PHOTO_AND_VIDEO",
+    "time_bucket": "Day8_14",
+    "bucket_share": 0.0188
+  },
+  {
+    "country": "All",
+    "region": "APAC",
+    "category": "PRODUCTIVITY",
+    "time_bucket": "Day0",
+    "bucket_share": 0.8785
+  },
+  {
+    "country": "All",
+    "region": "APAC",
+    "category": "PRODUCTIVITY",
+    "time_bucket": "Day15_30",
+    "bucket_share": 0.0151
+  },
+  {
+    "country": "All",
+    "region": "APAC",
+    "category": "PRODUCTIVITY",
+    "time_bucket": "Day1_3",
+    "bucket_share": 0.0361
+  },
+  {
+    "country": "All",
+    "region": "APAC",
+    "category": "PRODUCTIVITY",
+    "time_bucket": "Day31_plus",
+    "bucket_share": 0.0429
+  },
+  {
+    "country": "All",
+    "region": "APAC",
+    "category": "PRODUCTIVITY",
+    "time_bucket": "Day4_7",
+    "bucket_share": 0.014
+  },
+  {
+    "country": "All",
+    "region": "APAC",
+    "category": "PRODUCTIVITY",
+    "time_bucket": "Day8_14",
+    "bucket_share": 0.0134
+  },
+  {
+    "country": "All",
+    "region": "APAC",
+    "category": "UTILITIES",
+    "time_bucket": "Day0",
+    "bucket_share": 0.8606
+  },
+  {
+    "country": "All",
+    "region": "APAC",
+    "category": "UTILITIES",
+    "time_bucket": "Day15_30",
+    "bucket_share": 0.0165
+  },
+  {
+    "country": "All",
+    "region": "APAC",
+    "category": "UTILITIES",
+    "time_bucket": "Day1_3",
+    "bucket_share": 0.0402
+  },
+  {
+    "country": "All",
+    "region": "APAC",
+    "category": "UTILITIES",
+    "time_bucket": "Day31_plus",
+    "bucket_share": 0.0544
+  },
+  {
+    "country": "All",
+    "region": "APAC",
+    "category": "UTILITIES",
+    "time_bucket": "Day4_7",
+    "bucket_share": 0.0152
+  },
+  {
+    "country": "All",
+    "region": "APAC",
+    "category": "UTILITIES",
+    "time_bucket": "Day8_14",
+    "bucket_share": 0.0132
+  },
+  {
+    "country": "All",
+    "region": "Europe",
+    "category": "All",
+    "time_bucket": "Day0",
+    "bucket_share": 0.8176
+  },
+  {
+    "country": "All",
+    "region": "Europe",
+    "category": "All",
+    "time_bucket": "Day15_30",
+    "bucket_share": 0.0226
+  },
+  {
+    "country": "All",
+    "region": "Europe",
+    "category": "All",
+    "time_bucket": "Day1_3",
+    "bucket_share": 0.0565
+  },
+  {
+    "country": "All",
+    "region": "Europe",
+    "category": "All",
+    "time_bucket": "Day31_plus",
+    "bucket_share": 0.0617
+  },
+  {
+    "country": "All",
+    "region": "Europe",
+    "category": "All",
+    "time_bucket": "Day4_7",
+    "bucket_share": 0.0221
+  },
+  {
+    "country": "All",
+    "region": "Europe",
+    "category": "All",
+    "time_bucket": "Day8_14",
+    "bucket_share": 0.0195
+  },
+  {
+    "country": "All",
+    "region": "Europe",
+    "category": "EDUCATION",
+    "time_bucket": "Day0",
+    "bucket_share": 0.665
+  },
+  {
+    "country": "All",
+    "region": "Europe",
+    "category": "EDUCATION",
+    "time_bucket": "Day15_30",
+    "bucket_share": 0.0398
+  },
+  {
+    "country": "All",
+    "region": "Europe",
+    "category": "EDUCATION",
+    "time_bucket": "Day1_3",
+    "bucket_share": 0.1167
+  },
+  {
+    "country": "All",
+    "region": "Europe",
+    "category": "EDUCATION",
+    "time_bucket": "Day31_plus",
+    "bucket_share": 0.0997
+  },
+  {
+    "country": "All",
+    "region": "Europe",
+    "category": "EDUCATION",
+    "time_bucket": "Day4_7",
+    "bucket_share": 0.0436
+  },
+  {
+    "country": "All",
+    "region": "Europe",
+    "category": "EDUCATION",
+    "time_bucket": "Day8_14",
+    "bucket_share": 0.0351
+  },
+  {
+    "country": "All",
+    "region": "Europe",
+    "category": "ENTERTAINMENT",
+    "time_bucket": "Day0",
+    "bucket_share": 0.836
+  },
+  {
+    "country": "All",
+    "region": "Europe",
+    "category": "ENTERTAINMENT",
+    "time_bucket": "Day15_30",
+    "bucket_share": 0.0219
+  },
+  {
+    "country": "All",
+    "region": "Europe",
+    "category": "ENTERTAINMENT",
+    "time_bucket": "Day1_3",
+    "bucket_share": 0.0571
+  },
+  {
+    "country": "All",
+    "region": "Europe",
+    "category": "ENTERTAINMENT",
+    "time_bucket": "Day31_plus",
+    "bucket_share": 0.0435
+  },
+  {
+    "country": "All",
+    "region": "Europe",
+    "category": "ENTERTAINMENT",
+    "time_bucket": "Day4_7",
+    "bucket_share": 0.0225
+  },
+  {
+    "country": "All",
+    "region": "Europe",
+    "category": "ENTERTAINMENT",
+    "time_bucket": "Day8_14",
+    "bucket_share": 0.019
+  },
+  {
+    "country": "All",
+    "region": "Europe",
+    "category": "GRAPHICS_AND_DESIGN",
+    "time_bucket": "Day0",
+    "bucket_share": 0.8722
+  },
+  {
+    "country": "All",
+    "region": "Europe",
+    "category": "GRAPHICS_AND_DESIGN",
+    "time_bucket": "Day15_30",
+    "bucket_share": 0.0155
+  },
+  {
+    "country": "All",
+    "region": "Europe",
+    "category": "GRAPHICS_AND_DESIGN",
+    "time_bucket": "Day1_3",
+    "bucket_share": 0.0429
+  },
+  {
+    "country": "All",
+    "region": "Europe",
+    "category": "GRAPHICS_AND_DESIGN",
+    "time_bucket": "Day31_plus",
+    "bucket_share": 0.0384
+  },
+  {
+    "country": "All",
+    "region": "Europe",
+    "category": "GRAPHICS_AND_DESIGN",
+    "time_bucket": "Day4_7",
+    "bucket_share": 0.0168
+  },
+  {
+    "country": "All",
+    "region": "Europe",
+    "category": "GRAPHICS_AND_DESIGN",
+    "time_bucket": "Day8_14",
+    "bucket_share": 0.0143
+  },
+  {
+    "country": "All",
+    "region": "Europe",
+    "category": "HEALTH_AND_FITNESS",
+    "time_bucket": "Day0",
+    "bucket_share": 0.813
+  },
+  {
+    "country": "All",
+    "region": "Europe",
+    "category": "HEALTH_AND_FITNESS",
+    "time_bucket": "Day15_30",
+    "bucket_share": 0.0221
+  },
+  {
+    "country": "All",
+    "region": "Europe",
+    "category": "HEALTH_AND_FITNESS",
+    "time_bucket": "Day1_3",
+    "bucket_share": 0.0649
+  },
+  {
+    "country": "All",
+    "region": "Europe",
+    "category": "HEALTH_AND_FITNESS",
+    "time_bucket": "Day31_plus",
+    "bucket_share": 0.0518
+  },
+  {
+    "country": "All",
+    "region": "Europe",
+    "category": "HEALTH_AND_FITNESS",
+    "time_bucket": "Day4_7",
+    "bucket_share": 0.0268
+  },
+  {
+    "country": "All",
+    "region": "Europe",
+    "category": "HEALTH_AND_FITNESS",
+    "time_bucket": "Day8_14",
+    "bucket_share": 0.0215
+  },
+  {
+    "country": "All",
+    "region": "Europe",
+    "category": "LIFESTYLE",
+    "time_bucket": "Day0",
+    "bucket_share": 0.6704
+  },
+  {
+    "country": "All",
+    "region": "Europe",
+    "category": "LIFESTYLE",
+    "time_bucket": "Day15_30",
+    "bucket_share": 0.0442
+  },
+  {
+    "country": "All",
+    "region": "Europe",
+    "category": "LIFESTYLE",
+    "time_bucket": "Day1_3",
+    "bucket_share": 0.1016
+  },
+  {
+    "country": "All",
+    "region": "Europe",
+    "category": "LIFESTYLE",
+    "time_bucket": "Day31_plus",
+    "bucket_share": 0.1082
+  },
+  {
+    "country": "All",
+    "region": "Europe",
+    "category": "LIFESTYLE",
+    "time_bucket": "Day4_7",
+    "bucket_share": 0.0386
+  },
+  {
+    "country": "All",
+    "region": "Europe",
+    "category": "LIFESTYLE",
+    "time_bucket": "Day8_14",
+    "bucket_share": 0.037
+  },
+  {
+    "country": "All",
+    "region": "Europe",
+    "category": "PHOTO_AND_VIDEO",
+    "time_bucket": "Day0",
+    "bucket_share": 0.8234
+  },
+  {
+    "country": "All",
+    "region": "Europe",
+    "category": "PHOTO_AND_VIDEO",
+    "time_bucket": "Day15_30",
+    "bucket_share": 0.0211
+  },
+  {
+    "country": "All",
+    "region": "Europe",
+    "category": "PHOTO_AND_VIDEO",
+    "time_bucket": "Day1_3",
+    "bucket_share": 0.0506
+  },
+  {
+    "country": "All",
+    "region": "Europe",
+    "category": "PHOTO_AND_VIDEO",
+    "time_bucket": "Day31_plus",
+    "bucket_share": 0.0665
+  },
+  {
+    "country": "All",
+    "region": "Europe",
+    "category": "PHOTO_AND_VIDEO",
+    "time_bucket": "Day4_7",
+    "bucket_share": 0.0202
+  },
+  {
+    "country": "All",
+    "region": "Europe",
+    "category": "PHOTO_AND_VIDEO",
+    "time_bucket": "Day8_14",
+    "bucket_share": 0.0181
+  },
+  {
+    "country": "All",
+    "region": "Europe",
+    "category": "PRODUCTIVITY",
+    "time_bucket": "Day0",
+    "bucket_share": 0.8721
+  },
+  {
+    "country": "All",
+    "region": "Europe",
+    "category": "PRODUCTIVITY",
+    "time_bucket": "Day15_30",
+    "bucket_share": 0.0159
+  },
+  {
+    "country": "All",
+    "region": "Europe",
+    "category": "PRODUCTIVITY",
+    "time_bucket": "Day1_3",
+    "bucket_share": 0.0344
+  },
+  {
+    "country": "All",
+    "region": "Europe",
+    "category": "PRODUCTIVITY",
+    "time_bucket": "Day31_plus",
+    "bucket_share": 0.049
+  },
+  {
+    "country": "All",
+    "region": "Europe",
+    "category": "PRODUCTIVITY",
+    "time_bucket": "Day4_7",
+    "bucket_share": 0.0151
+  },
+  {
+    "country": "All",
+    "region": "Europe",
+    "category": "PRODUCTIVITY",
+    "time_bucket": "Day8_14",
+    "bucket_share": 0.0134
+  },
+  {
+    "country": "All",
+    "region": "Europe",
+    "category": "UTILITIES",
+    "time_bucket": "Day0",
+    "bucket_share": 0.8576
+  },
+  {
+    "country": "All",
+    "region": "Europe",
+    "category": "UTILITIES",
+    "time_bucket": "Day15_30",
+    "bucket_share": 0.0157
+  },
+  {
+    "country": "All",
+    "region": "Europe",
+    "category": "UTILITIES",
+    "time_bucket": "Day1_3",
+    "bucket_share": 0.0491
+  },
+  {
+    "country": "All",
+    "region": "Europe",
+    "category": "UTILITIES",
+    "time_bucket": "Day31_plus",
+    "bucket_share": 0.0451
+  },
+  {
+    "country": "All",
+    "region": "Europe",
+    "category": "UTILITIES",
+    "time_bucket": "Day4_7",
+    "bucket_share": 0.018
+  },
+  {
+    "country": "All",
+    "region": "Europe",
+    "category": "UTILITIES",
+    "time_bucket": "Day8_14",
+    "bucket_share": 0.0144
+  },
+  {
+    "country": "All",
+    "region": "LATAM",
+    "category": "All",
+    "time_bucket": "Day0",
+    "bucket_share": 0.8481
+  },
+  {
+    "country": "All",
+    "region": "LATAM",
+    "category": "All",
+    "time_bucket": "Day15_30",
+    "bucket_share": 0.0199
+  },
+  {
+    "country": "All",
+    "region": "LATAM",
+    "category": "All",
+    "time_bucket": "Day1_3",
+    "bucket_share": 0.0495
+  },
+  {
+    "country": "All",
+    "region": "LATAM",
+    "category": "All",
+    "time_bucket": "Day31_plus",
+    "bucket_share": 0.0477
+  },
+  {
+    "country": "All",
+    "region": "LATAM",
+    "category": "All",
+    "time_bucket": "Day4_7",
+    "bucket_share": 0.0185
+  },
+  {
+    "country": "All",
+    "region": "LATAM",
+    "category": "All",
+    "time_bucket": "Day8_14",
+    "bucket_share": 0.0163
+  },
+  {
+    "country": "All",
+    "region": "LATAM",
+    "category": "EDUCATION",
+    "time_bucket": "Day0",
+    "bucket_share": 0.7191
+  },
+  {
+    "country": "All",
+    "region": "LATAM",
+    "category": "EDUCATION",
+    "time_bucket": "Day15_30",
+    "bucket_share": 0.0338
+  },
+  {
+    "country": "All",
+    "region": "LATAM",
+    "category": "EDUCATION",
+    "time_bucket": "Day1_3",
+    "bucket_share": 0.0988
+  },
+  {
+    "country": "All",
+    "region": "LATAM",
+    "category": "EDUCATION",
+    "time_bucket": "Day31_plus",
+    "bucket_share": 0.0797
+  },
+  {
+    "country": "All",
+    "region": "LATAM",
+    "category": "EDUCATION",
+    "time_bucket": "Day4_7",
+    "bucket_share": 0.0367
+  },
+  {
+    "country": "All",
+    "region": "LATAM",
+    "category": "EDUCATION",
+    "time_bucket": "Day8_14",
+    "bucket_share": 0.0318
+  },
+  {
+    "country": "All",
+    "region": "LATAM",
+    "category": "ENTERTAINMENT",
+    "time_bucket": "Day0",
+    "bucket_share": 0.7574
+  },
+  {
+    "country": "All",
+    "region": "LATAM",
+    "category": "ENTERTAINMENT",
+    "time_bucket": "Day15_30",
+    "bucket_share": 0.0439
+  },
+  {
+    "country": "All",
+    "region": "LATAM",
+    "category": "ENTERTAINMENT",
+    "time_bucket": "Day1_3",
+    "bucket_share": 0.0753
+  },
+  {
+    "country": "All",
+    "region": "LATAM",
+    "category": "ENTERTAINMENT",
+    "time_bucket": "Day31_plus",
+    "bucket_share": 0.0525
+  },
+  {
+    "country": "All",
+    "region": "LATAM",
+    "category": "ENTERTAINMENT",
+    "time_bucket": "Day4_7",
+    "bucket_share": 0.0372
+  },
+  {
+    "country": "All",
+    "region": "LATAM",
+    "category": "ENTERTAINMENT",
+    "time_bucket": "Day8_14",
+    "bucket_share": 0.0337
+  },
+  {
+    "country": "All",
+    "region": "LATAM",
+    "category": "GRAPHICS_AND_DESIGN",
+    "time_bucket": "Day0",
+    "bucket_share": 0.8848
+  },
+  {
+    "country": "All",
+    "region": "LATAM",
+    "category": "GRAPHICS_AND_DESIGN",
+    "time_bucket": "Day15_30",
+    "bucket_share": 0.013
+  },
+  {
+    "country": "All",
+    "region": "LATAM",
+    "category": "GRAPHICS_AND_DESIGN",
+    "time_bucket": "Day1_3",
+    "bucket_share": 0.0429
+  },
+  {
+    "country": "All",
+    "region": "LATAM",
+    "category": "GRAPHICS_AND_DESIGN",
+    "time_bucket": "Day31_plus",
+    "bucket_share": 0.0316
+  },
+  {
+    "country": "All",
+    "region": "LATAM",
+    "category": "GRAPHICS_AND_DESIGN",
+    "time_bucket": "Day4_7",
+    "bucket_share": 0.015
+  },
+  {
+    "country": "All",
+    "region": "LATAM",
+    "category": "GRAPHICS_AND_DESIGN",
+    "time_bucket": "Day8_14",
+    "bucket_share": 0.0127
+  },
+  {
+    "country": "All",
+    "region": "LATAM",
+    "category": "HEALTH_AND_FITNESS",
+    "time_bucket": "Day0",
+    "bucket_share": 0.8219
+  },
+  {
+    "country": "All",
+    "region": "LATAM",
+    "category": "HEALTH_AND_FITNESS",
+    "time_bucket": "Day15_30",
+    "bucket_share": 0.0205
+  },
+  {
+    "country": "All",
+    "region": "LATAM",
+    "category": "HEALTH_AND_FITNESS",
+    "time_bucket": "Day1_3",
+    "bucket_share": 0.0597
+  },
+  {
+    "country": "All",
+    "region": "LATAM",
+    "category": "HEALTH_AND_FITNESS",
+    "time_bucket": "Day31_plus",
+    "bucket_share": 0.0503
+  },
+  {
+    "country": "All",
+    "region": "LATAM",
+    "category": "HEALTH_AND_FITNESS",
+    "time_bucket": "Day4_7",
+    "bucket_share": 0.0262
+  },
+  {
+    "country": "All",
+    "region": "LATAM",
+    "category": "HEALTH_AND_FITNESS",
+    "time_bucket": "Day8_14",
+    "bucket_share": 0.0214
+  },
+  {
+    "country": "All",
+    "region": "LATAM",
+    "category": "LIFESTYLE",
+    "time_bucket": "Day0",
+    "bucket_share": 0.8504
+  },
+  {
+    "country": "All",
+    "region": "LATAM",
+    "category": "LIFESTYLE",
+    "time_bucket": "Day15_30",
+    "bucket_share": 0.0177
+  },
+  {
+    "country": "All",
+    "region": "LATAM",
+    "category": "LIFESTYLE",
+    "time_bucket": "Day1_3",
+    "bucket_share": 0.0515
+  },
+  {
+    "country": "All",
+    "region": "LATAM",
+    "category": "LIFESTYLE",
+    "time_bucket": "Day31_plus",
+    "bucket_share": 0.0478
+  },
+  {
+    "country": "All",
+    "region": "LATAM",
+    "category": "LIFESTYLE",
+    "time_bucket": "Day4_7",
+    "bucket_share": 0.0176
+  },
+  {
+    "country": "All",
+    "region": "LATAM",
+    "category": "LIFESTYLE",
+    "time_bucket": "Day8_14",
+    "bucket_share": 0.0151
+  },
+  {
+    "country": "All",
+    "region": "LATAM",
+    "category": "PHOTO_AND_VIDEO",
+    "time_bucket": "Day0",
+    "bucket_share": 0.8371
+  },
+  {
+    "country": "All",
+    "region": "LATAM",
+    "category": "PHOTO_AND_VIDEO",
+    "time_bucket": "Day15_30",
+    "bucket_share": 0.0184
+  },
+  {
+    "country": "All",
+    "region": "LATAM",
+    "category": "PHOTO_AND_VIDEO",
+    "time_bucket": "Day1_3",
+    "bucket_share": 0.0518
+  },
+  {
+    "country": "All",
+    "region": "LATAM",
+    "category": "PHOTO_AND_VIDEO",
+    "time_bucket": "Day31_plus",
+    "bucket_share": 0.0593
+  },
+  {
+    "country": "All",
+    "region": "LATAM",
+    "category": "PHOTO_AND_VIDEO",
+    "time_bucket": "Day4_7",
+    "bucket_share": 0.018
+  },
+  {
+    "country": "All",
+    "region": "LATAM",
+    "category": "PHOTO_AND_VIDEO",
+    "time_bucket": "Day8_14",
+    "bucket_share": 0.0155
+  },
+  {
+    "country": "All",
+    "region": "LATAM",
+    "category": "PRODUCTIVITY",
+    "time_bucket": "Day0",
+    "bucket_share": 0.8789
+  },
+  {
+    "country": "All",
+    "region": "LATAM",
+    "category": "PRODUCTIVITY",
+    "time_bucket": "Day15_30",
+    "bucket_share": 0.0157
+  },
+  {
+    "country": "All",
+    "region": "LATAM",
+    "category": "PRODUCTIVITY",
+    "time_bucket": "Day1_3",
+    "bucket_share": 0.0347
+  },
+  {
+    "country": "All",
+    "region": "LATAM",
+    "category": "PRODUCTIVITY",
+    "time_bucket": "Day31_plus",
+    "bucket_share": 0.0446
+  },
+  {
+    "country": "All",
+    "region": "LATAM",
+    "category": "PRODUCTIVITY",
+    "time_bucket": "Day4_7",
+    "bucket_share": 0.0138
+  },
+  {
+    "country": "All",
+    "region": "LATAM",
+    "category": "PRODUCTIVITY",
+    "time_bucket": "Day8_14",
+    "bucket_share": 0.0123
+  },
+  {
+    "country": "All",
+    "region": "LATAM",
+    "category": "UTILITIES",
+    "time_bucket": "Day0",
+    "bucket_share": 0.8584
+  },
+  {
+    "country": "All",
+    "region": "LATAM",
+    "category": "UTILITIES",
+    "time_bucket": "Day15_30",
+    "bucket_share": 0.0188
+  },
+  {
+    "country": "All",
+    "region": "LATAM",
+    "category": "UTILITIES",
+    "time_bucket": "Day1_3",
+    "bucket_share": 0.0411
+  },
+  {
+    "country": "All",
+    "region": "LATAM",
+    "category": "UTILITIES",
+    "time_bucket": "Day31_plus",
+    "bucket_share": 0.0489
+  },
+  {
+    "country": "All",
+    "region": "LATAM",
+    "category": "UTILITIES",
+    "time_bucket": "Day4_7",
+    "bucket_share": 0.0166
+  },
+  {
+    "country": "All",
+    "region": "LATAM",
+    "category": "UTILITIES",
+    "time_bucket": "Day8_14",
+    "bucket_share": 0.0162
+  },
+  {
+    "country": "All",
+    "region": "MEA",
+    "category": "All",
+    "time_bucket": "Day0",
+    "bucket_share": 0.8092
+  },
+  {
+    "country": "All",
+    "region": "MEA",
+    "category": "All",
+    "time_bucket": "Day15_30",
+    "bucket_share": 0.0224
+  },
+  {
+    "country": "All",
+    "region": "MEA",
+    "category": "All",
+    "time_bucket": "Day1_3",
+    "bucket_share": 0.0565
+  },
+  {
+    "country": "All",
+    "region": "MEA",
+    "category": "All",
+    "time_bucket": "Day31_plus",
+    "bucket_share": 0.0721
+  },
+  {
+    "country": "All",
+    "region": "MEA",
+    "category": "All",
+    "time_bucket": "Day4_7",
+    "bucket_share": 0.0213
+  },
+  {
+    "country": "All",
+    "region": "MEA",
+    "category": "All",
+    "time_bucket": "Day8_14",
+    "bucket_share": 0.0185
+  },
+  {
+    "country": "All",
+    "region": "MEA",
+    "category": "EDUCATION",
+    "time_bucket": "Day0",
+    "bucket_share": 0.7522
+  },
+  {
+    "country": "All",
+    "region": "MEA",
+    "category": "EDUCATION",
+    "time_bucket": "Day15_30",
+    "bucket_share": 0.0292
+  },
+  {
+    "country": "All",
+    "region": "MEA",
+    "category": "EDUCATION",
+    "time_bucket": "Day1_3",
+    "bucket_share": 0.0728
+  },
+  {
+    "country": "All",
+    "region": "MEA",
+    "category": "EDUCATION",
+    "time_bucket": "Day31_plus",
+    "bucket_share": 0.0972
+  },
+  {
+    "country": "All",
+    "region": "MEA",
+    "category": "EDUCATION",
+    "time_bucket": "Day4_7",
+    "bucket_share": 0.0248
+  },
+  {
+    "country": "All",
+    "region": "MEA",
+    "category": "EDUCATION",
+    "time_bucket": "Day8_14",
+    "bucket_share": 0.0238
+  },
+  {
+    "country": "All",
+    "region": "MEA",
+    "category": "ENTERTAINMENT",
+    "time_bucket": "Day0",
+    "bucket_share": 0.852
+  },
+  {
+    "country": "All",
+    "region": "MEA",
+    "category": "ENTERTAINMENT",
+    "time_bucket": "Day15_30",
+    "bucket_share": 0.0198
+  },
+  {
+    "country": "All",
+    "region": "MEA",
+    "category": "ENTERTAINMENT",
+    "time_bucket": "Day1_3",
+    "bucket_share": 0.0544
+  },
+  {
+    "country": "All",
+    "region": "MEA",
+    "category": "ENTERTAINMENT",
+    "time_bucket": "Day31_plus",
+    "bucket_share": 0.0387
+  },
+  {
+    "country": "All",
+    "region": "MEA",
+    "category": "ENTERTAINMENT",
+    "time_bucket": "Day4_7",
+    "bucket_share": 0.0194
+  },
+  {
+    "country": "All",
+    "region": "MEA",
+    "category": "ENTERTAINMENT",
+    "time_bucket": "Day8_14",
+    "bucket_share": 0.0157
+  },
+  {
+    "country": "All",
+    "region": "MEA",
+    "category": "GRAPHICS_AND_DESIGN",
+    "time_bucket": "Day0",
+    "bucket_share": 0.8628
+  },
+  {
+    "country": "All",
+    "region": "MEA",
+    "category": "GRAPHICS_AND_DESIGN",
+    "time_bucket": "Day15_30",
+    "bucket_share": 0.0146
+  },
+  {
+    "country": "All",
+    "region": "MEA",
+    "category": "GRAPHICS_AND_DESIGN",
+    "time_bucket": "Day1_3",
+    "bucket_share": 0.0514
+  },
+  {
+    "country": "All",
+    "region": "MEA",
+    "category": "GRAPHICS_AND_DESIGN",
+    "time_bucket": "Day31_plus",
+    "bucket_share": 0.0406
+  },
+  {
+    "country": "All",
+    "region": "MEA",
+    "category": "GRAPHICS_AND_DESIGN",
+    "time_bucket": "Day4_7",
+    "bucket_share": 0.0171
+  },
+  {
+    "country": "All",
+    "region": "MEA",
+    "category": "GRAPHICS_AND_DESIGN",
+    "time_bucket": "Day8_14",
+    "bucket_share": 0.0135
+  },
+  {
+    "country": "All",
+    "region": "MEA",
+    "category": "HEALTH_AND_FITNESS",
+    "time_bucket": "Day0",
+    "bucket_share": 0.8436
+  },
+  {
+    "country": "All",
+    "region": "MEA",
+    "category": "HEALTH_AND_FITNESS",
+    "time_bucket": "Day15_30",
+    "bucket_share": 0.0162
+  },
+  {
+    "country": "All",
+    "region": "MEA",
+    "category": "HEALTH_AND_FITNESS",
+    "time_bucket": "Day1_3",
+    "bucket_share": 0.0535
+  },
+  {
+    "country": "All",
+    "region": "MEA",
+    "category": "HEALTH_AND_FITNESS",
+    "time_bucket": "Day31_plus",
+    "bucket_share": 0.0506
+  },
+  {
+    "country": "All",
+    "region": "MEA",
+    "category": "HEALTH_AND_FITNESS",
+    "time_bucket": "Day4_7",
+    "bucket_share": 0.02
+  },
+  {
+    "country": "All",
+    "region": "MEA",
+    "category": "HEALTH_AND_FITNESS",
+    "time_bucket": "Day8_14",
+    "bucket_share": 0.0161
+  },
+  {
+    "country": "All",
+    "region": "MEA",
+    "category": "LIFESTYLE",
+    "time_bucket": "Day0",
+    "bucket_share": 0.8149
+  },
+  {
+    "country": "All",
+    "region": "MEA",
+    "category": "LIFESTYLE",
+    "time_bucket": "Day15_30",
+    "bucket_share": 0.0228
+  },
+  {
+    "country": "All",
+    "region": "MEA",
+    "category": "LIFESTYLE",
+    "time_bucket": "Day1_3",
+    "bucket_share": 0.0612
+  },
+  {
+    "country": "All",
+    "region": "MEA",
+    "category": "LIFESTYLE",
+    "time_bucket": "Day31_plus",
+    "bucket_share": 0.06
+  },
+  {
+    "country": "All",
+    "region": "MEA",
+    "category": "LIFESTYLE",
+    "time_bucket": "Day4_7",
+    "bucket_share": 0.022
+  },
+  {
+    "country": "All",
+    "region": "MEA",
+    "category": "LIFESTYLE",
+    "time_bucket": "Day8_14",
+    "bucket_share": 0.0191
+  },
+  {
+    "country": "All",
+    "region": "MEA",
+    "category": "PHOTO_AND_VIDEO",
+    "time_bucket": "Day0",
+    "bucket_share": 0.8367
+  },
+  {
+    "country": "All",
+    "region": "MEA",
+    "category": "PHOTO_AND_VIDEO",
+    "time_bucket": "Day15_30",
+    "bucket_share": 0.0195
+  },
+  {
+    "country": "All",
+    "region": "MEA",
+    "category": "PHOTO_AND_VIDEO",
+    "time_bucket": "Day1_3",
+    "bucket_share": 0.051
+  },
+  {
+    "country": "All",
+    "region": "MEA",
+    "category": "PHOTO_AND_VIDEO",
+    "time_bucket": "Day31_plus",
+    "bucket_share": 0.0566
+  },
+  {
+    "country": "All",
+    "region": "MEA",
+    "category": "PHOTO_AND_VIDEO",
+    "time_bucket": "Day4_7",
+    "bucket_share": 0.0193
+  },
+  {
+    "country": "All",
+    "region": "MEA",
+    "category": "PHOTO_AND_VIDEO",
+    "time_bucket": "Day8_14",
+    "bucket_share": 0.0169
+  },
+  {
+    "country": "All",
+    "region": "MEA",
+    "category": "PRODUCTIVITY",
+    "time_bucket": "Day0",
+    "bucket_share": 0.8613
+  },
+  {
+    "country": "All",
+    "region": "MEA",
+    "category": "PRODUCTIVITY",
+    "time_bucket": "Day15_30",
+    "bucket_share": 0.0177
+  },
+  {
+    "country": "All",
+    "region": "MEA",
+    "category": "PRODUCTIVITY",
+    "time_bucket": "Day1_3",
+    "bucket_share": 0.0374
+  },
+  {
+    "country": "All",
+    "region": "MEA",
+    "category": "PRODUCTIVITY",
+    "time_bucket": "Day31_plus",
+    "bucket_share": 0.053
+  },
+  {
+    "country": "All",
+    "region": "MEA",
+    "category": "PRODUCTIVITY",
+    "time_bucket": "Day4_7",
+    "bucket_share": 0.0158
+  },
+  {
+    "country": "All",
+    "region": "MEA",
+    "category": "PRODUCTIVITY",
+    "time_bucket": "Day8_14",
+    "bucket_share": 0.0147
+  },
+  {
+    "country": "All",
+    "region": "MEA",
+    "category": "UTILITIES",
+    "time_bucket": "Day0",
+    "bucket_share": 0.7721
+  },
+  {
+    "country": "All",
+    "region": "MEA",
+    "category": "UTILITIES",
+    "time_bucket": "Day15_30",
+    "bucket_share": 0.0246
+  },
+  {
+    "country": "All",
+    "region": "MEA",
+    "category": "UTILITIES",
+    "time_bucket": "Day1_3",
+    "bucket_share": 0.0394
+  },
+  {
+    "country": "All",
+    "region": "MEA",
+    "category": "UTILITIES",
+    "time_bucket": "Day31_plus",
+    "bucket_share": 0.1315
+  },
+  {
+    "country": "All",
+    "region": "MEA",
+    "category": "UTILITIES",
+    "time_bucket": "Day4_7",
+    "bucket_share": 0.0158
+  },
+  {
+    "country": "All",
+    "region": "MEA",
+    "category": "UTILITIES",
+    "time_bucket": "Day8_14",
+    "bucket_share": 0.0165
+  },
+  {
+    "country": "All",
+    "region": "North America",
+    "category": "All",
+    "time_bucket": "Day0",
+    "bucket_share": 0.8609
+  },
+  {
+    "country": "All",
+    "region": "North America",
+    "category": "All",
+    "time_bucket": "Day15_30",
+    "bucket_share": 0.0176
+  },
+  {
+    "country": "All",
+    "region": "North America",
+    "category": "All",
+    "time_bucket": "Day1_3",
+    "bucket_share": 0.0457
+  },
+  {
+    "country": "All",
+    "region": "North America",
+    "category": "All",
+    "time_bucket": "Day31_plus",
+    "bucket_share": 0.0438
+  },
+  {
+    "country": "All",
+    "region": "North America",
+    "category": "All",
+    "time_bucket": "Day4_7",
+    "bucket_share": 0.017
+  },
+  {
+    "country": "All",
+    "region": "North America",
+    "category": "All",
+    "time_bucket": "Day8_14",
+    "bucket_share": 0.0151
+  },
+  {
+    "country": "All",
+    "region": "North America",
+    "category": "EDUCATION",
+    "time_bucket": "Day0",
+    "bucket_share": 0.7959
+  },
+  {
+    "country": "All",
+    "region": "North America",
+    "category": "EDUCATION",
+    "time_bucket": "Day15_30",
+    "bucket_share": 0.0256
+  },
+  {
+    "country": "All",
+    "region": "North America",
+    "category": "EDUCATION",
+    "time_bucket": "Day1_3",
+    "bucket_share": 0.0573
+  },
+  {
+    "country": "All",
+    "region": "North America",
+    "category": "EDUCATION",
+    "time_bucket": "Day31_plus",
+    "bucket_share": 0.074
+  },
+  {
+    "country": "All",
+    "region": "North America",
+    "category": "EDUCATION",
+    "time_bucket": "Day4_7",
+    "bucket_share": 0.0254
+  },
+  {
+    "country": "All",
+    "region": "North America",
+    "category": "EDUCATION",
+    "time_bucket": "Day8_14",
+    "bucket_share": 0.0218
+  },
+  {
+    "country": "All",
+    "region": "North America",
+    "category": "ENTERTAINMENT",
+    "time_bucket": "Day0",
+    "bucket_share": 0.859
+  },
+  {
+    "country": "All",
+    "region": "North America",
+    "category": "ENTERTAINMENT",
+    "time_bucket": "Day15_30",
+    "bucket_share": 0.0171
+  },
+  {
+    "country": "All",
+    "region": "North America",
+    "category": "ENTERTAINMENT",
+    "time_bucket": "Day1_3",
+    "bucket_share": 0.0538
+  },
+  {
+    "country": "All",
+    "region": "North America",
+    "category": "ENTERTAINMENT",
+    "time_bucket": "Day31_plus",
+    "bucket_share": 0.0367
+  },
+  {
+    "country": "All",
+    "region": "North America",
+    "category": "ENTERTAINMENT",
+    "time_bucket": "Day4_7",
+    "bucket_share": 0.0183
+  },
+  {
+    "country": "All",
+    "region": "North America",
+    "category": "ENTERTAINMENT",
+    "time_bucket": "Day8_14",
+    "bucket_share": 0.015
+  },
+  {
+    "country": "All",
+    "region": "North America",
+    "category": "GRAPHICS_AND_DESIGN",
+    "time_bucket": "Day0",
+    "bucket_share": 0.9018
+  },
+  {
+    "country": "All",
+    "region": "North America",
+    "category": "GRAPHICS_AND_DESIGN",
+    "time_bucket": "Day15_30",
+    "bucket_share": 0.0121
+  },
+  {
+    "country": "All",
+    "region": "North America",
+    "category": "GRAPHICS_AND_DESIGN",
+    "time_bucket": "Day1_3",
+    "bucket_share": 0.0345
+  },
+  {
+    "country": "All",
+    "region": "North America",
+    "category": "GRAPHICS_AND_DESIGN",
+    "time_bucket": "Day31_plus",
+    "bucket_share": 0.028
+  },
+  {
+    "country": "All",
+    "region": "North America",
+    "category": "GRAPHICS_AND_DESIGN",
+    "time_bucket": "Day4_7",
+    "bucket_share": 0.0127
+  },
+  {
+    "country": "All",
+    "region": "North America",
+    "category": "GRAPHICS_AND_DESIGN",
+    "time_bucket": "Day8_14",
+    "bucket_share": 0.0108
+  },
+  {
+    "country": "All",
+    "region": "North America",
+    "category": "HEALTH_AND_FITNESS",
+    "time_bucket": "Day0",
+    "bucket_share": 0.8625
+  },
+  {
+    "country": "All",
+    "region": "North America",
+    "category": "HEALTH_AND_FITNESS",
+    "time_bucket": "Day15_30",
+    "bucket_share": 0.0186
+  },
+  {
+    "country": "All",
+    "region": "North America",
+    "category": "HEALTH_AND_FITNESS",
+    "time_bucket": "Day1_3",
+    "bucket_share": 0.0406
+  },
+  {
+    "country": "All",
+    "region": "North America",
+    "category": "HEALTH_AND_FITNESS",
+    "time_bucket": "Day31_plus",
+    "bucket_share": 0.0473
+  },
+  {
+    "country": "All",
+    "region": "North America",
+    "category": "HEALTH_AND_FITNESS",
+    "time_bucket": "Day4_7",
+    "bucket_share": 0.0158
+  },
+  {
+    "country": "All",
+    "region": "North America",
+    "category": "HEALTH_AND_FITNESS",
+    "time_bucket": "Day8_14",
+    "bucket_share": 0.0152
+  },
+  {
+    "country": "All",
+    "region": "North America",
+    "category": "LIFESTYLE",
+    "time_bucket": "Day0",
+    "bucket_share": 0.734
+  },
+  {
+    "country": "All",
+    "region": "North America",
+    "category": "LIFESTYLE",
+    "time_bucket": "Day15_30",
+    "bucket_share": 0.0334
+  },
+  {
+    "country": "All",
+    "region": "North America",
+    "category": "LIFESTYLE",
+    "time_bucket": "Day1_3",
+    "bucket_share": 0.0917
+  },
+  {
+    "country": "All",
+    "region": "North America",
+    "category": "LIFESTYLE",
+    "time_bucket": "Day31_plus",
+    "bucket_share": 0.0786
+  },
+  {
+    "country": "All",
+    "region": "North America",
+    "category": "LIFESTYLE",
+    "time_bucket": "Day4_7",
+    "bucket_share": 0.0327
+  },
+  {
+    "country": "All",
+    "region": "North America",
+    "category": "LIFESTYLE",
+    "time_bucket": "Day8_14",
+    "bucket_share": 0.0295
+  },
+  {
+    "country": "All",
+    "region": "North America",
+    "category": "PHOTO_AND_VIDEO",
+    "time_bucket": "Day0",
+    "bucket_share": 0.8832
+  },
+  {
+    "country": "All",
+    "region": "North America",
+    "category": "PHOTO_AND_VIDEO",
+    "time_bucket": "Day15_30",
+    "bucket_share": 0.0138
+  },
+  {
+    "country": "All",
+    "region": "North America",
+    "category": "PHOTO_AND_VIDEO",
+    "time_bucket": "Day1_3",
+    "bucket_share": 0.0405
+  },
+  {
+    "country": "All",
+    "region": "North America",
+    "category": "PHOTO_AND_VIDEO",
+    "time_bucket": "Day31_plus",
+    "bucket_share": 0.0354
+  },
+  {
+    "country": "All",
+    "region": "North America",
+    "category": "PHOTO_AND_VIDEO",
+    "time_bucket": "Day4_7",
+    "bucket_share": 0.0145
+  },
+  {
+    "country": "All",
+    "region": "North America",
+    "category": "PHOTO_AND_VIDEO",
+    "time_bucket": "Day8_14",
+    "bucket_share": 0.0127
+  },
+  {
+    "country": "All",
+    "region": "North America",
+    "category": "PRODUCTIVITY",
+    "time_bucket": "Day0",
+    "bucket_share": 0.8929
+  },
+  {
+    "country": "All",
+    "region": "North America",
+    "category": "PRODUCTIVITY",
+    "time_bucket": "Day15_30",
+    "bucket_share": 0.0141
+  },
+  {
+    "country": "All",
+    "region": "North America",
+    "category": "PRODUCTIVITY",
+    "time_bucket": "Day1_3",
+    "bucket_share": 0.0299
+  },
+  {
+    "country": "All",
+    "region": "North America",
+    "category": "PRODUCTIVITY",
+    "time_bucket": "Day31_plus",
+    "bucket_share": 0.0385
+  },
+  {
+    "country": "All",
+    "region": "North America",
+    "category": "PRODUCTIVITY",
+    "time_bucket": "Day4_7",
+    "bucket_share": 0.0129
+  },
+  {
+    "country": "All",
+    "region": "North America",
+    "category": "PRODUCTIVITY",
+    "time_bucket": "Day8_14",
+    "bucket_share": 0.0117
+  },
+  {
+    "country": "All",
+    "region": "North America",
+    "category": "UTILITIES",
+    "time_bucket": "Day0",
+    "bucket_share": 0.8789
+  },
+  {
+    "country": "All",
+    "region": "North America",
+    "category": "UTILITIES",
+    "time_bucket": "Day15_30",
+    "bucket_share": 0.0145
+  },
+  {
+    "country": "All",
+    "region": "North America",
+    "category": "UTILITIES",
+    "time_bucket": "Day1_3",
+    "bucket_share": 0.0367
+  },
+  {
+    "country": "All",
+    "region": "North America",
+    "category": "UTILITIES",
+    "time_bucket": "Day31_plus",
+    "bucket_share": 0.0445
+  },
+  {
+    "country": "All",
+    "region": "North America",
+    "category": "UTILITIES",
+    "time_bucket": "Day4_7",
+    "bucket_share": 0.0135
+  },
+  {
+    "country": "All",
+    "region": "North America",
+    "category": "UTILITIES",
+    "time_bucket": "Day8_14",
+    "bucket_share": 0.0118
+  }
+]

@@ -9,10 +9,16 @@ const SOIS_LANCEDB_PATH = process.env.VERCEL ? path.join("/tmp", ".lancedb") : p
 const SOIS_LANCEDB_META_PATH = path.join(SOIS_LANCEDB_PATH, "sois_context_meta.json");
 const SOIS_LANCEDB_TABLE_NAME = "sois_context_evidence";
 const SOIS_CACHE_DIR = path.join(SOIS_LANCEDB_PATH, "sois-cache");
+const SOIS_SITE_CONTEXT_PATH =
+  process.env.SOIS_SITE_CONTEXT_PATH?.trim() || path.join(process.cwd(), "data", "sois-site", "context.json");
+const SOIS_ALL_DATASETS_PATH =
+  process.env.SOIS_ALL_DATASETS_PATH?.trim() ||
+  path.join(process.cwd(), "data", "sois-site", "all-datasets.json");
 const SOIS_FETCH_TIMEOUT_MS = 15_000;
 const SOIS_CACHE_TTL_MS = 6 * 60 * 60 * 1000;
 const SOIS_MAX_METRICS_PER_SECTION = 5;
 const SOIS_REPORT_NAME = "State of In-App Subscriptions";
+const SOIS_SITE_ORIGIN_FALLBACK = "https://adapty-state-of-appsubs.vercel.app";
 
 const ANALYSIS_POST_TYPE_PATTERN =
   /\b(sauce|curated roundup|controversial hot take|industry news reaction|case study|social proof|product feature launch|milestone|company update)\b/i;
@@ -195,6 +201,181 @@ type SoisEvidenceData = {
   availableSections: number;
   warning?: string;
 };
+
+type SoisSiteSnapshotMetric = {
+  key?: unknown;
+  count?: unknown;
+  min?: unknown;
+  p50?: unknown;
+  p90?: unknown;
+  max?: unknown;
+};
+
+type SoisSiteSnapshotDataset = {
+  id?: unknown;
+  title?: unknown;
+  categoryHint?: unknown;
+  sourceUrl?: unknown;
+  rowCount?: unknown;
+  columns?: unknown;
+  summaryLines?: unknown;
+  numericMetrics?: unknown;
+  dimensionSamples?: unknown;
+};
+
+type SoisAllDatasetMetadata = {
+  title: string;
+  category: SoisCategory;
+  subcategory?: number;
+  subcategoryLabel?: string;
+  apiTargetKey?: string;
+};
+
+const SOIS_ALL_DATASET_METADATA: Record<string, SoisAllDatasetMetadata> = {
+  "conversions-trial": {
+    title: "Conversions (Trials) Dataset",
+    category: "conversions",
+    subcategory: 1,
+    subcategoryLabel: "Conversions (Trials)",
+    apiTargetKey: "conversions-1",
+  },
+  "conversions-direct": {
+    title: "Conversions (Direct) Dataset",
+    category: "conversions",
+    subcategory: 2,
+    subcategoryLabel: "Conversions (Direct)",
+    apiTargetKey: "conversions-2",
+  },
+  "pricing-data": {
+    title: "Pricing Dataset",
+    category: "pricing",
+    subcategory: 2,
+    subcategoryLabel: "Price Index by Country",
+    apiTargetKey: "pricing-2",
+  },
+  "pricing-ltv": {
+    title: "LTV by Price Bucket Dataset",
+    category: "pricing",
+    subcategory: 3,
+    subcategoryLabel: "LTV by Price Buckets",
+    apiTargetKey: "pricing-3",
+  },
+  "pricing-conversion": {
+    title: "Conversions by Price Bucket Dataset",
+    category: "pricing",
+    subcategory: 4,
+    subcategoryLabel: "Conversions by Price Buckets",
+    apiTargetKey: "pricing-4",
+  },
+  "ltv-analytics": {
+    title: "LTV Analytics Dataset",
+    category: "ltv",
+    subcategory: 1,
+    subcategoryLabel: "LTV Dashboard",
+    apiTargetKey: "ltv-1",
+  },
+  "ltv-by-region": {
+    title: "LTV by Region Dataset",
+    category: "ltv",
+    subcategory: 2,
+    subcategoryLabel: "LTV by Country",
+    apiTargetKey: "ltv-2",
+  },
+  "install-ltv": {
+    title: "Install to Paid LTV Dataset",
+    category: "ltv",
+    subcategory: 3,
+    subcategoryLabel: '"Install to Paid" LTV',
+    apiTargetKey: "ltv-3",
+  },
+  retention: {
+    title: "Retention Dataset",
+    category: "retention",
+    subcategory: 1,
+    subcategoryLabel: "Retention Dashboard",
+    apiTargetKey: "retention-1",
+  },
+  "renewal-by-price": {
+    title: "Renewal by Price Dataset",
+    category: "retention",
+    subcategory: 2,
+    subcategoryLabel: "Renewal Rate by Price Bucket",
+    apiTargetKey: "retention-2",
+  },
+  "refund-share": {
+    title: "Refund Share Dataset",
+    category: "refunds",
+    subcategory: 1,
+    subcategoryLabel: "Refunds Overview",
+    apiTargetKey: "refunds-1",
+  },
+  "revenue-by-region": {
+    title: "Revenue by Region Dataset",
+    category: "market",
+    subcategory: 1,
+    subcategoryLabel: "Revenue by Regions",
+    apiTargetKey: "market-1",
+  },
+  "fastest-growing-countries": {
+    title: "Fastest Growing Countries Dataset",
+    category: "market",
+    subcategory: 3,
+    subcategoryLabel: "Fastest Growing Markets (YoY)",
+    apiTargetKey: "market-3",
+  },
+  "revenue-concentration": {
+    title: "Revenue Concentration Dataset",
+    category: "market",
+    subcategory: 4,
+    subcategoryLabel: "Revenue Concentration",
+    apiTargetKey: "market-4",
+  },
+  "revenue-by-product-type": {
+    title: "Revenue by Product Type Dataset",
+    category: "market",
+    subcategory: 5,
+    subcategoryLabel: "Revenue by Product Type",
+    apiTargetKey: "market-5",
+  },
+  "install-to-trial-time": {
+    title: "Install to Trial Time Dataset",
+    category: "market",
+    subcategory: 6,
+    subcategoryLabel: "Install to Trial Time",
+    apiTargetKey: "market-6",
+  },
+  "install-to-paid-time": {
+    title: "Install to Paid Time Dataset",
+    category: "market",
+    subcategory: 7,
+    subcategoryLabel: "Install to Paid Time",
+    apiTargetKey: "market-7",
+  },
+  "trial-usage": {
+    title: "Trial Usage Dataset",
+    category: "market",
+    subcategory: 8,
+    subcategoryLabel: "Trial Usage",
+    apiTargetKey: "market-8",
+  },
+  "discount-usage": {
+    title: "Discount Usage Dataset",
+    category: "market",
+    subcategory: 9,
+    subcategoryLabel: "Discount Usage",
+    apiTargetKey: "market-9",
+  },
+};
+
+let soisAllDatasetsCache:
+  | {
+      path: string;
+      mtimeMs: number;
+      maxMetrics: number;
+      sourceOrigin: string;
+      items: SoisContextItem[];
+    }
+  | null = null;
 
 function toHash(value: string): string {
   return crypto.createHash("sha256").update(value, "utf8").digest("hex");
@@ -785,6 +966,439 @@ function buildEvidenceChunks(params: {
   return items;
 }
 
+function normalizeCategoryHint(value: unknown): SoisCategory | null {
+  if (typeof value !== "string") {
+    return null;
+  }
+  const normalized = value.trim().toLowerCase();
+  const allowedCategories: SoisCategory[] = [
+    "ltv",
+    "conversions",
+    "pricing",
+    "market",
+    "retention",
+    "refunds",
+    "stores",
+    "ai",
+    "paywalls",
+    "webpaywalls",
+  ];
+
+  return allowedCategories.includes(normalized as SoisCategory) ? (normalized as SoisCategory) : null;
+}
+
+function toStringArray(value: unknown, limit = 12): string[] {
+  if (!Array.isArray(value)) {
+    return [];
+  }
+  return value
+    .filter((entry): entry is string => typeof entry === "string")
+    .map((entry) => entry.trim())
+    .filter(Boolean)
+    .slice(0, limit);
+}
+
+function formatSnapshotMetricLine(metric: SoisSiteSnapshotMetric): string | null {
+  if (typeof metric.key !== "string") {
+    return null;
+  }
+  const min = toNumeric(metric.min);
+  const p50 = toNumeric(metric.p50);
+  const p90 = toNumeric(metric.p90);
+  const max = toNumeric(metric.max);
+  if (min === null || p50 === null || p90 === null || max === null) {
+    return null;
+  }
+
+  const metricKey = metric.key.trim();
+  if (!metricKey) {
+    return null;
+  }
+
+  return `${normalizeLabel(metricKey)}: median ${formatMetricValue(metricKey, p50)} | p90 ${formatMetricValue(metricKey, p90)} | max ${formatMetricValue(metricKey, max)} (min ${formatMetricValue(metricKey, min)})`;
+}
+
+function summarizeDimensionSamples(value: unknown): string | null {
+  if (!isRecord(value)) {
+    return null;
+  }
+
+  const entries = Object.entries(value)
+    .map(([key, sampleValue]) => {
+      const samples = toStringArray(sampleValue, 5);
+      if (!samples.length || isOpaqueIdentifierKey(key)) {
+        return null;
+      }
+      return `${normalizeLabel(key)}=${samples.join(" | ")}`;
+    })
+    .filter((line): line is string => Boolean(line))
+    .slice(0, 4);
+
+  return entries.length ? entries.join("; ") : null;
+}
+
+async function readSoisSiteSnapshotItems(
+  inputType: string,
+): Promise<{ items: SoisContextItem[]; datasetCount: number; warning?: string }> {
+  const enabled = parseBooleanFlag(process.env.ENABLE_SOIS_SITE_CONTEXT, true);
+  if (!enabled) {
+    return { items: [], datasetCount: 0 };
+  }
+
+  const allowedCategories = new Set(defaultCategorySelectionForPostType(inputType));
+  if (!allowedCategories.size) {
+    return { items: [], datasetCount: 0 };
+  }
+
+  let raw: string;
+  try {
+    raw = await fs.readFile(SOIS_SITE_CONTEXT_PATH, "utf8");
+  } catch (error) {
+    if (isRecord(error) && "code" in error && error.code === "ENOENT") {
+      return { items: [], datasetCount: 0 };
+    }
+    return {
+      items: [],
+      datasetCount: 0,
+      warning: `SOIS site snapshot read failed: ${error instanceof Error ? error.message : String(error)}`,
+    };
+  }
+
+  let parsed: unknown;
+  try {
+    parsed = JSON.parse(raw);
+  } catch (error) {
+    return {
+      items: [],
+      datasetCount: 0,
+      warning: `SOIS site snapshot JSON parse failed: ${error instanceof Error ? error.message : String(error)}`,
+    };
+  }
+
+  if (!isRecord(parsed) || !Array.isArray(parsed.datasets)) {
+    return {
+      items: [],
+      datasetCount: 0,
+      warning: "SOIS site snapshot has invalid structure (missing datasets array).",
+    };
+  }
+
+  const items: SoisContextItem[] = [];
+  let datasetCount = 0;
+
+  for (const [index, datasetValue] of parsed.datasets.entries()) {
+    const dataset = isRecord(datasetValue) ? (datasetValue as SoisSiteSnapshotDataset) : null;
+    if (!dataset) {
+      continue;
+    }
+
+    const datasetCategory = normalizeCategoryHint(dataset.categoryHint) ?? "market";
+    if (!allowedCategories.has(datasetCategory)) {
+      continue;
+    }
+
+    const datasetId = typeof dataset.id === "string" && dataset.id.trim() ? dataset.id.trim() : `dataset-${index + 1}`;
+    const datasetTitle =
+      typeof dataset.title === "string" && dataset.title.trim() ? dataset.title.trim() : normalizeLabel(datasetId);
+    const sourceUrl =
+      typeof dataset.sourceUrl === "string" && dataset.sourceUrl.trim()
+        ? dataset.sourceUrl.trim()
+        : `${SOIS_SITE_CONTEXT_PATH}#${datasetId}`;
+    const rowCountValue = toNumeric(dataset.rowCount);
+    const rowCount = rowCountValue !== null ? Math.max(0, Math.round(rowCountValue)) : 0;
+    const columns = toStringArray(dataset.columns, 16);
+    const summaryLines = toStringArray(dataset.summaryLines, 5);
+    const metricLines = Array.isArray(dataset.numericMetrics)
+      ? dataset.numericMetrics
+          .map((metric) => (isRecord(metric) ? formatSnapshotMetricLine(metric as SoisSiteSnapshotMetric) : null))
+          .filter((line): line is string => Boolean(line))
+          .slice(0, 4)
+      : [];
+    const dimensionsLine = summarizeDimensionSamples(dataset.dimensionSamples);
+
+    const definition = SOIS_CATEGORY_DEFINITIONS[datasetCategory];
+    const subcategory = 9000 + index + 1;
+    const subcategoryLabel = datasetTitle;
+    const categoryLabel = definition?.label ?? normalizeLabel(datasetCategory);
+
+    const overviewParts = [
+      `SOIS website dataset: ${datasetTitle}`,
+      `Rows analyzed: ${rowCount.toLocaleString("en-US")}`,
+      columns.length ? `Columns: ${columns.map((col) => normalizeLabel(col)).join(", ")}` : "",
+      dimensionsLine ? `Filters: ${dimensionsLine}` : "",
+      summaryLines.length ? `Highlights: ${summaryLines.join(" | ")}` : "",
+    ].filter(Boolean);
+
+    items.push({
+      id: `site-${datasetId}-overview`,
+      category: datasetCategory,
+      categoryLabel,
+      subcategory,
+      subcategoryLabel,
+      sourceUrl,
+      rows: rowCount,
+      text: overviewParts.join("\n"),
+    });
+
+    for (const [metricIndex, metricLine] of metricLines.entries()) {
+      items.push({
+        id: `site-${datasetId}-metric-${metricIndex + 1}`,
+        category: datasetCategory,
+        categoryLabel,
+        subcategory,
+        subcategoryLabel,
+        sourceUrl,
+        rows: rowCount,
+        text: `${categoryLabel} ${subcategoryLabel} - snapshot metric\n${metricLine}`,
+      });
+    }
+
+    datasetCount += 1;
+  }
+
+  return { items, datasetCount };
+}
+
+function inferCategoryFromAllDatasetId(datasetId: string): SoisCategory {
+  const normalized = datasetId.toLowerCase();
+
+  if (normalized.startsWith("pricing-")) {
+    return "pricing";
+  }
+  if (normalized.startsWith("refund-")) {
+    return "refunds";
+  }
+  if (normalized.startsWith("retention") || normalized.startsWith("renewal-")) {
+    return "retention";
+  }
+  if (normalized.startsWith("ltv-") || normalized === "install-ltv") {
+    return "ltv";
+  }
+  if (normalized.startsWith("conversion-") || normalized.startsWith("conversions-")) {
+    return "conversions";
+  }
+  if (normalized.includes("paywall")) {
+    return "paywalls";
+  }
+
+  return "market";
+}
+
+function resolveAllDatasetMetadata(datasetId: string): SoisAllDatasetMetadata {
+  const known = SOIS_ALL_DATASET_METADATA[datasetId];
+  if (known) {
+    return known;
+  }
+
+  const category = inferCategoryFromAllDatasetId(datasetId);
+  return {
+    title: normalizeLabel(datasetId),
+    category,
+    subcategoryLabel: normalizeLabel(datasetId),
+  };
+}
+
+function allDatasetIdFromItemId(itemId: string): string | null {
+  if (!itemId.startsWith("all-")) {
+    return null;
+  }
+
+  const withoutPrefix = itemId.slice("all-".length);
+  const metricMarker = "-metric-";
+  const metricMarkerIndex = withoutPrefix.indexOf(metricMarker);
+  if (metricMarkerIndex > 0) {
+    return withoutPrefix.slice(0, metricMarkerIndex);
+  }
+
+  const overviewSuffix = "-overview";
+  if (withoutPrefix.endsWith(overviewSuffix) && withoutPrefix.length > overviewSuffix.length) {
+    return withoutPrefix.slice(0, -overviewSuffix.length);
+  }
+
+  return null;
+}
+
+function countDistinctAllDatasetIds(items: SoisContextItem[]): number {
+  const datasetIds = new Set<string>();
+  for (const item of items) {
+    const datasetId = allDatasetIdFromItemId(item.id);
+    if (datasetId) {
+      datasetIds.add(datasetId);
+    }
+  }
+  return datasetIds.size;
+}
+
+function filterAllDatasetItemsAlreadyCoveredByApi(
+  items: SoisContextItem[],
+  fetchedApiTargetKeys: Set<string>,
+): SoisContextItem[] {
+  if (!items.length || !fetchedApiTargetKeys.size) {
+    return items;
+  }
+
+  return items.filter((item) => {
+    const datasetId = allDatasetIdFromItemId(item.id);
+    if (!datasetId) {
+      return true;
+    }
+
+    const mappedApiTarget = SOIS_ALL_DATASET_METADATA[datasetId]?.apiTargetKey;
+    if (!mappedApiTarget) {
+      return true;
+    }
+
+    return !fetchedApiTargetKeys.has(mappedApiTarget);
+  });
+}
+
+function dedupeEvidenceItems(items: SoisContextItem[]): SoisContextItem[] {
+  const unique: SoisContextItem[] = [];
+  const seenIds = new Set<string>();
+  const seenTextKeys = new Set<string>();
+
+  for (const item of items) {
+    if (!item.id || seenIds.has(item.id)) {
+      continue;
+    }
+
+    const normalizedText = item.text.replace(/\s+/g, " ").trim().toLowerCase();
+    const textKey = `${item.category}|${normalizedText}`;
+    if (normalizedText && seenTextKeys.has(textKey)) {
+      continue;
+    }
+
+    seenIds.add(item.id);
+    if (normalizedText) {
+      seenTextKeys.add(textKey);
+    }
+    unique.push(item);
+  }
+
+  return unique;
+}
+
+async function readSoisAllDatasetItems(
+  inputType: string,
+): Promise<{ items: SoisContextItem[]; datasetCount: number; warning?: string }> {
+  const enabled = parseBooleanFlag(process.env.ENABLE_SOIS_ALL_DATASETS_CONTEXT, true);
+  if (!enabled) {
+    return { items: [], datasetCount: 0 };
+  }
+
+  const allowedCategories = new Set(defaultCategorySelectionForPostType(inputType));
+  if (!allowedCategories.size) {
+    return { items: [], datasetCount: 0 };
+  }
+
+  const maxMetrics = parsePositiveInt(process.env.SOIS_ALL_DATASETS_MAX_METRICS_PER_SECTION, 3, 8);
+
+  let stat: { mtimeMs: number };
+  try {
+    stat = await fs.stat(SOIS_ALL_DATASETS_PATH);
+  } catch (error) {
+    if (isRecord(error) && "code" in error && error.code === "ENOENT") {
+      return { items: [], datasetCount: 0 };
+    }
+    return {
+      items: [],
+      datasetCount: 0,
+      warning: `SOIS all-datasets read failed: ${error instanceof Error ? error.message : String(error)}`,
+    };
+  }
+
+  if (
+    !soisAllDatasetsCache ||
+    soisAllDatasetsCache.path !== SOIS_ALL_DATASETS_PATH ||
+    soisAllDatasetsCache.mtimeMs !== stat.mtimeMs ||
+    soisAllDatasetsCache.maxMetrics !== maxMetrics
+  ) {
+    let raw: string;
+    try {
+      raw = await fs.readFile(SOIS_ALL_DATASETS_PATH, "utf8");
+    } catch (error) {
+      return {
+        items: [],
+        datasetCount: 0,
+        warning: `SOIS all-datasets read failed: ${error instanceof Error ? error.message : String(error)}`,
+      };
+    }
+
+    let parsed: unknown;
+    try {
+      parsed = JSON.parse(raw);
+    } catch (error) {
+      return {
+        items: [],
+        datasetCount: 0,
+        warning: `SOIS all-datasets JSON parse failed: ${error instanceof Error ? error.message : String(error)}`,
+      };
+    }
+
+    if (!isRecord(parsed) || !isRecord(parsed.datasets)) {
+      return {
+        items: [],
+        datasetCount: 0,
+        warning: "SOIS all-datasets has invalid structure (missing datasets object).",
+      };
+    }
+
+    const sourceOrigin =
+      typeof parsed.sourceOrigin === "string" && parsed.sourceOrigin.trim()
+        ? parsed.sourceOrigin.trim().replace(/\/+$/, "")
+        : SOIS_SITE_ORIGIN_FALLBACK;
+
+    const builtItems: SoisContextItem[] = [];
+    let datasetIndex = 0;
+    for (const [datasetId, payload] of Object.entries(parsed.datasets)) {
+      if (!datasetId.trim()) {
+        continue;
+      }
+
+      const rows = extractRows(payload);
+      if (!rows.length) {
+        continue;
+      }
+
+      const metadata = resolveAllDatasetMetadata(datasetId);
+      const categoryDefinition = SOIS_CATEGORY_DEFINITIONS[metadata.category];
+      const subcategory = metadata.subcategory ?? 9500 + datasetIndex + 1;
+      const subcategoryLabel = metadata.subcategoryLabel ?? metadata.title;
+      const target: SoisSectionTarget = {
+        category: metadata.category,
+        categoryLabel: categoryDefinition?.label ?? normalizeLabel(metadata.category),
+        subcategory,
+        subcategoryLabel,
+        key: `all-${datasetId}`,
+      };
+      const sourceUrl = `${sourceOrigin}/data/${datasetId}.json`;
+      const evidenceChunks = buildEvidenceChunks({
+        target,
+        rows,
+        sourceUrl,
+        maxMetrics,
+      });
+
+      builtItems.push(...evidenceChunks);
+      datasetIndex += 1;
+    }
+
+    soisAllDatasetsCache = {
+      path: SOIS_ALL_DATASETS_PATH,
+      mtimeMs: stat.mtimeMs,
+      maxMetrics,
+      sourceOrigin,
+      items: builtItems,
+    };
+  }
+
+  const filteredItems = soisAllDatasetsCache.items.filter((item) => allowedCategories.has(item.category));
+  return {
+    items: filteredItems,
+    datasetCount: countDistinctAllDatasetIds(filteredItems),
+  };
+}
+
 function defaultCategorySelectionForPostType(inputType: string): SoisCategory[] {
   for (const rule of SOIS_POST_TYPE_CATEGORY_RULES) {
     if (rule.pattern.test(inputType)) {
@@ -947,20 +1561,50 @@ async function buildEvidenceData(inputType: string): Promise<SoisEvidenceData> {
     };
   }
 
+  const [siteSnapshot, allDatasetSnapshot] = await Promise.all([
+    readSoisSiteSnapshotItems(inputType),
+    readSoisAllDatasetItems(inputType),
+  ]);
+  const snapshotWarnings = [siteSnapshot.warning, allDatasetSnapshot.warning].filter(
+    (warning): warning is string => Boolean(warning),
+  );
+  const snapshotItems = dedupeEvidenceItems([...siteSnapshot.items, ...allDatasetSnapshot.items]);
+  const snapshotSectionCount = siteSnapshot.datasetCount + allDatasetSnapshot.datasetCount;
+  const availableSections = targets.length + snapshotSectionCount;
+
   const credentials = resolveCredentials();
   if (!credentials) {
+    const combinedWarnings = [
+      "SOIS credentials missing. Set SOIS_DATA_USERNAME and SOIS_DATA_PASSWORD.",
+      ...snapshotWarnings,
+    ]
+      .filter(Boolean)
+      .join(" | ");
+
+    if (snapshotItems.length > 0) {
+      const hash = toHash(snapshotItems.map((item) => `${item.id}|${item.text}`).join("\n---\n"));
+      return {
+        items: snapshotItems,
+        hash,
+        fetchedSections: snapshotSectionCount,
+        availableSections,
+        warning: combinedWarnings,
+      };
+    }
+
     return {
       items: [],
       hash: "",
       fetchedSections: 0,
-      availableSections: targets.length,
-      warning: "SOIS credentials missing. Set SOIS_DATA_USERNAME and SOIS_DATA_PASSWORD.",
+      availableSections,
+      warning: combinedWarnings,
     };
   }
 
-  const items: SoisContextItem[] = [];
-  let fetchedSections = 0;
-  const warnings: string[] = [];
+  const apiItems: SoisContextItem[] = [];
+  const fetchedApiTargetKeys = new Set<string>();
+  let fetchedApiSections = 0;
+  const warnings: string[] = [...snapshotWarnings];
 
   for (const target of targets) {
     try {
@@ -977,7 +1621,8 @@ async function buildEvidenceData(inputType: string): Promise<SoisEvidenceData> {
         continue;
       }
 
-      fetchedSections += 1;
+      fetchedApiSections += 1;
+      fetchedApiTargetKeys.add(target.key);
       const evidenceChunks = buildEvidenceChunks({
         target,
         rows,
@@ -985,19 +1630,32 @@ async function buildEvidenceData(inputType: string): Promise<SoisEvidenceData> {
         maxMetrics: SOIS_MAX_METRICS_PER_SECTION,
       });
 
-      items.push(...evidenceChunks);
+      apiItems.push(...evidenceChunks);
     } catch (error) {
       warnings.push(error instanceof Error ? error.message : String(error));
     }
   }
 
+  const retainedAllDatasetItems = filterAllDatasetItemsAlreadyCoveredByApi(
+    allDatasetSnapshot.items,
+    fetchedApiTargetKeys,
+  );
+  const retainedAllDatasetCount = countDistinctAllDatasetIds(retainedAllDatasetItems);
+  const droppedAllDatasetSections = Math.max(0, allDatasetSnapshot.datasetCount - retainedAllDatasetCount);
+  if (droppedAllDatasetSections > 0) {
+    warnings.push(
+      `Suppressed ${droppedAllDatasetSections} all-datasets section(s) because overlapping SOIS API sections were available.`,
+    );
+  }
+
+  const items = dedupeEvidenceItems([...siteSnapshot.items, ...retainedAllDatasetItems, ...apiItems]);
   const hash = toHash(items.map((item) => `${item.id}|${item.text}`).join("\n---\n"));
 
   return {
     items,
     hash,
-    fetchedSections,
-    availableSections: targets.length,
+    fetchedSections: siteSnapshot.datasetCount + retainedAllDatasetCount + fetchedApiSections,
+    availableSections,
     warning: warnings.length ? warnings.slice(0, 5).join(" | ") : undefined,
   };
 }
