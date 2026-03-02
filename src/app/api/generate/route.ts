@@ -3736,8 +3736,14 @@ Also generate a list of hook suggestions inspired by this style and request.
     };
 
     const anthropicApiKey = process.env.ANTHROPIC_API_KEY?.trim();
-    // Prefer Codex OAuth when available; fall back to Claude only when OAuth is unavailable.
-    const useClaudeWriter = Boolean(anthropicApiKey && !oauthCredentials);
+    const preferClaudeWriter = parseBooleanEnv(process.env.USE_CLAUDE_WRITER, true);
+    const preferCodexReviewer = parseBooleanEnv(process.env.USE_CODEX_REVIEWER, true);
+    const forceCodexReviewerPass = parseBooleanEnv(
+      process.env.FORCE_CODEX_REVIEWER,
+      parseBooleanEnv(process.env.FORCE_CODEX_REVIEWER_FOR_SAUCE, true),
+    );
+    const useClaudeWriter = Boolean(anthropicApiKey && preferClaudeWriter);
+    const useCodexReviewer = Boolean(oauthCredentials && preferCodexReviewer);
 
     const runGeneration = (params: {
       model: string;
@@ -3745,6 +3751,16 @@ Also generate a list of hook suggestions inspired by this style and request.
       responseSchema: ReturnType<typeof makeGeneratePostsResponseSchema>;
       postCount: number;
     }): Promise<GeneratedBatch> => {
+      if (useClaudeWriter) {
+        return runClaudeWriterGeneration({
+          systemPrompt,
+          userPrompt: params.userPrompt,
+          imageDataUrls: inputImageDataUrls.length ? inputImageDataUrls : undefined,
+          responseSchema: params.responseSchema,
+          postCount: params.postCount,
+        });
+      }
+
       if (oauthCredentials) {
         return runCodexOauthGeneration({
           oauth: oauthCredentials,
@@ -3753,16 +3769,6 @@ Also generate a list of hook suggestions inspired by this style and request.
           userPrompt: params.userPrompt,
           imageDataUrls: inputImageDataUrls.length ? inputImageDataUrls : undefined,
           responseSchema: params.responseSchema,
-        });
-      }
-
-      if (useClaudeWriter) {
-        return runClaudeWriterGeneration({
-          systemPrompt,
-          userPrompt: params.userPrompt,
-          imageDataUrls: inputImageDataUrls.length ? inputImageDataUrls : undefined,
-          responseSchema: params.responseSchema,
-          postCount: params.postCount,
         });
       }
 
@@ -4023,11 +4029,13 @@ ${toBulletedSection(QUALITY_REPAIR_REQUIREMENT_LINES)}
     }
 
     const skipEditorForTest = process.env.SKIP_CODEX_EDITOR === "1";
-    const shouldRunEditorPass = !skipEditorForTest && qualityIssuesByPost.length > 0;
+    const shouldForceCodexReviewerPass = forceCodexReviewerPass && useCodexReviewer;
+    const shouldRunEditorPass = !skipEditorForTest && (qualityIssuesByPost.length > 0 || shouldForceCodexReviewerPass);
 
     if (shouldRunEditorPass) {
       const editorPassGoals = [
         "Fix the remaining quality-gate issues without changing the core argument.",
+        "Eliminate staccato formatting. Merge isolated one-sentence lines into fuller paragraphs while preserving flow and readability.",
         looksLikeSaucePostType(input.inputType)
           ? "For Sauce posts: verify every number or percentage appears verbatim in SOIS evidence. Rewrite unsupported numbers qualitatively."
           : "",
@@ -4052,6 +4060,7 @@ Do this:
 - Rewrite sentences that restate themselves in two halves separated by a comma or period.
 - Replace stiff phrasing with how someone would actually say it.
 - Keep paragraphs of 2-4 sentences. Add blank lines only between paragraphs, not between sentences. Do not put each sentence on its own line.
+- Never return consecutive one-sentence paragraphs. At most one one-sentence paragraph in the whole body, and only if it is a deliberate punch line.
 - Say "app makers" or "app founders" instead of "teams" or "operators."
 - Use digits for numbers ("3 things" not "three things").
 - Use hyphens, commas, and periods.
@@ -4116,7 +4125,7 @@ Return ${parsed.hooks.length} hook suggestions as well (keep good ones, tighten 
         responseSchema: ReturnType<typeof makeGeneratePostsResponseSchema>;
         postCount: number;
       }): Promise<GeneratedBatch> => {
-        if (oauthCredentials) {
+        if (useCodexReviewer && oauthCredentials) {
           return runCodexOauthGeneration({
             oauth: oauthCredentials,
             model: params.model,
@@ -4132,6 +4141,16 @@ Return ${parsed.hooks.length} hook suggestions as well (keep good ones, tighten 
             userPrompt: params.userPrompt,
             responseSchema: params.responseSchema,
             postCount: params.postCount,
+          });
+        }
+
+        if (oauthCredentials) {
+          return runCodexOauthGeneration({
+            oauth: oauthCredentials,
+            model: params.model,
+            systemPrompt: editorSystemPrompt,
+            userPrompt: params.userPrompt,
+            responseSchema: params.responseSchema,
           });
         }
 

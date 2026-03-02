@@ -217,8 +217,9 @@ Each generation request goes through 3 passes:
 
 ## Auth and model routing
 
-- Preferred auth path: Codex OAuth
-- API key path supported as fallback
+- Writer default: Claude Sonnet 4.5 when `ANTHROPIC_API_KEY` is set (`USE_CLAUDE_WRITER=true`)
+- Reviewer default: Codex OAuth when OAuth creds are present (`USE_CODEX_REVIEWER=true`)
+- API key path supported as fallback when OAuth is unavailable
 - Model fallback supported for unavailable model access
 
 Priority order:
@@ -242,6 +243,12 @@ Use `.env` (local) and set same keys in Vercel project settings.
 
 - `OPENAI_MODEL` (default `gpt-5.3-codex`)
 - `OPENAI_MODEL_FALLBACK` (default `gpt-5.2`)
+- `ANTHROPIC_API_KEY` (enables Claude writer path)
+- `CLAUDE_WRITER_MODEL` (default `claude-sonnet-4-5`)
+- `USE_CLAUDE_WRITER=true|false` (default `true`)
+- `USE_CODEX_REVIEWER=true|false` (default `true`)
+- `FORCE_CODEX_REVIEWER=true|false` (default `true`; always runs reviewer pass for all post types when Codex reviewer is enabled)
+- `FORCE_CODEX_REVIEWER_FOR_SAUCE=true|false` (legacy fallback key; used only when `FORCE_CODEX_REVIEWER` is unset)
 - `OPENAI_CODEX_AUTH_MODE` (optional; usually `chatgpt`)
 - `OPENAI_CODEX_ACCESS_TOKEN`
 - `OPENAI_CODEX_REFRESH_TOKEN` (optional)
