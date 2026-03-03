@@ -3,6 +3,7 @@
 Goal:
 - Deliver actionable insights for B2C mobile app monetization teams.
 - Blend practical breakdown plus data insight in one clear narrative.
+- Hard requirement: every SOIS post must include at least 1 concrete numeric fact from `data/sois-insights.md` (for example `55.5%`, `$54.17`, `1.7x`).
 
 Preferred shape:
 1. Open with a hard, real question teams keep asking.

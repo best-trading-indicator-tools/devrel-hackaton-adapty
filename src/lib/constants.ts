@@ -226,9 +226,9 @@ export function lengthGuide(length: OutputLength): string {
     case "medium":
       return "5-9 sentences.";
     case "long":
-      return "18-35 sentences.";
+      return "10-22 sentences.";
     case "very long":
-      return "36-90 sentences.";
+      return "23-50 sentences.";
     default:
       return "Natural LinkedIn length.";
   }
@@ -247,9 +247,9 @@ export function lengthSentenceRange(length: OutputLength | "standard"): { min: n
     case "medium":
       return { min: 5, max: 9 };
     case "long":
-      return { min: 18, max: 35 };
+      return { min: 10, max: 22 };
     case "very long":
-      return { min: 36, max: 90 };
+      return { min: 23, max: 50 };
     default:
       return { min: 5, max: 9 };
   }

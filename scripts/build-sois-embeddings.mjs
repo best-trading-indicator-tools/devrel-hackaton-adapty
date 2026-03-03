@@ -111,6 +111,14 @@ function normalizeDataEvidence(lines) {
   const cleaned = lines.map(normalizeLine).filter(Boolean);
   if (!cleaned.length) return "";
 
+  const looksLikeMarkdownTable =
+    cleaned.length >= 2 &&
+    cleaned[0].startsWith("|") &&
+    cleaned.some((line) => /^\|\s*:?-{3,}/.test(line));
+  if (looksLikeMarkdownTable) {
+    return cleaned.join("\n");
+  }
+
   const table = inferTabularEvidence(cleaned);
   if (table) {
     const headerRow = `| ${table.headers.join(" | ")} |`;

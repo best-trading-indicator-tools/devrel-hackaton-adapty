@@ -44,7 +44,6 @@ import { retrieveLibraryContext, type LibraryEntry } from "@/lib/library-retriev
 import {
   getProductUpdateToneContext,
   getPromptGuides,
-  getSoisInsightsDataset,
 } from "@/lib/prompt-guides";
 import { runIndustryNewsContext } from "@/lib/rss-news";
 import { getClaudeCredentials, type ClaudeCredentials } from "@/lib/claude-credentials";
@@ -405,11 +404,6 @@ type NumericClaim = {
 };
 
 const MAX_ALLOWED_NUMERIC_CLAIM_ABS = 1e15;
-const SAUCE_FUZZY_NUMERIC_PLACEHOLDER_PATTERN = /\b(a few|meaningful share|broad range|a low threshold)\b/i;
-const SAUCE_FUZZY_QUANTIFIER_PATTERN =
-  /\bseveral\s+(?:days?|weeks?|months?|years?|hours?|minutes?|apps?|users?|installs?|downloads?|trials?|tests?|experiments?|placements?|paywalls?|countries?|markets?|segments?|cohorts?|regions?|categories?)\b/i;
-const SAUCE_BLOCKED_ANECDOTE_PATTERN =
-  /\b(?:one|another|third)\s+app\b|\b(?:we|our team)\s+(?:support(?:ed)?|work(?:ed)? with|had a client|helped)\b/i;
 const SAUCE_DETAILS_ANECDOTE_ALLOW_PATTERN =
   /\b(one app|another app|third app|client story|customer story|case study|we support|we worked with|we saw|we tested)\b/i;
 const SAUCE_BENCHMARK_NOISE_SEGMENT_PATTERN =
@@ -816,9 +810,6 @@ const SAUCE_TOPIC_PILLARS: SauceTopicPillar[] = [
     pattern: /\b(market|region|category|share|concentration|competition)\b/i,
   },
 ];
-const SOIS_FALLBACK_HEADING_CATEGORY_PATTERN =
-  /^(LTV|Pricing|Conversions|Market|Paywalls|Retention|Refunds|Stores|iOS vs Android|AI|Web Paywalls)\b/i;
-
 function clipTextAtWordBoundary(value: string, maxChars: number): string {
   if (value.length <= maxChars) {
     return value;
@@ -865,71 +856,6 @@ function sectionKeyFromItemId(itemId: string): string {
     return itemId.slice(0, markerIndex);
   }
   return itemId;
-}
-
-function parseNumberedInsightBlocks(params: {
-  text: string;
-  idPrefix: string;
-  sourceUrl: string;
-  categoryLabel: string;
-}): SoisContextItem[] {
-  const normalized = params.text.replace(/\r\n?/g, "\n");
-  const lines = normalized.split("\n");
-  const items: SoisContextItem[] = [];
-
-  let index = 0;
-  while (index < lines.length) {
-    const line = normalizeNoEmDash(lines[index]?.replace(/\s+/g, " ").trim() ?? "");
-    const headingMatch = line.match(/^#(\d+)(.*)$/);
-    if (!headingMatch) {
-      index += 1;
-      continue;
-    }
-
-    const number = Number.parseInt(headingMatch[1] ?? "", 10);
-    if (!Number.isFinite(number) || number < 1) {
-      index += 1;
-      continue;
-    }
-
-    let title = normalizeNoEmDash((headingMatch[2] ?? "").trim());
-    if (!title) {
-      let probe = index + 1;
-      while (probe < lines.length && !lines[probe]?.trim()) probe += 1;
-      const maybeTitle = normalizeNoEmDash(lines[probe]?.replace(/\s+/g, " ").trim() ?? "");
-      if (SOIS_FALLBACK_HEADING_CATEGORY_PATTERN.test(maybeTitle)) {
-        title = maybeTitle;
-      }
-    }
-
-    if (!SOIS_FALLBACK_HEADING_CATEGORY_PATTERN.test(title)) {
-      index += 1;
-      continue;
-    }
-
-    let end = index + 1;
-    while (end < lines.length) {
-      const probe = normalizeNoEmDash(lines[end]?.replace(/\s+/g, " ").trim() ?? "");
-      if (/^#\d+/.test(probe)) break;
-      end += 1;
-    }
-
-    const block = lines.slice(index, end).join("\n").trim();
-    items.push({
-      id: `${params.idPrefix}-${number}`,
-      category: "market",
-      categoryLabel: params.categoryLabel,
-      subcategory: number,
-      subcategoryLabel: title,
-      sourceUrl: params.sourceUrl,
-      rows: 0,
-      text: block,
-    });
-
-    index = end;
-  }
-
-  return items;
 }
 
 function shuffleArray<T>(arr: T[]): T[] {
@@ -1339,14 +1265,6 @@ function sentenceHasUnsupportedNumericClaim(sentence: string, allowedClaims: Set
   return claims.some((claim) => !allowedClaims.has(claim.canonical));
 }
 
-function sentenceHasFuzzyNumericPlaceholder(sentence: string): boolean {
-  return SAUCE_FUZZY_NUMERIC_PLACEHOLDER_PATTERN.test(sentence) || SAUCE_FUZZY_QUANTIFIER_PATTERN.test(sentence);
-}
-
-function sentenceHasBlockedAnecdote(sentence: string): boolean {
-  return SAUCE_BLOCKED_ANECDOTE_PATTERN.test(sentence);
-}
-
 function sentenceIsDegenerateNumericArtifact(sentence: string): boolean {
   const trimmed = sentence.trim();
   if (!trimmed) {
@@ -1382,10 +1300,9 @@ function sanitizeSauceTextStrict(
   removedAnecdoteSentences: number;
 } {
   const paragraphs = splitParagraphs(value);
+  void options.allowAnecdotes;
   const keptParagraphs: string[] = [];
   let removedUnsupportedNumericSentences = 0;
-  let removedFuzzyPlaceholderSentences = 0;
-  let removedAnecdoteSentences = 0;
 
   for (const paragraph of paragraphs) {
     const sentenceUnits = splitSentenceUnits(paragraph)
@@ -1399,25 +1316,27 @@ function sanitizeSauceTextStrict(
         continue;
       }
 
-      const hasUnsupportedNumeric = sentenceHasUnsupportedNumericClaim(sentence, options.allowedClaims);
-      const hasFuzzyPlaceholder = sentenceHasFuzzyNumericPlaceholder(sentence);
-      const hasBlockedAnecdote = !options.allowAnecdotes && sentenceHasBlockedAnecdote(sentence);
-      const hasDegenerateArtifact = sentenceIsDegenerateNumericArtifact(sentence);
+      let candidate = sentence;
+      let hasUnsupportedNumeric = sentenceHasUnsupportedNumericClaim(candidate, options.allowedClaims);
+      let hasDegenerateArtifact = sentenceIsDegenerateNumericArtifact(candidate);
 
-      if (hasUnsupportedNumeric || hasFuzzyPlaceholder || hasBlockedAnecdote || hasDegenerateArtifact) {
+      if (hasUnsupportedNumeric) {
+        const rewritten = rewriteUnsupportedNumericClaims(candidate, options.allowedClaims, false).value.trim();
+        if (rewritten) {
+          candidate = rewritten;
+          hasUnsupportedNumeric = sentenceHasUnsupportedNumericClaim(candidate, options.allowedClaims);
+          hasDegenerateArtifact = sentenceIsDegenerateNumericArtifact(candidate);
+        }
+      }
+
+      if (hasUnsupportedNumeric || hasDegenerateArtifact) {
         if (hasUnsupportedNumeric) {
           removedUnsupportedNumericSentences += 1;
-        }
-        if (hasFuzzyPlaceholder) {
-          removedFuzzyPlaceholderSentences += 1;
-        }
-        if (hasBlockedAnecdote) {
-          removedAnecdoteSentences += 1;
         }
         continue;
       }
 
-      keptSentences.push(sentence);
+      keptSentences.push(candidate);
     }
 
     if (keptSentences.length > 0) {
@@ -1429,8 +1348,8 @@ function sanitizeSauceTextStrict(
   return {
     value: sanitized,
     removedUnsupportedNumericSentences,
-    removedFuzzyPlaceholderSentences,
-    removedAnecdoteSentences,
+    removedFuzzyPlaceholderSentences: 0,
+    removedAnecdoteSentences: 0,
   };
 }
 
@@ -1675,33 +1594,78 @@ function pickTopBenchmarkClaim(stats: {
   return highCandidates[0] ?? null;
 }
 
-function buildStrictSauceFallbackHook(snippet: string | null): string {
+function buildStrictSauceFallbackHook(snippet: string | null, seed = 0): string {
   const compact = snippet?.replace(/\s+/g, " ").trim() ?? "";
   const metricLabel = extractMetricLabelFromBenchmarkSnippet(compact);
   const stats = extractBenchmarkStatClaims(compact);
   const topClaim = pickTopBenchmarkClaim(stats);
   const primaryValue = formatBenchmarkClaim(stats.median) ?? formatBenchmarkClaim(stats.min);
   const topValue = formatBenchmarkClaim(topClaim);
+  const safeSeed = Number.isFinite(seed) ? Math.abs(Math.trunc(seed)) : 0;
 
   if (metricLabel && primaryValue && topValue && primaryValue !== topValue) {
-    return `${normalizeHookMetricLabel(metricLabel)} has a bigger gap than most app makers expect: typical performance is near ${primaryValue}, while top apps reach about ${topValue}.`;
+    const normalizedLabel = normalizeHookMetricLabel(metricLabel);
+    const variants = [
+      `${normalizedLabel} has a bigger gap than most app makers expect: typical performance is near ${primaryValue}, while top apps reach about ${topValue}.`,
+      `Most app makers underestimate ${normalizedLabel.toLowerCase()}: typical results sit around ${primaryValue}, but top performers get closer to ${topValue}.`,
+      `${normalizedLabel} is not evenly distributed - many apps cluster around ${primaryValue}, while leaders push toward ${topValue}.`,
+    ];
+    return variants[safeSeed % variants.length] ?? variants[0];
   }
 
   if (metricLabel && primaryValue) {
-    return `${normalizeHookMetricLabel(metricLabel)} varies more by cohort than most app makers assume, with typical performance near ${primaryValue}.`;
+    const normalizedLabel = normalizeHookMetricLabel(metricLabel);
+    const variants = [
+      `${normalizedLabel} varies more by cohort than most app makers assume, with typical performance near ${primaryValue}.`,
+      `${normalizedLabel} benchmarks are wider than most dashboards suggest, and the typical level is around ${primaryValue}.`,
+      `Typical ${normalizedLabel.toLowerCase()} sits near ${primaryValue}, but the spread around that point is where strategy lives.`,
+    ];
+    return variants[safeSeed % variants.length] ?? variants[0];
   }
 
   if (metricLabel) {
-    return `${normalizeHookMetricLabel(metricLabel)} benchmarks vary more by cohort than most app makers assume.`;
+    const normalizedLabel = normalizeHookMetricLabel(metricLabel);
+    const variants = [
+      `${normalizedLabel} benchmarks vary more by cohort than most app makers assume.`,
+      `Most app makers treat ${normalizedLabel.toLowerCase()} as stable, but cohort splits show real variance.`,
+      `${normalizedLabel} looks simple at top level, then diverges quickly when you break it down by cohort.`,
+    ];
+    return variants[safeSeed % variants.length] ?? variants[0];
   }
 
-  return "Most app makers have bigger benchmark variance by cohort than their dashboards suggest.";
+  const primaryValues = extractBenchmarkPrimaryValues(compact);
+  if (primaryValues.length > 0) {
+    const focus = primaryValues[0];
+    const variants = [
+      `State of in-app subscriptions report benchmarks show typical performance around ${focus}.`,
+      `One benchmark level keeps showing up in the State of in-app subscriptions report: around ${focus}.`,
+      `The State of in-app subscriptions report keeps circling the same benchmark zone: roughly ${focus}.`,
+    ];
+    return variants[safeSeed % variants.length] ?? variants[0];
+  }
+
+  if (compact) {
+    const fragment = compact
+      .split(/[|]/)
+      .map((part) => part.trim())
+      .find((part) => part.length >= 12);
+    if (fragment) {
+      return `${clipTextAtWordBoundary(fragment, 120)}.`;
+    }
+  }
+
+  const genericVariants = [
+    "Most app makers underestimate how wide benchmark variance gets once cohorts are split.",
+    "Benchmark variance usually looks small in dashboards and much wider in cohort-level cuts.",
+    "The biggest benchmark gaps hide in cohort splits, not topline averages.",
+  ];
+  return genericVariants[safeSeed % genericVariants.length] ?? genericVariants[0];
 }
 
-function sanitizeSauceHookFallback(hook: string, benchmarkSnippet: string | null): string {
+function sanitizeSauceHookFallback(hook: string, benchmarkSnippet: string | null, seed = 0): string {
   const cleaned = hook.replace(/\s+/g, " ").trim();
   if (!cleaned || SAUCE_WEAK_HOOK_PATTERN.test(cleaned)) {
-    return buildStrictSauceFallbackHook(benchmarkSnippet);
+    return buildStrictSauceFallbackHook(benchmarkSnippet, seed);
   }
   return cleaned;
 }
@@ -1711,8 +1675,7 @@ function countStrictSauceOutputViolations(
   options: { allowedClaims: Set<string>; allowAnecdotes: boolean },
 ): { unsupportedNumericClaims: number; fuzzyPlaceholderSentences: number; blockedAnecdoteSentences: number } {
   let unsupportedNumericClaims = 0;
-  let fuzzyPlaceholderSentences = 0;
-  let blockedAnecdoteSentences = 0;
+  void options.allowAnecdotes;
 
   for (const value of values) {
     const text = value.trim();
@@ -1723,31 +1686,12 @@ function countStrictSauceOutputViolations(
     const claims = extractNumericClaims(text);
     unsupportedNumericClaims += claims.filter((claim) => !options.allowedClaims.has(claim.canonical)).length;
 
-    const paragraphs = splitParagraphs(text);
-    for (const paragraph of paragraphs) {
-      const sentenceUnits = splitSentenceUnits(paragraph)
-        .map((sentence) => sentence.replace(/\s+/g, " ").trim())
-        .filter(Boolean);
-      const sentences = sentenceUnits.length ? sentenceUnits : [paragraph.replace(/\s+/g, " ").trim()];
-
-      for (const sentence of sentences) {
-        if (!sentence) {
-          continue;
-        }
-        if (sentenceHasFuzzyNumericPlaceholder(sentence)) {
-          fuzzyPlaceholderSentences += 1;
-        }
-        if (!options.allowAnecdotes && sentenceHasBlockedAnecdote(sentence)) {
-          blockedAnecdoteSentences += 1;
-        }
-      }
-    }
   }
 
   return {
     unsupportedNumericClaims,
-    fuzzyPlaceholderSentences,
-    blockedAnecdoteSentences,
+    fuzzyPlaceholderSentences: 0,
+    blockedAnecdoteSentences: 0,
   };
 }
 
@@ -1884,30 +1828,89 @@ function extendBodyToMinSentences(body: string, minSentences: number): string {
   const padded = [...baseSentences];
 
   if (!padded.length) {
-    padded.push("The benchmark gap is real when you compare cohorts side by side.");
+    padded.push("Benchmark differences become clearer when we compare cohorts side by side.");
   }
 
-  const paddingPool = [
-    "In practice, the fastest gains come from testing one variable at a time.",
-    "The key is to compare cohorts before scaling any change.",
-    "Teams that track this weekly usually catch leaks earlier.",
-    "Treat this as an operating loop: test, measure, document, then iterate.",
-    "This keeps decisions grounded in evidence instead of one-off gut calls.",
-  ];
+  const ensureTerminalPunctuation = (value: string): string => {
+    const trimmed = value.replace(/\s+/g, " ").trim();
+    if (!trimmed) {
+      return "";
+    }
+    return /[.!?]$/.test(trimmed) ? trimmed : `${trimmed}.`;
+  };
 
-  let paddingIndex = 0;
+  const trySplitSentence = (sentence: string): [string, string] | null => {
+    const compact = sentence.replace(/\s+/g, " ").trim().replace(/[.!?]+$/g, "").trim();
+    if (!compact) {
+      return null;
+    }
+
+    const words = compact.split(/\s+/).filter(Boolean);
+    if (words.length < 14) {
+      return null;
+    }
+
+    const splitAt = (index: number): [string, string] | null => {
+      if (index <= 0 || index >= compact.length) {
+        return null;
+      }
+      const left = compact.slice(0, index).replace(/[,\s]+$/g, "").trim();
+      const right = compact.slice(index).replace(/^[,\s]+/g, "").trim();
+      const leftWords = left.split(/\s+/).filter(Boolean).length;
+      const rightWords = right.split(/\s+/).filter(Boolean).length;
+      if (leftWords < 6 || rightWords < 6) {
+        return null;
+      }
+      return [ensureTerminalPunctuation(left), ensureTerminalPunctuation(right)];
+    };
+
+    const midpoint = compact.length / 2;
+    const commaMatches = [...compact.matchAll(/,\s+/g)];
+    const commaSplit = commaMatches
+      .map((match) => (typeof match.index === "number" ? splitAt(match.index + match[0].length) : null))
+      .find(Boolean);
+    if (commaSplit) {
+      return commaSplit;
+    }
+
+    const conjunctionMatches = [...compact.matchAll(/\s+(and|but|so|because|while|when|which|that)\s+/gi)];
+    let bestSplit: [string, string] | null = null;
+    let bestDistance = Number.POSITIVE_INFINITY;
+    for (const match of conjunctionMatches) {
+      if (typeof match.index !== "number") {
+        continue;
+      }
+      const candidate = splitAt(match.index + 1);
+      if (!candidate) {
+        continue;
+      }
+      const distance = Math.abs(match.index - midpoint);
+      if (distance < bestDistance) {
+        bestDistance = distance;
+        bestSplit = candidate;
+      }
+    }
+    return bestSplit;
+  };
+
   while (padded.length < minSentences) {
-    const anchor = padded[paddingIndex % padded.length]?.replace(/[.!?]+$/g, "").trim() ?? "";
-    const template = paddingPool[paddingIndex % paddingPool.length] ?? "Keep testing and measuring by cohort.";
-    const nextSentence =
-      paddingIndex % 2 === 0 || !anchor
-        ? template
-        : `${anchor} when segmented by cohort and price tier.`;
-    padded.push(nextSentence);
-    paddingIndex += 1;
+    let splitApplied = false;
+    for (let index = 0; index < padded.length; index += 1) {
+      const split = trySplitSentence(padded[index] ?? "");
+      if (!split) {
+        continue;
+      }
+      padded.splice(index, 1, split[0], split[1]);
+      splitApplied = true;
+      break;
+    }
+
+    if (!splitApplied) {
+      break;
+    }
   }
 
-  return normalizeBodyRhythm(padded.join(" "));
+  return normalizeBodyRhythm(padded.map((sentence) => ensureTerminalPunctuation(sentence)).join(" "));
 }
 
 function normalizeComparisonText(value: string): string {
@@ -3410,6 +3413,7 @@ async function runOpenAiChatGeneration(params: {
   responseSchema: ReturnType<typeof makeGeneratePostsResponseSchema>;
   postCount: number;
   temperature?: number;
+  strictOutput?: boolean;
 }) {
   const { client } = getOpenAIClient(params.token);
   const imageDataUrls = (params.imageDataUrls ?? []).filter(Boolean);
@@ -3442,7 +3446,9 @@ async function runOpenAiChatGeneration(params: {
     throw new Error("Model returned no parsable output.");
   }
 
-  return params.responseSchema.parse(normalizeGeneratedBatchPayload(parsed, params.postCount));
+  return params.responseSchema.parse(
+    normalizeGeneratedBatchPayload(parsed, params.postCount, { strict: params.strictOutput }),
+  );
 }
 
 async function runCodexOauthGeneration(params: {
@@ -3454,6 +3460,7 @@ async function runCodexOauthGeneration(params: {
   responseSchema: ReturnType<typeof makeGeneratePostsResponseSchema>;
   postCount: number;
   verbosity?: "low" | "medium" | "high";
+  strictOutput?: boolean;
 }) {
   const responseFormat = zodResponseFormat(params.responseSchema, "linkedin_post_batch");
   const jsonSchema = responseFormat.json_schema?.schema;
@@ -3475,10 +3482,12 @@ async function runCodexOauthGeneration(params: {
     baseUrl: process.env.OPENAI_CODEX_BASE_URL,
   });
 
-  return params.responseSchema.parse(normalizeGeneratedBatchPayload(parsedJson, params.postCount));
+  return params.responseSchema.parse(
+    normalizeGeneratedBatchPayload(parsedJson, params.postCount, { strict: params.strictOutput }),
+  );
 }
 
-const CLAUDE_WRITER_MODEL = "claude-sonnet-4-5";
+const CLAUDE_WRITER_MODEL = "claude-sonnet-4-6";
 const CLAUDE_ALLOWED_LENGTHS = new Set(["short", "medium", "long", "very long", "standard"]);
 const CLAUDE_HOOK_LIMITS = { min: 8, max: 220 } as const;
 const CLAUDE_POST_HOOK_LIMITS = { min: 8, max: 280 } as const;
@@ -3545,6 +3554,9 @@ function buildClaudeFallbackPost(length: "short" | "medium" | "long" | "very lon
 function normalizeGeneratedBatchPayload(
   payload: unknown,
   postCount: number,
+  options?: {
+    strict?: boolean;
+  },
 ): {
   hooks: string[];
   posts: Array<{
@@ -3554,6 +3566,7 @@ function normalizeGeneratedBatchPayload(
     cta: string;
   }>;
 } {
+  const strict = options?.strict ?? false;
   const requiredHookCount = Math.max(5, postCount);
   const normalizedPayload =
     payload && typeof payload === "object" ? (payload as Record<string, unknown>) : {};
@@ -3576,10 +3589,32 @@ function normalizeGeneratedBatchPayload(
   })();
 
   const clippedPosts = rawPosts.slice(0, postCount);
+  if (strict && clippedPosts.length < postCount) {
+    throw new Error(`Model returned ${clippedPosts.length} posts; expected ${postCount} in strict mode.`);
+  }
   const sanitizedPosts = clippedPosts.map((post) => {
     const rawPost = post && typeof post === "object" ? (post as Record<string, unknown>) : {};
     const rawLength = typeof rawPost.length === "string" ? rawPost.length.trim().toLowerCase() : "";
     const safeLength = CLAUDE_ALLOWED_LENGTHS.has(rawLength) ? rawLength : "medium";
+    const rawHook = typeof rawPost.hook === "string" ? normalizeNoEmDash(rawPost.hook).trim() : "";
+    const rawBody = typeof rawPost.body === "string" ? normalizeNoEmDash(rawPost.body).trim() : "";
+    const rawCta = typeof rawPost.cta === "string" ? normalizeNoEmDash(rawPost.cta).trim() : "";
+
+    if (strict) {
+      if (!CLAUDE_ALLOWED_LENGTHS.has(rawLength)) {
+        throw new Error(`Model returned unsupported post length '${rawLength || "(empty)"}' in strict mode.`);
+      }
+      if (!rawHook || !rawBody) {
+        throw new Error("Model returned incomplete post fields in strict mode.");
+      }
+
+      return {
+        length: safeLength as "short" | "medium" | "long" | "very long" | "standard",
+        hook: clipTextStrictMax(rawHook, CLAUDE_POST_HOOK_LIMITS.max),
+        body: clipMultilineTextStrictMax(rawBody, CLAUDE_POST_BODY_LIMITS.max),
+        cta: clipTextStrictMax(rawCta, CLAUDE_POST_CTA_LIMITS.max),
+      };
+    }
 
     return {
       length: safeLength as "short" | "medium" | "long" | "very long" | "standard",
@@ -3590,10 +3625,16 @@ function normalizeGeneratedBatchPayload(
   });
 
   if (!sanitizedPosts.length) {
+    if (strict) {
+      throw new Error("Model returned no posts in strict mode.");
+    }
     sanitizedPosts.push(buildClaudeFallbackPost("medium"));
   }
 
   while (sanitizedPosts.length < postCount) {
+    if (strict) {
+      break;
+    }
     const templatePost = sanitizedPosts[sanitizedPosts.length - 1] ?? buildClaudeFallbackPost("medium");
     sanitizedPosts.push({ ...templatePost });
   }
@@ -3619,10 +3660,18 @@ function normalizeGeneratedBatchPayload(
 
   const finalizedHooks = dedupedHookCandidates.length
     ? [...dedupedHookCandidates]
-    : [normalizeClaudeBoundedString(CLAUDE_FALLBACK_HOOK, CLAUDE_HOOK_LIMITS, CLAUDE_FALLBACK_HOOK)];
+    : strict
+      ? []
+      : [normalizeClaudeBoundedString(CLAUDE_FALLBACK_HOOK, CLAUDE_HOOK_LIMITS, CLAUDE_FALLBACK_HOOK)];
+  if (strict && finalizedHooks.length === 0) {
+    throw new Error("Model returned no hooks in strict mode.");
+  }
   const hookCycleSource = finalizedHooks.length ? finalizedHooks : [CLAUDE_FALLBACK_HOOK];
 
   while (finalizedHooks.length < requiredHookCount) {
+    if (strict) {
+      break;
+    }
     finalizedHooks.push(hookCycleSource[finalizedHooks.length % hookCycleSource.length] ?? hookCycleSource[0]);
   }
 
@@ -3707,6 +3756,11 @@ function parseClaudeJsonBestEffort(value: string): unknown | null {
   return null;
 }
 
+function isAnthropicModelSelectionError(error: unknown): boolean {
+  const message = error instanceof Error ? error.message : String(error ?? "");
+  return /\b(model|unsupported|not found|does not exist|invalid)\b/i.test(message);
+}
+
 async function runClaudeWriterGeneration(params: {
   credentials: ClaudeCredentials;
   systemPrompt: string;
@@ -3714,6 +3768,8 @@ async function runClaudeWriterGeneration(params: {
   imageDataUrls?: string[];
   responseSchema: ReturnType<typeof makeGeneratePostsResponseSchema>;
   postCount: number;
+  strictOutput?: boolean;
+  allowModelFallback?: boolean;
 }) {
   const { apiKey, authToken } = params.credentials;
   const client = new Anthropic({ apiKey: apiKey ?? undefined, authToken: authToken ?? undefined });
@@ -3734,19 +3790,42 @@ async function runClaudeWriterGeneration(params: {
 
   userContent.push({ type: "text", text: params.userPrompt });
 
-  const response = await client.messages.create({
-    model: process.env.CLAUDE_WRITER_MODEL ?? CLAUDE_WRITER_MODEL,
-    max_tokens: 4096,
-    system: params.systemPrompt,
-    messages: [{ role: "user", content: userContent }],
-    temperature: 0.8,
-    output_config: {
-      format: {
-        type: "json_schema" as const,
-        schema: buildClaudePostsJsonSchema(),
+  const preferredModel = process.env.CLAUDE_WRITER_MODEL?.trim() || CLAUDE_WRITER_MODEL;
+  const fallbackModel = process.env.CLAUDE_WRITER_FALLBACK_MODEL?.trim() || "claude-sonnet-4-5";
+  const allowModelFallback = params.allowModelFallback ?? true;
+  const modelCandidates =
+    allowModelFallback && preferredModel !== fallbackModel
+      ? [preferredModel, fallbackModel]
+      : [preferredModel];
+
+  const createWriterResponse = (model: string) =>
+    client.messages.create({
+      model,
+      max_tokens: 4096,
+      system: params.systemPrompt,
+      messages: [{ role: "user", content: userContent }],
+      temperature: 0.8,
+      output_config: {
+        format: {
+          type: "json_schema" as const,
+          schema: buildClaudePostsJsonSchema(),
+        },
       },
-    },
-  });
+    });
+
+  let response;
+  if (modelCandidates.length > 1) {
+    try {
+      response = await createWriterResponse(modelCandidates[0]);
+    } catch (primaryModelError) {
+      if (!isAnthropicModelSelectionError(primaryModelError)) {
+        throw primaryModelError;
+      }
+      response = await createWriterResponse(modelCandidates[1]);
+    }
+  } else {
+    response = await createWriterResponse(modelCandidates[0]);
+  }
 
   const textBlock = response.content.find((b): b is Anthropic.TextBlock => b.type === "text");
   if (!textBlock?.text) {
@@ -3756,6 +3835,9 @@ async function runClaudeWriterGeneration(params: {
   const parsed =
     parseClaudeJsonBestEffort(textBlock.text) ??
     (() => {
+      if (params.strictOutput) {
+        throw new Error("Claude writer returned non-parseable JSON in strict mode.");
+      }
       console.warn(
         "Claude writer returned non-parseable JSON; using fallback post skeleton.",
         textBlock.text.slice(0, 240),
@@ -3766,7 +3848,9 @@ async function runClaudeWriterGeneration(params: {
       };
     })();
 
-  return params.responseSchema.parse(normalizeGeneratedBatchPayload(parsed, params.postCount));
+  return params.responseSchema.parse(
+    normalizeGeneratedBatchPayload(parsed, params.postCount, { strict: params.strictOutput }),
+  );
 }
 
 type XThreadSourcePost = {
@@ -4321,7 +4405,8 @@ export async function POST(request: Request) {
     const isEventOrWebinarPostType = looksLikeEventOrWebinarPostType(input.inputType);
     const isProductUpdatePostType = looksLikeProductUpdatePostType(input.inputType);
     const isYouTubePromoPostType = looksLikeYouTubePromoPostType(input.inputType);
-    const shouldRunWebFactCheck = !isProductUpdatePostType && !isYouTubePromoPostType;
+    const isSaucePostType = looksLikeSaucePostType(input.inputType);
+    const shouldRunWebFactCheck = !isProductUpdatePostType && !isYouTubePromoPostType && !isSaucePostType;
     const shouldRunSoisContext = !isProductUpdatePostType && !isEventOrWebinarPostType;
     const webFactCheckSkipReason = isProductUpdatePostType
       ? "Web fact-check skipped for product feature launch post type."
@@ -4353,17 +4438,22 @@ export async function POST(request: Request) {
         });
     const sauceLimit = Math.min(12, Math.max(6, input.numberOfPosts * 3));
     const sauceRetrievalQuery = soisRetrievalQuery || retrievalQuery;
-    const soisContextPromise = looksLikeSaucePostType(input.inputType)
-      ? (embeddingClient
-          ? retrieveSoisEmbeddedContext({
-              client: embeddingClient,
-              query: sauceRetrievalQuery,
-              details: input.details,
-              limit: sauceLimit,
-            })
-          : Promise.resolve<{ items: { id: string; text: string }[]; method: "none" }>({ items: [], method: "none" })
-        ).then(async (sauce) => {
-          let items: SoisContextItem[] = sauce.items.map((item) => ({
+    const soisContextPromise = isSaucePostType
+      ? (async () => {
+          if (!embeddingClient) {
+            throw new Error(
+              "SOIS embedded context requires LanceDB embeddings. Run `npm run sois-embeddings` and retry.",
+            );
+          }
+
+          const sauce = await retrieveSoisEmbeddedContext({
+            client: embeddingClient,
+            query: sauceRetrievalQuery,
+            details: input.details,
+            limit: sauceLimit,
+          });
+
+          const items: SoisContextItem[] = sauce.items.map((item) => ({
             id: item.id,
             category: "market",
             categoryLabel: "SOIS",
@@ -4373,42 +4463,22 @@ export async function POST(request: Request) {
             rows: 0,
             text: item.text,
           }));
-          if (items.length === 0) {
-            const fallback = await getSoisInsightsDataset();
-            if (fallback.trim()) {
-              const parsedFallbackItems = parseNumberedInsightBlocks({
-                text: fallback,
-                idPrefix: "sois-fallback",
-                sourceUrl: "data/sois-insights.md",
-                categoryLabel: "SOIS",
-              });
-              if (parsedFallbackItems.length > 0) {
-                items = parsedFallbackItems.slice(0, Math.max(sauceLimit, input.numberOfPosts * 4));
-              } else {
-                items = [
-                  {
-                    id: "sois-fallback",
-                    category: "market",
-                    categoryLabel: "SOIS",
-                    subcategory: 1,
-                    subcategoryLabel: "SOIS local insights feed",
-                    sourceUrl: "data/sois-insights.md",
-                    rows: 0,
-                    text: fallback.slice(0, 25_000),
-                  },
-                ];
-              }
-            }
+
+          if (!items.length) {
+            throw new Error(
+              "No SOIS embedded evidence retrieved for this request. Ensure data/sois-insights.md is embedded and indexed in LanceDB.",
+            );
           }
+
           return {
-            enabled: items.length > 0,
-            method: items.length ? sauce.method : ("none" as const),
+            enabled: true,
+            method: sauce.method,
             items,
             warning: undefined,
             fetchedSections: items.length,
             availableSections: items.length,
           };
-        })
+        })()
       : shouldRunSoisContext
         ? retrieveSoisContext({
             client: embeddingClient,
@@ -4586,8 +4656,8 @@ export async function POST(request: Request) {
         : "internal context";
     const evidenceContextGuidance = shouldRunSoisContext
       ? looksLikeSaucePostType(input.inputType)
-        ? `Evidence context: SOIS insights feed below. MANDATORY: Every SOIS post body MUST include at least 1 concrete number from the SOIS insights feed (e.g. 1.7x, 55.5%, $54.17, 46.2%). Copy numbers verbatim. Zero numbers in a SOIS post = invalid output. Do not use numbers from web fact-check or user input.`
-        : `Evidence context (priority order: ${evidencePriorityOrder}). Numbers from the State of in-app subscriptions report are real benchmarks - use them. Copy numbers verbatim from the evidence below. Use each number for its labeled metric only: install_to_paid_rate as %, avg_ltv as $, price_usd as $. When a number is not in the evidence, write the sentence without it. For SOIS posts: only use numbers from the report evidence or SOIS insights feed below (not from web fact-check or user input). REQUIRED: Each SOIS post body must include at least 1 concrete number from the evidence (e.g. X%, $Y, Z rate). Never output a SOIS post with zero numbers.`
+        ? `Evidence context: SOIS insights feed below. MANDATORY: Every SOIS post MUST include at least 1 concrete numeric fact from data/sois-insights.md (hook or body), e.g. 1.7x, 55.5%, $54.17, 46.2%. Copy numbers verbatim. Zero numbers in a SOIS post = invalid output. Do not use numbers from web fact-check or user input.`
+        : `Evidence context (priority order: ${evidencePriorityOrder}). Numbers from the State of in-app subscriptions report are real benchmarks - use them. Copy numbers verbatim from the evidence below. Use each number for its labeled metric only: install_to_paid_rate as %, avg_ltv as $, price_usd as $. When a number is not in the evidence, write the sentence without it. For SOIS posts: only use numbers from the report evidence or SOIS insights feed below (not from web fact-check or user input). REQUIRED: Each SOIS post must include at least 1 concrete numeric fact from data/sois-insights.md (hook or body), e.g. X%, $Y, Z rate. Never output a SOIS post with zero numbers.`
       : shouldRunWebFactCheck
         ? `Evidence context (priority order: ${evidencePriorityOrder}). Use web evidence to fill factual gaps when available (especially for event logistics). If a detail is not supported by evidence, keep phrasing qualitative and avoid invented specifics. Do not introduce State of in-app subscriptions report benchmark claims.`
         : `Evidence context (priority order: ${evidencePriorityOrder}). Use internal request context only (details, event data, date/time/place${
@@ -4659,7 +4729,7 @@ ${promptGuides.aso}
 Paywall guide from repository prompt file:
 ${promptGuides.paywall}
 SOIS number rule (MANDATORY - non-negotiable):
-- Every SOIS post body MUST include at least 1 concrete number from the SOIS insights feed below (e.g. 1.7x, 7.4x, 55.5%, $54.17, 46.2%, 58.1%). A SOIS post with zero numbers is invalid.
+- Every SOIS post MUST include at least 1 concrete numeric fact from data/sois-insights.md (hook or body), e.g. 1.7x, 7.4x, 55.5%, $54.17, 46.2%, 58.1%. A SOIS post with zero numbers is invalid.
 - Target 1-2 benchmark numbers per post. Copy numbers verbatim from the SOIS insights evidence.
 - Every number must come from the SOIS insights feed below. Do not use numbers from web fact-check or user input.
 - Do not repeat the same benchmark number multiple times in the same post or across most hook suggestions.
@@ -4816,17 +4886,15 @@ Also generate a list of hook suggestions inspired by this style and request.
     };
 
     const preferClaudeWriter = parseBooleanEnv(process.env.USE_CLAUDE_WRITER, true);
-    const forceCodexReviewerPass = parseBooleanEnv(
-      process.env.FORCE_CODEX_REVIEWER,
-      parseBooleanEnv(process.env.FORCE_CODEX_REVIEWER_FOR_SAUCE, true),
-    );
+    const enableCodexReviewerPass = parseBooleanEnv(process.env.ENABLE_CODEX_REVIEWER_PASS, false);
     const useClaudeWriter = Boolean(claudeCredentials && preferClaudeWriter);
-    const useCodexReviewer = Boolean(oauthCredentials);
-    const hasCodexReviewerPath = useCodexReviewer;
+    const strictSauceOutput = isSaucePostType;
     const enableNumericSanitizerRewrite = parseBooleanEnv(
       process.env.ENABLE_NUMERIC_SANITIZER_REWRITE,
       false,
     );
+    const enablePostSanitization =
+      parseBooleanEnv(process.env.ENABLE_POST_SANITIZATION, false) && !strictSauceOutput;
 
     const runGeneration = (params: {
       model: string;
@@ -4842,6 +4910,8 @@ Also generate a list of hook suggestions inspired by this style and request.
           imageDataUrls: inputImageDataUrls.length ? inputImageDataUrls : undefined,
           responseSchema: params.responseSchema,
           postCount: params.postCount,
+          strictOutput: strictSauceOutput,
+          allowModelFallback: !strictSauceOutput,
         });
       }
 
@@ -4855,6 +4925,7 @@ Also generate a list of hook suggestions inspired by this style and request.
           responseSchema: params.responseSchema,
           postCount: params.postCount,
           verbosity: codexWriterVerbosity,
+          strictOutput: strictSauceOutput,
         });
       }
 
@@ -4870,6 +4941,7 @@ Also generate a list of hook suggestions inspired by this style and request.
         imageDataUrls: inputImageDataUrls.length ? inputImageDataUrls : undefined,
         responseSchema: params.responseSchema,
         postCount: params.postCount,
+        strictOutput: strictSauceOutput,
       });
     };
 
@@ -4892,7 +4964,10 @@ Also generate a list of hook suggestions inspired by this style and request.
         };
       } catch (primaryError) {
         const canFallback =
-          fallbackModel.trim().length > 0 && fallbackModel !== requestedModel && isModelAccessError(primaryError);
+          !strictSauceOutput &&
+          fallbackModel.trim().length > 0 &&
+          fallbackModel !== requestedModel &&
+          isModelAccessError(primaryError);
 
         if (!canFallback) {
           throw primaryError;
@@ -5058,10 +5133,12 @@ ${rankedContextLines}`;
         .filter((item) => item.issues.length > 0);
 
     let normalizedPosts = normalizeGeneratedPosts(parsed.posts);
-    let qualityIssuesByPost = collectQualityIssues(normalizedPosts);
+    let normalizedHooks = parsed.hooks.map((hook) => normalizeNoEmDash(hook));
+    let qualityIssuesByPost = enablePostSanitization ? collectQualityIssues(normalizedPosts) : [];
 
     const enableQualityRepairPass = parseBooleanEnv(process.env.ENABLE_QUALITY_REPAIR_PASS, false);
-    const shouldRunQualityRepairPass = enableQualityRepairPass && qualityIssuesByPost.length > 0;
+    const shouldRunQualityRepairPass =
+      enablePostSanitization && enableQualityRepairPass && qualityIssuesByPost.length > 0;
 
     if (shouldRunQualityRepairPass) {
       const qualityIssueSummary = qualityIssuesByPost
@@ -5111,20 +5188,18 @@ ${toBulletedSection(QUALITY_REPAIR_REQUIREMENT_LINES)}
       qualityIssuesByPost = collectQualityIssues(normalizedPosts);
     } else if (qualityIssuesByPost.length > 0 && !enableQualityRepairPass) {
       console.info(
-        `Quality repair pass disabled (ENABLE_QUALITY_REPAIR_PASS=false): proceeding to editor review with ${qualityIssuesByPost.length} post(s) flagged after first draft.`,
+        `Quality repair pass disabled (ENABLE_QUALITY_REPAIR_PASS=false): Codex reviewer pass is disabled, so keeping first draft with ${qualityIssuesByPost.length} flagged post(s).`,
       );
     }
 
-    const skipEditorForTest = process.env.SKIP_CODEX_EDITOR === "1";
-    const shouldForceCodexReviewerPass = forceCodexReviewerPass && hasCodexReviewerPath;
-    const shouldRunEditorPass = !skipEditorForTest && (qualityIssuesByPost.length > 0 || shouldForceCodexReviewerPass);
+    const shouldRunEditorPass = enablePostSanitization && enableCodexReviewerPass && qualityIssuesByPost.length > 0;
 
     if (shouldRunEditorPass) {
       const editorPassGoals = [
         "Fix the remaining quality-gate issues without changing the core argument.",
         "Eliminate staccato formatting. Merge isolated one-sentence lines into fuller paragraphs while preserving flow and readability.",
         "Ensure body text uses paragraph breaks (blank line between paragraphs). Never leave a wall of text without paragraph breaks.",
-        "Keep each post body within requested length range: short 2-4, medium 5-9, long 18-35, very long 36-90 sentences.",
+        "Keep each post body within requested length range: short 2-4, medium 5-9, long 10-22, very long 23-50 sentences.",
         looksLikeSaucePostType(input.inputType)
           ? "For SOIS posts: verify every number or percentage appears verbatim in the SOIS dataset evidence. Rewrite unsupported numbers qualitatively. Every SOIS post must include at least 1 number from the SOIS dataset."
           : "",
@@ -5173,7 +5248,7 @@ Fact and benchmark rules:
 - When a numeric claim is unsupported, rewrite it qualitatively.
 - Use each metric in its correct unit: conversion as %, LTV as currency, price as currency.
 - For SOIS posts: only keep numbers that appear verbatim in the SOIS dataset evidence above (not web evidence). Replace any other number with qualitative phrasing.
-- For SOIS posts: each post body MUST include at least 1 concrete number from the SOIS dataset. Never output a SOIS post with zero numbers.
+- For SOIS posts: each post MUST include at least 1 concrete numeric fact from data/sois-insights.md (hook or body). Never output a SOIS post with zero numbers.
 - Vary benchmark numbers across posts and hook suggestions.
 
 Rewrite to concrete anchors:
@@ -5275,8 +5350,9 @@ Return ${parsed.hooks.length} hook suggestions as well (keep good ones, tighten 
       }
     }
 
-    const MAX_LENGTH_REPAIR_ATTEMPTS = 3;
-    let lengthValidationIssues = collectLengthValidationIssues(normalizedPosts);
+    if (enablePostSanitization) {
+      const MAX_LENGTH_REPAIR_ATTEMPTS = 3;
+      let lengthValidationIssues = collectLengthValidationIssues(normalizedPosts);
 
     for (let attempt = 1; attempt <= MAX_LENGTH_REPAIR_ATTEMPTS && lengthValidationIssues.length > 0; attempt += 1) {
       const issueSummary = lengthValidationIssues
@@ -5366,8 +5442,9 @@ ${draftSummary}`;
       }
     }
 
-    if (lengthValidationIssues.length > 0) {
-      const unresolvedSummary = lengthValidationIssues
+    const unresolvedMaxLengthIssues = lengthValidationIssues.filter((issue) => issue.sentenceCount > issue.max);
+    if (unresolvedMaxLengthIssues.length > 0) {
+      const unresolvedSummary = unresolvedMaxLengthIssues
         .map(
           (issue) =>
             `post ${issue.postIndex + 1} expected ${issue.min}-${issue.max}, got ${issue.sentenceCount}`,
@@ -5375,40 +5452,48 @@ ${draftSummary}`;
         .join("; ");
       throw new Error(`Length enforcement unresolved after repair pass: ${unresolvedSummary}`);
     }
+    if (lengthValidationIssues.length > 0) {
+      const unresolvedSummary = lengthValidationIssues
+        .map(
+          (issue) =>
+            `post ${issue.postIndex + 1} expected ${issue.min}-${issue.max}, got ${issue.sentenceCount}`,
+        )
+        .join("; ");
+      console.warn(`Length minimum unmet after repair pass: ${unresolvedSummary}`);
+    }
 
-    let normalizedHooks = parsed.hooks.map((hook) => normalizeNoEmDash(hook));
-    const sauceUsesSoisOnly =
-      looksLikeSaucePostType(input.inputType) && sauceBenchmarkNumericClaims.size > 0;
-    const hooksAllowedClaims = sauceUsesSoisOnly ? sauceBenchmarkNumericClaims : allowedNumericClaims;
-    const postsAllowedClaims = sauceUsesSoisOnly ? sauceBenchmarkNumericClaims : allowedNumericClaims;
+      const sauceUsesSoisOnly =
+        looksLikeSaucePostType(input.inputType) && sauceBenchmarkNumericClaims.size > 0;
+      const hooksAllowedClaims = sauceUsesSoisOnly ? sauceBenchmarkNumericClaims : allowedNumericClaims;
+      const postsAllowedClaims = sauceUsesSoisOnly ? sauceBenchmarkNumericClaims : allowedNumericClaims;
 
-    if (enableNumericSanitizerRewrite) {
-      const sanitizedHooksResult = sanitizeHookSuggestionsNumericClaims(
-        normalizedHooks,
-        hooksAllowedClaims,
-        sauceUsesSoisOnly,
-      );
-      normalizedHooks = sanitizedHooksResult.hooks.map((hook) => normalizeNoEmDash(hook));
+      if (enableNumericSanitizerRewrite) {
+        const sanitizedHooksResult = sanitizeHookSuggestionsNumericClaims(
+          normalizedHooks,
+          hooksAllowedClaims,
+          sauceUsesSoisOnly,
+        );
+        normalizedHooks = sanitizedHooksResult.hooks.map((hook) => normalizeNoEmDash(hook));
 
-      const sanitizedPostsResult = sanitizeGeneratedPostsNumericClaims(
-        normalizedPosts,
-        postsAllowedClaims,
-        sauceUsesSoisOnly,
-      );
-      normalizedPosts = sanitizedPostsResult.posts;
+        const sanitizedPostsResult = sanitizeGeneratedPostsNumericClaims(
+          normalizedPosts,
+          postsAllowedClaims,
+          sauceUsesSoisOnly,
+        );
+        normalizedPosts = sanitizedPostsResult.posts;
 
-      const numericClaimsSanitizedCount =
-        sanitizedHooksResult.unsupportedClaims.length + sanitizedPostsResult.unsupportedClaims.length;
-      if (numericClaimsSanitizedCount > 0) {
-        console.warn(
-          `Numeric safety pass rewrote ${numericClaimsSanitizedCount} unsupported number claim(s) to qualitative phrasing.`,
+        const numericClaimsSanitizedCount =
+          sanitizedHooksResult.unsupportedClaims.length + sanitizedPostsResult.unsupportedClaims.length;
+        if (numericClaimsSanitizedCount > 0) {
+          console.warn(
+            `Numeric safety pass rewrote ${numericClaimsSanitizedCount} unsupported number claim(s) to qualitative phrasing.`,
+          );
+        }
+      } else {
+        console.info(
+          "Numeric sanitizer rewrite pass disabled (ENABLE_NUMERIC_SANITIZER_REWRITE=false): relying on prompt+reviewer quality passes.",
         );
       }
-    } else {
-      console.info(
-        "Numeric sanitizer rewrite pass disabled (ENABLE_NUMERIC_SANITIZER_REWRITE=false): relying on prompt+reviewer quality passes.",
-      );
-    }
 
     if (sauceUsesSoisOnly && enableNumericSanitizerRewrite) {
       const sauceHookSanitization = sanitizeHookSuggestionsNumericClaims(
@@ -5643,7 +5728,7 @@ ${draftSummary}`;
     const enforceStrictSauceEvidenceMode =
       looksLikeSaucePostType(input.inputType) &&
       sauceBenchmarkNumericClaims.size > 0 &&
-      parseBooleanEnv(process.env.ENABLE_SAUCE_STRICT_EVIDENCE_MODE, true);
+      parseBooleanEnv(process.env.ENABLE_SAUCE_STRICT_EVIDENCE_MODE, false);
 
     if (enforceStrictSauceEvidenceMode) {
       const allowAnecdotes = detailsAllowSauceAnecdotes(input.details);
@@ -5691,7 +5776,7 @@ ${draftSummary}`;
               .trim()
           : "";
 
-        hook = sanitizeSauceHookFallback(hook, benchmarkSnippet);
+        hook = sanitizeSauceHookFallback(hook, benchmarkSnippet, index);
         if (!body) {
           body =
             benchmarkSentence ||
@@ -5729,7 +5814,7 @@ ${draftSummary}`;
           sanitized.removedUnsupportedNumericSentences +
           sanitized.removedFuzzyPlaceholderSentences +
           sanitized.removedAnecdoteSentences;
-        const fallbackHook = sanitizeSauceHookFallback(sanitized.value, benchmarkSnippet);
+        const fallbackHook = sanitizeSauceHookFallback(sanitized.value, benchmarkSnippet, index);
         return clipTextStrictMax(fallbackHook, CLAUDE_HOOK_LIMITS.max);
       });
 
@@ -5766,7 +5851,7 @@ ${draftSummary}`;
             );
             const rewrittenHook = rewriteUnsupportedNumericClaims(hook, sauceBenchmarkNumericClaims, false).value;
             return clipTextStrictMax(
-              sanitizeSauceHookFallback(rewrittenHook, benchmarkSnippet),
+              sanitizeSauceHookFallback(rewrittenHook, benchmarkSnippet, index),
               CLAUDE_HOOK_LIMITS.max,
             );
           });
@@ -5782,7 +5867,7 @@ ${draftSummary}`;
             const bodyRewrite = rewriteUnsupportedNumericClaims(post.body, sauceBenchmarkNumericClaims, false).value;
             const ctaRewrite = rewriteUnsupportedNumericClaims(post.cta, sauceBenchmarkNumericClaims, false).value;
             const nextHook = clipTextStrictMax(
-              sanitizeSauceHookFallback(hookRewrite, benchmarkSnippet),
+              sanitizeSauceHookFallback(hookRewrite, benchmarkSnippet, index),
               CLAUDE_POST_HOOK_LIMITS.max,
             );
             const nextBody = clipMultilineTextStrictMax(
@@ -5808,40 +5893,83 @@ ${draftSummary}`;
       }
     }
 
-    let finalLengthIssues = collectLengthValidationIssues(normalizedPosts);
-    if (finalLengthIssues.length > 0) {
-      const issuesByPostIndex = new Map<number, LengthValidationIssue>();
-      for (const issue of finalLengthIssues) {
-        issuesByPostIndex.set(issue.postIndex, issue);
-      }
-
+    if (looksLikeSaucePostType(input.inputType) && normalizedPosts.length > 1) {
+      const seenHookKeys = new Set<string>();
       normalizedPosts = normalizedPosts.map((post, index) => {
-        const issue = issuesByPostIndex.get(index);
-        if (!issue) {
-          return post;
+        let nextHook = normalizeNoEmDash(post.hook).replace(/\s+/g, " ").trim();
+        let nextKey = nextHook.toLowerCase();
+
+        if (!nextHook || seenHookKeys.has(nextKey)) {
+          const maxAttempts = Math.max(3, sauceSnippetsForInjection.length);
+          for (let attempt = 0; attempt < maxAttempts; attempt += 1) {
+            const benchmarkSnippet = pickStrictSauceBenchmarkSnippet(
+              sauceSnippetsForInjection,
+              sauceBenchmarkNumericClaims,
+              index + attempt,
+            );
+            const candidateHook = sanitizeSauceHookFallback("", benchmarkSnippet, index + attempt);
+            const candidateKey = candidateHook.toLowerCase();
+            if (!candidateHook || seenHookKeys.has(candidateKey)) {
+              continue;
+            }
+            nextHook = candidateHook;
+            nextKey = candidateKey;
+            break;
+          }
         }
 
-        if (issue.sentenceCount < issue.min) {
-          return {
-            ...post,
-            body: extendBodyToMinSentences(post.body, issue.min),
-          };
-        }
-
+        seenHookKeys.add(nextKey);
         return {
           ...post,
-          body: clipBodyToMaxSentences(post.body, issue.max),
+          hook: clipTextStrictMax(nextHook || post.hook, CLAUDE_POST_HOOK_LIMITS.max),
         };
       });
-
-      finalLengthIssues = collectLengthValidationIssues(normalizedPosts);
     }
 
-    if (finalLengthIssues.length > 0) {
-      const unresolvedSummary = finalLengthIssues
-        .map((issue) => `post ${issue.postIndex + 1}: expected ${issue.min}-${issue.max}, got ${issue.sentenceCount}`)
-        .join("; ");
-      throw new Error(`Final length enforcement failed: ${unresolvedSummary}`);
+      let finalLengthIssues = collectLengthValidationIssues(normalizedPosts);
+      if (finalLengthIssues.length > 0) {
+        const issuesByPostIndex = new Map<number, LengthValidationIssue>();
+        for (const issue of finalLengthIssues) {
+          issuesByPostIndex.set(issue.postIndex, issue);
+        }
+
+        normalizedPosts = normalizedPosts.map((post, index) => {
+          const issue = issuesByPostIndex.get(index);
+          if (!issue) {
+            return post;
+          }
+
+          if (issue.sentenceCount < issue.min) {
+            return {
+              ...post,
+              body: extendBodyToMinSentences(post.body, issue.min),
+            };
+          }
+
+          return {
+            ...post,
+            body: clipBodyToMaxSentences(post.body, issue.max),
+          };
+        });
+
+        finalLengthIssues = collectLengthValidationIssues(normalizedPosts);
+      }
+
+      const finalLengthUpperBoundIssues = finalLengthIssues.filter((issue) => issue.sentenceCount > issue.max);
+      if (finalLengthUpperBoundIssues.length > 0) {
+        const unresolvedSummary = finalLengthUpperBoundIssues
+          .map((issue) => `post ${issue.postIndex + 1}: expected ${issue.min}-${issue.max}, got ${issue.sentenceCount}`)
+          .join("; ");
+        throw new Error(`Final length enforcement failed: ${unresolvedSummary}`);
+      }
+      if (finalLengthIssues.length > 0) {
+        const unresolvedSummary = finalLengthIssues
+          .map((issue) => `post ${issue.postIndex + 1}: expected ${issue.min}-${issue.max}, got ${issue.sentenceCount}`)
+          .join("; ");
+        console.warn(`Final length minimum unmet after cleanup: ${unresolvedSummary}`);
+      }
+    } else {
+      console.info("Post sanitization pipeline disabled (ENABLE_POST_SANITIZATION=false): using direct model output.");
     }
 
     let postsWithMemes: GeneratePostsResponse["posts"] = normalizedPosts;
