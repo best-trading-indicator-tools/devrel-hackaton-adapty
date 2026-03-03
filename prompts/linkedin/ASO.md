@@ -1,6 +1,6 @@
 # ASO Playbook
 
-Use this guide when the post is a Sauce post touching ASO, store visibility, keyword strategy, app page conversion, ratings, or localization.
+Use this guide when the post is a SOIS post touching ASO, store visibility, keyword strategy, app page conversion, ratings, or localization.
 
 Operating contract:
 - Treat this as strategy guidance, not a source of hard facts.
@@ -34,7 +34,7 @@ Tactical patterns to surface:
 - Localization should adapt meaning and examples, not just translate text.
 - A/B tests should isolate one major variable and run long enough for stable reads.
 
-Sauce quality bar:
+SOIS quality bar:
 - Include at least one concrete metric, threshold, or example scenario.
 - Include one boundary condition such as "for utility apps" or "in paid-heavy traffic."
 - End with a practical next step, checklist, or experiment idea.

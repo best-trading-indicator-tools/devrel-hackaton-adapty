@@ -10,7 +10,7 @@ export const QUALITY_ISSUES = {
   MISSING_DIRECT_READER: "Add at least one direct reader line using you, your app, or your team.",
   MISSING_OPERATOR_ACTION:
     "Add one practical operator action sentence with a clear verb like test, measure, compare, fix, or ship.",
-  UNEXPANDED_SOIS: "Write SOIS as State of In-App Subscriptions (SOIS) on first mention.",
+  SOIS_ACRONYM: 'Do not use the acronym "SOIS" in public copy. Write "State of in-app subscriptions report".',
   LABEL_STYLE_OPENER: "Start sentences with the claim or scene, not a label-plus-colon.",
   AI_SCAFFOLD_OPENER:
     "Open with the point directly. Skip rhetorical labels like Strong stance:, Hard truth:, Hot take:, or Caveat,.",
@@ -49,7 +49,7 @@ export const QUALITY_GATE_PROMPT_LINES = [
   'Use Adapty company voice: "we", "our", and "us". Never use first-person singular pronouns ("I", "me", "my").',
   "Every post needs at least one specific number, name, or real example.",
   "Ground facts in provided evidence only. When you have no data for a claim, phrase it as opinion.",
-  "Write SOIS as State of In-App Subscriptions (SOIS) on first mention.",
+  'Do not use the acronym "SOIS" in public copy. Write "State of in-app subscriptions report".',
   "For events: include date, place, and who should come.",
   "Use hyphens, commas, and periods.",
   "For clickbait plus virality: hook must be one declarative factual sentence, starting with the claim or scene.",

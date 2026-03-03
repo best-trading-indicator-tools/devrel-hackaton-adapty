@@ -224,8 +224,10 @@ const INDUSTRY_NEWS_REACTION_PATTERN = /\bindustry news reaction\b/i;
 const PRODUCT_UPDATE_PATTERN =
   /\bproduct\s+(?:feature\s+)?(?:launch|lunch)(?:\s+update)?\b|\bproduct\s+update\b/i;
 const YOUTUBE_PROMO_POST_TYPE_PATTERN = /\b(content promo|post[-\s]?event youtube promo|youtube promo)\b/i;
+const SOIS_PRELAUNCH_POST_TYPE_PATTERN =
+  /\bsois\s*pre[-\s]?launch\b|\bstate of in[-\s]?app subscriptions\s*pre[-\s]?launch\b/i;
 const SOIS_ACRONYM_PATTERN = /\bsois\b/i;
-const SOIS_EXPANDED_PATTERN = /\bstate of in[-\s]?app subscriptions\b/i;
+const SOIS_PUBLIC_NAME = "State of in-app subscriptions report";
 const AI_LABEL_STYLE_OPENER_PATTERN = /(?:^|[.!?]\s+)[A-Za-z][A-Za-z ]{1,24}:\s+/i;
 const HOOK_IF_OPENING_PATTERN = /^\s*if\b/i;
 const ROBOTIC_FILLER_PATTERN = /\b(?:the|this|that)\s+[a-z][a-z\s]{0,24}\s+is real\./i;
@@ -275,9 +277,14 @@ const POST_TYPE_PLAYBOOKS: Array<{ pattern: RegExp; directive: string }> = [
       "Frame the user pain first. Stack: pain story + what changed + concrete outcome. Explain why it matters and one concrete use case.",
   },
   {
-    pattern: /sauce/i,
+    pattern: /sois\s*pre[-\s]?launch|state of in[-\s]?app subscriptions\s*pre[-\s]?launch/i,
     directive:
-      "For Sauce posts, combine clear practical breakdown with data-backed insight. Stack: concrete scenario (e.g. a test that surprised you) + mechanism + numbers + caveat. Use concrete numbers and include caveats or segmentation.",
+      "Announce next week's State of in-app subscriptions report launch with anticipation and one teaser insight. Stack: progress update + early insight + playful prediction poll + promise to fact-check with launch data.",
+  },
+  {
+    pattern: /sauce|sois|state of in[-\s]?app subscriptions/i,
+    directive:
+      "For SOIS posts, combine clear practical breakdown with data-backed insight. Stack: concrete scenario (e.g. a test that surprised you) + mechanism + numbers + caveat. Use concrete numbers and include caveats or segmentation.",
   },
   {
     pattern: /industry news reaction/i,
@@ -890,7 +897,7 @@ function buildSauceAutoTopicPlan(
       planLines: Array.from({ length: postCount }, (_, index) =>
         `Post ${index + 1}: ${SAUCE_TOPIC_PILLARS[index % SAUCE_TOPIC_PILLARS.length]!.label}
 - Primary pillar: ${SAUCE_TOPIC_PILLARS[index % SAUCE_TOPIC_PILLARS.length]!.label}
-- Anchor: No SOIS evidence retrieved. Keep this post qualitative and mechanism-focused.`,
+- Anchor: No State of in-app subscriptions report evidence retrieved. Keep this post qualitative and mechanism-focused.`,
       ),
       assignedSectionKeys,
     };
@@ -906,7 +913,7 @@ function buildSauceAutoTopicPlan(
       const fallbackPillar = SAUCE_TOPIC_PILLARS[index % SAUCE_TOPIC_PILLARS.length]!;
       return `Post ${index + 1}: ${fallbackPillar.label}
 - Primary pillar: ${fallbackPillar.label}
-- Anchor: No SOIS evidence matched. Keep this post qualitative and mechanism-focused.`;
+- Anchor: No State of in-app subscriptions report evidence matched. Keep this post qualitative and mechanism-focused.`;
     }
 
     return `Post ${index + 1}: ${evidenceItem.categoryLabel} / ${evidenceItem.subcategoryLabel}
@@ -1418,10 +1425,10 @@ function buildStrictSauceBenchmarkSentence(snippet: string): string {
     return `${metricLabel} shows meaningful variance by cohort and region.`;
   }
   if (first && top && first !== top) {
-    return `SOIS shows a meaningful spread: typical apps are around ${first}, while top performers reach about ${top}.`;
+    return `State of in-app subscriptions report benchmarks show a meaningful spread: typical apps are around ${first}, while top performers reach about ${top}.`;
   }
   if (first) {
-    return `SOIS shows typical performance around ${first}.`;
+    return `State of in-app subscriptions report benchmarks show typical performance around ${first}.`;
   }
   return compact.endsWith(".") ? compact : `${compact}.`;
 }
@@ -2334,8 +2341,14 @@ function hasOperatorActionLanguage(value: string): boolean {
   return OPERATOR_ACTION_VERB_PATTERN.test(value);
 }
 
-function hasUnexpandedSoisAcronym(value: string): boolean {
-  return SOIS_ACRONYM_PATTERN.test(value) && !SOIS_EXPANDED_PATTERN.test(value);
+function hasSoisAcronym(value: string): boolean {
+  return SOIS_ACRONYM_PATTERN.test(value);
+}
+
+function replaceSoisAcronymForPublicCopy(value: string): string {
+  return value.replace(/(^|[^a-z0-9/_-])sois([^a-z0-9/_-]|$)/gi, (_, prefix: string, suffix: string) => {
+    return `${prefix}${SOIS_PUBLIC_NAME}${suffix}`;
+  });
 }
 
 function hasLabelStyleSentenceOpener(value: string): boolean {
@@ -2455,8 +2468,8 @@ function evaluatePostQuality(params: {
     issues.push(QUALITY_ISSUES.MISSING_OPERATOR_ACTION);
   }
 
-  if (hasUnexpandedSoisAcronym(combinedText)) {
-    issues.push(QUALITY_ISSUES.UNEXPANDED_SOIS);
+  if (hasSoisAcronym(combinedText)) {
+    issues.push(QUALITY_ISSUES.SOIS_ACRONYM);
   }
 
   if (hasLabelStyleSentenceOpener(combinedText)) {
@@ -3296,7 +3309,11 @@ function resolveMemeToneProfile(params: {
 }
 
 function looksLikeSaucePostType(inputType: string): boolean {
-  return /\bsauce\b/i.test(inputType);
+  return /\b(sauce|sois|state of in[-\s]?app subscriptions)\b/i.test(inputType);
+}
+
+function looksLikeSoisPrelaunchPostType(inputType: string): boolean {
+  return SOIS_PRELAUNCH_POST_TYPE_PATTERN.test(inputType);
 }
 
 function looksLikeIndustryNewsReactionPostType(inputType: string): boolean {
@@ -4228,10 +4245,10 @@ export async function POST(request: Request) {
         ? "Web fact-check skipped for YouTube promo post type."
       : "Web fact-check skipped for this post type.";
     const soisContextSkipReason = isProductUpdatePostType
-      ? "SOIS context skipped for product feature launch post type."
+      ? "State of in-app subscriptions report context skipped for product feature launch post type."
       : isEventOrWebinarPostType
-        ? "SOIS context skipped for event/webinar post type."
-        : "SOIS context skipped for this post type.";
+        ? "State of in-app subscriptions report context skipped for event/webinar post type."
+        : "State of in-app subscriptions report context skipped for this post type.";
     const webFactCheckPromise = shouldRunWebFactCheck
       ? runWebFactCheck({
           style: input.style,
@@ -4251,11 +4268,12 @@ export async function POST(request: Request) {
           warning: webFactCheckSkipReason,
         });
     const sauceLimit = Math.min(12, Math.max(6, input.numberOfPosts * 3));
+    const sauceRetrievalQuery = soisRetrievalQuery || retrievalQuery;
     const soisContextPromise = looksLikeSaucePostType(input.inputType)
       ? (embeddingClient
           ? retrieveSauceContext({
               client: embeddingClient,
-              query: retrievalQuery,
+              query: sauceRetrievalQuery,
               details: input.details,
               limit: sauceLimit,
             })
@@ -4264,7 +4282,7 @@ export async function POST(request: Request) {
           let items = sauce.items.map((item) => ({
             id: item.id,
             category: "market" as const,
-            categoryLabel: "Sauce",
+            categoryLabel: "SOIS",
             subcategory: 1,
             subcategoryLabel: item.id,
             sourceUrl: "https://appstate2.vercel.app/",
@@ -4278,9 +4296,9 @@ export async function POST(request: Request) {
                 {
                   id: "sauce-fallback",
                   category: "market" as const,
-                  categoryLabel: "Sauce",
+                  categoryLabel: "SOIS",
                   subcategory: 1,
-                  subcategoryLabel: "Sauce dataset",
+                  subcategoryLabel: "SOIS dataset",
                   sourceUrl: "https://appstate2.vercel.app/",
                   rows: 0,
                   text: fallback.slice(0, 25_000),
@@ -4420,9 +4438,9 @@ export async function POST(request: Request) {
     const sauceTopicPlanSummary = sauceTopicPlanLines.length ? sauceTopicPlanLines.join("\n\n") : "(none)";
     const sauceTopicExecutionDirective = shouldUseSauceAutoTopicPlan
       ? sauceTopicPlanLines.length
-        ? "Sauce auto-topic planner is active because Details is empty. Follow the per-post Sauce topic plan strictly: each post must center on its assigned pillar and anchor."
-        : "Sauce auto-topic planner is active because Details is empty, but no SOIS evidence was retrieved. Follow assigned pillars and keep claims qualitative."
-      : "No Sauce auto-topic plan required.";
+        ? "SOIS auto-topic planner is active because Details is empty. Follow the per-post SOIS topic plan strictly: each post must center on its assigned pillar and anchor."
+        : "SOIS auto-topic planner is active because Details is empty, but no State of in-app subscriptions report evidence was retrieved. Follow assigned pillars and keep claims qualitative."
+      : "No SOIS auto-topic plan required.";
     const webEvidenceLines = webFactCheck.evidenceLines
       .slice(0, FACT_CHECK_EVIDENCE_PROMPT_LIMIT)
       .map((line) => normalizeNoEmDash(line));
@@ -4447,10 +4465,10 @@ export async function POST(request: Request) {
         ? "Web evidence is available. Ground factual claims in this evidence. Use real numbers only when they appear in the evidence or provided context."
         : "Web evidence is unavailable or empty. Phrase uncertain factual claims as opinion, observation, or hypothesis.";
     const soisDirective = !shouldRunSoisContext
-      ? `${soisContextSkipReason} Use only non-SOIS evidence and provided event/request details.`
+      ? `${soisContextSkipReason} Use only non-report evidence and provided event/request details.`
       : soisContext.enabled
-        ? "State of In-App Subscriptions (SOIS) benchmark evidence is available. Use it as a first-class factual source for hooks, mechanisms, caveats, and numeric anchors."
-        : "State of In-App Subscriptions (SOIS) benchmark evidence is unavailable for this run. Use only numbers and claims from other provided evidence.";
+        ? "State of in-app subscriptions report benchmark evidence is available. Use it as a first-class factual source for hooks, mechanisms, caveats, and numeric anchors."
+        : "State of in-app subscriptions report benchmark evidence is unavailable for this run. Use only numbers and claims from other provided evidence.";
     const eventWebEnrichmentDirective =
       isEventOrWebinarPostType && shouldRunWebFactCheck
         ? "For event/webinar posts, use web evidence to recover missing logistics (date, time, place, registration URL) only when explicitly supported by evidence. If time or place is still missing, assume there is no time or place and do not invent one."
@@ -4464,31 +4482,31 @@ export async function POST(request: Request) {
       ? soisContextSkipReason
       : soisEvidenceLines.length
         ? soisEvidenceLines.join("\n")
-        : "No SOIS benchmark evidence available for this request.";
+        : "No State of in-app subscriptions report benchmark evidence available for this request.";
     const evidencePriorityOrder = shouldRunSoisContext
       ? shouldRunWebFactCheck
-        ? "SOIS > web"
-        : "SOIS > internal context"
+        ? "report > web"
+        : "report > internal context"
       : shouldRunWebFactCheck
         ? "web > internal context"
         : "internal context";
     const evidenceContextGuidance = shouldRunSoisContext
       ? looksLikeSaucePostType(input.inputType)
-        ? `Evidence context: Sauce dataset (TOP 35 INSIGHTS) below. MANDATORY: Every Sauce post body MUST include at least 1 concrete number from the Sauce dataset (e.g. 1.7x, 55.5%, $54.17, 46.2%). Copy numbers verbatim. Zero numbers in a Sauce post = invalid output. Do not use numbers from web fact-check or user input.`
-        : `Evidence context (priority order: ${evidencePriorityOrder}). Numbers from SOIS are real benchmarks - use them, they make posts more compelling. Copy numbers verbatim from the evidence below. Use each number for its labeled metric only: install_to_paid_rate as %, avg_ltv as $, price_usd as $. When a number is not in the evidence, write the sentence without it. For Sauce posts: only use numbers from the SOIS evidence or Sauce dataset below (not from web fact-check or user input). REQUIRED: Each Sauce post body must include at least 1 concrete number from the evidence (e.g. X%, $Y, Z rate). Never output a Sauce post with zero numbers.`
+        ? `Evidence context: SOIS dataset (TOP 35 INSIGHTS) below. MANDATORY: Every SOIS post body MUST include at least 1 concrete number from the SOIS dataset (e.g. 1.7x, 55.5%, $54.17, 46.2%). Copy numbers verbatim. Zero numbers in a SOIS post = invalid output. Do not use numbers from web fact-check or user input.`
+        : `Evidence context (priority order: ${evidencePriorityOrder}). Numbers from the State of in-app subscriptions report are real benchmarks - use them. Copy numbers verbatim from the evidence below. Use each number for its labeled metric only: install_to_paid_rate as %, avg_ltv as $, price_usd as $. When a number is not in the evidence, write the sentence without it. For SOIS posts: only use numbers from the report evidence or SOIS dataset below (not from web fact-check or user input). REQUIRED: Each SOIS post body must include at least 1 concrete number from the evidence (e.g. X%, $Y, Z rate). Never output a SOIS post with zero numbers.`
       : shouldRunWebFactCheck
-        ? `Evidence context (priority order: ${evidencePriorityOrder}). Use web evidence to fill factual gaps when available (especially for event logistics). If a detail is not supported by evidence, keep phrasing qualitative and avoid invented specifics. Do not introduce SOIS benchmark claims.`
+        ? `Evidence context (priority order: ${evidencePriorityOrder}). Use web evidence to fill factual gaps when available (especially for event logistics). If a detail is not supported by evidence, keep phrasing qualitative and avoid invented specifics. Do not introduce State of in-app subscriptions report benchmark claims.`
         : `Evidence context (priority order: ${evidencePriorityOrder}). Use internal request context only (details, event data, date/time/place${
             shouldIncludeCta ? ", and CTA link" : ""
-          }). Do not introduce SOIS benchmark claims.`;
+          }). Do not introduce State of in-app subscriptions report benchmark claims.`;
     const soisSectionTitle = shouldRunSoisContext
       ? looksLikeSaucePostType(input.inputType)
-        ? "1. Sauce dataset (TOP 35 INSIGHTS - use at least 1 number from here in every post):"
-        : "1. SOIS (Adapty State of In-App Subscriptions) - fetched from dags.adpinfra.dev:"
-      : `1. SOIS benchmark context: ${soisContextSkipReason}`;
+        ? "1. SOIS dataset (TOP 35 INSIGHTS - use at least 1 number from here in every post):"
+        : "1. State of in-app subscriptions report benchmark context - fetched from dags.adpinfra.dev:"
+      : `1. State of in-app subscriptions report benchmark context: ${soisContextSkipReason}`;
     const webFactCheckSectionTitle = shouldRunWebFactCheck
       ? shouldRunSoisContext
-        ? "2. Web fact-check (use when SOIS lacks the claim):"
+        ? "2. Web fact-check (use when report evidence lacks the claim):"
         : "2. Web fact-check (primary external evidence source):"
       : `2. Web fact-check: ${webFactCheckSkipReason}`;
     if (shouldRunSoisContext) {
@@ -4535,12 +4553,13 @@ export async function POST(request: Request) {
       requireCta: shouldIncludeCta,
     });
     const promptGuides = await getPromptGuides();
+    const isSoisPrelaunchPostType = looksLikeSoisPrelaunchPostType(input.inputType);
     const sauceDomainGuideSection = looksLikeSaucePostType(input.inputType)
       ? `
-Sauce guide from repository prompt file:
+SOIS guide from repository prompt file:
 ${promptGuides.sauce}
 
-SOIS website context guide from repository prompt file:
+State of in-app subscriptions report website context guide from repository prompt file:
 ${promptGuides.sois}
 
 ASO guide from repository prompt file:
@@ -4548,11 +4567,17 @@ ${promptGuides.aso}
 
 Paywall guide from repository prompt file:
 ${promptGuides.paywall}
-Sauce number rule (MANDATORY - non-negotiable):
-- Every Sauce post body MUST include at least 1 concrete number from the Sauce dataset below (e.g. 1.7x, 7.4x, 55.5%, $54.17, 46.2%, 58.1%). A Sauce post with zero numbers is invalid.
-- Target 1-2 benchmark numbers per post. Copy numbers verbatim from the Sauce dataset evidence.
-- Every number must come from the Sauce dataset below. Do not use numbers from web fact-check or user input.
+SOIS number rule (MANDATORY - non-negotiable):
+- Every SOIS post body MUST include at least 1 concrete number from the SOIS dataset below (e.g. 1.7x, 7.4x, 55.5%, $54.17, 46.2%, 58.1%). A SOIS post with zero numbers is invalid.
+- Target 1-2 benchmark numbers per post. Copy numbers verbatim from the SOIS dataset evidence.
+- Every number must come from the SOIS dataset below. Do not use numbers from web fact-check or user input.
 - Do not repeat the same benchmark number multiple times in the same post or across most hook suggestions.
+`
+      : "";
+    const soisPrelaunchGuideSection = isSoisPrelaunchPostType
+      ? `
+SOIS Pre-launch guide from repository prompt file:
+${promptGuides.soisPrelaunch}
 `
       : "";
 
@@ -4584,7 +4609,7 @@ Hooks start from a specific observation: a number, a name, a thing that happened
 
 Writing guide:
 ${promptGuides.writing}
-${sauceDomainGuideSection}${productUpdateToneSection}
+${sauceDomainGuideSection}${soisPrelaunchGuideSection}${productUpdateToneSection}
 Fact-check guide:
 ${promptGuides.factCheck}
 
@@ -4598,6 +4623,7 @@ ${ctaGuidanceDirective}
 - Voice perspective: speak as Adapty company voice. Use "we", "our", and "us". Never use first-person singular pronouns ("I", "me", "my").
 
 Numbers: copy every number verbatim from the evidence sections in the user prompt. When a number exists in the evidence, use it. When it does not, rewrite naturally with qualitative language ("higher than peers", "lower than baseline", "most apps"). Omit sample sizes when the evidence does not state them.
+Do not use the acronym "SOIS" in public copy. Write "State of in-app subscriptions report".
 Do not use vague filler fragments like "significantly", "meaningful", or "premium" without a concrete noun.
 
 Before returning, read each post out loud in your head. Rewrite any sentence that sounds unnatural spoken.
@@ -4617,10 +4643,10 @@ ${toBulletedSection(QUALITY_GATE_PROMPT_LINES)}
       : "";
     const sauceAutoTopicPlanSection = shouldUseSauceAutoTopicPlan
       ? `
-Sauce topic context:
+SOIS topic context:
 ${sauceTopicExecutionDirective}
 
-Per-post Sauce topic plan:
+Per-post SOIS topic plan:
 ${sauceTopicPlanSummary}`
       : "";
     const perPostCtaPlanSection = hasPerPostCtaPlan
@@ -5007,23 +5033,23 @@ ${toBulletedSection(QUALITY_REPAIR_REQUIREMENT_LINES)}
         "Ensure body text uses paragraph breaks (blank line between paragraphs). Never leave a wall of text without paragraph breaks.",
         "Keep each post body within requested length range: short 2-4, medium 5-9, long 18-35, very long 36-90 sentences.",
         looksLikeSaucePostType(input.inputType)
-          ? "For Sauce posts: verify every number or percentage appears verbatim in the Sauce dataset evidence. Rewrite unsupported numbers qualitatively. Every Sauce post must include at least 1 number from the Sauce dataset."
+          ? "For SOIS posts: verify every number or percentage appears verbatim in the SOIS dataset evidence. Rewrite unsupported numbers qualitatively. Every SOIS post must include at least 1 number from the SOIS dataset."
           : "",
       ]
         .filter(Boolean)
         .map((line) => `- ${line}`)
         .join("\n");
       const editorEvidenceBlock = looksLikeSaucePostType(input.inputType)
-        ? `Evidence context for factual QA - Sauce dataset (use numbers from here):
-Sauce dataset:
+        ? `Evidence context for factual QA - SOIS dataset (use numbers from here):
+SOIS dataset:
 ${soisEvidenceForPrompt.slice(0, 2400)}
 
-If a Sauce post has ZERO numbers, you MUST add at least 1 number from the Sauce dataset above (e.g. 1.7x, 55.5%, $54.17, 46.2%). Do not output a Sauce post without a number.
+If a SOIS post has ZERO numbers, you MUST add at least 1 number from the SOIS dataset above (e.g. 1.7x, 55.5%, $54.17, 46.2%). Do not output a SOIS post without a number.
 
 Web evidence (secondary):
 ${factCheckEvidenceForPrompt.slice(0, 1400)}`
-        : `Evidence context for factual QA (SOIS > web):
-SOIS evidence:
+        : `Evidence context for factual QA (report > web):
+State of in-app subscriptions report evidence:
 ${soisEvidenceForPrompt.slice(0, 2400)}
 
 Web evidence:
@@ -5045,6 +5071,7 @@ Do this:
 - Say "app makers" or "app founders" instead of "teams" or "operators."
 - Use digits for numbers ("3 things" not "three things").
 - Use hyphens, commas, and periods.
+- Do not use the acronym "SOIS" in public copy. Write "State of in-app subscriptions report".
 - Use Adapty company voice: "we", "our", and "us". Never use first-person singular pronouns ("I", "me", "my").
 
 Fact and benchmark rules:
@@ -5052,8 +5079,8 @@ Fact and benchmark rules:
 - Keep a number only if it appears verbatim in the provided evidence context.
 - When a numeric claim is unsupported, rewrite it qualitatively.
 - Use each metric in its correct unit: conversion as %, LTV as currency, price as currency.
-- For Sauce posts: only keep numbers that appear verbatim in the Sauce dataset evidence above (not web evidence). Replace any other number with qualitative phrasing.
-- For Sauce posts: each post body MUST include at least 1 concrete number from the Sauce dataset. Never output a Sauce post with zero numbers.
+- For SOIS posts: only keep numbers that appear verbatim in the SOIS dataset evidence above (not web evidence). Replace any other number with qualitative phrasing.
+- For SOIS posts: each post body MUST include at least 1 concrete number from the SOIS dataset. Never output a SOIS post with zero numbers.
 - Vary benchmark numbers across posts and hook suggestions.
 
 Rewrite to concrete anchors:
@@ -5348,12 +5375,12 @@ ${draftSummary}`;
         sauceHookSanitization.unsupportedClaims.length + saucePostSanitization.unsupportedClaims.length;
       if (sauceStrictSanitizedCount > 0) {
         console.warn(
-          `Sauce benchmark safety pass rewrote ${sauceStrictSanitizedCount} non-benchmark number claim(s).`,
+          `SOIS benchmark safety pass rewrote ${sauceStrictSanitizedCount} non-benchmark number claim(s).`,
         );
       }
       if (sauceHookRepetitionSanitization.rewrittenClaims.length > 0) {
         console.warn(
-          `Sauce hook diversity pass rewrote ${sauceHookRepetitionSanitization.rewrittenClaims.length} repeated benchmark number claim(s).`,
+          `SOIS hook diversity pass rewrote ${sauceHookRepetitionSanitization.rewrittenClaims.length} repeated benchmark number claim(s).`,
         );
       }
     }
@@ -5412,7 +5439,7 @@ ${draftSummary}`;
           }
         }
         console.warn(
-          `Sauce benchmark guard injected evidence-backed numeric anchors into ${injectedBenchmarkAnchors} post(s).`,
+          `SOIS benchmark guard injected evidence-backed numeric anchors into ${injectedBenchmarkAnchors} post(s).`,
         );
       }
     }
@@ -5451,7 +5478,7 @@ ${draftSummary}`;
 
       if (sauceBudgetRewriteCount > 0) {
         console.warn(
-          `Sauce benchmark budget pass rewrote ${sauceBudgetRewriteCount} numeric claim(s) to keep each post at <=2 benchmark numbers.`,
+          `SOIS benchmark budget pass rewrote ${sauceBudgetRewriteCount} numeric claim(s) to keep each post at <=2 benchmark numbers.`,
         );
       }
     }
@@ -5500,7 +5527,7 @@ ${draftSummary}`;
 
       if (sauceRepeatRewriteCount > 0) {
         console.warn(
-          `Sauce repetition pass rewrote ${sauceRepeatRewriteCount} repeated benchmark number mention(s) within posts.`,
+          `SOIS repetition pass rewrote ${sauceRepeatRewriteCount} repeated benchmark number mention(s) within posts.`,
         );
       }
     }
@@ -5548,7 +5575,7 @@ ${draftSummary}`;
 
       if (sauceCrossPostRewriteCount > 0) {
         console.warn(
-          `Sauce cross-post diversity pass rewrote ${sauceCrossPostRewriteCount} repeated benchmark number mention(s) across posts.`,
+          `SOIS cross-post diversity pass rewrote ${sauceCrossPostRewriteCount} repeated benchmark number mention(s) across posts.`,
         );
       }
     }
@@ -5563,8 +5590,8 @@ ${draftSummary}`;
       const strictFallbackCta = shouldIncludeCta
         ? clipTextStrictMax(
             effectiveCtaLink
-              ? `See full SOIS benchmarks here: ${effectiveCtaLink}`
-              : "See full SOIS benchmarks in State of In-App Subscriptions.",
+              ? `See full State of in-app subscriptions report benchmarks here: ${effectiveCtaLink}`
+              : "See full State of in-app subscriptions report benchmarks.",
             CLAUDE_POST_CTA_LIMITS.max,
           )
         : "";
@@ -5606,7 +5633,9 @@ ${draftSummary}`;
 
         hook = sanitizeSauceHookFallback(hook, benchmarkSnippet);
         if (!body) {
-          body = benchmarkSentence || "SOIS evidence shows clear benchmark differences by segment and setup.";
+          body =
+            benchmarkSentence ||
+            "State of in-app subscriptions report evidence shows clear benchmark differences by segment and setup.";
         }
         if (!shouldIncludeCta) {
           cta = "";
@@ -5655,7 +5684,7 @@ ${draftSummary}`;
 
       if (strictPostRewrites > 0 || strictHookRewrites > 0) {
         console.warn(
-          `Strict Sauce evidence pass rewrote ${strictPostRewrites} post sentence(s) and ${strictHookRewrites} hook sentence(s).`,
+          `Strict SOIS evidence pass rewrote ${strictPostRewrites} post sentence(s) and ${strictHookRewrites} hook sentence(s).`,
         );
       }
 
@@ -5665,7 +5694,7 @@ ${draftSummary}`;
         strictViolations.blockedAnecdoteSentences > 0
       ) {
         console.warn(
-          `Strict Sauce evidence gate triggered cleanup: unsupported_numeric=${strictViolations.unsupportedNumericClaims}, fuzzy_placeholders=${strictViolations.fuzzyPlaceholderSentences}, blocked_anecdotes=${strictViolations.blockedAnecdoteSentences}.`,
+          `Strict SOIS evidence gate triggered cleanup: unsupported_numeric=${strictViolations.unsupportedNumericClaims}, fuzzy_placeholders=${strictViolations.fuzzyPlaceholderSentences}, blocked_anecdotes=${strictViolations.blockedAnecdoteSentences}.`,
         );
 
         if (enableNumericSanitizerRewrite) {
@@ -5713,7 +5742,7 @@ ${draftSummary}`;
           });
         } else {
           console.info(
-            "Strict Sauce fallback numeric rewriter disabled (ENABLE_NUMERIC_SANITIZER_REWRITE=false); keeping prompt-reviewed copy.",
+            "Strict SOIS fallback numeric rewriter disabled (ENABLE_NUMERIC_SANITIZER_REWRITE=false); keeping prompt-reviewed copy.",
           );
         }
       }
@@ -6211,10 +6240,19 @@ For each post:
       }
     }
 
+    const sanitizedHooksForResponse = normalizedHooks.map((hook) => replaceSoisAcronymForPublicCopy(hook));
+    const sanitizedPostsForResponse: GeneratePostsResponse["posts"] = postsWithXThreads.map((post) => ({
+      ...post,
+      hook: replaceSoisAcronymForPublicCopy(post.hook),
+      body: replaceSoisAcronymForPublicCopy(post.body),
+      cta: replaceSoisAcronymForPublicCopy(post.cta),
+      xThread: post.xThread?.map((line) => replaceSoisAcronymForPublicCopy(line)),
+    }));
+
     const response: GeneratePostsResponse = {
-      hooks: normalizedHooks,
+      hooks: sanitizedHooksForResponse,
       chart: chartCompanion,
-      posts: postsWithXThreads,
+      posts: sanitizedPostsForResponse,
       generation: {
         modelRequested: requestedModel,
         modelUsed,

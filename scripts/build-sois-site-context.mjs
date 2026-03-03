@@ -389,7 +389,7 @@ function buildMarkdown(snapshot) {
   lines.push("");
   lines.push("## Usage Notes");
   lines.push("- This file summarizes chart datasets from the SOIS public web app.");
-  lines.push("- Use this as supporting context and idea discovery for Sauce narratives.");
+  lines.push("- Use this as supporting context and idea discovery for SOIS narratives.");
   lines.push("- Prefer official SOIS API evidence lines for strict numeric claims in generation.");
   lines.push("");
 

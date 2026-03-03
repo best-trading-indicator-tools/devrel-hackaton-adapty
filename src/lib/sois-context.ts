@@ -21,7 +21,7 @@ const SOIS_REPORT_NAME = "State of In-App Subscriptions";
 const SOIS_SITE_ORIGIN_FALLBACK = "https://appstate2.vercel.app";
 
 const ANALYSIS_POST_TYPE_PATTERN =
-  /\b(sauce|curated roundup|controversial hot take|industry news reaction|case study|social proof|product feature launch|milestone|company update)\b/i;
+  /\b(sauce|sois|state of in[-\s]?app subscriptions|sois\s*pre[-\s]?launch|curated roundup|controversial hot take|industry news reaction|case study|social proof|product feature launch|milestone|company update)\b/i;
 
 type LanceDbConnection = import("@lancedb/lancedb").Connection;
 
@@ -148,7 +148,11 @@ const SOIS_CATEGORY_DEFINITIONS: Record<SoisCategory, SoisCategoryDefinition> = 
 
 const SOIS_POST_TYPE_CATEGORY_RULES: Array<{ pattern: RegExp; categories: SoisCategory[] }> = [
   {
-    pattern: /sauce/i,
+    pattern: /sois\s*pre[-\s]?launch|state of in[-\s]?app subscriptions\s*pre[-\s]?launch/i,
+    categories: ["market", "pricing", "conversions", "ltv"],
+  },
+  {
+    pattern: /sauce|sois|state of in[-\s]?app subscriptions/i,
     categories: ["conversions", "pricing", "retention", "paywalls", "ltv", "market"],
   },
   {
@@ -416,6 +420,11 @@ const SOIS_QUERY_NOISE_TOKENS = new Set<string>([
   "engagement",
   "traffic",
   "sauce",
+  "sois",
+  "state",
+  "subscriptions",
+  "prelaunch",
+  "launch",
   "style",
   "goal",
   "post",

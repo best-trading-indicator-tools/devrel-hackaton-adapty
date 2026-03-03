@@ -5,7 +5,7 @@ const ADAPTY_CHANGELOG_JSON_FEED = "https://changelog.adapty.io/jsonfeed.json";
 const CHANGELOG_CACHE_TTL_MS = 60 * 60 * 1000; // 1 hour
 let changelogCache: { text: string; fetchedAt: number } | null = null;
 
-type PromptGuideKey = "writing" | "sauce" | "sois" | "aso" | "paywall" | "factCheck";
+type PromptGuideKey = "writing" | "sauce" | "sois" | "soisPrelaunch" | "aso" | "paywall" | "factCheck";
 
 export type PromptGuides = Record<PromptGuideKey, string>;
 
@@ -13,6 +13,7 @@ const GUIDE_PATHS: Record<PromptGuideKey, string> = {
   writing: path.join(process.cwd(), "prompts", "linkedin", "WRITING.md"),
   sauce: path.join(process.cwd(), "prompts", "linkedin", "SAUCE.md"),
   sois: path.join(process.cwd(), "prompts", "linkedin", "SOIS.md"),
+  soisPrelaunch: path.join(process.cwd(), "prompts", "linkedin", "SOIS_PRELAUNCH.md"),
   aso: path.join(process.cwd(), "prompts", "linkedin", "ASO.md"),
   paywall: path.join(process.cwd(), "prompts", "linkedin", "PAYWALL.md"),
   factCheck: path.join(process.cwd(), "prompts", "linkedin", "FACT_CHECK.md"),
@@ -32,14 +33,20 @@ const DEFAULT_GUIDES: PromptGuides = {
     "Use hyphens, commas, and periods.",
   ].join("\n"),
   sauce: [
-    "For Sauce posts, combine practical breakdown and data insight.",
+    "For State of in-app subscriptions report posts, combine practical breakdown and data insight.",
     "Lead with a hard question, explain mechanism, add concrete evidence, give actions, include caveats.",
     "Keep concrete density high and include at least one lived observation line in company voice (we saw, we tested).",
   ].join("\n"),
   sois: [
-    "SOIS website context can be used for directional patterns, filters, and hypothesis generation.",
-    "For strict numeric claims in Sauce posts, keep only values present in SOIS evidence context for the current run.",
+    "State of in-app subscriptions report context can be used for directional patterns, filters, and hypothesis generation.",
+    "For strict numeric claims in state of in-app subscriptions report posts, keep only values present in report evidence context for the current run.",
     "Prefer category/region/plan-specific benchmarks over global generic statements.",
+  ].join("\n"),
+  soisPrelaunch: [
+    "Use this guide for SOIS Pre-launch posts that tease next week's report launch.",
+    "Frame progress and anticipation: report in final polishing stage, early screenshots, and one concrete insight.",
+    "Use a playful prediction or poll prompt and promise later fact-checking with the full report data.",
+    'Never use the acronym "SOIS" in public copy; write "State of in-app subscriptions report".',
   ].join("\n"),
   aso: [
     "For ASO topics, focus on intent fit, conversion levers, and practical diagnostics before tool chatter.",
@@ -99,10 +106,11 @@ export async function getPromptGuides(): Promise<PromptGuides> {
     return guideCache;
   }
 
-  const [writing, sauce, sois, aso, paywall, factCheck] = await Promise.all([
+  const [writing, sauce, sois, soisPrelaunch, aso, paywall, factCheck] = await Promise.all([
     loadGuide("writing"),
     loadGuide("sauce"),
     loadGuide("sois"),
+    loadGuide("soisPrelaunch"),
     loadGuide("aso"),
     loadGuide("paywall"),
     loadGuide("factCheck"),
@@ -112,6 +120,7 @@ export async function getPromptGuides(): Promise<PromptGuides> {
     writing,
     sauce,
     sois,
+    soisPrelaunch,
     aso,
     paywall,
     factCheck,

@@ -23,7 +23,7 @@ async function run() {
     method: "POST",
     headers: { "Content-Type": "application/json" },
     body: JSON.stringify({
-      inputType: "Sauce",
+      inputType: "SOIS",
       numberOfPosts: 1,
       details: "Paywall placement and install-to-trial",
       style: "adapty",

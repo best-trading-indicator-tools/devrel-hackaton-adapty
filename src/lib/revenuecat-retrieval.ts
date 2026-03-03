@@ -177,7 +177,8 @@ async function ensureTable(client: OpenAI, items: RevenueCatContextItem[]): Prom
   }
 }
 
-const SAUCE_POST_TYPE_PATTERN = /\b(sauce|curated roundup|controversial hot take|case study|social proof)\b/i;
+const SAUCE_POST_TYPE_PATTERN =
+  /\b(sauce|sois|state of in[-\s]?app subscriptions|sois\s*pre[-\s]?launch|curated roundup|controversial hot take|case study|social proof)\b/i;
 
 export function shouldUseRevenueCatContextForPostType(inputType: string): boolean {
   return SAUCE_POST_TYPE_PATTERN.test(inputType);

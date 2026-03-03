@@ -37,7 +37,7 @@ async function main() {
     body: JSON.stringify({
       style: "adapty",
       goal: "virality",
-      inputType: "Sauce",
+      inputType: "SOIS",
       numberOfPosts: 1,
       details: "weekly subscriptions vs annual conversion",
       createXPosts: false,
@@ -58,7 +58,7 @@ async function main() {
 
   const text = `${post.hook}\n${post.body}\n${post.cta}`.toLowerCase();
 
-  // Sauce insight #5: weekly converts 1.7x to 7.4x more than annual
+  // SOIS insight #5: weekly converts 1.7x to 7.4x more than annual
   const hasWeeklyConversion = /\b(1\.7x|7\.4x|2\.7x|5\.4x)\b/.test(text);
   const hasWeeklyVsAnnual = /weekly.*annual|annual.*weekly/.test(text);
   const hasSauceNumbers =
@@ -68,7 +68,7 @@ async function main() {
   console.log("\nHook:", post.hook);
   console.log("\nBody:\n", post.body ?? "");
   console.log("\nCTA:", post.cta ?? "");
-  console.log("\n--- Sauce context check ---");
+  console.log("\n--- SOIS context check ---");
   console.log("Has weekly conversion multipliers (1.7x, 7.4x, etc):", hasWeeklyConversion);
   console.log("Mentions weekly vs annual:", hasWeeklyVsAnnual);
   console.log("Has sauce benchmark numbers:", hasSauceNumbers);

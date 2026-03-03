@@ -21,7 +21,7 @@ async function run() {
     console.log("=".repeat(80));
 
     const body = {
-      inputType: "Sauce",
+      inputType: "SOIS",
       numberOfPosts: 3,
       details: prompt.details,
       style: "adapty",

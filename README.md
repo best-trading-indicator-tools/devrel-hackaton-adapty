@@ -26,7 +26,8 @@ Everything below is already implemented in this repo on `main`.
 - Post Type
   - Product feature launch
   - Event / webinar promo
-  - Sauce
+  - SOIS
+  - SOIS Pre-launch
   - Industry news reaction
   - Engagement farming: poll/quiz
   - Case study / social proof
@@ -97,7 +98,8 @@ Posts are prompted to stack multiple dopamine elements — one hook is not enoug
 |-----------|---------------|
 | event / webinar | relatable scenario + why-now + logistics + takeaway |
 | product feature launch | pain story + what changed + concrete outcome |
-| sauce | concrete scenario + mechanism + numbers + caveat |
+| SOIS | concrete scenario + mechanism + numbers + caveat |
+| SOIS pre-launch | launch update + teaser insight + prediction poll + payoff |
 | industry news reaction | news hook + real-team impact + implication + next move |
 | engagement farming | context + clear options + why it matters |
 | case study | before + intervention + after + measurable result |
@@ -106,9 +108,9 @@ Posts are prompted to stack multiple dopamine elements — one hook is not enoug
 | controversial hot take | contrarian claim + illustrative story + mechanics + alternative |
 | curated roundup | one takeaway per item + recommendation on what to read first |
 
-**Sauce posts and SOIS data**
+**SOIS posts and report data**
 
-Sauce posts fetch real benchmark data from the SOIS (State of In-App Subscriptions) report at `https://dags.adpinfra.dev/webhook/sois-data`. Categories used: conversions, pricing, retention, paywalls, ltv, market. For Sauce posts, only numbers/percentages from the SOIS report are allowed — not from web fact-check or user input. Unsupported claims are rewritten to qualitative phrasing.
+SOIS posts fetch real benchmark data from the State of in-app subscriptions report at `https://dags.adpinfra.dev/webhook/sois-data`. Categories used: conversions, pricing, retention, paywalls, ltv, market. For SOIS posts, only numbers/percentages from report evidence are allowed — not from web fact-check or user input. Unsupported claims are rewritten to qualitative phrasing.
 
 ### Meme companion system
 
@@ -197,9 +199,10 @@ Each generation request goes through 3 passes:
 ### Prompt files
 
 - `prompts/linkedin/WRITING.md` — ~14 positive voice principles with before/after examples of sloppy vs clean writing
-- `prompts/linkedin/SAUCE.md` (applied for Sauce post type)
-- `prompts/linkedin/ASO.md` (applied for Sauce post type)
-- `prompts/linkedin/PAYWALL.md` (applied for Sauce post type)
+- `prompts/linkedin/SAUCE.md` (applied for SOIS post type)
+- `prompts/linkedin/SOIS_PRELAUNCH.md` (applied for SOIS Pre-launch post type)
+- `prompts/linkedin/ASO.md` (applied for SOIS post type)
+- `prompts/linkedin/PAYWALL.md` (applied for SOIS post type)
 - `prompts/linkedin/FACT_CHECK.md`
 
 ### Prompt structure
@@ -402,6 +405,7 @@ If you get a lock error like `.next/dev/lock`, stop other running `next dev` pro
 
 - `prebuild` runs `scripts/prune-lancedb-binaries.mjs`
 - On Linux builds it keeps only one LanceDB native binary variant (glibc or musl)
+- `build` runs `sauce-embeddings` before `next build` (best-effort; requires `OPENAI_API_KEY` for semantic retrieval)
 
 ## Troubleshooting
 

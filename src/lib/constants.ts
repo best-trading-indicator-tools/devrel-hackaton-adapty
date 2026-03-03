@@ -71,7 +71,8 @@ export const POST_TYPE_OPTIONS = [
   "Product feature launch",
   "Event / webinar promo",
   CONTENT_PROMO_POST_TYPE,
-  "Sauce",
+  "SOIS",
+  "SOIS Pre-launch",
   "Industry news reaction",
   // "Engagement farming: poll/quiz",
   // "Case study / social proof",
@@ -86,7 +87,10 @@ export const POST_TYPE_UI_DESCRIPTIONS: Record<(typeof POST_TYPE_OPTIONS)[number
   "Event / webinar promo": "Promote an upcoming event with clear why-now, logistics, and who should attend.",
   [CONTENT_PROMO_POST_TYPE]:
     "Promote the event recording on YouTube: tease one specific takeaway and drive people to watch.",
-  Sauce: "Share tactical insights, data-backed mechanics, and practical steps teams can apply this week.",
+  SOIS:
+    "Share tactical insights from the State of in-app subscriptions report with concrete benchmarks and practical next steps.",
+  "SOIS Pre-launch":
+    "Tease next week’s State of in-app subscriptions report launch with early insights, polls, and trend predictions.",
   "Industry news reaction": "Give a sharp take on recent industry news with clear implications and next moves.",
   // "Engagement farming: poll/quiz": "Ask high-signal questions that invite comments, votes, and operator viewpoints.",
   // "Case study / social proof": "Show before/after outcomes with context, intervention, and measurable result.",

@@ -10,9 +10,10 @@ Discovered data files: 19
 - Adapty historical SLA: 99.99%
 
 ## Usage Notes
-- This file summarizes chart datasets from the SOIS public web app.
-- Use this as supporting context and idea discovery for Sauce narratives.
-- Prefer official SOIS API evidence lines for strict numeric claims in generation.
+- This file summarizes chart datasets from the State of in-app subscriptions report web app.
+- Use this as supporting context and idea discovery for SOIS narratives.
+- Prefer official report API evidence lines for strict numeric claims in generation.
+- Do not output the acronym "SOIS" in public copy.
 
 ## Direct Conversion Benchmarks
 - Dataset: `conversions-direct`

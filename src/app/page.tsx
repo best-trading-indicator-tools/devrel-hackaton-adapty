@@ -5418,7 +5418,9 @@ export default function Home() {
             <div className="flex flex-wrap gap-2 rounded-xl border border-slate-200 bg-slate-50/80 px-3 py-2">
               <span className="text-[11px] font-medium uppercase tracking-wide text-slate-500">Evidence sources:</span>
               {result.retrieval.evidenceSources.sois ? (
-                <span className="rounded-md bg-emerald-100 px-2 py-0.5 text-[11px] text-emerald-800">SOIS</span>
+                <span className="rounded-md bg-emerald-100 px-2 py-0.5 text-[11px] text-emerald-800">
+                  State of in-app subscriptions
+                </span>
               ) : null}
               {result.retrieval.evidenceSources.web ? (
                 <span className="rounded-md bg-amber-100 px-2 py-0.5 text-[11px] text-amber-800">Web</span>

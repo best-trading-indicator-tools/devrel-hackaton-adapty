@@ -72,6 +72,13 @@ function normalizeNoEmDash(value: string): string {
     .replace(/[\u2010\u2011\u2012\u2013\u2014\u2015\u2212]/g, "-");
 }
 
+function replaceSoisAcronymForPublicCopy(value: string): string {
+  return value.replace(
+    /(^|[^a-z0-9/_-])sois([^a-z0-9/_-]|$)/gi,
+    (_, prefix: string, suffix: string) => `${prefix}State of in-app subscriptions report${suffix}`,
+  );
+}
+
 function hasFirstPersonSingularPronouns(value: string): boolean {
   return FIRST_PERSON_SINGULAR_PATTERN.test(value);
 }
@@ -134,7 +141,11 @@ function resolveBrandVoiceDirective(style: string): string {
 }
 
 function looksLikeSaucePostType(inputType: string): boolean {
-  return /\bsauce\b/i.test(inputType);
+  return /\b(sauce|sois|state of in[-\s]?app subscriptions)\b/i.test(inputType);
+}
+
+function looksLikeSoisPrelaunchPostType(inputType: string): boolean {
+  return /\bsois\s*pre[-\s]?launch\b|\bstate of in[-\s]?app subscriptions\s*pre[-\s]?launch\b/i.test(inputType);
 }
 
 async function runOpenAiRewrite<T>(params: {
@@ -243,12 +254,13 @@ export async function POST(request: Request) {
 
     const brandVoiceDirective = resolveBrandVoiceDirective(input.style);
     const promptGuides = await getPromptGuides();
+    const isSoisPrelaunchPostType = looksLikeSoisPrelaunchPostType(input.inputType);
     const sauceDomainGuideSection = looksLikeSaucePostType(input.inputType)
       ? `
-Sauce guide from repository prompt file:
+SOIS guide from repository prompt file:
 ${promptGuides.sauce}
 
-SOIS website context guide from repository prompt file:
+State of in-app subscriptions report website context guide from repository prompt file:
 ${promptGuides.sois}
 
 ASO guide from repository prompt file:
@@ -256,6 +268,12 @@ ${promptGuides.aso}
 
 Paywall guide from repository prompt file:
 ${promptGuides.paywall}
+`
+      : "";
+    const soisPrelaunchGuideSection = isSoisPrelaunchPostType
+      ? `
+SOIS pre-launch guide from repository prompt file:
+${promptGuides.soisPrelaunch}
 `
       : "";
     const promptDirective = input.prompt.trim()
@@ -281,6 +299,7 @@ Rules:
 - Keep copy practical, specific, and human sounding.
 - Preserve core meaning unless explicit rewrite prompt asks to change it.
 - Never use em dash or en dash punctuation.
+- Do not use the acronym "SOIS" in public copy. Write "State of in-app subscriptions report".
 - Avoid generic AI-like cadence and buzzword filler.
 - Keep claims concrete and defensible.
 - Use Adapty company voice: "we", "our", and "us". Never use first-person singular pronouns ("I", "me", "my").
@@ -291,7 +310,7 @@ Rewrite intensity:
 
 Repository writing guide:
 ${promptGuides.writing}
-${sauceDomainGuideSection}
+${sauceDomainGuideSection}${soisPrelaunchGuideSection}
 Repository fact-check guide:
 ${promptGuides.factCheck}
 `;
@@ -464,9 +483,9 @@ Output requirements:
       return NextResponse.json({
         mode: "post",
         post: {
-          hook: normalizeNoEmDash(enforceCompanyVoicePronouns(post.hook)),
-          body: normalizeNoEmDash(enforceCompanyVoicePronouns(post.body)),
-          cta: normalizeNoEmDash(enforceCompanyVoicePronouns(post.cta)),
+          hook: replaceSoisAcronymForPublicCopy(normalizeNoEmDash(enforceCompanyVoicePronouns(post.hook))),
+          body: replaceSoisAcronymForPublicCopy(normalizeNoEmDash(enforceCompanyVoicePronouns(post.body))),
+          cta: replaceSoisAcronymForPublicCopy(normalizeNoEmDash(enforceCompanyVoicePronouns(post.cta))),
         },
         generation: {
           modelRequested: requestedModel,
@@ -481,7 +500,7 @@ Output requirements:
     const lineRewrite = rewriteLineResponseSchema.parse(parsed);
     return NextResponse.json({
       mode: "line",
-      line: normalizeNoEmDash(enforceCompanyVoicePronouns(lineRewrite.line)),
+      line: replaceSoisAcronymForPublicCopy(normalizeNoEmDash(enforceCompanyVoicePronouns(lineRewrite.line))),
       generation: {
         modelRequested: requestedModel,
         modelUsed,

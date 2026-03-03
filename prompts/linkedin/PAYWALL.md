@@ -1,6 +1,6 @@
 # Paywall Playbook
 
-Use this guide when the post is a Sauce post about paywalls, trials, subscription pricing, offer logic, or monetization conversion.
+Use this guide when the post is a SOIS post about paywalls, trials, subscription pricing, offer logic, or monetization conversion.
 
 Operating contract:
 - Treat this as execution guidance. Keep advice specific to funnel stage and traffic quality.
@@ -33,11 +33,11 @@ Tactical patterns to surface:
 - Fallback offers should feel contextual and earned, not random discount spam.
 
 Benchmark anchors:
-- Prefer SOIS benchmarks provided in runtime context.
-- Use numbers from provided SOIS evidence, web fact-check evidence, user input, or retrieved library metrics.
+- Prefer State of in-app subscriptions report benchmarks provided in runtime context.
+- Use numbers from provided report evidence, web fact-check evidence, user input, or retrieved library metrics.
 - When numeric evidence is missing for a claim, present it as an observation.
 
-Sauce quality bar:
+SOIS quality bar:
 - Include at least one concrete metric or diagnostic threshold.
 - Include one explicit caveat such as channel mix, cohort quality, or app category.
 - Close with a practical test idea that teams can run this week.
