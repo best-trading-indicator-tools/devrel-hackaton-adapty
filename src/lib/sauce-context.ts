@@ -35,6 +35,7 @@ export async function retrieveSauceContext(params: {
   query: string;
   details?: string;
   limit: number;
+  insightIds?: string[];
 }): Promise<{ items: { id: string; text: string }[]; method: "lancedb" | "none" }> {
   return retrieveEmbeddedContext({
     ...params,
@@ -48,11 +49,31 @@ export async function retrieveSoisEmbeddedContext(params: {
   query: string;
   details?: string;
   limit: number;
+  insightIds?: string[];
 }): Promise<{ items: { id: string; text: string }[]; method: "lancedb" | "none" }> {
   return retrieveEmbeddedContext({
     ...params,
     tableName: SOIS_LANCEDB_TABLE_NAME,
   });
+}
+
+function normalizeInsightId(value: string): string | null {
+  const trimmed = value.trim().toLowerCase();
+  if (!trimmed) {
+    return null;
+  }
+
+  const rawNumberMatch = trimmed.match(/^#?\s*(\d{1,4})$/);
+  if (rawNumberMatch?.[1]) {
+    return `sois-insight-${Number.parseInt(rawNumberMatch[1], 10)}`;
+  }
+
+  const insightMatch = trimmed.match(/^sois[-_\s]?insight[-_\s]?(\d{1,4})$/i);
+  if (insightMatch?.[1]) {
+    return `sois-insight-${Number.parseInt(insightMatch[1], 10)}`;
+  }
+
+  return null;
 }
 
 async function retrieveEmbeddedContext(params: {
@@ -61,6 +82,7 @@ async function retrieveEmbeddedContext(params: {
   details?: string;
   limit: number;
   tableName: string;
+  insightIds?: string[];
 }): Promise<{ items: { id: string; text: string }[]; method: "lancedb" | "none" }> {
   const db = await connectLanceDb();
 
@@ -74,6 +96,35 @@ async function retrieveEmbeddedContext(params: {
     const count = await table.countRows();
     if (count === 0) {
       return { items: [], method: "none" };
+    }
+
+    const normalizedInsightIds = Array.from(
+      new Set((params.insightIds ?? []).map((id) => normalizeInsightId(id)).filter((id): id is string => Boolean(id))),
+    );
+
+    if (normalizedInsightIds.length > 0) {
+      const rows = await table.query().limit(Math.max(200, count)).toArray();
+      const textById = new Map<string, string>();
+
+      for (const row of rows as Array<Record<string, unknown>>) {
+        const rowId = normalizeInsightId(String(row.insightId ?? ""));
+        if (!rowId) {
+          continue;
+        }
+        textById.set(rowId, String(row.text ?? ""));
+      }
+
+      const items = normalizedInsightIds
+        .map((id) => {
+          const text = textById.get(id);
+          if (!text) {
+            return null;
+          }
+          return { id, text };
+        })
+        .filter((item): item is { id: string; text: string } => Boolean(item));
+
+      return { items, method: "lancedb" };
     }
 
     const focusQuery = [params.details?.trim(), params.query].filter(Boolean).join(" | ").trim() || params.query;

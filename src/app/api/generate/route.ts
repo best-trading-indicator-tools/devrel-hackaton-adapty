@@ -3,6 +3,7 @@ import { NextResponse } from "next/server";
 import OpenAI from "openai";
 import { zodResponseFormat } from "openai/helpers/zod";
 import { z } from "zod";
+import { randomInt } from "node:crypto";
 
 import {
   ChartInputError,
@@ -858,10 +859,37 @@ function sectionKeyFromItemId(itemId: string): string {
   return itemId;
 }
 
+function extractPinnedSoisInsightIds(details: string): string[] {
+  if (!details.trim()) {
+    return [];
+  }
+
+  const pinned = new Set<string>();
+  const hashMatches = details.matchAll(/(?:^|[\s,;])#\s*(\d{1,4})(?=$|[\s,;.!?])/g);
+  for (const match of hashMatches) {
+    const raw = match[1];
+    if (!raw) {
+      continue;
+    }
+    pinned.add(`sois-insight-${Number.parseInt(raw, 10)}`);
+  }
+
+  const idMatches = details.matchAll(/\bsois[-_\s]?insight[-_\s]?(\d{1,4})\b/gi);
+  for (const match of idMatches) {
+    const raw = match[1];
+    if (!raw) {
+      continue;
+    }
+    pinned.add(`sois-insight-${Number.parseInt(raw, 10)}`);
+  }
+
+  return [...pinned];
+}
+
 function shuffleArray<T>(arr: T[]): T[] {
   const out = [...arr];
   for (let i = out.length - 1; i > 0; i--) {
-    const j = Math.floor(Math.random() * (i + 1));
+    const j = randomInt(i + 1);
     [out[i], out[j]] = [out[j]!, out[i]!];
   }
   return out;
@@ -913,7 +941,7 @@ function buildSauceAutoTopicPlan(
     const sectionKey = randomizedSections[slot]!;
     assignedSectionKeys.add(sectionKey);
     const sectionItems = bySection.get(sectionKey) ?? [];
-    const evidenceItem = sectionItems[Math.floor(Math.random() * sectionItems.length)] ?? sectionItems[0];
+    const evidenceItem = sectionItems[randomInt(sectionItems.length)] ?? sectionItems[0];
 
     if (!evidenceItem) {
       const fallbackPillar = SAUCE_TOPIC_PILLARS[index % SAUCE_TOPIC_PILLARS.length]!;
@@ -1750,12 +1778,17 @@ function hasShortLineStack(body: string): boolean {
 }
 
 function splitSentenceUnits(paragraph: string): string[] {
-  const matches = paragraph
+  // Protect decimal separators so sentence splitting never turns
+  // values like 59.3% into "59." and "3%".
+  const DECIMAL_SENTINEL = "__DECIMAL_DOT__";
+  const decimalSafeParagraph = paragraph.replace(/(\d)\.(\d)/g, `$1${DECIMAL_SENTINEL}$2`);
+  const matches = decimalSafeParagraph
     .match(/[^.!?]+[.!?]+|[^.!?]+$/g)
+    ?.map((part) => part.replaceAll(DECIMAL_SENTINEL, "."))
     ?.map((part) => part.trim())
     .filter(Boolean);
 
-  return matches?.length ? matches : [paragraph.trim()].filter(Boolean);
+  return matches?.length ? matches : [paragraph.replaceAll(DECIMAL_SENTINEL, ".").trim()].filter(Boolean);
 }
 
 type LengthValidationIssue = {
@@ -3596,31 +3629,34 @@ function normalizeGeneratedBatchPayload(
     const rawPost = post && typeof post === "object" ? (post as Record<string, unknown>) : {};
     const rawLength = typeof rawPost.length === "string" ? rawPost.length.trim().toLowerCase() : "";
     const safeLength = CLAUDE_ALLOWED_LENGTHS.has(rawLength) ? rawLength : "medium";
-    const rawHook = typeof rawPost.hook === "string" ? normalizeNoEmDash(rawPost.hook).trim() : "";
-    const rawBody = typeof rawPost.body === "string" ? normalizeNoEmDash(rawPost.body).trim() : "";
-    const rawCta = typeof rawPost.cta === "string" ? normalizeNoEmDash(rawPost.cta).trim() : "";
+    const rawHook = typeof rawPost.hook === "string" ? rawPost.hook : "";
+    const rawBody = typeof rawPost.body === "string" ? rawPost.body : "";
+    const rawCta = typeof rawPost.cta === "string" ? rawPost.cta : "";
+    const normalizedHook = normalizeNoEmDash(rawHook).trim();
+    const normalizedBody = normalizeNoEmDash(rawBody).trim();
+    const normalizedCta = normalizeNoEmDash(rawCta).trim();
 
     if (strict) {
       if (!CLAUDE_ALLOWED_LENGTHS.has(rawLength)) {
         throw new Error(`Model returned unsupported post length '${rawLength || "(empty)"}' in strict mode.`);
       }
-      if (!rawHook || !rawBody) {
+      if (!rawHook.trim() || !rawBody.trim()) {
         throw new Error("Model returned incomplete post fields in strict mode.");
       }
 
       return {
         length: safeLength as "short" | "medium" | "long" | "very long" | "standard",
-        hook: clipTextStrictMax(rawHook, CLAUDE_POST_HOOK_LIMITS.max),
-        body: clipMultilineTextStrictMax(rawBody, CLAUDE_POST_BODY_LIMITS.max),
-        cta: clipTextStrictMax(rawCta, CLAUDE_POST_CTA_LIMITS.max),
+        hook: rawHook,
+        body: rawBody,
+        cta: rawCta,
       };
     }
 
     return {
       length: safeLength as "short" | "medium" | "long" | "very long" | "standard",
-      hook: normalizeClaudeBoundedString(rawPost.hook, CLAUDE_POST_HOOK_LIMITS, CLAUDE_FALLBACK_HOOK),
-      body: normalizeClaudeBoundedString(rawPost.body, CLAUDE_POST_BODY_LIMITS, CLAUDE_FALLBACK_BODY),
-      cta: normalizeClaudeBoundedString(rawPost.cta, CLAUDE_POST_CTA_LIMITS, CLAUDE_FALLBACK_CTA),
+      hook: normalizeClaudeBoundedString(normalizedHook, CLAUDE_POST_HOOK_LIMITS, CLAUDE_FALLBACK_HOOK),
+      body: normalizeClaudeBoundedString(normalizedBody, CLAUDE_POST_BODY_LIMITS, CLAUDE_FALLBACK_BODY),
+      cta: normalizeClaudeBoundedString(normalizedCta, CLAUDE_POST_CTA_LIMITS, CLAUDE_FALLBACK_CTA),
     };
   });
 
@@ -3790,9 +3826,12 @@ async function runClaudeWriterGeneration(params: {
 
   userContent.push({ type: "text", text: params.userPrompt });
 
-  const preferredModel = process.env.CLAUDE_WRITER_MODEL?.trim() || CLAUDE_WRITER_MODEL;
-  const fallbackModel = process.env.CLAUDE_WRITER_FALLBACK_MODEL?.trim() || "claude-sonnet-4-5";
-  const allowModelFallback = params.allowModelFallback ?? true;
+  // For strict SOIS output, force Sonnet 4.6 and disable model fallback.
+  const preferredModel = params.strictOutput ? CLAUDE_WRITER_MODEL : process.env.CLAUDE_WRITER_MODEL?.trim() || CLAUDE_WRITER_MODEL;
+  const fallbackModel = params.strictOutput
+    ? CLAUDE_WRITER_MODEL
+    : process.env.CLAUDE_WRITER_FALLBACK_MODEL?.trim() || "claude-sonnet-4-5";
+  const allowModelFallback = params.strictOutput ? false : params.allowModelFallback ?? true;
   const modelCandidates =
     allowModelFallback && preferredModel !== fallbackModel
       ? [preferredModel, fallbackModel]
@@ -4406,6 +4445,10 @@ export async function POST(request: Request) {
     const isProductUpdatePostType = looksLikeProductUpdatePostType(input.inputType);
     const isYouTubePromoPostType = looksLikeYouTubePromoPostType(input.inputType);
     const isSaucePostType = looksLikeSaucePostType(input.inputType);
+    const pinnedSoisInsightIds = isSaucePostType ? extractPinnedSoisInsightIds(input.details) : [];
+    if (pinnedSoisInsightIds.length > 0) {
+      console.info(`SOIS evidence pin active: ${pinnedSoisInsightIds.join(", ")}`);
+    }
     const shouldRunWebFactCheck = !isProductUpdatePostType && !isYouTubePromoPostType && !isSaucePostType;
     const shouldRunSoisContext = !isProductUpdatePostType && !isEventOrWebinarPostType;
     const webFactCheckSkipReason = isProductUpdatePostType
@@ -4436,7 +4479,10 @@ export async function POST(request: Request) {
           evidenceLines: [],
           warning: webFactCheckSkipReason,
         });
-    const sauceLimit = Math.min(12, Math.max(6, input.numberOfPosts * 3));
+    const sauceLimit =
+      isSaucePostType && !hasSpecificSoisPromptDetails
+        ? Math.min(80, Math.max(35, input.numberOfPosts * 12))
+        : Math.min(12, Math.max(6, input.numberOfPosts * 3));
     const sauceRetrievalQuery = soisRetrievalQuery || retrievalQuery;
     const soisContextPromise = isSaucePostType
       ? (async () => {
@@ -4451,6 +4497,7 @@ export async function POST(request: Request) {
             query: sauceRetrievalQuery,
             details: input.details,
             limit: sauceLimit,
+            insightIds: pinnedSoisInsightIds,
           });
 
           const items: SoisContextItem[] = sauce.items.map((item) => ({
@@ -4780,6 +4827,8 @@ ${promptGuides.factCheck}
 Output format:
 ${ctaOutputDirective}
 - Use paragraphs of 2-4 sentences. Add blank lines only between paragraphs, not between sentences. Do not put each sentence on its own line.
+- Body formatting is mandatory: output multi-paragraph bodies with explicit blank lines (\\n\\n) between paragraphs.
+- For medium, long, and very long outputs, one single wall-of-text paragraph is invalid.
 ${ctaGuidanceDirective}
 - For multi-post industry news batches, anchor each post to a different news item.
 - When source metadata says "others", use for structural inspiration, not voice imitation.
@@ -4821,6 +4870,21 @@ ${effectiveCtaLinksByPost.map((link, index) => `  ${index + 1}. ${link || "(none
     const ctaRequestSection = shouldIncludeCta
       ? `- CTA link: ${effectiveCtaLink || "(not provided)"}${perPostCtaPlanSection}`
       : "- CTA: disabled for this run. Return cta as an empty string for every post.";
+    const paragraphLayoutPlan = lengthPlan
+      .map((length, index) => {
+        const normalized = normalizeOutputLength(length);
+        if (normalized === "short") {
+          return `${index + 1}. short: 1-2 paragraphs, each 1-3 sentences.`;
+        }
+        if (normalized === "medium") {
+          return `${index + 1}. medium: 2-4 paragraphs, each 2-4 sentences. MUST include blank lines between paragraphs (\\n\\n).`;
+        }
+        if (normalized === "long") {
+          return `${index + 1}. long: 3-6 paragraphs, each 2-4 sentences. MUST include blank lines between paragraphs (\\n\\n).`;
+        }
+        return `${index + 1}. very long: 5-10 paragraphs, each 2-4 sentences. MUST include blank lines between paragraphs (\\n\\n).`;
+      })
+      .join("\n");
 
     const customInstructionBlock = input.details.trim()
       ? `REQUIRED — Apply this custom instruction exactly. It takes priority over default style and structural patterns:\n"${input.details.trim()}"\n\n`
@@ -4853,6 +4917,9 @@ ${ctaRequestSection}
 
 Required length per post:
 ${lengthPlan.map((length, index) => `${index + 1}. ${length} -> ${lengthGuide(length)}`).join("\n")}
+
+Required paragraph layout per post:
+${paragraphLayoutPlan}
 
 ${evidenceContextGuidance}
 
@@ -4889,12 +4956,9 @@ Also generate a list of hook suggestions inspired by this style and request.
     const enableCodexReviewerPass = parseBooleanEnv(process.env.ENABLE_CODEX_REVIEWER_PASS, false);
     const useClaudeWriter = Boolean(claudeCredentials && preferClaudeWriter);
     const strictSauceOutput = isSaucePostType;
-    const enableNumericSanitizerRewrite = parseBooleanEnv(
-      process.env.ENABLE_NUMERIC_SANITIZER_REWRITE,
-      false,
-    );
-    const enablePostSanitization =
-      parseBooleanEnv(process.env.ENABLE_POST_SANITIZATION, false) && !strictSauceOutput;
+    // User request: disable sanitizer rewrite passes and post-sanitization cleanup.
+    const enableNumericSanitizerRewrite = false;
+    const enablePostSanitization = false;
 
     const runGeneration = (params: {
       model: string;
@@ -4987,7 +5051,7 @@ Also generate a list of hook suggestions inspired by this style and request.
       }
     };
 
-    let modelUsed = useClaudeWriter ? (process.env.CLAUDE_WRITER_MODEL ?? CLAUDE_WRITER_MODEL) : requestedModel;
+    let modelUsed = useClaudeWriter ? (isSaucePostType ? CLAUDE_WRITER_MODEL : process.env.CLAUDE_WRITER_MODEL ?? CLAUDE_WRITER_MODEL) : requestedModel;
     let fallbackUsed = false;
 
     let parsed: GeneratedBatch;
@@ -5091,7 +5155,8 @@ ${rankedContextLines}`;
       }
     }
 
-    const shouldEnforceParagraphNormalization = true;
+    // Keep SOIS copy as direct model output (no sentence-level restructuring pass).
+    const shouldEnforceParagraphNormalization = !isSaucePostType;
     const hasNumericInputsAvailable =
       webEvidenceLines.length > 0 ||
       soisEvidenceLines.length > 0 ||
@@ -5101,6 +5166,15 @@ ${rankedContextLines}`;
       (retrieval.performanceInsights?.summaryLines?.some((line) => /\d/.test(line)) ?? false);
     const normalizeGeneratedPosts = (posts: GeneratedPost[]) =>
       posts.map((post, index) => {
+        if (isSaucePostType) {
+          return {
+            length: post.length,
+            hook: post.hook,
+            body: post.body,
+            cta: shouldIncludeCta ? post.cta : "",
+          };
+        }
+
         const normalizedHook = stripAiScaffoldOpeners(normalizeNoEmDash(post.hook));
         const normalizedBody = normalizeNoEmDash(post.body);
         const ctaLinkForPost = effectiveCtaLinksByPost[index] ?? effectiveCtaLink;
@@ -5133,7 +5207,7 @@ ${rankedContextLines}`;
         .filter((item) => item.issues.length > 0);
 
     let normalizedPosts = normalizeGeneratedPosts(parsed.posts);
-    let normalizedHooks = parsed.hooks.map((hook) => normalizeNoEmDash(hook));
+    let normalizedHooks = isSaucePostType ? [...parsed.hooks] : parsed.hooks.map((hook) => normalizeNoEmDash(hook));
     let qualityIssuesByPost = enablePostSanitization ? collectQualityIssues(normalizedPosts) : [];
 
     const enableQualityRepairPass = parseBooleanEnv(process.env.ENABLE_QUALITY_REPAIR_PASS, false);
@@ -5725,10 +5799,7 @@ ${draftSummary}`;
       }
     }
 
-    const enforceStrictSauceEvidenceMode =
-      looksLikeSaucePostType(input.inputType) &&
-      sauceBenchmarkNumericClaims.size > 0 &&
-      parseBooleanEnv(process.env.ENABLE_SAUCE_STRICT_EVIDENCE_MODE, false);
+    const enforceStrictSauceEvidenceMode = false;
 
     if (enforceStrictSauceEvidenceMode) {
       const allowAnecdotes = detailsAllowSauceAnecdotes(input.details);
@@ -6428,14 +6499,18 @@ For each post:
       }
     }
 
-    const sanitizedHooksForResponse = normalizedHooks.map((hook) => replaceSoisAcronymForPublicCopy(hook));
-    const sanitizedPostsForResponse: GeneratePostsResponse["posts"] = postsWithXThreads.map((post) => ({
-      ...post,
-      hook: replaceSoisAcronymForPublicCopy(post.hook),
-      body: replaceSoisAcronymForPublicCopy(post.body),
-      cta: replaceSoisAcronymForPublicCopy(post.cta),
-      xThread: post.xThread?.map((line) => replaceSoisAcronymForPublicCopy(line)),
-    }));
+    const sanitizedHooksForResponse = isSaucePostType
+      ? normalizedHooks
+      : normalizedHooks.map((hook) => replaceSoisAcronymForPublicCopy(hook));
+    const sanitizedPostsForResponse: GeneratePostsResponse["posts"] = isSaucePostType
+      ? postsWithXThreads
+      : postsWithXThreads.map((post) => ({
+          ...post,
+          hook: replaceSoisAcronymForPublicCopy(post.hook),
+          body: replaceSoisAcronymForPublicCopy(post.body),
+          cta: replaceSoisAcronymForPublicCopy(post.cta),
+          xThread: post.xThread?.map((line) => replaceSoisAcronymForPublicCopy(line)),
+        }));
 
     const response: GeneratePostsResponse = {
       hooks: sanitizedHooksForResponse,
