@@ -2,7 +2,8 @@ import path from "node:path";
 
 import OpenAI from "openai";
 
-const SAUCE_LANCEDB_PATH = process.env.VERCEL ? path.join("/tmp", ".lancedb") : path.join(process.cwd(), ".lancedb");
+// Read from project root where sauce-embeddings writes during build (deployed on Vercel)
+const SAUCE_LANCEDB_PATH = path.join(process.cwd(), ".lancedb");
 const SAUCE_LANCEDB_TABLE_NAME = "sauce_insights";
 
 type LanceDbConnection = import("@lancedb/lancedb").Connection;

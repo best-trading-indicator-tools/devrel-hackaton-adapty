@@ -43,6 +43,7 @@ import {
 import { retrieveLibraryContext, type LibraryEntry } from "@/lib/library-retrieval";
 import { getProductUpdateToneContext, getPromptGuides, getSauceDataset } from "@/lib/prompt-guides";
 import { runIndustryNewsContext } from "@/lib/rss-news";
+import { getClaudeCredentials, type ClaudeCredentials } from "@/lib/claude-credentials";
 import { retrieveSauceContext } from "@/lib/sauce-context";
 import { retrieveSoisContext, type SoisContextItem } from "@/lib/sois-context";
 import {
@@ -3627,18 +3628,15 @@ function parseClaudeJsonBestEffort(value: string): unknown | null {
 }
 
 async function runClaudeWriterGeneration(params: {
+  credentials: ClaudeCredentials;
   systemPrompt: string;
   userPrompt: string;
   imageDataUrls?: string[];
   responseSchema: ReturnType<typeof makeGeneratePostsResponseSchema>;
   postCount: number;
 }) {
-  const apiKey = process.env.ANTHROPIC_API_KEY;
-  if (!apiKey) {
-    throw new Error("ANTHROPIC_API_KEY is required for Claude writer");
-  }
-
-  const client = new Anthropic({ apiKey });
+  const { apiKey, authToken } = params.credentials;
+  const client = new Anthropic({ apiKey: apiKey ?? undefined, authToken: authToken ?? undefined });
   const userContent: Anthropic.MessageParam["content"] = [];
 
   for (const imageDataUrl of params.imageDataUrls ?? []) {
@@ -3774,11 +3772,12 @@ function buildClaudeMemeSelectionJsonSchema(): Record<string, unknown> {
 }
 
 async function runClaudeXThreadGeneration(params: {
-  apiKey: string;
+  credentials: ClaudeCredentials;
   model: string;
   sourcePosts: XThreadSourcePost[];
 }): Promise<Map<number, string[]>> {
-  const client = new Anthropic({ apiKey: params.apiKey });
+  const { apiKey, authToken } = params.credentials;
+  const client = new Anthropic({ apiKey: apiKey ?? undefined, authToken: authToken ?? undefined });
   const sourcePostBlock = params.sourcePosts
     .map(
       (post) => `Post ${post.postIndex}
@@ -3887,7 +3886,7 @@ ${sourcePostBlock}`,
 }
 
 async function runClaudeMemeSelection(params: {
-  apiKey: string;
+  credentials: ClaudeCredentials;
   model: string;
   systemPrompt: string;
   userPrompt: string;
@@ -3896,7 +3895,8 @@ async function runClaudeMemeSelection(params: {
   variantCount: number;
   defaultTemplateId: MemeTemplateId;
 }) {
-  const client = new Anthropic({ apiKey: params.apiKey });
+  const { apiKey, authToken } = params.credentials;
+  const client = new Anthropic({ apiKey: apiKey ?? undefined, authToken: authToken ?? undefined });
   const response = await client.messages.create({
     model: params.model,
     max_tokens: 4096,
@@ -4140,9 +4140,13 @@ export async function POST(request: Request) {
     const fallbackModel = process.env.OPENAI_MODEL_FALLBACK ?? "gpt-5.2";
 
     let oauthCredentials: CodexOAuthCredentials | null = null;
+    let claudeCredentials: ClaudeCredentials | null = null;
 
     try {
-      oauthCredentials = await getCodexOAuthCredentials();
+      [oauthCredentials, claudeCredentials] = await Promise.all([
+        getCodexOAuthCredentials(),
+        getClaudeCredentials(),
+      ]);
     } catch (oauthError) {
       return NextResponse.json(
         {
@@ -4155,11 +4159,11 @@ export async function POST(request: Request) {
 
     const openAiApiToken = getOpenAIApiToken();
 
-    if (!oauthCredentials && !openAiApiToken) {
+    if (!oauthCredentials && !openAiApiToken && !claudeCredentials) {
       return NextResponse.json(
         {
           error:
-            "Missing credentials. Set OPENAI_CODEX_ACCESS_TOKEN or OPENAI_OAUTH_TOKEN (recommended), or OPENAI_API_KEY / OPENAI_ACCESS_TOKEN.",
+            "Missing credentials. Set ANTHROPIC_API_KEY or ANTHROPIC_AUTH_TOKEN, or OPENAI_CODEX_ACCESS_TOKEN / OPENAI_OAUTH_TOKEN, or OPENAI_API_KEY / OPENAI_ACCESS_TOKEN.",
         },
         { status: 500 },
       );
@@ -4721,16 +4725,14 @@ Also generate a list of hook suggestions inspired by this style and request.
       posts: GeneratedPost[];
     };
 
-    const anthropicApiKey = process.env.ANTHROPIC_API_KEY?.trim();
     const preferClaudeWriter = parseBooleanEnv(process.env.USE_CLAUDE_WRITER, true);
-    const preferCodexReviewer = parseBooleanEnv(process.env.USE_CODEX_REVIEWER, true);
     const forceCodexReviewerPass = parseBooleanEnv(
       process.env.FORCE_CODEX_REVIEWER,
       parseBooleanEnv(process.env.FORCE_CODEX_REVIEWER_FOR_SAUCE, true),
     );
-    const useClaudeWriter = Boolean(anthropicApiKey && preferClaudeWriter);
-    const useCodexReviewer = Boolean(oauthCredentials && preferCodexReviewer);
-    const hasCodexReviewerPath = Boolean((useCodexReviewer || openAiApiToken) && preferCodexReviewer);
+    const useClaudeWriter = Boolean(claudeCredentials && preferClaudeWriter);
+    const useCodexReviewer = Boolean(oauthCredentials);
+    const hasCodexReviewerPath = useCodexReviewer;
     const enableNumericSanitizerRewrite = parseBooleanEnv(
       process.env.ENABLE_NUMERIC_SANITIZER_REWRITE,
       false,
@@ -4742,8 +4744,9 @@ Also generate a list of hook suggestions inspired by this style and request.
       responseSchema: ReturnType<typeof makeGeneratePostsResponseSchema>;
       postCount: number;
     }): Promise<GeneratedBatch> => {
-      if (useClaudeWriter) {
+      if (useClaudeWriter && claudeCredentials) {
         return runClaudeWriterGeneration({
+          credentials: claudeCredentials,
           systemPrompt,
           userPrompt: params.userPrompt,
           imageDataUrls: inputImageDataUrls.length ? inputImageDataUrls : undefined,
@@ -5137,52 +5140,19 @@ Return ${parsed.hooks.length} hook suggestions as well (keep good ones, tighten 
         responseSchema: ReturnType<typeof makeGeneratePostsResponseSchema>;
         postCount: number;
       }): Promise<GeneratedBatch> => {
-        if (useCodexReviewer && oauthCredentials) {
-          return runCodexOauthGeneration({
-            oauth: oauthCredentials,
-            model: params.model,
-            systemPrompt: editorSystemPrompt,
-            userPrompt: params.userPrompt,
-            responseSchema: params.responseSchema,
-            postCount: params.postCount,
-            verbosity: editorCodexVerbosity,
-          });
+        if (!oauthCredentials) {
+          throw new Error("Codex reviewer requires OPENAI_CODEX_ACCESS_TOKEN or OPENAI_OAUTH_TOKEN.");
         }
 
-        if (openAiApiToken && preferCodexReviewer) {
-          return runOpenAiChatGeneration({
-            token: openAiApiToken,
-            model: params.model,
-            systemPrompt: editorSystemPrompt,
-            userPrompt: params.userPrompt,
-            responseSchema: params.responseSchema,
-            postCount: params.postCount,
-            temperature: 0.4,
-          });
-        }
-
-        if (useClaudeWriter && anthropicApiKey) {
-          return runClaudeWriterGeneration({
-            systemPrompt: editorSystemPrompt,
-            userPrompt: params.userPrompt,
-            responseSchema: params.responseSchema,
-            postCount: params.postCount,
-          });
-        }
-
-        if (openAiApiToken) {
-          return runOpenAiChatGeneration({
-            token: openAiApiToken,
-            model: params.model,
-            systemPrompt: editorSystemPrompt,
-            userPrompt: params.userPrompt,
-            responseSchema: params.responseSchema,
-            postCount: params.postCount,
-            temperature: 0.4,
-          });
-        }
-
-        throw new Error("No reviewer model credentials available (Codex/OpenAI/Claude).");
+        return runCodexOauthGeneration({
+          oauth: oauthCredentials,
+          model: params.model,
+          systemPrompt: editorSystemPrompt,
+          userPrompt: params.userPrompt,
+          responseSchema: params.responseSchema,
+          postCount: params.postCount,
+          verbosity: editorCodexVerbosity,
+        });
       };
 
       try {
@@ -5933,10 +5903,10 @@ For each post:
         let parsedMemeSelection: z.infer<typeof memeSelectionSchema> | null = null;
         let memeSelectionError: unknown = null;
 
-        if (useClaudeWriter && anthropicApiKey) {
+        if (useClaudeWriter && claudeCredentials) {
           try {
             parsedMemeSelection = await runClaudeMemeSelection({
-              apiKey: anthropicApiKey,
+              credentials: claudeCredentials,
               model: claudeMemeModel,
               systemPrompt: memeSelectionSystemPrompt,
               userPrompt: memeSelectionUserPrompt,
@@ -6157,7 +6127,7 @@ For each post:
       : [];
 
     let claudeXThreadsByPostIndex = new Map<number, string[]>();
-    if (eligibleXThreadPostIndices.length && useClaudeWriter && anthropicApiKey) {
+    if (eligibleXThreadPostIndices.length && useClaudeWriter && claudeCredentials) {
       try {
         const sourcePostsForXThreads = eligibleXThreadPostIndices.map((postIndex) => {
           const post = postsWithMedia[postIndex];
@@ -6170,7 +6140,7 @@ For each post:
         });
 
         claudeXThreadsByPostIndex = await runClaudeXThreadGeneration({
-          apiKey: anthropicApiKey,
+          credentials: claudeCredentials,
           model: process.env.CLAUDE_WRITER_MODEL ?? CLAUDE_WRITER_MODEL,
           sourcePosts: sourcePostsForXThreads,
         });

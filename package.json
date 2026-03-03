@@ -5,7 +5,7 @@
   "scripts": {
     "dev": "next dev",
     "prebuild": "node scripts/prune-lancedb-binaries.mjs",
-    "build": "next build",
+    "build": "(npm run sauce-embeddings || true) && next build",
     "start": "next start",
     "lint": "eslint",
     "sois-site-sync": "node scripts/build-sois-site-context.mjs",

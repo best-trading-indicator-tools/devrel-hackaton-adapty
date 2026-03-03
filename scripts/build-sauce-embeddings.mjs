@@ -25,7 +25,8 @@ function loadEnv() {
 loadEnv();
 
 const SAUCE_DATASET_PATH = path.join(process.cwd(), "data", "sauce-dataset.md");
-const LANCEDB_PATH = process.env.VERCEL ? path.join("/tmp", ".lancedb") : path.join(process.cwd(), ".lancedb");
+// Always write to project root so the table is included in Vercel deployment
+const LANCEDB_PATH = path.join(process.cwd(), ".lancedb");
 const TABLE_NAME = "sauce_insights";
 const EMBEDDING_MODEL = process.env.OPENAI_SAUCE_EMBEDDING_MODEL ?? "text-embedding-3-small";
 
