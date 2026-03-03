@@ -5166,9 +5166,11 @@ ${rankedContextLines}`;
       (retrieval.performanceInsights?.summaryLines?.some((line) => /\d/.test(line)) ?? false);
     const normalizeGeneratedPosts = (posts: GeneratedPost[]) =>
       posts.map((post, index) => {
+        const normalizedLength = lengthPlan[index] ?? normalizeOutputLength(post.length);
+
         if (isSaucePostType) {
           return {
-            length: post.length,
+            length: normalizedLength,
             hook: post.hook,
             body: post.body,
             cta: shouldIncludeCta ? post.cta : "",
@@ -5183,7 +5185,7 @@ ${rankedContextLines}`;
           : "";
 
         return {
-          length: lengthPlan[index] ?? post.length,
+          length: normalizedLength,
           hook: normalizedHook,
           body: shouldEnforceParagraphNormalization ? normalizeBodyRhythm(normalizedBody) : normalizedBody,
           cta: normalizedCta,
