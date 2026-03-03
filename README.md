@@ -404,7 +404,7 @@ If you get a lock error like `.next/dev/lock`, stop other running `next dev` pro
 
 - `prebuild` runs `scripts/prune-lancedb-binaries.mjs`
 - On Linux builds it keeps only one LanceDB native binary variant (glibc or musl)
-- `build` runs `sauce-embeddings` before `next build` (best-effort; requires `OPENAI_API_KEY` for semantic retrieval)
+- `build` runs `sois-embeddings` before `next build` (best-effort; requires `OPENAI_API_KEY` for semantic retrieval)
 
 ## Troubleshooting
 

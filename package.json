@@ -5,11 +5,12 @@
   "scripts": {
     "dev": "next dev",
     "prebuild": "node scripts/prune-lancedb-binaries.mjs",
-    "build": "(npm run sauce-embeddings || true) && next build",
+    "build": "(npm run sois-embeddings || true) && next build",
     "start": "next start",
     "lint": "eslint",
     "sois-site-sync": "node scripts/build-sois-site-context.mjs",
-    "sauce-embeddings": "node scripts/build-sauce-embeddings.mjs",
+    "sois-insights-sync": "node scripts/refresh-sois-insights.mjs",
+    "sois-embeddings": "node scripts/build-sois-embeddings.mjs",
     "slack-sync": "node scripts/slack-product-updates-sync.mjs",
     "notion-sync": "node scripts/notion-calendar-sync.mjs"
   },

@@ -260,9 +260,6 @@ export async function POST(request: Request) {
 SOIS guide from repository prompt file:
 ${promptGuides.sauce}
 
-State of in-app subscriptions report website context guide from repository prompt file:
-${promptGuides.sois}
-
 ASO guide from repository prompt file:
 ${promptGuides.aso}
 
@@ -274,6 +271,9 @@ ${promptGuides.paywall}
       ? `
 SOIS pre-launch guide from repository prompt file:
 ${promptGuides.soisPrelaunch}
+
+SOIS pre-launch inspiration feed (style reference only; do not treat as factual evidence for this run):
+${promptGuides.soisPrelaunchInspiration}
 `
       : "";
     const promptDirective = input.prompt.trim()

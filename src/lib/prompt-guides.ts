@@ -5,7 +5,15 @@ const ADAPTY_CHANGELOG_JSON_FEED = "https://changelog.adapty.io/jsonfeed.json";
 const CHANGELOG_CACHE_TTL_MS = 60 * 60 * 1000; // 1 hour
 let changelogCache: { text: string; fetchedAt: number } | null = null;
 
-type PromptGuideKey = "writing" | "sauce" | "sois" | "soisPrelaunch" | "aso" | "paywall" | "factCheck";
+type PromptGuideKey =
+  | "writing"
+  | "sauce"
+  | "sois"
+  | "soisPrelaunch"
+  | "soisPrelaunchInspiration"
+  | "aso"
+  | "paywall"
+  | "factCheck";
 
 export type PromptGuides = Record<PromptGuideKey, string>;
 
@@ -14,6 +22,7 @@ const GUIDE_PATHS: Record<PromptGuideKey, string> = {
   sauce: path.join(process.cwd(), "prompts", "linkedin", "SAUCE.md"),
   sois: path.join(process.cwd(), "prompts", "linkedin", "SOIS.md"),
   soisPrelaunch: path.join(process.cwd(), "prompts", "linkedin", "SOIS_PRELAUNCH.md"),
+  soisPrelaunchInspiration: path.join(process.cwd(), "sois-pre-launch.md"),
   aso: path.join(process.cwd(), "prompts", "linkedin", "ASO.md"),
   paywall: path.join(process.cwd(), "prompts", "linkedin", "PAYWALL.md"),
   factCheck: path.join(process.cwd(), "prompts", "linkedin", "FACT_CHECK.md"),
@@ -48,6 +57,7 @@ const DEFAULT_GUIDES: PromptGuides = {
     "Use a playful prediction or poll prompt and promise later fact-checking with the full report data.",
     'Never use the acronym "SOIS" in public copy; write "State of in-app subscriptions report".',
   ].join("\n"),
+  soisPrelaunchInspiration: "No SOIS pre-launch inspiration feed provided.",
   aso: [
     "For ASO topics, focus on intent fit, conversion levers, and practical diagnostics before tool chatter.",
     "Use concrete metrics and caveats by geo, app category, and traffic source.",
@@ -83,8 +93,12 @@ async function loadGuide(key: PromptGuideKey): Promise<string> {
 const SAUCE_DATASET_PATH =
   process.env.SAUCE_DATASET_PATH?.trim() || path.join(process.cwd(), "data", "sauce-dataset.md");
 const SAUCE_DATASET_MAX_CHARS = 50_000;
+const SOIS_INSIGHTS_DATASET_PATH =
+  process.env.SOIS_INSIGHTS_DATASET_PATH?.trim() || path.join(process.cwd(), "data", "sois-insights.md");
+const SOIS_INSIGHTS_DATASET_MAX_CHARS = 120_000;
 
 let sauceDatasetCache: string | null = null;
+let soisInsightsDatasetCache: string | null = null;
 
 export async function getSauceDataset(): Promise<string> {
   if (sauceDatasetCache !== null) {
@@ -101,16 +115,33 @@ export async function getSauceDataset(): Promise<string> {
   }
 }
 
+export async function getSoisInsightsDataset(): Promise<string> {
+  if (soisInsightsDatasetCache !== null) {
+    return soisInsightsDatasetCache;
+  }
+
+  try {
+    const raw = await readFile(SOIS_INSIGHTS_DATASET_PATH, "utf8");
+    const text = raw.replace(/\r\n?/g, "\n").trim().slice(0, SOIS_INSIGHTS_DATASET_MAX_CHARS);
+    soisInsightsDatasetCache = text;
+    return text;
+  } catch {
+    soisInsightsDatasetCache = "";
+    return "";
+  }
+}
+
 export async function getPromptGuides(): Promise<PromptGuides> {
   if (guideCache) {
     return guideCache;
   }
 
-  const [writing, sauce, sois, soisPrelaunch, aso, paywall, factCheck] = await Promise.all([
+  const [writing, sauce, sois, soisPrelaunch, soisPrelaunchInspiration, aso, paywall, factCheck] = await Promise.all([
     loadGuide("writing"),
     loadGuide("sauce"),
     loadGuide("sois"),
     loadGuide("soisPrelaunch"),
+    loadGuide("soisPrelaunchInspiration"),
     loadGuide("aso"),
     loadGuide("paywall"),
     loadGuide("factCheck"),
@@ -121,6 +152,7 @@ export async function getPromptGuides(): Promise<PromptGuides> {
     sauce,
     sois,
     soisPrelaunch,
+    soisPrelaunchInspiration,
     aso,
     paywall,
     factCheck,

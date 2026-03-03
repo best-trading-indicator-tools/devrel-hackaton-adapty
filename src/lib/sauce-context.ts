@@ -2,9 +2,9 @@ import path from "node:path";
 
 import OpenAI from "openai";
 
-// Read from project root where sauce-embeddings writes during build (deployed on Vercel)
+// Read from project root where sois-embeddings writes during build (deployed on Vercel)
 const SAUCE_LANCEDB_PATH = path.join(process.cwd(), ".lancedb");
-const SAUCE_LANCEDB_TABLE_NAME = "sauce_insights";
+const SOIS_LANCEDB_TABLE_NAME = "sois_insights";
 
 type LanceDbConnection = import("@lancedb/lancedb").Connection;
 
@@ -36,15 +36,41 @@ export async function retrieveSauceContext(params: {
   details?: string;
   limit: number;
 }): Promise<{ items: { id: string; text: string }[]; method: "lancedb" | "none" }> {
+  return retrieveEmbeddedContext({
+    ...params,
+    // Legacy call sites now use the SOIS-only embedding table.
+    tableName: SOIS_LANCEDB_TABLE_NAME,
+  });
+}
+
+export async function retrieveSoisEmbeddedContext(params: {
+  client: OpenAI;
+  query: string;
+  details?: string;
+  limit: number;
+}): Promise<{ items: { id: string; text: string }[]; method: "lancedb" | "none" }> {
+  return retrieveEmbeddedContext({
+    ...params,
+    tableName: SOIS_LANCEDB_TABLE_NAME,
+  });
+}
+
+async function retrieveEmbeddedContext(params: {
+  client: OpenAI;
+  query: string;
+  details?: string;
+  limit: number;
+  tableName: string;
+}): Promise<{ items: { id: string; text: string }[]; method: "lancedb" | "none" }> {
   const db = await connectLanceDb();
 
   try {
     const tableNames = await db.tableNames();
-    if (!tableNames.includes(SAUCE_LANCEDB_TABLE_NAME)) {
+    if (!tableNames.includes(params.tableName)) {
       return { items: [], method: "none" };
     }
 
-    const table = await db.openTable(SAUCE_LANCEDB_TABLE_NAME);
+    const table = await db.openTable(params.tableName);
     const count = await table.countRows();
     if (count === 0) {
       return { items: [], method: "none" };

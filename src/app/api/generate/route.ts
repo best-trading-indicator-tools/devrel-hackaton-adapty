@@ -41,10 +41,14 @@ import {
   fetchGiphyVariants,
 } from "@/lib/giphy";
 import { retrieveLibraryContext, type LibraryEntry } from "@/lib/library-retrieval";
-import { getProductUpdateToneContext, getPromptGuides, getSauceDataset } from "@/lib/prompt-guides";
+import {
+  getProductUpdateToneContext,
+  getPromptGuides,
+  getSoisInsightsDataset,
+} from "@/lib/prompt-guides";
 import { runIndustryNewsContext } from "@/lib/rss-news";
 import { getClaudeCredentials, type ClaudeCredentials } from "@/lib/claude-credentials";
-import { retrieveSauceContext } from "@/lib/sauce-context";
+import { retrieveSoisEmbeddedContext } from "@/lib/sauce-context";
 import { retrieveSoisContext, type SoisContextItem } from "@/lib/sois-context";
 import {
   generatePostsRequestSchema,
@@ -812,6 +816,8 @@ const SAUCE_TOPIC_PILLARS: SauceTopicPillar[] = [
     pattern: /\b(market|region|category|share|concentration|competition)\b/i,
   },
 ];
+const SOIS_FALLBACK_HEADING_CATEGORY_PATTERN =
+  /^(LTV|Pricing|Conversions|Market|Paywalls|Retention|Refunds|Stores|iOS vs Android|AI|Web Paywalls)\b/i;
 
 function clipTextAtWordBoundary(value: string, maxChars: number): string {
   if (value.length <= maxChars) {
@@ -861,6 +867,71 @@ function sectionKeyFromItemId(itemId: string): string {
   return itemId;
 }
 
+function parseNumberedInsightBlocks(params: {
+  text: string;
+  idPrefix: string;
+  sourceUrl: string;
+  categoryLabel: string;
+}): SoisContextItem[] {
+  const normalized = params.text.replace(/\r\n?/g, "\n");
+  const lines = normalized.split("\n");
+  const items: SoisContextItem[] = [];
+
+  let index = 0;
+  while (index < lines.length) {
+    const line = normalizeNoEmDash(lines[index]?.replace(/\s+/g, " ").trim() ?? "");
+    const headingMatch = line.match(/^#(\d+)(.*)$/);
+    if (!headingMatch) {
+      index += 1;
+      continue;
+    }
+
+    const number = Number.parseInt(headingMatch[1] ?? "", 10);
+    if (!Number.isFinite(number) || number < 1) {
+      index += 1;
+      continue;
+    }
+
+    let title = normalizeNoEmDash((headingMatch[2] ?? "").trim());
+    if (!title) {
+      let probe = index + 1;
+      while (probe < lines.length && !lines[probe]?.trim()) probe += 1;
+      const maybeTitle = normalizeNoEmDash(lines[probe]?.replace(/\s+/g, " ").trim() ?? "");
+      if (SOIS_FALLBACK_HEADING_CATEGORY_PATTERN.test(maybeTitle)) {
+        title = maybeTitle;
+      }
+    }
+
+    if (!SOIS_FALLBACK_HEADING_CATEGORY_PATTERN.test(title)) {
+      index += 1;
+      continue;
+    }
+
+    let end = index + 1;
+    while (end < lines.length) {
+      const probe = normalizeNoEmDash(lines[end]?.replace(/\s+/g, " ").trim() ?? "");
+      if (/^#\d+/.test(probe)) break;
+      end += 1;
+    }
+
+    const block = lines.slice(index, end).join("\n").trim();
+    items.push({
+      id: `${params.idPrefix}-${number}`,
+      category: "market",
+      categoryLabel: params.categoryLabel,
+      subcategory: number,
+      subcategoryLabel: title,
+      sourceUrl: params.sourceUrl,
+      rows: 0,
+      text: block,
+    });
+
+    index = end;
+  }
+
+  return items;
+}
+
 function shuffleArray<T>(arr: T[]): T[] {
   const out = [...arr];
   for (let i = out.length - 1; i > 0; i--) {
@@ -904,24 +975,33 @@ function buildSauceAutoTopicPlan(
     };
   }
 
-  const planLines = Array.from({ length: postCount }, (_, index) => {
-    const sectionKey = sections[Math.floor(Math.random() * sections.length)]!;
+  const planLines: string[] = [];
+  let randomizedSections = shuffleArray(sections);
+
+  for (let index = 0; index < postCount; index += 1) {
+    const slot = index % randomizedSections.length;
+    if (slot === 0 && index > 0) {
+      randomizedSections = shuffleArray(sections);
+    }
+
+    const sectionKey = randomizedSections[slot]!;
     assignedSectionKeys.add(sectionKey);
     const sectionItems = bySection.get(sectionKey) ?? [];
     const evidenceItem = sectionItems[Math.floor(Math.random() * sectionItems.length)] ?? sectionItems[0];
 
     if (!evidenceItem) {
       const fallbackPillar = SAUCE_TOPIC_PILLARS[index % SAUCE_TOPIC_PILLARS.length]!;
-      return `Post ${index + 1}: ${fallbackPillar.label}
+      planLines.push(`Post ${index + 1}: ${fallbackPillar.label}
 - Primary pillar: ${fallbackPillar.label}
-- Anchor: No State of in-app subscriptions report evidence matched. Keep this post qualitative and mechanism-focused.`;
+- Anchor: No State of in-app subscriptions report evidence matched. Keep this post qualitative and mechanism-focused.`);
+      continue;
     }
 
-    return `Post ${index + 1}: ${evidenceItem.categoryLabel} / ${evidenceItem.subcategoryLabel}
+    planLines.push(`Post ${index + 1}: ${evidenceItem.categoryLabel} / ${evidenceItem.subcategoryLabel}
 - Primary pillar: ${evidenceItem.categoryLabel} / ${evidenceItem.subcategoryLabel}
 - Anchor: ${extractSauceAnchorFromItem(evidenceItem)}
-- Source: ${evidenceItem.sourceUrl}`;
-  });
+ - Source: ${evidenceItem.sourceUrl}`);
+  }
 
   return { planLines, assignedSectionKeys };
 }
@@ -4275,7 +4355,7 @@ export async function POST(request: Request) {
     const sauceRetrievalQuery = soisRetrievalQuery || retrievalQuery;
     const soisContextPromise = looksLikeSaucePostType(input.inputType)
       ? (embeddingClient
-          ? retrieveSauceContext({
+          ? retrieveSoisEmbeddedContext({
               client: embeddingClient,
               query: sauceRetrievalQuery,
               details: input.details,
@@ -4283,31 +4363,41 @@ export async function POST(request: Request) {
             })
           : Promise.resolve<{ items: { id: string; text: string }[]; method: "none" }>({ items: [], method: "none" })
         ).then(async (sauce) => {
-          let items = sauce.items.map((item) => ({
+          let items: SoisContextItem[] = sauce.items.map((item) => ({
             id: item.id,
-            category: "market" as const,
+            category: "market",
             categoryLabel: "SOIS",
             subcategory: 1,
             subcategoryLabel: item.id,
-            sourceUrl: "https://appstate2.vercel.app/",
+            sourceUrl: "data/sois-insights.md",
             rows: 0,
             text: item.text,
           }));
           if (items.length === 0) {
-            const fallback = await getSauceDataset();
+            const fallback = await getSoisInsightsDataset();
             if (fallback.trim()) {
-              items = [
-                {
-                  id: "sauce-fallback",
-                  category: "market" as const,
-                  categoryLabel: "SOIS",
-                  subcategory: 1,
-                  subcategoryLabel: "SOIS dataset",
-                  sourceUrl: "https://appstate2.vercel.app/",
-                  rows: 0,
-                  text: fallback.slice(0, 25_000),
-                },
-              ];
+              const parsedFallbackItems = parseNumberedInsightBlocks({
+                text: fallback,
+                idPrefix: "sois-fallback",
+                sourceUrl: "data/sois-insights.md",
+                categoryLabel: "SOIS",
+              });
+              if (parsedFallbackItems.length > 0) {
+                items = parsedFallbackItems.slice(0, Math.max(sauceLimit, input.numberOfPosts * 4));
+              } else {
+                items = [
+                  {
+                    id: "sois-fallback",
+                    category: "market",
+                    categoryLabel: "SOIS",
+                    subcategory: 1,
+                    subcategoryLabel: "SOIS local insights feed",
+                    sourceUrl: "data/sois-insights.md",
+                    rows: 0,
+                    text: fallback.slice(0, 25_000),
+                  },
+                ];
+              }
             }
           }
           return {
@@ -4496,8 +4586,8 @@ export async function POST(request: Request) {
         : "internal context";
     const evidenceContextGuidance = shouldRunSoisContext
       ? looksLikeSaucePostType(input.inputType)
-        ? `Evidence context: SOIS dataset (TOP 35 INSIGHTS) below. MANDATORY: Every SOIS post body MUST include at least 1 concrete number from the SOIS dataset (e.g. 1.7x, 55.5%, $54.17, 46.2%). Copy numbers verbatim. Zero numbers in a SOIS post = invalid output. Do not use numbers from web fact-check or user input.`
-        : `Evidence context (priority order: ${evidencePriorityOrder}). Numbers from the State of in-app subscriptions report are real benchmarks - use them. Copy numbers verbatim from the evidence below. Use each number for its labeled metric only: install_to_paid_rate as %, avg_ltv as $, price_usd as $. When a number is not in the evidence, write the sentence without it. For SOIS posts: only use numbers from the report evidence or SOIS dataset below (not from web fact-check or user input). REQUIRED: Each SOIS post body must include at least 1 concrete number from the evidence (e.g. X%, $Y, Z rate). Never output a SOIS post with zero numbers.`
+        ? `Evidence context: SOIS insights feed below. MANDATORY: Every SOIS post body MUST include at least 1 concrete number from the SOIS insights feed (e.g. 1.7x, 55.5%, $54.17, 46.2%). Copy numbers verbatim. Zero numbers in a SOIS post = invalid output. Do not use numbers from web fact-check or user input.`
+        : `Evidence context (priority order: ${evidencePriorityOrder}). Numbers from the State of in-app subscriptions report are real benchmarks - use them. Copy numbers verbatim from the evidence below. Use each number for its labeled metric only: install_to_paid_rate as %, avg_ltv as $, price_usd as $. When a number is not in the evidence, write the sentence without it. For SOIS posts: only use numbers from the report evidence or SOIS insights feed below (not from web fact-check or user input). REQUIRED: Each SOIS post body must include at least 1 concrete number from the evidence (e.g. X%, $Y, Z rate). Never output a SOIS post with zero numbers.`
       : shouldRunWebFactCheck
         ? `Evidence context (priority order: ${evidencePriorityOrder}). Use web evidence to fill factual gaps when available (especially for event logistics). If a detail is not supported by evidence, keep phrasing qualitative and avoid invented specifics. Do not introduce State of in-app subscriptions report benchmark claims.`
         : `Evidence context (priority order: ${evidencePriorityOrder}). Use internal request context only (details, event data, date/time/place${
@@ -4505,7 +4595,7 @@ export async function POST(request: Request) {
           }). Do not introduce State of in-app subscriptions report benchmark claims.`;
     const soisSectionTitle = shouldRunSoisContext
       ? looksLikeSaucePostType(input.inputType)
-        ? "1. SOIS dataset (TOP 35 INSIGHTS - use at least 1 number from here in every post):"
+        ? "1. SOIS insights feed (local LanceDB source - use at least 1 number from here in every post):"
         : "1. State of in-app subscriptions report benchmark context - fetched from dags.adpinfra.dev:"
       : `1. State of in-app subscriptions report benchmark context: ${soisContextSkipReason}`;
     const webFactCheckSectionTitle = shouldRunWebFactCheck
@@ -4563,18 +4653,15 @@ export async function POST(request: Request) {
 SOIS guide from repository prompt file:
 ${promptGuides.sauce}
 
-State of in-app subscriptions report website context guide from repository prompt file:
-${promptGuides.sois}
-
 ASO guide from repository prompt file:
 ${promptGuides.aso}
 
 Paywall guide from repository prompt file:
 ${promptGuides.paywall}
 SOIS number rule (MANDATORY - non-negotiable):
-- Every SOIS post body MUST include at least 1 concrete number from the SOIS dataset below (e.g. 1.7x, 7.4x, 55.5%, $54.17, 46.2%, 58.1%). A SOIS post with zero numbers is invalid.
-- Target 1-2 benchmark numbers per post. Copy numbers verbatim from the SOIS dataset evidence.
-- Every number must come from the SOIS dataset below. Do not use numbers from web fact-check or user input.
+- Every SOIS post body MUST include at least 1 concrete number from the SOIS insights feed below (e.g. 1.7x, 7.4x, 55.5%, $54.17, 46.2%, 58.1%). A SOIS post with zero numbers is invalid.
+- Target 1-2 benchmark numbers per post. Copy numbers verbatim from the SOIS insights evidence.
+- Every number must come from the SOIS insights feed below. Do not use numbers from web fact-check or user input.
 - Do not repeat the same benchmark number multiple times in the same post or across most hook suggestions.
 `
       : "";
@@ -4582,6 +4669,9 @@ SOIS number rule (MANDATORY - non-negotiable):
       ? `
 SOIS Pre-launch guide from repository prompt file:
 ${promptGuides.soisPrelaunch}
+
+SOIS Pre-launch inspiration feed (style reference only; do not treat as factual evidence for this run):
+${promptGuides.soisPrelaunchInspiration}
 `
       : "";
 
