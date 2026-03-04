@@ -1,7 +1,48 @@
 {
-  "syncedAt": "2026-03-03T00:40:18.581Z",
+  "syncedAt": "2026-03-04T00:38:13.567Z",
   "channel": "#product-release",
   "entries": [
+    {
+      "id": "1772548496.458589",
+      "slackUrl": "https://adapty-team.slack.com/archives/C04SY70QZ0T/p1772548496458589",
+      "name": "Change retrieving profile data from Postgres to Aerospike + ClickHouse",
+      "message": "Feature: <https://adaptyio.atlassian.net/browse/INFRA-164|Change retrieving profile data from Postgres to Aerospike + ClickHouse>\nRelease date: Mar 3, 2026\nAffected areas: Profiles (Dashboard only)",
+      "releaseDate": "2026-03-03",
+      "thread": [
+        {
+          "userId": "U04B26DSWMA",
+          "userName": "Sergei Solodskikh",
+          "text": "Feature: <https://adaptyio.atlassian.net/browse/INFRA-164|Change retrieving profile data from Postgres to Aerospike + ClickHouse>\nRelease date: Mar 3, 2026\nAffected areas: Profiles (Dashboard only)",
+          "date": "2026-03-03T14:34:56.458Z",
+          "images": []
+        },
+        {
+          "userId": "U04B26DSWMA",
+          "userName": "Sergei Solodskikh",
+          "text": "What changed for users:\n\n1. Less filters. Filters by subscription state and product have been removed due to new data layout. The country filter has been kept.\n2. Profile search reworked. Searching for users by Profile Key, Customer User ID, or email continues to work but has been rebuilt under the hood for better accuracy and speed.\n3. Profile detail & events. The profile detail page and the transaction/event history within it remain available with the same information, now sourced through a more reliable data pipeline.\nIn short: The CRM section should feel largely the same. Some rarely-used filters are gone, but the core workflow - finding a user, viewing their profile, and checking their transaction history - stays the same. Despite this feature is mostly technical and was thoroughly tested, I ask <!subteam^S03KM96DV0U> and <!subteam^S07BZPQDBUJ> to be aware in case our customers report disruptions in this section of dashboard",
+          "date": "2026-03-03T14:39:05.538Z",
+          "images": []
+        },
+        {
+          "userId": "U0AHM55LEAC",
+          "userName": "Clawdapty",
+          "text": ":+1:",
+          "date": "2026-03-03T14:39:09.609Z",
+          "images": []
+        },
+        {
+          "userId": "U04B26DSWMA",
+          "userName": "Sergei Solodskikh",
+          "text": "<@UNWFN144R> This is a frontend release that switches CRM to ClickHouse + Aerospike mix we discussed yesterday, now facing customers",
+          "date": "2026-03-03T14:44:07.115Z",
+          "images": []
+        }
+      ],
+      "content": "[Sergei Solodskikh]: Feature: <https://adaptyio.atlassian.net/browse/INFRA-164|Change retrieving profile data from Postgres to Aerospike + ClickHouse>\nRelease date: Mar 3, 2026\nAffected areas: Profiles (Dashboard only)\n\n[Sergei Solodskikh]: What changed for users:\n\n1. Less filters. Filters by subscription state and product have been removed due to new data layout. The country filter has been kept.\n2. Profile search reworked. Searching for users by Profile Key, Customer User ID, or email continues to work but has been rebuilt under the hood for better accuracy and speed.\n3. Profile detail & events. The profile detail page and the transaction/event history within it remain available with the same information, now sourced through a more reliable data pipeline.\nIn short: The CRM section should feel largely the same. Some rarely-used filters are gone, but the core workflow - finding a user, viewing their profile, and checking their transaction history - stays the same. Despite this feature is mostly technical and was thoroughly tested, I ask <!subteam^S03KM96DV0U> and <!subteam^S07BZPQDBUJ> to be aware in case our customers report disruptions in this section of dashboard\n\n[Clawdapty]: :+1:\n\n[Sergei Solodskikh]: <@UNWFN144R> This is a frontend release that switches CRM to ClickHouse + Aerospike mix we discussed yesterday, now facing customers",
+      "matchingReplies": [],
+      "hasTeamMention": true,
+      "images": []
+    },
     {
       "id": "1772014235.944699",
       "slackUrl": "https://adapty-team.slack.com/archives/C04SY70QZ0T/p1772014235944699",
@@ -1029,62 +1070,6 @@
       ],
       "content": "[Vlad Guriev]: Feature: *<https://github.com/adaptyteam/AdaptySDK-Android/releases/tag/3.14.0|Adapty Android 3.14.0>*\nRelease date: Nov 26, 2025\nDependencies: Crossplatforms\nEffected areas:\n• Multihost\n• Backend errors handling\n\n[Vlad Guriev]: released *3.14.1*\n\n<!subteam^S07BZPQDBUJ> <!subteam^S03KM96DV0U> fyi",
       "matchingReplies": [],
-      "hasTeamMention": true,
-      "images": []
-    },
-    {
-      "id": "1764074879.277239",
-      "slackUrl": "https://adapty-team.slack.com/archives/C04SY70QZ0T/p1764074879277239",
-      "name": "Developer role in Adapty",
-      "message": "Feature: <https://adaptyio.atlassian.net/browse/ADP-4487|Developer role in Adapty>\nRelease date: Nov 25, 2025\nEffected areas: for this new role\n• Removed all metrics for this role\n• Removed sections\n    ◦ overview\n    ◦ analytics\n    ◦ refund saver\n    ◦ ua\n    ◦ asa",
-      "releaseDate": "2025-11-25",
-      "thread": [
-        {
-          "userId": "UN9KZ9RL4",
-          "userName": "Kovalev Artem",
-          "text": "Feature: <https://adaptyio.atlassian.net/browse/ADP-4487|Developer role in Adapty>\nRelease date: Nov 25, 2025\nEffected areas: for this new role\n• Removed all metrics for this role\n• Removed sections\n    ◦ overview\n    ◦ analytics\n    ◦ refund saver\n    ◦ ua\n    ◦ asa",
-          "date": "2025-11-25T12:47:59.277Z",
-          "images": []
-        },
-        {
-          "userId": "U04B26DSWMA",
-          "userName": "Sergei Solodskikh",
-          "text": "Side note: if a user was previously assigned other role, enabled email notifications with financial summaries, and then was turned into developer, they will no longer receive such emails",
-          "date": "2025-11-25T13:58:17.690Z",
-          "images": []
-        },
-        {
-          "userId": "U9HDNS9S4",
-          "userName": "Kirill Potekhin",
-          "text": "<!subteam^S07BZPQDBUJ> many customers requested it. it's now possible to add developers to projects without giving them access to metrics, so they can configure everything, but they can't see revenue and other metrics ",
-          "date": "2025-11-25T14:56:03.842Z",
-          "images": []
-        },
-        {
-          "userId": "U07H1ESAH6K",
-          "userName": "Sofia Pikuleva",
-          "text": "<https://adapty.io/docs/members-settings>",
-          "date": "2025-11-25T15:01:30.612Z",
-          "images": []
-        },
-        {
-          "userId": "U09EG3DK4US",
-          "userName": "Polina Ishimbaeva",
-          "text": "Great update! Thank you, team!",
-          "date": "2025-11-25T16:49:00.344Z",
-          "images": []
-        }
-      ],
-      "content": "[Kovalev Artem]: Feature: <https://adaptyio.atlassian.net/browse/ADP-4487|Developer role in Adapty>\nRelease date: Nov 25, 2025\nEffected areas: for this new role\n• Removed all metrics for this role\n• Removed sections\n    ◦ overview\n    ◦ analytics\n    ◦ refund saver\n    ◦ ua\n    ◦ asa\n\n[Sergei Solodskikh]: Side note: if a user was previously assigned other role, enabled email notifications with financial summaries, and then was turned into developer, they will no longer receive such emails\n\n[Kirill Potekhin]: <!subteam^S07BZPQDBUJ> many customers requested it. it's now possible to add developers to projects without giving them access to metrics, so they can configure everything, but they can't see revenue and other metrics \n\n[Sofia Pikuleva]: <https://adapty.io/docs/members-settings>\n\n[Polina Ishimbaeva]: Great update! Thank you, team!",
-      "matchingReplies": [
-        {
-          "userId": "U9HDNS9S4",
-          "userName": "Kirill Potekhin",
-          "text": "<!subteam^S07BZPQDBUJ> many customers requested it. it's now possible to add developers to projects without giving them access to metrics, so they can configure everything, but they can't see revenue and other metrics ",
-          "date": "2025-11-25T14:56:03.842Z",
-          "images": []
-        }
-      ],
       "hasTeamMention": true,
       "images": []
     }
