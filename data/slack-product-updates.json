@@ -1,7 +1,48 @@
 {
-  "syncedAt": "2026-03-04T00:38:13.567Z",
+  "syncedAt": "2026-03-05T00:39:28.533Z",
   "channel": "#product-release",
   "entries": [
+    {
+      "id": "1772615346.581719",
+      "slackUrl": "https://adapty-team.slack.com/archives/C04SY70QZ0T/p1772615346581719",
+      "name": "Highlight visual ideas in hypothesis list",
+      "message": "Feature: <https://adaptyio.atlassian.net/browse/ADP-5416|Highlight visual ideas in hypothesis list>\nRelease date: Mar 4, 2026\nAffected areas: Autopilot",
+      "releaseDate": "2026-03-04",
+      "thread": [
+        {
+          "userId": "U0903TFULQ3",
+          "userName": "Andrii Hermanov",
+          "text": "Feature: <https://adaptyio.atlassian.net/browse/ADP-5416|Highlight visual ideas in hypothesis list>\nRelease date: Mar 4, 2026\nAffected areas: Autopilot",
+          "date": "2026-03-04T09:09:06.581Z",
+          "images": []
+        },
+        {
+          "userId": "U08EVBTE69E",
+          "userName": "Maxim Borisik",
+          "text": "<!subteam^S07BZPQDBUJ> <!subteam^S02U0UTPEQM>\n\nhey team!\nwe've added visual recommendations in Autopilot\n\nnow they are generic (same for everyone), but it's a first step for our plan for personalised visual recommendations, based on your paywall analysis\n\nnow we can say that \"we know that these mechanisms work - try it out\"",
+          "date": "2026-03-04T11:54:01.587Z",
+          "images": [
+            "https://files.slack.com/files-pri/T9HDDB78Q-F0AJ0T9QZPH/image.png"
+          ]
+        }
+      ],
+      "content": "[Andrii Hermanov]: Feature: <https://adaptyio.atlassian.net/browse/ADP-5416|Highlight visual ideas in hypothesis list>\nRelease date: Mar 4, 2026\nAffected areas: Autopilot\n\n[Maxim Borisik]: <!subteam^S07BZPQDBUJ> <!subteam^S02U0UTPEQM>\n\nhey team!\nwe've added visual recommendations in Autopilot\n\nnow they are generic (same for everyone), but it's a first step for our plan for personalised visual recommendations, based on your paywall analysis\n\nnow we can say that \"we know that these mechanisms work - try it out\"",
+      "matchingReplies": [
+        {
+          "userId": "U08EVBTE69E",
+          "userName": "Maxim Borisik",
+          "text": "<!subteam^S07BZPQDBUJ> <!subteam^S02U0UTPEQM>\n\nhey team!\nwe've added visual recommendations in Autopilot\n\nnow they are generic (same for everyone), but it's a first step for our plan for personalised visual recommendations, based on your paywall analysis\n\nnow we can say that \"we know that these mechanisms work - try it out\"",
+          "date": "2026-03-04T11:54:01.587Z",
+          "images": [
+            "https://files.slack.com/files-pri/T9HDDB78Q-F0AJ0T9QZPH/image.png"
+          ]
+        }
+      ],
+      "hasTeamMention": true,
+      "images": [
+        "https://files.slack.com/files-pri/T9HDDB78Q-F0AJ0T9QZPH/image.png"
+      ]
+    },
     {
       "id": "1772548496.458589",
       "slackUrl": "https://adapty-team.slack.com/archives/C04SY70QZ0T/p1772548496458589",
@@ -36,10 +77,95 @@
           "text": "<@UNWFN144R> This is a frontend release that switches CRM to ClickHouse + Aerospike mix we discussed yesterday, now facing customers",
           "date": "2026-03-03T14:44:07.115Z",
           "images": []
+        },
+        {
+          "userId": "U08917H1C5B",
+          "userName": "Vitaly Kuzmin",
+          "text": "Hi <@U04B26DSWMA>! One of our clients reports about a problem with counting users and opening a segment.\nsegment: <https://app.adapty.io/profiles/segments/9572aafb-4b53-4ce3-9525-90205c010f13>\nApp: VPN Blue — `da142e66-2fcb-44fb-9f42-169ddcdff415`\nCompany id: `f68893c0-193f-461f-80da-fad4e3844906`\nSummary from clawbot:\n_Root Cause: Backend timeout (HTTP 524)_\nTwo API requests required to render the segment page both return _status 524_ (Cloudflare timeout — origin server did not respond within 100s):\n| `GET /api/v1/portal/profile/da142e66-.../segment/filter_value/` | 524 |\n| `GET /api/v1/portal/profile/da142e66-.../segment/9572aafb-.../sample/` | 524 |\n• _Server:_ Cloudflare (`CF-Ray: 9d6fa632aad7ceba-RIX`)\n• _Response:_ Cloudflare HTML error page (`Content-Type: text/html`, 7616 bytes) instead of expected JSON\n• _CORS errors in console are a side effect_ — Cloudflare's 524 error page does not include `Access-Control-Allow-Origin` headers, so the browser reports it as a CORS violation. The actual issue is upstream timeout.\nCould this be related? Or is it a separate issue?",
+          "date": "2026-03-04T09:15:05.301Z",
+          "images": []
+        },
+        {
+          "userId": "U0A47J102CU",
+          "userName": "Georgii Abramenko",
+          "text": "<@U08917H1C5B> Could be related to this one - <https://adaptyio.atlassian.net/browse/ADP-5217>",
+          "date": "2026-03-04T09:32:47.226Z",
+          "images": []
+        },
+        {
+          "userId": "U08917H1C5B",
+          "userName": "Vitaly Kuzmin",
+          "text": "Sergei, sorry for the ping, <@U0A47J102CU>, let's continue in another thread.",
+          "date": "2026-03-04T09:34:18.207Z",
+          "images": []
+        },
+        {
+          "userId": "U04B26DSWMA",
+          "userName": "Sergei Solodskikh",
+          "text": "Hey! Segments were not affected by this release. The issue is that VPN Blue has enormous amount of profiles and complicated segment definitions that process slowly. Luckily today we will release another thing from the same epic, which will speed up segment sample significantly",
+          "date": "2026-03-04T09:34:27.737Z",
+          "images": []
+        },
+        {
+          "userId": "U04B26DSWMA",
+          "userName": "Sergei Solodskikh",
+          "text": "BTW issue with custom-attribute-based segments is old, well-known and unavoidable in current (postgres-only) implementation. We should've had a record in KB related to this",
+          "date": "2026-03-04T09:36:39.741Z",
+          "images": []
+        },
+        {
+          "userId": "U06JP8BJFEV",
+          "userName": "Viktoriya Kirsanova",
+          "text": "Guys, so searching by transaction ID isn't available anymore. That was a very useful option tho..",
+          "date": "2026-03-04T15:19:07.287Z",
+          "images": []
+        },
+        {
+          "userId": "U06JP8BJFEV",
+          "userName": "Viktoriya Kirsanova",
+          "text": "Feeld team is already asking about that",
+          "date": "2026-03-04T15:19:38.265Z",
+          "images": []
+        },
+        {
+          "userId": "U04B26DSWMA",
+          "userName": "Sergei Solodskikh",
+          "text": "Thanks for bringing this up. We'll restore this functionality in one of the upcoming releases (before EOB tomorrow)",
+          "date": "2026-03-04T15:27:02.620Z",
+          "images": []
+        },
+        {
+          "userId": "U04B26DSWMA",
+          "userName": "Sergei Solodskikh",
+          "text": "<@U06JP8BJFEV> Fix is in production",
+          "date": "2026-03-04T17:11:45.834Z",
+          "images": []
+        },
+        {
+          "userId": "U07AUQLQUJX",
+          "userName": "Aleksandr Smirnov",
+          "text": "Feeld are happy now, all good, thanks a lot",
+          "date": "2026-03-04T19:09:17.138Z",
+          "images": []
+        },
+        {
+          "userId": "U04B26DSWMA",
+          "userName": "Sergei Solodskikh",
+          "text": "Everyone is happy when Feeld are",
+          "date": "2026-03-04T19:15:01.483Z",
+          "images": []
         }
       ],
-      "content": "[Sergei Solodskikh]: Feature: <https://adaptyio.atlassian.net/browse/INFRA-164|Change retrieving profile data from Postgres to Aerospike + ClickHouse>\nRelease date: Mar 3, 2026\nAffected areas: Profiles (Dashboard only)\n\n[Sergei Solodskikh]: What changed for users:\n\n1. Less filters. Filters by subscription state and product have been removed due to new data layout. The country filter has been kept.\n2. Profile search reworked. Searching for users by Profile Key, Customer User ID, or email continues to work but has been rebuilt under the hood for better accuracy and speed.\n3. Profile detail & events. The profile detail page and the transaction/event history within it remain available with the same information, now sourced through a more reliable data pipeline.\nIn short: The CRM section should feel largely the same. Some rarely-used filters are gone, but the core workflow - finding a user, viewing their profile, and checking their transaction history - stays the same. Despite this feature is mostly technical and was thoroughly tested, I ask <!subteam^S03KM96DV0U> and <!subteam^S07BZPQDBUJ> to be aware in case our customers report disruptions in this section of dashboard\n\n[Clawdapty]: :+1:\n\n[Sergei Solodskikh]: <@UNWFN144R> This is a frontend release that switches CRM to ClickHouse + Aerospike mix we discussed yesterday, now facing customers",
-      "matchingReplies": [],
+      "content": "[Sergei Solodskikh]: Feature: <https://adaptyio.atlassian.net/browse/INFRA-164|Change retrieving profile data from Postgres to Aerospike + ClickHouse>\nRelease date: Mar 3, 2026\nAffected areas: Profiles (Dashboard only)\n\n[Sergei Solodskikh]: What changed for users:\n\n1. Less filters. Filters by subscription state and product have been removed due to new data layout. The country filter has been kept.\n2. Profile search reworked. Searching for users by Profile Key, Customer User ID, or email continues to work but has been rebuilt under the hood for better accuracy and speed.\n3. Profile detail & events. The profile detail page and the transaction/event history within it remain available with the same information, now sourced through a more reliable data pipeline.\nIn short: The CRM section should feel largely the same. Some rarely-used filters are gone, but the core workflow - finding a user, viewing their profile, and checking their transaction history - stays the same. Despite this feature is mostly technical and was thoroughly tested, I ask <!subteam^S03KM96DV0U> and <!subteam^S07BZPQDBUJ> to be aware in case our customers report disruptions in this section of dashboard\n\n[Clawdapty]: :+1:\n\n[Sergei Solodskikh]: <@UNWFN144R> This is a frontend release that switches CRM to ClickHouse + Aerospike mix we discussed yesterday, now facing customers\n\n[Vitaly Kuzmin]: Hi <@U04B26DSWMA>! One of our clients reports about a problem with counting users and opening a segment.\nsegment: <https://app.adapty.io/profiles/segments/9572aafb-4b53-4ce3-9525-90205c010f13>\nApp: VPN Blue — `da142e66-2fcb-44fb-9f42-169ddcdff415`\nCompany id: `f68893c0-193f-461f-80da-fad4e3844906`\nSummary from clawbot:\n_Root Cause: Backend timeout (HTTP 524)_\nTwo API requests required to render the segment page both return _status 524_ (Cloudflare timeout — origin server did not respond within 100s):\n| `GET /api/v1/portal/profile/da142e66-.../segment/filter_value/` | 524 |\n| `GET /api/v1/portal/profile/da142e66-.../segment/9572aafb-.../sample/` | 524 |\n• _Server:_ Cloudflare (`CF-Ray: 9d6fa632aad7ceba-RIX`)\n• _Response:_ Cloudflare HTML error page (`Content-Type: text/html`, 7616 bytes) instead of expected JSON\n• _CORS errors in console are a side effect_ — Cloudflare's 524 error page does not include `Access-Control-Allow-Origin` headers, so the browser reports it as a CORS violation. The actual issue is upstream timeout.\nCould this be related? Or is it a separate issue?\n\n[Georgii Abramenko]: <@U08917H1C5B> Could be related to this one - <https://adaptyio.atlassian.net/browse/ADP-5217>\n\n[Vitaly Kuzmin]: Sergei, sorry for the ping, <@U0A47J102CU>, let's continue in another thread.\n\n[Sergei Solodskikh]: Hey! Segments were not affected by this release. The issue is that VPN Blue has enormous amount of profiles and complicated segment definitions that process slowly. Luckily today we will release another thing from the same epic, which will speed up segment sample significantly\n\n[Sergei Solodskikh]: BTW issue with custom-attribute-based segments is old, well-known and unavoidable in current (postgres-only) implementation. We should've had a record in KB related to this\n\n[Viktoriya Kirsanova]: Guys, so searching by transaction ID isn't available anymore. That was a very useful option tho..\n\n[Viktoriya Kirsanova]: Feeld team is already asking about that\n\n[Sergei Solodskikh]: Thanks for bringing this up. We'll restore this functionality in one of the upcoming releases (before EOB tomorrow)\n\n[Sergei Solodskikh]: <@U06JP8BJFEV> Fix is in production\n\n[Aleksandr Smirnov]: Feeld are happy now, all good, thanks a lot\n\n[Sergei Solodskikh]: Everyone is happy when Feeld are",
+      "matchingReplies": [
+        {
+          "userId": "U06JP8BJFEV",
+          "userName": "Viktoriya Kirsanova",
+          "text": "Guys, so searching by transaction ID isn't available anymore. That was a very useful option tho..",
+          "date": "2026-03-04T15:19:07.287Z",
+          "images": []
+        }
+      ],
       "hasTeamMention": true,
       "images": []
     },
@@ -1042,33 +1168,6 @@
         }
       ],
       "content": "[Danil Melnichuk]: Feature: <https://adaptyio.atlassian.net/browse/ADP-4857|Open web paywall in in-app browser>\nRelease date: Dec 2, 2025\nEffected areas: Paywall Builder\n\n[Sergey Muratov]: Great! Are the SDKs with support for this out yet? <@U09HGKVGSTV>\n\nShould we announce?\n\n[Artem Frolov]: <https://adapty-team.slack.com/archives/C04SY70QZ0T/p1764609896195029>\n\nYes, iOS 3.15.0 released\n\n[Artem Frolov]: <!subteam^S03KM96DV0U> <!subteam^S086DHAHL8J> <!subteam^S03KC9S1QMC>\n\nNow client can open web paywall in in-app browser\n\n<@U07H1ESAH6K> great news for Glam!\n\n[Artem Frolov]: <@U05QELDHUUX> are we going to announce it with an email campaign?",
-      "matchingReplies": [],
-      "hasTeamMention": true,
-      "images": []
-    },
-    {
-      "id": "1764142476.521019",
-      "slackUrl": "https://adapty-team.slack.com/archives/C04SY70QZ0T/p1764142476521019",
-      "name": "Adapty Android 3.14.0",
-      "message": "Feature: *<https://github.com/adaptyteam/AdaptySDK-Android/releases/tag/3.14.0|Adapty Android 3.14.0>*\nRelease date: Nov 26, 2025\nDependencies: Crossplatforms\nEffected areas:\n• Multihost\n• Backend errors handling",
-      "releaseDate": "2025-11-26",
-      "thread": [
-        {
-          "userId": "U016EBX2UH3",
-          "userName": "Vlad Guriev",
-          "text": "Feature: *<https://github.com/adaptyteam/AdaptySDK-Android/releases/tag/3.14.0|Adapty Android 3.14.0>*\nRelease date: Nov 26, 2025\nDependencies: Crossplatforms\nEffected areas:\n• Multihost\n• Backend errors handling",
-          "date": "2025-11-26T07:34:36.521Z",
-          "images": []
-        },
-        {
-          "userId": "U016EBX2UH3",
-          "userName": "Vlad Guriev",
-          "text": "released *3.14.1*\n\n<!subteam^S07BZPQDBUJ> <!subteam^S03KM96DV0U> fyi",
-          "date": "2025-12-04T08:52:40.213Z",
-          "images": []
-        }
-      ],
-      "content": "[Vlad Guriev]: Feature: *<https://github.com/adaptyteam/AdaptySDK-Android/releases/tag/3.14.0|Adapty Android 3.14.0>*\nRelease date: Nov 26, 2025\nDependencies: Crossplatforms\nEffected areas:\n• Multihost\n• Backend errors handling\n\n[Vlad Guriev]: released *3.14.1*\n\n<!subteam^S07BZPQDBUJ> <!subteam^S03KM96DV0U> fyi",
       "matchingReplies": [],
       "hasTeamMention": true,
       "images": []
