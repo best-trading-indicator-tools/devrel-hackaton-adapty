@@ -21,6 +21,7 @@ Add these in **Project Settings → Environment Variables**. Mark sensitive valu
 | `ENABLE_LANCEDB` | `true` for semantic retrieval |
 | `OPENAI_EMBEDDING_MODEL` | `text-embedding-3-large` recommended |
 | `CLAUDE_WRITER_MODEL` | `claude-sonnet-4-5` (default) |
+| `ANTHROPIC_AUTH_TOKEN` | Claude Code auth token fallback (`claude setup-token`) |
 
 ## SOIS / Sauce context
 
@@ -55,6 +56,7 @@ Add these in **Project Settings → Environment Variables**. Mark sensitive valu
 
 ```
 ANTHROPIC_API_KEY=
+ANTHROPIC_AUTH_TOKEN=
 OPENAI_API_KEY=
 OPENAI_OAUTH_TOKEN=
 OPENAI_OAUTH_REFRESH_TOKEN=
@@ -80,4 +82,4 @@ GIPHY_API_KEY=
 SLACK_BOT_TOKEN=
 ```
 
-**Note:** `ANTHROPIC_API_KEY` from [console.anthropic.com](https://console.anthropic.com).
+**Note:** prefer `ANTHROPIC_API_KEY` for direct Anthropic API calls. `ANTHROPIC_AUTH_TOKEN` is a fallback path.

@@ -220,7 +220,7 @@ Each generation request goes through 3 passes:
 
 ## Auth and model routing
 
-- Writer default: Claude Sonnet 4.5 when `ANTHROPIC_AUTH_TOKEN` is set (`USE_CLAUDE_WRITER=true`)
+- Writer default: Claude Sonnet 4.5 when `ANTHROPIC_API_KEY` is set (`USE_CLAUDE_WRITER=true`)
 - Reviewer is always Codex OAuth
 - Reviewer requires Codex OAuth credentials (`OPENAI_CODEX_ACCESS_TOKEN` or `OPENAI_OAUTH_TOKEN`)
 - Model fallback supported for unavailable model access
@@ -246,7 +246,8 @@ Use `.env` (local) and set same keys in Vercel project settings.
 
 - `OPENAI_MODEL` (default `gpt-5.3-codex`)
 - `OPENAI_MODEL_FALLBACK` (default `gpt-5.2`)
-- `ANTHROPIC_AUTH_TOKEN` (Claude subscription OAuth token from `claude setup-token`)
+- `ANTHROPIC_API_KEY` (Claude API key from Anthropic Console)
+- `ANTHROPIC_AUTH_TOKEN` (optional fallback token from `claude setup-token`)
 - `CLAUDE_WRITER_MODEL` (default `claude-sonnet-4-5`)
 - `USE_CLAUDE_WRITER=true|false` (default `true`)
 - `FORCE_CODEX_REVIEWER=true|false` (default `true`; always runs reviewer pass for all post types)

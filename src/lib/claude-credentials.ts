@@ -40,6 +40,7 @@ export async function getClaudeCredentials(): Promise<ClaudeCredentials | null> 
     return { apiKey, source: "env" };
   }
 
+  // Fallback path for Claude Code auth-token setups.
   const authToken = process.env.ANTHROPIC_AUTH_TOKEN?.trim();
   if (authToken) {
     return { authToken, source: "env" };

@@ -4366,7 +4366,7 @@ export async function POST(request: Request) {
       return NextResponse.json(
         {
           error:
-            "Missing credentials. Set ANTHROPIC_API_KEY or ANTHROPIC_AUTH_TOKEN, or OPENAI_CODEX_ACCESS_TOKEN / OPENAI_OAUTH_TOKEN, or OPENAI_API_KEY / OPENAI_ACCESS_TOKEN.",
+            "Missing credentials. Set ANTHROPIC_API_KEY (preferred) or ANTHROPIC_AUTH_TOKEN, or OPENAI_CODEX_ACCESS_TOKEN / OPENAI_OAUTH_TOKEN, or OPENAI_API_KEY / OPENAI_ACCESS_TOKEN.",
         },
         { status: 500 },
       );
