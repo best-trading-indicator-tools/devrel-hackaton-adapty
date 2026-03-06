@@ -1,7 +1,48 @@
 {
-  "syncedAt": "2026-03-05T00:39:28.533Z",
+  "syncedAt": "2026-03-06T00:42:41.119Z",
   "channel": "#product-release",
   "entries": [
+    {
+      "id": "1772727009.854469",
+      "slackUrl": "https://adapty-team.slack.com/archives/C04SY70QZ0T/p1772727009854469",
+      "name": "Add your own hypothesis",
+      "message": "Feature: <https://adaptyio.atlassian.net/browse/ADP-5121|Add your own hypothesis>\nRelease date: Mar 5, 2026\nAffected areas: Autopilot",
+      "releaseDate": "2026-03-05",
+      "thread": [
+        {
+          "userId": "U0903TFULQ3",
+          "userName": "Andrii Hermanov",
+          "text": "Feature: <https://adaptyio.atlassian.net/browse/ADP-5121|Add your own hypothesis>\nRelease date: Mar 5, 2026\nAffected areas: Autopilot",
+          "date": "2026-03-05T16:10:09.854Z",
+          "images": []
+        },
+        {
+          "userId": "U0903TFULQ3",
+          "userName": "Andrii Hermanov",
+          "text": "<!subteam^S07BZPQDBUJ> <!subteam^S02U0UTPEQM>",
+          "date": "2026-03-05T16:11:21.821Z",
+          "images": []
+        },
+        {
+          "userId": "U0A3NG4G5E3",
+          "userName": "Gene Titerman",
+          "text": "<@U0903TFULQ3> do you expect to release the step reordering capability later today?",
+          "date": "2026-03-05T16:16:01.327Z",
+          "images": []
+        },
+        {
+          "userId": "U0903TFULQ3",
+          "userName": "Andrii Hermanov",
+          "text": "<@U0A3NG4G5E3> we're doing everything we can to make it happen\nwe will try, but if not, we'll release it on Monday",
+          "date": "2026-03-05T16:18:04.735Z",
+          "images": []
+        }
+      ],
+      "content": "[Andrii Hermanov]: Feature: <https://adaptyio.atlassian.net/browse/ADP-5121|Add your own hypothesis>\nRelease date: Mar 5, 2026\nAffected areas: Autopilot\n\n[Andrii Hermanov]: <!subteam^S07BZPQDBUJ> <!subteam^S02U0UTPEQM>\n\n[Gene Titerman]: <@U0903TFULQ3> do you expect to release the step reordering capability later today?\n\n[Andrii Hermanov]: <@U0A3NG4G5E3> we're doing everything we can to make it happen\nwe will try, but if not, we'll release it on Monday",
+      "matchingReplies": [],
+      "hasTeamMention": true,
+      "images": []
+    },
     {
       "id": "1772615346.581719",
       "slackUrl": "https://adapty-team.slack.com/archives/C04SY70QZ0T/p1772615346581719",
@@ -154,9 +195,136 @@
           "text": "Everyone is happy when Feeld are",
           "date": "2026-03-04T19:15:01.483Z",
           "images": []
+        },
+        {
+          "userId": "U08917H1C5B",
+          "userName": "Vitaly Kuzmin",
+          "text": "Hey <@U04B26DSWMA>\nIt seems that searching by customer user ID does not work either. Is this expected?",
+          "date": "2026-03-05T07:08:43.762Z",
+          "images": []
+        },
+        {
+          "userId": "U04B26DSWMA",
+          "userName": "Sergei Solodskikh",
+          "text": "Hey! It should work. Could you give a couple of examples please?",
+          "date": "2026-03-05T10:12:42.515Z",
+          "images": []
+        },
+        {
+          "userId": "U08917H1C5B",
+          "userName": "Vitaly Kuzmin",
+          "text": "Company: f04a6ffa-f5ae-4e77-a980-169cbcb95293\nApp: Diyetkolik\nYou can use any of their cuid or, for example, 2460722",
+          "date": "2026-03-05T10:14:14.718Z",
+          "images": []
+        },
+        {
+          "userId": "U04B26DSWMA",
+          "userName": "Sergei Solodskikh",
+          "text": "",
+          "date": "2026-03-05T10:15:51.808Z",
+          "images": [
+            "https://files.slack.com/files-pri/T9HDDB78Q-F0AK3GL36QZ/screenshot_2026-03-05_at_11.15.46.png"
+          ]
+        },
+        {
+          "userId": "U08917H1C5B",
+          "userName": "Vitaly Kuzmin",
+          "text": "",
+          "date": "2026-03-05T10:17:31.450Z",
+          "images": [
+            "https://files.slack.com/files-pri/T9HDDB78Q-F0AJU7NM5GC/image.png"
+          ]
+        },
+        {
+          "userId": "U08917H1C5B",
+          "userName": "Vitaly Kuzmin",
+          "text": "That's strange.\nI found profile 2460758 too.",
+          "date": "2026-03-05T10:19:10.564Z",
+          "images": [
+            "https://files.slack.com/files-pri/T9HDDB78Q-F0AJQKP2NCA/image.png"
+          ]
+        },
+        {
+          "userId": "U08917H1C5B",
+          "userName": "Vitaly Kuzmin",
+          "text": "So, here are my observations:\nIf you open the profile page, its finded\nIf you just enter the cuid without going to the profile, you get no data\n<@U04B26DSWMA>",
+          "date": "2026-03-05T10:21:17.569Z",
+          "images": []
+        },
+        {
+          "userId": "U04B26DSWMA",
+          "userName": "Sergei Solodskikh",
+          "text": "Need to investigate",
+          "date": "2026-03-05T10:34:12.568Z",
+          "images": []
+        },
+        {
+          "userId": "U08917H1C5B",
+          "userName": "Vitaly Kuzmin",
+          "text": "We will do it",
+          "date": "2026-03-05T10:35:07.538Z",
+          "images": []
+        },
+        {
+          "userId": "U04B26DSWMA",
+          "userName": "Sergei Solodskikh",
+          "text": "Sorry, bad wording. We need to investigate it on our side, I have enough data for now. I'll come back when finished",
+          "date": "2026-03-05T10:48:58.282Z",
+          "images": []
+        },
+        {
+          "userId": "U0A47J102CU",
+          "userName": "Georgii Abramenko",
+          "text": "Hi <@U04B26DSWMA>! Please also take a look at this one - <https://adaptyio.atlassian.net/jira/software/c/projects/DS/boards/3?selectedIssue=ADP-5777>\nCurrently we are facing crashes on the profile details page for profiles that have duplicate `vendor_transaction_id` entries in `adapty_analytics_transaction` table. The LEFT JOIN in `profile_event.sql` multiplies rows, causing the frontend to crash. I'm not sure yet why we have duplicated `vendor_transaction_id` entries (same ID appearing with different store values) and whether it affects any other clients, will investigate this further.\nI provided additional details in the task, tagging you as it is probably related to these commits - 23685d3c9f, 6ac95c11da which are in <https://gitlab.adapty.io/adapty/adapty-dashboard-api/-/merge_requests/11701>",
+          "date": "2026-03-05T12:38:34.174Z",
+          "images": [
+            "https://files.slack.com/files-pri/T9HDDB78Q-F0AJ9VA72RM/image.png"
+          ]
+        },
+        {
+          "userId": "U04B26DSWMA",
+          "userName": "Sergei Solodskikh",
+          "text": "<@U0A47J102CU> Thanks for the report. Fix is coming soon",
+          "date": "2026-03-05T13:08:58.495Z",
+          "images": []
+        },
+        {
+          "userId": "U04B26DSWMA",
+          "userName": "Sergei Solodskikh",
+          "text": "<@U0A47J102CU> <@U08917H1C5B> Fixes are in production",
+          "date": "2026-03-05T14:42:03.490Z",
+          "images": []
+        },
+        {
+          "userId": "U0A47J102CU",
+          "userName": "Georgii Abramenko",
+          "text": "Checked, no more crashes for such profiles. Thanks a lot!",
+          "date": "2026-03-05T14:44:57.434Z",
+          "images": []
+        },
+        {
+          "userId": "U04B26DSWMA",
+          "userName": "Sergei Solodskikh",
+          "text": "Btw input from agents was mostly useful this time - it allowed for quicker identification of issues in code. Fix for crash related to multiple events was almost identical to what agent proposed (though if one applied what agent proposed without any edits it would kill our integrations). Fix for profiles not found was also inspired by agentic suggestions",
+          "date": "2026-03-05T14:47:36.254Z",
+          "images": []
+        },
+        {
+          "userId": "U08917H1C5B",
+          "userName": "Vitaly Kuzmin",
+          "text": "<@U0AHM55LEAC> compliments for you",
+          "date": "2026-03-05T14:53:11.865Z",
+          "images": []
+        },
+        {
+          "userId": "U0AHM55LEAC",
+          "userName": "Clawdapty",
+          "text": "Ha, I'll take it! Nice to hear the agent suggestions actually helped speed things up. Though Sergei's caveat about \"don't apply blindly or you'll kill integrations\" is the kind of detail that keeps humans very much in the loop. :smile:\n\nGood teamwork all around — fast turnaround on both fixes.",
+          "date": "2026-03-05T14:53:19.740Z",
+          "images": []
         }
       ],
-      "content": "[Sergei Solodskikh]: Feature: <https://adaptyio.atlassian.net/browse/INFRA-164|Change retrieving profile data from Postgres to Aerospike + ClickHouse>\nRelease date: Mar 3, 2026\nAffected areas: Profiles (Dashboard only)\n\n[Sergei Solodskikh]: What changed for users:\n\n1. Less filters. Filters by subscription state and product have been removed due to new data layout. The country filter has been kept.\n2. Profile search reworked. Searching for users by Profile Key, Customer User ID, or email continues to work but has been rebuilt under the hood for better accuracy and speed.\n3. Profile detail & events. The profile detail page and the transaction/event history within it remain available with the same information, now sourced through a more reliable data pipeline.\nIn short: The CRM section should feel largely the same. Some rarely-used filters are gone, but the core workflow - finding a user, viewing their profile, and checking their transaction history - stays the same. Despite this feature is mostly technical and was thoroughly tested, I ask <!subteam^S03KM96DV0U> and <!subteam^S07BZPQDBUJ> to be aware in case our customers report disruptions in this section of dashboard\n\n[Clawdapty]: :+1:\n\n[Sergei Solodskikh]: <@UNWFN144R> This is a frontend release that switches CRM to ClickHouse + Aerospike mix we discussed yesterday, now facing customers\n\n[Vitaly Kuzmin]: Hi <@U04B26DSWMA>! One of our clients reports about a problem with counting users and opening a segment.\nsegment: <https://app.adapty.io/profiles/segments/9572aafb-4b53-4ce3-9525-90205c010f13>\nApp: VPN Blue — `da142e66-2fcb-44fb-9f42-169ddcdff415`\nCompany id: `f68893c0-193f-461f-80da-fad4e3844906`\nSummary from clawbot:\n_Root Cause: Backend timeout (HTTP 524)_\nTwo API requests required to render the segment page both return _status 524_ (Cloudflare timeout — origin server did not respond within 100s):\n| `GET /api/v1/portal/profile/da142e66-.../segment/filter_value/` | 524 |\n| `GET /api/v1/portal/profile/da142e66-.../segment/9572aafb-.../sample/` | 524 |\n• _Server:_ Cloudflare (`CF-Ray: 9d6fa632aad7ceba-RIX`)\n• _Response:_ Cloudflare HTML error page (`Content-Type: text/html`, 7616 bytes) instead of expected JSON\n• _CORS errors in console are a side effect_ — Cloudflare's 524 error page does not include `Access-Control-Allow-Origin` headers, so the browser reports it as a CORS violation. The actual issue is upstream timeout.\nCould this be related? Or is it a separate issue?\n\n[Georgii Abramenko]: <@U08917H1C5B> Could be related to this one - <https://adaptyio.atlassian.net/browse/ADP-5217>\n\n[Vitaly Kuzmin]: Sergei, sorry for the ping, <@U0A47J102CU>, let's continue in another thread.\n\n[Sergei Solodskikh]: Hey! Segments were not affected by this release. The issue is that VPN Blue has enormous amount of profiles and complicated segment definitions that process slowly. Luckily today we will release another thing from the same epic, which will speed up segment sample significantly\n\n[Sergei Solodskikh]: BTW issue with custom-attribute-based segments is old, well-known and unavoidable in current (postgres-only) implementation. We should've had a record in KB related to this\n\n[Viktoriya Kirsanova]: Guys, so searching by transaction ID isn't available anymore. That was a very useful option tho..\n\n[Viktoriya Kirsanova]: Feeld team is already asking about that\n\n[Sergei Solodskikh]: Thanks for bringing this up. We'll restore this functionality in one of the upcoming releases (before EOB tomorrow)\n\n[Sergei Solodskikh]: <@U06JP8BJFEV> Fix is in production\n\n[Aleksandr Smirnov]: Feeld are happy now, all good, thanks a lot\n\n[Sergei Solodskikh]: Everyone is happy when Feeld are",
+      "content": "[Sergei Solodskikh]: Feature: <https://adaptyio.atlassian.net/browse/INFRA-164|Change retrieving profile data from Postgres to Aerospike + ClickHouse>\nRelease date: Mar 3, 2026\nAffected areas: Profiles (Dashboard only)\n\n[Sergei Solodskikh]: What changed for users:\n\n1. Less filters. Filters by subscription state and product have been removed due to new data layout. The country filter has been kept.\n2. Profile search reworked. Searching for users by Profile Key, Customer User ID, or email continues to work but has been rebuilt under the hood for better accuracy and speed.\n3. Profile detail & events. The profile detail page and the transaction/event history within it remain available with the same information, now sourced through a more reliable data pipeline.\nIn short: The CRM section should feel largely the same. Some rarely-used filters are gone, but the core workflow - finding a user, viewing their profile, and checking their transaction history - stays the same. Despite this feature is mostly technical and was thoroughly tested, I ask <!subteam^S03KM96DV0U> and <!subteam^S07BZPQDBUJ> to be aware in case our customers report disruptions in this section of dashboard\n\n[Clawdapty]: :+1:\n\n[Sergei Solodskikh]: <@UNWFN144R> This is a frontend release that switches CRM to ClickHouse + Aerospike mix we discussed yesterday, now facing customers\n\n[Vitaly Kuzmin]: Hi <@U04B26DSWMA>! One of our clients reports about a problem with counting users and opening a segment.\nsegment: <https://app.adapty.io/profiles/segments/9572aafb-4b53-4ce3-9525-90205c010f13>\nApp: VPN Blue — `da142e66-2fcb-44fb-9f42-169ddcdff415`\nCompany id: `f68893c0-193f-461f-80da-fad4e3844906`\nSummary from clawbot:\n_Root Cause: Backend timeout (HTTP 524)_\nTwo API requests required to render the segment page both return _status 524_ (Cloudflare timeout — origin server did not respond within 100s):\n| `GET /api/v1/portal/profile/da142e66-.../segment/filter_value/` | 524 |\n| `GET /api/v1/portal/profile/da142e66-.../segment/9572aafb-.../sample/` | 524 |\n• _Server:_ Cloudflare (`CF-Ray: 9d6fa632aad7ceba-RIX`)\n• _Response:_ Cloudflare HTML error page (`Content-Type: text/html`, 7616 bytes) instead of expected JSON\n• _CORS errors in console are a side effect_ — Cloudflare's 524 error page does not include `Access-Control-Allow-Origin` headers, so the browser reports it as a CORS violation. The actual issue is upstream timeout.\nCould this be related? Or is it a separate issue?\n\n[Georgii Abramenko]: <@U08917H1C5B> Could be related to this one - <https://adaptyio.atlassian.net/browse/ADP-5217>\n\n[Vitaly Kuzmin]: Sergei, sorry for the ping, <@U0A47J102CU>, let's continue in another thread.\n\n[Sergei Solodskikh]: Hey! Segments were not affected by this release. The issue is that VPN Blue has enormous amount of profiles and complicated segment definitions that process slowly. Luckily today we will release another thing from the same epic, which will speed up segment sample significantly\n\n[Sergei Solodskikh]: BTW issue with custom-attribute-based segments is old, well-known and unavoidable in current (postgres-only) implementation. We should've had a record in KB related to this\n\n[Viktoriya Kirsanova]: Guys, so searching by transaction ID isn't available anymore. That was a very useful option tho..\n\n[Viktoriya Kirsanova]: Feeld team is already asking about that\n\n[Sergei Solodskikh]: Thanks for bringing this up. We'll restore this functionality in one of the upcoming releases (before EOB tomorrow)\n\n[Sergei Solodskikh]: <@U06JP8BJFEV> Fix is in production\n\n[Aleksandr Smirnov]: Feeld are happy now, all good, thanks a lot\n\n[Sergei Solodskikh]: Everyone is happy when Feeld are\n\n[Vitaly Kuzmin]: Hey <@U04B26DSWMA>\nIt seems that searching by customer user ID does not work either. Is this expected?\n\n[Sergei Solodskikh]: Hey! It should work. Could you give a couple of examples please?\n\n[Vitaly Kuzmin]: Company: f04a6ffa-f5ae-4e77-a980-169cbcb95293\nApp: Diyetkolik\nYou can use any of their cuid or, for example, 2460722\n\n[Sergei Solodskikh]: \n\n[Vitaly Kuzmin]: \n\n[Vitaly Kuzmin]: That's strange.\nI found profile 2460758 too.\n\n[Vitaly Kuzmin]: So, here are my observations:\nIf you open the profile page, its finded\nIf you just enter the cuid without going to the profile, you get no data\n<@U04B26DSWMA>\n\n[Sergei Solodskikh]: Need to investigate\n\n[Vitaly Kuzmin]: We will do it\n\n[Sergei Solodskikh]: Sorry, bad wording. We need to investigate it on our side, I have enough data for now. I'll come back when finished\n\n[Georgii Abramenko]: Hi <@U04B26DSWMA>! Please also take a look at this one - <https://adaptyio.atlassian.net/jira/software/c/projects/DS/boards/3?selectedIssue=ADP-5777>\nCurrently we are facing crashes on the profile details page for profiles that have duplicate `vendor_transaction_id` entries in `adapty_analytics_transaction` table. The LEFT JOIN in `profile_event.sql` multiplies rows, causing the frontend to crash. I'm not sure yet why we have duplicated `vendor_transaction_id` entries (same ID appearing with different store values) and whether it affects any other clients, will investigate this further.\nI provided additional details in the task, tagging you as it is probably related to these commits - 23685d3c9f, 6ac95c11da which are in <https://gitlab.adapty.io/adapty/adapty-dashboard-api/-/merge_requests/11701>\n\n[Sergei Solodskikh]: <@U0A47J102CU> Thanks for the report. Fix is coming soon\n\n[Sergei Solodskikh]: <@U0A47J102CU> <@U08917H1C5B> Fixes are in production\n\n[Georgii Abramenko]: Checked, no more crashes for such profiles. Thanks a lot!\n\n[Sergei Solodskikh]: Btw input from agents was mostly useful this time - it allowed for quicker identification of issues in code. Fix for crash related to multiple events was almost identical to what agent proposed (though if one applied what agent proposed without any edits it would kill our integrations). Fix for profiles not found was also inspired by agentic suggestions\n\n[Vitaly Kuzmin]: <@U0AHM55LEAC> compliments for you\n\n[Clawdapty]: Ha, I'll take it! Nice to hear the agent suggestions actually helped speed things up. Though Sergei's caveat about \"don't apply blindly or you'll kill integrations\" is the kind of detail that keeps humans very much in the loop. :smile:\n\nGood teamwork all around — fast turnaround on both fixes.",
       "matchingReplies": [
         {
           "userId": "U06JP8BJFEV",
@@ -167,7 +335,12 @@
         }
       ],
       "hasTeamMention": true,
-      "images": []
+      "images": [
+        "https://files.slack.com/files-pri/T9HDDB78Q-F0AK3GL36QZ/screenshot_2026-03-05_at_11.15.46.png",
+        "https://files.slack.com/files-pri/T9HDDB78Q-F0AJU7NM5GC/image.png",
+        "https://files.slack.com/files-pri/T9HDDB78Q-F0AJQKP2NCA/image.png",
+        "https://files.slack.com/files-pri/T9HDDB78Q-F0AJ9VA72RM/image.png"
+      ]
     },
     {
       "id": "1772014235.944699",
@@ -1123,54 +1296,6 @@
         "https://files.slack.com/files-pri/T9HDDB78Q-F0A39LGT283/image.png",
         "https://files.slack.com/files-pri/T9HDDB78Q-F0A3CK9ADA9/image.png"
       ]
-    },
-    {
-      "id": "1764676060.060689",
-      "slackUrl": "https://adapty-team.slack.com/archives/C04SY70QZ0T/p1764676060060689",
-      "name": "Open web paywall in in-app browser",
-      "message": "Feature: <https://adaptyio.atlassian.net/browse/ADP-4857|Open web paywall in in-app browser>\nRelease date: Dec 2, 2025\nEffected areas: Paywall Builder",
-      "releaseDate": "2025-12-02",
-      "thread": [
-        {
-          "userId": "U07J1NQPD4P",
-          "userName": "Danil Melnichuk",
-          "text": "Feature: <https://adaptyio.atlassian.net/browse/ADP-4857|Open web paywall in in-app browser>\nRelease date: Dec 2, 2025\nEffected areas: Paywall Builder",
-          "date": "2025-12-02T11:47:40.060Z",
-          "images": []
-        },
-        {
-          "userId": "U05QELDHUUX",
-          "userName": "Sergey Muratov",
-          "text": "Great! Are the SDKs with support for this out yet? <@U09HGKVGSTV>\n\nShould we announce?",
-          "date": "2025-12-02T11:50:25.521Z",
-          "images": []
-        },
-        {
-          "userId": "U09HGKVGSTV",
-          "userName": "Artem Frolov",
-          "text": "<https://adapty-team.slack.com/archives/C04SY70QZ0T/p1764609896195029>\n\nYes, iOS 3.15.0 released",
-          "date": "2025-12-02T11:55:05.525Z",
-          "images": []
-        },
-        {
-          "userId": "U09HGKVGSTV",
-          "userName": "Artem Frolov",
-          "text": "<!subteam^S03KM96DV0U> <!subteam^S086DHAHL8J> <!subteam^S03KC9S1QMC>\n\nNow client can open web paywall in in-app browser\n\n<@U07H1ESAH6K> great news for Glam!",
-          "date": "2025-12-02T12:00:02.429Z",
-          "images": []
-        },
-        {
-          "userId": "U09HGKVGSTV",
-          "userName": "Artem Frolov",
-          "text": "<@U05QELDHUUX> are we going to announce it with an email campaign?",
-          "date": "2025-12-02T12:01:26.811Z",
-          "images": []
-        }
-      ],
-      "content": "[Danil Melnichuk]: Feature: <https://adaptyio.atlassian.net/browse/ADP-4857|Open web paywall in in-app browser>\nRelease date: Dec 2, 2025\nEffected areas: Paywall Builder\n\n[Sergey Muratov]: Great! Are the SDKs with support for this out yet? <@U09HGKVGSTV>\n\nShould we announce?\n\n[Artem Frolov]: <https://adapty-team.slack.com/archives/C04SY70QZ0T/p1764609896195029>\n\nYes, iOS 3.15.0 released\n\n[Artem Frolov]: <!subteam^S03KM96DV0U> <!subteam^S086DHAHL8J> <!subteam^S03KC9S1QMC>\n\nNow client can open web paywall in in-app browser\n\n<@U07H1ESAH6K> great news for Glam!\n\n[Artem Frolov]: <@U05QELDHUUX> are we going to announce it with an email campaign?",
-      "matchingReplies": [],
-      "hasTeamMention": true,
-      "images": []
     }
   ]
 }
