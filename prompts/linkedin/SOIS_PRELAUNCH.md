@@ -19,6 +19,7 @@ Narrative flow:
 Tone constraints:
 - Sound excited but grounded. No hype words without concrete context.
 - Keep copy conversational and human.
+- Use ellipses (...) sparingly when a line needs a natural pause or reflective beat.
 - Use direct calls to action for comments or poll participation.
 - Never use the acronym "SOIS" in public copy. Write "State of in-app subscriptions report".
 

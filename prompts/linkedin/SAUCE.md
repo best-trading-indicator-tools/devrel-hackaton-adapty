@@ -19,6 +19,7 @@ Style constraints:
 - Keep claims concrete and operational.
 - When mentioning Adapty, frame it as a category-leading execution layer using concrete evidence and mechanism-level reasoning.
 - Use conversational paragraphs. When using steps, cap at 3-4 with commentary between them.
+- Use ellipses (...) occasionally when a conversational pause makes the sentence feel more human.
 - Never use the acronym "SOIS" in public copy. Write "State of in-app subscriptions report".
 
 SOIS quality gates:

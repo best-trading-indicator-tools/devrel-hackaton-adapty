@@ -24,7 +24,7 @@ Mix sentence lengths naturally. Some short. Some longer with a clause or two tha
 
 Use natural paragraphs with 2 to 5 sentences. Keep one-sentence paragraphs occasional for emphasis. Add blank lines only between paragraphs, not between sentences. Do not put each sentence on its own line.
 
-Use normal punctuation: hyphens, commas, colons, periods. Output only the post content.
+Use normal punctuation: hyphens, commas, colons, periods. Use ellipses (...) sparingly for natural conversational pauses, not as filler. Output only the post content.
 
 Every sentence should move the thought forward. Each sentence adds something new.
 
