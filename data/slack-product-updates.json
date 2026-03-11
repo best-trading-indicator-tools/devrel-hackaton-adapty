@@ -1,7 +1,99 @@
 {
-  "syncedAt": "2026-03-10T00:36:03.368Z",
+  "syncedAt": "2026-03-11T00:36:18.943Z",
   "channel": "#product-release",
   "entries": [
+    {
+      "id": "1773140810.924259",
+      "slackUrl": "https://adapty-team.slack.com/archives/C04SY70QZ0T/p1773140810924259",
+      "name": "INFRA-141",
+      "message": "Feature: Point 1 from <https://adaptyio.atlassian.net/browse/INFRA-141|INFRA-141>\nRelease date: March 10, 2026\nAffected areas: Adapty analytics",
+      "releaseDate": "2026-03-10",
+      "thread": [
+        {
+          "userId": "U08C43RCH39",
+          "userName": "Artur Beglaryan",
+          "text": "Feature: Point 1 from <https://adaptyio.atlassian.net/browse/INFRA-141|INFRA-141>\nRelease date: March 10, 2026\nAffected areas: Adapty analytics",
+          "date": "2026-03-10T11:06:50.924Z",
+          "images": []
+        },
+        {
+          "userId": "U08C43RCH39",
+          "userName": "Artur Beglaryan",
+          "text": "During this and following week we will change part by part all profile based migrations to clickhouse to be based on aerospike(new Key-Value database) instead of postgresql. Today’s release affected only to `adapty_analytics_profiles`  table. Aldo during implementation of this task we found and fixed several minor issues, that we were not noticed before.\n```1. Fixed issue with null device_id filter out in coalesce of fraud devices which was bringing lose of installs, when we were using device_id as a source of install\n2. Fixed platform identification consistency. After final migration of task in all places we will identify platform based on application, if there is no meta for platform\n3. Fixed case, when Profiles latest meta have broken meta(with None as a platform). in this case now we are using term called relevant_meta, which is the last meta with normal platform. This allows us to fill correctly all profile and transaction fields\n4. Fixed issue with missing iOS devices human readable names. This was used for build user segments```",
+          "date": "2026-03-10T11:12:17.842Z",
+          "images": []
+        },
+        {
+          "userId": "U08C43RCH39",
+          "userName": "Artur Beglaryan",
+          "text": "Also improved profile migration task performance. Before it was running ~50-60 seconds, not it’s running  ~3-6 seconds",
+          "date": "2026-03-10T11:14:03.029Z",
+          "images": []
+        },
+        {
+          "userId": "U08C43RCH39",
+          "userName": "Artur Beglaryan",
+          "text": "<!subteam^S03KM96DV0U> <!subteam^S07BZPQDBUJ> please keep an eye on it, it should not affect to anything, just for notice",
+          "date": "2026-03-10T11:19:53.194Z",
+          "images": []
+        },
+        {
+          "userId": "U0A266T9SJE",
+          "userName": "Melike Sezer",
+          "text": "<@U09RF6V1YHM> was this related to Hubx's current issue?",
+          "date": "2026-03-10T11:26:04.721Z",
+          "images": []
+        }
+      ],
+      "content": "[Artur Beglaryan]: Feature: Point 1 from <https://adaptyio.atlassian.net/browse/INFRA-141|INFRA-141>\nRelease date: March 10, 2026\nAffected areas: Adapty analytics\n\n[Artur Beglaryan]: During this and following week we will change part by part all profile based migrations to clickhouse to be based on aerospike(new Key-Value database) instead of postgresql. Today’s release affected only to `adapty_analytics_profiles`  table. Aldo during implementation of this task we found and fixed several minor issues, that we were not noticed before.\n```1. Fixed issue with null device_id filter out in coalesce of fraud devices which was bringing lose of installs, when we were using device_id as a source of install\n2. Fixed platform identification consistency. After final migration of task in all places we will identify platform based on application, if there is no meta for platform\n3. Fixed case, when Profiles latest meta have broken meta(with None as a platform). in this case now we are using term called relevant_meta, which is the last meta with normal platform. This allows us to fill correctly all profile and transaction fields\n4. Fixed issue with missing iOS devices human readable names. This was used for build user segments```\n\n[Artur Beglaryan]: Also improved profile migration task performance. Before it was running ~50-60 seconds, not it’s running  ~3-6 seconds\n\n[Artur Beglaryan]: <!subteam^S03KM96DV0U> <!subteam^S07BZPQDBUJ> please keep an eye on it, it should not affect to anything, just for notice\n\n[Melike Sezer]: <@U09RF6V1YHM> was this related to Hubx's current issue?",
+      "matchingReplies": [],
+      "hasTeamMention": true,
+      "images": []
+    },
+    {
+      "id": "1773137368.148139",
+      "slackUrl": "https://adapty-team.slack.com/archives/C04SY70QZ0T/p1773137368148139",
+      "name": "Maximize Conversions support and Search Term Automations",
+      "message": "Feature: Maximize Conversions support and Search Term Automations\nRelease date: Mar 10, 2026\nAffected areas: Adapty Ads Manager",
+      "releaseDate": "2026-03-10",
+      "thread": [
+        {
+          "userId": "U03J8UXUDPF",
+          "userName": "Mykola Martynovets",
+          "text": "Feature: Maximize Conversions support and Search Term Automations\nRelease date: Mar 10, 2026\nAffected areas: Adapty Ads Manager",
+          "date": "2026-03-10T10:09:28.148Z",
+          "images": []
+        },
+        {
+          "userId": "U03J8UXUDPF",
+          "userName": "Mykola Martynovets",
+          "text": ":rocket: Two major updates are now live in Adapty Ads Manager\n\nFirst, Search Term Automations are now live.\nRules can now run directly on search terms using metrics like taps, downlods, spend, and more — and automatically:\n• Transfer winning terms into keywords (Exact ) in selected ad groups\n• Add those same terms to negatives on the current ad group or campaign to avoid paying twice\n• Stay duplicate-safe with `skip_enable_duplicate_keywords`, which prevents re-enabling paused duplicates when enabled\nA practical use case: let Search Match or Discovery campaigns collect real user queries, then use a rule to detect terms with 2+ downloads or specific metrics thresholds and automatically push them into Probing ad groups  as keywords, while negating them in the original source. The result is faster scaling, cleaner discovery traffic, and less manual work.\n\nSecond, we’ve also started supporting Maximize Conversions campaigns in Adapty Ads Manager.\nYou can now view and manage Apple Ads campaigns that use automated bidding and Search Match to maximize downloads around a target CPA directly inside Adapty. Apple describes Maximize Conversions as a campaign type that uses intelligent automation to set optimal bids for relevant search queries, broaden reach, and drive installs toward a target CPA on a weekly average basis. (<https://ads.apple.com/app-store/best-practices/maximize-conversions|Apple Ads>)\n\nTogether, these two updates make discovery workflows much stronger: Maximize Conversions helps uncover more conversion opportunities with automated bidding, while Search Term Automations help you operationalize those learnings faster by promoting strong terms into managed keyword structures and closing the loop with negatives. Apple also recommends letting Maximize Conversions campaigns run for at least two weeks before evaluating performance. (<https://ads.apple.com/app-store/best-practices/maximize-conversions|Apple Ads>)\n\nFYI <@U08QUJMN0UV>",
+          "date": "2026-03-10T10:10:32.774Z",
+          "images": [
+            "https://files.slack.com/files-pri/T9HDDB78Q-F0AKF4W2D6X/screenshot_2026-03-03_at_2.23.20___pm.png",
+            "https://files.slack.com/files-pri/T9HDDB78Q-F0AKF50GF35/image.png"
+          ]
+        }
+      ],
+      "content": "[Mykola Martynovets]: Feature: Maximize Conversions support and Search Term Automations\nRelease date: Mar 10, 2026\nAffected areas: Adapty Ads Manager\n\n[Mykola Martynovets]: :rocket: Two major updates are now live in Adapty Ads Manager\n\nFirst, Search Term Automations are now live.\nRules can now run directly on search terms using metrics like taps, downlods, spend, and more — and automatically:\n• Transfer winning terms into keywords (Exact ) in selected ad groups\n• Add those same terms to negatives on the current ad group or campaign to avoid paying twice\n• Stay duplicate-safe with `skip_enable_duplicate_keywords`, which prevents re-enabling paused duplicates when enabled\nA practical use case: let Search Match or Discovery campaigns collect real user queries, then use a rule to detect terms with 2+ downloads or specific metrics thresholds and automatically push them into Probing ad groups  as keywords, while negating them in the original source. The result is faster scaling, cleaner discovery traffic, and less manual work.\n\nSecond, we’ve also started supporting Maximize Conversions campaigns in Adapty Ads Manager.\nYou can now view and manage Apple Ads campaigns that use automated bidding and Search Match to maximize downloads around a target CPA directly inside Adapty. Apple describes Maximize Conversions as a campaign type that uses intelligent automation to set optimal bids for relevant search queries, broaden reach, and drive installs toward a target CPA on a weekly average basis. (<https://ads.apple.com/app-store/best-practices/maximize-conversions|Apple Ads>)\n\nTogether, these two updates make discovery workflows much stronger: Maximize Conversions helps uncover more conversion opportunities with automated bidding, while Search Term Automations help you operationalize those learnings faster by promoting strong terms into managed keyword structures and closing the loop with negatives. Apple also recommends letting Maximize Conversions campaigns run for at least two weeks before evaluating performance. (<https://ads.apple.com/app-store/best-practices/maximize-conversions|Apple Ads>)\n\nFYI <@U08QUJMN0UV>",
+      "matchingReplies": [
+        {
+          "userId": "U03J8UXUDPF",
+          "userName": "Mykola Martynovets",
+          "text": ":rocket: Two major updates are now live in Adapty Ads Manager\n\nFirst, Search Term Automations are now live.\nRules can now run directly on search terms using metrics like taps, downlods, spend, and more — and automatically:\n• Transfer winning terms into keywords (Exact ) in selected ad groups\n• Add those same terms to negatives on the current ad group or campaign to avoid paying twice\n• Stay duplicate-safe with `skip_enable_duplicate_keywords`, which prevents re-enabling paused duplicates when enabled\nA practical use case: let Search Match or Discovery campaigns collect real user queries, then use a rule to detect terms with 2+ downloads or specific metrics thresholds and automatically push them into Probing ad groups  as keywords, while negating them in the original source. The result is faster scaling, cleaner discovery traffic, and less manual work.\n\nSecond, we’ve also started supporting Maximize Conversions campaigns in Adapty Ads Manager.\nYou can now view and manage Apple Ads campaigns that use automated bidding and Search Match to maximize downloads around a target CPA directly inside Adapty. Apple describes Maximize Conversions as a campaign type that uses intelligent automation to set optimal bids for relevant search queries, broaden reach, and drive installs toward a target CPA on a weekly average basis. (<https://ads.apple.com/app-store/best-practices/maximize-conversions|Apple Ads>)\n\nTogether, these two updates make discovery workflows much stronger: Maximize Conversions helps uncover more conversion opportunities with automated bidding, while Search Term Automations help you operationalize those learnings faster by promoting strong terms into managed keyword structures and closing the loop with negatives. Apple also recommends letting Maximize Conversions campaigns run for at least two weeks before evaluating performance. (<https://ads.apple.com/app-store/best-practices/maximize-conversions|Apple Ads>)\n\nFYI <@U08QUJMN0UV>",
+          "date": "2026-03-10T10:10:32.774Z",
+          "images": [
+            "https://files.slack.com/files-pri/T9HDDB78Q-F0AKF4W2D6X/screenshot_2026-03-03_at_2.23.20___pm.png",
+            "https://files.slack.com/files-pri/T9HDDB78Q-F0AKF50GF35/image.png"
+          ]
+        }
+      ],
+      "hasTeamMention": false,
+      "images": [
+        "https://files.slack.com/files-pri/T9HDDB78Q-F0AKF4W2D6X/screenshot_2026-03-03_at_2.23.20___pm.png",
+        "https://files.slack.com/files-pri/T9HDDB78Q-F0AKF50GF35/image.png"
+      ]
+    },
     {
       "id": "1772727009.854469",
       "slackUrl": "https://adapty-team.slack.com/archives/C04SY70QZ0T/p1772727009854469",
@@ -1264,111 +1356,6 @@
       "matchingReplies": [],
       "hasTeamMention": true,
       "images": []
-    },
-    {
-      "id": "1764939278.332289",
-      "slackUrl": "https://adapty-team.slack.com/archives/C04SY70QZ0T/p1764939278332289",
-      "name": "Adapty Unity 3.14.0",
-      "message": "Feature: *<https://github.com/adaptyteam/AdaptySDK-Unity/releases/tag/3.14.0|Adapty Unity 3.14.0>*\nRelease date: Dec 5, 2025\nDependencies: None\nEffected areas:\n• Cross-AB Tests\n• UA\n• Local PALs + StoreKit testing in Xcode\n• UI: Onboardings\n• UI: Custom Assets\n• UI: Web Checkout\n",
-      "releaseDate": "2025-12-05",
-      "thread": [
-        {
-          "userId": "U03LQU89VHQ",
-          "userName": "Alexey Goncharov",
-          "text": "Feature: *<https://github.com/adaptyteam/AdaptySDK-Unity/releases/tag/3.14.0|Adapty Unity 3.14.0>*\nRelease date: Dec 5, 2025\nDependencies: None\nEffected areas:\n• Cross-AB Tests\n• UA\n• Local PALs + StoreKit testing in Xcode\n• UI: Onboardings\n• UI: Custom Assets\n• UI: Web Checkout\n",
-          "date": "2025-12-05T12:54:38.332Z",
-          "images": []
-        },
-        {
-          "userId": "U9HDNS9S4",
-          "userName": "Kirill Potekhin",
-          "text": "<@U07MXM412JV> hey! Onboardings are available on Unity now, I think you requested it.",
-          "date": "2025-12-05T13:13:43.447Z",
-          "images": []
-        },
-        {
-          "userId": "U07MXM412JV",
-          "userName": "Marina Trypolskaya",
-          "text": "<!subteam^S086DJEQEUE> fyi\n<@U08SAFDTUKZ> is it smth Greentomato was looking into?",
-          "date": "2025-12-05T14:02:56.317Z",
-          "images": []
-        },
-        {
-          "userId": "U03DFSCP8CW",
-          "userName": "Mike Gorokhov",
-          "text": "Took us a bit longer than we planned :slightly_smiling_face: <https://adapty-team.slack.com/archives/C04NKQV7C73/p1748354036794889?thread_ts=1748266580.918109&amp;cid=C04NKQV7C73>",
-          "date": "2025-12-05T14:09:03.549Z",
-          "images": []
-        },
-        {
-          "userId": "U08SAFDTUKZ",
-          "userName": "Ella",
-          "text": "<@U07MXM412JV> yup, looks good!",
-          "date": "2025-12-05T14:42:38.880Z",
-          "images": []
-        }
-      ],
-      "content": "[Alexey Goncharov]: Feature: *<https://github.com/adaptyteam/AdaptySDK-Unity/releases/tag/3.14.0|Adapty Unity 3.14.0>*\nRelease date: Dec 5, 2025\nDependencies: None\nEffected areas:\n• Cross-AB Tests\n• UA\n• Local PALs + StoreKit testing in Xcode\n• UI: Onboardings\n• UI: Custom Assets\n• UI: Web Checkout\n\n\n[Kirill Potekhin]: <@U07MXM412JV> hey! Onboardings are available on Unity now, I think you requested it.\n\n[Marina Trypolskaya]: <!subteam^S086DJEQEUE> fyi\n<@U08SAFDTUKZ> is it smth Greentomato was looking into?\n\n[Mike Gorokhov]: Took us a bit longer than we planned :slightly_smiling_face: <https://adapty-team.slack.com/archives/C04NKQV7C73/p1748354036794889?thread_ts=1748266580.918109&amp;cid=C04NKQV7C73>\n\n[Ella]: <@U07MXM412JV> yup, looks good!",
-      "matchingReplies": [
-        {
-          "userId": "U9HDNS9S4",
-          "userName": "Kirill Potekhin",
-          "text": "<@U07MXM412JV> hey! Onboardings are available on Unity now, I think you requested it.",
-          "date": "2025-12-05T13:13:43.447Z",
-          "images": []
-        }
-      ],
-      "hasTeamMention": true,
-      "images": []
-    },
-    {
-      "id": "1764681927.610129",
-      "slackUrl": "https://adapty-team.slack.com/archives/C04SY70QZ0T/p1764681927610129",
-      "name": "new template library",
-      "message": "Feature: <https://adaptyio.atlassian.net/browse/ADP-4278|new template library>\nRelease date: Dec 2, 2025\nEffected areas: Paywall Builder",
-      "releaseDate": "2025-12-02",
-      "thread": [
-        {
-          "userId": "U09AH7D2A4X",
-          "userName": "German Shteynardt",
-          "text": "Feature: <https://adaptyio.atlassian.net/browse/ADP-4278|new template library>\nRelease date: Dec 2, 2025\nEffected areas: Paywall Builder",
-          "date": "2025-12-02T13:25:27.610Z",
-          "images": []
-        },
-        {
-          "userId": "U09HGKVGSTV",
-          "userName": "Artem Frolov",
-          "text": "<!subteam^S03KM96DV0U> <!subteam^S086DHAHL8J> <!subteam^S03KC9S1QMC>\n\nNow users can filter paywalls using:\n• Number of products: 1 product, More than 1 product\n• Image and video: All, With image or video, No media\n• Components: Free trial toggle, Trial timeline, Reviews, Timer\n• Length: All, Short, Long\n• Background theme: All, Light, Dark\nWe’ve also highlighted popular and seasonal paywalls to make them easier to find.",
-          "date": "2025-12-02T14:26:17.374Z",
-          "images": []
-        },
-        {
-          "userId": "U034A27SVHC",
-          "userName": "Artem Rukavishnikov",
-          "text": "Hey folks! Mainly <@U09HGKVGSTV>\nSome of the new templates seem odd.\nPic 1 - old template. Product cards display the actual product duration selected on the paywall. Paywall makes sense as is without editing (which is important for demo).\nPic 2 - new template. Same set of product selected, but the template displays random duration and even more random prices. Looks wacky and raises eyebrows.\n(I know that the price tags in preview are not supposed to be correct, but they should definitively make more sense than this)\n\nThe reason seems to be that the old templates use tags for product cards, which is the correct way to design the cards (pic 3) while the new templates just have \"hard\" text.",
-          "date": "2025-12-14T06:56:11.708Z",
-          "images": [
-            "https://files.slack.com/files-pri/T9HDDB78Q-F0A39LGEX2P/image.png",
-            "https://files.slack.com/files-pri/T9HDDB78Q-F0A39LGT283/image.png",
-            "https://files.slack.com/files-pri/T9HDDB78Q-F0A3CK9ADA9/image.png"
-          ]
-        },
-        {
-          "userId": "U09HGKVGSTV",
-          "userName": "Artem Frolov",
-          "text": "Hey, thanks for raising the problem\n\nWe will fix it",
-          "date": "2025-12-15T09:23:16.403Z",
-          "images": []
-        }
-      ],
-      "content": "[German Shteynardt]: Feature: <https://adaptyio.atlassian.net/browse/ADP-4278|new template library>\nRelease date: Dec 2, 2025\nEffected areas: Paywall Builder\n\n[Artem Frolov]: <!subteam^S03KM96DV0U> <!subteam^S086DHAHL8J> <!subteam^S03KC9S1QMC>\n\nNow users can filter paywalls using:\n• Number of products: 1 product, More than 1 product\n• Image and video: All, With image or video, No media\n• Components: Free trial toggle, Trial timeline, Reviews, Timer\n• Length: All, Short, Long\n• Background theme: All, Light, Dark\nWe’ve also highlighted popular and seasonal paywalls to make them easier to find.\n\n[Artem Rukavishnikov]: Hey folks! Mainly <@U09HGKVGSTV>\nSome of the new templates seem odd.\nPic 1 - old template. Product cards display the actual product duration selected on the paywall. Paywall makes sense as is without editing (which is important for demo).\nPic 2 - new template. Same set of product selected, but the template displays random duration and even more random prices. Looks wacky and raises eyebrows.\n(I know that the price tags in preview are not supposed to be correct, but they should definitively make more sense than this)\n\nThe reason seems to be that the old templates use tags for product cards, which is the correct way to design the cards (pic 3) while the new templates just have \"hard\" text.\n\n[Artem Frolov]: Hey, thanks for raising the problem\n\nWe will fix it",
-      "matchingReplies": [],
-      "hasTeamMention": true,
-      "images": [
-        "https://files.slack.com/files-pri/T9HDDB78Q-F0A39LGEX2P/image.png",
-        "https://files.slack.com/files-pri/T9HDDB78Q-F0A39LGT283/image.png",
-        "https://files.slack.com/files-pri/T9HDDB78Q-F0A3CK9ADA9/image.png"
-      ]
     }
   ]
 }
