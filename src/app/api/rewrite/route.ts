@@ -227,22 +227,27 @@ export async function POST(request: Request) {
     const fallbackModel = process.env.OPENAI_MODEL_FALLBACK ?? "gpt-5.2";
 
     let oauthCredentials: CodexOAuthCredentials | null = null;
+    let oauthCredentialErrorMessage: string | null = null;
 
     try {
       oauthCredentials = await getCodexOAuthCredentials();
     } catch (oauthError) {
-      return NextResponse.json(
-        {
-          error: "Failed to resolve OpenAI Codex OAuth credentials",
-          message: oauthError instanceof Error ? oauthError.message : String(oauthError),
-        },
-        { status: 500 },
-      );
+      oauthCredentialErrorMessage = oauthError instanceof Error ? oauthError.message : String(oauthError);
     }
 
     const openAiApiToken = getOpenAIApiToken();
 
     if (!oauthCredentials && !openAiApiToken) {
+      if (oauthCredentialErrorMessage) {
+        return NextResponse.json(
+          {
+            error: "Failed to resolve OpenAI Codex OAuth credentials",
+            message: oauthCredentialErrorMessage,
+          },
+          { status: 500 },
+        );
+      }
+
       return NextResponse.json(
         {
           error:
@@ -250,6 +255,10 @@ export async function POST(request: Request) {
         },
         { status: 500 },
       );
+    }
+
+    if (oauthCredentialErrorMessage) {
+      console.warn(`Codex OAuth unavailable for rewrite request; continuing without it. ${oauthCredentialErrorMessage}`);
     }
 
     const brandVoiceDirective = resolveBrandVoiceDirective(input.style);

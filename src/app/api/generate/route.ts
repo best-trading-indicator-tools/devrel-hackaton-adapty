@@ -4344,25 +4344,29 @@ export async function POST(request: Request) {
 
     let oauthCredentials: CodexOAuthCredentials | null = null;
     let claudeCredentials: ClaudeCredentials | null = null;
+    let oauthCredentialErrorMessage: string | null = null;
+
+    claudeCredentials = await getClaudeCredentials();
 
     try {
-      [oauthCredentials, claudeCredentials] = await Promise.all([
-        getCodexOAuthCredentials(),
-        getClaudeCredentials(),
-      ]);
+      oauthCredentials = await getCodexOAuthCredentials();
     } catch (oauthError) {
-      return NextResponse.json(
-        {
-          error: "Failed to resolve OpenAI Codex OAuth credentials",
-          message: oauthError instanceof Error ? oauthError.message : String(oauthError),
-        },
-        { status: 500 },
-      );
+      oauthCredentialErrorMessage = oauthError instanceof Error ? oauthError.message : String(oauthError);
     }
 
     const openAiApiToken = getOpenAIApiToken();
 
     if (!oauthCredentials && !openAiApiToken && !claudeCredentials) {
+      if (oauthCredentialErrorMessage) {
+        return NextResponse.json(
+          {
+            error: "Failed to resolve OpenAI Codex OAuth credentials",
+            message: oauthCredentialErrorMessage,
+          },
+          { status: 500 },
+        );
+      }
+
       return NextResponse.json(
         {
           error:
@@ -4370,6 +4374,10 @@ export async function POST(request: Request) {
         },
         { status: 500 },
       );
+    }
+
+    if (oauthCredentialErrorMessage) {
+      console.warn(`Codex OAuth unavailable for this request; continuing without it. ${oauthCredentialErrorMessage}`);
     }
 
     const lengthPlan = buildLengthPlan(input.inputLength, input.numberOfPosts);
