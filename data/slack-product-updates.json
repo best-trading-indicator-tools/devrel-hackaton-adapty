@@ -1,7 +1,41 @@
 {
-  "syncedAt": "2026-03-11T00:36:18.943Z",
+  "syncedAt": "2026-03-12T00:33:24.924Z",
   "channel": "#product-release",
   "entries": [
+    {
+      "id": "1773241049.524709",
+      "slackUrl": "https://adapty-team.slack.com/archives/C04SY70QZ0T/p1773241049524709",
+      "name": "INFRA-141",
+      "message": "Feature: Point 2 from <https://adaptyio.atlassian.net/browse/INFRA-141|INFRA-141>\nRelease date: March 11, 2026\nAffected areas: Adapty analytics",
+      "releaseDate": "2026-03-11",
+      "thread": [
+        {
+          "userId": "U08C43RCH39",
+          "userName": "Artur Beglaryan",
+          "text": "Feature: Point 2 from <https://adaptyio.atlassian.net/browse/INFRA-141|INFRA-141>\nRelease date: March 11, 2026\nAffected areas: Adapty analytics",
+          "date": "2026-03-11T14:57:29.524Z",
+          "images": []
+        },
+        {
+          "userId": "U08C43RCH39",
+          "userName": "Artur Beglaryan",
+          "text": "In analytics changed profile fields in `adapty_analytics_transacations` to be based on profiles from aerospike. Should not affect to anything. More details what’s changed and improved in <https://adapty-team.slack.com/archives/C04SY70QZ0T/p1773140810924259|thread>",
+          "date": "2026-03-11T14:59:09.551Z",
+          "images": []
+        },
+        {
+          "userId": "U08C43RCH39",
+          "userName": "Artur Beglaryan",
+          "text": "<!subteam^S03KM96DV0U> <!subteam^S07BZPQDBUJ> please keep an eye on it, it should not affect to anything, just for notice",
+          "date": "2026-03-11T14:59:28.387Z",
+          "images": []
+        }
+      ],
+      "content": "[Artur Beglaryan]: Feature: Point 2 from <https://adaptyio.atlassian.net/browse/INFRA-141|INFRA-141>\nRelease date: March 11, 2026\nAffected areas: Adapty analytics\n\n[Artur Beglaryan]: In analytics changed profile fields in `adapty_analytics_transacations` to be based on profiles from aerospike. Should not affect to anything. More details what’s changed and improved in <https://adapty-team.slack.com/archives/C04SY70QZ0T/p1773140810924259|thread>\n\n[Artur Beglaryan]: <!subteam^S03KM96DV0U> <!subteam^S07BZPQDBUJ> please keep an eye on it, it should not affect to anything, just for notice",
+      "matchingReplies": [],
+      "hasTeamMention": true,
+      "images": []
+    },
     {
       "id": "1773140810.924259",
       "slackUrl": "https://adapty-team.slack.com/archives/C04SY70QZ0T/p1773140810924259",
@@ -1322,40 +1356,6 @@
         "https://files.slack.com/files-pri/T9HDDB78Q-F0A2S7D0HM1/screenshot_2025-12-11_at_13.48.29.png",
         "https://files.slack.com/files-pri/T9HDDB78Q-F0A41ENRBFX/image.png"
       ]
-    },
-    {
-      "id": "1765291185.596929",
-      "slackUrl": "https://adapty-team.slack.com/archives/C04SY70QZ0T/p1765291185596929",
-      "name": "Fix number of views in Onboardings",
-      "message": "Feature: <https://adaptyio.atlassian.net/jira/software/c/projects/ADP/boards/180?quickFilter=269&amp;selectedIssue=ADP-5034|Fix number of views in Onboardings>\nRelease date: Dec 9th 2025\nAffected areas: *Analytics, Onboardings*",
-      "releaseDate": "2025-12-09",
-      "thread": [
-        {
-          "userId": "U033TEH5HSA",
-          "userName": "Dmitry Bastrikin",
-          "text": "Feature: <https://adaptyio.atlassian.net/jira/software/c/projects/ADP/boards/180?quickFilter=269&amp;selectedIssue=ADP-5034|Fix number of views in Onboardings>\nRelease date: Dec 9th 2025\nAffected areas: *Analytics, Onboardings*",
-          "date": "2025-12-09T14:39:45.596Z",
-          "images": []
-        },
-        {
-          "userId": "U033TEH5HSA",
-          "userName": "Dmitry Bastrikin",
-          "text": "Views were not counted when the user left after the first page. Now they are counted.",
-          "date": "2025-12-09T14:40:33.952Z",
-          "images": []
-        },
-        {
-          "userId": "U09HGKVGSTV",
-          "userName": "Artem Frolov",
-          "text": "<!subteam^S07BZPQDBUJ> Hey!\n\nWe had a bug related to the number of onboarding views.\n\nIf an onboarding contained only one screen, we didn’t count its views.\n\nNow we’ve fixed it.",
-          "date": "2025-12-10T09:06:13.963Z",
-          "images": []
-        }
-      ],
-      "content": "[Dmitry Bastrikin]: Feature: <https://adaptyio.atlassian.net/jira/software/c/projects/ADP/boards/180?quickFilter=269&amp;selectedIssue=ADP-5034|Fix number of views in Onboardings>\nRelease date: Dec 9th 2025\nAffected areas: *Analytics, Onboardings*\n\n[Dmitry Bastrikin]: Views were not counted when the user left after the first page. Now they are counted.\n\n[Artem Frolov]: <!subteam^S07BZPQDBUJ> Hey!\n\nWe had a bug related to the number of onboarding views.\n\nIf an onboarding contained only one screen, we didn’t count its views.\n\nNow we’ve fixed it.",
-      "matchingReplies": [],
-      "hasTeamMention": true,
-      "images": []
     }
   ]
 }
