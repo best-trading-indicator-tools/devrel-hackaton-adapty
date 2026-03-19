@@ -1,7 +1,116 @@
 {
-  "syncedAt": "2026-03-18T00:41:07.593Z",
+  "syncedAt": "2026-03-19T00:41:41.263Z",
   "channel": "#product-release",
   "entries": [
+    {
+      "id": "1773845836.790589",
+      "slackUrl": "https://adapty-team.slack.com/archives/C04SY70QZ0T/p1773845836790589",
+      "name": "Remove dependency on profile table in raw SQL queries within purchase context",
+      "message": "Feature: <https://adaptyio.atlassian.net/browse/INFRA-157|Remove dependency on profile table in raw SQL queries within purchase context>\nRelease date: Mar 18, 2026\nAffected areas: *Refund saver* (dashboard)*, Purchases* (SDK), Paywalls (SDK)",
+      "releaseDate": "2026-03-18",
+      "thread": [
+        {
+          "userId": "U04B26DSWMA",
+          "userName": "Sergei Solodskikh",
+          "text": "Feature: <https://adaptyio.atlassian.net/browse/INFRA-157|Remove dependency on profile table in raw SQL queries within purchase context>\nRelease date: Mar 18, 2026\nAffected areas: *Refund saver* (dashboard)*, Purchases* (SDK), Paywalls (SDK)",
+          "date": "2026-03-18T14:57:16.790Z",
+          "images": []
+        },
+        {
+          "userId": "U04B26DSWMA",
+          "userName": "Sergei Solodskikh",
+          "text": "As part of the migration to Aerospike, we've made several changes on backend related to data retrieval. No changes in logic were introduced. What can potentially be affected:\n1. *Refund saver* - transaction list in dashboard; changing per-profile refund preference on profile page (app-wide settings stay intact)\n2. *Purchases* - sharing Paid access level between profiles if _Transfer access to new user_ is selected in app settings \n3. *Paywalls* - `introductory_offer_eligibility` field in paywall object returned to SDK (confirmed not changed via logs, but still worth mentioning)",
+          "date": "2026-03-18T15:00:29.757Z",
+          "images": []
+        },
+        {
+          "userId": "U04B26DSWMA",
+          "userName": "Sergei Solodskikh",
+          "text": "<!subteam^S03KM96DV0U> FYI",
+          "date": "2026-03-18T15:35:36.917Z",
+          "images": []
+        }
+      ],
+      "content": "[Sergei Solodskikh]: Feature: <https://adaptyio.atlassian.net/browse/INFRA-157|Remove dependency on profile table in raw SQL queries within purchase context>\nRelease date: Mar 18, 2026\nAffected areas: *Refund saver* (dashboard)*, Purchases* (SDK), Paywalls (SDK)\n\n[Sergei Solodskikh]: As part of the migration to Aerospike, we've made several changes on backend related to data retrieval. No changes in logic were introduced. What can potentially be affected:\n1. *Refund saver* - transaction list in dashboard; changing per-profile refund preference on profile page (app-wide settings stay intact)\n2. *Purchases* - sharing Paid access level between profiles if _Transfer access to new user_ is selected in app settings \n3. *Paywalls* - `introductory_offer_eligibility` field in paywall object returned to SDK (confirmed not changed via logs, but still worth mentioning)\n\n[Sergei Solodskikh]: <!subteam^S03KM96DV0U> FYI",
+      "matchingReplies": [],
+      "hasTeamMention": true,
+      "images": []
+    },
+    {
+      "id": "1773785665.395739",
+      "slackUrl": "https://adapty-team.slack.com/archives/C04SY70QZ0T/p1773785665395739",
+      "name": "7.2 [Backend] Implement profile data retrieval from Aerospike when forming view events",
+      "message": "Feature: <https://adaptyio.atlassian.net/browse/INFRA-153|7.2 [Backend] Implement profile data retrieval from Aerospike when forming view events>\nRelease date: Mar 17, 2026\nAffected areas: Analytics(affected paywall visits and onboarding views)",
+      "releaseDate": "2026-03-17",
+      "thread": [
+        {
+          "userId": "U08C43RCH39",
+          "userName": "Artur Beglaryan",
+          "text": "Feature: <https://adaptyio.atlassian.net/browse/INFRA-153|7.2 [Backend] Implement profile data retrieval from Aerospike when forming view events>\nRelease date: Mar 17, 2026\nAffected areas: Analytics(affected paywall visits and onboarding views)",
+          "date": "2026-03-17T22:14:25.395Z",
+          "images": []
+        },
+        {
+          "userId": "U08C43RCH39",
+          "userName": "Artur Beglaryan",
+          "text": "As part of the migration to Aerospike, we’ve switched the retrieval of profile information to enrich paywall visits and onboarding views. this is used in analytics of filtering/grouping by segments, where we are rendering charts and tables.\nAs a technical improvement-data processing speed increased by 2x(before postgres based was ~20 seconds, now it’s ~10 seconds)",
+          "date": "2026-03-17T22:18:13.337Z",
+          "images": []
+        },
+        {
+          "userId": "U07J9LKBQ5U",
+          "userName": "Yurii Kleimenov",
+          "text": "<!subteam^S03KM96DV0U> fyi ",
+          "date": "2026-03-18T06:45:20.296Z",
+          "images": []
+        }
+      ],
+      "content": "[Artur Beglaryan]: Feature: <https://adaptyio.atlassian.net/browse/INFRA-153|7.2 [Backend] Implement profile data retrieval from Aerospike when forming view events>\nRelease date: Mar 17, 2026\nAffected areas: Analytics(affected paywall visits and onboarding views)\n\n[Artur Beglaryan]: As part of the migration to Aerospike, we’ve switched the retrieval of profile information to enrich paywall visits and onboarding views. this is used in analytics of filtering/grouping by segments, where we are rendering charts and tables.\nAs a technical improvement-data processing speed increased by 2x(before postgres based was ~20 seconds, now it’s ~10 seconds)\n\n[Yurii Kleimenov]: <!subteam^S03KM96DV0U> fyi ",
+      "matchingReplies": [],
+      "hasTeamMention": true,
+      "images": []
+    },
+    {
+      "id": "1773766243.012069",
+      "slackUrl": "https://adapty-team.slack.com/archives/C04SY70QZ0T/p1773766243012069",
+      "name": "11.5 [Backend] Tune profile sampling",
+      "message": "Feature: <https://adaptyio.atlassian.net/browse/INFRA-166|11.5 [Backend] Tune profile sampling>\nRelease date: Mar 17, 2026\nAffected areas: Segments *(segment profile sample in Dashboard)*",
+      "releaseDate": "2026-03-17",
+      "thread": [
+        {
+          "userId": "U04B26DSWMA",
+          "userName": "Sergei Solodskikh",
+          "text": "Feature: <https://adaptyio.atlassian.net/browse/INFRA-166|11.5 [Backend] Tune profile sampling>\nRelease date: Mar 17, 2026\nAffected areas: Segments *(segment profile sample in Dashboard)*",
+          "date": "2026-03-17T16:50:43.012Z",
+          "images": []
+        },
+        {
+          "userId": "U04B26DSWMA",
+          "userName": "Sergei Solodskikh",
+          "text": "As part of the migration to Aerospike, we've switched the profile sample view from PostgreSQL to a ClickHouse + Aerospike combo. The behavior of this page is now as follows:\n• New profiles and segment rule changes can take up to 20 minutes to show up here.\n• If you update a custom attribute for an existing profile, this list will still use the value from when the profile was first created. This only applies to this preview — segments in the SDK are always accurate and up to date.\n• Profile details (subscription status, revenue, etc.) are always current, but which profiles appear here is based on data from when they were created.\n(this text is also visible to customer on segment page).\nThis change affects only dashboard, segments per se work as usual",
+          "date": "2026-03-17T16:54:20.830Z",
+          "images": []
+        },
+        {
+          "userId": "U04B26DSWMA",
+          "userName": "Sergei Solodskikh",
+          "text": "One note on this page: it must not be viewed as a complete, deterministic, single source of truth on segment composition. It is what it is called - a sample. A list of profiles that usually fall into the segment, in order to show the customer that:\n• The segment generally works\n• Profiles like the ones in the list may fall into this segment\nNo other conclusions should be drawn based on this list",
+          "date": "2026-03-17T17:03:39.288Z",
+          "images": []
+        },
+        {
+          "userId": "U07J9LKBQ5U",
+          "userName": "Yurii Kleimenov",
+          "text": "<!subteam^S03KM96DV0U> fyi",
+          "date": "2026-03-18T06:45:00.906Z",
+          "images": []
+        }
+      ],
+      "content": "[Sergei Solodskikh]: Feature: <https://adaptyio.atlassian.net/browse/INFRA-166|11.5 [Backend] Tune profile sampling>\nRelease date: Mar 17, 2026\nAffected areas: Segments *(segment profile sample in Dashboard)*\n\n[Sergei Solodskikh]: As part of the migration to Aerospike, we've switched the profile sample view from PostgreSQL to a ClickHouse + Aerospike combo. The behavior of this page is now as follows:\n• New profiles and segment rule changes can take up to 20 minutes to show up here.\n• If you update a custom attribute for an existing profile, this list will still use the value from when the profile was first created. This only applies to this preview — segments in the SDK are always accurate and up to date.\n• Profile details (subscription status, revenue, etc.) are always current, but which profiles appear here is based on data from when they were created.\n(this text is also visible to customer on segment page).\nThis change affects only dashboard, segments per se work as usual\n\n[Sergei Solodskikh]: One note on this page: it must not be viewed as a complete, deterministic, single source of truth on segment composition. It is what it is called - a sample. A list of profiles that usually fall into the segment, in order to show the customer that:\n• The segment generally works\n• Profiles like the ones in the list may fall into this segment\nNo other conclusions should be drawn based on this list\n\n[Yurii Kleimenov]: <!subteam^S03KM96DV0U> fyi",
+      "matchingReplies": [],
+      "hasTeamMention": true,
+      "images": []
+    },
     {
       "id": "1773241049.524709",
       "slackUrl": "https://adapty-team.slack.com/archives/C04SY70QZ0T/p1773241049524709",
@@ -1195,166 +1304,6 @@
       "images": [
         "https://files.slack.com/files-pri/T9HDDB78Q-F0A48HU4YF7/img_6845.png",
         "https://files.slack.com/files-pri/T9HDDB78Q-F0A45K9AK51/img_6843.jpg"
-      ]
-    },
-    {
-      "id": "1765806637.083639",
-      "slackUrl": "https://adapty-team.slack.com/archives/C04SY70QZ0T/p1765806637083639",
-      "name": "Fix resetting builder product style during product replacing",
-      "message": "Feature: <https://adaptyio.atlassian.net/browse/ADP-4126|Fix resetting builder product style during product replacing>\nRelease date: Dec 15, 2025\nEffected areas: Paywall Builder",
-      "releaseDate": "2025-12-15",
-      "thread": [
-        {
-          "userId": "U07J1NQPD4P",
-          "userName": "Danil Melnichuk",
-          "text": "Feature: <https://adaptyio.atlassian.net/browse/ADP-4126|Fix resetting builder product style during product replacing>\nRelease date: Dec 15, 2025\nEffected areas: Paywall Builder",
-          "date": "2025-12-15T13:50:37.083Z",
-          "images": []
-        },
-        {
-          "userId": "U08EVBTE69E",
-          "userName": "Maxim Borisik",
-          "text": "hey team!\n\n<!subteam^S07BZPQDBUJ>\n<!subteam^S03KM96DV0U>\n\nthis one is a blast! now when users duplicate their paywalls the style/design of product section remains the same. this was a huge pain for many clients, because the design was being reset before, and it slowed them down when making lots of paywalls and experiments\n\ni've heard about it at least 10 times, and I think many will be happy with this fix. let's share some great christmas updates for them",
-          "date": "2025-12-15T14:21:58.096Z",
-          "images": []
-        },
-        {
-          "userId": "U08EVBTE69E",
-          "userName": "Maxim Borisik",
-          "text": "<@U08MPLZ50NP> <@U075H1SMAJC> also may be valuable for you",
-          "date": "2025-12-15T14:22:21.011Z",
-          "images": []
-        },
-        {
-          "userId": "U07J1NQPD4P",
-          "userName": "Danil Melnichuk",
-          "text": "finally ",
-          "date": "2025-12-15T14:22:24.385Z",
-          "images": []
-        }
-      ],
-      "content": "[Danil Melnichuk]: Feature: <https://adaptyio.atlassian.net/browse/ADP-4126|Fix resetting builder product style during product replacing>\nRelease date: Dec 15, 2025\nEffected areas: Paywall Builder\n\n[Maxim Borisik]: hey team!\n\n<!subteam^S07BZPQDBUJ>\n<!subteam^S03KM96DV0U>\n\nthis one is a blast! now when users duplicate their paywalls the style/design of product section remains the same. this was a huge pain for many clients, because the design was being reset before, and it slowed them down when making lots of paywalls and experiments\n\ni've heard about it at least 10 times, and I think many will be happy with this fix. let's share some great christmas updates for them\n\n[Maxim Borisik]: <@U08MPLZ50NP> <@U075H1SMAJC> also may be valuable for you\n\n[Danil Melnichuk]: finally ",
-      "matchingReplies": [
-        {
-          "userId": "U08EVBTE69E",
-          "userName": "Maxim Borisik",
-          "text": "hey team!\n\n<!subteam^S07BZPQDBUJ>\n<!subteam^S03KM96DV0U>\n\nthis one is a blast! now when users duplicate their paywalls the style/design of product section remains the same. this was a huge pain for many clients, because the design was being reset before, and it slowed them down when making lots of paywalls and experiments\n\ni've heard about it at least 10 times, and I think many will be happy with this fix. let's share some great christmas updates for them",
-          "date": "2025-12-15T14:21:58.096Z",
-          "images": []
-        },
-        {
-          "userId": "U08EVBTE69E",
-          "userName": "Maxim Borisik",
-          "text": "<@U08MPLZ50NP> <@U075H1SMAJC> also may be valuable for you",
-          "date": "2025-12-15T14:22:21.011Z",
-          "images": []
-        }
-      ],
-      "hasTeamMention": true,
-      "images": []
-    },
-    {
-      "id": "1765463966.530219",
-      "slackUrl": "https://adapty-team.slack.com/archives/C04SY70QZ0T/p1765463966530219",
-      "name": "Update the analysis list",
-      "message": "Feature: <https://adaptyio.atlassian.net/browse/ADP-4935|Update the analysis list>\nRelease date: Dec 11th 2025\nAffected areas: Autopilot",
-      "releaseDate": "2025-12-11",
-      "thread": [
-        {
-          "userId": "U0903TFULQ3",
-          "userName": "Andrii Hermanov",
-          "text": "Feature: <https://adaptyio.atlassian.net/browse/ADP-4935|Update the analysis list>\nRelease date: Dec 11th 2025\nAffected areas: Autopilot",
-          "date": "2025-12-11T14:39:26.530Z",
-          "images": []
-        },
-        {
-          "userId": "U08EVBTE69E",
-          "userName": "Maxim Borisik",
-          "text": "<!subteam^S07BZPQDBUJ> hey team!\nin this release now it's possible to delete the analysis of the autopilot.\nso if you have an urge to secretly check autopilot for a particular client, just create an analysis and then delete it from the list. simple as that",
-          "date": "2025-12-11T14:40:47.030Z",
-          "images": []
-        }
-      ],
-      "content": "[Andrii Hermanov]: Feature: <https://adaptyio.atlassian.net/browse/ADP-4935|Update the analysis list>\nRelease date: Dec 11th 2025\nAffected areas: Autopilot\n\n[Maxim Borisik]: <!subteam^S07BZPQDBUJ> hey team!\nin this release now it's possible to delete the analysis of the autopilot.\nso if you have an urge to secretly check autopilot for a particular client, just create an analysis and then delete it from the list. simple as that",
-      "matchingReplies": [
-        {
-          "userId": "U08EVBTE69E",
-          "userName": "Maxim Borisik",
-          "text": "<!subteam^S07BZPQDBUJ> hey team!\nin this release now it's possible to delete the analysis of the autopilot.\nso if you have an urge to secretly check autopilot for a particular client, just create an analysis and then delete it from the list. simple as that",
-          "date": "2025-12-11T14:40:47.030Z",
-          "images": []
-        }
-      ],
-      "hasTeamMention": true,
-      "images": []
-    },
-    {
-      "id": "1765445909.835359",
-      "slackUrl": "https://adapty-team.slack.com/archives/C04SY70QZ0T/p1765445909835359",
-      "name": "Search apps by name",
-      "message": "Feature: <https://adaptyio.atlassian.net/browse/ADP-4490|Search apps by name>\nRelease date: Dec 11th 2025\nAffected areas: top navigation bar",
-      "releaseDate": "2025-12-11",
-      "thread": [
-        {
-          "userId": "U09AH7D2A4X",
-          "userName": "German Shteynardt",
-          "text": "Feature: <https://adaptyio.atlassian.net/browse/ADP-4490|Search apps by name>\nRelease date: Dec 11th 2025\nAffected areas: top navigation bar",
-          "date": "2025-12-11T09:38:29.835Z",
-          "images": []
-        },
-        {
-          "userId": "U07H1ESAH6K",
-          "userName": "Sofia Pikuleva",
-          "text": ":clap::clap::clap:",
-          "date": "2025-12-11T09:41:15.120Z",
-          "images": []
-        },
-        {
-          "userId": "U09HGKVGSTV",
-          "userName": "Artem Frolov",
-          "text": "<!subteam^S07BZPQDBUJ> <!subteam^S03KM96DV0U>\n\nNow users can search apps by name",
-          "date": "2025-12-11T10:48:37.537Z",
-          "images": [
-            "https://files.slack.com/files-pri/T9HDDB78Q-F0A2S7D0HM1/screenshot_2025-12-11_at_13.48.29.png"
-          ]
-        },
-        {
-          "userId": "U07F3ULE4MA",
-          "userName": "Darina Kobzar",
-          "text": "Now way, this is finally happening! )))) :tada::clap::skin-tone-3:",
-          "date": "2025-12-11T10:50:12.746Z",
-          "images": []
-        },
-        {
-          "userId": "U09EG3DK4US",
-          "userName": "Polina Ishimbaeva",
-          "text": "Well-awaited release:heart: Thank you!",
-          "date": "2025-12-16T12:43:34.529Z",
-          "images": []
-        },
-        {
-          "userId": "U07FKBD6QDS",
-          "userName": "Daniel Ridny",
-          "text": "Hi team, why don’t some accounts have this feature enabled?\nIs there a threshold for the number of apps after which search becomes available (for example, starting from 10 apps per account)?\nHere’s an example from an account with 5 apps.",
-          "date": "2025-12-17T11:57:50.169Z",
-          "images": [
-            "https://files.slack.com/files-pri/T9HDDB78Q-F0A41ENRBFX/image.png"
-          ]
-        },
-        {
-          "userId": "U09AH7D2A4X",
-          "userName": "German Shteynardt",
-          "text": "<@U07FKBD6QDS> Hi! search input appears if there are more than 7 apps",
-          "date": "2025-12-17T12:00:59.777Z",
-          "images": []
-        }
-      ],
-      "content": "[German Shteynardt]: Feature: <https://adaptyio.atlassian.net/browse/ADP-4490|Search apps by name>\nRelease date: Dec 11th 2025\nAffected areas: top navigation bar\n\n[Sofia Pikuleva]: :clap::clap::clap:\n\n[Artem Frolov]: <!subteam^S07BZPQDBUJ> <!subteam^S03KM96DV0U>\n\nNow users can search apps by name\n\n[Darina Kobzar]: Now way, this is finally happening! )))) :tada::clap::skin-tone-3:\n\n[Polina Ishimbaeva]: Well-awaited release:heart: Thank you!\n\n[Daniel Ridny]: Hi team, why don’t some accounts have this feature enabled?\nIs there a threshold for the number of apps after which search becomes available (for example, starting from 10 apps per account)?\nHere’s an example from an account with 5 apps.\n\n[German Shteynardt]: <@U07FKBD6QDS> Hi! search input appears if there are more than 7 apps",
-      "matchingReplies": [],
-      "hasTeamMention": true,
-      "images": [
-        "https://files.slack.com/files-pri/T9HDDB78Q-F0A2S7D0HM1/screenshot_2025-12-11_at_13.48.29.png",
-        "https://files.slack.com/files-pri/T9HDDB78Q-F0A41ENRBFX/image.png"
       ]
     }
   ]
