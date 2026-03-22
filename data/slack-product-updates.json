@@ -1,7 +1,70 @@
 {
-  "syncedAt": "2026-03-21T00:37:33.374Z",
+  "syncedAt": "2026-03-22T00:42:08.178Z",
   "channel": "#product-release",
   "entries": [
+    {
+      "id": "1774106493.202359",
+      "slackUrl": "https://adapty-team.slack.com/archives/C04SY70QZ0T/p1774106493202359",
+      "name": "Chinese localization of Adapty documentation",
+      "message": "Feature: Chinese localization of Adapty documentation\nRelease date: Mar 21, 2026\nAffected areas: Docs",
+      "releaseDate": "2026-03-21",
+      "thread": [
+        {
+          "userId": "U08QUJMN0UV",
+          "userName": "Elina Andreeva",
+          "text": "Feature: Chinese localization of Adapty documentation\nRelease date: Mar 21, 2026\nAffected areas: Docs",
+          "date": "2026-03-21T15:21:33.202Z",
+          "images": []
+        },
+        {
+          "userId": "U08QUJMN0UV",
+          "userName": "Elina Andreeva",
+          "text": "Adapty docs are now available in Chinese: <https://adapty.io/docs/zh/>\n\nYou can switch languages using the switcher in the header.\n\nThe localization is LLM-assisted, so it may not be perfect — but it's already a step toward making Adapty more accessible to Chinese-speaking developers who aren't comfortable reading docs in English.\n\nIf you spot anything that looks off, please let us know!",
+          "date": "2026-03-21T15:22:28.593Z",
+          "images": []
+        },
+        {
+          "userId": "U9HDNS9S4",
+          "userName": "Kirill Potekhin",
+          "text": "thanks a lot <@U08QUJMN0UV>, great job! <@U09QBBKPGMC> <!subteam^S03KC9S1QMC> fyi ",
+          "date": "2026-03-21T15:48:46.606Z",
+          "images": []
+        },
+        {
+          "userId": "U9HDNS9S4",
+          "userName": "Kirill Potekhin",
+          "text": "and thanks to <@U0AAD5KEPBK> for helping with translation!",
+          "date": "2026-03-21T15:49:19.732Z",
+          "images": []
+        },
+        {
+          "userId": "U09QBBKPGMC",
+          "userName": "Elena Robakidze",
+          "text": "Super, thank you guys! :heart_hands::skin-tone-2:",
+          "date": "2026-03-21T15:57:10.029Z",
+          "images": []
+        }
+      ],
+      "content": "[Elina Andreeva]: Feature: Chinese localization of Adapty documentation\nRelease date: Mar 21, 2026\nAffected areas: Docs\n\n[Elina Andreeva]: Adapty docs are now available in Chinese: <https://adapty.io/docs/zh/>\n\nYou can switch languages using the switcher in the header.\n\nThe localization is LLM-assisted, so it may not be perfect — but it's already a step toward making Adapty more accessible to Chinese-speaking developers who aren't comfortable reading docs in English.\n\nIf you spot anything that looks off, please let us know!\n\n[Kirill Potekhin]: thanks a lot <@U08QUJMN0UV>, great job! <@U09QBBKPGMC> <!subteam^S03KC9S1QMC> fyi \n\n[Kirill Potekhin]: and thanks to <@U0AAD5KEPBK> for helping with translation!\n\n[Elena Robakidze]: Super, thank you guys! :heart_hands::skin-tone-2:",
+      "matchingReplies": [
+        {
+          "userId": "U9HDNS9S4",
+          "userName": "Kirill Potekhin",
+          "text": "thanks a lot <@U08QUJMN0UV>, great job! <@U09QBBKPGMC> <!subteam^S03KC9S1QMC> fyi ",
+          "date": "2026-03-21T15:48:46.606Z",
+          "images": []
+        },
+        {
+          "userId": "U9HDNS9S4",
+          "userName": "Kirill Potekhin",
+          "text": "and thanks to <@U0AAD5KEPBK> for helping with translation!",
+          "date": "2026-03-21T15:49:19.732Z",
+          "images": []
+        }
+      ],
+      "hasTeamMention": true,
+      "images": []
+    },
     {
       "id": "1773845836.790589",
       "slackUrl": "https://adapty-team.slack.com/archives/C04SY70QZ0T/p1773845836790589",
@@ -1247,64 +1310,6 @@
       "matchingReplies": [],
       "hasTeamMention": true,
       "images": []
-    },
-    {
-      "id": "1765982691.426309",
-      "slackUrl": "https://adapty-team.slack.com/archives/C04SY70QZ0T/p1765982691426309",
-      "name": "Install counts by device_id  now based on the first meta of profile.",
-      "message": "Feature: Install counts by device_id  now based on the first meta of profile.\nRelease date: Dec 17, 2025\nDependencies: None\nEffected areas:\n• Analytics\n",
-      "releaseDate": "2025-12-17",
-      "thread": [
-        {
-          "userId": "U08C43RCH39",
-          "userName": "Artur Beglaryan",
-          "text": "Feature: Install counts by device_id  now based on the first meta of profile.\nRelease date: Dec 17, 2025\nDependencies: None\nEffected areas:\n• Analytics\n",
-          "date": "2025-12-17T14:44:51.426Z",
-          "images": []
-        },
-        {
-          "userId": "U08C43RCH39",
-          "userName": "Artur Beglaryan",
-          "text": "<!subteam^S03KM96DV0U> by this release some users may see increase in their installs. Explanation of the reasons are described in <https://adapty-team.slack.com/archives/C060EEW2FEV/p1765465151415289?thread_ts=1764858744.063109&amp;cid=C060EEW2FEV|thread>",
-          "date": "2025-12-17T14:46:36.607Z",
-          "images": []
-        },
-        {
-          "userId": "U03J8UXUDPF",
-          "userName": "Mykola Martynovets",
-          "text": "<@U08917H1C5B> related?\n\nThe client reported a significant drop in installs.*",
-          "date": "2025-12-18T08:12:23.204Z",
-          "images": [
-            "https://files.slack.com/files-pri/T9HDDB78Q-F0A48HU4YF7/img_6845.png",
-            "https://files.slack.com/files-pri/T9HDDB78Q-F0A45K9AK51/img_6843.jpg"
-          ]
-        },
-        {
-          "userId": "U08917H1C5B",
-          "userName": "Vitaly Kuzmin",
-          "text": "<@U03J8UXUDPF> hey!\nEscalated to L2 for closer investigation. But it seems that this is not related, as they use \"New profiles\" instead of \"New device_ids\"",
-          "date": "2025-12-18T08:17:30.097Z",
-          "images": []
-        }
-      ],
-      "content": "[Artur Beglaryan]: Feature: Install counts by device_id  now based on the first meta of profile.\nRelease date: Dec 17, 2025\nDependencies: None\nEffected areas:\n• Analytics\n\n\n[Artur Beglaryan]: <!subteam^S03KM96DV0U> by this release some users may see increase in their installs. Explanation of the reasons are described in <https://adapty-team.slack.com/archives/C060EEW2FEV/p1765465151415289?thread_ts=1764858744.063109&amp;cid=C060EEW2FEV|thread>\n\n[Mykola Martynovets]: <@U08917H1C5B> related?\n\nThe client reported a significant drop in installs.*\n\n[Vitaly Kuzmin]: <@U03J8UXUDPF> hey!\nEscalated to L2 for closer investigation. But it seems that this is not related, as they use \"New profiles\" instead of \"New device_ids\"",
-      "matchingReplies": [
-        {
-          "userId": "U03J8UXUDPF",
-          "userName": "Mykola Martynovets",
-          "text": "<@U08917H1C5B> related?\n\nThe client reported a significant drop in installs.*",
-          "date": "2025-12-18T08:12:23.204Z",
-          "images": [
-            "https://files.slack.com/files-pri/T9HDDB78Q-F0A48HU4YF7/img_6845.png",
-            "https://files.slack.com/files-pri/T9HDDB78Q-F0A45K9AK51/img_6843.jpg"
-          ]
-        }
-      ],
-      "hasTeamMention": true,
-      "images": [
-        "https://files.slack.com/files-pri/T9HDDB78Q-F0A48HU4YF7/img_6845.png",
-        "https://files.slack.com/files-pri/T9HDDB78Q-F0A45K9AK51/img_6843.jpg"
-      ]
     }
   ]
 }
