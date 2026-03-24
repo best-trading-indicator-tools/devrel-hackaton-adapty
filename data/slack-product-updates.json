@@ -1,5 +1,5 @@
 {
-  "syncedAt": "2026-03-23T00:43:31.628Z",
+  "syncedAt": "2026-03-24T00:36:10.869Z",
   "channel": "#product-release",
   "entries": [
     {
@@ -43,9 +43,16 @@
           "text": "Super, thank you guys! :heart_hands::skin-tone-2:",
           "date": "2026-03-21T15:57:10.029Z",
           "images": []
+        },
+        {
+          "userId": "U09EG3DK4US",
+          "userName": "Polina Ishimbaeva",
+          "text": ":fire:",
+          "date": "2026-03-23T10:51:09.622Z",
+          "images": []
         }
       ],
-      "content": "[Elina Andreeva]: Feature: Chinese localization of Adapty documentation\nRelease date: Mar 21, 2026\nAffected areas: Docs\n\n[Elina Andreeva]: Adapty docs are now available in Chinese: <https://adapty.io/docs/zh/>\n\nYou can switch languages using the switcher in the header.\n\nThe localization is LLM-assisted, so it may not be perfect — but it's already a step toward making Adapty more accessible to Chinese-speaking developers who aren't comfortable reading docs in English.\n\nIf you spot anything that looks off, please let us know!\n\n[Kirill Potekhin]: thanks a lot <@U08QUJMN0UV>, great job! <@U09QBBKPGMC> <!subteam^S03KC9S1QMC> fyi \n\n[Kirill Potekhin]: and thanks to <@U0AAD5KEPBK> for helping with translation!\n\n[Elena Robakidze]: Super, thank you guys! :heart_hands::skin-tone-2:",
+      "content": "[Elina Andreeva]: Feature: Chinese localization of Adapty documentation\nRelease date: Mar 21, 2026\nAffected areas: Docs\n\n[Elina Andreeva]: Adapty docs are now available in Chinese: <https://adapty.io/docs/zh/>\n\nYou can switch languages using the switcher in the header.\n\nThe localization is LLM-assisted, so it may not be perfect — but it's already a step toward making Adapty more accessible to Chinese-speaking developers who aren't comfortable reading docs in English.\n\nIf you spot anything that looks off, please let us know!\n\n[Kirill Potekhin]: thanks a lot <@U08QUJMN0UV>, great job! <@U09QBBKPGMC> <!subteam^S03KC9S1QMC> fyi \n\n[Kirill Potekhin]: and thanks to <@U0AAD5KEPBK> for helping with translation!\n\n[Elena Robakidze]: Super, thank you guys! :heart_hands::skin-tone-2:\n\n[Polina Ishimbaeva]: :fire:",
       "matchingReplies": [
         {
           "userId": "U9HDNS9S4",
@@ -92,9 +99,44 @@
           "text": "<!subteam^S03KM96DV0U> FYI",
           "date": "2026-03-18T15:35:36.917Z",
           "images": []
+        },
+        {
+          "userId": "U04N9V7T5U4",
+          "userName": "Emre Ergün",
+          "text": "Hi <@U04B26DSWMA> could this be a reason for profiles to appear with delay to the dashboard? A customer said profiles that download their app appear around 20 mins late to the dashboard but previously it was instantenious",
+          "date": "2026-03-23T10:12:00.943Z",
+          "images": []
+        },
+        {
+          "userId": "U04B26DSWMA",
+          "userName": "Sergei Solodskikh",
+          "text": "Hey <@U04N9V7T5U4>! No, this one is not related (<https://adapty-team.slack.com/archives/C04SY70QZ0T/p1772548496458589|that one> is). Searching by profile_id, customer_user_is, email or transaction_id works instantaneously. Profile list, however, shows profiles with delay",
+          "date": "2026-03-23T10:18:32.879Z",
+          "images": []
+        },
+        {
+          "userId": "U04N9V7T5U4",
+          "userName": "Emre Ergün",
+          "text": "yes it is about the profile list actually thanks <@U04B26DSWMA>\n\nCustomer says it is very important for them because they check the list regularly, do we expect any changes there soon?",
+          "date": "2026-03-23T10:19:37.030Z",
+          "images": []
+        },
+        {
+          "userId": "U04B26DSWMA",
+          "userName": "Sergei Solodskikh",
+          "text": "No, this is by design and will not be changed",
+          "date": "2026-03-23T10:29:45.026Z",
+          "images": []
+        },
+        {
+          "userId": "U04N9V7T5U4",
+          "userName": "Emre Ergün",
+          "text": "thanks <@U04B26DSWMA>",
+          "date": "2026-03-23T11:32:01.204Z",
+          "images": []
         }
       ],
-      "content": "[Sergei Solodskikh]: Feature: <https://adaptyio.atlassian.net/browse/INFRA-157|Remove dependency on profile table in raw SQL queries within purchase context>\nRelease date: Mar 18, 2026\nAffected areas: *Refund saver* (dashboard)*, Purchases* (SDK), Paywalls (SDK)\n\n[Sergei Solodskikh]: As part of the migration to Aerospike, we've made several changes on backend related to data retrieval. No changes in logic were introduced. What can potentially be affected:\n1. *Refund saver* - transaction list in dashboard; changing per-profile refund preference on profile page (app-wide settings stay intact)\n2. *Purchases* - sharing Paid access level between profiles if _Transfer access to new user_ is selected in app settings \n3. *Paywalls* - `introductory_offer_eligibility` field in paywall object returned to SDK (confirmed not changed via logs, but still worth mentioning)\n\n[Sergei Solodskikh]: <!subteam^S03KM96DV0U> FYI",
+      "content": "[Sergei Solodskikh]: Feature: <https://adaptyio.atlassian.net/browse/INFRA-157|Remove dependency on profile table in raw SQL queries within purchase context>\nRelease date: Mar 18, 2026\nAffected areas: *Refund saver* (dashboard)*, Purchases* (SDK), Paywalls (SDK)\n\n[Sergei Solodskikh]: As part of the migration to Aerospike, we've made several changes on backend related to data retrieval. No changes in logic were introduced. What can potentially be affected:\n1. *Refund saver* - transaction list in dashboard; changing per-profile refund preference on profile page (app-wide settings stay intact)\n2. *Purchases* - sharing Paid access level between profiles if _Transfer access to new user_ is selected in app settings \n3. *Paywalls* - `introductory_offer_eligibility` field in paywall object returned to SDK (confirmed not changed via logs, but still worth mentioning)\n\n[Sergei Solodskikh]: <!subteam^S03KM96DV0U> FYI\n\n[Emre Ergün]: Hi <@U04B26DSWMA> could this be a reason for profiles to appear with delay to the dashboard? A customer said profiles that download their app appear around 20 mins late to the dashboard but previously it was instantenious\n\n[Sergei Solodskikh]: Hey <@U04N9V7T5U4>! No, this one is not related (<https://adapty-team.slack.com/archives/C04SY70QZ0T/p1772548496458589|that one> is). Searching by profile_id, customer_user_is, email or transaction_id works instantaneously. Profile list, however, shows profiles with delay\n\n[Emre Ergün]: yes it is about the profile list actually thanks <@U04B26DSWMA>\n\nCustomer says it is very important for them because they check the list regularly, do we expect any changes there soon?\n\n[Sergei Solodskikh]: No, this is by design and will not be changed\n\n[Emre Ergün]: thanks <@U04B26DSWMA>",
       "matchingReplies": [],
       "hasTeamMention": true,
       "images": []
