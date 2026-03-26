@@ -1,7 +1,34 @@
 {
-  "syncedAt": "2026-03-25T00:40:59.515Z",
+  "syncedAt": "2026-03-26T00:43:28.757Z",
   "channel": "#product-release",
   "entries": [
+    {
+      "id": "1774439434.317519",
+      "slackUrl": "https://adapty-team.slack.com/archives/C04SY70QZ0T/p1774439434317519",
+      "name": "Adapty iOS 3.15.7",
+      "message": "Feature: *<https://github.com/adaptyteam/AdaptySDK-iOS/releases/tag/3.15.7|Adapty iOS 3.15.7>*\nRelease date: Mar 25, 2026\nDependencies: Crossplatforms\nEffected areas:\n• Fixed support for Xcode 26.4",
+      "releaseDate": "2026-03-25",
+      "thread": [
+        {
+          "userId": "U03LQU89VHQ",
+          "userName": "Alexey Goncharov",
+          "text": "Feature: *<https://github.com/adaptyteam/AdaptySDK-iOS/releases/tag/3.15.7|Adapty iOS 3.15.7>*\nRelease date: Mar 25, 2026\nDependencies: Crossplatforms\nEffected areas:\n• Fixed support for Xcode 26.4",
+          "date": "2026-03-25T11:50:34.317Z",
+          "images": []
+        },
+        {
+          "userId": "U03LQU89VHQ",
+          "userName": "Alexey Goncharov",
+          "text": "<!subteam^S03KM96DV0U> fyi\n\nToday new Xcode version was being released, we're going to rollout all our crossplatrofm SDKs in the following hours as well",
+          "date": "2026-03-25T11:51:38.137Z",
+          "images": []
+        }
+      ],
+      "content": "[Alexey Goncharov]: Feature: *<https://github.com/adaptyteam/AdaptySDK-iOS/releases/tag/3.15.7|Adapty iOS 3.15.7>*\nRelease date: Mar 25, 2026\nDependencies: Crossplatforms\nEffected areas:\n• Fixed support for Xcode 26.4\n\n[Alexey Goncharov]: <!subteam^S03KM96DV0U> fyi\n\nToday new Xcode version was being released, we're going to rollout all our crossplatrofm SDKs in the following hours as well",
+      "matchingReplies": [],
+      "hasTeamMention": true,
+      "images": []
+    },
     {
       "id": "1774106493.202359",
       "slackUrl": "https://adapty-team.slack.com/archives/C04SY70QZ0T/p1774106493202359",
@@ -1322,33 +1349,6 @@
         }
       ],
       "content": "[Aleksei Beliaitsev]: :pushpin: Please switch to these canonical domains to connect to production databases from now on:\n• Postgres:\n    ◦ `r03-pg.prod.adpinfra.dev:5432`\n• ClickHouse:\n    ◦ `ch.prod.adpinfra.dev:31124` - for native protcol\n    ◦ `ch.prod.adpinfra.dev:31123` - for HTTP protcol (for PyCharm/DataGrip use this)\n\n[Aleksei Beliaitsev]: <!subteam^S03KM96DV0U> <!subteam^S07BZPQDBUJ> fyi\n\n[Sergei Solodskikh]: where вщуы <http://r03-pg.prod.adpinfra.dev|r03-pg.prod.adpinfra.dev> lead to? is is a prod or dev DB?\n\n[Aleksei Beliaitsev]: prod RO replica\n\n[Aleksei Beliaitsev]: full info about all DB's addresses <https://www.notion.so/adapty/Shared-info-2231ca4355c380828a11dd7ef23279a2#2231ca4355c38083984aec8d5cc32b50|here>",
-      "matchingReplies": [],
-      "hasTeamMention": true,
-      "images": []
-    },
-    {
-      "id": "1766154076.864639",
-      "slackUrl": "https://adapty-team.slack.com/archives/C04SY70QZ0T/p1766154076864639",
-      "name": "Frontend doesn't send DELETE request to delete an offer",
-      "message": "Feature: <https://adaptyio.atlassian.net/browse/ADP-5070|Frontend doesn't send DELETE request to delete an offer>\nRelease date: Dec 19, 2025\nDependencies: Products",
-      "releaseDate": "2025-12-19",
-      "thread": [
-        {
-          "userId": "U0903TFULQ3",
-          "userName": "Andrii Hermanov",
-          "text": "Feature: <https://adaptyio.atlassian.net/browse/ADP-5070|Frontend doesn't send DELETE request to delete an offer>\nRelease date: Dec 19, 2025\nDependencies: Products",
-          "date": "2025-12-19T14:21:16.864Z",
-          "images": []
-        },
-        {
-          "userId": "U0903TFULQ3",
-          "userName": "Andrii Hermanov",
-          "text": "fyi <@U07K7QLL37F> <!subteam^S03KM96DV0U>",
-          "date": "2025-12-19T14:21:56.864Z",
-          "images": []
-        }
-      ],
-      "content": "[Andrii Hermanov]: Feature: <https://adaptyio.atlassian.net/browse/ADP-5070|Frontend doesn't send DELETE request to delete an offer>\nRelease date: Dec 19, 2025\nDependencies: Products\n\n[Andrii Hermanov]: fyi <@U07K7QLL37F> <!subteam^S03KM96DV0U>",
       "matchingReplies": [],
       "hasTeamMention": true,
       "images": []
