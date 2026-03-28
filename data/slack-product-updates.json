@@ -1,7 +1,87 @@
 {
-  "syncedAt": "2026-03-27T00:44:01.769Z",
+  "syncedAt": "2026-03-28T00:40:44.721Z",
   "channel": "#product-release",
   "entries": [
+    {
+      "id": "1774620592.015979",
+      "slackUrl": "https://adapty-team.slack.com/archives/C04SY70QZ0T/p1774620592015979",
+      "name": "Switch reading profile segment aggregate to Aerospike",
+      "message": "Feature: <https://adaptyio.atlassian.net/browse/INFRA-77?atlOrigin=eyJpIjoiZmFkNDIxY2RhYjZiNDVmN2IyODQzNzRkM2Q5NWNjZTUiLCJwIjoiaiJ9|Switch reading profile segment aggregate to Aerospike>\nRelease date: Mar 27, 2026 9:15 AM UTC\nAffected areas: *Everything* (mainly profiles, paywalls and A/B tests from SDK surface)",
+      "releaseDate": "2026-03-27",
+      "thread": [
+        {
+          "userId": "U04B26DSWMA",
+          "userName": "Sergei Solodskikh",
+          "text": "Feature: <https://adaptyio.atlassian.net/browse/INFRA-77?atlOrigin=eyJpIjoiZmFkNDIxY2RhYjZiNDVmN2IyODQzNzRkM2Q5NWNjZTUiLCJwIjoiaiJ9|Switch reading profile segment aggregate to Aerospike>\nRelease date: Mar 27, 2026 9:15 AM UTC\nAffected areas: *Everything* (mainly profiles, paywalls and A/B tests from SDK surface)",
+          "date": "2026-03-27T14:09:52.015Z",
+          "images": []
+        },
+        {
+          "userId": "U04B26DSWMA",
+          "userName": "Sergei Solodskikh",
+          "text": "This is the 4th step in migrating the most heavily used part of our infrastructure from PostgreSQL to Aerospike. It should not have any negative impact on user experience and should be viewed as a technical improvement. From now on, all read operations related to profiles, profile custom attributes, attributions, purchase states, and segmentation are performed using Aerospike as a data source. We still write data to both databases, and continue monitoring the state of our API. In the upcoming releases we will stop writing these data to PostgreSQL completely, and remove historic data from there",
+          "date": "2026-03-27T14:13:52.044Z",
+          "images": []
+        },
+        {
+          "userId": "U04B26DSWMA",
+          "userName": "Sergei Solodskikh",
+          "text": "<!subteam^S03KM96DV0U> boring technical release",
+          "date": "2026-03-27T14:14:13.494Z",
+          "images": []
+        }
+      ],
+      "content": "[Sergei Solodskikh]: Feature: <https://adaptyio.atlassian.net/browse/INFRA-77?atlOrigin=eyJpIjoiZmFkNDIxY2RhYjZiNDVmN2IyODQzNzRkM2Q5NWNjZTUiLCJwIjoiaiJ9|Switch reading profile segment aggregate to Aerospike>\nRelease date: Mar 27, 2026 9:15 AM UTC\nAffected areas: *Everything* (mainly profiles, paywalls and A/B tests from SDK surface)\n\n[Sergei Solodskikh]: This is the 4th step in migrating the most heavily used part of our infrastructure from PostgreSQL to Aerospike. It should not have any negative impact on user experience and should be viewed as a technical improvement. From now on, all read operations related to profiles, profile custom attributes, attributions, purchase states, and segmentation are performed using Aerospike as a data source. We still write data to both databases, and continue monitoring the state of our API. In the upcoming releases we will stop writing these data to PostgreSQL completely, and remove historic data from there\n\n[Sergei Solodskikh]: <!subteam^S03KM96DV0U> boring technical release",
+      "matchingReplies": [],
+      "hasTeamMention": true,
+      "images": []
+    },
+    {
+      "id": "1774617237.297169",
+      "slackUrl": "https://adapty-team.slack.com/archives/C04SY70QZ0T/p1774617237297169",
+      "name": "Market Intelligence, New automation actions, Bid History on Keyword Chart, Overview Page, CPP A/B Tests Beta",
+      "message": "Feature: Market Intelligence, New automation actions, Bid History on Keyword Chart, Overview Page, CPP A/B Tests Beta\nRelease date: Mar 27, 2026\nAffected areas: Adapty Ads Manager\nAudience: Sales, CS, Growth teams\nFormat: What’s new → Why it matters → How to sell it\n\nFYI <!subteam^S086DJEQEUE> <!subteam^S07BZPQDBUJ> <@U08QUJMN0UV>",
+      "releaseDate": "2026-03-27",
+      "thread": [
+        {
+          "userId": "U03J8UXUDPF",
+          "userName": "Mykola Martynovets",
+          "text": "Feature: Market Intelligence, New automation actions, Bid History on Keyword Chart, Overview Page, CPP A/B Tests Beta\nRelease date: Mar 27, 2026\nAffected areas: Adapty Ads Manager\nAudience: Sales, CS, Growth teams\nFormat: What’s new → Why it matters → How to sell it\n\nFYI <!subteam^S086DJEQEUE> <!subteam^S07BZPQDBUJ> <@U08QUJMN0UV>",
+          "date": "2026-03-27T13:13:57.297Z",
+          "images": [
+            "https://files.slack.com/files-pri/T9HDDB78Q-F0AP822LQ06/adapty_market_intelligence.gif"
+          ]
+        },
+        {
+          "userId": "U03J8UXUDPF",
+          "userName": "Mykola Martynovets",
+          "text": "Public version (we can use for clients):\n\n\nIntroducing Apple Ads Manager 2.0: Market Intelligence, Smarter Automation, and More\nWe’ve been busy. Today we’re rolling out the biggest update to Apple Ads Manager by Adapty since launch — a set of features designed to help you spend less time managing campaigns and more time growing your app.\nHere’s what’s new.\n\n\n\nMarket Intelligence: See What Your Competitors Are Bidding On\nFinding the right keywords for Apple Ads has always been part science, part guesswork. You run Discovery campaigns, test broad matches, maybe check a few ASO tools — and hope for the best.\nMarket Intelligence changes that. Pick your competitors (or discover new ones using ASO search — just enter a relevant keyword and see who ranks organically), and we’ll show you exactly which keywords they’re running Apple Ads on, across 50+ countries.\nWhat you can do with it:\n• See competitor keyword strategies grouped by country or by app.\n• Find the most contested keywords in your category — and the gaps nobody’s covering.\n• Discover long-tail keywords (specific, lower-competition phrases like “budget meal planner for families”) that your competitors use but you haven’t tried yet. These often have lower CPAs and higher ROAS than popular head terms.\n• Check if competitors are bidding on your brand keywords — and in which countries.\n• Research a new market before you launch there. See what works for local competitors before spending a dollar.\n• Export everything to CSV or add keywords directly to your campaigns from the same screen.\nThink of it as a free alternative to running Discovery campaigns for keyword research. Instead of spending budget to find what works, look at what’s already working for your competitors and start from there.\n\n\nNew Automation Actions: Full Keyword Lifecycle on Autopilot\nRule-based automation just got a lot more powerful. Until now, you could change bids automatically. Now you can manage the entire keyword lifecycle.\nNew actions for targeting keywords:\n• Enable Keyword — automatically re-enable a paused keyword when conditions are met. Perfect for cases where you paused a keyword too early, but its D31 or D61 ROAS (available through Adapty’s cohort data) turns out to be great. Give good keywords a second chance — backed by data.\n• Pause Keyword — automatically pause keywords that underperform. Set your threshold (e.g., spend &gt; $100 with zero conversions) and let the system handle it. No more budget waste going unnoticed over weekends.\n• Add as Keyword to… — copy a keyword to another ad group with your preferred bid and match type. Automate your testing-to-scaling pipeline: when a keyword hits your CPA target in a test campaign, move it to your scale campaign automatically.\n• Add as Negative Keyword to… — negate keywords at the ad group or campaign level. Keep your Discovery and Max Conversion campaigns clean by auto-negating any keyword that’s already running as an exact match elsewhere.\nNew action for search terms:\n• Add as Negative Keyword to… — automatically negate irrelevant or wasteful search terms from Discovery and Max Conversion campaigns. Set a rule (e.g., 50+ impressions and 0 taps) and stop paying for traffic that doesn’t convert.\nThese actions work across all your campaigns and countries. Set the rules once — the system runs 24/7.\n\n\nBid History on Keyword Charts\nEver changed a bid and wondered what happened next? Now you don’t have to guess.\nThe keyword performance chart shows a marker at every point where the CPT bid was changed, along with the exact bid amount. You can visually correlate bid changes with shifts in impressions, taps, CPA, and other metrics — all on one chart.\nThis is especially useful when multiple team members manage the same campaigns. The chart becomes your changelog: every bid change is visible, and its impact is clear.\n\n\n\nNew Overview Page\nWe added a dedicated Overview page that shows all your key metrics at a glance — spend, revenue, ROAS, impressions, CPM, taps, CPT, TTR, downloads, CPA, and download rate — each with a daily trend chart.\nYou can customize which metrics are shown and in what order, filter by a specific app or view your entire account, and switch between time ranges. It’s the “how are things going?” dashboard that takes 5 seconds to read — and it’s the page Apple should have built but didn’t.\n\n\n\nComing Soon: CPP A/B Testing — Beta Sign-Up Is Open\nOne more thing. We’re about to launch a feature we’ve been working on for a while: Custom Product Page A/B Testing for Apple Ads.\nApple now lets you create up to 70 Custom Product Pages per app — alternative versions of your App Store page with different screenshots, descriptions, and previews. The problem? There’s no native way to test which one actually converts better for your ads.\nCPP A/B Testing in Ads Manager solves this. Assign multiple product pages to the same keywords, split traffic automatically, and let the system find a winner with 90%+ statistical confidence. And here’s what makes our approach different: we don’t just measure which page gets more downloads — we measure which page drives the best ROAS by connecting to Adapty’s revenue data. Because a page that converts more installs isn’t always the page that converts more paying users.\nWe’re currently running the feature in production and opening beta access next week. If you want early access, reach out to your account manager or reply to this email — we’ll add you to the list.\n\nAnd There’s More Coming\nWe have a packed roadmap with major features already in the pipeline. This is just the beginning of the 2.0 era — stay tuned for the next updates.\n\nReady to try it? All features are live in your Apple Ads Manager dashboard. Log in and explore what’s new. Questions or feedback? Reach out to your account manager or contact us at <mailto:support@adapty.io|support@adapty.io>.\n\n\nFYI <@U06K36L6CTB>",
+          "date": "2026-03-27T13:15:12.581Z",
+          "images": []
+        },
+        {
+          "userId": "U09EG3DK4US",
+          "userName": "Polina Ishimbaeva",
+          "text": "Офигеть!!!! Круто! :boom:",
+          "date": "2026-03-27T15:03:57.123Z",
+          "images": []
+        }
+      ],
+      "content": "[Mykola Martynovets]: Feature: Market Intelligence, New automation actions, Bid History on Keyword Chart, Overview Page, CPP A/B Tests Beta\nRelease date: Mar 27, 2026\nAffected areas: Adapty Ads Manager\nAudience: Sales, CS, Growth teams\nFormat: What’s new → Why it matters → How to sell it\n\nFYI <!subteam^S086DJEQEUE> <!subteam^S07BZPQDBUJ> <@U08QUJMN0UV>\n\n[Mykola Martynovets]: Public version (we can use for clients):\n\n\nIntroducing Apple Ads Manager 2.0: Market Intelligence, Smarter Automation, and More\nWe’ve been busy. Today we’re rolling out the biggest update to Apple Ads Manager by Adapty since launch — a set of features designed to help you spend less time managing campaigns and more time growing your app.\nHere’s what’s new.\n\n\n\nMarket Intelligence: See What Your Competitors Are Bidding On\nFinding the right keywords for Apple Ads has always been part science, part guesswork. You run Discovery campaigns, test broad matches, maybe check a few ASO tools — and hope for the best.\nMarket Intelligence changes that. Pick your competitors (or discover new ones using ASO search — just enter a relevant keyword and see who ranks organically), and we’ll show you exactly which keywords they’re running Apple Ads on, across 50+ countries.\nWhat you can do with it:\n• See competitor keyword strategies grouped by country or by app.\n• Find the most contested keywords in your category — and the gaps nobody’s covering.\n• Discover long-tail keywords (specific, lower-competition phrases like “budget meal planner for families”) that your competitors use but you haven’t tried yet. These often have lower CPAs and higher ROAS than popular head terms.\n• Check if competitors are bidding on your brand keywords — and in which countries.\n• Research a new market before you launch there. See what works for local competitors before spending a dollar.\n• Export everything to CSV or add keywords directly to your campaigns from the same screen.\nThink of it as a free alternative to running Discovery campaigns for keyword research. Instead of spending budget to find what works, look at what’s already working for your competitors and start from there.\n\n\nNew Automation Actions: Full Keyword Lifecycle on Autopilot\nRule-based automation just got a lot more powerful. Until now, you could change bids automatically. Now you can manage the entire keyword lifecycle.\nNew actions for targeting keywords:\n• Enable Keyword — automatically re-enable a paused keyword when conditions are met. Perfect for cases where you paused a keyword too early, but its D31 or D61 ROAS (available through Adapty’s cohort data) turns out to be great. Give good keywords a second chance — backed by data.\n• Pause Keyword — automatically pause keywords that underperform. Set your threshold (e.g., spend &gt; $100 with zero conversions) and let the system handle it. No more budget waste going unnoticed over weekends.\n• Add as Keyword to… — copy a keyword to another ad group with your preferred bid and match type. Automate your testing-to-scaling pipeline: when a keyword hits your CPA target in a test campaign, move it to your scale campaign automatically.\n• Add as Negative Keyword to… — negate keywords at the ad group or campaign level. Keep your Discovery and Max Conversion campaigns clean by auto-negating any keyword that’s already running as an exact match elsewhere.\nNew action for search terms:\n• Add as Negative Keyword to… — automatically negate irrelevant or wasteful search terms from Discovery and Max Conversion campaigns. Set a rule (e.g., 50+ impressions and 0 taps) and stop paying for traffic that doesn’t convert.\nThese actions work across all your campaigns and countries. Set the rules once — the system runs 24/7.\n\n\nBid History on Keyword Charts\nEver changed a bid and wondered what happened next? Now you don’t have to guess.\nThe keyword performance chart shows a marker at every point where the CPT bid was changed, along with the exact bid amount. You can visually correlate bid changes with shifts in impressions, taps, CPA, and other metrics — all on one chart.\nThis is especially useful when multiple team members manage the same campaigns. The chart becomes your changelog: every bid change is visible, and its impact is clear.\n\n\n\nNew Overview Page\nWe added a dedicated Overview page that shows all your key metrics at a glance — spend, revenue, ROAS, impressions, CPM, taps, CPT, TTR, downloads, CPA, and download rate — each with a daily trend chart.\nYou can customize which metrics are shown and in what order, filter by a specific app or view your entire account, and switch between time ranges. It’s the “how are things going?” dashboard that takes 5 seconds to read — and it’s the page Apple should have built but didn’t.\n\n\n\nComing Soon: CPP A/B Testing — Beta Sign-Up Is Open\nOne more thing. We’re about to launch a feature we’ve been working on for a while: Custom Product Page A/B Testing for Apple Ads.\nApple now lets you create up to 70 Custom Product Pages per app — alternative versions of your App Store page with different screenshots, descriptions, and previews. The problem? There’s no native way to test which one actually converts better for your ads.\nCPP A/B Testing in Ads Manager solves this. Assign multiple product pages to the same keywords, split traffic automatically, and let the system find a winner with 90%+ statistical confidence. And here’s what makes our approach different: we don’t just measure which page gets more downloads — we measure which page drives the best ROAS by connecting to Adapty’s revenue data. Because a page that converts more installs isn’t always the page that converts more paying users.\nWe’re currently running the feature in production and opening beta access next week. If you want early access, reach out to your account manager or reply to this email — we’ll add you to the list.\n\nAnd There’s More Coming\nWe have a packed roadmap with major features already in the pipeline. This is just the beginning of the 2.0 era — stay tuned for the next updates.\n\nReady to try it? All features are live in your Apple Ads Manager dashboard. Log in and explore what’s new. Questions or feedback? Reach out to your account manager or contact us at <mailto:support@adapty.io|support@adapty.io>.\n\n\nFYI <@U06K36L6CTB>\n\n[Polina Ishimbaeva]: Офигеть!!!! Круто! :boom:",
+      "matchingReplies": [
+        {
+          "userId": "U03J8UXUDPF",
+          "userName": "Mykola Martynovets",
+          "text": "Public version (we can use for clients):\n\n\nIntroducing Apple Ads Manager 2.0: Market Intelligence, Smarter Automation, and More\nWe’ve been busy. Today we’re rolling out the biggest update to Apple Ads Manager by Adapty since launch — a set of features designed to help you spend less time managing campaigns and more time growing your app.\nHere’s what’s new.\n\n\n\nMarket Intelligence: See What Your Competitors Are Bidding On\nFinding the right keywords for Apple Ads has always been part science, part guesswork. You run Discovery campaigns, test broad matches, maybe check a few ASO tools — and hope for the best.\nMarket Intelligence changes that. Pick your competitors (or discover new ones using ASO search — just enter a relevant keyword and see who ranks organically), and we’ll show you exactly which keywords they’re running Apple Ads on, across 50+ countries.\nWhat you can do with it:\n• See competitor keyword strategies grouped by country or by app.\n• Find the most contested keywords in your category — and the gaps nobody’s covering.\n• Discover long-tail keywords (specific, lower-competition phrases like “budget meal planner for families”) that your competitors use but you haven’t tried yet. These often have lower CPAs and higher ROAS than popular head terms.\n• Check if competitors are bidding on your brand keywords — and in which countries.\n• Research a new market before you launch there. See what works for local competitors before spending a dollar.\n• Export everything to CSV or add keywords directly to your campaigns from the same screen.\nThink of it as a free alternative to running Discovery campaigns for keyword research. Instead of spending budget to find what works, look at what’s already working for your competitors and start from there.\n\n\nNew Automation Actions: Full Keyword Lifecycle on Autopilot\nRule-based automation just got a lot more powerful. Until now, you could change bids automatically. Now you can manage the entire keyword lifecycle.\nNew actions for targeting keywords:\n• Enable Keyword — automatically re-enable a paused keyword when conditions are met. Perfect for cases where you paused a keyword too early, but its D31 or D61 ROAS (available through Adapty’s cohort data) turns out to be great. Give good keywords a second chance — backed by data.\n• Pause Keyword — automatically pause keywords that underperform. Set your threshold (e.g., spend &gt; $100 with zero conversions) and let the system handle it. No more budget waste going unnoticed over weekends.\n• Add as Keyword to… — copy a keyword to another ad group with your preferred bid and match type. Automate your testing-to-scaling pipeline: when a keyword hits your CPA target in a test campaign, move it to your scale campaign automatically.\n• Add as Negative Keyword to… — negate keywords at the ad group or campaign level. Keep your Discovery and Max Conversion campaigns clean by auto-negating any keyword that’s already running as an exact match elsewhere.\nNew action for search terms:\n• Add as Negative Keyword to… — automatically negate irrelevant or wasteful search terms from Discovery and Max Conversion campaigns. Set a rule (e.g., 50+ impressions and 0 taps) and stop paying for traffic that doesn’t convert.\nThese actions work across all your campaigns and countries. Set the rules once — the system runs 24/7.\n\n\nBid History on Keyword Charts\nEver changed a bid and wondered what happened next? Now you don’t have to guess.\nThe keyword performance chart shows a marker at every point where the CPT bid was changed, along with the exact bid amount. You can visually correlate bid changes with shifts in impressions, taps, CPA, and other metrics — all on one chart.\nThis is especially useful when multiple team members manage the same campaigns. The chart becomes your changelog: every bid change is visible, and its impact is clear.\n\n\n\nNew Overview Page\nWe added a dedicated Overview page that shows all your key metrics at a glance — spend, revenue, ROAS, impressions, CPM, taps, CPT, TTR, downloads, CPA, and download rate — each with a daily trend chart.\nYou can customize which metrics are shown and in what order, filter by a specific app or view your entire account, and switch between time ranges. It’s the “how are things going?” dashboard that takes 5 seconds to read — and it’s the page Apple should have built but didn’t.\n\n\n\nComing Soon: CPP A/B Testing — Beta Sign-Up Is Open\nOne more thing. We’re about to launch a feature we’ve been working on for a while: Custom Product Page A/B Testing for Apple Ads.\nApple now lets you create up to 70 Custom Product Pages per app — alternative versions of your App Store page with different screenshots, descriptions, and previews. The problem? There’s no native way to test which one actually converts better for your ads.\nCPP A/B Testing in Ads Manager solves this. Assign multiple product pages to the same keywords, split traffic automatically, and let the system find a winner with 90%+ statistical confidence. And here’s what makes our approach different: we don’t just measure which page gets more downloads — we measure which page drives the best ROAS by connecting to Adapty’s revenue data. Because a page that converts more installs isn’t always the page that converts more paying users.\nWe’re currently running the feature in production and opening beta access next week. If you want early access, reach out to your account manager or reply to this email — we’ll add you to the list.\n\nAnd There’s More Coming\nWe have a packed roadmap with major features already in the pipeline. This is just the beginning of the 2.0 era — stay tuned for the next updates.\n\nReady to try it? All features are live in your Apple Ads Manager dashboard. Log in and explore what’s new. Questions or feedback? Reach out to your account manager or contact us at <mailto:support@adapty.io|support@adapty.io>.\n\n\nFYI <@U06K36L6CTB>",
+          "date": "2026-03-27T13:15:12.581Z",
+          "images": []
+        }
+      ],
+      "hasTeamMention": false,
+      "images": [
+        "https://files.slack.com/files-pri/T9HDDB78Q-F0AP822LQ06/adapty_market_intelligence.gif"
+      ]
+    },
     {
       "id": "1774439434.317519",
       "slackUrl": "https://adapty-team.slack.com/archives/C04SY70QZ0T/p1774439434317519",
@@ -1277,81 +1357,6 @@
         "https://files.slack.com/files-pri/T9HDDB78Q-F0A5F0L52LD/image.png",
         "https://files.slack.com/files-pri/T9HDDB78Q-F0A5FQ0DY9Z/image.png"
       ]
-    },
-    {
-      "id": "1766496132.471569",
-      "slackUrl": "https://adapty-team.slack.com/archives/C04SY70QZ0T/p1766496132471569",
-      "name": "*Feature:* Refactored Profile context",
-      "message": "*Feature:* Refactored Profile context\n*Release date:* Dec 23, 2025\n*Additional info:*\n• <https://gitlab.adapty.io/adapty/adapty-dashboard-api/-/merge_requests/11386|Merge Request>\n*Note*:\nI slightly refactored the profile creation flow and the Customer User ID assignment. There were no changes to the logic, so everything should remain the same for clients.\n*Affected areas:*\n• requests from SDK and Server-Side API;\n• analytics (Installs).",
-      "releaseDate": "2025-12-23",
-      "thread": [
-        {
-          "userId": "UNWFN144R",
-          "userName": "Artem Davydov",
-          "text": "*Feature:* Refactored Profile context\n*Release date:* Dec 23, 2025\n*Additional info:*\n• <https://gitlab.adapty.io/adapty/adapty-dashboard-api/-/merge_requests/11386|Merge Request>\n*Note*:\nI slightly refactored the profile creation flow and the Customer User ID assignment. There were no changes to the logic, so everything should remain the same for clients.\n*Affected areas:*\n• requests from SDK and Server-Side API;\n• analytics (Installs).",
-          "date": "2025-12-23T13:22:12.471Z",
-          "images": []
-        },
-        {
-          "userId": "UNWFN144R",
-          "userName": "Artem Davydov",
-          "text": "<!subteam^S03KM96DV0U> fyi",
-          "date": "2025-12-23T13:22:56.747Z",
-          "images": []
-        }
-      ],
-      "content": "[Artem Davydov]: *Feature:* Refactored Profile context\n*Release date:* Dec 23, 2025\n*Additional info:*\n• <https://gitlab.adapty.io/adapty/adapty-dashboard-api/-/merge_requests/11386|Merge Request>\n*Note*:\nI slightly refactored the profile creation flow and the Customer User ID assignment. There were no changes to the logic, so everything should remain the same for clients.\n*Affected areas:*\n• requests from SDK and Server-Side API;\n• analytics (Installs).\n\n[Artem Davydov]: <!subteam^S03KM96DV0U> fyi",
-      "matchingReplies": [],
-      "hasTeamMention": true,
-      "images": []
-    },
-    {
-      "id": "1766415516.591039",
-      "slackUrl": "https://adapty-team.slack.com/archives/C04SY70QZ0T/p1766415516591039",
-      "name": ":pushpin: Please switch to these canonical domains to connect to production databases from now on:",
-      "message": ":pushpin: Please switch to these canonical domains to connect to production databases from now on:\n• Postgres:\n    ◦ `r03-pg.prod.adpinfra.dev:5432`\n• ClickHouse:\n    ◦ `ch.prod.adpinfra.dev:31124` - for native protcol\n    ◦ `ch.prod.adpinfra.dev:31123` - for HTTP protcol (for PyCharm/DataGrip use this)",
-      "releaseDate": "2025-12-22",
-      "thread": [
-        {
-          "userId": "U093VEXJVC4",
-          "userName": "Aleksei Beliaitsev",
-          "text": ":pushpin: Please switch to these canonical domains to connect to production databases from now on:\n• Postgres:\n    ◦ `r03-pg.prod.adpinfra.dev:5432`\n• ClickHouse:\n    ◦ `ch.prod.adpinfra.dev:31124` - for native protcol\n    ◦ `ch.prod.adpinfra.dev:31123` - for HTTP protcol (for PyCharm/DataGrip use this)",
-          "date": "2025-12-22T14:58:36.591Z",
-          "images": []
-        },
-        {
-          "userId": "U093VEXJVC4",
-          "userName": "Aleksei Beliaitsev",
-          "text": "<!subteam^S03KM96DV0U> <!subteam^S07BZPQDBUJ> fyi",
-          "date": "2025-12-22T14:59:33.781Z",
-          "images": []
-        },
-        {
-          "userId": "U04B26DSWMA",
-          "userName": "Sergei Solodskikh",
-          "text": "where вщуы <http://r03-pg.prod.adpinfra.dev|r03-pg.prod.adpinfra.dev> lead to? is is a prod or dev DB?",
-          "date": "2025-12-22T15:35:11.592Z",
-          "images": []
-        },
-        {
-          "userId": "U093VEXJVC4",
-          "userName": "Aleksei Beliaitsev",
-          "text": "prod RO replica",
-          "date": "2025-12-22T15:35:44.292Z",
-          "images": []
-        },
-        {
-          "userId": "U093VEXJVC4",
-          "userName": "Aleksei Beliaitsev",
-          "text": "full info about all DB's addresses <https://www.notion.so/adapty/Shared-info-2231ca4355c380828a11dd7ef23279a2#2231ca4355c38083984aec8d5cc32b50|here>",
-          "date": "2025-12-22T15:36:52.049Z",
-          "images": []
-        }
-      ],
-      "content": "[Aleksei Beliaitsev]: :pushpin: Please switch to these canonical domains to connect to production databases from now on:\n• Postgres:\n    ◦ `r03-pg.prod.adpinfra.dev:5432`\n• ClickHouse:\n    ◦ `ch.prod.adpinfra.dev:31124` - for native protcol\n    ◦ `ch.prod.adpinfra.dev:31123` - for HTTP protcol (for PyCharm/DataGrip use this)\n\n[Aleksei Beliaitsev]: <!subteam^S03KM96DV0U> <!subteam^S07BZPQDBUJ> fyi\n\n[Sergei Solodskikh]: where вщуы <http://r03-pg.prod.adpinfra.dev|r03-pg.prod.adpinfra.dev> lead to? is is a prod or dev DB?\n\n[Aleksei Beliaitsev]: prod RO replica\n\n[Aleksei Beliaitsev]: full info about all DB's addresses <https://www.notion.so/adapty/Shared-info-2231ca4355c380828a11dd7ef23279a2#2231ca4355c38083984aec8d5cc32b50|here>",
-      "matchingReplies": [],
-      "hasTeamMention": true,
-      "images": []
     }
   ]
 }
