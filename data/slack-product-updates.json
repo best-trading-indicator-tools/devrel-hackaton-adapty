@@ -1,7 +1,42 @@
 {
-  "syncedAt": "2026-04-14T00:49:55.720Z",
+  "syncedAt": "2026-04-15T00:49:40.960Z",
   "channel": "#product-release",
   "entries": [
+    {
+      "id": "1776100427.609739",
+      "slackUrl": "https://adapty-team.slack.com/archives/C04SY70QZ0T/p1776100427609739",
+      "name": "AI-Paywall analysis feature for autopilot",
+      "message": "Feature: *<https://adaptyio.atlassian.net/browse/ADP-5670|AI-Paywall analysis feature for autopilot>*\nRelease date: Apr 13, 2026\nAffected areas: *Autopilot*",
+      "releaseDate": "2026-04-13",
+      "thread": [
+        {
+          "userId": "U080G9FHV50",
+          "userName": "Mirazim Tolipov",
+          "text": "Feature: *<https://adaptyio.atlassian.net/browse/ADP-5670|AI-Paywall analysis feature for autopilot>*\nRelease date: Apr 13, 2026\nAffected areas: *Autopilot*",
+          "date": "2026-04-13T17:13:47.609Z",
+          "images": []
+        },
+        {
+          "userId": "U08EVBTE69E",
+          "userName": "Maxim Borisik",
+          "text": "Hey team! <!subteam^S07BZPQDBUJ> <!subteam^S03KC9S1QMC> <!subteam^S03KM96DV0U> <!subteam^S02U0UTPEQM>\n*we've added the paywall analysis* in the autopilot. AI project that lived in claude now moved to autopilot and is accessible for every app\n\ni attach a short video about that\nthe idea is simple. `upload the screenshot` -&gt; `get the insights/ideas on what to test` -&gt; `launch them from autopilot`\n\n*in case you forgot what Autopilot is*\nbriefly - we are building an ai-growth manager which helps with monetisation part of an app. now we give recommendations on 1) visuals; 2) monetisation; 3) country-pricing. and we plan to make it smarter\n\n1) I've updated the main doc and made it actual (link <https://www.notion.so/adapty/Autopilot-Materials-Updated-April-2026-2fe1ca4355c3819a859cc80c14177c83|here>),\n2) attached there a new video about how it works to cover all the main parts of the autopilot, check it out\n\nalso we have a <https://adapty.io/case-studies/appdevlabs|new success case>, where we boosted a portfolio-app company MRR by 28%\n\nafter the new builder we will support paywall generation, so clients can just approve the ideas from us and launch them easily. for now, they need to apply changes themselves",
+          "date": "2026-04-14T11:28:51.125Z",
+          "images": []
+        }
+      ],
+      "content": "[Mirazim Tolipov]: Feature: *<https://adaptyio.atlassian.net/browse/ADP-5670|AI-Paywall analysis feature for autopilot>*\nRelease date: Apr 13, 2026\nAffected areas: *Autopilot*\n\n[Maxim Borisik]: Hey team! <!subteam^S07BZPQDBUJ> <!subteam^S03KC9S1QMC> <!subteam^S03KM96DV0U> <!subteam^S02U0UTPEQM>\n*we've added the paywall analysis* in the autopilot. AI project that lived in claude now moved to autopilot and is accessible for every app\n\ni attach a short video about that\nthe idea is simple. `upload the screenshot` -&gt; `get the insights/ideas on what to test` -&gt; `launch them from autopilot`\n\n*in case you forgot what Autopilot is*\nbriefly - we are building an ai-growth manager which helps with monetisation part of an app. now we give recommendations on 1) visuals; 2) monetisation; 3) country-pricing. and we plan to make it smarter\n\n1) I've updated the main doc and made it actual (link <https://www.notion.so/adapty/Autopilot-Materials-Updated-April-2026-2fe1ca4355c3819a859cc80c14177c83|here>),\n2) attached there a new video about how it works to cover all the main parts of the autopilot, check it out\n\nalso we have a <https://adapty.io/case-studies/appdevlabs|new success case>, where we boosted a portfolio-app company MRR by 28%\n\nafter the new builder we will support paywall generation, so clients can just approve the ideas from us and launch them easily. for now, they need to apply changes themselves",
+      "matchingReplies": [
+        {
+          "userId": "U08EVBTE69E",
+          "userName": "Maxim Borisik",
+          "text": "Hey team! <!subteam^S07BZPQDBUJ> <!subteam^S03KC9S1QMC> <!subteam^S03KM96DV0U> <!subteam^S02U0UTPEQM>\n*we've added the paywall analysis* in the autopilot. AI project that lived in claude now moved to autopilot and is accessible for every app\n\ni attach a short video about that\nthe idea is simple. `upload the screenshot` -&gt; `get the insights/ideas on what to test` -&gt; `launch them from autopilot`\n\n*in case you forgot what Autopilot is*\nbriefly - we are building an ai-growth manager which helps with monetisation part of an app. now we give recommendations on 1) visuals; 2) monetisation; 3) country-pricing. and we plan to make it smarter\n\n1) I've updated the main doc and made it actual (link <https://www.notion.so/adapty/Autopilot-Materials-Updated-April-2026-2fe1ca4355c3819a859cc80c14177c83|here>),\n2) attached there a new video about how it works to cover all the main parts of the autopilot, check it out\n\nalso we have a <https://adapty.io/case-studies/appdevlabs|new success case>, where we boosted a portfolio-app company MRR by 28%\n\nafter the new builder we will support paywall generation, so clients can just approve the ideas from us and launch them easily. for now, they need to apply changes themselves",
+          "date": "2026-04-14T11:28:51.125Z",
+          "images": []
+        }
+      ],
+      "hasTeamMention": true,
+      "images": []
+    },
     {
       "id": "1776084199.252419",
       "slackUrl": "https://adapty-team.slack.com/archives/C04SY70QZ0T/p1776084199252419",
@@ -50,12 +85,37 @@
           "text": "Thank you :raised_hands:",
           "date": "2026-04-13T12:46:29.082Z",
           "images": []
+        },
+        {
+          "userId": "U08917H1C5B",
+          "userName": "Vitaly Kuzmin",
+          "text": "Hey <@U08QUJMN0UV>\nIs it possible to limit document search based on the selected localization? I’m getting Turkish documents when searching in the EN locale.",
+          "date": "2026-04-14T09:45:36.750Z",
+          "images": [
+            "https://files.slack.com/files-pri/T9HDDB78Q-F0ASV30BU5A/image.png"
+          ]
+        },
+        {
+          "userId": "U08QUJMN0UV",
+          "userName": "Elina Andreeva",
+          "text": "Hi! Thank you for reporting this! Specifically tried to fix this issue... Will fix asap",
+          "date": "2026-04-14T09:46:48.520Z",
+          "images": []
+        },
+        {
+          "userId": "U08QUJMN0UV",
+          "userName": "Elina Andreeva",
+          "text": "Fixed now\nEnglish and Turkish indices got accidentally merged this morning; added a reminder about this to the localization process, so we don't get this error with new languages",
+          "date": "2026-04-14T10:35:43.090Z",
+          "images": []
         }
       ],
-      "content": "[Elina Andreeva]: Feature: Turkish localization of Adapty documentation\nRelease date: Apr 13, 2026\nAffected areas: Docs\n\n[Elina Andreeva]: Adapty docs are now available in Turkish: <https://adapty.io/docs/tr/>\n\nYou can switch languages using the switcher in the header.\n\n<@U02GSCVUPHU> thank you for your help!\n\n[Adil]: <@U0A266T9SJE> fyi :eyes:\n\n[Kirill Potekhin]: <!subteam^S03KC9S1QMC> <!subteam^S07BZPQDBUJ>\n\n[Kirill Potekhin]: <@U08QUJMN0UV> thank you!\n\n[Adil]: Thank you :raised_hands:",
+      "content": "[Elina Andreeva]: Feature: Turkish localization of Adapty documentation\nRelease date: Apr 13, 2026\nAffected areas: Docs\n\n[Elina Andreeva]: Adapty docs are now available in Turkish: <https://adapty.io/docs/tr/>\n\nYou can switch languages using the switcher in the header.\n\n<@U02GSCVUPHU> thank you for your help!\n\n[Adil]: <@U0A266T9SJE> fyi :eyes:\n\n[Kirill Potekhin]: <!subteam^S03KC9S1QMC> <!subteam^S07BZPQDBUJ>\n\n[Kirill Potekhin]: <@U08QUJMN0UV> thank you!\n\n[Adil]: Thank you :raised_hands:\n\n[Vitaly Kuzmin]: Hey <@U08QUJMN0UV>\nIs it possible to limit document search based on the selected localization? I’m getting Turkish documents when searching in the EN locale.\n\n[Elina Andreeva]: Hi! Thank you for reporting this! Specifically tried to fix this issue... Will fix asap\n\n[Elina Andreeva]: Fixed now\nEnglish and Turkish indices got accidentally merged this morning; added a reminder about this to the localization process, so we don't get this error with new languages",
       "matchingReplies": [],
       "hasTeamMention": true,
-      "images": []
+      "images": [
+        "https://files.slack.com/files-pri/T9HDDB78Q-F0ASV30BU5A/image.png"
+      ]
     },
     {
       "id": "1775658495.451319",
@@ -1222,75 +1282,6 @@
       ],
       "hasTeamMention": false,
       "images": []
-    },
-    {
-      "id": "1769766798.436629",
-      "slackUrl": "https://adapty-team.slack.com/archives/C04SY70QZ0T/p1769766798436629",
-      "name": "Show Geo Pricing Opportunities with basic recommendations",
-      "message": "Feature: <https://adaptyio.atlassian.net/browse/ADP-4887|Show Geo Pricing Opportunities with basic recommendations>\nRelease date: Jan 30, 2026\nAffected areas: *Autopilot*",
-      "releaseDate": "2026-01-30",
-      "thread": [
-        {
-          "userId": "U080G9FHV50",
-          "userName": "Mirazim Tolipov",
-          "text": "Feature: <https://adaptyio.atlassian.net/browse/ADP-4887|Show Geo Pricing Opportunities with basic recommendations>\nRelease date: Jan 30, 2026\nAffected areas: *Autopilot*",
-          "date": "2026-01-30T09:53:18.436Z",
-          "images": []
-        },
-        {
-          "userId": "U08EVBTE69E",
-          "userName": "Maxim Borisik",
-          "text": "hey team!\nwe've released a new feature - geo-pricing recommendations! :earth_africa:\n\nAutopilot now chooses the top-5 countries by revenue, and then provides pricing signals for this countries based on conversion rate comprising and Adapty Pricing index .\n\n*for example*: 1) the conversion in Germany is _twice better than average_ (4% vs 2%); 2) and pricing index tells that purchasing power is _high_. it means that it's a great idea for you to try and _increase_ the price in Germany\n\nso the personalised list of A/B tests remains based on US market (as a core recommendation flow for paywall improvement), but the signals are targeting the other countries\n\n*check the video to get more context!* \n<!subteam^S07BZPQDBUJ> <!subteam^S03KC9S1QMC> <!subteam^S03KM96DV0U> fyi\n\nwhat comes next:\n• deeper country analytics \n    ◦ get analysis of the competitors prices in these top countries \n    ◦ see the paywall CR benchmarks by country (what is average trial-paid conversion  for VPN apps in Germany)\n• opportunity to update product prices in these countries within adapty (integration with v2. of product export)",
-          "date": "2026-01-30T12:40:49.011Z",
-          "images": [
-            "https://files.slack.com/files-pri/T9HDDB78Q-F0ACU1C8TTJ/image.png"
-          ]
-        },
-        {
-          "userId": "U06K36L6CTB",
-          "userName": "Victoria Kharlan",
-          "text": "<@U08SQQGK1A7>, <@U02GSCVUPHU> please add this to your content plans :pray:",
-          "date": "2026-01-30T15:38:29.838Z",
-          "images": []
-        },
-        {
-          "userId": "U0A266T9SJE",
-          "userName": "Melike Sezer",
-          "text": "Hi <@U08EVBTE69E> so the current 2.28% we see there, is it global CR average of the category of our selected app, right?",
-          "date": "2026-02-09T15:13:39.781Z",
-          "images": []
-        },
-        {
-          "userId": "U08EVBTE69E",
-          "userName": "Maxim Borisik",
-          "text": "2,28% is this app's CR, not average of the industry!",
-          "date": "2026-02-09T15:14:23.644Z",
-          "images": []
-        }
-      ],
-      "content": "[Mirazim Tolipov]: Feature: <https://adaptyio.atlassian.net/browse/ADP-4887|Show Geo Pricing Opportunities with basic recommendations>\nRelease date: Jan 30, 2026\nAffected areas: *Autopilot*\n\n[Maxim Borisik]: hey team!\nwe've released a new feature - geo-pricing recommendations! :earth_africa:\n\nAutopilot now chooses the top-5 countries by revenue, and then provides pricing signals for this countries based on conversion rate comprising and Adapty Pricing index .\n\n*for example*: 1) the conversion in Germany is _twice better than average_ (4% vs 2%); 2) and pricing index tells that purchasing power is _high_. it means that it's a great idea for you to try and _increase_ the price in Germany\n\nso the personalised list of A/B tests remains based on US market (as a core recommendation flow for paywall improvement), but the signals are targeting the other countries\n\n*check the video to get more context!* \n<!subteam^S07BZPQDBUJ> <!subteam^S03KC9S1QMC> <!subteam^S03KM96DV0U> fyi\n\nwhat comes next:\n• deeper country analytics \n    ◦ get analysis of the competitors prices in these top countries \n    ◦ see the paywall CR benchmarks by country (what is average trial-paid conversion  for VPN apps in Germany)\n• opportunity to update product prices in these countries within adapty (integration with v2. of product export)\n\n[Victoria Kharlan]: <@U08SQQGK1A7>, <@U02GSCVUPHU> please add this to your content plans :pray:\n\n[Melike Sezer]: Hi <@U08EVBTE69E> so the current 2.28% we see there, is it global CR average of the category of our selected app, right?\n\n[Maxim Borisik]: 2,28% is this app's CR, not average of the industry!",
-      "matchingReplies": [
-        {
-          "userId": "U08EVBTE69E",
-          "userName": "Maxim Borisik",
-          "text": "hey team!\nwe've released a new feature - geo-pricing recommendations! :earth_africa:\n\nAutopilot now chooses the top-5 countries by revenue, and then provides pricing signals for this countries based on conversion rate comprising and Adapty Pricing index .\n\n*for example*: 1) the conversion in Germany is _twice better than average_ (4% vs 2%); 2) and pricing index tells that purchasing power is _high_. it means that it's a great idea for you to try and _increase_ the price in Germany\n\nso the personalised list of A/B tests remains based on US market (as a core recommendation flow for paywall improvement), but the signals are targeting the other countries\n\n*check the video to get more context!* \n<!subteam^S07BZPQDBUJ> <!subteam^S03KC9S1QMC> <!subteam^S03KM96DV0U> fyi\n\nwhat comes next:\n• deeper country analytics \n    ◦ get analysis of the competitors prices in these top countries \n    ◦ see the paywall CR benchmarks by country (what is average trial-paid conversion  for VPN apps in Germany)\n• opportunity to update product prices in these countries within adapty (integration with v2. of product export)",
-          "date": "2026-01-30T12:40:49.011Z",
-          "images": [
-            "https://files.slack.com/files-pri/T9HDDB78Q-F0ACU1C8TTJ/image.png"
-          ]
-        },
-        {
-          "userId": "U08EVBTE69E",
-          "userName": "Maxim Borisik",
-          "text": "2,28% is this app's CR, not average of the industry!",
-          "date": "2026-02-09T15:14:23.644Z",
-          "images": []
-        }
-      ],
-      "hasTeamMention": true,
-      "images": [
-        "https://files.slack.com/files-pri/T9HDDB78Q-F0ACU1C8TTJ/image.png"
-      ]
     }
   ]
 }
