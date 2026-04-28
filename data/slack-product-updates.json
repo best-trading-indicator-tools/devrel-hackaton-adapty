@@ -1,7 +1,112 @@
 {
-  "syncedAt": "2026-04-27T00:52:48.968Z",
+  "syncedAt": "2026-04-28T00:54:54.088Z",
   "channel": "#product-release",
   "entries": [
+    {
+      "id": "1776943145.916389",
+      "slackUrl": "https://adapty-team.slack.com/archives/C04SY70QZ0T/p1776943145916389",
+      "name": "*New revenue and LTV predictions for cohorts*",
+      "message": "Feature: *New revenue and LTV predictions for cohorts*\nRelease date: Apr 22, 2026\nAffected areas: Analytics (Cohorts)\n\nRevenue and LTV predictions for cohorts are now powered by a new model, this is the first major update since 2024. See details in the <https://adapty.io/docs/predicted-ltv-and-revenue|docs>.\n\nWhat's different\nThe old model predicted revenue directly, without much visibility into how. The new one takes an interpretable approach: it predicts churn between renewal periods, and derives revenue/LTV from there. This means every prediction has a traceable logic behind it.\n\nWhy it's more trustworthy\nThe old model had a tendency to overestimate (<https://adaptyio.atlassian.net/browse/DS-764|one>, <https://adaptyio.atlassian.net/browse/DS-748|two>, <https://adaptyio.atlassian.net/browse/ADP-5506|three>). The new model is less prone to it by design. In testing, cases with overestimates dropped by half.\n\nOverall, we now have a simpler model that matches the previous quality in terms of median error, while making predictions interpretable and more trustworthy.\n\nWe’ll add a tooltip to the dashboard later this week to let users know about this update.\n\nFYI <!subteam^S03KM96DV0U> <!subteam^S07BZPQDBUJ>",
+      "releaseDate": "2026-04-23",
+      "thread": [
+        {
+          "userId": "U0ABX9WPC5V",
+          "userName": "Artem Sorokin",
+          "text": "Feature: *New revenue and LTV predictions for cohorts*\nRelease date: Apr 22, 2026\nAffected areas: Analytics (Cohorts)\n\nRevenue and LTV predictions for cohorts are now powered by a new model, this is the first major update since 2024. See details in the <https://adapty.io/docs/predicted-ltv-and-revenue|docs>.\n\nWhat's different\nThe old model predicted revenue directly, without much visibility into how. The new one takes an interpretable approach: it predicts churn between renewal periods, and derives revenue/LTV from there. This means every prediction has a traceable logic behind it.\n\nWhy it's more trustworthy\nThe old model had a tendency to overestimate (<https://adaptyio.atlassian.net/browse/DS-764|one>, <https://adaptyio.atlassian.net/browse/DS-748|two>, <https://adaptyio.atlassian.net/browse/ADP-5506|three>). The new model is less prone to it by design. In testing, cases with overestimates dropped by half.\n\nOverall, we now have a simpler model that matches the previous quality in terms of median error, while making predictions interpretable and more trustworthy.\n\nWe’ll add a tooltip to the dashboard later this week to let users know about this update.\n\nFYI <!subteam^S03KM96DV0U> <!subteam^S07BZPQDBUJ>",
+          "date": "2026-04-23T11:19:05.916Z",
+          "images": []
+        },
+        {
+          "userId": "U07H1ESAH6K",
+          "userName": "Sofia Pikuleva",
+          "text": "Hey Artem! Thanks for the update :+1: Any plans to add one-time purchases to the model at some point?",
+          "date": "2026-04-23T11:38:53.152Z",
+          "images": []
+        },
+        {
+          "userId": "U0ABX9WPC5V",
+          "userName": "Artem Sorokin",
+          "text": "<@U07H1ESAH6K> In general, predictions should be visible for one-time purchases, although the model just shows total revenue and assumes there will be no more purchases in the future. We do have plans to improve this logic, although subscriptions have a higher priority (<https://adapty-team.slack.com/archives/C04NKQV7C73/p1776244110932329|related thread>).",
+          "date": "2026-04-23T13:20:33.077Z",
+          "images": []
+        },
+        {
+          "userId": "U09EG3DK4US",
+          "userName": "Polina Ishimbaeva",
+          "text": "<@U07F3ULE4MA> Appio might be interesting in it? wdyt?",
+          "date": "2026-04-24T08:44:04.663Z",
+          "images": []
+        },
+        {
+          "userId": "U0A266T9SJE",
+          "userName": "Melike Sezer",
+          "text": "Hi <@U0ABX9WPC5V>, can I ask something really quick? When the users filter with the channel on cohorts, the estimations they see, are they determined by the general coefficients or do we include channel based estimation to the equation as well?",
+          "date": "2026-04-24T08:45:58.949Z",
+          "images": []
+        },
+        {
+          "userId": "U0ABX9WPC5V",
+          "userName": "Artem Sorokin",
+          "text": "<@U0A266T9SJE> The coefficients are currently not aware of any filters chosen by the user other than Duration. Estimates with other filters applied will be less precise for two reasons:\n1. Applying a filter reduces the amount of data in the cohort, which leads to greater fluctuation.\n2. The model does not capture patterns specific to particular user segments of users.\nThe second issue comes from a trade-off: the more granular data you train a model on, the less data you have for each combination of parameters, which leads to worse overall performance.\n\nThere is no straightforward solution, but we will run more experiments to address this.",
+          "date": "2026-04-24T11:22:54.675Z",
+          "images": []
+        },
+        {
+          "userId": "U040DK8K86Q",
+          "userName": "Kseniya Simonova",
+          "text": "<@U0ABX9WPC5V> Hi!\n\nHow much will this affect the numbers? If clients have been using predictions on a regular basis, could they start seeing significantly different results? If so, they might have questions. It’s important for us to understand whether we should proactively notify clients who use predictions.",
+          "date": "2026-04-27T10:53:20.499Z",
+          "images": []
+        },
+        {
+          "userId": "U09CTDGV18D",
+          "userName": "Berenay Yiğit",
+          "text": "<@U0ABX9WPC5V> Hi!\nI would like to confirm whether the changes reported by the client are expected or if they require a deeper investigation.\nThe client has reported a significant drop in predicted LTV values compared to about a week ago:\n• 24-month predicted LTV for US cohorts (approximately Oct–Mar) was previously in the range of *$46–52*\n• It is now showing around *$29–31*\nWhat makes this particularly suspicious is that the current *2-month ARPU is around $23*, while the *24-month predicted LTV is only about $28*, which seems disproportionately low.\nThis could potentially be the result of the release, but I’m not confident in confirming that without further validation.\n*App name:* AI Home Design - Decor\n*Company ID:* d3270bf7-ebc1-4ee5-a182-8476bbc50365",
+          "date": "2026-04-27T11:00:03.556Z",
+          "images": []
+        },
+        {
+          "userId": "U0ABX9WPC5V",
+          "userName": "Artem Sorokin",
+          "text": "<@U040DK8K86Q> already done! We've put a temporary notification in the UI, and some clients noticed new predictions even before it was added.\n\nSome predictions can differ significantly, but using historical data, we see that predictions changed by less than 11% for 75% of all cohorts.",
+          "date": "2026-04-27T12:48:03.516Z",
+          "images": []
+        },
+        {
+          "userId": "U0ABX9WPC5V",
+          "userName": "Artem Sorokin",
+          "text": "<@U09CTDGV18D> hi! We do expect to see lower predictions on average, since targeting overestimation was one of the things we focused on for this release.\n\nCould there be a specific user segment where the client sees this severe drop? For this app, I see its current ARPPU at $27–32 and predicted 24-month LTV at $42–44 for Feb'26 and Mar'26 cohorts, which looks fine to me.",
+          "date": "2026-04-27T12:58:11.040Z",
+          "images": []
+        },
+        {
+          "userId": "U07H1ESAH6K",
+          "userName": "Sofia Pikuleva",
+          "text": "hey <@U0ABX9WPC5V> please check our big enterprise client feedback regarding predictions <https://adapty-team.slack.com/archives/C06EMR5057B/p1777295072649829>\n\ntheir company id: 408bf8af-d6d6-4787-b7a1-96b98fc30456\n\nplease let me know what can we reply to them",
+          "date": "2026-04-27T13:33:08.528Z",
+          "images": []
+        },
+        {
+          "userId": "U06JP8BJFEV",
+          "userName": "Viktoriya Kirsanova",
+          "text": "Also, might be related <https://adaptyio.atlassian.net/browse/DS-1730|https://adaptyio.atlassian.net/browse/DS-1730> ",
+          "date": "2026-04-27T13:48:12.558Z",
+          "images": []
+        }
+      ],
+      "content": "[Artem Sorokin]: Feature: *New revenue and LTV predictions for cohorts*\nRelease date: Apr 22, 2026\nAffected areas: Analytics (Cohorts)\n\nRevenue and LTV predictions for cohorts are now powered by a new model, this is the first major update since 2024. See details in the <https://adapty.io/docs/predicted-ltv-and-revenue|docs>.\n\nWhat's different\nThe old model predicted revenue directly, without much visibility into how. The new one takes an interpretable approach: it predicts churn between renewal periods, and derives revenue/LTV from there. This means every prediction has a traceable logic behind it.\n\nWhy it's more trustworthy\nThe old model had a tendency to overestimate (<https://adaptyio.atlassian.net/browse/DS-764|one>, <https://adaptyio.atlassian.net/browse/DS-748|two>, <https://adaptyio.atlassian.net/browse/ADP-5506|three>). The new model is less prone to it by design. In testing, cases with overestimates dropped by half.\n\nOverall, we now have a simpler model that matches the previous quality in terms of median error, while making predictions interpretable and more trustworthy.\n\nWe’ll add a tooltip to the dashboard later this week to let users know about this update.\n\nFYI <!subteam^S03KM96DV0U> <!subteam^S07BZPQDBUJ>\n\n[Sofia Pikuleva]: Hey Artem! Thanks for the update :+1: Any plans to add one-time purchases to the model at some point?\n\n[Artem Sorokin]: <@U07H1ESAH6K> In general, predictions should be visible for one-time purchases, although the model just shows total revenue and assumes there will be no more purchases in the future. We do have plans to improve this logic, although subscriptions have a higher priority (<https://adapty-team.slack.com/archives/C04NKQV7C73/p1776244110932329|related thread>).\n\n[Polina Ishimbaeva]: <@U07F3ULE4MA> Appio might be interesting in it? wdyt?\n\n[Melike Sezer]: Hi <@U0ABX9WPC5V>, can I ask something really quick? When the users filter with the channel on cohorts, the estimations they see, are they determined by the general coefficients or do we include channel based estimation to the equation as well?\n\n[Artem Sorokin]: <@U0A266T9SJE> The coefficients are currently not aware of any filters chosen by the user other than Duration. Estimates with other filters applied will be less precise for two reasons:\n1. Applying a filter reduces the amount of data in the cohort, which leads to greater fluctuation.\n2. The model does not capture patterns specific to particular user segments of users.\nThe second issue comes from a trade-off: the more granular data you train a model on, the less data you have for each combination of parameters, which leads to worse overall performance.\n\nThere is no straightforward solution, but we will run more experiments to address this.\n\n[Kseniya Simonova]: <@U0ABX9WPC5V> Hi!\n\nHow much will this affect the numbers? If clients have been using predictions on a regular basis, could they start seeing significantly different results? If so, they might have questions. It’s important for us to understand whether we should proactively notify clients who use predictions.\n\n[Berenay Yiğit]: <@U0ABX9WPC5V> Hi!\nI would like to confirm whether the changes reported by the client are expected or if they require a deeper investigation.\nThe client has reported a significant drop in predicted LTV values compared to about a week ago:\n• 24-month predicted LTV for US cohorts (approximately Oct–Mar) was previously in the range of *$46–52*\n• It is now showing around *$29–31*\nWhat makes this particularly suspicious is that the current *2-month ARPU is around $23*, while the *24-month predicted LTV is only about $28*, which seems disproportionately low.\nThis could potentially be the result of the release, but I’m not confident in confirming that without further validation.\n*App name:* AI Home Design - Decor\n*Company ID:* d3270bf7-ebc1-4ee5-a182-8476bbc50365\n\n[Artem Sorokin]: <@U040DK8K86Q> already done! We've put a temporary notification in the UI, and some clients noticed new predictions even before it was added.\n\nSome predictions can differ significantly, but using historical data, we see that predictions changed by less than 11% for 75% of all cohorts.\n\n[Artem Sorokin]: <@U09CTDGV18D> hi! We do expect to see lower predictions on average, since targeting overestimation was one of the things we focused on for this release.\n\nCould there be a specific user segment where the client sees this severe drop? For this app, I see its current ARPPU at $27–32 and predicted 24-month LTV at $42–44 for Feb'26 and Mar'26 cohorts, which looks fine to me.\n\n[Sofia Pikuleva]: hey <@U0ABX9WPC5V> please check our big enterprise client feedback regarding predictions <https://adapty-team.slack.com/archives/C06EMR5057B/p1777295072649829>\n\ntheir company id: 408bf8af-d6d6-4787-b7a1-96b98fc30456\n\nplease let me know what can we reply to them\n\n[Viktoriya Kirsanova]: Also, might be related <https://adaptyio.atlassian.net/browse/DS-1730|https://adaptyio.atlassian.net/browse/DS-1730> ",
+      "matchingReplies": [
+        {
+          "userId": "U06JP8BJFEV",
+          "userName": "Viktoriya Kirsanova",
+          "text": "Also, might be related <https://adaptyio.atlassian.net/browse/DS-1730|https://adaptyio.atlassian.net/browse/DS-1730> ",
+          "date": "2026-04-27T13:48:12.558Z",
+          "images": []
+        }
+      ],
+      "hasTeamMention": false,
+      "images": []
+    },
     {
       "id": "1776100427.609739",
       "slackUrl": "https://adapty-team.slack.com/archives/C04SY70QZ0T/p1776100427609739",
@@ -1246,41 +1351,6 @@
         }
       ],
       "hasTeamMention": true,
-      "images": []
-    },
-    {
-      "id": "1770198265.304899",
-      "slackUrl": "https://adapty-team.slack.com/archives/C04SY70QZ0T/p1770198265304899",
-      "name": "New conversion charts: \"Paywall view -",
-      "message": "Feature: <https://adaptyio.atlassian.net/browse/ADP-4286|New conversion charts: \"Paywall view -> Trial\" and \"Paywall view -&gt; Paid\"&gt;\nRelease date: Feb 4, 2026\nEffected areas: Conversion charts",
-      "releaseDate": "2026-02-04",
-      "thread": [
-        {
-          "userId": "U07J1NQPD4P",
-          "userName": "Danil Melnichuk",
-          "text": "Feature: <https://adaptyio.atlassian.net/browse/ADP-4286|New conversion charts: \"Paywall view -> Trial\" and \"Paywall view -&gt; Paid\"&gt;\nRelease date: Feb 4, 2026\nEffected areas: Conversion charts",
-          "date": "2026-02-04T09:44:25.304Z",
-          "images": []
-        },
-        {
-          "userId": "U08EVBTE69E",
-          "userName": "Maxim Borisik",
-          "text": "<@U080G9FHV50> нам надо быть уверенным, что у нас все бьется\n<@U08JY3U9S7P> подхвати плз",
-          "date": "2026-02-04T09:49:31.570Z",
-          "images": []
-        }
-      ],
-      "content": "[Danil Melnichuk]: Feature: <https://adaptyio.atlassian.net/browse/ADP-4286|New conversion charts: \"Paywall view -> Trial\" and \"Paywall view -&gt; Paid\"&gt;\nRelease date: Feb 4, 2026\nEffected areas: Conversion charts\n\n[Maxim Borisik]: <@U080G9FHV50> нам надо быть уверенным, что у нас все бьется\n<@U08JY3U9S7P> подхвати плз",
-      "matchingReplies": [
-        {
-          "userId": "U08EVBTE69E",
-          "userName": "Maxim Borisik",
-          "text": "<@U080G9FHV50> нам надо быть уверенным, что у нас все бьется\n<@U08JY3U9S7P> подхвати плз",
-          "date": "2026-02-04T09:49:31.570Z",
-          "images": []
-        }
-      ],
-      "hasTeamMention": false,
       "images": []
     }
   ]
