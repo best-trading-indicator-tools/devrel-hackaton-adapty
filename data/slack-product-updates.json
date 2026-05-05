@@ -1,7 +1,55 @@
 {
-  "syncedAt": "2026-05-04T00:55:51.152Z",
+  "syncedAt": "2026-05-05T00:51:17.113Z",
   "channel": "#product-release",
   "entries": [
+    {
+      "id": "1777920040.056639",
+      "slackUrl": "https://adapty-team.slack.com/archives/C04SY70QZ0T/p1777920040056639",
+      "name": "Simplifying the process of running AB tests in Autopilot",
+      "message": "Feature: <https://adaptyio.atlassian.net/browse/ADP-5941|Simplifying the process of running AB tests in Autopilot>\nRelease date: May 4. 2026\nAffected areas: Autopilot",
+      "releaseDate": "2026-05-04",
+      "thread": [
+        {
+          "userId": "U0903TFULQ3",
+          "userName": "Andrii Hermanov",
+          "text": "Feature: <https://adaptyio.atlassian.net/browse/ADP-5941|Simplifying the process of running AB tests in Autopilot>\nRelease date: May 4. 2026\nAffected areas: Autopilot",
+          "date": "2026-05-04T18:40:40.056Z",
+          "images": []
+        },
+        {
+          "userId": "U0903TFULQ3",
+          "userName": "Andrii Hermanov",
+          "text": "<!subteam^S03KM96DV0U> <!subteam^S07BZPQDBUJ> <!subteam^S02U0UTPEQM> <@U0A3NG4G5E3> fyi",
+          "date": "2026-05-04T18:42:02.248Z",
+          "images": []
+        },
+        {
+          "userId": "U0A266T9SJE",
+          "userName": "Melike Sezer",
+          "text": "It's all in RU :sweat_smile:",
+          "date": "2026-05-04T18:42:31.844Z",
+          "images": []
+        },
+        {
+          "userId": "U08EVBTE69E",
+          "userName": "Maxim Borisik",
+          "text": "will update haha ",
+          "date": "2026-05-04T18:47:16.048Z",
+          "images": []
+        },
+        {
+          "userId": "U0A266T9SJE",
+          "userName": "Melike Sezer",
+          "text": "thank you :joy:",
+          "date": "2026-05-04T18:48:26.113Z",
+          "images": []
+        }
+      ],
+      "content": "[Andrii Hermanov]: Feature: <https://adaptyio.atlassian.net/browse/ADP-5941|Simplifying the process of running AB tests in Autopilot>\nRelease date: May 4. 2026\nAffected areas: Autopilot\n\n[Andrii Hermanov]: <!subteam^S03KM96DV0U> <!subteam^S07BZPQDBUJ> <!subteam^S02U0UTPEQM> <@U0A3NG4G5E3> fyi\n\n[Melike Sezer]: It's all in RU :sweat_smile:\n\n[Maxim Borisik]: will update haha \n\n[Melike Sezer]: thank you :joy:",
+      "matchingReplies": [],
+      "hasTeamMention": true,
+      "images": []
+    },
     {
       "id": "1776955553.012079",
       "slackUrl": "https://adapty-team.slack.com/archives/C04SY70QZ0T/p1776955553012079",
@@ -1407,72 +1455,6 @@
       ],
       "hasTeamMention": false,
       "images": []
-    },
-    {
-      "id": "1771941058.884159",
-      "slackUrl": "https://adapty-team.slack.com/archives/C04SY70QZ0T/p1771941058884159",
-      "name": "Price import/export interface",
-      "message": "Feature: <https://adaptyio.atlassian.net/browse/ADP-5120|Price import/export interface>\nRelease date: Feb 24, 2026\nAffected areas: Products",
-      "releaseDate": "2026-02-24",
-      "thread": [
-        {
-          "userId": "U0A4F2RSMQQ",
-          "userName": "Denis Dolbilin",
-          "text": "Feature: <https://adaptyio.atlassian.net/browse/ADP-5120|Price import/export interface>\nRelease date: Feb 24, 2026\nAffected areas: Products",
-          "date": "2026-02-24T13:50:58.884Z",
-          "images": []
-        },
-        {
-          "userId": "U0A4F2RSMQQ",
-          "userName": "Denis Dolbilin",
-          "text": "<@U08ASB4GYR4> notification",
-          "date": "2026-02-24T13:53:48.932Z",
-          "images": []
-        },
-        {
-          "userId": "U0A4F2RSMQQ",
-          "userName": "Denis Dolbilin",
-          "text": "link to epic: <https://adaptyio.atlassian.net/browse/ADP-4651|ADP-4651>",
-          "date": "2026-02-24T13:55:30.059Z",
-          "images": []
-        },
-        {
-          "userId": "U08917H1C5B",
-          "userName": "Vitaly Kuzmin",
-          "text": "Will the price on the dashboard in the placeholder be updated?",
-          "date": "2026-02-24T15:06:13.204Z",
-          "images": [
-            "https://files.slack.com/files-pri/T9HDDB78Q-F0AGUEHHG2W/image.png"
-          ]
-        },
-        {
-          "userId": "U0A4F2RSMQQ",
-          "userName": "Denis Dolbilin",
-          "text": "yeah, it should, for my knowledge updating prices takes some time, <@U08ASB4GYR4> can correct me If I am wrong\n\nif it is not updated, then you can ping me and I will look into it",
-          "date": "2026-02-24T15:15:36.408Z",
-          "images": []
-        },
-        {
-          "userId": "U08ASB4GYR4",
-          "userName": "Roman Miasnikov",
-          "text": "This price not updated. It's only used when creating a product in Adapty.The price synchronization we implemented as part of this feature applies to a downloadable price file that the user can view and edit. I think that at some point in the future we will either update this value according to the data or abandon it in favor of geo-pricing.",
-          "date": "2026-02-24T15:20:38.811Z",
-          "images": []
-        },
-        {
-          "userId": "U07H1ESAH6K",
-          "userName": "Sofia Pikuleva",
-          "text": "<!subteam^S07BZPQDBUJ> FYI new feature release\n\nNow clients *can set different prices for different regions right in the Adapty dashboard*, and these *country-specific prices* will be applied to your products in App Store Connect and/or Google Play Console automatically. <https://adapty.io/docs/edit-product>",
-          "date": "2026-02-25T09:14:07.453Z",
-          "images": []
-        }
-      ],
-      "content": "[Denis Dolbilin]: Feature: <https://adaptyio.atlassian.net/browse/ADP-5120|Price import/export interface>\nRelease date: Feb 24, 2026\nAffected areas: Products\n\n[Denis Dolbilin]: <@U08ASB4GYR4> notification\n\n[Denis Dolbilin]: link to epic: <https://adaptyio.atlassian.net/browse/ADP-4651|ADP-4651>\n\n[Vitaly Kuzmin]: Will the price on the dashboard in the placeholder be updated?\n\n[Denis Dolbilin]: yeah, it should, for my knowledge updating prices takes some time, <@U08ASB4GYR4> can correct me If I am wrong\n\nif it is not updated, then you can ping me and I will look into it\n\n[Roman Miasnikov]: This price not updated. It's only used when creating a product in Adapty.The price synchronization we implemented as part of this feature applies to a downloadable price file that the user can view and edit. I think that at some point in the future we will either update this value according to the data or abandon it in favor of geo-pricing.\n\n[Sofia Pikuleva]: <!subteam^S07BZPQDBUJ> FYI new feature release\n\nNow clients *can set different prices for different regions right in the Adapty dashboard*, and these *country-specific prices* will be applied to your products in App Store Connect and/or Google Play Console automatically. <https://adapty.io/docs/edit-product>",
-      "matchingReplies": [],
-      "hasTeamMention": true,
-      "images": [
-        "https://files.slack.com/files-pri/T9HDDB78Q-F0AGUEHHG2W/image.png"
-      ]
     }
   ]
 }
