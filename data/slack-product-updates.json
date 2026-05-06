@@ -1,5 +1,5 @@
 {
-  "syncedAt": "2026-05-05T00:51:17.113Z",
+  "syncedAt": "2026-05-06T00:51:00.865Z",
   "channel": "#product-release",
   "entries": [
     {
@@ -93,9 +93,16 @@
           "text": "<@U0ALV3FNQGP> CC for the anchor article ",
           "date": "2026-04-29T15:43:05.761Z",
           "images": []
+        },
+        {
+          "userId": "U08EVBTE69E",
+          "userName": "Maxim Borisik",
+          "text": "a quick video on that. nothing new",
+          "date": "2026-05-05T15:48:16.099Z",
+          "images": []
         }
       ],
-      "content": "[Andrii Hermanov]: Feature: <https://adaptyio.atlassian.net/browse/ADP-6006|Duration mix benchmark per country &amp; subcategory>\nRelease date: Apr 23, 2026\nAffected areas: *Autopilot*\n\n[Maxim Borisik]: Hey team!\n\nA new benchmark (you VS sub-category) added to Autopilot\nnow it's possible to see *which durations are popular in your niche* and what you aren't using yet. located in \"Analysis results\"\n\non a screenshot it's obvious that you need to try out annual (autopilot will recommend it too!)\n\nwhat's cool (and not like in RC):\n• it's per sub-category (or category if the data's lacking)\n• it's per country (use the country toggle)\nnext we'll add the ARPU benchmark\n\n<!subteam^S03KM96DV0U> <!subteam^S07BZPQDBUJ> <!subteam^S02U0UTPEQM> fyi\n\n[Dmitry Shestoperov]: could you make a quick explainer video? I see only the \"industry\" averages here, not sub-categories.\n\nbtw, you use our internal data only for these benchmarks, right?\n\n[Maxim Borisik]: &gt; btw, you use our internal data only for these benchmarks, right?\nyes. no competitors data here or other stuff\n\ndata is the moat and we use it. since we have lots of data about apps in adapty we are better than chatgpt\n\n[Victoria Kharlan]: <@U0ALV3FNQGP> CC for the anchor article ",
+      "content": "[Andrii Hermanov]: Feature: <https://adaptyio.atlassian.net/browse/ADP-6006|Duration mix benchmark per country &amp; subcategory>\nRelease date: Apr 23, 2026\nAffected areas: *Autopilot*\n\n[Maxim Borisik]: Hey team!\n\nA new benchmark (you VS sub-category) added to Autopilot\nnow it's possible to see *which durations are popular in your niche* and what you aren't using yet. located in \"Analysis results\"\n\non a screenshot it's obvious that you need to try out annual (autopilot will recommend it too!)\n\nwhat's cool (and not like in RC):\n• it's per sub-category (or category if the data's lacking)\n• it's per country (use the country toggle)\nnext we'll add the ARPU benchmark\n\n<!subteam^S03KM96DV0U> <!subteam^S07BZPQDBUJ> <!subteam^S02U0UTPEQM> fyi\n\n[Dmitry Shestoperov]: could you make a quick explainer video? I see only the \"industry\" averages here, not sub-categories.\n\nbtw, you use our internal data only for these benchmarks, right?\n\n[Maxim Borisik]: &gt; btw, you use our internal data only for these benchmarks, right?\nyes. no competitors data here or other stuff\n\ndata is the moat and we use it. since we have lots of data about apps in adapty we are better than chatgpt\n\n[Victoria Kharlan]: <@U0ALV3FNQGP> CC for the anchor article \n\n[Maxim Borisik]: a quick video on that. nothing new",
       "matchingReplies": [
         {
           "userId": "U08EVBTE69E",
