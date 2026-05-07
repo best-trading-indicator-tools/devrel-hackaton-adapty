@@ -1,7 +1,41 @@
 {
-  "syncedAt": "2026-05-06T00:51:00.865Z",
+  "syncedAt": "2026-05-07T00:55:27.997Z",
   "channel": "#product-release",
   "entries": [
+    {
+      "id": "1778082376.853549",
+      "slackUrl": "https://adapty-team.slack.com/archives/C04SY70QZ0T/p1778082376853549",
+      "name": "Aerospike profile migrations",
+      "message": "Feature: <https://adaptyio.atlassian.net/browse/INFRA-77?atlOrigin=eyJpIjoiZDIwOTUyM2NkY2MzNGVhYzk3ZTc5ODQ0YzZiNmQzNWYiLCJwIjoiaiJ9|Aerospike profile migrations>\nRelease date: May 6th, 2026 11:43 UTC\nAffected areas: Universe",
+      "releaseDate": "2026-05-06",
+      "thread": [
+        {
+          "userId": "U04B26DSWMA",
+          "userName": "Sergei Solodskikh",
+          "text": "Feature: <https://adaptyio.atlassian.net/browse/INFRA-77?atlOrigin=eyJpIjoiZDIwOTUyM2NkY2MzNGVhYzk3ZTc5ODQ0YzZiNmQzNWYiLCJwIjoiaiJ9|Aerospike profile migrations>\nRelease date: May 6th, 2026 11:43 UTC\nAffected areas: Universe",
+          "date": "2026-05-06T15:46:16.853Z",
+          "images": []
+        },
+        {
+          "userId": "U04B26DSWMA",
+          "userName": "Sergei Solodskikh",
+          "text": "We have stopped writing data to Postgres tables `adapty_analytics_profile`, `adapty_analytics_profile_installation_meta`, `adapty_analytics_profile_attribute`, `adapty_analytics_profile_attribution_unified`, `adapty_purchase_profile_purchase_state` which were previously responsible for profile state. For any research or support purposes, Aerospike is a single source of truth from now on. It can be accessed via web-interface <https://aerospike.prod.adpinfra.dev/|here>.\nFor info regrading access there, please refer to <https://adapty-team.slack.com/archives/C060EEW2FEV/p1774604905415179|this> message (I believe, everyone who is eligible for this access is a member of that channel already)\n<!subteam^S03KM96DV0U> FYI",
+          "date": "2026-05-06T15:55:44.673Z",
+          "images": []
+        },
+        {
+          "userId": "U04B26DSWMA",
+          "userName": "Sergei Solodskikh",
+          "text": "There will be several minor releases afterwards, mostly boring tech debt elimination. All moving parts are already in place, and, as usual, if something suspicious surfaces, please let us know",
+          "date": "2026-05-06T15:57:26.336Z",
+          "images": []
+        }
+      ],
+      "content": "[Sergei Solodskikh]: Feature: <https://adaptyio.atlassian.net/browse/INFRA-77?atlOrigin=eyJpIjoiZDIwOTUyM2NkY2MzNGVhYzk3ZTc5ODQ0YzZiNmQzNWYiLCJwIjoiaiJ9|Aerospike profile migrations>\nRelease date: May 6th, 2026 11:43 UTC\nAffected areas: Universe\n\n[Sergei Solodskikh]: We have stopped writing data to Postgres tables `adapty_analytics_profile`, `adapty_analytics_profile_installation_meta`, `adapty_analytics_profile_attribute`, `adapty_analytics_profile_attribution_unified`, `adapty_purchase_profile_purchase_state` which were previously responsible for profile state. For any research or support purposes, Aerospike is a single source of truth from now on. It can be accessed via web-interface <https://aerospike.prod.adpinfra.dev/|here>.\nFor info regrading access there, please refer to <https://adapty-team.slack.com/archives/C060EEW2FEV/p1774604905415179|this> message (I believe, everyone who is eligible for this access is a member of that channel already)\n<!subteam^S03KM96DV0U> FYI\n\n[Sergei Solodskikh]: There will be several minor releases afterwards, mostly boring tech debt elimination. All moving parts are already in place, and, as usual, if something suspicious surfaces, please let us know",
+      "matchingReplies": [],
+      "hasTeamMention": true,
+      "images": []
+    },
     {
       "id": "1777920040.056639",
       "slackUrl": "https://adapty-team.slack.com/archives/C04SY70QZ0T/p1777920040056639",
@@ -1399,69 +1433,6 @@
         "https://files.slack.com/files-pri/T9HDDB78Q-F0AJ9VA72RM/image.png",
         "https://files.slack.com/files-pri/T9HDDB78Q-F0AJT6T5EDR/image.png"
       ]
-    },
-    {
-      "id": "1772014235.944699",
-      "slackUrl": "https://adapty-team.slack.com/archives/C04SY70QZ0T/p1772014235944699",
-      "name": "",
-      "message": "<@U9HDNS9S4> <@U03J8UXUDPF> <@U08EVBTE69E>\n\nHey guys! We're trying to automate how our SMM works — meaning, ideally we'd like to generate posts about new product releases based on what is being posted to this channel.\n\nCan I ask you to post comments in threads to the features that deserve being highlighted in our marketing? Like these:\n• <https://adapty-team.slack.com/archives/C04SY70QZ0T/p1772010847453799?thread_ts=1771941058.884159&amp;cid=C04SY70QZ0T>\n• <https://adapty-team.slack.com/archives/C04SY70QZ0T/p1770977999507989?thread_ts=1770819397.356349&amp;cid=C04SY70QZ0T>\n• <https://adapty-team.slack.com/archives/C04SY70QZ0T/p1769776849011559?thread_ts=1769766798.436629&amp;cid=C04SY70QZ0T>\n• <https://adapty-team.slack.com/archives/C04SY70QZ0T/p1768803495924489>\nWe can then take this info and produce posts based on this. Thank you!",
-      "releaseDate": "2026-02-25",
-      "thread": [
-        {
-          "userId": "U05QELDHUUX",
-          "userName": "Sergey Muratov",
-          "text": "<@U9HDNS9S4> <@U03J8UXUDPF> <@U08EVBTE69E>\n\nHey guys! We're trying to automate how our SMM works — meaning, ideally we'd like to generate posts about new product releases based on what is being posted to this channel.\n\nCan I ask you to post comments in threads to the features that deserve being highlighted in our marketing? Like these:\n• <https://adapty-team.slack.com/archives/C04SY70QZ0T/p1772010847453799?thread_ts=1771941058.884159&amp;cid=C04SY70QZ0T>\n• <https://adapty-team.slack.com/archives/C04SY70QZ0T/p1770977999507989?thread_ts=1770819397.356349&amp;cid=C04SY70QZ0T>\n• <https://adapty-team.slack.com/archives/C04SY70QZ0T/p1769776849011559?thread_ts=1769766798.436629&amp;cid=C04SY70QZ0T>\n• <https://adapty-team.slack.com/archives/C04SY70QZ0T/p1768803495924489>\nWe can then take this info and produce posts based on this. Thank you!",
-          "date": "2026-02-25T10:10:35.944Z",
-          "images": []
-        },
-        {
-          "userId": "U9HDNS9S4",
-          "userName": "Kirill Potekhin",
-          "text": "what comments?",
-          "date": "2026-02-25T10:24:33.914Z",
-          "images": []
-        },
-        {
-          "userId": "U05QELDHUUX",
-          "userName": "Sergey Muratov",
-          "text": "&gt; Like these",
-          "date": "2026-02-25T10:28:30.538Z",
-          "images": []
-        },
-        {
-          "userId": "U05QELDHUUX",
-          "userName": "Sergey Muratov",
-          "text": "Describing how the features work and their value — what should be highlighted in marketing",
-          "date": "2026-02-25T10:28:40.984Z",
-          "images": []
-        },
-        {
-          "userId": "U07J9LKBQ5U",
-          "userName": "Yurii Kleimenov",
-          "text": "Hey, I just saw this and had an idea about creating a workflow for analyzing the codebase and MRs, since some features are being released in complete silence, and now we also have L3 resources available.\n\nIdeally, each MR should include a product description of the feature, so Claude (and anyone else) can read it or simply copy-paste it when needed.\n\nJust my passing thoughts :slightly_smiling_face:",
-          "date": "2026-02-25T10:31:32.181Z",
-          "images": []
-        },
-        {
-          "userId": "U08EVBTE69E",
-          "userName": "Maxim Borisik",
-          "text": "hey! i do it everytime on cool features and plan to do it further!",
-          "date": "2026-02-25T10:32:34.162Z",
-          "images": []
-        }
-      ],
-      "content": "[Sergey Muratov]: <@U9HDNS9S4> <@U03J8UXUDPF> <@U08EVBTE69E>\n\nHey guys! We're trying to automate how our SMM works — meaning, ideally we'd like to generate posts about new product releases based on what is being posted to this channel.\n\nCan I ask you to post comments in threads to the features that deserve being highlighted in our marketing? Like these:\n• <https://adapty-team.slack.com/archives/C04SY70QZ0T/p1772010847453799?thread_ts=1771941058.884159&amp;cid=C04SY70QZ0T>\n• <https://adapty-team.slack.com/archives/C04SY70QZ0T/p1770977999507989?thread_ts=1770819397.356349&amp;cid=C04SY70QZ0T>\n• <https://adapty-team.slack.com/archives/C04SY70QZ0T/p1769776849011559?thread_ts=1769766798.436629&amp;cid=C04SY70QZ0T>\n• <https://adapty-team.slack.com/archives/C04SY70QZ0T/p1768803495924489>\nWe can then take this info and produce posts based on this. Thank you!\n\n[Kirill Potekhin]: what comments?\n\n[Sergey Muratov]: &gt; Like these\n\n[Sergey Muratov]: Describing how the features work and their value — what should be highlighted in marketing\n\n[Yurii Kleimenov]: Hey, I just saw this and had an idea about creating a workflow for analyzing the codebase and MRs, since some features are being released in complete silence, and now we also have L3 resources available.\n\nIdeally, each MR should include a product description of the feature, so Claude (and anyone else) can read it or simply copy-paste it when needed.\n\nJust my passing thoughts :slightly_smiling_face:\n\n[Maxim Borisik]: hey! i do it everytime on cool features and plan to do it further!",
-      "matchingReplies": [
-        {
-          "userId": "U08EVBTE69E",
-          "userName": "Maxim Borisik",
-          "text": "hey! i do it everytime on cool features and plan to do it further!",
-          "date": "2026-02-25T10:32:34.162Z",
-          "images": []
-        }
-      ],
-      "hasTeamMention": false,
-      "images": []
     }
   ]
 }
