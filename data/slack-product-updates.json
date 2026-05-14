@@ -1,5 +1,5 @@
 {
-  "syncedAt": "2026-05-13T00:58:38.824Z",
+  "syncedAt": "2026-05-14T01:00:13.929Z",
   "channel": "#product-release",
   "entries": [
     {
@@ -77,9 +77,30 @@
           "text": "Just to clarify - there will never be access to Aerospike on a mass scale as it was with Postgres. This is due to infrastructure (analytic queries may impact production), as well as privacy and security concerns. We'd like to keep number of non-dev employees with an access somewhat below 10, and leave it mostly to team leads. Aside from debugging really deep client cases (L3), generally, one doesn't need to see profile data at all",
           "date": "2026-05-07T12:55:03.398Z",
           "images": []
+        },
+        {
+          "userId": "U08C43RCH39",
+          "userName": "Artur Beglaryan",
+          "text": "One more update here for <!subteam^S03KM96DV0U>\nWe completely drop the profile related tables from postgres. And I guess everyone have access to aerospike. let me know you if need something extra here.",
+          "date": "2026-05-13T13:29:54.980Z",
+          "images": []
+        },
+        {
+          "userId": "U09CTDGV18D",
+          "userName": "Berenay Yiğit",
+          "text": "<@U08C43RCH39> I don't have access to aerospike, could you please help with it?",
+          "date": "2026-05-13T13:31:56.035Z",
+          "images": []
+        },
+        {
+          "userId": "U08C43RCH39",
+          "userName": "Artur Beglaryan",
+          "text": "<@U09CTDGV18D> You should ask access from your team lead. We shared access to the corresponded team-leaders",
+          "date": "2026-05-13T13:33:42.105Z",
+          "images": []
         }
       ],
-      "content": "[Sergei Solodskikh]: Feature: <https://adaptyio.atlassian.net/browse/INFRA-77?atlOrigin=eyJpIjoiZDIwOTUyM2NkY2MzNGVhYzk3ZTc5ODQ0YzZiNmQzNWYiLCJwIjoiaiJ9|Aerospike profile migrations>\nRelease date: May 6th, 2026 11:43 UTC\nAffected areas: Universe\n\n[Sergei Solodskikh]: We have stopped writing data to Postgres tables `adapty_analytics_profile`, `adapty_analytics_profile_installation_meta`, `adapty_analytics_profile_attribute`, `adapty_analytics_profile_attribution_unified`, `adapty_purchase_profile_purchase_state` which were previously responsible for profile state. For any research or support purposes, Aerospike is a single source of truth from now on. It can be accessed via web-interface <https://aerospike.prod.adpinfra.dev/|here>.\nFor info regrading access there, please refer to <https://adapty-team.slack.com/archives/C060EEW2FEV/p1774604905415179|this> message (I believe, everyone who is eligible for this access is a member of that channel already)\n<!subteam^S03KM96DV0U> FYI\n\n[Sergei Solodskikh]: There will be several minor releases afterwards, mostly boring tech debt elimination. All moving parts are already in place, and, as usual, if something suspicious surfaces, please let us know\n\n[Artem Rukavishnikov]: <@U04B26DSWMA> could you add me and @ Hudson Ribeiro to that secret channel too\n\n[Sergei Solodskikh]: <@U08C43RCH39> I believe, you can handle this (access to Aerospike dashboard, I mean)\n\n[Sergei Solodskikh]: Just to clarify - there will never be access to Aerospike on a mass scale as it was with Postgres. This is due to infrastructure (analytic queries may impact production), as well as privacy and security concerns. We'd like to keep number of non-dev employees with an access somewhat below 10, and leave it mostly to team leads. Aside from debugging really deep client cases (L3), generally, one doesn't need to see profile data at all",
+      "content": "[Sergei Solodskikh]: Feature: <https://adaptyio.atlassian.net/browse/INFRA-77?atlOrigin=eyJpIjoiZDIwOTUyM2NkY2MzNGVhYzk3ZTc5ODQ0YzZiNmQzNWYiLCJwIjoiaiJ9|Aerospike profile migrations>\nRelease date: May 6th, 2026 11:43 UTC\nAffected areas: Universe\n\n[Sergei Solodskikh]: We have stopped writing data to Postgres tables `adapty_analytics_profile`, `adapty_analytics_profile_installation_meta`, `adapty_analytics_profile_attribute`, `adapty_analytics_profile_attribution_unified`, `adapty_purchase_profile_purchase_state` which were previously responsible for profile state. For any research or support purposes, Aerospike is a single source of truth from now on. It can be accessed via web-interface <https://aerospike.prod.adpinfra.dev/|here>.\nFor info regrading access there, please refer to <https://adapty-team.slack.com/archives/C060EEW2FEV/p1774604905415179|this> message (I believe, everyone who is eligible for this access is a member of that channel already)\n<!subteam^S03KM96DV0U> FYI\n\n[Sergei Solodskikh]: There will be several minor releases afterwards, mostly boring tech debt elimination. All moving parts are already in place, and, as usual, if something suspicious surfaces, please let us know\n\n[Artem Rukavishnikov]: <@U04B26DSWMA> could you add me and @ Hudson Ribeiro to that secret channel too\n\n[Sergei Solodskikh]: <@U08C43RCH39> I believe, you can handle this (access to Aerospike dashboard, I mean)\n\n[Sergei Solodskikh]: Just to clarify - there will never be access to Aerospike on a mass scale as it was with Postgres. This is due to infrastructure (analytic queries may impact production), as well as privacy and security concerns. We'd like to keep number of non-dev employees with an access somewhat below 10, and leave it mostly to team leads. Aside from debugging really deep client cases (L3), generally, one doesn't need to see profile data at all\n\n[Artur Beglaryan]: One more update here for <!subteam^S03KM96DV0U>\nWe completely drop the profile related tables from postgres. And I guess everyone have access to aerospike. let me know you if need something extra here.\n\n[Berenay Yiğit]: <@U08C43RCH39> I don't have access to aerospike, could you please help with it?\n\n[Artur Beglaryan]: <@U09CTDGV18D> You should ask access from your team lead. We shared access to the corresponded team-leaders",
       "matchingReplies": [],
       "hasTeamMention": true,
       "images": []
