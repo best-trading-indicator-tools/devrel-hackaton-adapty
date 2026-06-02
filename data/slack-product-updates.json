@@ -1,7 +1,413 @@
 {
-  "syncedAt": "2026-06-01T01:10:31.344Z",
+  "syncedAt": "2026-06-02T01:09:36.484Z",
   "channel": "#product-release",
   "entries": [
+    {
+      "id": "1780332987.166339",
+      "slackUrl": "https://adapty-team.slack.com/archives/C04SY70QZ0T/p1780332987166339",
+      "name": "Yango (Yandex Plus) international app. Everyone will request templates or AI",
+      "message": "Yango (Yandex Plus) international app. Everyone will request templates or AI",
+      "releaseDate": "2026-06-01",
+      "thread": [
+        {
+          "userId": "U9JU5J5RC",
+          "userName": "Vitaly Davydov",
+          "text": "Yango (Yandex Plus) international app. Everyone will request templates or AI",
+          "date": "2026-06-01T16:56:27.166Z",
+          "images": [
+            "https://files.slack.com/files-pri/T9HDDB78Q-F0B7LSTD1FW/image.png"
+          ]
+        },
+        {
+          "userId": "U08EVBTE69E",
+          "userName": "Maxim Borisik",
+          "text": "both are in progress",
+          "date": "2026-06-01T16:57:41.509Z",
+          "images": []
+        },
+        {
+          "userId": "U9JU5J5RC",
+          "userName": "Vitaly Davydov",
+          "text": "yeap",
+          "date": "2026-06-01T16:58:26.836Z",
+          "images": []
+        },
+        {
+          "userId": "U090T4UNBUK",
+          "userName": "Stanislav Mayorov",
+          "text": "will request templates for flow builder?",
+          "date": "2026-06-01T17:03:43.521Z",
+          "images": []
+        },
+        {
+          "userId": "U9JU5J5RC",
+          "userName": "Vitaly Davydov",
+          "text": "who?",
+          "date": "2026-06-01T17:07:32.989Z",
+          "images": []
+        },
+        {
+          "userId": "U090T4UNBUK",
+          "userName": "Stanislav Mayorov",
+          "text": "will everyone request templates for flow builder?",
+          "date": "2026-06-01T17:09:13.511Z",
+          "images": []
+        },
+        {
+          "userId": "U090T4UNBUK",
+          "userName": "Stanislav Mayorov",
+          "text": "I dont get. is it about flow builder?",
+          "date": "2026-06-01T17:09:20.379Z",
+          "images": []
+        },
+        {
+          "userId": "U03DFSCP8CW",
+          "userName": "Mike Gorokhov",
+          "text": "<@U9HDNS9S4> <@U08EVBTE69E>\nDo we have an ETA on adding this stuff?\n\n\"В последних двух вариантах есть плавная анимация на раскрытие карточки.\nЧастью дизайн-системы, которую важно сохранить, являются: шрифты, цвета, свечения и градиенты.\"\n\n(fonts, gradients and colors are clear)\n\nEdit: I was able to do a glow with Drop Shadow setting",
+          "date": "2026-06-01T17:12:36.121Z",
+          "images": [
+            "https://files.slack.com/files-pri/T9HDDB78Q-F0B7M1NF7L4/telegram-cloud-photo-size-2-5255936739694550147-w.jpg"
+          ]
+        },
+        {
+          "userId": "U9JU5J5RC",
+          "userName": "Vitaly Davydov",
+          "text": "<@U090T4UNBUK> it's about Flow builder, right",
+          "date": "2026-06-01T17:13:21.342Z",
+          "images": []
+        },
+        {
+          "userId": "U9JU5J5RC",
+          "userName": "Vitaly Davydov",
+          "text": "people do request templates already",
+          "date": "2026-06-01T17:13:29.607Z",
+          "images": []
+        },
+        {
+          "userId": "U9JU5J5RC",
+          "userName": "Vitaly Davydov",
+          "text": "after the first demo Mike did today",
+          "date": "2026-06-01T17:13:35.561Z",
+          "images": []
+        },
+        {
+          "userId": "U9JU5J5RC",
+          "userName": "Vitaly Davydov",
+          "text": "that to a point of <@U05QELDHUUX> of promotion product",
+          "date": "2026-06-01T17:13:46.415Z",
+          "images": []
+        },
+        {
+          "userId": "U05QELDHUUX",
+          "userName": "Sergey Muratov",
+          "text": "Of course they do, I bet every single demo will ask for that :slightly_smiling_face:",
+          "date": "2026-06-01T17:14:30.803Z",
+          "images": []
+        },
+        {
+          "userId": "U9JU5J5RC",
+          "userName": "Vitaly Davydov",
+          "text": "exactly",
+          "date": "2026-06-01T17:14:57.699Z",
+          "images": []
+        },
+        {
+          "userId": "U090T4UNBUK",
+          "userName": "Stanislav Mayorov",
+          "text": "<@U03DFSCP8CW> custom fonts are supported in flow builder",
+          "date": "2026-06-01T17:17:58.584Z",
+          "images": []
+        },
+        {
+          "userId": "U03DFSCP8CW",
+          "userName": "Mike Gorokhov",
+          "text": "Yes, this is why I mentioned `(fonts, gradients and colors are clear)`",
+          "date": "2026-06-01T17:18:30.408Z",
+          "images": []
+        },
+        {
+          "userId": "U03DFSCP8CW",
+          "userName": "Mike Gorokhov",
+          "text": "Looks like the only thing missing is the opening/expanding animation?",
+          "date": "2026-06-01T17:18:55.615Z",
+          "images": []
+        },
+        {
+          "userId": "U090T4UNBUK",
+          "userName": "Stanislav Mayorov",
+          "text": "<@U03DFSCP8CW> I am not sure about glow effects as well. there are different kinds of them",
+          "date": "2026-06-01T17:21:29.402Z",
+          "images": []
+        },
+        {
+          "userId": "U9HDNS9S4",
+          "userName": "Kirill Potekhin",
+          "text": "yes. i'm not sure about glows too",
+          "date": "2026-06-01T17:21:35.604Z",
+          "images": []
+        },
+        {
+          "userId": "U05QELDHUUX",
+          "userName": "Sergey Muratov",
+          "text": "Everything glowing I personally see on the screenshot is either a gradient, or something like a custom animation/image.",
+          "date": "2026-06-01T17:22:36.237Z",
+          "images": []
+        },
+        {
+          "userId": "U03DFSCP8CW",
+          "userName": "Mike Gorokhov",
+          "text": "easy",
+          "date": "2026-06-01T17:22:38.548Z",
+          "images": [
+            "https://files.slack.com/files-pri/T9HDDB78Q-F0B7M407RA8/image.png"
+          ]
+        },
+        {
+          "userId": "U03DFSCP8CW",
+          "userName": "Mike Gorokhov",
+          "text": "Shadow + blur = glow",
+          "date": "2026-06-01T17:23:19.325Z",
+          "images": []
+        },
+        {
+          "userId": "U9HDNS9S4",
+          "userName": "Kirill Potekhin",
+          "text": "we have some support for animations on the sdk side already, but they can't be configured in the builder. currently, we have a prioritized backlog (templates, custom layouts and other SDKs), so most likely animations won't be live until July. <@U0APAGBPJTA> and <@U08EVBTE69E> will provide more updates once we have better ETAs, but for now animations are not supported ",
+          "date": "2026-06-01T17:24:34.967Z",
+          "images": []
+        },
+        {
+          "userId": "U03DFSCP8CW",
+          "userName": "Mike Gorokhov",
+          "text": "What about videos/gifs?",
+          "date": "2026-06-01T17:25:02.730Z",
+          "images": []
+        },
+        {
+          "userId": "U090T4UNBUK",
+          "userName": "Stanislav Mayorov",
+          "text": "<@U03DFSCP8CW> Video is supported, just as in the previous version v3 sdk",
+          "date": "2026-06-01T17:29:20.066Z",
+          "images": []
+        },
+        {
+          "userId": "U090T4UNBUK",
+          "userName": "Stanislav Mayorov",
+          "text": "<@U03DFSCP8CW> modern WebP image format is now supported (the best compression)",
+          "date": "2026-06-01T17:31:58.687Z",
+          "images": []
+        }
+      ],
+      "content": "[Vitaly Davydov]: Yango (Yandex Plus) international app. Everyone will request templates or AI\n\n[Maxim Borisik]: both are in progress\n\n[Vitaly Davydov]: yeap\n\n[Stanislav Mayorov]: will request templates for flow builder?\n\n[Vitaly Davydov]: who?\n\n[Stanislav Mayorov]: will everyone request templates for flow builder?\n\n[Stanislav Mayorov]: I dont get. is it about flow builder?\n\n[Mike Gorokhov]: <@U9HDNS9S4> <@U08EVBTE69E>\nDo we have an ETA on adding this stuff?\n\n\"В последних двух вариантах есть плавная анимация на раскрытие карточки.\nЧастью дизайн-системы, которую важно сохранить, являются: шрифты, цвета, свечения и градиенты.\"\n\n(fonts, gradients and colors are clear)\n\nEdit: I was able to do a glow with Drop Shadow setting\n\n[Vitaly Davydov]: <@U090T4UNBUK> it's about Flow builder, right\n\n[Vitaly Davydov]: people do request templates already\n\n[Vitaly Davydov]: after the first demo Mike did today\n\n[Vitaly Davydov]: that to a point of <@U05QELDHUUX> of promotion product\n\n[Sergey Muratov]: Of course they do, I bet every single demo will ask for that :slightly_smiling_face:\n\n[Vitaly Davydov]: exactly\n\n[Stanislav Mayorov]: <@U03DFSCP8CW> custom fonts are supported in flow builder\n\n[Mike Gorokhov]: Yes, this is why I mentioned `(fonts, gradients and colors are clear)`\n\n[Mike Gorokhov]: Looks like the only thing missing is the opening/expanding animation?\n\n[Stanislav Mayorov]: <@U03DFSCP8CW> I am not sure about glow effects as well. there are different kinds of them\n\n[Kirill Potekhin]: yes. i'm not sure about glows too\n\n[Sergey Muratov]: Everything glowing I personally see on the screenshot is either a gradient, or something like a custom animation/image.\n\n[Mike Gorokhov]: easy\n\n[Mike Gorokhov]: Shadow + blur = glow\n\n[Kirill Potekhin]: we have some support for animations on the sdk side already, but they can't be configured in the builder. currently, we have a prioritized backlog (templates, custom layouts and other SDKs), so most likely animations won't be live until July. <@U0APAGBPJTA> and <@U08EVBTE69E> will provide more updates once we have better ETAs, but for now animations are not supported \n\n[Mike Gorokhov]: What about videos/gifs?\n\n[Stanislav Mayorov]: <@U03DFSCP8CW> Video is supported, just as in the previous version v3 sdk\n\n[Stanislav Mayorov]: <@U03DFSCP8CW> modern WebP image format is now supported (the best compression)",
+      "matchingReplies": [
+        {
+          "userId": "U9HDNS9S4",
+          "userName": "Kirill Potekhin",
+          "text": "we have some support for animations on the sdk side already, but they can't be configured in the builder. currently, we have a prioritized backlog (templates, custom layouts and other SDKs), so most likely animations won't be live until July. <@U0APAGBPJTA> and <@U08EVBTE69E> will provide more updates once we have better ETAs, but for now animations are not supported ",
+          "date": "2026-06-01T17:24:34.967Z",
+          "images": []
+        }
+      ],
+      "hasTeamMention": false,
+      "images": [
+        "https://files.slack.com/files-pri/T9HDDB78Q-F0B7LSTD1FW/image.png",
+        "https://files.slack.com/files-pri/T9HDDB78Q-F0B7M1NF7L4/telegram-cloud-photo-size-2-5255936739694550147-w.jpg",
+        "https://files.slack.com/files-pri/T9HDDB78Q-F0B7M407RA8/image.png"
+      ]
+    },
+    {
+      "id": "1780304092.508929",
+      "slackUrl": "https://adapty-team.slack.com/archives/C04SY70QZ0T/p1780304092508929",
+      "name": "Флоу билдер в проде.",
+      "message": "Флоу билдер в проде. <@U9HDNS9S4>\n\nогромное спасибо команде, которая сделал это возможным в таких сложных условиях. горжусь всеми!",
+      "releaseDate": "2026-06-01",
+      "thread": [
+        {
+          "userId": "U09GNBR5ZNW",
+          "userName": "Fedar Zvalinski",
+          "text": "Флоу билдер в проде. <@U9HDNS9S4>\n\nогромное спасибо команде, которая сделал это возможным в таких сложных условиях. горжусь всеми!",
+          "date": "2026-06-01T08:54:52.508Z",
+          "images": []
+        },
+        {
+          "userId": "U9HDNS9S4",
+          "userName": "Kirill Potekhin",
+          "text": "оу е! огромное спасибо на самом деле. один из самых больших релизов за все время, lfg ",
+          "date": "2026-06-01T08:56:26.834Z",
+          "images": []
+        },
+        {
+          "userId": "U08EVBTE69E",
+          "userName": "Maxim Borisik",
+          "text": "so cool!",
+          "date": "2026-06-01T08:56:57.781Z",
+          "images": [
+            "https://files.slack.com/files-pri/T9HDDB78Q-F0B7H6N8ASY/image.png"
+          ]
+        },
+        {
+          "userId": "U07F3ULE4MA",
+          "userName": "Darina Kobzar",
+          "text": "Hello Team! Congratulations on this! Huge work done :rocket:\nDo we have documentation for clients? What we should share with clients as next steps for the usage? Any SDK update is required?",
+          "date": "2026-06-01T09:03:15.100Z",
+          "images": []
+        },
+        {
+          "userId": "U08EVBTE69E",
+          "userName": "Maxim Borisik",
+          "text": "You can find the docs here!\n<https://adapty.io/docs/adapty-flow-builder>\n\nSDK for sure - The Adapty Flow Builder currently supports iOS SDK v.4 and up. Support for other platforms and frameworks is coming soon.",
+          "date": "2026-06-01T09:04:32.595Z",
+          "images": []
+        },
+        {
+          "userId": "U07F3ULE4MA",
+          "userName": "Darina Kobzar",
+          "text": "<@U08EVBTE69E> thank you! And great to see there is already some video material :+1::skin-tone-3:",
+          "date": "2026-06-01T09:06:54.426Z",
+          "images": []
+        },
+        {
+          "userId": "U08QUJMN0UV",
+          "userName": "Elina Andreeva",
+          "text": "Hi!\n• Main docs: <https://adapty.io/docs/adapty-flow-builder>\n• Some common templates step by step: <https://adapty.io/docs/flow-builder-recipes>\n• SDK quickstart from scratch: <https://adapty.io/docs/ios-quickstart-paywalls>\n• <https://adapty.io/docs/migration-to-ios-sdk-v4> SDK migration guide\n• Video quickstart <https://youtu.be/aa-m459VIuY>",
+          "date": "2026-06-01T09:06:54.839Z",
+          "images": []
+        },
+        {
+          "userId": "U9HDNS9S4",
+          "userName": "Kirill Potekhin",
+          "text": "<!subteam^S03KC9S1QMC> <!subteam^S07BZPQDBUJ> <!subteam^S03KM96DV0U> please review the docs and video, the flow builder is live ",
+          "date": "2026-06-01T09:08:17.807Z",
+          "images": []
+        },
+        {
+          "userId": "U08917H1C5B",
+          "userName": "Vitaly Kuzmin",
+          "text": "Hi team!\nCongratulations! :fire::rocket:\nWhen will the templates be available?",
+          "date": "2026-06-01T09:13:15.098Z",
+          "images": []
+        },
+        {
+          "userId": "U09GNBR5ZNW",
+          "userName": "Fedar Zvalinski",
+          "text": "Basic template is incorporated into new flow creation. Library will be available later, 100% after mid june",
+          "date": "2026-06-01T09:15:13.894Z",
+          "images": []
+        },
+        {
+          "userId": "U07H1ESAH6K",
+          "userName": "Sofia Pikuleva",
+          "text": "<@U09GNBR5ZNW> hey! One of the clients ask:\n\n\n&gt; ok so currently *the AI translate button is missing in the builder* but it's mentioned in the documentation.\ncan we check it please?",
+          "date": "2026-06-01T09:35:54.638Z",
+          "images": []
+        },
+        {
+          "userId": "U08QUJMN0UV",
+          "userName": "Elina Andreeva",
+          "text": "Sorry, I missed that it was excluded from the current release scope; the doc fix will land in ~10 minutes",
+          "date": "2026-06-01T09:44:17.810Z",
+          "images": []
+        },
+        {
+          "userId": "U07FKBD6QDS",
+          "userName": "Daniel Ridny",
+          "text": "<@U09GNBR5ZNW> Impala is excited with this update, and now they're eager to know the ETA for Landscape orientation - can you provide any approximate timing for this critical feature release?",
+          "date": "2026-06-01T09:45:16.449Z",
+          "images": []
+        },
+        {
+          "userId": "U09GNBR5ZNW",
+          "userName": "Fedar Zvalinski",
+          "text": "Kir said that it should be ready around 15.06. We could tell if it is possible around this dates in a couple of days, ok?",
+          "date": "2026-06-01T09:55:12.376Z",
+          "images": []
+        },
+        {
+          "userId": "U09GNBR5ZNW",
+          "userName": "Fedar Zvalinski",
+          "text": "@channel btw, if you've created flows in partner's accounts it would be nice to clean up this drafts if they are not needed",
+          "date": "2026-06-01T09:57:47.138Z",
+          "images": []
+        },
+        {
+          "userId": "U0A266T9SJE",
+          "userName": "Melike Sezer",
+          "text": "Maybe a late question to ask, but if they use the flow builder, will it be necessary to use one placement both for onboarding+paywall?",
+          "date": "2026-06-01T10:06:26.545Z",
+          "images": []
+        },
+        {
+          "userId": "U090BDLA9JN",
+          "userName": "Dmitry Shestoperov",
+          "text": "<@U9HDNS9S4> are we ready to announce it on our Telegram channel?",
+          "date": "2026-06-01T10:09:34.348Z",
+          "images": []
+        },
+        {
+          "userId": "U9HDNS9S4",
+          "userName": "Kirill Potekhin",
+          "text": "telegram yes, but make sure to align it with <@U05QELDHUUX>",
+          "date": "2026-06-01T10:10:50.706Z",
+          "images": []
+        },
+        {
+          "userId": "U09GNBR5ZNW",
+          "userName": "Fedar Zvalinski",
+          "text": "&gt; Maybe a late question to ask, but if they use the flow builder, will it be necessary to use one placement both for onboarding+paywall?\none placement per flow. If the flow contains onboarding and paywall inside, then you need only one placement",
+          "date": "2026-06-01T10:13:38.560Z",
+          "images": []
+        },
+        {
+          "userId": "U9JU5J5RC",
+          "userName": "Vitaly Davydov",
+          "text": "Great job guys",
+          "date": "2026-06-01T10:58:16.863Z",
+          "images": []
+        },
+        {
+          "userId": "U08914ZA6A1",
+          "userName": "Gregory Komissarov",
+          "text": "A big thank you to the team, you overcame so many obstacles. You are lions!",
+          "date": "2026-06-01T16:06:41.171Z",
+          "images": []
+        }
+      ],
+      "content": "[Fedar Zvalinski]: Флоу билдер в проде. <@U9HDNS9S4>\n\nогромное спасибо команде, которая сделал это возможным в таких сложных условиях. горжусь всеми!\n\n[Kirill Potekhin]: оу е! огромное спасибо на самом деле. один из самых больших релизов за все время, lfg \n\n[Maxim Borisik]: so cool!\n\n[Darina Kobzar]: Hello Team! Congratulations on this! Huge work done :rocket:\nDo we have documentation for clients? What we should share with clients as next steps for the usage? Any SDK update is required?\n\n[Maxim Borisik]: You can find the docs here!\n<https://adapty.io/docs/adapty-flow-builder>\n\nSDK for sure - The Adapty Flow Builder currently supports iOS SDK v.4 and up. Support for other platforms and frameworks is coming soon.\n\n[Darina Kobzar]: <@U08EVBTE69E> thank you! And great to see there is already some video material :+1::skin-tone-3:\n\n[Elina Andreeva]: Hi!\n• Main docs: <https://adapty.io/docs/adapty-flow-builder>\n• Some common templates step by step: <https://adapty.io/docs/flow-builder-recipes>\n• SDK quickstart from scratch: <https://adapty.io/docs/ios-quickstart-paywalls>\n• <https://adapty.io/docs/migration-to-ios-sdk-v4> SDK migration guide\n• Video quickstart <https://youtu.be/aa-m459VIuY>\n\n[Kirill Potekhin]: <!subteam^S03KC9S1QMC> <!subteam^S07BZPQDBUJ> <!subteam^S03KM96DV0U> please review the docs and video, the flow builder is live \n\n[Vitaly Kuzmin]: Hi team!\nCongratulations! :fire::rocket:\nWhen will the templates be available?\n\n[Fedar Zvalinski]: Basic template is incorporated into new flow creation. Library will be available later, 100% after mid june\n\n[Sofia Pikuleva]: <@U09GNBR5ZNW> hey! One of the clients ask:\n\n\n&gt; ok so currently *the AI translate button is missing in the builder* but it's mentioned in the documentation.\ncan we check it please?\n\n[Elina Andreeva]: Sorry, I missed that it was excluded from the current release scope; the doc fix will land in ~10 minutes\n\n[Daniel Ridny]: <@U09GNBR5ZNW> Impala is excited with this update, and now they're eager to know the ETA for Landscape orientation - can you provide any approximate timing for this critical feature release?\n\n[Fedar Zvalinski]: Kir said that it should be ready around 15.06. We could tell if it is possible around this dates in a couple of days, ok?\n\n[Fedar Zvalinski]: @channel btw, if you've created flows in partner's accounts it would be nice to clean up this drafts if they are not needed\n\n[Melike Sezer]: Maybe a late question to ask, but if they use the flow builder, will it be necessary to use one placement both for onboarding+paywall?\n\n[Dmitry Shestoperov]: <@U9HDNS9S4> are we ready to announce it on our Telegram channel?\n\n[Kirill Potekhin]: telegram yes, but make sure to align it with <@U05QELDHUUX>\n\n[Fedar Zvalinski]: &gt; Maybe a late question to ask, but if they use the flow builder, will it be necessary to use one placement both for onboarding+paywall?\none placement per flow. If the flow contains onboarding and paywall inside, then you need only one placement\n\n[Vitaly Davydov]: Great job guys\n\n[Gregory Komissarov]: A big thank you to the team, you overcame so many obstacles. You are lions!",
+      "matchingReplies": [
+        {
+          "userId": "U9HDNS9S4",
+          "userName": "Kirill Potekhin",
+          "text": "оу е! огромное спасибо на самом деле. один из самых больших релизов за все время, lfg ",
+          "date": "2026-06-01T08:56:26.834Z",
+          "images": []
+        },
+        {
+          "userId": "U08EVBTE69E",
+          "userName": "Maxim Borisik",
+          "text": "You can find the docs here!\n<https://adapty.io/docs/adapty-flow-builder>\n\nSDK for sure - The Adapty Flow Builder currently supports iOS SDK v.4 and up. Support for other platforms and frameworks is coming soon.",
+          "date": "2026-06-01T09:04:32.595Z",
+          "images": []
+        },
+        {
+          "userId": "U9HDNS9S4",
+          "userName": "Kirill Potekhin",
+          "text": "<!subteam^S03KC9S1QMC> <!subteam^S07BZPQDBUJ> <!subteam^S03KM96DV0U> please review the docs and video, the flow builder is live ",
+          "date": "2026-06-01T09:08:17.807Z",
+          "images": []
+        },
+        {
+          "userId": "U9HDNS9S4",
+          "userName": "Kirill Potekhin",
+          "text": "telegram yes, but make sure to align it with <@U05QELDHUUX>",
+          "date": "2026-06-01T10:10:50.706Z",
+          "images": []
+        }
+      ],
+      "hasTeamMention": true,
+      "images": [
+        "https://files.slack.com/files-pri/T9HDDB78Q-F0B7H6N8ASY/image.png"
+      ]
+    },
     {
       "id": "1778596793.879699",
       "slackUrl": "https://adapty-team.slack.com/archives/C04SY70QZ0T/p1778596793879699",
@@ -1088,88 +1494,6 @@
       "images": [
         "https://files.slack.com/files-pri/T9HDDB78Q-F0AKF4W2D6X/screenshot_2026-03-03_at_2.23.20___pm.png",
         "https://files.slack.com/files-pri/T9HDDB78Q-F0AKF50GF35/image.png"
-      ]
-    },
-    {
-      "id": "1772727009.854469",
-      "slackUrl": "https://adapty-team.slack.com/archives/C04SY70QZ0T/p1772727009854469",
-      "name": "Add your own hypothesis",
-      "message": "Feature: <https://adaptyio.atlassian.net/browse/ADP-5121|Add your own hypothesis>\nRelease date: Mar 5, 2026\nAffected areas: Autopilot",
-      "releaseDate": "2026-03-05",
-      "thread": [
-        {
-          "userId": "U0903TFULQ3",
-          "userName": "Andrii Hermanov",
-          "text": "Feature: <https://adaptyio.atlassian.net/browse/ADP-5121|Add your own hypothesis>\nRelease date: Mar 5, 2026\nAffected areas: Autopilot",
-          "date": "2026-03-05T16:10:09.854Z",
-          "images": []
-        },
-        {
-          "userId": "U0903TFULQ3",
-          "userName": "Andrii Hermanov",
-          "text": "<!subteam^S07BZPQDBUJ> <!subteam^S02U0UTPEQM>",
-          "date": "2026-03-05T16:11:21.821Z",
-          "images": []
-        },
-        {
-          "userId": "U0A3NG4G5E3",
-          "userName": "Gene Titerman",
-          "text": "<@U0903TFULQ3> do you expect to release the step reordering capability later today?",
-          "date": "2026-03-05T16:16:01.327Z",
-          "images": []
-        },
-        {
-          "userId": "U0903TFULQ3",
-          "userName": "Andrii Hermanov",
-          "text": "<@U0A3NG4G5E3> we're doing everything we can to make it happen\nwe will try, but if not, we'll release it on Monday",
-          "date": "2026-03-05T16:18:04.735Z",
-          "images": []
-        }
-      ],
-      "content": "[Andrii Hermanov]: Feature: <https://adaptyio.atlassian.net/browse/ADP-5121|Add your own hypothesis>\nRelease date: Mar 5, 2026\nAffected areas: Autopilot\n\n[Andrii Hermanov]: <!subteam^S07BZPQDBUJ> <!subteam^S02U0UTPEQM>\n\n[Gene Titerman]: <@U0903TFULQ3> do you expect to release the step reordering capability later today?\n\n[Andrii Hermanov]: <@U0A3NG4G5E3> we're doing everything we can to make it happen\nwe will try, but if not, we'll release it on Monday",
-      "matchingReplies": [],
-      "hasTeamMention": true,
-      "images": []
-    },
-    {
-      "id": "1772615346.581719",
-      "slackUrl": "https://adapty-team.slack.com/archives/C04SY70QZ0T/p1772615346581719",
-      "name": "Highlight visual ideas in hypothesis list",
-      "message": "Feature: <https://adaptyio.atlassian.net/browse/ADP-5416|Highlight visual ideas in hypothesis list>\nRelease date: Mar 4, 2026\nAffected areas: Autopilot",
-      "releaseDate": "2026-03-04",
-      "thread": [
-        {
-          "userId": "U0903TFULQ3",
-          "userName": "Andrii Hermanov",
-          "text": "Feature: <https://adaptyio.atlassian.net/browse/ADP-5416|Highlight visual ideas in hypothesis list>\nRelease date: Mar 4, 2026\nAffected areas: Autopilot",
-          "date": "2026-03-04T09:09:06.581Z",
-          "images": []
-        },
-        {
-          "userId": "U08EVBTE69E",
-          "userName": "Maxim Borisik",
-          "text": "<!subteam^S07BZPQDBUJ> <!subteam^S02U0UTPEQM>\n\nhey team!\nwe've added visual recommendations in Autopilot\n\nnow they are generic (same for everyone), but it's a first step for our plan for personalised visual recommendations, based on your paywall analysis\n\nnow we can say that \"we know that these mechanisms work - try it out\"",
-          "date": "2026-03-04T11:54:01.587Z",
-          "images": [
-            "https://files.slack.com/files-pri/T9HDDB78Q-F0AJ0T9QZPH/image.png"
-          ]
-        }
-      ],
-      "content": "[Andrii Hermanov]: Feature: <https://adaptyio.atlassian.net/browse/ADP-5416|Highlight visual ideas in hypothesis list>\nRelease date: Mar 4, 2026\nAffected areas: Autopilot\n\n[Maxim Borisik]: <!subteam^S07BZPQDBUJ> <!subteam^S02U0UTPEQM>\n\nhey team!\nwe've added visual recommendations in Autopilot\n\nnow they are generic (same for everyone), but it's a first step for our plan for personalised visual recommendations, based on your paywall analysis\n\nnow we can say that \"we know that these mechanisms work - try it out\"",
-      "matchingReplies": [
-        {
-          "userId": "U08EVBTE69E",
-          "userName": "Maxim Borisik",
-          "text": "<!subteam^S07BZPQDBUJ> <!subteam^S02U0UTPEQM>\n\nhey team!\nwe've added visual recommendations in Autopilot\n\nnow they are generic (same for everyone), but it's a first step for our plan for personalised visual recommendations, based on your paywall analysis\n\nnow we can say that \"we know that these mechanisms work - try it out\"",
-          "date": "2026-03-04T11:54:01.587Z",
-          "images": [
-            "https://files.slack.com/files-pri/T9HDDB78Q-F0AJ0T9QZPH/image.png"
-          ]
-        }
-      ],
-      "hasTeamMention": true,
-      "images": [
-        "https://files.slack.com/files-pri/T9HDDB78Q-F0AJ0T9QZPH/image.png"
       ]
     }
   ]
