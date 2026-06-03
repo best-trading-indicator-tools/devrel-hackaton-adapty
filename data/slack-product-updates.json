@@ -1,5 +1,5 @@
 {
-  "syncedAt": "2026-06-02T01:09:36.484Z",
+  "syncedAt": "2026-06-03T01:15:39.929Z",
   "channel": "#product-release",
   "entries": [
     {
@@ -196,9 +196,48 @@
           "text": "<@U03DFSCP8CW> modern WebP image format is now supported (the best compression)",
           "date": "2026-06-01T17:31:58.687Z",
           "images": []
+        },
+        {
+          "userId": "U03DFSCP8CW",
+          "userName": "Mike Gorokhov",
+          "text": "I've been creating a paywall for 30 minutes, then this happened and all work is gone...",
+          "date": "2026-06-02T03:27:26.120Z",
+          "images": [
+            "https://files.slack.com/files-pri/T9HDDB78Q-F0B7NRWC6N5/image.png"
+          ]
+        },
+        {
+          "userId": "U03DFSCP8CW",
+          "userName": "Mike Gorokhov",
+          "text": "It crashed one hour later again.\nThis time I was smarter and kept saving.\nBut after the crash the custom fonts were gone",
+          "date": "2026-06-02T04:23:26.934Z",
+          "images": []
+        },
+        {
+          "userId": "U03DFSCP8CW",
+          "userName": "Mike Gorokhov",
+          "text": "A ruined morning and I'm done :mike:",
+          "date": "2026-06-02T04:28:25.816Z",
+          "images": [
+            "https://files.slack.com/files-pri/T9HDDB78Q-F0B7HT38M1B/image.png"
+          ]
+        },
+        {
+          "userId": "U090T4UNBUK",
+          "userName": "Stanislav Mayorov",
+          "text": "<@U03DFSCP8CW> very poor experience. thank you! we have already received similar feedback from colleagues who have lost progress. auto saving progress is intentionally not implemented, so you can easily revert changes. I will resent your message to the team\n<https://adapty-team.slack.com/archives/C04SY70QZ0T/p1780370846120619?thread_ts=1780332987.166339&cid=C04SY70QZ0T>",
+          "date": "2026-06-02T07:19:32.560Z",
+          "images": []
+        },
+        {
+          "userId": "U9HDNS9S4",
+          "userName": "Kirill Potekhin",
+          "text": "<@U03DFSCP8CW> thanks for sharing. we'll check what happened and why the fonts are not saved ",
+          "date": "2026-06-02T07:35:46.745Z",
+          "images": []
         }
       ],
-      "content": "[Vitaly Davydov]: Yango (Yandex Plus) international app. Everyone will request templates or AI\n\n[Maxim Borisik]: both are in progress\n\n[Vitaly Davydov]: yeap\n\n[Stanislav Mayorov]: will request templates for flow builder?\n\n[Vitaly Davydov]: who?\n\n[Stanislav Mayorov]: will everyone request templates for flow builder?\n\n[Stanislav Mayorov]: I dont get. is it about flow builder?\n\n[Mike Gorokhov]: <@U9HDNS9S4> <@U08EVBTE69E>\nDo we have an ETA on adding this stuff?\n\n\"В последних двух вариантах есть плавная анимация на раскрытие карточки.\nЧастью дизайн-системы, которую важно сохранить, являются: шрифты, цвета, свечения и градиенты.\"\n\n(fonts, gradients and colors are clear)\n\nEdit: I was able to do a glow with Drop Shadow setting\n\n[Vitaly Davydov]: <@U090T4UNBUK> it's about Flow builder, right\n\n[Vitaly Davydov]: people do request templates already\n\n[Vitaly Davydov]: after the first demo Mike did today\n\n[Vitaly Davydov]: that to a point of <@U05QELDHUUX> of promotion product\n\n[Sergey Muratov]: Of course they do, I bet every single demo will ask for that :slightly_smiling_face:\n\n[Vitaly Davydov]: exactly\n\n[Stanislav Mayorov]: <@U03DFSCP8CW> custom fonts are supported in flow builder\n\n[Mike Gorokhov]: Yes, this is why I mentioned `(fonts, gradients and colors are clear)`\n\n[Mike Gorokhov]: Looks like the only thing missing is the opening/expanding animation?\n\n[Stanislav Mayorov]: <@U03DFSCP8CW> I am not sure about glow effects as well. there are different kinds of them\n\n[Kirill Potekhin]: yes. i'm not sure about glows too\n\n[Sergey Muratov]: Everything glowing I personally see on the screenshot is either a gradient, or something like a custom animation/image.\n\n[Mike Gorokhov]: easy\n\n[Mike Gorokhov]: Shadow + blur = glow\n\n[Kirill Potekhin]: we have some support for animations on the sdk side already, but they can't be configured in the builder. currently, we have a prioritized backlog (templates, custom layouts and other SDKs), so most likely animations won't be live until July. <@U0APAGBPJTA> and <@U08EVBTE69E> will provide more updates once we have better ETAs, but for now animations are not supported \n\n[Mike Gorokhov]: What about videos/gifs?\n\n[Stanislav Mayorov]: <@U03DFSCP8CW> Video is supported, just as in the previous version v3 sdk\n\n[Stanislav Mayorov]: <@U03DFSCP8CW> modern WebP image format is now supported (the best compression)",
+      "content": "[Vitaly Davydov]: Yango (Yandex Plus) international app. Everyone will request templates or AI\n\n[Maxim Borisik]: both are in progress\n\n[Vitaly Davydov]: yeap\n\n[Stanislav Mayorov]: will request templates for flow builder?\n\n[Vitaly Davydov]: who?\n\n[Stanislav Mayorov]: will everyone request templates for flow builder?\n\n[Stanislav Mayorov]: I dont get. is it about flow builder?\n\n[Mike Gorokhov]: <@U9HDNS9S4> <@U08EVBTE69E>\nDo we have an ETA on adding this stuff?\n\n\"В последних двух вариантах есть плавная анимация на раскрытие карточки.\nЧастью дизайн-системы, которую важно сохранить, являются: шрифты, цвета, свечения и градиенты.\"\n\n(fonts, gradients and colors are clear)\n\nEdit: I was able to do a glow with Drop Shadow setting\n\n[Vitaly Davydov]: <@U090T4UNBUK> it's about Flow builder, right\n\n[Vitaly Davydov]: people do request templates already\n\n[Vitaly Davydov]: after the first demo Mike did today\n\n[Vitaly Davydov]: that to a point of <@U05QELDHUUX> of promotion product\n\n[Sergey Muratov]: Of course they do, I bet every single demo will ask for that :slightly_smiling_face:\n\n[Vitaly Davydov]: exactly\n\n[Stanislav Mayorov]: <@U03DFSCP8CW> custom fonts are supported in flow builder\n\n[Mike Gorokhov]: Yes, this is why I mentioned `(fonts, gradients and colors are clear)`\n\n[Mike Gorokhov]: Looks like the only thing missing is the opening/expanding animation?\n\n[Stanislav Mayorov]: <@U03DFSCP8CW> I am not sure about glow effects as well. there are different kinds of them\n\n[Kirill Potekhin]: yes. i'm not sure about glows too\n\n[Sergey Muratov]: Everything glowing I personally see on the screenshot is either a gradient, or something like a custom animation/image.\n\n[Mike Gorokhov]: easy\n\n[Mike Gorokhov]: Shadow + blur = glow\n\n[Kirill Potekhin]: we have some support for animations on the sdk side already, but they can't be configured in the builder. currently, we have a prioritized backlog (templates, custom layouts and other SDKs), so most likely animations won't be live until July. <@U0APAGBPJTA> and <@U08EVBTE69E> will provide more updates once we have better ETAs, but for now animations are not supported \n\n[Mike Gorokhov]: What about videos/gifs?\n\n[Stanislav Mayorov]: <@U03DFSCP8CW> Video is supported, just as in the previous version v3 sdk\n\n[Stanislav Mayorov]: <@U03DFSCP8CW> modern WebP image format is now supported (the best compression)\n\n[Mike Gorokhov]: I've been creating a paywall for 30 minutes, then this happened and all work is gone...\n\n[Mike Gorokhov]: It crashed one hour later again.\nThis time I was smarter and kept saving.\nBut after the crash the custom fonts were gone\n\n[Mike Gorokhov]: A ruined morning and I'm done :mike:\n\n[Stanislav Mayorov]: <@U03DFSCP8CW> very poor experience. thank you! we have already received similar feedback from colleagues who have lost progress. auto saving progress is intentionally not implemented, so you can easily revert changes. I will resent your message to the team\n<https://adapty-team.slack.com/archives/C04SY70QZ0T/p1780370846120619?thread_ts=1780332987.166339&cid=C04SY70QZ0T>\n\n[Kirill Potekhin]: <@U03DFSCP8CW> thanks for sharing. we'll check what happened and why the fonts are not saved ",
       "matchingReplies": [
         {
           "userId": "U9HDNS9S4",
@@ -206,13 +245,22 @@
           "text": "we have some support for animations on the sdk side already, but they can't be configured in the builder. currently, we have a prioritized backlog (templates, custom layouts and other SDKs), so most likely animations won't be live until July. <@U0APAGBPJTA> and <@U08EVBTE69E> will provide more updates once we have better ETAs, but for now animations are not supported ",
           "date": "2026-06-01T17:24:34.967Z",
           "images": []
+        },
+        {
+          "userId": "U9HDNS9S4",
+          "userName": "Kirill Potekhin",
+          "text": "<@U03DFSCP8CW> thanks for sharing. we'll check what happened and why the fonts are not saved ",
+          "date": "2026-06-02T07:35:46.745Z",
+          "images": []
         }
       ],
       "hasTeamMention": false,
       "images": [
         "https://files.slack.com/files-pri/T9HDDB78Q-F0B7LSTD1FW/image.png",
         "https://files.slack.com/files-pri/T9HDDB78Q-F0B7M1NF7L4/telegram-cloud-photo-size-2-5255936739694550147-w.jpg",
-        "https://files.slack.com/files-pri/T9HDDB78Q-F0B7M407RA8/image.png"
+        "https://files.slack.com/files-pri/T9HDDB78Q-F0B7M407RA8/image.png",
+        "https://files.slack.com/files-pri/T9HDDB78Q-F0B7NRWC6N5/image.png",
+        "https://files.slack.com/files-pri/T9HDDB78Q-F0B7HT38M1B/image.png"
       ]
     },
     {
@@ -370,9 +418,30 @@
           "text": "A big thank you to the team, you overcame so many obstacles. You are lions!",
           "date": "2026-06-01T16:06:41.171Z",
           "images": []
+        },
+        {
+          "userId": "U0489S1AKEC",
+          "userName": "Anna Suvorova",
+          "text": "<@U08EVBTE69E> do you know when flow builder will be available for flutter? like approx which month or Q?",
+          "date": "2026-06-02T14:39:33.753Z",
+          "images": []
+        },
+        {
+          "userId": "U08EVBTE69E",
+          "userName": "Maxim Borisik",
+          "text": "hey! i'd say summer (jul-aug). let's keep it internally",
+          "date": "2026-06-02T14:40:54.545Z",
+          "images": []
+        },
+        {
+          "userId": "U0489S1AKEC",
+          "userName": "Anna Suvorova",
+          "text": "got you, thanks",
+          "date": "2026-06-02T14:41:22.120Z",
+          "images": []
         }
       ],
-      "content": "[Fedar Zvalinski]: Флоу билдер в проде. <@U9HDNS9S4>\n\nогромное спасибо команде, которая сделал это возможным в таких сложных условиях. горжусь всеми!\n\n[Kirill Potekhin]: оу е! огромное спасибо на самом деле. один из самых больших релизов за все время, lfg \n\n[Maxim Borisik]: so cool!\n\n[Darina Kobzar]: Hello Team! Congratulations on this! Huge work done :rocket:\nDo we have documentation for clients? What we should share with clients as next steps for the usage? Any SDK update is required?\n\n[Maxim Borisik]: You can find the docs here!\n<https://adapty.io/docs/adapty-flow-builder>\n\nSDK for sure - The Adapty Flow Builder currently supports iOS SDK v.4 and up. Support for other platforms and frameworks is coming soon.\n\n[Darina Kobzar]: <@U08EVBTE69E> thank you! And great to see there is already some video material :+1::skin-tone-3:\n\n[Elina Andreeva]: Hi!\n• Main docs: <https://adapty.io/docs/adapty-flow-builder>\n• Some common templates step by step: <https://adapty.io/docs/flow-builder-recipes>\n• SDK quickstart from scratch: <https://adapty.io/docs/ios-quickstart-paywalls>\n• <https://adapty.io/docs/migration-to-ios-sdk-v4> SDK migration guide\n• Video quickstart <https://youtu.be/aa-m459VIuY>\n\n[Kirill Potekhin]: <!subteam^S03KC9S1QMC> <!subteam^S07BZPQDBUJ> <!subteam^S03KM96DV0U> please review the docs and video, the flow builder is live \n\n[Vitaly Kuzmin]: Hi team!\nCongratulations! :fire::rocket:\nWhen will the templates be available?\n\n[Fedar Zvalinski]: Basic template is incorporated into new flow creation. Library will be available later, 100% after mid june\n\n[Sofia Pikuleva]: <@U09GNBR5ZNW> hey! One of the clients ask:\n\n\n&gt; ok so currently *the AI translate button is missing in the builder* but it's mentioned in the documentation.\ncan we check it please?\n\n[Elina Andreeva]: Sorry, I missed that it was excluded from the current release scope; the doc fix will land in ~10 minutes\n\n[Daniel Ridny]: <@U09GNBR5ZNW> Impala is excited with this update, and now they're eager to know the ETA for Landscape orientation - can you provide any approximate timing for this critical feature release?\n\n[Fedar Zvalinski]: Kir said that it should be ready around 15.06. We could tell if it is possible around this dates in a couple of days, ok?\n\n[Fedar Zvalinski]: @channel btw, if you've created flows in partner's accounts it would be nice to clean up this drafts if they are not needed\n\n[Melike Sezer]: Maybe a late question to ask, but if they use the flow builder, will it be necessary to use one placement both for onboarding+paywall?\n\n[Dmitry Shestoperov]: <@U9HDNS9S4> are we ready to announce it on our Telegram channel?\n\n[Kirill Potekhin]: telegram yes, but make sure to align it with <@U05QELDHUUX>\n\n[Fedar Zvalinski]: &gt; Maybe a late question to ask, but if they use the flow builder, will it be necessary to use one placement both for onboarding+paywall?\none placement per flow. If the flow contains onboarding and paywall inside, then you need only one placement\n\n[Vitaly Davydov]: Great job guys\n\n[Gregory Komissarov]: A big thank you to the team, you overcame so many obstacles. You are lions!",
+      "content": "[Fedar Zvalinski]: Флоу билдер в проде. <@U9HDNS9S4>\n\nогромное спасибо команде, которая сделал это возможным в таких сложных условиях. горжусь всеми!\n\n[Kirill Potekhin]: оу е! огромное спасибо на самом деле. один из самых больших релизов за все время, lfg \n\n[Maxim Borisik]: so cool!\n\n[Darina Kobzar]: Hello Team! Congratulations on this! Huge work done :rocket:\nDo we have documentation for clients? What we should share with clients as next steps for the usage? Any SDK update is required?\n\n[Maxim Borisik]: You can find the docs here!\n<https://adapty.io/docs/adapty-flow-builder>\n\nSDK for sure - The Adapty Flow Builder currently supports iOS SDK v.4 and up. Support for other platforms and frameworks is coming soon.\n\n[Darina Kobzar]: <@U08EVBTE69E> thank you! And great to see there is already some video material :+1::skin-tone-3:\n\n[Elina Andreeva]: Hi!\n• Main docs: <https://adapty.io/docs/adapty-flow-builder>\n• Some common templates step by step: <https://adapty.io/docs/flow-builder-recipes>\n• SDK quickstart from scratch: <https://adapty.io/docs/ios-quickstart-paywalls>\n• <https://adapty.io/docs/migration-to-ios-sdk-v4> SDK migration guide\n• Video quickstart <https://youtu.be/aa-m459VIuY>\n\n[Kirill Potekhin]: <!subteam^S03KC9S1QMC> <!subteam^S07BZPQDBUJ> <!subteam^S03KM96DV0U> please review the docs and video, the flow builder is live \n\n[Vitaly Kuzmin]: Hi team!\nCongratulations! :fire::rocket:\nWhen will the templates be available?\n\n[Fedar Zvalinski]: Basic template is incorporated into new flow creation. Library will be available later, 100% after mid june\n\n[Sofia Pikuleva]: <@U09GNBR5ZNW> hey! One of the clients ask:\n\n\n&gt; ok so currently *the AI translate button is missing in the builder* but it's mentioned in the documentation.\ncan we check it please?\n\n[Elina Andreeva]: Sorry, I missed that it was excluded from the current release scope; the doc fix will land in ~10 minutes\n\n[Daniel Ridny]: <@U09GNBR5ZNW> Impala is excited with this update, and now they're eager to know the ETA for Landscape orientation - can you provide any approximate timing for this critical feature release?\n\n[Fedar Zvalinski]: Kir said that it should be ready around 15.06. We could tell if it is possible around this dates in a couple of days, ok?\n\n[Fedar Zvalinski]: @channel btw, if you've created flows in partner's accounts it would be nice to clean up this drafts if they are not needed\n\n[Melike Sezer]: Maybe a late question to ask, but if they use the flow builder, will it be necessary to use one placement both for onboarding+paywall?\n\n[Dmitry Shestoperov]: <@U9HDNS9S4> are we ready to announce it on our Telegram channel?\n\n[Kirill Potekhin]: telegram yes, but make sure to align it with <@U05QELDHUUX>\n\n[Fedar Zvalinski]: &gt; Maybe a late question to ask, but if they use the flow builder, will it be necessary to use one placement both for onboarding+paywall?\none placement per flow. If the flow contains onboarding and paywall inside, then you need only one placement\n\n[Vitaly Davydov]: Great job guys\n\n[Gregory Komissarov]: A big thank you to the team, you overcame so many obstacles. You are lions!\n\n[Anna Suvorova]: <@U08EVBTE69E> do you know when flow builder will be available for flutter? like approx which month or Q?\n\n[Maxim Borisik]: hey! i'd say summer (jul-aug). let's keep it internally\n\n[Anna Suvorova]: got you, thanks",
       "matchingReplies": [
         {
           "userId": "U9HDNS9S4",
@@ -400,6 +469,13 @@
           "userName": "Kirill Potekhin",
           "text": "telegram yes, but make sure to align it with <@U05QELDHUUX>",
           "date": "2026-06-01T10:10:50.706Z",
+          "images": []
+        },
+        {
+          "userId": "U08EVBTE69E",
+          "userName": "Maxim Borisik",
+          "text": "hey! i'd say summer (jul-aug). let's keep it internally",
+          "date": "2026-06-02T14:40:54.545Z",
           "images": []
         }
       ],
