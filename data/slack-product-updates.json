@@ -1,7 +1,56 @@
 {
-  "syncedAt": "2026-06-04T01:15:34.797Z",
+  "syncedAt": "2026-06-05T01:06:22.086Z",
   "channel": "#product-release",
   "entries": [
+    {
+      "id": "1780590711.906779",
+      "slackUrl": "https://adapty-team.slack.com/archives/C04SY70QZ0T/p1780590711906779",
+      "name": "hey team!",
+      "message": "hey team!\nwe're trimming channels a bit, and with the Product team we're turning this one into our *product feed* :dart:\n\n*the idea:* show how we actually _cook_ product at adapty.\nnot just a release log, but the thinking behind it - a place to pull ideas, inspiration, or answers to your questions.\n\n*expect stuff like:*\n• what's behind the decisions we make \n• what results our products actually deliver\n• what clients say about them\n• the messy parts: where we get stuck inside our teams\n*posting tips:* \nthe more visual the better - videos, figma, mockups, demos land best :popcorn:\nand keep it real: *your own voice beats an AI wall of text*\n\njump in - drop questions, react, tell us what you'd want to see here :eyes:",
+      "releaseDate": "2026-06-04",
+      "thread": [
+        {
+          "userId": "U08EVBTE69E",
+          "userName": "Maxim Borisik",
+          "text": "hey team!\nwe're trimming channels a bit, and with the Product team we're turning this one into our *product feed* :dart:\n\n*the idea:* show how we actually _cook_ product at adapty.\nnot just a release log, but the thinking behind it - a place to pull ideas, inspiration, or answers to your questions.\n\n*expect stuff like:*\n• what's behind the decisions we make \n• what results our products actually deliver\n• what clients say about them\n• the messy parts: where we get stuck inside our teams\n*posting tips:* \nthe more visual the better - videos, figma, mockups, demos land best :popcorn:\nand keep it real: *your own voice beats an AI wall of text*\n\njump in - drop questions, react, tell us what you'd want to see here :eyes:",
+          "date": "2026-06-04T16:31:51.906Z",
+          "images": []
+        },
+        {
+          "userId": "U09L1SS03B8",
+          "userName": "Yakov Shabalkov",
+          "text": "great idea! how \"messy\" could be messy part? is that ok/interesting to share some technical details spoken with simple/human language behind the scenes?",
+          "date": "2026-06-04T16:36:16.951Z",
+          "images": []
+        },
+        {
+          "userId": "U08EVBTE69E",
+          "userName": "Maxim Borisik",
+          "text": "yes! sure thing!",
+          "date": "2026-06-04T16:36:33.043Z",
+          "images": []
+        },
+        {
+          "userId": "U08EVBTE69E",
+          "userName": "Maxim Borisik",
+          "text": "we want to know more about this \"dog on fire\" :rolling_on_the_floor_laughing:",
+          "date": "2026-06-04T16:37:11.092Z",
+          "images": []
+        }
+      ],
+      "content": "[Maxim Borisik]: hey team!\nwe're trimming channels a bit, and with the Product team we're turning this one into our *product feed* :dart:\n\n*the idea:* show how we actually _cook_ product at adapty.\nnot just a release log, but the thinking behind it - a place to pull ideas, inspiration, or answers to your questions.\n\n*expect stuff like:*\n• what's behind the decisions we make \n• what results our products actually deliver\n• what clients say about them\n• the messy parts: where we get stuck inside our teams\n*posting tips:* \nthe more visual the better - videos, figma, mockups, demos land best :popcorn:\nand keep it real: *your own voice beats an AI wall of text*\n\njump in - drop questions, react, tell us what you'd want to see here :eyes:\n\n[Yakov Shabalkov]: great idea! how \"messy\" could be messy part? is that ok/interesting to share some technical details spoken with simple/human language behind the scenes?\n\n[Maxim Borisik]: yes! sure thing!\n\n[Maxim Borisik]: we want to know more about this \"dog on fire\" :rolling_on_the_floor_laughing:",
+      "matchingReplies": [
+        {
+          "userId": "U08EVBTE69E",
+          "userName": "Maxim Borisik",
+          "text": "we want to know more about this \"dog on fire\" :rolling_on_the_floor_laughing:",
+          "date": "2026-06-04T16:37:11.092Z",
+          "images": []
+        }
+      ],
+      "hasTeamMention": false,
+      "images": []
+    },
     {
       "id": "1780332987.166339",
       "slackUrl": "https://adapty-team.slack.com/archives/C04SY70QZ0T/p1780332987166339",
@@ -439,9 +488,30 @@
           "text": "got you, thanks",
           "date": "2026-06-02T14:41:22.120Z",
           "images": []
+        },
+        {
+          "userId": "U08QUJMN0UV",
+          "userName": "Elina Andreeva",
+          "text": "Hi team!\nOne more doc: <https://adapty.io/docs/migrate-to-flows|https://adapty.io/docs/migrate-to-flows> \nShould be useful to those clients who already use the paywall and/or onboarding builder and consider switching to the flow builder\n\n<@U06K36L6CTB> you asked about it",
+          "date": "2026-06-04T14:20:12.167Z",
+          "images": []
+        },
+        {
+          "userId": "U07MXM412JV",
+          "userName": "Marina Trypolskaya",
+          "text": "<!subteam^S086DJEQEUE> might be super helpful for you",
+          "date": "2026-06-04T16:52:36.971Z",
+          "images": []
+        },
+        {
+          "userId": "U08EVBTE69E",
+          "userName": "Maxim Borisik",
+          "text": "also we have a channel about flow-builder: <#C08FZR5C6GY>\nexpect more updates or useful info there",
+          "date": "2026-06-04T16:56:57.804Z",
+          "images": []
         }
       ],
-      "content": "[Fedar Zvalinski]: Флоу билдер в проде. <@U9HDNS9S4>\n\nогромное спасибо команде, которая сделал это возможным в таких сложных условиях. горжусь всеми!\n\n[Kirill Potekhin]: оу е! огромное спасибо на самом деле. один из самых больших релизов за все время, lfg \n\n[Maxim Borisik]: so cool!\n\n[Darina Kobzar]: Hello Team! Congratulations on this! Huge work done :rocket:\nDo we have documentation for clients? What we should share with clients as next steps for the usage? Any SDK update is required?\n\n[Maxim Borisik]: You can find the docs here!\n<https://adapty.io/docs/adapty-flow-builder>\n\nSDK for sure - The Adapty Flow Builder currently supports iOS SDK v.4 and up. Support for other platforms and frameworks is coming soon.\n\n[Darina Kobzar]: <@U08EVBTE69E> thank you! And great to see there is already some video material :+1::skin-tone-3:\n\n[Elina Andreeva]: Hi!\n• Main docs: <https://adapty.io/docs/adapty-flow-builder>\n• Some common templates step by step: <https://adapty.io/docs/flow-builder-recipes>\n• SDK quickstart from scratch: <https://adapty.io/docs/ios-quickstart-paywalls>\n• <https://adapty.io/docs/migration-to-ios-sdk-v4> SDK migration guide\n• Video quickstart <https://youtu.be/aa-m459VIuY>\n\n[Kirill Potekhin]: <!subteam^S03KC9S1QMC> <!subteam^S07BZPQDBUJ> <!subteam^S03KM96DV0U> please review the docs and video, the flow builder is live \n\n[Vitaly Kuzmin]: Hi team!\nCongratulations! :fire::rocket:\nWhen will the templates be available?\n\n[Fedar Zvalinski]: Basic template is incorporated into new flow creation. Library will be available later, 100% after mid june\n\n[Sofia Pikuleva]: <@U09GNBR5ZNW> hey! One of the clients ask:\n\n\n&gt; ok so currently *the AI translate button is missing in the builder* but it's mentioned in the documentation.\ncan we check it please?\n\n[Elina Andreeva]: Sorry, I missed that it was excluded from the current release scope; the doc fix will land in ~10 minutes\n\n[Daniel Ridny]: <@U09GNBR5ZNW> Impala is excited with this update, and now they're eager to know the ETA for Landscape orientation - can you provide any approximate timing for this critical feature release?\n\n[Fedar Zvalinski]: Kir said that it should be ready around 15.06. We could tell if it is possible around this dates in a couple of days, ok?\n\n[Fedar Zvalinski]: @channel btw, if you've created flows in partner's accounts it would be nice to clean up this drafts if they are not needed\n\n[Melike Sezer]: Maybe a late question to ask, but if they use the flow builder, will it be necessary to use one placement both for onboarding+paywall?\n\n[Dmitry Shestoperov]: <@U9HDNS9S4> are we ready to announce it on our Telegram channel?\n\n[Kirill Potekhin]: telegram yes, but make sure to align it with <@U05QELDHUUX>\n\n[Fedar Zvalinski]: &gt; Maybe a late question to ask, but if they use the flow builder, will it be necessary to use one placement both for onboarding+paywall?\none placement per flow. If the flow contains onboarding and paywall inside, then you need only one placement\n\n[Vitaly Davydov]: Great job guys\n\n[Gregory Komissarov]: A big thank you to the team, you overcame so many obstacles. You are lions!\n\n[Anna Suvorova]: <@U08EVBTE69E> do you know when flow builder will be available for flutter? like approx which month or Q?\n\n[Maxim Borisik]: hey! i'd say summer (jul-aug). let's keep it internally\n\n[Anna Suvorova]: got you, thanks",
+      "content": "[Fedar Zvalinski]: Флоу билдер в проде. <@U9HDNS9S4>\n\nогромное спасибо команде, которая сделал это возможным в таких сложных условиях. горжусь всеми!\n\n[Kirill Potekhin]: оу е! огромное спасибо на самом деле. один из самых больших релизов за все время, lfg \n\n[Maxim Borisik]: so cool!\n\n[Darina Kobzar]: Hello Team! Congratulations on this! Huge work done :rocket:\nDo we have documentation for clients? What we should share with clients as next steps for the usage? Any SDK update is required?\n\n[Maxim Borisik]: You can find the docs here!\n<https://adapty.io/docs/adapty-flow-builder>\n\nSDK for sure - The Adapty Flow Builder currently supports iOS SDK v.4 and up. Support for other platforms and frameworks is coming soon.\n\n[Darina Kobzar]: <@U08EVBTE69E> thank you! And great to see there is already some video material :+1::skin-tone-3:\n\n[Elina Andreeva]: Hi!\n• Main docs: <https://adapty.io/docs/adapty-flow-builder>\n• Some common templates step by step: <https://adapty.io/docs/flow-builder-recipes>\n• SDK quickstart from scratch: <https://adapty.io/docs/ios-quickstart-paywalls>\n• <https://adapty.io/docs/migration-to-ios-sdk-v4> SDK migration guide\n• Video quickstart <https://youtu.be/aa-m459VIuY>\n\n[Kirill Potekhin]: <!subteam^S03KC9S1QMC> <!subteam^S07BZPQDBUJ> <!subteam^S03KM96DV0U> please review the docs and video, the flow builder is live \n\n[Vitaly Kuzmin]: Hi team!\nCongratulations! :fire::rocket:\nWhen will the templates be available?\n\n[Fedar Zvalinski]: Basic template is incorporated into new flow creation. Library will be available later, 100% after mid june\n\n[Sofia Pikuleva]: <@U09GNBR5ZNW> hey! One of the clients ask:\n\n\n&gt; ok so currently *the AI translate button is missing in the builder* but it's mentioned in the documentation.\ncan we check it please?\n\n[Elina Andreeva]: Sorry, I missed that it was excluded from the current release scope; the doc fix will land in ~10 minutes\n\n[Daniel Ridny]: <@U09GNBR5ZNW> Impala is excited with this update, and now they're eager to know the ETA for Landscape orientation - can you provide any approximate timing for this critical feature release?\n\n[Fedar Zvalinski]: Kir said that it should be ready around 15.06. We could tell if it is possible around this dates in a couple of days, ok?\n\n[Fedar Zvalinski]: @channel btw, if you've created flows in partner's accounts it would be nice to clean up this drafts if they are not needed\n\n[Melike Sezer]: Maybe a late question to ask, but if they use the flow builder, will it be necessary to use one placement both for onboarding+paywall?\n\n[Dmitry Shestoperov]: <@U9HDNS9S4> are we ready to announce it on our Telegram channel?\n\n[Kirill Potekhin]: telegram yes, but make sure to align it with <@U05QELDHUUX>\n\n[Fedar Zvalinski]: &gt; Maybe a late question to ask, but if they use the flow builder, will it be necessary to use one placement both for onboarding+paywall?\none placement per flow. If the flow contains onboarding and paywall inside, then you need only one placement\n\n[Vitaly Davydov]: Great job guys\n\n[Gregory Komissarov]: A big thank you to the team, you overcame so many obstacles. You are lions!\n\n[Anna Suvorova]: <@U08EVBTE69E> do you know when flow builder will be available for flutter? like approx which month or Q?\n\n[Maxim Borisik]: hey! i'd say summer (jul-aug). let's keep it internally\n\n[Anna Suvorova]: got you, thanks\n\n[Elina Andreeva]: Hi team!\nOne more doc: <https://adapty.io/docs/migrate-to-flows|https://adapty.io/docs/migrate-to-flows> \nShould be useful to those clients who already use the paywall and/or onboarding builder and consider switching to the flow builder\n\n<@U06K36L6CTB> you asked about it\n\n[Marina Trypolskaya]: <!subteam^S086DJEQEUE> might be super helpful for you\n\n[Maxim Borisik]: also we have a channel about flow-builder: <#C08FZR5C6GY>\nexpect more updates or useful info there",
       "matchingReplies": [
         {
           "userId": "U9HDNS9S4",
@@ -476,6 +546,13 @@
           "userName": "Maxim Borisik",
           "text": "hey! i'd say summer (jul-aug). let's keep it internally",
           "date": "2026-06-02T14:40:54.545Z",
+          "images": []
+        },
+        {
+          "userId": "U08EVBTE69E",
+          "userName": "Maxim Borisik",
+          "text": "also we have a channel about flow-builder: <#C08FZR5C6GY>\nexpect more updates or useful info there",
+          "date": "2026-06-04T16:56:57.804Z",
           "images": []
         }
       ],
@@ -1527,50 +1604,6 @@
       "matchingReplies": [],
       "hasTeamMention": true,
       "images": []
-    },
-    {
-      "id": "1773137368.148139",
-      "slackUrl": "https://adapty-team.slack.com/archives/C04SY70QZ0T/p1773137368148139",
-      "name": "Maximize Conversions support and Search Term Automations",
-      "message": "Feature: Maximize Conversions support and Search Term Automations\nRelease date: Mar 10, 2026\nAffected areas: Adapty Ads Manager",
-      "releaseDate": "2026-03-10",
-      "thread": [
-        {
-          "userId": "U03J8UXUDPF",
-          "userName": "Mykola Martynovets",
-          "text": "Feature: Maximize Conversions support and Search Term Automations\nRelease date: Mar 10, 2026\nAffected areas: Adapty Ads Manager",
-          "date": "2026-03-10T10:09:28.148Z",
-          "images": []
-        },
-        {
-          "userId": "U03J8UXUDPF",
-          "userName": "Mykola Martynovets",
-          "text": ":rocket: Two major updates are now live in Adapty Ads Manager\n\nFirst, Search Term Automations are now live.\nRules can now run directly on search terms using metrics like taps, downlods, spend, and more — and automatically:\n• Transfer winning terms into keywords (Exact ) in selected ad groups\n• Add those same terms to negatives on the current ad group or campaign to avoid paying twice\n• Stay duplicate-safe with `skip_enable_duplicate_keywords`, which prevents re-enabling paused duplicates when enabled\nA practical use case: let Search Match or Discovery campaigns collect real user queries, then use a rule to detect terms with 2+ downloads or specific metrics thresholds and automatically push them into Probing ad groups  as keywords, while negating them in the original source. The result is faster scaling, cleaner discovery traffic, and less manual work.\n\nSecond, we’ve also started supporting Maximize Conversions campaigns in Adapty Ads Manager.\nYou can now view and manage Apple Ads campaigns that use automated bidding and Search Match to maximize downloads around a target CPA directly inside Adapty. Apple describes Maximize Conversions as a campaign type that uses intelligent automation to set optimal bids for relevant search queries, broaden reach, and drive installs toward a target CPA on a weekly average basis. (<https://ads.apple.com/app-store/best-practices/maximize-conversions|Apple Ads>)\n\nTogether, these two updates make discovery workflows much stronger: Maximize Conversions helps uncover more conversion opportunities with automated bidding, while Search Term Automations help you operationalize those learnings faster by promoting strong terms into managed keyword structures and closing the loop with negatives. Apple also recommends letting Maximize Conversions campaigns run for at least two weeks before evaluating performance. (<https://ads.apple.com/app-store/best-practices/maximize-conversions|Apple Ads>)\n\nFYI <@U08QUJMN0UV>",
-          "date": "2026-03-10T10:10:32.774Z",
-          "images": [
-            "https://files.slack.com/files-pri/T9HDDB78Q-F0AKF4W2D6X/screenshot_2026-03-03_at_2.23.20___pm.png",
-            "https://files.slack.com/files-pri/T9HDDB78Q-F0AKF50GF35/image.png"
-          ]
-        }
-      ],
-      "content": "[Mykola Martynovets]: Feature: Maximize Conversions support and Search Term Automations\nRelease date: Mar 10, 2026\nAffected areas: Adapty Ads Manager\n\n[Mykola Martynovets]: :rocket: Two major updates are now live in Adapty Ads Manager\n\nFirst, Search Term Automations are now live.\nRules can now run directly on search terms using metrics like taps, downlods, spend, and more — and automatically:\n• Transfer winning terms into keywords (Exact ) in selected ad groups\n• Add those same terms to negatives on the current ad group or campaign to avoid paying twice\n• Stay duplicate-safe with `skip_enable_duplicate_keywords`, which prevents re-enabling paused duplicates when enabled\nA practical use case: let Search Match or Discovery campaigns collect real user queries, then use a rule to detect terms with 2+ downloads or specific metrics thresholds and automatically push them into Probing ad groups  as keywords, while negating them in the original source. The result is faster scaling, cleaner discovery traffic, and less manual work.\n\nSecond, we’ve also started supporting Maximize Conversions campaigns in Adapty Ads Manager.\nYou can now view and manage Apple Ads campaigns that use automated bidding and Search Match to maximize downloads around a target CPA directly inside Adapty. Apple describes Maximize Conversions as a campaign type that uses intelligent automation to set optimal bids for relevant search queries, broaden reach, and drive installs toward a target CPA on a weekly average basis. (<https://ads.apple.com/app-store/best-practices/maximize-conversions|Apple Ads>)\n\nTogether, these two updates make discovery workflows much stronger: Maximize Conversions helps uncover more conversion opportunities with automated bidding, while Search Term Automations help you operationalize those learnings faster by promoting strong terms into managed keyword structures and closing the loop with negatives. Apple also recommends letting Maximize Conversions campaigns run for at least two weeks before evaluating performance. (<https://ads.apple.com/app-store/best-practices/maximize-conversions|Apple Ads>)\n\nFYI <@U08QUJMN0UV>",
-      "matchingReplies": [
-        {
-          "userId": "U03J8UXUDPF",
-          "userName": "Mykola Martynovets",
-          "text": ":rocket: Two major updates are now live in Adapty Ads Manager\n\nFirst, Search Term Automations are now live.\nRules can now run directly on search terms using metrics like taps, downlods, spend, and more — and automatically:\n• Transfer winning terms into keywords (Exact ) in selected ad groups\n• Add those same terms to negatives on the current ad group or campaign to avoid paying twice\n• Stay duplicate-safe with `skip_enable_duplicate_keywords`, which prevents re-enabling paused duplicates when enabled\nA practical use case: let Search Match or Discovery campaigns collect real user queries, then use a rule to detect terms with 2+ downloads or specific metrics thresholds and automatically push them into Probing ad groups  as keywords, while negating them in the original source. The result is faster scaling, cleaner discovery traffic, and less manual work.\n\nSecond, we’ve also started supporting Maximize Conversions campaigns in Adapty Ads Manager.\nYou can now view and manage Apple Ads campaigns that use automated bidding and Search Match to maximize downloads around a target CPA directly inside Adapty. Apple describes Maximize Conversions as a campaign type that uses intelligent automation to set optimal bids for relevant search queries, broaden reach, and drive installs toward a target CPA on a weekly average basis. (<https://ads.apple.com/app-store/best-practices/maximize-conversions|Apple Ads>)\n\nTogether, these two updates make discovery workflows much stronger: Maximize Conversions helps uncover more conversion opportunities with automated bidding, while Search Term Automations help you operationalize those learnings faster by promoting strong terms into managed keyword structures and closing the loop with negatives. Apple also recommends letting Maximize Conversions campaigns run for at least two weeks before evaluating performance. (<https://ads.apple.com/app-store/best-practices/maximize-conversions|Apple Ads>)\n\nFYI <@U08QUJMN0UV>",
-          "date": "2026-03-10T10:10:32.774Z",
-          "images": [
-            "https://files.slack.com/files-pri/T9HDDB78Q-F0AKF4W2D6X/screenshot_2026-03-03_at_2.23.20___pm.png",
-            "https://files.slack.com/files-pri/T9HDDB78Q-F0AKF50GF35/image.png"
-          ]
-        }
-      ],
-      "hasTeamMention": false,
-      "images": [
-        "https://files.slack.com/files-pri/T9HDDB78Q-F0AKF4W2D6X/screenshot_2026-03-03_at_2.23.20___pm.png",
-        "https://files.slack.com/files-pri/T9HDDB78Q-F0AKF50GF35/image.png"
-      ]
     }
   ]
 }
