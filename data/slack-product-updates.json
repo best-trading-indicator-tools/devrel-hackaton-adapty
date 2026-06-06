@@ -1,7 +1,76 @@
 {
-  "syncedAt": "2026-06-05T01:06:22.086Z",
+  "syncedAt": "2026-06-06T01:02:37.252Z",
   "channel": "#product-release",
   "entries": [
+    {
+      "id": "1780666921.025909",
+      "slackUrl": "https://adapty-team.slack.com/archives/C04SY70QZ0T/p1780666921025909",
+      "name": "*Problem*",
+      "message": "*Problem*\n\nThe <!subteam^S0ATWJA5K6Z> has identified the root cause behind our recurring incidents related to connection pool exhaustion between Odyssey and Postgres. During purchase validation, we create a lot of records (transactions, PAL, subscriptions, non-subscriptions, transaction events, and a few others). Since this operation has to be atomic, it all happens inside a single transaction / single PG connection. As a result, Postgres accumulates a lot of uncommitted row versions that stick around for quite a while, which slows the database down once the number of concurrent operations crosses a certain threshold.\n\nThere are basically two ways to address this kind of issue:\n1. Reduce the number of operations running in parallel.\n2. Reduce how long each operation takes.\n*Solution*\n\nWe’ve moved App Store and Play Store purchase event processing to a background job (similar to how Stripe and Paddle do it) and added rate-limiting on concurrent event handling (processing metrics are available <https://grafana.adpinfra.dev/d/dramatiq-workers/dramatiq-workers?orgId=1&amp;var-namespace=production&amp;var-queue=purchase_app_store&amp;var-queue=purchase_play_store&amp;var-actor=All&amp;from=now-15m&amp;to=now|here>). This smooths out event handling over time and protects us from sudden spikes coming from the stores. Nothing changes on the SDK side: we still validate purchases and grant PAL on time, no delays there.\n\nWe also did a small refactor of the core transaction validation module, which cut the time a transaction stays open by around 60%.\n\nTechnical details are in this <https://gitlab.adapty.io/adapty/adapty-dashboard-api/-/merge_requests/12810|MR>.\n\n*Risks*\n\nIf customers start complaining about delayed event delivery to their hooks (custom webhooks or raw event forwarding), or about issues with granting PAL, ping <!subteam^S09JZKWUF2N>.",
+      "releaseDate": "2026-06-05",
+      "thread": [
+        {
+          "userId": "UNWFN144R",
+          "userName": "Artem Davydov",
+          "text": "*Problem*\n\nThe <!subteam^S0ATWJA5K6Z> has identified the root cause behind our recurring incidents related to connection pool exhaustion between Odyssey and Postgres. During purchase validation, we create a lot of records (transactions, PAL, subscriptions, non-subscriptions, transaction events, and a few others). Since this operation has to be atomic, it all happens inside a single transaction / single PG connection. As a result, Postgres accumulates a lot of uncommitted row versions that stick around for quite a while, which slows the database down once the number of concurrent operations crosses a certain threshold.\n\nThere are basically two ways to address this kind of issue:\n1. Reduce the number of operations running in parallel.\n2. Reduce how long each operation takes.\n*Solution*\n\nWe’ve moved App Store and Play Store purchase event processing to a background job (similar to how Stripe and Paddle do it) and added rate-limiting on concurrent event handling (processing metrics are available <https://grafana.adpinfra.dev/d/dramatiq-workers/dramatiq-workers?orgId=1&amp;var-namespace=production&amp;var-queue=purchase_app_store&amp;var-queue=purchase_play_store&amp;var-actor=All&amp;from=now-15m&amp;to=now|here>). This smooths out event handling over time and protects us from sudden spikes coming from the stores. Nothing changes on the SDK side: we still validate purchases and grant PAL on time, no delays there.\n\nWe also did a small refactor of the core transaction validation module, which cut the time a transaction stays open by around 60%.\n\nTechnical details are in this <https://gitlab.adapty.io/adapty/adapty-dashboard-api/-/merge_requests/12810|MR>.\n\n*Risks*\n\nIf customers start complaining about delayed event delivery to their hooks (custom webhooks or raw event forwarding), or about issues with granting PAL, ping <!subteam^S09JZKWUF2N>.",
+          "date": "2026-06-05T13:42:01.025Z",
+          "images": []
+        },
+        {
+          "userId": "UNWFN144R",
+          "userName": "Artem Davydov",
+          "text": "<!subteam^S03KM96DV0U> <!subteam^S07BZPQDBUJ> fyi",
+          "date": "2026-06-05T13:43:24.851Z",
+          "images": []
+        },
+        {
+          "userId": "U03Q2R7AGLA",
+          "userName": "Amina Magomedova",
+          "text": "Thank you for a detailed explanation, especially for a Risks section, it's very useful! ",
+          "date": "2026-06-05T13:45:08.731Z",
+          "images": []
+        },
+        {
+          "userId": "U09EG3DK4US",
+          "userName": "Polina Ishimbaeva",
+          "text": "<@U0A266T9SJE> fyi about webhooks",
+          "date": "2026-06-05T13:53:55.629Z",
+          "images": []
+        },
+        {
+          "userId": "U0A266T9SJE",
+          "userName": "Melike Sezer",
+          "text": "Should we communicate anything with the clients? <@U09EG3DK4US> ",
+          "date": "2026-06-05T13:57:04.606Z",
+          "images": []
+        },
+        {
+          "userId": "U0A266T9SJE",
+          "userName": "Melike Sezer",
+          "text": "Also, <@UNWFN144R> i got confused on something. Clients have been complaining about webhooks not being sent properly, sometimes stoping for hours. But you say solution we have still have the risks, and the risk is webhooks being delayed. So for example, let’s think Superapplabs, they use webhooks to feed the Meta campaigns with subs data. If it’s delayed, it will still attect the campaign performance. Maybe I didn’t understand you fully.",
+          "date": "2026-06-05T14:00:36.694Z",
+          "images": []
+        },
+        {
+          "userId": "UNWFN144R",
+          "userName": "Artem Davydov",
+          "text": "Just to clarify: the risks I mentioned are specifically about this release. We weren’t addressing the Superapplabs event delivery delays here — that’s a separate problem. I also looked through the <https://adapty-team.slack.com/archives/C035WAT083Y/p1774359817598499|thread> on that one, and it seems their issue was already resolved.",
+          "date": "2026-06-05T14:20:23.351Z",
+          "images": []
+        },
+        {
+          "userId": "U0A266T9SJE",
+          "userName": "Melike Sezer",
+          "text": "&gt; Just to clarify: the risks I mentioned are specifically about this release.\nOh I see now, that clarified the situation for me thank you Artem :pray::skin-tone-3:",
+          "date": "2026-06-05T14:21:26.654Z",
+          "images": []
+        }
+      ],
+      "content": "[Artem Davydov]: *Problem*\n\nThe <!subteam^S0ATWJA5K6Z> has identified the root cause behind our recurring incidents related to connection pool exhaustion between Odyssey and Postgres. During purchase validation, we create a lot of records (transactions, PAL, subscriptions, non-subscriptions, transaction events, and a few others). Since this operation has to be atomic, it all happens inside a single transaction / single PG connection. As a result, Postgres accumulates a lot of uncommitted row versions that stick around for quite a while, which slows the database down once the number of concurrent operations crosses a certain threshold.\n\nThere are basically two ways to address this kind of issue:\n1. Reduce the number of operations running in parallel.\n2. Reduce how long each operation takes.\n*Solution*\n\nWe’ve moved App Store and Play Store purchase event processing to a background job (similar to how Stripe and Paddle do it) and added rate-limiting on concurrent event handling (processing metrics are available <https://grafana.adpinfra.dev/d/dramatiq-workers/dramatiq-workers?orgId=1&amp;var-namespace=production&amp;var-queue=purchase_app_store&amp;var-queue=purchase_play_store&amp;var-actor=All&amp;from=now-15m&amp;to=now|here>). This smooths out event handling over time and protects us from sudden spikes coming from the stores. Nothing changes on the SDK side: we still validate purchases and grant PAL on time, no delays there.\n\nWe also did a small refactor of the core transaction validation module, which cut the time a transaction stays open by around 60%.\n\nTechnical details are in this <https://gitlab.adapty.io/adapty/adapty-dashboard-api/-/merge_requests/12810|MR>.\n\n*Risks*\n\nIf customers start complaining about delayed event delivery to their hooks (custom webhooks or raw event forwarding), or about issues with granting PAL, ping <!subteam^S09JZKWUF2N>.\n\n[Artem Davydov]: <!subteam^S03KM96DV0U> <!subteam^S07BZPQDBUJ> fyi\n\n[Amina Magomedova]: Thank you for a detailed explanation, especially for a Risks section, it's very useful! \n\n[Polina Ishimbaeva]: <@U0A266T9SJE> fyi about webhooks\n\n[Melike Sezer]: Should we communicate anything with the clients? <@U09EG3DK4US> \n\n[Melike Sezer]: Also, <@UNWFN144R> i got confused on something. Clients have been complaining about webhooks not being sent properly, sometimes stoping for hours. But you say solution we have still have the risks, and the risk is webhooks being delayed. So for example, let’s think Superapplabs, they use webhooks to feed the Meta campaigns with subs data. If it’s delayed, it will still attect the campaign performance. Maybe I didn’t understand you fully.\n\n[Artem Davydov]: Just to clarify: the risks I mentioned are specifically about this release. We weren’t addressing the Superapplabs event delivery delays here — that’s a separate problem. I also looked through the <https://adapty-team.slack.com/archives/C035WAT083Y/p1774359817598499|thread> on that one, and it seems their issue was already resolved.\n\n[Melike Sezer]: &gt; Just to clarify: the risks I mentioned are specifically about this release.\nOh I see now, that clarified the situation for me thank you Artem :pray::skin-tone-3:",
+      "matchingReplies": [],
+      "hasTeamMention": true,
+      "images": []
+    },
     {
       "id": "1780590711.906779",
       "slackUrl": "https://adapty-team.slack.com/archives/C04SY70QZ0T/p1780590711906779",
@@ -36,15 +105,36 @@
           "text": "we want to know more about this \"dog on fire\" :rolling_on_the_floor_laughing:",
           "date": "2026-06-04T16:37:11.092Z",
           "images": []
+        },
+        {
+          "userId": "U034A27SVHC",
+          "userName": "Artem Rukavishnikov",
+          "text": "Hey! I fancy a channel like this, but does it worth sacrifising the \"releases\" channel?\n\nI find a lot of value in the way it is. We have a few product chanels that are not really used for anything like <#C03KF7Q7353> and could be revitalized.\n\nI feel like having the release log diluted with duscussions could reduct visibility on releases.",
+          "date": "2026-06-05T04:41:38.262Z",
+          "images": []
+        },
+        {
+          "userId": "U08EVBTE69E",
+          "userName": "Maxim Borisik",
+          "text": "we'll calibrate. if something's off we can coordinate. but one more channel is too much i'd say",
+          "date": "2026-06-05T09:16:41.565Z",
+          "images": []
         }
       ],
-      "content": "[Maxim Borisik]: hey team!\nwe're trimming channels a bit, and with the Product team we're turning this one into our *product feed* :dart:\n\n*the idea:* show how we actually _cook_ product at adapty.\nnot just a release log, but the thinking behind it - a place to pull ideas, inspiration, or answers to your questions.\n\n*expect stuff like:*\n• what's behind the decisions we make \n• what results our products actually deliver\n• what clients say about them\n• the messy parts: where we get stuck inside our teams\n*posting tips:* \nthe more visual the better - videos, figma, mockups, demos land best :popcorn:\nand keep it real: *your own voice beats an AI wall of text*\n\njump in - drop questions, react, tell us what you'd want to see here :eyes:\n\n[Yakov Shabalkov]: great idea! how \"messy\" could be messy part? is that ok/interesting to share some technical details spoken with simple/human language behind the scenes?\n\n[Maxim Borisik]: yes! sure thing!\n\n[Maxim Borisik]: we want to know more about this \"dog on fire\" :rolling_on_the_floor_laughing:",
+      "content": "[Maxim Borisik]: hey team!\nwe're trimming channels a bit, and with the Product team we're turning this one into our *product feed* :dart:\n\n*the idea:* show how we actually _cook_ product at adapty.\nnot just a release log, but the thinking behind it - a place to pull ideas, inspiration, or answers to your questions.\n\n*expect stuff like:*\n• what's behind the decisions we make \n• what results our products actually deliver\n• what clients say about them\n• the messy parts: where we get stuck inside our teams\n*posting tips:* \nthe more visual the better - videos, figma, mockups, demos land best :popcorn:\nand keep it real: *your own voice beats an AI wall of text*\n\njump in - drop questions, react, tell us what you'd want to see here :eyes:\n\n[Yakov Shabalkov]: great idea! how \"messy\" could be messy part? is that ok/interesting to share some technical details spoken with simple/human language behind the scenes?\n\n[Maxim Borisik]: yes! sure thing!\n\n[Maxim Borisik]: we want to know more about this \"dog on fire\" :rolling_on_the_floor_laughing:\n\n[Artem Rukavishnikov]: Hey! I fancy a channel like this, but does it worth sacrifising the \"releases\" channel?\n\nI find a lot of value in the way it is. We have a few product chanels that are not really used for anything like <#C03KF7Q7353> and could be revitalized.\n\nI feel like having the release log diluted with duscussions could reduct visibility on releases.\n\n[Maxim Borisik]: we'll calibrate. if something's off we can coordinate. but one more channel is too much i'd say",
       "matchingReplies": [
         {
           "userId": "U08EVBTE69E",
           "userName": "Maxim Borisik",
           "text": "we want to know more about this \"dog on fire\" :rolling_on_the_floor_laughing:",
           "date": "2026-06-04T16:37:11.092Z",
+          "images": []
+        },
+        {
+          "userId": "U08EVBTE69E",
+          "userName": "Maxim Borisik",
+          "text": "we'll calibrate. if something's off we can coordinate. but one more channel is too much i'd say",
+          "date": "2026-06-05T09:16:41.565Z",
           "images": []
         }
       ],
@@ -1553,54 +1643,6 @@
         }
       ],
       "content": "[Artur Beglaryan]: Feature: Point 2 from <https://adaptyio.atlassian.net/browse/INFRA-141|INFRA-141>\nRelease date: March 11, 2026\nAffected areas: Adapty analytics\n\n[Artur Beglaryan]: In analytics changed profile fields in `adapty_analytics_transacations` to be based on profiles from aerospike. Should not affect to anything. More details what’s changed and improved in <https://adapty-team.slack.com/archives/C04SY70QZ0T/p1773140810924259|thread>\n\n[Artur Beglaryan]: <!subteam^S03KM96DV0U> <!subteam^S07BZPQDBUJ> please keep an eye on it, it should not affect to anything, just for notice",
-      "matchingReplies": [],
-      "hasTeamMention": true,
-      "images": []
-    },
-    {
-      "id": "1773140810.924259",
-      "slackUrl": "https://adapty-team.slack.com/archives/C04SY70QZ0T/p1773140810924259",
-      "name": "INFRA-141",
-      "message": "Feature: Point 1 from <https://adaptyio.atlassian.net/browse/INFRA-141|INFRA-141>\nRelease date: March 10, 2026\nAffected areas: Adapty analytics",
-      "releaseDate": "2026-03-10",
-      "thread": [
-        {
-          "userId": "U08C43RCH39",
-          "userName": "Artur Beglaryan",
-          "text": "Feature: Point 1 from <https://adaptyio.atlassian.net/browse/INFRA-141|INFRA-141>\nRelease date: March 10, 2026\nAffected areas: Adapty analytics",
-          "date": "2026-03-10T11:06:50.924Z",
-          "images": []
-        },
-        {
-          "userId": "U08C43RCH39",
-          "userName": "Artur Beglaryan",
-          "text": "During this and following week we will change part by part all profile based migrations to clickhouse to be based on aerospike(new Key-Value database) instead of postgresql. Today’s release affected only to `adapty_analytics_profiles`  table. Aldo during implementation of this task we found and fixed several minor issues, that we were not noticed before.\n```1. Fixed issue with null device_id filter out in coalesce of fraud devices which was bringing lose of installs, when we were using device_id as a source of install\n2. Fixed platform identification consistency. After final migration of task in all places we will identify platform based on application, if there is no meta for platform\n3. Fixed case, when Profiles latest meta have broken meta(with None as a platform). in this case now we are using term called relevant_meta, which is the last meta with normal platform. This allows us to fill correctly all profile and transaction fields\n4. Fixed issue with missing iOS devices human readable names. This was used for build user segments```",
-          "date": "2026-03-10T11:12:17.842Z",
-          "images": []
-        },
-        {
-          "userId": "U08C43RCH39",
-          "userName": "Artur Beglaryan",
-          "text": "Also improved profile migration task performance. Before it was running ~50-60 seconds, not it’s running  ~3-6 seconds",
-          "date": "2026-03-10T11:14:03.029Z",
-          "images": []
-        },
-        {
-          "userId": "U08C43RCH39",
-          "userName": "Artur Beglaryan",
-          "text": "<!subteam^S03KM96DV0U> <!subteam^S07BZPQDBUJ> please keep an eye on it, it should not affect to anything, just for notice",
-          "date": "2026-03-10T11:19:53.194Z",
-          "images": []
-        },
-        {
-          "userId": "U0A266T9SJE",
-          "userName": "Melike Sezer",
-          "text": "<@U09RF6V1YHM> was this related to Hubx's current issue?",
-          "date": "2026-03-10T11:26:04.721Z",
-          "images": []
-        }
-      ],
-      "content": "[Artur Beglaryan]: Feature: Point 1 from <https://adaptyio.atlassian.net/browse/INFRA-141|INFRA-141>\nRelease date: March 10, 2026\nAffected areas: Adapty analytics\n\n[Artur Beglaryan]: During this and following week we will change part by part all profile based migrations to clickhouse to be based on aerospike(new Key-Value database) instead of postgresql. Today’s release affected only to `adapty_analytics_profiles`  table. Aldo during implementation of this task we found and fixed several minor issues, that we were not noticed before.\n```1. Fixed issue with null device_id filter out in coalesce of fraud devices which was bringing lose of installs, when we were using device_id as a source of install\n2. Fixed platform identification consistency. After final migration of task in all places we will identify platform based on application, if there is no meta for platform\n3. Fixed case, when Profiles latest meta have broken meta(with None as a platform). in this case now we are using term called relevant_meta, which is the last meta with normal platform. This allows us to fill correctly all profile and transaction fields\n4. Fixed issue with missing iOS devices human readable names. This was used for build user segments```\n\n[Artur Beglaryan]: Also improved profile migration task performance. Before it was running ~50-60 seconds, not it’s running  ~3-6 seconds\n\n[Artur Beglaryan]: <!subteam^S03KM96DV0U> <!subteam^S07BZPQDBUJ> please keep an eye on it, it should not affect to anything, just for notice\n\n[Melike Sezer]: <@U09RF6V1YHM> was this related to Hubx's current issue?",
       "matchingReplies": [],
       "hasTeamMention": true,
       "images": []
