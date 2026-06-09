@@ -1,7 +1,105 @@
 {
-  "syncedAt": "2026-06-08T01:10:06.265Z",
+  "syncedAt": "2026-06-09T01:01:16.007Z",
   "channel": "#product-release",
   "entries": [
+    {
+      "id": "1780931682.615739",
+      "slackUrl": "https://adapty-team.slack.com/archives/C04SY70QZ0T/p1780931682615739",
+      "name": "our customer did a Chrome (!) extention to calculate A/B testing p value for Adapty",
+      "message": "<https://github.com/DoguD/adapty-ab-result-p-value-view-chrome-extension> our customer did a Chrome (!) extention to calculate A/B testing p value for Adapty\nworth adding inside?",
+      "releaseDate": "2026-06-08",
+      "thread": [
+        {
+          "userId": "U9JU5J5RC",
+          "userName": "Vitaly Davydov",
+          "text": "<https://github.com/DoguD/adapty-ab-result-p-value-view-chrome-extension> our customer did a Chrome (!) extention to calculate A/B testing p value for Adapty\nworth adding inside?",
+          "date": "2026-06-08T15:14:42.615Z",
+          "images": []
+        },
+        {
+          "userId": "U08EVBTE69E",
+          "userName": "Maxim Borisik",
+          "text": "sounds nice! we keep getting requests on statistical significance in our ABs",
+          "date": "2026-06-08T15:17:56.649Z",
+          "images": []
+        },
+        {
+          "userId": "U9JU5J5RC",
+          "userName": "Vitaly Davydov",
+          "text": "We can just add this extension ",
+          "date": "2026-06-08T15:53:55.912Z",
+          "images": []
+        },
+        {
+          "userId": "U9JU5J5RC",
+          "userName": "Vitaly Davydov",
+          "text": "Literally copy and paste ",
+          "date": "2026-06-08T15:54:01.617Z",
+          "images": []
+        },
+        {
+          "userId": "U090T4UNBUK",
+          "userName": "Stanislav Mayorov",
+          "text": "<@U9JU5J5RC> It’s unlikely to be reusable. It modifies DOM with raw <https://github.com/DoguD/adapty-ab-result-p-value-view-chrome-extension/blob/main/content.js|html>",
+          "date": "2026-06-08T16:17:37.613Z",
+          "images": []
+        },
+        {
+          "userId": "U9JU5J5RC",
+          "userName": "Vitaly Davydov",
+          "text": ":/",
+          "date": "2026-06-08T16:19:22.724Z",
+          "images": []
+        },
+        {
+          "userId": "U090T4UNBUK",
+          "userName": "Stanislav Mayorov",
+          "text": "By the way the repo doesn’t have any stars from other users for now. We can watch it grow",
+          "date": "2026-06-08T16:23:39.818Z",
+          "images": []
+        },
+        {
+          "userId": "U9JU5J5RC",
+          "userName": "Vitaly Davydov",
+          "text": "yes, it was our customer, who built it for himself",
+          "date": "2026-06-08T16:34:17.810Z",
+          "images": []
+        },
+        {
+          "userId": "U09RF6V1YHM",
+          "userName": "Adil",
+          "text": "<@U0A266T9SJE> <@U09EG3DK4US> Dofatech Dogu fyi :eyes:",
+          "date": "2026-06-08T20:20:47.671Z",
+          "images": []
+        },
+        {
+          "userId": "U09RF6V1YHM",
+          "userName": "Adil",
+          "text": "if you want we can ask him <@U090T4UNBUK> <@U9JU5J5RC>",
+          "date": "2026-06-08T20:22:02.312Z",
+          "images": []
+        },
+        {
+          "userId": "U09EG3DK4US",
+          "userName": "Polina Ishimbaeva",
+          "text": "Smart :dizzy:",
+          "date": "2026-06-08T20:22:38.486Z",
+          "images": []
+        }
+      ],
+      "content": "[Vitaly Davydov]: <https://github.com/DoguD/adapty-ab-result-p-value-view-chrome-extension> our customer did a Chrome (!) extention to calculate A/B testing p value for Adapty\nworth adding inside?\n\n[Maxim Borisik]: sounds nice! we keep getting requests on statistical significance in our ABs\n\n[Vitaly Davydov]: We can just add this extension \n\n[Vitaly Davydov]: Literally copy and paste \n\n[Stanislav Mayorov]: <@U9JU5J5RC> It’s unlikely to be reusable. It modifies DOM with raw <https://github.com/DoguD/adapty-ab-result-p-value-view-chrome-extension/blob/main/content.js|html>\n\n[Vitaly Davydov]: :/\n\n[Stanislav Mayorov]: By the way the repo doesn’t have any stars from other users for now. We can watch it grow\n\n[Vitaly Davydov]: yes, it was our customer, who built it for himself\n\n[Adil]: <@U0A266T9SJE> <@U09EG3DK4US> Dofatech Dogu fyi :eyes:\n\n[Adil]: if you want we can ask him <@U090T4UNBUK> <@U9JU5J5RC>\n\n[Polina Ishimbaeva]: Smart :dizzy:",
+      "matchingReplies": [
+        {
+          "userId": "U08EVBTE69E",
+          "userName": "Maxim Borisik",
+          "text": "sounds nice! we keep getting requests on statistical significance in our ABs",
+          "date": "2026-06-08T15:17:56.649Z",
+          "images": []
+        }
+      ],
+      "hasTeamMention": false,
+      "images": []
+    },
     {
       "id": "1780666921.025909",
       "slackUrl": "https://adapty-team.slack.com/archives/C04SY70QZ0T/p1780666921025909",
@@ -1609,40 +1707,6 @@
         }
       ],
       "content": "[Sergei Solodskikh]: Feature: <https://adaptyio.atlassian.net/browse/INFRA-166|11.5 [Backend] Tune profile sampling>\nRelease date: Mar 17, 2026\nAffected areas: Segments *(segment profile sample in Dashboard)*\n\n[Sergei Solodskikh]: As part of the migration to Aerospike, we've switched the profile sample view from PostgreSQL to a ClickHouse + Aerospike combo. The behavior of this page is now as follows:\n• New profiles and segment rule changes can take up to 20 minutes to show up here.\n• If you update a custom attribute for an existing profile, this list will still use the value from when the profile was first created. This only applies to this preview — segments in the SDK are always accurate and up to date.\n• Profile details (subscription status, revenue, etc.) are always current, but which profiles appear here is based on data from when they were created.\n(this text is also visible to customer on segment page).\nThis change affects only dashboard, segments per se work as usual\n\n[Sergei Solodskikh]: One note on this page: it must not be viewed as a complete, deterministic, single source of truth on segment composition. It is what it is called - a sample. A list of profiles that usually fall into the segment, in order to show the customer that:\n• The segment generally works\n• Profiles like the ones in the list may fall into this segment\nNo other conclusions should be drawn based on this list\n\n[Yurii Kleimenov]: <!subteam^S03KM96DV0U> fyi",
-      "matchingReplies": [],
-      "hasTeamMention": true,
-      "images": []
-    },
-    {
-      "id": "1773241049.524709",
-      "slackUrl": "https://adapty-team.slack.com/archives/C04SY70QZ0T/p1773241049524709",
-      "name": "INFRA-141",
-      "message": "Feature: Point 2 from <https://adaptyio.atlassian.net/browse/INFRA-141|INFRA-141>\nRelease date: March 11, 2026\nAffected areas: Adapty analytics",
-      "releaseDate": "2026-03-11",
-      "thread": [
-        {
-          "userId": "U08C43RCH39",
-          "userName": "Artur Beglaryan",
-          "text": "Feature: Point 2 from <https://adaptyio.atlassian.net/browse/INFRA-141|INFRA-141>\nRelease date: March 11, 2026\nAffected areas: Adapty analytics",
-          "date": "2026-03-11T14:57:29.524Z",
-          "images": []
-        },
-        {
-          "userId": "U08C43RCH39",
-          "userName": "Artur Beglaryan",
-          "text": "In analytics changed profile fields in `adapty_analytics_transacations` to be based on profiles from aerospike. Should not affect to anything. More details what’s changed and improved in <https://adapty-team.slack.com/archives/C04SY70QZ0T/p1773140810924259|thread>",
-          "date": "2026-03-11T14:59:09.551Z",
-          "images": []
-        },
-        {
-          "userId": "U08C43RCH39",
-          "userName": "Artur Beglaryan",
-          "text": "<!subteam^S03KM96DV0U> <!subteam^S07BZPQDBUJ> please keep an eye on it, it should not affect to anything, just for notice",
-          "date": "2026-03-11T14:59:28.387Z",
-          "images": []
-        }
-      ],
-      "content": "[Artur Beglaryan]: Feature: Point 2 from <https://adaptyio.atlassian.net/browse/INFRA-141|INFRA-141>\nRelease date: March 11, 2026\nAffected areas: Adapty analytics\n\n[Artur Beglaryan]: In analytics changed profile fields in `adapty_analytics_transacations` to be based on profiles from aerospike. Should not affect to anything. More details what’s changed and improved in <https://adapty-team.slack.com/archives/C04SY70QZ0T/p1773140810924259|thread>\n\n[Artur Beglaryan]: <!subteam^S03KM96DV0U> <!subteam^S07BZPQDBUJ> please keep an eye on it, it should not affect to anything, just for notice",
       "matchingReplies": [],
       "hasTeamMention": true,
       "images": []
