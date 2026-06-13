@@ -1,7 +1,195 @@
 {
-  "syncedAt": "2026-06-12T01:11:59.535Z",
+  "syncedAt": "2026-06-13T01:10:02.148Z",
   "channel": "#product-release",
   "entries": [
+    {
+      "id": "1781276508.777609",
+      "slackUrl": "https://adapty-team.slack.com/archives/C04SY70QZ0T/p1781276508777609",
+      "name": "Hi there! I suppose sometimes core-related posts will look less like a cool new feature for customers. So, this is a sto",
+      "message": "Hi there! I suppose sometimes core-related posts will look less like a cool new feature for customers. So, this is a story about an invisible defensive feature: the kind that hopefully no customer ever notices, because its whole purpose is to prevent bad things from happening in the background.\nIt was implemented and delivered a sprint ago, but I believe that late is better than never.\n\n*What's the deal?* \nThe main problem this feature revolves around is \"Forwarding event loops\".\nAdapty allows its users to forward events into third-party systems for further processing and that's perfectly fine - many customers, especially big ones use it. However, the issue is that we have no control over what our customers do in other systems in terms of event routing. And rarely, but very painfully we encountered situations where some of our customers were configuring third-party systems in a way that forwarded events further... back to Adapty.\nEasy to guess, what happened next: reforward back to them, receive again, repeat until (almost) forever (but most likely until something breaks under the load). So given that, if someone configured back-forwarding and experienced a spike of events (say a lot of transactions in a short period of time) - we're cooked, just like Spider-Man's \"no you!\" meme but on high speed. Why is it bad? Well, apart from useless load on our metal, we had already experienced a few painful downtimes of the integrations pipeline because of it.\n\n*Aha, and what you did?*\nTo prevent this, we added a small layer of event analysis on the fly for the integrations flow: before forwarding, we decompose an event in a store-based manner (separately App Store v1, v2 and Play Store), combine some of its data into `deduplication key` - like a passport for an event and store it in memory for an hour at the moment of forwarding. If an App Store / Play Store related event is about to be forwarded and its deduplication key is already present, we simply do nothing integration-wise. That's it.\nWe shipped it in two stages: for the first week, we just added a few logs/notifications around such suspicious passengers, to see if it worked at all. Surprising discoveries around it were that even at this stage there were a few really small customers with such loops. Only around 1-2 transactions per day, but still buzzing every minute or so on constant ping-ponging events back and forth. The second stage, obviously, was about transforming alerts into strict bans on forwarding.\nWe haven’t had a real forward-storm since then, which is good news, but the mechanism is already catching small misconfigurations.\n\nBig thanks go to <@U04B26DSWMA> for implementing the first version, <@U0AR243M9T9> for the initial review, and <@UNWFN144R> for the review battle that helped make this thing nice and robust.\n\n*P.S.* We’re a bit behind with this feed, but next week we’ll catch up and share a few more recent releases - about integrations, billing, and the initial work on Virtual Currencies and Apple Retention Messaging API.",
+      "releaseDate": "2026-06-12",
+      "thread": [
+        {
+          "userId": "U09L1SS03B8",
+          "userName": "Yakov Shabalkov",
+          "text": "Hi there! I suppose sometimes core-related posts will look less like a cool new feature for customers. So, this is a story about an invisible defensive feature: the kind that hopefully no customer ever notices, because its whole purpose is to prevent bad things from happening in the background.\nIt was implemented and delivered a sprint ago, but I believe that late is better than never.\n\n*What's the deal?* \nThe main problem this feature revolves around is \"Forwarding event loops\".\nAdapty allows its users to forward events into third-party systems for further processing and that's perfectly fine - many customers, especially big ones use it. However, the issue is that we have no control over what our customers do in other systems in terms of event routing. And rarely, but very painfully we encountered situations where some of our customers were configuring third-party systems in a way that forwarded events further... back to Adapty.\nEasy to guess, what happened next: reforward back to them, receive again, repeat until (almost) forever (but most likely until something breaks under the load). So given that, if someone configured back-forwarding and experienced a spike of events (say a lot of transactions in a short period of time) - we're cooked, just like Spider-Man's \"no you!\" meme but on high speed. Why is it bad? Well, apart from useless load on our metal, we had already experienced a few painful downtimes of the integrations pipeline because of it.\n\n*Aha, and what you did?*\nTo prevent this, we added a small layer of event analysis on the fly for the integrations flow: before forwarding, we decompose an event in a store-based manner (separately App Store v1, v2 and Play Store), combine some of its data into `deduplication key` - like a passport for an event and store it in memory for an hour at the moment of forwarding. If an App Store / Play Store related event is about to be forwarded and its deduplication key is already present, we simply do nothing integration-wise. That's it.\nWe shipped it in two stages: for the first week, we just added a few logs/notifications around such suspicious passengers, to see if it worked at all. Surprising discoveries around it were that even at this stage there were a few really small customers with such loops. Only around 1-2 transactions per day, but still buzzing every minute or so on constant ping-ponging events back and forth. The second stage, obviously, was about transforming alerts into strict bans on forwarding.\nWe haven’t had a real forward-storm since then, which is good news, but the mechanism is already catching small misconfigurations.\n\nBig thanks go to <@U04B26DSWMA> for implementing the first version, <@U0AR243M9T9> for the initial review, and <@UNWFN144R> for the review battle that helped make this thing nice and robust.\n\n*P.S.* We’re a bit behind with this feed, but next week we’ll catch up and share a few more recent releases - about integrations, billing, and the initial work on Virtual Currencies and Apple Retention Messaging API.",
+          "date": "2026-06-12T15:01:48.777Z",
+          "images": []
+        },
+        {
+          "userId": "U08EVBTE69E",
+          "userName": "Maxim Borisik",
+          "text": "that's so cool Yakov!! well done team",
+          "date": "2026-06-12T15:24:24.318Z",
+          "images": []
+        },
+        {
+          "userId": "U08EVBTE69E",
+          "userName": "Maxim Borisik",
+          "text": "if possible to add a visual scheme before/after that'd be super nice",
+          "date": "2026-06-12T15:25:02.619Z",
+          "images": []
+        }
+      ],
+      "content": "[Yakov Shabalkov]: Hi there! I suppose sometimes core-related posts will look less like a cool new feature for customers. So, this is a story about an invisible defensive feature: the kind that hopefully no customer ever notices, because its whole purpose is to prevent bad things from happening in the background.\nIt was implemented and delivered a sprint ago, but I believe that late is better than never.\n\n*What's the deal?* \nThe main problem this feature revolves around is \"Forwarding event loops\".\nAdapty allows its users to forward events into third-party systems for further processing and that's perfectly fine - many customers, especially big ones use it. However, the issue is that we have no control over what our customers do in other systems in terms of event routing. And rarely, but very painfully we encountered situations where some of our customers were configuring third-party systems in a way that forwarded events further... back to Adapty.\nEasy to guess, what happened next: reforward back to them, receive again, repeat until (almost) forever (but most likely until something breaks under the load). So given that, if someone configured back-forwarding and experienced a spike of events (say a lot of transactions in a short period of time) - we're cooked, just like Spider-Man's \"no you!\" meme but on high speed. Why is it bad? Well, apart from useless load on our metal, we had already experienced a few painful downtimes of the integrations pipeline because of it.\n\n*Aha, and what you did?*\nTo prevent this, we added a small layer of event analysis on the fly for the integrations flow: before forwarding, we decompose an event in a store-based manner (separately App Store v1, v2 and Play Store), combine some of its data into `deduplication key` - like a passport for an event and store it in memory for an hour at the moment of forwarding. If an App Store / Play Store related event is about to be forwarded and its deduplication key is already present, we simply do nothing integration-wise. That's it.\nWe shipped it in two stages: for the first week, we just added a few logs/notifications around such suspicious passengers, to see if it worked at all. Surprising discoveries around it were that even at this stage there were a few really small customers with such loops. Only around 1-2 transactions per day, but still buzzing every minute or so on constant ping-ponging events back and forth. The second stage, obviously, was about transforming alerts into strict bans on forwarding.\nWe haven’t had a real forward-storm since then, which is good news, but the mechanism is already catching small misconfigurations.\n\nBig thanks go to <@U04B26DSWMA> for implementing the first version, <@U0AR243M9T9> for the initial review, and <@UNWFN144R> for the review battle that helped make this thing nice and robust.\n\n*P.S.* We’re a bit behind with this feed, but next week we’ll catch up and share a few more recent releases - about integrations, billing, and the initial work on Virtual Currencies and Apple Retention Messaging API.\n\n[Maxim Borisik]: that's so cool Yakov!! well done team\n\n[Maxim Borisik]: if possible to add a visual scheme before/after that'd be super nice",
+      "matchingReplies": [
+        {
+          "userId": "U08EVBTE69E",
+          "userName": "Maxim Borisik",
+          "text": "if possible to add a visual scheme before/after that'd be super nice",
+          "date": "2026-06-12T15:25:02.619Z",
+          "images": []
+        }
+      ],
+      "hasTeamMention": false,
+      "images": []
+    },
+    {
+      "id": "1781261275.436209",
+      "slackUrl": "https://adapty-team.slack.com/archives/C04SY70QZ0T/p1781261275436209",
+      "name": ":rotating_light: shipping alert :rotating_light: our first *Apple Ads Agent* drops to prod THIS MONTH :apple::robot_face",
+      "message": ":rotating_light: shipping alert :rotating_light: our first *Apple Ads Agent* drops to prod THIS MONTH :apple::robot_face:\n\nbasically a ChatGPT/Claude/UA Manager that actually knows your Apple Ads account — campaigns, keywords, budgets, tap → sub. you ask, it just… knows. new coworker, never sleeps, never takes vacation:keep_thinkin':.\n\nscreenshot below :point_down: (numbers blurred, trade secrets and all :shushing_face:)\n\nneed your big-brain energy before launch:\n> :one: *NAME THIS THING* — it deserves better than “AI Agent”. my nominees: Adaptly, Max ~Kamenkov~ AI, AsapAI, AIkut…\n> :two: *what would YOU ask it on day 1?* you’re the client, 47 campaigns, one coffee :coffee: — what do you fire at it first?\nbest ideas ship with the product :trophy: thread’s open :thread::point_down:",
+      "releaseDate": "2026-06-12",
+      "thread": [
+        {
+          "userId": "U03J8UXUDPF",
+          "userName": "Mykola Martynovets",
+          "text": ":rotating_light: shipping alert :rotating_light: our first *Apple Ads Agent* drops to prod THIS MONTH :apple::robot_face:\n\nbasically a ChatGPT/Claude/UA Manager that actually knows your Apple Ads account — campaigns, keywords, budgets, tap → sub. you ask, it just… knows. new coworker, never sleeps, never takes vacation:keep_thinkin':.\n\nscreenshot below :point_down: (numbers blurred, trade secrets and all :shushing_face:)\n\nneed your big-brain energy before launch:\n> :one: *NAME THIS THING* — it deserves better than “AI Agent”. my nominees: Adaptly, Max ~Kamenkov~ AI, AsapAI, AIkut…\n> :two: *what would YOU ask it on day 1?* you’re the client, 47 campaigns, one coffee :coffee: — what do you fire at it first?\nbest ideas ship with the product :trophy: thread’s open :thread::point_down:",
+          "date": "2026-06-12T10:47:55.436Z",
+          "images": [
+            "https://files.slack.com/files-pri/T9HDDB78Q-F0B9YSKCLEP/image.png"
+          ]
+        },
+        {
+          "userId": "U08ASB4GYR4",
+          "userName": "Roman Miasnikov",
+          "text": "AdBuddy :eye-in-speech-bubble:",
+          "date": "2026-06-12T10:50:50.970Z",
+          "images": []
+        },
+        {
+          "userId": "U03J8UXUDPF",
+          "userName": "Mykola Martynovets",
+          "text": "<@U08ASB4GYR4> cool idea, thx!\n<https://en.wikipedia.org/wiki/Buddy_(rapper)>",
+          "date": "2026-06-12T10:52:14.744Z",
+          "images": [
+            "https://files.slack.com/files-pri/T9HDDB78Q-F0BA36E4RE2/screenshot_2026-06-12_at_1.51.32___pm.png"
+          ]
+        },
+        {
+          "userId": "U0A4F2RSMQQ",
+          "userName": "Denis Dolbilin",
+          "text": "PommeAi\nits apple from french, its silly but has some resemblance to claude, in the sense that it is also french ",
+          "date": "2026-06-12T11:04:04.019Z",
+          "images": []
+        },
+        {
+          "userId": "U07H1ESAH6K",
+          "userName": "Sofia Pikuleva",
+          "text": "I have slogan for this tool: сrunch your insights like apples",
+          "date": "2026-06-12T11:08:27.292Z",
+          "images": []
+        },
+        {
+          "userId": "U03J8UXUDPF",
+          "userName": "Mykola Martynovets",
+          "text": "quick variations :think-and-smoke:",
+          "date": "2026-06-12T11:12:04.918Z",
+          "images": [
+            "https://files.slack.com/files-pri/T9HDDB78Q-F0BA5B1B5UJ/screenshot_2026-06-12_at_2.05.20___pm.png",
+            "https://files.slack.com/files-pri/T9HDDB78Q-F0BA90XPP7W/screenshot_2026-06-12_at_2.11.21___pm.png"
+          ]
+        },
+        {
+          "userId": "U080G9FHV50",
+          "userName": "Mirazim Tolipov",
+          "text": "apple ~ads~ intelligence",
+          "date": "2026-06-12T11:14:19.869Z",
+          "images": [
+            "https://files.slack.com/files-pri/T9HDDB78Q-F0BA3AGCPHC/shot_2026-06-12-11-gahiuhgo-13.48_2x.png"
+          ]
+        },
+        {
+          "userId": "U03J8UXUDPF",
+          "userName": "Mykola Martynovets",
+          "text": "Oh, and one more thing we’re toying with :eyes:\nYou’d get to pick your agent’s personality - choose a character, and it chats with you and delivers reports in their style.\nPicture Trump-mode breaking down why your ROAS drop in Iran, or why your keywords keep getting pricier in the US. :us:",
+          "date": "2026-06-12T11:15:02.583Z",
+          "images": []
+        },
+        {
+          "userId": "U07H1ESAH6K",
+          "userName": "Sofia Pikuleva",
+          "text": "Apple Pie\nASA insights, served hot and fresh.\nWe cook ASA insights. You take the win.\n\nI need to go for lunch",
+          "date": "2026-06-12T11:35:55.091Z",
+          "images": [
+            "https://files.slack.com/files-pri/T9HDDB78Q-F0BA7B7JYMP/a-img.jpg"
+          ]
+        },
+        {
+          "userId": "U03J8UXUDPF",
+          "userName": "Mykola Martynovets",
+          "text": "Apple pie pineapple fine",
+          "date": "2026-06-12T11:48:19.364Z",
+          "images": []
+        },
+        {
+          "userId": "U9JU5J5RC",
+          "userName": "Vitaly Davydov",
+          "text": "Odopti",
+          "date": "2026-06-12T12:00:20.215Z",
+          "images": []
+        },
+        {
+          "userId": "U9JU5J5RC",
+          "userName": "Vitaly Davydov",
+          "text": "I'd ask about competitor metrics/try to hack data from our db",
+          "date": "2026-06-12T12:01:46.267Z",
+          "images": []
+        },
+        {
+          "userId": "U03J8UXUDPF",
+          "userName": "Mykola Martynovets",
+          "text": "&gt; I’d ask about competitor metrics/try to hack data from our db\nAuf, provocative!",
+          "date": "2026-06-12T12:03:01.787Z",
+          "images": []
+        }
+      ],
+      "content": "[Mykola Martynovets]: :rotating_light: shipping alert :rotating_light: our first *Apple Ads Agent* drops to prod THIS MONTH :apple::robot_face:\n\nbasically a ChatGPT/Claude/UA Manager that actually knows your Apple Ads account — campaigns, keywords, budgets, tap → sub. you ask, it just… knows. new coworker, never sleeps, never takes vacation:keep_thinkin':.\n\nscreenshot below :point_down: (numbers blurred, trade secrets and all :shushing_face:)\n\nneed your big-brain energy before launch:\n> :one: *NAME THIS THING* — it deserves better than “AI Agent”. my nominees: Adaptly, Max ~Kamenkov~ AI, AsapAI, AIkut…\n> :two: *what would YOU ask it on day 1?* you’re the client, 47 campaigns, one coffee :coffee: — what do you fire at it first?\nbest ideas ship with the product :trophy: thread’s open :thread::point_down:\n\n[Roman Miasnikov]: AdBuddy :eye-in-speech-bubble:\n\n[Mykola Martynovets]: <@U08ASB4GYR4> cool idea, thx!\n<https://en.wikipedia.org/wiki/Buddy_(rapper)>\n\n[Denis Dolbilin]: PommeAi\nits apple from french, its silly but has some resemblance to claude, in the sense that it is also french \n\n[Sofia Pikuleva]: I have slogan for this tool: сrunch your insights like apples\n\n[Mykola Martynovets]: quick variations :think-and-smoke:\n\n[Mirazim Tolipov]: apple ~ads~ intelligence\n\n[Mykola Martynovets]: Oh, and one more thing we’re toying with :eyes:\nYou’d get to pick your agent’s personality - choose a character, and it chats with you and delivers reports in their style.\nPicture Trump-mode breaking down why your ROAS drop in Iran, or why your keywords keep getting pricier in the US. :us:\n\n[Sofia Pikuleva]: Apple Pie\nASA insights, served hot and fresh.\nWe cook ASA insights. You take the win.\n\nI need to go for lunch\n\n[Mykola Martynovets]: Apple pie pineapple fine\n\n[Vitaly Davydov]: Odopti\n\n[Vitaly Davydov]: I'd ask about competitor metrics/try to hack data from our db\n\n[Mykola Martynovets]: &gt; I’d ask about competitor metrics/try to hack data from our db\nAuf, provocative!",
+      "matchingReplies": [
+        {
+          "userId": "U03J8UXUDPF",
+          "userName": "Mykola Martynovets",
+          "text": "<@U08ASB4GYR4> cool idea, thx!\n<https://en.wikipedia.org/wiki/Buddy_(rapper)>",
+          "date": "2026-06-12T10:52:14.744Z",
+          "images": [
+            "https://files.slack.com/files-pri/T9HDDB78Q-F0BA36E4RE2/screenshot_2026-06-12_at_1.51.32___pm.png"
+          ]
+        },
+        {
+          "userId": "U03J8UXUDPF",
+          "userName": "Mykola Martynovets",
+          "text": "Oh, and one more thing we’re toying with :eyes:\nYou’d get to pick your agent’s personality - choose a character, and it chats with you and delivers reports in their style.\nPicture Trump-mode breaking down why your ROAS drop in Iran, or why your keywords keep getting pricier in the US. :us:",
+          "date": "2026-06-12T11:15:02.583Z",
+          "images": []
+        },
+        {
+          "userId": "U03J8UXUDPF",
+          "userName": "Mykola Martynovets",
+          "text": "&gt; I’d ask about competitor metrics/try to hack data from our db\nAuf, provocative!",
+          "date": "2026-06-12T12:03:01.787Z",
+          "images": []
+        }
+      ],
+      "hasTeamMention": false,
+      "images": [
+        "https://files.slack.com/files-pri/T9HDDB78Q-F0B9YSKCLEP/image.png",
+        "https://files.slack.com/files-pri/T9HDDB78Q-F0BA36E4RE2/screenshot_2026-06-12_at_1.51.32___pm.png",
+        "https://files.slack.com/files-pri/T9HDDB78Q-F0BA5B1B5UJ/screenshot_2026-06-12_at_2.05.20___pm.png",
+        "https://files.slack.com/files-pri/T9HDDB78Q-F0BA90XPP7W/screenshot_2026-06-12_at_2.11.21___pm.png",
+        "https://files.slack.com/files-pri/T9HDDB78Q-F0BA3AGCPHC/shot_2026-06-12-11-gahiuhgo-13.48_2x.png",
+        "https://files.slack.com/files-pri/T9HDDB78Q-F0BA7B7JYMP/a-img.jpg"
+      ]
+    },
     {
       "id": "1780931682.615739",
       "slackUrl": "https://adapty-team.slack.com/archives/C04SY70QZ0T/p1780931682615739",
@@ -217,9 +405,30 @@
           "text": "we'll calibrate. if something's off we can coordinate. but one more channel is too much i'd say",
           "date": "2026-06-05T09:16:41.565Z",
           "images": []
+        },
+        {
+          "userId": "U034A27SVHC",
+          "userName": "Artem Rukavishnikov",
+          "text": "Hey Maxim!\nJust to reiterate, we don't have any internal release feed anymore? In slack or anywhere else?\n\nI don't mind if we keep it here, I am just worried there is no strict requirement anymore to post releases here, so it will be at the mercy of individuals rather than institutional",
+          "date": "2026-06-12T06:16:52.622Z",
+          "images": []
+        },
+        {
+          "userId": "U08EVBTE69E",
+          "userName": "Maxim Borisik",
+          "text": "sure thing we have releases! and it should be specified here. I just have a feeling that there haven't been big releases yet. that's why no posts",
+          "date": "2026-06-12T10:26:43.659Z",
+          "images": []
+        },
+        {
+          "userId": "U08EVBTE69E",
+          "userName": "Maxim Borisik",
+          "text": "let me check with my teams, maybe we can share some",
+          "date": "2026-06-12T10:26:51.372Z",
+          "images": []
         }
       ],
-      "content": "[Maxim Borisik]: hey team!\nwe're trimming channels a bit, and with the Product team we're turning this one into our *product feed* :dart:\n\n*the idea:* show how we actually _cook_ product at adapty.\nnot just a release log, but the thinking behind it - a place to pull ideas, inspiration, or answers to your questions.\n\n*expect stuff like:*\n• what's behind the decisions we make \n• what results our products actually deliver\n• what clients say about them\n• the messy parts: where we get stuck inside our teams\n*posting tips:* \nthe more visual the better - videos, figma, mockups, demos land best :popcorn:\nand keep it real: *your own voice beats an AI wall of text*\n\njump in - drop questions, react, tell us what you'd want to see here :eyes:\n\n[Yakov Shabalkov]: great idea! how \"messy\" could be messy part? is that ok/interesting to share some technical details spoken with simple/human language behind the scenes?\n\n[Maxim Borisik]: yes! sure thing!\n\n[Maxim Borisik]: we want to know more about this \"dog on fire\" :rolling_on_the_floor_laughing:\n\n[Artem Rukavishnikov]: Hey! I fancy a channel like this, but does it worth sacrifising the \"releases\" channel?\n\nI find a lot of value in the way it is. We have a few product chanels that are not really used for anything like <#C03KF7Q7353> and could be revitalized.\n\nI feel like having the release log diluted with duscussions could reduct visibility on releases.\n\n[Maxim Borisik]: we'll calibrate. if something's off we can coordinate. but one more channel is too much i'd say",
+      "content": "[Maxim Borisik]: hey team!\nwe're trimming channels a bit, and with the Product team we're turning this one into our *product feed* :dart:\n\n*the idea:* show how we actually _cook_ product at adapty.\nnot just a release log, but the thinking behind it - a place to pull ideas, inspiration, or answers to your questions.\n\n*expect stuff like:*\n• what's behind the decisions we make \n• what results our products actually deliver\n• what clients say about them\n• the messy parts: where we get stuck inside our teams\n*posting tips:* \nthe more visual the better - videos, figma, mockups, demos land best :popcorn:\nand keep it real: *your own voice beats an AI wall of text*\n\njump in - drop questions, react, tell us what you'd want to see here :eyes:\n\n[Yakov Shabalkov]: great idea! how \"messy\" could be messy part? is that ok/interesting to share some technical details spoken with simple/human language behind the scenes?\n\n[Maxim Borisik]: yes! sure thing!\n\n[Maxim Borisik]: we want to know more about this \"dog on fire\" :rolling_on_the_floor_laughing:\n\n[Artem Rukavishnikov]: Hey! I fancy a channel like this, but does it worth sacrifising the \"releases\" channel?\n\nI find a lot of value in the way it is. We have a few product chanels that are not really used for anything like <#C03KF7Q7353> and could be revitalized.\n\nI feel like having the release log diluted with duscussions could reduct visibility on releases.\n\n[Maxim Borisik]: we'll calibrate. if something's off we can coordinate. but one more channel is too much i'd say\n\n[Artem Rukavishnikov]: Hey Maxim!\nJust to reiterate, we don't have any internal release feed anymore? In slack or anywhere else?\n\nI don't mind if we keep it here, I am just worried there is no strict requirement anymore to post releases here, so it will be at the mercy of individuals rather than institutional\n\n[Maxim Borisik]: sure thing we have releases! and it should be specified here. I just have a feeling that there haven't been big releases yet. that's why no posts\n\n[Maxim Borisik]: let me check with my teams, maybe we can share some",
       "matchingReplies": [
         {
           "userId": "U08EVBTE69E",
@@ -233,6 +442,20 @@
           "userName": "Maxim Borisik",
           "text": "we'll calibrate. if something's off we can coordinate. but one more channel is too much i'd say",
           "date": "2026-06-05T09:16:41.565Z",
+          "images": []
+        },
+        {
+          "userId": "U08EVBTE69E",
+          "userName": "Maxim Borisik",
+          "text": "sure thing we have releases! and it should be specified here. I just have a feeling that there haven't been big releases yet. that's why no posts",
+          "date": "2026-06-12T10:26:43.659Z",
+          "images": []
+        },
+        {
+          "userId": "U08EVBTE69E",
+          "userName": "Maxim Borisik",
+          "text": "let me check with my teams, maybe we can share some",
+          "date": "2026-06-12T10:26:51.372Z",
           "images": []
         }
       ],
@@ -1632,81 +1855,6 @@
         }
       ],
       "content": "[Sergei Solodskikh]: Feature: <https://adaptyio.atlassian.net/browse/INFRA-157|Remove dependency on profile table in raw SQL queries within purchase context>\nRelease date: Mar 18, 2026\nAffected areas: *Refund saver* (dashboard)*, Purchases* (SDK), Paywalls (SDK)\n\n[Sergei Solodskikh]: As part of the migration to Aerospike, we've made several changes on backend related to data retrieval. No changes in logic were introduced. What can potentially be affected:\n1. *Refund saver* - transaction list in dashboard; changing per-profile refund preference on profile page (app-wide settings stay intact)\n2. *Purchases* - sharing Paid access level between profiles if _Transfer access to new user_ is selected in app settings \n3. *Paywalls* - `introductory_offer_eligibility` field in paywall object returned to SDK (confirmed not changed via logs, but still worth mentioning)\n\n[Sergei Solodskikh]: <!subteam^S03KM96DV0U> FYI\n\n[Emre Ergün]: Hi <@U04B26DSWMA> could this be a reason for profiles to appear with delay to the dashboard? A customer said profiles that download their app appear around 20 mins late to the dashboard but previously it was instantenious\n\n[Sergei Solodskikh]: Hey <@U04N9V7T5U4>! No, this one is not related (<https://adapty-team.slack.com/archives/C04SY70QZ0T/p1772548496458589|that one> is). Searching by profile_id, customer_user_is, email or transaction_id works instantaneously. Profile list, however, shows profiles with delay\n\n[Emre Ergün]: yes it is about the profile list actually thanks <@U04B26DSWMA>\n\nCustomer says it is very important for them because they check the list regularly, do we expect any changes there soon?\n\n[Sergei Solodskikh]: No, this is by design and will not be changed\n\n[Emre Ergün]: thanks <@U04B26DSWMA>",
-      "matchingReplies": [],
-      "hasTeamMention": true,
-      "images": []
-    },
-    {
-      "id": "1773785665.395739",
-      "slackUrl": "https://adapty-team.slack.com/archives/C04SY70QZ0T/p1773785665395739",
-      "name": "7.2 [Backend] Implement profile data retrieval from Aerospike when forming view events",
-      "message": "Feature: <https://adaptyio.atlassian.net/browse/INFRA-153|7.2 [Backend] Implement profile data retrieval from Aerospike when forming view events>\nRelease date: Mar 17, 2026\nAffected areas: Analytics(affected paywall visits and onboarding views)",
-      "releaseDate": "2026-03-17",
-      "thread": [
-        {
-          "userId": "U08C43RCH39",
-          "userName": "Artur Beglaryan",
-          "text": "Feature: <https://adaptyio.atlassian.net/browse/INFRA-153|7.2 [Backend] Implement profile data retrieval from Aerospike when forming view events>\nRelease date: Mar 17, 2026\nAffected areas: Analytics(affected paywall visits and onboarding views)",
-          "date": "2026-03-17T22:14:25.395Z",
-          "images": []
-        },
-        {
-          "userId": "U08C43RCH39",
-          "userName": "Artur Beglaryan",
-          "text": "As part of the migration to Aerospike, we’ve switched the retrieval of profile information to enrich paywall visits and onboarding views. this is used in analytics of filtering/grouping by segments, where we are rendering charts and tables.\nAs a technical improvement-data processing speed increased by 2x(before postgres based was ~20 seconds, now it’s ~10 seconds)",
-          "date": "2026-03-17T22:18:13.337Z",
-          "images": []
-        },
-        {
-          "userId": "U07J9LKBQ5U",
-          "userName": "Yurii Kleimenov",
-          "text": "<!subteam^S03KM96DV0U> fyi ",
-          "date": "2026-03-18T06:45:20.296Z",
-          "images": []
-        }
-      ],
-      "content": "[Artur Beglaryan]: Feature: <https://adaptyio.atlassian.net/browse/INFRA-153|7.2 [Backend] Implement profile data retrieval from Aerospike when forming view events>\nRelease date: Mar 17, 2026\nAffected areas: Analytics(affected paywall visits and onboarding views)\n\n[Artur Beglaryan]: As part of the migration to Aerospike, we’ve switched the retrieval of profile information to enrich paywall visits and onboarding views. this is used in analytics of filtering/grouping by segments, where we are rendering charts and tables.\nAs a technical improvement-data processing speed increased by 2x(before postgres based was ~20 seconds, now it’s ~10 seconds)\n\n[Yurii Kleimenov]: <!subteam^S03KM96DV0U> fyi ",
-      "matchingReplies": [],
-      "hasTeamMention": true,
-      "images": []
-    },
-    {
-      "id": "1773766243.012069",
-      "slackUrl": "https://adapty-team.slack.com/archives/C04SY70QZ0T/p1773766243012069",
-      "name": "11.5 [Backend] Tune profile sampling",
-      "message": "Feature: <https://adaptyio.atlassian.net/browse/INFRA-166|11.5 [Backend] Tune profile sampling>\nRelease date: Mar 17, 2026\nAffected areas: Segments *(segment profile sample in Dashboard)*",
-      "releaseDate": "2026-03-17",
-      "thread": [
-        {
-          "userId": "U04B26DSWMA",
-          "userName": "Sergei Solodskikh",
-          "text": "Feature: <https://adaptyio.atlassian.net/browse/INFRA-166|11.5 [Backend] Tune profile sampling>\nRelease date: Mar 17, 2026\nAffected areas: Segments *(segment profile sample in Dashboard)*",
-          "date": "2026-03-17T16:50:43.012Z",
-          "images": []
-        },
-        {
-          "userId": "U04B26DSWMA",
-          "userName": "Sergei Solodskikh",
-          "text": "As part of the migration to Aerospike, we've switched the profile sample view from PostgreSQL to a ClickHouse + Aerospike combo. The behavior of this page is now as follows:\n• New profiles and segment rule changes can take up to 20 minutes to show up here.\n• If you update a custom attribute for an existing profile, this list will still use the value from when the profile was first created. This only applies to this preview — segments in the SDK are always accurate and up to date.\n• Profile details (subscription status, revenue, etc.) are always current, but which profiles appear here is based on data from when they were created.\n(this text is also visible to customer on segment page).\nThis change affects only dashboard, segments per se work as usual",
-          "date": "2026-03-17T16:54:20.830Z",
-          "images": []
-        },
-        {
-          "userId": "U04B26DSWMA",
-          "userName": "Sergei Solodskikh",
-          "text": "One note on this page: it must not be viewed as a complete, deterministic, single source of truth on segment composition. It is what it is called - a sample. A list of profiles that usually fall into the segment, in order to show the customer that:\n• The segment generally works\n• Profiles like the ones in the list may fall into this segment\nNo other conclusions should be drawn based on this list",
-          "date": "2026-03-17T17:03:39.288Z",
-          "images": []
-        },
-        {
-          "userId": "U07J9LKBQ5U",
-          "userName": "Yurii Kleimenov",
-          "text": "<!subteam^S03KM96DV0U> fyi",
-          "date": "2026-03-18T06:45:00.906Z",
-          "images": []
-        }
-      ],
-      "content": "[Sergei Solodskikh]: Feature: <https://adaptyio.atlassian.net/browse/INFRA-166|11.5 [Backend] Tune profile sampling>\nRelease date: Mar 17, 2026\nAffected areas: Segments *(segment profile sample in Dashboard)*\n\n[Sergei Solodskikh]: As part of the migration to Aerospike, we've switched the profile sample view from PostgreSQL to a ClickHouse + Aerospike combo. The behavior of this page is now as follows:\n• New profiles and segment rule changes can take up to 20 minutes to show up here.\n• If you update a custom attribute for an existing profile, this list will still use the value from when the profile was first created. This only applies to this preview — segments in the SDK are always accurate and up to date.\n• Profile details (subscription status, revenue, etc.) are always current, but which profiles appear here is based on data from when they were created.\n(this text is also visible to customer on segment page).\nThis change affects only dashboard, segments per se work as usual\n\n[Sergei Solodskikh]: One note on this page: it must not be viewed as a complete, deterministic, single source of truth on segment composition. It is what it is called - a sample. A list of profiles that usually fall into the segment, in order to show the customer that:\n• The segment generally works\n• Profiles like the ones in the list may fall into this segment\nNo other conclusions should be drawn based on this list\n\n[Yurii Kleimenov]: <!subteam^S03KM96DV0U> fyi",
       "matchingReplies": [],
       "hasTeamMention": true,
       "images": []
