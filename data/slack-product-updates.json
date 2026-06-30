@@ -1,7 +1,154 @@
 {
-  "syncedAt": "2026-06-29T01:07:37.794Z",
+  "syncedAt": "2026-06-30T01:03:06.388Z",
   "channel": "#product-release",
   "entries": [
+    {
+      "id": "1782741495.646139",
+      "slackUrl": "https://adapty-team.slack.com/archives/C04SY70QZ0T/p1782741495646139",
+      "name": "Hi everyone!",
+      "message": "Hi everyone!\nBy turning this channel into an ideas hub, we lost the process where the support team knew about releases in time and could connect the dots when something went wrong. We already tripped over this once, when the infrastructure team shipped sensitive code and support had no idea, so a customer issue took much longer to sort out (details <https://adapty-team.slack.com/archives/C035WAT083Y/p1782555171158509|here>). I’m with <@U05QELDHUUX> and suggest we bring back the practice of announcing releases. Let’s use the old message format (like <https://adapty-team.slack.com/archives/C04SY70QZ0T/p1782447994191469|this>), and also tag the messages with `#released` at the start.\n\n<@U08EVBTE69E> <@U07J9LKBQ5U> <@U03J8UXUDPF> <@U03K1BGS464> Folks, please pick this up too.",
+      "releaseDate": "2026-06-29",
+      "thread": [
+        {
+          "userId": "UNWFN144R",
+          "userName": "Artem Davydov",
+          "text": "Hi everyone!\nBy turning this channel into an ideas hub, we lost the process where the support team knew about releases in time and could connect the dots when something went wrong. We already tripped over this once, when the infrastructure team shipped sensitive code and support had no idea, so a customer issue took much longer to sort out (details <https://adapty-team.slack.com/archives/C035WAT083Y/p1782555171158509|here>). I’m with <@U05QELDHUUX> and suggest we bring back the practice of announcing releases. Let’s use the old message format (like <https://adapty-team.slack.com/archives/C04SY70QZ0T/p1782447994191469|this>), and also tag the messages with `#released` at the start.\n\n<@U08EVBTE69E> <@U07J9LKBQ5U> <@U03J8UXUDPF> <@U03K1BGS464> Folks, please pick this up too.",
+          "date": "2026-06-29T13:58:15.646Z",
+          "images": []
+        },
+        {
+          "userId": "U08EVBTE69E",
+          "userName": "Maxim Borisik",
+          "text": "i agree that we should (and will) highlight what's released, but if we ship sensitive code, then we need to tag support if it's important. what do you think?",
+          "date": "2026-06-29T14:00:33.503Z",
+          "images": []
+        },
+        {
+          "userId": "U08C43RCH39",
+          "userName": "Artur Beglaryan",
+          "text": "<@U08EVBTE69E> before we were tagging the support when were posting the sensitive code release but after we change the channel flow that practice disappear",
+          "date": "2026-06-29T14:03:24.247Z",
+          "images": []
+        },
+        {
+          "userId": "UNWFN144R",
+          "userName": "Artem Davydov",
+          "text": "Sure, if you have doubts about a release, better to tag <!subteam^S08SJ447HD4> an extra time than not",
+          "date": "2026-06-29T14:06:31.519Z",
+          "images": []
+        },
+        {
+          "userId": "U9HDNS9S4",
+          "userName": "Kirill Potekhin",
+          "text": "let's not publish all releases here. previous channel had many notifications but they were meaningless for most of the team members, because they lacked customer value, so most of the people stopped paying attention. if we start posting here, that we've introduced new feature flag to battle redis locks, it will be the same.\n\nthis channel is focused on the actual product news/ideas, some of which are releases, but they should be useful/helpful for anyone in the company. for raw releases/tech details it's better to create a new channel and invite guys from support and other interested parties there.",
+          "date": "2026-06-29T14:51:18.451Z",
+          "images": []
+        },
+        {
+          "userId": "UNWFN144R",
+          "userName": "Artem Davydov",
+          "text": "Well, I’ve created a new channel <#C0BERHB1YLQ>. <!subteam^S0ATWJA5K6Z> <!subteam^S0B8JGJ5QAW> <!subteam^S07T30HQ360> <!subteam^S08SJ447HD4> everyone join to new channel",
+          "date": "2026-06-29T15:10:23.557Z",
+          "images": []
+        },
+        {
+          "userId": "U05QELDHUUX",
+          "userName": "Sergey Muratov",
+          "text": "I don't know guys, I feel like maybe this needs more structure. The way it is now — every PM will need to post both here in <#C04SY70QZ0T> and in <#C0BERHB1YLQ>.",
+          "date": "2026-06-29T16:28:32.526Z",
+          "images": []
+        },
+        {
+          "userId": "U05QELDHUUX",
+          "userName": "Sergey Muratov",
+          "text": "I just need a place to look for actual user-facing releases, and I believe this is not only my need, but it's relevant for many people as well.\n\nCould we maybe do:\n• <#C0BERHB1YLQ> for user-facing stuff\n• <#C04SY70QZ0T> for everything else (so releases will only go to <#C0BERHB1YLQ> with a possible additional write-up in <#C04SY70QZ0T>, if a PM wants it)\n• #tech-releases for releases that might be important to support, but not user-facing?",
+          "date": "2026-06-29T16:30:06.041Z",
+          "images": []
+        },
+        {
+          "userId": "U9HDNS9S4",
+          "userName": "Kirill Potekhin",
+          "text": "<@U05QELDHUUX> why this channel is not sufficient for customer facing releases? the other one should be renamed to #tech-releases, yes, not the product ones. we can also publish product updates there, but more on the tech side, with affected areas, etc",
+          "date": "2026-06-29T16:35:40.842Z",
+          "images": []
+        },
+        {
+          "userId": "U05QELDHUUX",
+          "userName": "Sergey Muratov",
+          "text": "I don't know a better way to explain it than this: <https://adapty-team.slack.com/archives/C04SY70QZ0T/p1782739516553869>",
+          "date": "2026-06-29T16:36:12.971Z",
+          "images": []
+        },
+        {
+          "userId": "U05QELDHUUX",
+          "userName": "Sergey Muratov",
+          "text": "If we're doing that — OK",
+          "date": "2026-06-29T16:36:59.638Z",
+          "images": []
+        },
+        {
+          "userId": "U9HDNS9S4",
+          "userName": "Kirill Potekhin",
+          "text": "well, released tag can be used, but not a separate channel. if the release is not customer facing, it wouldn't be here, and you don't need to monitor anything else",
+          "date": "2026-06-29T16:37:36.357Z",
+          "images": []
+        },
+        {
+          "userId": "U05QELDHUUX",
+          "userName": "Sergey Muratov",
+          "text": "OK, then this other channel shouldn't be called <#C0BERHB1YLQ> then :slightly_smiling_face:",
+          "date": "2026-06-29T16:38:04.393Z",
+          "images": []
+        },
+        {
+          "userId": "U9HDNS9S4",
+          "userName": "Kirill Potekhin",
+          "text": "#*product-tech-releases*",
+          "date": "2026-06-29T16:38:49.508Z",
+          "images": []
+        },
+        {
+          "userId": "U05QELDHUUX",
+          "userName": "Sergey Muratov",
+          "text": "That works.",
+          "date": "2026-06-29T16:38:57.925Z",
+          "images": []
+        }
+      ],
+      "content": "[Artem Davydov]: Hi everyone!\nBy turning this channel into an ideas hub, we lost the process where the support team knew about releases in time and could connect the dots when something went wrong. We already tripped over this once, when the infrastructure team shipped sensitive code and support had no idea, so a customer issue took much longer to sort out (details <https://adapty-team.slack.com/archives/C035WAT083Y/p1782555171158509|here>). I’m with <@U05QELDHUUX> and suggest we bring back the practice of announcing releases. Let’s use the old message format (like <https://adapty-team.slack.com/archives/C04SY70QZ0T/p1782447994191469|this>), and also tag the messages with `#released` at the start.\n\n<@U08EVBTE69E> <@U07J9LKBQ5U> <@U03J8UXUDPF> <@U03K1BGS464> Folks, please pick this up too.\n\n[Maxim Borisik]: i agree that we should (and will) highlight what's released, but if we ship sensitive code, then we need to tag support if it's important. what do you think?\n\n[Artur Beglaryan]: <@U08EVBTE69E> before we were tagging the support when were posting the sensitive code release but after we change the channel flow that practice disappear\n\n[Artem Davydov]: Sure, if you have doubts about a release, better to tag <!subteam^S08SJ447HD4> an extra time than not\n\n[Kirill Potekhin]: let's not publish all releases here. previous channel had many notifications but they were meaningless for most of the team members, because they lacked customer value, so most of the people stopped paying attention. if we start posting here, that we've introduced new feature flag to battle redis locks, it will be the same.\n\nthis channel is focused on the actual product news/ideas, some of which are releases, but they should be useful/helpful for anyone in the company. for raw releases/tech details it's better to create a new channel and invite guys from support and other interested parties there.\n\n[Artem Davydov]: Well, I’ve created a new channel <#C0BERHB1YLQ>. <!subteam^S0ATWJA5K6Z> <!subteam^S0B8JGJ5QAW> <!subteam^S07T30HQ360> <!subteam^S08SJ447HD4> everyone join to new channel\n\n[Sergey Muratov]: I don't know guys, I feel like maybe this needs more structure. The way it is now — every PM will need to post both here in <#C04SY70QZ0T> and in <#C0BERHB1YLQ>.\n\n[Sergey Muratov]: I just need a place to look for actual user-facing releases, and I believe this is not only my need, but it's relevant for many people as well.\n\nCould we maybe do:\n• <#C0BERHB1YLQ> for user-facing stuff\n• <#C04SY70QZ0T> for everything else (so releases will only go to <#C0BERHB1YLQ> with a possible additional write-up in <#C04SY70QZ0T>, if a PM wants it)\n• #tech-releases for releases that might be important to support, but not user-facing?\n\n[Kirill Potekhin]: <@U05QELDHUUX> why this channel is not sufficient for customer facing releases? the other one should be renamed to #tech-releases, yes, not the product ones. we can also publish product updates there, but more on the tech side, with affected areas, etc\n\n[Sergey Muratov]: I don't know a better way to explain it than this: <https://adapty-team.slack.com/archives/C04SY70QZ0T/p1782739516553869>\n\n[Sergey Muratov]: If we're doing that — OK\n\n[Kirill Potekhin]: well, released tag can be used, but not a separate channel. if the release is not customer facing, it wouldn't be here, and you don't need to monitor anything else\n\n[Sergey Muratov]: OK, then this other channel shouldn't be called <#C0BERHB1YLQ> then :slightly_smiling_face:\n\n[Kirill Potekhin]: #*product-tech-releases*\n\n[Sergey Muratov]: That works.",
+      "matchingReplies": [
+        {
+          "userId": "U08EVBTE69E",
+          "userName": "Maxim Borisik",
+          "text": "i agree that we should (and will) highlight what's released, but if we ship sensitive code, then we need to tag support if it's important. what do you think?",
+          "date": "2026-06-29T14:00:33.503Z",
+          "images": []
+        },
+        {
+          "userId": "U9HDNS9S4",
+          "userName": "Kirill Potekhin",
+          "text": "let's not publish all releases here. previous channel had many notifications but they were meaningless for most of the team members, because they lacked customer value, so most of the people stopped paying attention. if we start posting here, that we've introduced new feature flag to battle redis locks, it will be the same.\n\nthis channel is focused on the actual product news/ideas, some of which are releases, but they should be useful/helpful for anyone in the company. for raw releases/tech details it's better to create a new channel and invite guys from support and other interested parties there.",
+          "date": "2026-06-29T14:51:18.451Z",
+          "images": []
+        },
+        {
+          "userId": "U9HDNS9S4",
+          "userName": "Kirill Potekhin",
+          "text": "<@U05QELDHUUX> why this channel is not sufficient for customer facing releases? the other one should be renamed to #tech-releases, yes, not the product ones. we can also publish product updates there, but more on the tech side, with affected areas, etc",
+          "date": "2026-06-29T16:35:40.842Z",
+          "images": []
+        },
+        {
+          "userId": "U9HDNS9S4",
+          "userName": "Kirill Potekhin",
+          "text": "well, released tag can be used, but not a separate channel. if the release is not customer facing, it wouldn't be here, and you don't need to monitor anything else",
+          "date": "2026-06-29T16:37:36.357Z",
+          "images": []
+        }
+      ],
+      "hasTeamMention": true,
+      "images": []
+    },
     {
       "id": "1781726151.656829",
       "slackUrl": "https://adapty-team.slack.com/archives/C04SY70QZ0T/p1781726151656829",
@@ -1815,76 +1962,6 @@
       ],
       "content": "[Alexey Goncharov]: Feature: *<https://github.com/adaptyteam/AdaptySDK-iOS/releases/tag/3.15.7|Adapty iOS 3.15.7>*\nRelease date: Mar 25, 2026\nDependencies: Crossplatforms\nEffected areas:\n• Fixed support for Xcode 26.4\n\n[Alexey Goncharov]: <!subteam^S03KM96DV0U> fyi\n\nToday new Xcode version was being released, we're going to rollout all our crossplatrofm SDKs in the following hours as well",
       "matchingReplies": [],
-      "hasTeamMention": true,
-      "images": []
-    },
-    {
-      "id": "1774106493.202359",
-      "slackUrl": "https://adapty-team.slack.com/archives/C04SY70QZ0T/p1774106493202359",
-      "name": "Chinese localization of Adapty documentation",
-      "message": "Feature: Chinese localization of Adapty documentation\nRelease date: Mar 21, 2026\nAffected areas: Docs",
-      "releaseDate": "2026-03-21",
-      "thread": [
-        {
-          "userId": "U08QUJMN0UV",
-          "userName": "Elina Andreeva",
-          "text": "Feature: Chinese localization of Adapty documentation\nRelease date: Mar 21, 2026\nAffected areas: Docs",
-          "date": "2026-03-21T15:21:33.202Z",
-          "images": []
-        },
-        {
-          "userId": "U08QUJMN0UV",
-          "userName": "Elina Andreeva",
-          "text": "Adapty docs are now available in Chinese: <https://adapty.io/docs/zh/>\n\nYou can switch languages using the switcher in the header.\n\nThe localization is LLM-assisted, so it may not be perfect — but it's already a step toward making Adapty more accessible to Chinese-speaking developers who aren't comfortable reading docs in English.\n\nIf you spot anything that looks off, please let us know!",
-          "date": "2026-03-21T15:22:28.593Z",
-          "images": []
-        },
-        {
-          "userId": "U9HDNS9S4",
-          "userName": "Kirill Potekhin",
-          "text": "thanks a lot <@U08QUJMN0UV>, great job! <@U09QBBKPGMC> <!subteam^S03KC9S1QMC> fyi ",
-          "date": "2026-03-21T15:48:46.606Z",
-          "images": []
-        },
-        {
-          "userId": "U9HDNS9S4",
-          "userName": "Kirill Potekhin",
-          "text": "and thanks to <@U0AAD5KEPBK> for helping with translation!",
-          "date": "2026-03-21T15:49:19.732Z",
-          "images": []
-        },
-        {
-          "userId": "U09QBBKPGMC",
-          "userName": "Elena Robakidze",
-          "text": "Super, thank you guys! :heart_hands::skin-tone-2:",
-          "date": "2026-03-21T15:57:10.029Z",
-          "images": []
-        },
-        {
-          "userId": "U09EG3DK4US",
-          "userName": "Polina Ishimbaeva",
-          "text": ":fire:",
-          "date": "2026-03-23T10:51:09.622Z",
-          "images": []
-        }
-      ],
-      "content": "[Elina Andreeva]: Feature: Chinese localization of Adapty documentation\nRelease date: Mar 21, 2026\nAffected areas: Docs\n\n[Elina Andreeva]: Adapty docs are now available in Chinese: <https://adapty.io/docs/zh/>\n\nYou can switch languages using the switcher in the header.\n\nThe localization is LLM-assisted, so it may not be perfect — but it's already a step toward making Adapty more accessible to Chinese-speaking developers who aren't comfortable reading docs in English.\n\nIf you spot anything that looks off, please let us know!\n\n[Kirill Potekhin]: thanks a lot <@U08QUJMN0UV>, great job! <@U09QBBKPGMC> <!subteam^S03KC9S1QMC> fyi \n\n[Kirill Potekhin]: and thanks to <@U0AAD5KEPBK> for helping with translation!\n\n[Elena Robakidze]: Super, thank you guys! :heart_hands::skin-tone-2:\n\n[Polina Ishimbaeva]: :fire:",
-      "matchingReplies": [
-        {
-          "userId": "U9HDNS9S4",
-          "userName": "Kirill Potekhin",
-          "text": "thanks a lot <@U08QUJMN0UV>, great job! <@U09QBBKPGMC> <!subteam^S03KC9S1QMC> fyi ",
-          "date": "2026-03-21T15:48:46.606Z",
-          "images": []
-        },
-        {
-          "userId": "U9HDNS9S4",
-          "userName": "Kirill Potekhin",
-          "text": "and thanks to <@U0AAD5KEPBK> for helping with translation!",
-          "date": "2026-03-21T15:49:19.732Z",
-          "images": []
-        }
-      ],
       "hasTeamMention": true,
       "images": []
     }
