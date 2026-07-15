@@ -1,7 +1,77 @@
 {
-  "syncedAt": "2026-07-14T00:40:38.224Z",
+  "syncedAt": "2026-07-15T00:38:08.299Z",
   "channel": "#product-release",
   "entries": [
+    {
+      "id": "1783952997.742879",
+      "slackUrl": "https://adapty-team.slack.com/archives/C04SY70QZ0T/p1783952997742879",
+      "name": "hey team!",
+      "message": "hey team!\na short reminder - why we are going to win the market with the flow builder\n\n<@U08914ZA6A1> did some good research comparing our screen load times with Superwall's\n\nI think any additional comments are just not needed here. we also plan to use it in our campaigns so prospects can finally see what they're missing by not using Adapty\n:popcorn:",
+      "releaseDate": "2026-07-13",
+      "thread": [
+        {
+          "userId": "U08EVBTE69E",
+          "userName": "Maxim Borisik",
+          "text": "hey team!\na short reminder - why we are going to win the market with the flow builder\n\n<@U08914ZA6A1> did some good research comparing our screen load times with Superwall's\n\nI think any additional comments are just not needed here. we also plan to use it in our campaigns so prospects can finally see what they're missing by not using Adapty\n:popcorn:",
+          "date": "2026-07-13T14:29:57.742Z",
+          "images": []
+        },
+        {
+          "userId": "U03DFSCP8CW",
+          "userName": "Mike Gorokhov",
+          "text": "Looks good, and nice to see our Flow Builder loading faster. Could we add a few details to make sure this is a fair comparison?\n\nWas it a cold start or warm start? Was any cache involved? Were both apps using the same environment, prod vs testю Also, is SDK initialization done under similar conditions in the app code, and are both apps loading comparable content and assets?\n\nIf we have several runs with the same setup, ideally median or p95, this would make the result much stronger.",
+          "date": "2026-07-14T09:01:13.761Z",
+          "images": []
+        },
+        {
+          "userId": "U08EVBTE69E",
+          "userName": "Maxim Borisik",
+          "text": "thanks Mike. i can say that yes, it was a fair comparison (checked with Greg before publishing)\n\n<@U08914ZA6A1> any comments here on what Mike wants to know?",
+          "date": "2026-07-14T09:02:27.379Z",
+          "images": []
+        },
+        {
+          "userId": "U090T4UNBUK",
+          "userName": "Stanislav Mayorov",
+          "text": "<@U03DFSCP8CW> Great questions! Cold start, no cache.\n<@U08914ZA6A1> did you use a debug or prod scheme for xcode build?",
+          "date": "2026-07-14T10:21:30.195Z",
+          "images": []
+        },
+        {
+          "userId": "U08914ZA6A1",
+          "userName": "Gregory Komissarov",
+          "text": "<@U090T4UNBUK> here is the build and deploy script\n```#!/bin/bash\nset -e\n\nDEVICE_ID=\"00008130-00080DA60C31001C\"\nPROJECT=\"$(dirname \"$0\")/Basic.xcodeproj\"\nSCHEME=\"Basic\"\nAPP_PATH=~/Library/Developer/Xcode/DerivedData/Basic-higysqwnklkibnbznjjhzcoqsmvb/Build/Products/Debug-iphoneos/Superwall-SwiftUI.app\n\necho \"Building...\"\nxcodebuild -project \"$PROJECT\" \\\n  -scheme \"$SCHEME\" \\\n  -destination \"platform=iOS,id=$DEVICE_ID\" \\\n  build\n\necho \"Installing...\"\nxcrun devicectl device install app \\\n  --device \"$DEVICE_ID\" \\\n  \"$APP_PATH\"\n\necho \"Done.\"```",
+          "date": "2026-07-14T10:38:15.817Z",
+          "images": []
+        },
+        {
+          "userId": "U090T4UNBUK",
+          "userName": "Stanislav Mayorov",
+          "text": "<@U08914ZA6A1> I think it’s a debug scheme\n&gt; Debug-iphoneos",
+          "date": "2026-07-14T10:40:44.493Z",
+          "images": []
+        },
+        {
+          "userId": "U08914ZA6A1",
+          "userName": "Gregory Komissarov",
+          "text": "<@U03DFSCP8CW>\n1. Cold starts\n2. Full remove before the cold start. Only CDN cache I assume b/c I was made a series of tests for both vendors.\n3. Both SDKs were initialised in the MainActor, code copied from each vendor examples from oficial repo.\n4. Both apps loading the same content: two onboarding screens with one image and the same text + 3rd paywall screen.",
+          "date": "2026-07-14T10:41:50.164Z",
+          "images": []
+        }
+      ],
+      "content": "[Maxim Borisik]: hey team!\na short reminder - why we are going to win the market with the flow builder\n\n<@U08914ZA6A1> did some good research comparing our screen load times with Superwall's\n\nI think any additional comments are just not needed here. we also plan to use it in our campaigns so prospects can finally see what they're missing by not using Adapty\n:popcorn:\n\n[Mike Gorokhov]: Looks good, and nice to see our Flow Builder loading faster. Could we add a few details to make sure this is a fair comparison?\n\nWas it a cold start or warm start? Was any cache involved? Were both apps using the same environment, prod vs testю Also, is SDK initialization done under similar conditions in the app code, and are both apps loading comparable content and assets?\n\nIf we have several runs with the same setup, ideally median or p95, this would make the result much stronger.\n\n[Maxim Borisik]: thanks Mike. i can say that yes, it was a fair comparison (checked with Greg before publishing)\n\n<@U08914ZA6A1> any comments here on what Mike wants to know?\n\n[Stanislav Mayorov]: <@U03DFSCP8CW> Great questions! Cold start, no cache.\n<@U08914ZA6A1> did you use a debug or prod scheme for xcode build?\n\n[Gregory Komissarov]: <@U090T4UNBUK> here is the build and deploy script\n```#!/bin/bash\nset -e\n\nDEVICE_ID=\"00008130-00080DA60C31001C\"\nPROJECT=\"$(dirname \"$0\")/Basic.xcodeproj\"\nSCHEME=\"Basic\"\nAPP_PATH=~/Library/Developer/Xcode/DerivedData/Basic-higysqwnklkibnbznjjhzcoqsmvb/Build/Products/Debug-iphoneos/Superwall-SwiftUI.app\n\necho \"Building...\"\nxcodebuild -project \"$PROJECT\" \\\n  -scheme \"$SCHEME\" \\\n  -destination \"platform=iOS,id=$DEVICE_ID\" \\\n  build\n\necho \"Installing...\"\nxcrun devicectl device install app \\\n  --device \"$DEVICE_ID\" \\\n  \"$APP_PATH\"\n\necho \"Done.\"```\n\n[Stanislav Mayorov]: <@U08914ZA6A1> I think it’s a debug scheme\n&gt; Debug-iphoneos\n\n[Gregory Komissarov]: <@U03DFSCP8CW>\n1. Cold starts\n2. Full remove before the cold start. Only CDN cache I assume b/c I was made a series of tests for both vendors.\n3. Both SDKs were initialised in the MainActor, code copied from each vendor examples from oficial repo.\n4. Both apps loading the same content: two onboarding screens with one image and the same text + 3rd paywall screen.",
+      "matchingReplies": [
+        {
+          "userId": "U08EVBTE69E",
+          "userName": "Maxim Borisik",
+          "text": "thanks Mike. i can say that yes, it was a fair comparison (checked with Greg before publishing)\n\n<@U08914ZA6A1> any comments here on what Mike wants to know?",
+          "date": "2026-07-14T09:02:27.379Z",
+          "images": []
+        }
+      ],
+      "hasTeamMention": false,
+      "images": []
+    },
     {
       "id": "1782741495.646139",
       "slackUrl": "https://adapty-team.slack.com/archives/C04SY70QZ0T/p1782741495646139",
@@ -2004,33 +2074,6 @@
         "https://files.slack.com/files-pri/T9HDDB78Q-F0AP822LQ06/adapty_market_intelligence.gif",
         "https://files.slack.com/files-pri/T9HDDB78Q-F0APU4VAQLX/screenshot_2026-04-01_at_17.33.32.png"
       ]
-    },
-    {
-      "id": "1774439434.317519",
-      "slackUrl": "https://adapty-team.slack.com/archives/C04SY70QZ0T/p1774439434317519",
-      "name": "Adapty iOS 3.15.7",
-      "message": "Feature: *<https://github.com/adaptyteam/AdaptySDK-iOS/releases/tag/3.15.7|Adapty iOS 3.15.7>*\nRelease date: Mar 25, 2026\nDependencies: Crossplatforms\nEffected areas:\n• Fixed support for Xcode 26.4",
-      "releaseDate": "2026-03-25",
-      "thread": [
-        {
-          "userId": "U03LQU89VHQ",
-          "userName": "Alexey Goncharov",
-          "text": "Feature: *<https://github.com/adaptyteam/AdaptySDK-iOS/releases/tag/3.15.7|Adapty iOS 3.15.7>*\nRelease date: Mar 25, 2026\nDependencies: Crossplatforms\nEffected areas:\n• Fixed support for Xcode 26.4",
-          "date": "2026-03-25T11:50:34.317Z",
-          "images": []
-        },
-        {
-          "userId": "U03LQU89VHQ",
-          "userName": "Alexey Goncharov",
-          "text": "<!subteam^S03KM96DV0U> fyi\n\nToday new Xcode version was being released, we're going to rollout all our crossplatrofm SDKs in the following hours as well",
-          "date": "2026-03-25T11:51:38.137Z",
-          "images": []
-        }
-      ],
-      "content": "[Alexey Goncharov]: Feature: *<https://github.com/adaptyteam/AdaptySDK-iOS/releases/tag/3.15.7|Adapty iOS 3.15.7>*\nRelease date: Mar 25, 2026\nDependencies: Crossplatforms\nEffected areas:\n• Fixed support for Xcode 26.4\n\n[Alexey Goncharov]: <!subteam^S03KM96DV0U> fyi\n\nToday new Xcode version was being released, we're going to rollout all our crossplatrofm SDKs in the following hours as well",
-      "matchingReplies": [],
-      "hasTeamMention": true,
-      "images": []
     }
   ]
 }
