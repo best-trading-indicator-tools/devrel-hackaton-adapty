@@ -1,7 +1,390 @@
 {
-  "syncedAt": "2026-07-22T00:42:43.157Z",
+  "syncedAt": "2026-07-23T00:44:49.924Z",
   "channel": "#product-release",
   "entries": [
+    {
+      "id": "1784720672.403529",
+      "slackUrl": "https://adapty-team.slack.com/archives/C04SY70QZ0T/p1784720672403529",
+      "name": "sup, team",
+      "message": "sup, team\n\nlast month we've been cooking an *ai agent* for our one and only *flow builder*. it can do (almost) everything you can do via the ui — add and edit elements, styles and copy; and since it's powered by claude, it can mimic well-known app styles, suggest layouts according to best practices, etc.\n\ntoday we're ready for an *internal release*. it was a rough ride and we're still not quite there. we're working hard on polishing, and you can help us shape the path to public release. it's easy — if you're building a new gorgeous flow and tempted to use ui buttons, just tell yourself \"oh man, it's the year 2026 and i'm doing something old-school and not burning tokens. i need to change my life and fast\"\n\nso, here is the way:\n1. open any flow on any app\n2. open the browser console and enter the command: `adapty_ff.set('FLOW_GENERATOR', true)`\n3. now instead of editing flow manually, open the chat using :sparkles: button in the left sidebar and type (or dictate) what you desire to do\n4. notice what works well, what's not, what's missing and write in down to this thread. we'll take care of it\nknown restrictions: it's not always the smartest, it works on a per-screen basis, it leaks config internals and sometimes it may crash the page :this_is_fine: . we're working on it, stay tuned.\n\nshoutout and love to <@U08EVBTE69E> <@U07PR2368G5> <@U0ALSG3VA30> <@U080G9FHV50> <@U08JY3U9S7P>",
+      "releaseDate": "2026-07-22",
+      "thread": [
+        {
+          "userId": "U07J1NQPD4P",
+          "userName": "Danil Melnichuk",
+          "text": "sup, team\n\nlast month we've been cooking an *ai agent* for our one and only *flow builder*. it can do (almost) everything you can do via the ui — add and edit elements, styles and copy; and since it's powered by claude, it can mimic well-known app styles, suggest layouts according to best practices, etc.\n\ntoday we're ready for an *internal release*. it was a rough ride and we're still not quite there. we're working hard on polishing, and you can help us shape the path to public release. it's easy — if you're building a new gorgeous flow and tempted to use ui buttons, just tell yourself \"oh man, it's the year 2026 and i'm doing something old-school and not burning tokens. i need to change my life and fast\"\n\nso, here is the way:\n1. open any flow on any app\n2. open the browser console and enter the command: `adapty_ff.set('FLOW_GENERATOR', true)`\n3. now instead of editing flow manually, open the chat using :sparkles: button in the left sidebar and type (or dictate) what you desire to do\n4. notice what works well, what's not, what's missing and write in down to this thread. we'll take care of it\nknown restrictions: it's not always the smartest, it works on a per-screen basis, it leaks config internals and sometimes it may crash the page :this_is_fine: . we're working on it, stay tuned.\n\nshoutout and love to <@U08EVBTE69E> <@U07PR2368G5> <@U0ALSG3VA30> <@U080G9FHV50> <@U08JY3U9S7P>",
+          "date": "2026-07-22T11:44:32.403Z",
+          "images": [
+            "https://files.slack.com/files-pri/T9HDDB78Q-F0BJULQMSGK/cleanshot_2026-07-22_at_18.33.25_2x.png"
+          ]
+        },
+        {
+          "userId": "U9HDNS9S4",
+          "userName": "Kirill Potekhin",
+          "text": "big deal, guys, thanks a lot! we're gonna show it to ElevenLabs today, just in time",
+          "date": "2026-07-22T11:50:42.718Z",
+          "images": []
+        },
+        {
+          "userId": "U07J1NQPD4P",
+          "userName": "Danil Melnichuk",
+          "text": "<@U080G9FHV50> don't sweat, we nailed it",
+          "date": "2026-07-22T11:52:42.837Z",
+          "images": []
+        },
+        {
+          "userId": "U03DFSCP8CW",
+          "userName": "Mike Gorokhov",
+          "text": "It works!",
+          "date": "2026-07-22T11:55:43.530Z",
+          "images": [
+            "https://files.slack.com/files-pri/T9HDDB78Q-F0BK300GWQZ/image.png"
+          ]
+        },
+        {
+          "userId": "U03DFSCP8CW",
+          "userName": "Mike Gorokhov",
+          "text": "In like 3 seconds!",
+          "date": "2026-07-22T11:56:52.494Z",
+          "images": []
+        },
+        {
+          "userId": "U03DFSCP8CW",
+          "userName": "Mike Gorokhov",
+          "text": "like 2 seconds and it is done!",
+          "date": "2026-07-22T11:57:32.381Z",
+          "images": [
+            "https://files.slack.com/files-pri/T9HDDB78Q-F0BK12N94SE/image.png"
+          ]
+        },
+        {
+          "userId": "U07J1NQPD4P",
+          "userName": "Danil Melnichuk",
+          "text": "<@U03DFSCP8CW> crazy. didn't expect such a HUGE change to happen so fast",
+          "date": "2026-07-22T11:59:24.603Z",
+          "images": []
+        },
+        {
+          "userId": "U03DFSCP8CW",
+          "userName": "Mike Gorokhov",
+          "text": "<!subteam^S086DJEQEUE>\n\nRight-click on the page, select \"Inspect\".\nYou will go to the Dev Console.\nThere, open the \"Console\" tab and paste the snippet.",
+          "date": "2026-07-22T11:59:30.138Z",
+          "images": []
+        },
+        {
+          "userId": "U03DFSCP8CW",
+          "userName": "Mike Gorokhov",
+          "text": "`@Mike crazy. didn't expect such a HUGE change to happen so fast`\n\nWell, in FF's builder this takes like 12 seconds to change a button color",
+          "date": "2026-07-22T12:01:17.827Z",
+          "images": []
+        },
+        {
+          "userId": "U07J1NQPD4P",
+          "userName": "Danil Melnichuk",
+          "text": "&gt; this takes like 12 seconds\nwe'll be there (no)",
+          "date": "2026-07-22T12:02:09.139Z",
+          "images": []
+        },
+        {
+          "userId": "U08EVBTE69E",
+          "userName": "Maxim Borisik",
+          "text": "Dan huge round of applause to that stuff!\nteam, Dan had lots of various engineering challenges while creating this chat, so respect to bypassing them! :chefs-kiss:",
+          "date": "2026-07-22T12:04:00.426Z",
+          "images": []
+        },
+        {
+          "userId": "U9HDNS9S4",
+          "userName": "Kirill Potekhin",
+          "text": "this element was added to the paywall using AI editor live during the demo, worked really cool!",
+          "date": "2026-07-22T14:55:16.394Z",
+          "images": [
+            "https://files.slack.com/files-pri/T9HDDB78Q-F0BJWB0JMB5/cleanshot_2026-07-22_at_15.53.56_2x.png"
+          ]
+        },
+        {
+          "userId": "U07MXM412JV",
+          "userName": "Marina Trypolskaya",
+          "text": "<!subteam^S086DJEQEUE> guys make sure you tested the flow and show it on the demo calls, looks really amazing!",
+          "date": "2026-07-22T14:58:56.208Z",
+          "images": []
+        },
+        {
+          "userId": "U08EVBTE69E",
+          "userName": "Maxim Borisik",
+          "text": "FYI\nwe expect 1-2 weeks to finish and polish it before relaising to public! so i think we can tell that it will be available in august",
+          "date": "2026-07-22T14:59:54.634Z",
+          "images": []
+        },
+        {
+          "userId": "U07FGPCB4D9",
+          "userName": "Vlad Konkov",
+          "text": "qq: and would it be possible in the nearest future just drop appstore link and ask to create an onboarding say just like for this app but with my branding? or just upload a photo and ask create this screen?",
+          "date": "2026-07-22T15:25:43.880Z",
+          "images": []
+        },
+        {
+          "userId": "U08EVBTE69E",
+          "userName": "Maxim Borisik",
+          "text": "figma import is the closest ones to be released. expect it in August too",
+          "date": "2026-07-22T15:28:50.276Z",
+          "images": []
+        },
+        {
+          "userId": "U0A3Y4X1XUG",
+          "userName": "Matty Friedman",
+          "text": "!!!!",
+          "date": "2026-07-22T16:10:47.691Z",
+          "images": []
+        }
+      ],
+      "content": "[Danil Melnichuk]: sup, team\n\nlast month we've been cooking an *ai agent* for our one and only *flow builder*. it can do (almost) everything you can do via the ui — add and edit elements, styles and copy; and since it's powered by claude, it can mimic well-known app styles, suggest layouts according to best practices, etc.\n\ntoday we're ready for an *internal release*. it was a rough ride and we're still not quite there. we're working hard on polishing, and you can help us shape the path to public release. it's easy — if you're building a new gorgeous flow and tempted to use ui buttons, just tell yourself \"oh man, it's the year 2026 and i'm doing something old-school and not burning tokens. i need to change my life and fast\"\n\nso, here is the way:\n1. open any flow on any app\n2. open the browser console and enter the command: `adapty_ff.set('FLOW_GENERATOR', true)`\n3. now instead of editing flow manually, open the chat using :sparkles: button in the left sidebar and type (or dictate) what you desire to do\n4. notice what works well, what's not, what's missing and write in down to this thread. we'll take care of it\nknown restrictions: it's not always the smartest, it works on a per-screen basis, it leaks config internals and sometimes it may crash the page :this_is_fine: . we're working on it, stay tuned.\n\nshoutout and love to <@U08EVBTE69E> <@U07PR2368G5> <@U0ALSG3VA30> <@U080G9FHV50> <@U08JY3U9S7P>\n\n[Kirill Potekhin]: big deal, guys, thanks a lot! we're gonna show it to ElevenLabs today, just in time\n\n[Danil Melnichuk]: <@U080G9FHV50> don't sweat, we nailed it\n\n[Mike Gorokhov]: It works!\n\n[Mike Gorokhov]: In like 3 seconds!\n\n[Mike Gorokhov]: like 2 seconds and it is done!\n\n[Danil Melnichuk]: <@U03DFSCP8CW> crazy. didn't expect such a HUGE change to happen so fast\n\n[Mike Gorokhov]: <!subteam^S086DJEQEUE>\n\nRight-click on the page, select \"Inspect\".\nYou will go to the Dev Console.\nThere, open the \"Console\" tab and paste the snippet.\n\n[Mike Gorokhov]: `@Mike crazy. didn't expect such a HUGE change to happen so fast`\n\nWell, in FF's builder this takes like 12 seconds to change a button color\n\n[Danil Melnichuk]: &gt; this takes like 12 seconds\nwe'll be there (no)\n\n[Maxim Borisik]: Dan huge round of applause to that stuff!\nteam, Dan had lots of various engineering challenges while creating this chat, so respect to bypassing them! :chefs-kiss:\n\n[Kirill Potekhin]: this element was added to the paywall using AI editor live during the demo, worked really cool!\n\n[Marina Trypolskaya]: <!subteam^S086DJEQEUE> guys make sure you tested the flow and show it on the demo calls, looks really amazing!\n\n[Maxim Borisik]: FYI\nwe expect 1-2 weeks to finish and polish it before relaising to public! so i think we can tell that it will be available in august\n\n[Vlad Konkov]: qq: and would it be possible in the nearest future just drop appstore link and ask to create an onboarding say just like for this app but with my branding? or just upload a photo and ask create this screen?\n\n[Maxim Borisik]: figma import is the closest ones to be released. expect it in August too\n\n[Matty Friedman]: !!!!",
+      "matchingReplies": [
+        {
+          "userId": "U9HDNS9S4",
+          "userName": "Kirill Potekhin",
+          "text": "big deal, guys, thanks a lot! we're gonna show it to ElevenLabs today, just in time",
+          "date": "2026-07-22T11:50:42.718Z",
+          "images": []
+        },
+        {
+          "userId": "U08EVBTE69E",
+          "userName": "Maxim Borisik",
+          "text": "Dan huge round of applause to that stuff!\nteam, Dan had lots of various engineering challenges while creating this chat, so respect to bypassing them! :chefs-kiss:",
+          "date": "2026-07-22T12:04:00.426Z",
+          "images": []
+        },
+        {
+          "userId": "U9HDNS9S4",
+          "userName": "Kirill Potekhin",
+          "text": "this element was added to the paywall using AI editor live during the demo, worked really cool!",
+          "date": "2026-07-22T14:55:16.394Z",
+          "images": [
+            "https://files.slack.com/files-pri/T9HDDB78Q-F0BJWB0JMB5/cleanshot_2026-07-22_at_15.53.56_2x.png"
+          ]
+        },
+        {
+          "userId": "U08EVBTE69E",
+          "userName": "Maxim Borisik",
+          "text": "FYI\nwe expect 1-2 weeks to finish and polish it before relaising to public! so i think we can tell that it will be available in august",
+          "date": "2026-07-22T14:59:54.634Z",
+          "images": []
+        },
+        {
+          "userId": "U08EVBTE69E",
+          "userName": "Maxim Borisik",
+          "text": "figma import is the closest ones to be released. expect it in August too",
+          "date": "2026-07-22T15:28:50.276Z",
+          "images": []
+        }
+      ],
+      "hasTeamMention": true,
+      "images": [
+        "https://files.slack.com/files-pri/T9HDDB78Q-F0BJULQMSGK/cleanshot_2026-07-22_at_18.33.25_2x.png",
+        "https://files.slack.com/files-pri/T9HDDB78Q-F0BK300GWQZ/image.png",
+        "https://files.slack.com/files-pri/T9HDDB78Q-F0BK12N94SE/image.png",
+        "https://files.slack.com/files-pri/T9HDDB78Q-F0BJWB0JMB5/cleanshot_2026-07-22_at_15.53.56_2x.png"
+      ]
+    },
+    {
+      "id": "1784644350.224869",
+      "slackUrl": "https://adapty-team.slack.com/archives/C04SY70QZ0T/p1784644350224869",
+      "name": "Virtual currencies support",
+      "message": "Feature: <https://adaptyio.atlassian.net/browse/ADP-5994|Virtual currencies support>\nRelease date: July 21, 2026\nDependencies: None\nEffected areas: Transactions, Products, API\n\n<!subteam^S07BZPQDBUJ> <!subteam^S03KM96DV0U> <!subteam^S03KC9S1QMC> <@U05QELDHUUX> <@U06K36L6CTB> It’s finally here! :money-smell:\n\nYou can now define in-app currencies - credits, tokens, coins - link them to your products, and Adapty will automatically grant and track balances for every user.\n\n*Who this is for:*\n• *AI apps* - charge credits per generation, bundle a monthly allowance into subscriptions, sell credit packs as one-time products\n• *Short drama / video apps* - coins to unlock episodes\n• *Games* - soft + hard currency with atomic conversions\n• *Education & productivity* - hearts, lives, metered actions like OCR or exports\n*How it works:*\nСreate a currency, map it to products with credit amounts, and every purchase or renewal credits the user automatically. Reading and spending balances happens through the *server-side API.* \n\n*What’s next:*\nIf adoption is strong, we’re planning Flow Builder support (analogue of product variables), manual credits from the dashboard, SDK methods, and balance-based segments to target paywalls.\n\nDocs: <https://adapty.io/docs/virtual-currencies|adapty.io/docs/virtual-currencies>\n\nHuge kudos to: <@U08ASB4GYR4> <@U09AH7D2A4X> <@U0A3M160RB4> <@U0AQZG23D62> <@U0AKC1Y09R8>",
+      "releaseDate": "2026-07-21",
+      "thread": [
+        {
+          "userId": "U07J9LKBQ5U",
+          "userName": "Yurii Kleimenov",
+          "text": "Feature: <https://adaptyio.atlassian.net/browse/ADP-5994|Virtual currencies support>\nRelease date: July 21, 2026\nDependencies: None\nEffected areas: Transactions, Products, API\n\n<!subteam^S07BZPQDBUJ> <!subteam^S03KM96DV0U> <!subteam^S03KC9S1QMC> <@U05QELDHUUX> <@U06K36L6CTB> It’s finally here! :money-smell:\n\nYou can now define in-app currencies - credits, tokens, coins - link them to your products, and Adapty will automatically grant and track balances for every user.\n\n*Who this is for:*\n• *AI apps* - charge credits per generation, bundle a monthly allowance into subscriptions, sell credit packs as one-time products\n• *Short drama / video apps* - coins to unlock episodes\n• *Games* - soft + hard currency with atomic conversions\n• *Education & productivity* - hearts, lives, metered actions like OCR or exports\n*How it works:*\nСreate a currency, map it to products with credit amounts, and every purchase or renewal credits the user automatically. Reading and spending balances happens through the *server-side API.* \n\n*What’s next:*\nIf adoption is strong, we’re planning Flow Builder support (analogue of product variables), manual credits from the dashboard, SDK methods, and balance-based segments to target paywalls.\n\nDocs: <https://adapty.io/docs/virtual-currencies|adapty.io/docs/virtual-currencies>\n\nHuge kudos to: <@U08ASB4GYR4> <@U09AH7D2A4X> <@U0A3M160RB4> <@U0AQZG23D62> <@U0AKC1Y09R8>",
+          "date": "2026-07-21T14:32:30.224Z",
+          "images": []
+        },
+        {
+          "userId": "U08EVBTE69E",
+          "userName": "Maxim Borisik",
+          "text": "hell yeahh! well done Yurii and the team!",
+          "date": "2026-07-21T14:34:08.991Z",
+          "images": []
+        },
+        {
+          "userId": "U09QBBKPGMC",
+          "userName": "Elena Robakidze",
+          "text": "this is great! <@U06K36L6CTB> <@U05QELDHUUX> do we plan any marketing materials about it? or we just can post the news in a \"free way\" on our WeChat account?",
+          "date": "2026-07-21T15:13:14.152Z",
+          "images": []
+        },
+        {
+          "userId": "U07MXM412JV",
+          "userName": "Marina Trypolskaya",
+          "text": "huraaay:tada:",
+          "date": "2026-07-21T15:18:38.835Z",
+          "images": []
+        },
+        {
+          "userId": "U05QELDHUUX",
+          "userName": "Sergey Muratov",
+          "text": "<@U09QBBKPGMC> we didn't expect this to be released today tbh, but we talked about it prior. Give us a day to figure out next steps )",
+          "date": "2026-07-21T15:19:38.260Z",
+          "images": []
+        },
+        {
+          "userId": "U9JU5J5RC",
+          "userName": "Vitaly Davydov",
+          "text": "Can I see currency balance in CRM?",
+          "date": "2026-07-22T10:15:13.992Z",
+          "images": []
+        },
+        {
+          "userId": "U9JU5J5RC",
+          "userName": "Vitaly Davydov",
+          "text": "like for each user",
+          "date": "2026-07-22T10:15:20.685Z",
+          "images": []
+        },
+        {
+          "userId": "U9JU5J5RC",
+          "userName": "Vitaly Davydov",
+          "text": "I'd pitch that as a ledger <@U07MXM412JV> <@U05QELDHUUX>",
+          "date": "2026-07-22T10:15:33.394Z",
+          "images": []
+        },
+        {
+          "userId": "U07J9LKBQ5U",
+          "userName": "Yurii Kleimenov",
+          "text": "Yes you can ",
+          "date": "2026-07-22T10:15:40.021Z",
+          "images": []
+        },
+        {
+          "userId": "U9JU5J5RC",
+          "userName": "Vitaly Davydov",
+          "text": "can you share how it looks like?",
+          "date": "2026-07-22T10:17:07.188Z",
+          "images": []
+        },
+        {
+          "userId": "U9JU5J5RC",
+          "userName": "Vitaly Davydov",
+          "text": "and I think it's important to include in the docs",
+          "date": "2026-07-22T10:17:13.197Z",
+          "images": []
+        },
+        {
+          "userId": "U03DFSCP8CW",
+          "userName": "Mike Gorokhov",
+          "text": "",
+          "date": "2026-07-22T10:17:21.475Z",
+          "images": [
+            "https://files.slack.com/files-pri/T9HDDB78Q-F0BK45HNUH2/image.png"
+          ]
+        },
+        {
+          "userId": "U07J9LKBQ5U",
+          "userName": "Yurii Kleimenov",
+          "text": "",
+          "date": "2026-07-22T10:17:57.331Z",
+          "images": [
+            "https://files.slack.com/files-pri/T9HDDB78Q-F0BKUPTLAKA/img_7338.png"
+          ]
+        },
+        {
+          "userId": "U07J9LKBQ5U",
+          "userName": "Yurii Kleimenov",
+          "text": "And here is how events look like: ",
+          "date": "2026-07-22T10:18:49.281Z",
+          "images": [
+            "https://files.slack.com/files-pri/T9HDDB78Q-F0BK0E8N6RY/img_7339.png"
+          ]
+        },
+        {
+          "userId": "U08ASB4GYR4",
+          "userName": "Roman Miasnikov",
+          "text": "",
+          "date": "2026-07-22T10:18:58.234Z",
+          "images": [
+            "https://files.slack.com/files-pri/T9HDDB78Q-F0BJYEKNX62/image.png"
+          ]
+        },
+        {
+          "userId": "U9JU5J5RC",
+          "userName": "Vitaly Davydov",
+          "text": "cool",
+          "date": "2026-07-22T10:19:19.594Z",
+          "images": []
+        },
+        {
+          "userId": "U9JU5J5RC",
+          "userName": "Vitaly Davydov",
+          "text": "ledger may be a better term esp for games",
+          "date": "2026-07-22T10:19:29.675Z",
+          "images": []
+        },
+        {
+          "userId": "U9JU5J5RC",
+          "userName": "Vitaly Davydov",
+          "text": "<https://en.wikipedia.org/wiki/Ledger|en.wikipedia.org/wiki/Ledger>",
+          "date": "2026-07-22T10:19:40.013Z",
+          "images": []
+        },
+        {
+          "userId": "U07J9LKBQ5U",
+          "userName": "Yurii Kleimenov",
+          "text": "I feel like the coolest ledger is metadata that we store from VC transaction and here you can put “Bought ultra ammo pack” and etc",
+          "date": "2026-07-22T10:20:41.256Z",
+          "images": []
+        },
+        {
+          "userId": "U08EVBTE69E",
+          "userName": "Maxim Borisik",
+          "text": "i saw people who share their clients do token purchasing ",
+          "date": "2026-07-22T10:22:13.957Z",
+          "images": [
+            "https://files.slack.com/files-pri/T9HDDB78Q-F0BK46BT86Q/img_0415.jpg"
+          ]
+        },
+        {
+          "userId": "U9JU5J5RC",
+          "userName": "Vitaly Davydov",
+          "text": "How does it look in our event feed?",
+          "date": "2026-07-22T10:23:11.433Z",
+          "images": []
+        },
+        {
+          "userId": "U08ASB4GYR4",
+          "userName": "Roman Miasnikov",
+          "text": "We currently don't display metadata in the dashboard, we've decided to look at adoption features and further user. It's available in the API on retrieving a list of transactions",
+          "date": "2026-07-22T10:25:35.331Z",
+          "images": []
+        },
+        {
+          "userId": "U07J9LKBQ5U",
+          "userName": "Yurii Kleimenov",
+          "text": "On API side it looks like this: \n\n```{\n  \"data\": [\n    {\n      \"transaction_id\": \"0190e8a4-1c2b-7def-8abc-2c1a4b6d8e90\",\n      \"transaction_type\": \"api_transaction\",\n      \"items\": [\n        {\n          \"currency_code\": \"COINS\",\n          \"amount\": 500,\n          \"balance_after\": 12950\n        }\n      ],\n      \"metadata\": {\n        \"reason\": \"promo_bonus\"\n      },\n      \"created_at\": \"2026-05-23T10:30:00Z\"\n    },\n    {\n      \"transaction_id\": \"0190e7b2-9a44-7c10-bb31-7d2e9f0a1c55\",\n      \"transaction_type\": \"store_purchase\",\n      \"items\": [\n        {\n          \"currency_code\": \"COINS\",\n          \"amount\": 1000,\n          \"balance_after\": 12450\n        }\n      ],\n      \"created_at\": \"2026-05-22T18:05:12Z\"\n    },\n    {\n      \"transaction_id\": \"0190e5c0-3f18-7b9a-9e6d-44a1c8b27e03\",\n      \"transaction_type\": \"subscription_renewal\",\n      \"items\": [\n        {\n          \"currency_code\": \"GEMS\",\n          \"amount\": 200,\n          \"balance_after\": 3280\n        }\n      ],\n      \"created_at\": \"2026-05-20T09:00:00Z\"\n    }\n  ],\n  \"pagination\": {\n    \"next_cursor\": \"MjAyNi0wNS0yMFQwOTowMDowMFowMTkwZTVjMC0zZjE4LTdiOWEtOWU2ZC00NGExYzhiMjdlMDM=\"\n  }\n}```",
+          "date": "2026-07-22T10:27:15.727Z",
+          "images": []
+        }
+      ],
+      "content": "[Yurii Kleimenov]: Feature: <https://adaptyio.atlassian.net/browse/ADP-5994|Virtual currencies support>\nRelease date: July 21, 2026\nDependencies: None\nEffected areas: Transactions, Products, API\n\n<!subteam^S07BZPQDBUJ> <!subteam^S03KM96DV0U> <!subteam^S03KC9S1QMC> <@U05QELDHUUX> <@U06K36L6CTB> It’s finally here! :money-smell:\n\nYou can now define in-app currencies - credits, tokens, coins - link them to your products, and Adapty will automatically grant and track balances for every user.\n\n*Who this is for:*\n• *AI apps* - charge credits per generation, bundle a monthly allowance into subscriptions, sell credit packs as one-time products\n• *Short drama / video apps* - coins to unlock episodes\n• *Games* - soft + hard currency with atomic conversions\n• *Education & productivity* - hearts, lives, metered actions like OCR or exports\n*How it works:*\nСreate a currency, map it to products with credit amounts, and every purchase or renewal credits the user automatically. Reading and spending balances happens through the *server-side API.* \n\n*What’s next:*\nIf adoption is strong, we’re planning Flow Builder support (analogue of product variables), manual credits from the dashboard, SDK methods, and balance-based segments to target paywalls.\n\nDocs: <https://adapty.io/docs/virtual-currencies|adapty.io/docs/virtual-currencies>\n\nHuge kudos to: <@U08ASB4GYR4> <@U09AH7D2A4X> <@U0A3M160RB4> <@U0AQZG23D62> <@U0AKC1Y09R8>\n\n[Maxim Borisik]: hell yeahh! well done Yurii and the team!\n\n[Elena Robakidze]: this is great! <@U06K36L6CTB> <@U05QELDHUUX> do we plan any marketing materials about it? or we just can post the news in a \"free way\" on our WeChat account?\n\n[Marina Trypolskaya]: huraaay:tada:\n\n[Sergey Muratov]: <@U09QBBKPGMC> we didn't expect this to be released today tbh, but we talked about it prior. Give us a day to figure out next steps )\n\n[Vitaly Davydov]: Can I see currency balance in CRM?\n\n[Vitaly Davydov]: like for each user\n\n[Vitaly Davydov]: I'd pitch that as a ledger <@U07MXM412JV> <@U05QELDHUUX>\n\n[Yurii Kleimenov]: Yes you can \n\n[Vitaly Davydov]: can you share how it looks like?\n\n[Vitaly Davydov]: and I think it's important to include in the docs\n\n[Mike Gorokhov]: \n\n[Yurii Kleimenov]: \n\n[Yurii Kleimenov]: And here is how events look like: \n\n[Roman Miasnikov]: \n\n[Vitaly Davydov]: cool\n\n[Vitaly Davydov]: ledger may be a better term esp for games\n\n[Vitaly Davydov]: <https://en.wikipedia.org/wiki/Ledger|en.wikipedia.org/wiki/Ledger>\n\n[Yurii Kleimenov]: I feel like the coolest ledger is metadata that we store from VC transaction and here you can put “Bought ultra ammo pack” and etc\n\n[Maxim Borisik]: i saw people who share their clients do token purchasing \n\n[Vitaly Davydov]: How does it look in our event feed?\n\n[Roman Miasnikov]: We currently don't display metadata in the dashboard, we've decided to look at adoption features and further user. It's available in the API on retrieving a list of transactions\n\n[Yurii Kleimenov]: On API side it looks like this: \n\n```{\n  \"data\": [\n    {\n      \"transaction_id\": \"0190e8a4-1c2b-7def-8abc-2c1a4b6d8e90\",\n      \"transaction_type\": \"api_transaction\",\n      \"items\": [\n        {\n          \"currency_code\": \"COINS\",\n          \"amount\": 500,\n          \"balance_after\": 12950\n        }\n      ],\n      \"metadata\": {\n        \"reason\": \"promo_bonus\"\n      },\n      \"created_at\": \"2026-05-23T10:30:00Z\"\n    },\n    {\n      \"transaction_id\": \"0190e7b2-9a44-7c10-bb31-7d2e9f0a1c55\",\n      \"transaction_type\": \"store_purchase\",\n      \"items\": [\n        {\n          \"currency_code\": \"COINS\",\n          \"amount\": 1000,\n          \"balance_after\": 12450\n        }\n      ],\n      \"created_at\": \"2026-05-22T18:05:12Z\"\n    },\n    {\n      \"transaction_id\": \"0190e5c0-3f18-7b9a-9e6d-44a1c8b27e03\",\n      \"transaction_type\": \"subscription_renewal\",\n      \"items\": [\n        {\n          \"currency_code\": \"GEMS\",\n          \"amount\": 200,\n          \"balance_after\": 3280\n        }\n      ],\n      \"created_at\": \"2026-05-20T09:00:00Z\"\n    }\n  ],\n  \"pagination\": {\n    \"next_cursor\": \"MjAyNi0wNS0yMFQwOTowMDowMFowMTkwZTVjMC0zZjE4LTdiOWEtOWU2ZC00NGExYzhiMjdlMDM=\"\n  }\n}```",
+      "matchingReplies": [
+        {
+          "userId": "U08EVBTE69E",
+          "userName": "Maxim Borisik",
+          "text": "i saw people who share their clients do token purchasing ",
+          "date": "2026-07-22T10:22:13.957Z",
+          "images": [
+            "https://files.slack.com/files-pri/T9HDDB78Q-F0BK46BT86Q/img_0415.jpg"
+          ]
+        }
+      ],
+      "hasTeamMention": false,
+      "images": [
+        "https://files.slack.com/files-pri/T9HDDB78Q-F0BK45HNUH2/image.png",
+        "https://files.slack.com/files-pri/T9HDDB78Q-F0BKUPTLAKA/img_7338.png",
+        "https://files.slack.com/files-pri/T9HDDB78Q-F0BK0E8N6RY/img_7339.png",
+        "https://files.slack.com/files-pri/T9HDDB78Q-F0BJYEKNX62/image.png",
+        "https://files.slack.com/files-pri/T9HDDB78Q-F0BK46BT86Q/img_0415.jpg"
+      ]
+    },
     {
       "id": "1784113417.441009",
       "slackUrl": "https://adapty-team.slack.com/archives/C04SY70QZ0T/p1784113417441009",
@@ -1943,67 +2326,6 @@
       "images": [
         "https://files.slack.com/files-pri/T9HDDB78Q-F0ASV30BU5A/image.png"
       ]
-    },
-    {
-      "id": "1775658495.451319",
-      "slackUrl": "https://adapty-team.slack.com/archives/C04SY70QZ0T/p1775658495451319",
-      "name": "*Feature:* AdaptyMail — AI-powered email marketing for subscription apps",
-      "message": "*Feature:* AdaptyMail — AI-powered email marketing for subscription apps\n*Release date:* Apr 8, 2026\n*Affected areas:* AdaptyMail (new product line)\n*Audience:* Sales, CS, Growth teams, SDR, Marketing\n*What's new*\nAdaptyMail is live in Beta. A new product that generates complete lifecycle email campaigns from app store metadata using AI.\n\n *Core capabilities:*\n - AI analyzes app brand, category, and audience from App Store / Google Play listing\n - Generates 7–15 personalized HTML emails in under 2 minutes\n - 13 email types: Welcome → Product Discovery → Social Proof → Final Chance\n - AI-generated hero images that match the app's brand\n - 6 responsive layouts with dark mode\n - Built-in A/B testing (3–10 variants per email, automatic winner rollout)\n - Sending infrastructure included — DKIM, SPF, DMARC configured automatically on customer's domain\n - Personalized checkout links with closed-loop revenue attribution\n\n*Pricing model:* 20% of incremental revenue only. No platform fees. No setup costs. No minimum commitment.\n\n*Page:* <http://adapty.io/mail|adapty.io/mail> (will be changed soon :slightly_smiling_face: )\n\n - *73% of subscription apps* collect email addresses but never send a single lifecycle email — they lack the time, the copywriter, or the budget for Braze\n - *Top subscription apps make 4–13% of total revenue from email.* Most apps see 0%. That's money left on the table\n - AdaptyMail removes all three blockers at once: no copywriter needed, no months of setup, no unmeasurable ROI\n - Works on existing Adapty data — zero additional integration for current customers\n - Pure revenue share means zero risk for the customer: if we don't generate revenue, they pay nothing\n\n*ICP:* Any Adapty customer (or prospect) who collects email addresses but doesn't run lifecycle email campaigns. Especially strong for teams without a dedicated email marketer or Braze/Iterable contract.\n\nFYI <!subteam^S086DJEQEUE> <!subteam^S07BZPQDBUJ> <!subteam^S02U0UTPEQM>",
-      "releaseDate": "2026-04-08",
-      "thread": [
-        {
-          "userId": "U03K1BGS464",
-          "userName": "Vitali Khmialnitski",
-          "text": "*Feature:* AdaptyMail — AI-powered email marketing for subscription apps\n*Release date:* Apr 8, 2026\n*Affected areas:* AdaptyMail (new product line)\n*Audience:* Sales, CS, Growth teams, SDR, Marketing\n*What's new*\nAdaptyMail is live in Beta. A new product that generates complete lifecycle email campaigns from app store metadata using AI.\n\n *Core capabilities:*\n - AI analyzes app brand, category, and audience from App Store / Google Play listing\n - Generates 7–15 personalized HTML emails in under 2 minutes\n - 13 email types: Welcome → Product Discovery → Social Proof → Final Chance\n - AI-generated hero images that match the app's brand\n - 6 responsive layouts with dark mode\n - Built-in A/B testing (3–10 variants per email, automatic winner rollout)\n - Sending infrastructure included — DKIM, SPF, DMARC configured automatically on customer's domain\n - Personalized checkout links with closed-loop revenue attribution\n\n*Pricing model:* 20% of incremental revenue only. No platform fees. No setup costs. No minimum commitment.\n\n*Page:* <http://adapty.io/mail|adapty.io/mail> (will be changed soon :slightly_smiling_face: )\n\n - *73% of subscription apps* collect email addresses but never send a single lifecycle email — they lack the time, the copywriter, or the budget for Braze\n - *Top subscription apps make 4–13% of total revenue from email.* Most apps see 0%. That's money left on the table\n - AdaptyMail removes all three blockers at once: no copywriter needed, no months of setup, no unmeasurable ROI\n - Works on existing Adapty data — zero additional integration for current customers\n - Pure revenue share means zero risk for the customer: if we don't generate revenue, they pay nothing\n\n*ICP:* Any Adapty customer (or prospect) who collects email addresses but doesn't run lifecycle email campaigns. Especially strong for teams without a dedicated email marketer or Braze/Iterable contract.\n\nFYI <!subteam^S086DJEQEUE> <!subteam^S07BZPQDBUJ> <!subteam^S02U0UTPEQM>",
-          "date": "2026-04-08T14:28:15.451Z",
-          "images": []
-        },
-        {
-          "userId": "U04B26DSWMA",
-          "userName": "Sergei Solodskikh",
-          "text": "<!subteam^S03KM96DV0U> I believe also might be interested :slightly_smiling_face:",
-          "date": "2026-04-08T14:32:39.845Z",
-          "images": []
-        }
-      ],
-      "content": "[Vitali Khmialnitski]: *Feature:* AdaptyMail — AI-powered email marketing for subscription apps\n*Release date:* Apr 8, 2026\n*Affected areas:* AdaptyMail (new product line)\n*Audience:* Sales, CS, Growth teams, SDR, Marketing\n*What's new*\nAdaptyMail is live in Beta. A new product that generates complete lifecycle email campaigns from app store metadata using AI.\n\n *Core capabilities:*\n - AI analyzes app brand, category, and audience from App Store / Google Play listing\n - Generates 7–15 personalized HTML emails in under 2 minutes\n - 13 email types: Welcome → Product Discovery → Social Proof → Final Chance\n - AI-generated hero images that match the app's brand\n - 6 responsive layouts with dark mode\n - Built-in A/B testing (3–10 variants per email, automatic winner rollout)\n - Sending infrastructure included — DKIM, SPF, DMARC configured automatically on customer's domain\n - Personalized checkout links with closed-loop revenue attribution\n\n*Pricing model:* 20% of incremental revenue only. No platform fees. No setup costs. No minimum commitment.\n\n*Page:* <http://adapty.io/mail|adapty.io/mail> (will be changed soon :slightly_smiling_face: )\n\n - *73% of subscription apps* collect email addresses but never send a single lifecycle email — they lack the time, the copywriter, or the budget for Braze\n - *Top subscription apps make 4–13% of total revenue from email.* Most apps see 0%. That's money left on the table\n - AdaptyMail removes all three blockers at once: no copywriter needed, no months of setup, no unmeasurable ROI\n - Works on existing Adapty data — zero additional integration for current customers\n - Pure revenue share means zero risk for the customer: if we don't generate revenue, they pay nothing\n\n*ICP:* Any Adapty customer (or prospect) who collects email addresses but doesn't run lifecycle email campaigns. Especially strong for teams without a dedicated email marketer or Braze/Iterable contract.\n\nFYI <!subteam^S086DJEQEUE> <!subteam^S07BZPQDBUJ> <!subteam^S02U0UTPEQM>\n\n[Sergei Solodskikh]: <!subteam^S03KM96DV0U> I believe also might be interested :slightly_smiling_face:",
-      "matchingReplies": [],
-      "hasTeamMention": true,
-      "images": []
-    },
-    {
-      "id": "1774620592.015979",
-      "slackUrl": "https://adapty-team.slack.com/archives/C04SY70QZ0T/p1774620592015979",
-      "name": "Switch reading profile segment aggregate to Aerospike",
-      "message": "Feature: <https://adaptyio.atlassian.net/browse/INFRA-77?atlOrigin=eyJpIjoiZmFkNDIxY2RhYjZiNDVmN2IyODQzNzRkM2Q5NWNjZTUiLCJwIjoiaiJ9|Switch reading profile segment aggregate to Aerospike>\nRelease date: Mar 27, 2026 9:15 AM UTC\nAffected areas: *Everything* (mainly profiles, paywalls and A/B tests from SDK surface)",
-      "releaseDate": "2026-03-27",
-      "thread": [
-        {
-          "userId": "U04B26DSWMA",
-          "userName": "Sergei Solodskikh",
-          "text": "Feature: <https://adaptyio.atlassian.net/browse/INFRA-77?atlOrigin=eyJpIjoiZmFkNDIxY2RhYjZiNDVmN2IyODQzNzRkM2Q5NWNjZTUiLCJwIjoiaiJ9|Switch reading profile segment aggregate to Aerospike>\nRelease date: Mar 27, 2026 9:15 AM UTC\nAffected areas: *Everything* (mainly profiles, paywalls and A/B tests from SDK surface)",
-          "date": "2026-03-27T14:09:52.015Z",
-          "images": []
-        },
-        {
-          "userId": "U04B26DSWMA",
-          "userName": "Sergei Solodskikh",
-          "text": "This is the 4th step in migrating the most heavily used part of our infrastructure from PostgreSQL to Aerospike. It should not have any negative impact on user experience and should be viewed as a technical improvement. From now on, all read operations related to profiles, profile custom attributes, attributions, purchase states, and segmentation are performed using Aerospike as a data source. We still write data to both databases, and continue monitoring the state of our API. In the upcoming releases we will stop writing these data to PostgreSQL completely, and remove historic data from there",
-          "date": "2026-03-27T14:13:52.044Z",
-          "images": []
-        },
-        {
-          "userId": "U04B26DSWMA",
-          "userName": "Sergei Solodskikh",
-          "text": "<!subteam^S03KM96DV0U> boring technical release",
-          "date": "2026-03-27T14:14:13.494Z",
-          "images": []
-        }
-      ],
-      "content": "[Sergei Solodskikh]: Feature: <https://adaptyio.atlassian.net/browse/INFRA-77?atlOrigin=eyJpIjoiZmFkNDIxY2RhYjZiNDVmN2IyODQzNzRkM2Q5NWNjZTUiLCJwIjoiaiJ9|Switch reading profile segment aggregate to Aerospike>\nRelease date: Mar 27, 2026 9:15 AM UTC\nAffected areas: *Everything* (mainly profiles, paywalls and A/B tests from SDK surface)\n\n[Sergei Solodskikh]: This is the 4th step in migrating the most heavily used part of our infrastructure from PostgreSQL to Aerospike. It should not have any negative impact on user experience and should be viewed as a technical improvement. From now on, all read operations related to profiles, profile custom attributes, attributions, purchase states, and segmentation are performed using Aerospike as a data source. We still write data to both databases, and continue monitoring the state of our API. In the upcoming releases we will stop writing these data to PostgreSQL completely, and remove historic data from there\n\n[Sergei Solodskikh]: <!subteam^S03KM96DV0U> boring technical release",
-      "matchingReplies": [],
-      "hasTeamMention": true,
-      "images": []
     }
   ]
 }
