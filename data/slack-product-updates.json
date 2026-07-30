@@ -1,7 +1,67 @@
 {
-  "syncedAt": "2026-07-29T00:41:38.748Z",
+  "syncedAt": "2026-07-30T00:40:40.574Z",
   "channel": "#product-release",
   "entries": [
+    {
+      "id": "1785315192.779649",
+      "slackUrl": "https://adapty-team.slack.com/archives/C04SY70QZ0T/p1785315192779649",
+      "name": "*AI Agent (Apple Ads) - what two months of client conversations tell us*",
+      "message": "*AI Agent (Apple Ads) - what two months of client conversations tell us*\n\nI've analyzed every client conversation with the agent since release. In this post, I'll share the main highlights. You can find the full analysis in the document: <https://app.notion.com/p/adapty/AI-18-27-2026-3aa1ca4355c38197960ee8bc1ee93a55|:bar_chart: AI Agent Chat Analytics> + interactive visualization attached.\n\n*The numbers*:\n• 81 client orgs tried the agent → 221 real chats\n• *72% of orgs (58) started one chat and never came back* :epic-sad:\n• 11 deep sessions with 10+ messages - clients execute its instructions step by step and come back for verification.\n*What separates those who stayed from those who left:*\n• Churned clients opened with broad questions - \"what's wrong with my ads?\" in various forms. The agent answered, couldn't create or change anything itself, and the client never returned.\n• Retained clients came with specific tasks - \"what's up with my ROAS?\" - which gives them a reason to come back and re-check regularly. One client literally runs the same weekly-report prompt every Monday across 3–4 apps, polishing it a bit each iteration.\n*Potential agent improvements:*\n1. Scheduled reports/checks - \"check my ROAS every Monday.\"\n2. Agent-initiated follow-ups - client asks \"what can I improve?\", agent gives recommendations and offers: \"Want me to re-check in 3 days and ping you?\" with an \"Ok, remind me\" button. Should lift retention for clients who come with broad questions.\nAttached to the message is a visualization of the analytics in the form of an HTML file.\nYou can also find an MD file with analytics <https://app.notion.com/p/adapty/AI-Agent-Chat-Analytics-May-25-July-28-2026-3aa1ca4355c38197960ee8bc1ee93a55|in the Document>.",
+      "releaseDate": "2026-07-29",
+      "thread": [
+        {
+          "userId": "U0B6GAY6P8C",
+          "userName": "Roman Kuntsevich",
+          "text": "*AI Agent (Apple Ads) - what two months of client conversations tell us*\n\nI've analyzed every client conversation with the agent since release. In this post, I'll share the main highlights. You can find the full analysis in the document: <https://app.notion.com/p/adapty/AI-18-27-2026-3aa1ca4355c38197960ee8bc1ee93a55|:bar_chart: AI Agent Chat Analytics> + interactive visualization attached.\n\n*The numbers*:\n• 81 client orgs tried the agent → 221 real chats\n• *72% of orgs (58) started one chat and never came back* :epic-sad:\n• 11 deep sessions with 10+ messages - clients execute its instructions step by step and come back for verification.\n*What separates those who stayed from those who left:*\n• Churned clients opened with broad questions - \"what's wrong with my ads?\" in various forms. The agent answered, couldn't create or change anything itself, and the client never returned.\n• Retained clients came with specific tasks - \"what's up with my ROAS?\" - which gives them a reason to come back and re-check regularly. One client literally runs the same weekly-report prompt every Monday across 3–4 apps, polishing it a bit each iteration.\n*Potential agent improvements:*\n1. Scheduled reports/checks - \"check my ROAS every Monday.\"\n2. Agent-initiated follow-ups - client asks \"what can I improve?\", agent gives recommendations and offers: \"Want me to re-check in 3 days and ping you?\" with an \"Ok, remind me\" button. Should lift retention for clients who come with broad questions.\nAttached to the message is a visualization of the analytics in the form of an HTML file.\nYou can also find an MD file with analytics <https://app.notion.com/p/adapty/AI-Agent-Chat-Analytics-May-25-July-28-2026-3aa1ca4355c38197960ee8bc1ee93a55|in the Document>.",
+          "date": "2026-07-29T08:53:12.779Z",
+          "images": [
+            "https://files.slack.com/files-pri/T9HDDB78Q-F0BL3NZ2BQF/_______________________________2026-07-29_____10.44.15.png"
+          ]
+        },
+        {
+          "userId": "U08EVBTE69E",
+          "userName": "Maxim Borisik",
+          "text": "very cool!\ndid you have any :+1::skin-tone-2:/:-1::skin-tone-2:? or other way to get the satisfaction level\nexcept for retention as a proxy metric",
+          "date": "2026-07-29T08:57:20.565Z",
+          "images": []
+        },
+        {
+          "userId": "U0B6GAY6P8C",
+          "userName": "Roman Kuntsevich",
+          "text": "<@U08EVBTE69E> Yes, we have that. But those buttons were only clicked three times :upside_down_face:.\n- All three were dislikes.\n- The feedback was about data inaccuracy.\n\nI added this data to the doc",
+          "date": "2026-07-29T09:35:34.823Z",
+          "images": []
+        },
+        {
+          "userId": "U08EVBTE69E",
+          "userName": "Maxim Borisik",
+          "text": "aahh.. get it. thanks\n\nwe are adding the same to our AI chat in flow builder. will see",
+          "date": "2026-07-29T09:35:58.627Z",
+          "images": []
+        }
+      ],
+      "content": "[Roman Kuntsevich]: *AI Agent (Apple Ads) - what two months of client conversations tell us*\n\nI've analyzed every client conversation with the agent since release. In this post, I'll share the main highlights. You can find the full analysis in the document: <https://app.notion.com/p/adapty/AI-18-27-2026-3aa1ca4355c38197960ee8bc1ee93a55|:bar_chart: AI Agent Chat Analytics> + interactive visualization attached.\n\n*The numbers*:\n• 81 client orgs tried the agent → 221 real chats\n• *72% of orgs (58) started one chat and never came back* :epic-sad:\n• 11 deep sessions with 10+ messages - clients execute its instructions step by step and come back for verification.\n*What separates those who stayed from those who left:*\n• Churned clients opened with broad questions - \"what's wrong with my ads?\" in various forms. The agent answered, couldn't create or change anything itself, and the client never returned.\n• Retained clients came with specific tasks - \"what's up with my ROAS?\" - which gives them a reason to come back and re-check regularly. One client literally runs the same weekly-report prompt every Monday across 3–4 apps, polishing it a bit each iteration.\n*Potential agent improvements:*\n1. Scheduled reports/checks - \"check my ROAS every Monday.\"\n2. Agent-initiated follow-ups - client asks \"what can I improve?\", agent gives recommendations and offers: \"Want me to re-check in 3 days and ping you?\" with an \"Ok, remind me\" button. Should lift retention for clients who come with broad questions.\nAttached to the message is a visualization of the analytics in the form of an HTML file.\nYou can also find an MD file with analytics <https://app.notion.com/p/adapty/AI-Agent-Chat-Analytics-May-25-July-28-2026-3aa1ca4355c38197960ee8bc1ee93a55|in the Document>.\n\n[Maxim Borisik]: very cool!\ndid you have any :+1::skin-tone-2:/:-1::skin-tone-2:? or other way to get the satisfaction level\nexcept for retention as a proxy metric\n\n[Roman Kuntsevich]: <@U08EVBTE69E> Yes, we have that. But those buttons were only clicked three times :upside_down_face:.\n- All three were dislikes.\n- The feedback was about data inaccuracy.\n\nI added this data to the doc\n\n[Maxim Borisik]: aahh.. get it. thanks\n\nwe are adding the same to our AI chat in flow builder. will see",
+      "matchingReplies": [
+        {
+          "userId": "U08EVBTE69E",
+          "userName": "Maxim Borisik",
+          "text": "very cool!\ndid you have any :+1::skin-tone-2:/:-1::skin-tone-2:? or other way to get the satisfaction level\nexcept for retention as a proxy metric",
+          "date": "2026-07-29T08:57:20.565Z",
+          "images": []
+        },
+        {
+          "userId": "U08EVBTE69E",
+          "userName": "Maxim Borisik",
+          "text": "aahh.. get it. thanks\n\nwe are adding the same to our AI chat in flow builder. will see",
+          "date": "2026-07-29T09:35:58.627Z",
+          "images": []
+        }
+      ],
+      "hasTeamMention": false,
+      "images": [
+        "https://files.slack.com/files-pri/T9HDDB78Q-F0BL3NZ2BQF/_______________________________2026-07-29_____10.44.15.png"
+      ]
+    },
     {
       "id": "1784720672.403529",
       "slackUrl": "https://adapty-team.slack.com/archives/C04SY70QZ0T/p1784720672403529",
@@ -200,9 +260,16 @@
           "text": "up to you, it's not a top secret :) ",
           "date": "2026-07-23T18:35:46.324Z",
           "images": []
+        },
+        {
+          "userId": "U0ALSG3VA30",
+          "userName": "Sergey Bliznetsov",
+          "text": "Update is finally released!\nProper stop behaviour, undo/redo stack, ui polishing, bugfixes.\nlooks and feels a lot better now.",
+          "date": "2026-07-29T15:09:31.006Z",
+          "images": []
         }
       ],
-      "content": "[Danil Melnichuk]: sup, team\n\nlast month we've been cooking an *ai agent* for our one and only *flow builder*. it can do (almost) everything you can do via the ui — add and edit elements, styles and copy; and since it's powered by claude, it can mimic well-known app styles, suggest layouts according to best practices, etc.\n\ntoday we're ready for an *internal release*. it was a rough ride and we're still not quite there. we're working hard on polishing, and you can help us shape the path to public release. it's easy — if you're building a new gorgeous flow and tempted to use ui buttons, just tell yourself \"oh man, it's the year 2026 and i'm doing something old-school and not burning tokens. i need to change my life and fast\"\n\nso, here is the way:\n1. open any flow on any app\n2. open the browser console and enter the command: `adapty_ff.set('FLOW_GENERATOR', true)`\n3. now instead of editing flow manually, open the chat using :sparkles: button in the left sidebar and type (or dictate) what you desire to do\n4. notice what works well, what's not, what's missing and write in down to this thread. we'll take care of it\nknown restrictions: it's not always the smartest, it works on a per-screen basis, it leaks config internals and sometimes it may crash the page :this_is_fine: . we're working on it, stay tuned.\n\nshoutout and love to <@U08EVBTE69E> <@U07PR2368G5> <@U0ALSG3VA30> <@U080G9FHV50> <@U08JY3U9S7P>\n\n[Kirill Potekhin]: big deal, guys, thanks a lot! we're gonna show it to ElevenLabs today, just in time\n\n[Danil Melnichuk]: <@U080G9FHV50> don't sweat, we nailed it\n\n[Mike Gorokhov]: It works!\n\n[Mike Gorokhov]: In like 3 seconds!\n\n[Mike Gorokhov]: like 2 seconds and it is done!\n\n[Danil Melnichuk]: <@U03DFSCP8CW> crazy. didn't expect such a HUGE change to happen so fast\n\n[Mike Gorokhov]: <!subteam^S086DJEQEUE>\n\nRight-click on the page, select \"Inspect\".\nYou will go to the Dev Console.\nThere, open the \"Console\" tab and paste the snippet.\n\n[Mike Gorokhov]: `@Mike crazy. didn't expect such a HUGE change to happen so fast`\n\nWell, in FF's builder this takes like 12 seconds to change a button color\n\n[Danil Melnichuk]: &gt; this takes like 12 seconds\nwe'll be there (no)\n\n[Maxim Borisik]: Dan huge round of applause to that stuff!\nteam, Dan had lots of various engineering challenges while creating this chat, so respect to bypassing them! :chefs-kiss:\n\n[Kirill Potekhin]: this element was added to the paywall using AI editor live during the demo, worked really cool!\n\n[Marina Trypolskaya]: <!subteam^S086DJEQEUE> guys make sure you tested the flow and show it on the demo calls, looks really amazing!\n\n[Maxim Borisik]: FYI\nwe expect 1-2 weeks to finish and polish it before relaising to public! so i think we can tell that it will be available in august\n\n[Vlad Konkov]: qq: and would it be possible in the nearest future just drop appstore link and ask to create an onboarding say just like for this app but with my branding? or just upload a photo and ask create this screen?\n\n[Maxim Borisik]: figma import is the closest ones to be released. expect it in August too\n\n[Matty Friedman]: !!!!\n\n[Aliaksandra Subach]: love it!!\n\n[Maxim Borisik]: brand new padel (or tennis) app from Sasha haha\n\n[Maxim Borisik]: getting ready for BCN event on 100%\n\n[Melike Sezer]: Hi team, first and foremost, thank you! It's everything we dreamed of :tada:\nSmall feedback: After I give a second prompt, it applies all the requested changes. However, if I want to revert to the previous version, the Undo button only reverts the last individual change. I asked the AI to undo the entire previous prompt and that worked, but maybe we could consider adding a UI element like *“Undo All Changes”* to revert everything made by the last AI prompt in one click.\n\n[Sergey Bliznetsov]: its done already, will be shipped today hopefully, with a bunch of ui improvements\n\n[Aleksandr Smirnov]: hey-hey!\ni’m not sure whether we can share <https://adapty-team.slack.com/archives/C07EVTD6AF4/p1784829647421379|it>, even with Josh\ncould someone confirm?\n\n[Kirill Potekhin]: hey! yes, share it with him, but tell it's in alpha, so he should double check everything before pushing to prod, and also share a feedback with us \n\n[Aleksandr Smirnov]: ok, I’ll dm him rather than reply in the thread, right?\n\n[Kirill Potekhin]: up to you, it's not a top secret :) ",
+      "content": "[Danil Melnichuk]: sup, team\n\nlast month we've been cooking an *ai agent* for our one and only *flow builder*. it can do (almost) everything you can do via the ui — add and edit elements, styles and copy; and since it's powered by claude, it can mimic well-known app styles, suggest layouts according to best practices, etc.\n\ntoday we're ready for an *internal release*. it was a rough ride and we're still not quite there. we're working hard on polishing, and you can help us shape the path to public release. it's easy — if you're building a new gorgeous flow and tempted to use ui buttons, just tell yourself \"oh man, it's the year 2026 and i'm doing something old-school and not burning tokens. i need to change my life and fast\"\n\nso, here is the way:\n1. open any flow on any app\n2. open the browser console and enter the command: `adapty_ff.set('FLOW_GENERATOR', true)`\n3. now instead of editing flow manually, open the chat using :sparkles: button in the left sidebar and type (or dictate) what you desire to do\n4. notice what works well, what's not, what's missing and write in down to this thread. we'll take care of it\nknown restrictions: it's not always the smartest, it works on a per-screen basis, it leaks config internals and sometimes it may crash the page :this_is_fine: . we're working on it, stay tuned.\n\nshoutout and love to <@U08EVBTE69E> <@U07PR2368G5> <@U0ALSG3VA30> <@U080G9FHV50> <@U08JY3U9S7P>\n\n[Kirill Potekhin]: big deal, guys, thanks a lot! we're gonna show it to ElevenLabs today, just in time\n\n[Danil Melnichuk]: <@U080G9FHV50> don't sweat, we nailed it\n\n[Mike Gorokhov]: It works!\n\n[Mike Gorokhov]: In like 3 seconds!\n\n[Mike Gorokhov]: like 2 seconds and it is done!\n\n[Danil Melnichuk]: <@U03DFSCP8CW> crazy. didn't expect such a HUGE change to happen so fast\n\n[Mike Gorokhov]: <!subteam^S086DJEQEUE>\n\nRight-click on the page, select \"Inspect\".\nYou will go to the Dev Console.\nThere, open the \"Console\" tab and paste the snippet.\n\n[Mike Gorokhov]: `@Mike crazy. didn't expect such a HUGE change to happen so fast`\n\nWell, in FF's builder this takes like 12 seconds to change a button color\n\n[Danil Melnichuk]: &gt; this takes like 12 seconds\nwe'll be there (no)\n\n[Maxim Borisik]: Dan huge round of applause to that stuff!\nteam, Dan had lots of various engineering challenges while creating this chat, so respect to bypassing them! :chefs-kiss:\n\n[Kirill Potekhin]: this element was added to the paywall using AI editor live during the demo, worked really cool!\n\n[Marina Trypolskaya]: <!subteam^S086DJEQEUE> guys make sure you tested the flow and show it on the demo calls, looks really amazing!\n\n[Maxim Borisik]: FYI\nwe expect 1-2 weeks to finish and polish it before relaising to public! so i think we can tell that it will be available in august\n\n[Vlad Konkov]: qq: and would it be possible in the nearest future just drop appstore link and ask to create an onboarding say just like for this app but with my branding? or just upload a photo and ask create this screen?\n\n[Maxim Borisik]: figma import is the closest ones to be released. expect it in August too\n\n[Matty Friedman]: !!!!\n\n[Aliaksandra Subach]: love it!!\n\n[Maxim Borisik]: brand new padel (or tennis) app from Sasha haha\n\n[Maxim Borisik]: getting ready for BCN event on 100%\n\n[Melike Sezer]: Hi team, first and foremost, thank you! It's everything we dreamed of :tada:\nSmall feedback: After I give a second prompt, it applies all the requested changes. However, if I want to revert to the previous version, the Undo button only reverts the last individual change. I asked the AI to undo the entire previous prompt and that worked, but maybe we could consider adding a UI element like *“Undo All Changes”* to revert everything made by the last AI prompt in one click.\n\n[Sergey Bliznetsov]: its done already, will be shipped today hopefully, with a bunch of ui improvements\n\n[Aleksandr Smirnov]: hey-hey!\ni’m not sure whether we can share <https://adapty-team.slack.com/archives/C07EVTD6AF4/p1784829647421379|it>, even with Josh\ncould someone confirm?\n\n[Kirill Potekhin]: hey! yes, share it with him, but tell it's in alpha, so he should double check everything before pushing to prod, and also share a feedback with us \n\n[Aleksandr Smirnov]: ok, I’ll dm him rather than reply in the thread, right?\n\n[Kirill Potekhin]: up to you, it's not a top secret :) \n\n[Sergey Bliznetsov]: Update is finally released!\nProper stop behaviour, undo/redo stack, ui polishing, bugfixes.\nlooks and feels a lot better now.",
       "matchingReplies": [
         {
           "userId": "U9HDNS9S4",
@@ -2422,86 +2489,6 @@
       ],
       "hasTeamMention": true,
       "images": []
-    },
-    {
-      "id": "1776084199.252419",
-      "slackUrl": "https://adapty-team.slack.com/archives/C04SY70QZ0T/p1776084199252419",
-      "name": "Turkish localization of Adapty documentation",
-      "message": "Feature: Turkish localization of Adapty documentation\nRelease date: Apr 13, 2026\nAffected areas: Docs",
-      "releaseDate": "2026-04-13",
-      "thread": [
-        {
-          "userId": "U08QUJMN0UV",
-          "userName": "Elina Andreeva",
-          "text": "Feature: Turkish localization of Adapty documentation\nRelease date: Apr 13, 2026\nAffected areas: Docs",
-          "date": "2026-04-13T12:43:19.252Z",
-          "images": []
-        },
-        {
-          "userId": "U08QUJMN0UV",
-          "userName": "Elina Andreeva",
-          "text": "Adapty docs are now available in Turkish: <https://adapty.io/docs/tr/>\n\nYou can switch languages using the switcher in the header.\n\n<@U02GSCVUPHU> thank you for your help!",
-          "date": "2026-04-13T12:43:37.309Z",
-          "images": []
-        },
-        {
-          "userId": "U09RF6V1YHM",
-          "userName": "Adil",
-          "text": "<@U0A266T9SJE> fyi :eyes:",
-          "date": "2026-04-13T12:46:03.673Z",
-          "images": []
-        },
-        {
-          "userId": "U9HDNS9S4",
-          "userName": "Kirill Potekhin",
-          "text": "<!subteam^S03KC9S1QMC> <!subteam^S07BZPQDBUJ>",
-          "date": "2026-04-13T12:46:14.319Z",
-          "images": []
-        },
-        {
-          "userId": "U9HDNS9S4",
-          "userName": "Kirill Potekhin",
-          "text": "<@U08QUJMN0UV> thank you!",
-          "date": "2026-04-13T12:46:19.430Z",
-          "images": []
-        },
-        {
-          "userId": "U09RF6V1YHM",
-          "userName": "Adil",
-          "text": "Thank you :raised_hands:",
-          "date": "2026-04-13T12:46:29.082Z",
-          "images": []
-        },
-        {
-          "userId": "U08917H1C5B",
-          "userName": "Vitaly Kuzmin",
-          "text": "Hey <@U08QUJMN0UV>\nIs it possible to limit document search based on the selected localization? I’m getting Turkish documents when searching in the EN locale.",
-          "date": "2026-04-14T09:45:36.750Z",
-          "images": [
-            "https://files.slack.com/files-pri/T9HDDB78Q-F0ASV30BU5A/image.png"
-          ]
-        },
-        {
-          "userId": "U08QUJMN0UV",
-          "userName": "Elina Andreeva",
-          "text": "Hi! Thank you for reporting this! Specifically tried to fix this issue... Will fix asap",
-          "date": "2026-04-14T09:46:48.520Z",
-          "images": []
-        },
-        {
-          "userId": "U08QUJMN0UV",
-          "userName": "Elina Andreeva",
-          "text": "Fixed now\nEnglish and Turkish indices got accidentally merged this morning; added a reminder about this to the localization process, so we don't get this error with new languages",
-          "date": "2026-04-14T10:35:43.090Z",
-          "images": []
-        }
-      ],
-      "content": "[Elina Andreeva]: Feature: Turkish localization of Adapty documentation\nRelease date: Apr 13, 2026\nAffected areas: Docs\n\n[Elina Andreeva]: Adapty docs are now available in Turkish: <https://adapty.io/docs/tr/>\n\nYou can switch languages using the switcher in the header.\n\n<@U02GSCVUPHU> thank you for your help!\n\n[Adil]: <@U0A266T9SJE> fyi :eyes:\n\n[Kirill Potekhin]: <!subteam^S03KC9S1QMC> <!subteam^S07BZPQDBUJ>\n\n[Kirill Potekhin]: <@U08QUJMN0UV> thank you!\n\n[Adil]: Thank you :raised_hands:\n\n[Vitaly Kuzmin]: Hey <@U08QUJMN0UV>\nIs it possible to limit document search based on the selected localization? I’m getting Turkish documents when searching in the EN locale.\n\n[Elina Andreeva]: Hi! Thank you for reporting this! Specifically tried to fix this issue... Will fix asap\n\n[Elina Andreeva]: Fixed now\nEnglish and Turkish indices got accidentally merged this morning; added a reminder about this to the localization process, so we don't get this error with new languages",
-      "matchingReplies": [],
-      "hasTeamMention": true,
-      "images": [
-        "https://files.slack.com/files-pri/T9HDDB78Q-F0ASV30BU5A/image.png"
-      ]
     }
   ]
 }
