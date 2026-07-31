@@ -1,5 +1,5 @@
 {
-  "syncedAt": "2026-07-30T00:40:40.574Z",
+  "syncedAt": "2026-07-31T00:45:48.054Z",
   "channel": "#product-release",
   "entries": [
     {
@@ -739,9 +739,30 @@
           "text": "<@U03DFSCP8CW>\n1. Cold starts\n2. Full remove before the cold start. Only CDN cache I assume b/c I was made a series of tests for both vendors.\n3. Both SDKs were initialised in the MainActor, code copied from each vendor examples from oficial repo.\n4. Both apps loading the same content: two onboarding screens with one image and the same text + 3rd paywall screen.",
           "date": "2026-07-14T10:41:50.164Z",
           "images": []
+        },
+        {
+          "userId": "U034A27SVHC",
+          "userName": "Artem Rukavishnikov",
+          "text": "Hey guys! I've managed to find the onboarding latency doc but not a flow builder one <https://app.notion.com/p/adapty/SDK-Onboardings-Paywalls-load-latency-comparison-2026-3961ca4355c380dd943cc41fce2602e6?pvs=26&amp;qid=1%3Ab0e272f4-6cc2-4663-8353-5c33e5c2473a%3A12|app.notion.com/p/adapty/…/SDK-Onboardings-Paywalls-load-latency-comparison-2026…?pvs=26&amp;…>\nWhere can we get the raw numbers/methodology for this research? Thanks!",
+          "date": "2026-07-30T04:31:17.074Z",
+          "images": []
+        },
+        {
+          "userId": "U08EVBTE69E",
+          "userName": "Maxim Borisik",
+          "text": "that's flow builder Artem",
+          "date": "2026-07-30T08:00:22.721Z",
+          "images": []
+        },
+        {
+          "userId": "U034A27SVHC",
+          "userName": "Artem Rukavishnikov",
+          "text": "Oh okay, I would never think from the doc itself\nThe numbers make sense then, though :slightly_smiling_face:\nThank you, Maxim!",
+          "date": "2026-07-30T08:15:58.982Z",
+          "images": []
         }
       ],
-      "content": "[Maxim Borisik]: hey team!\na short reminder - why we are going to win the market with the flow builder\n\n<@U08914ZA6A1> did some good research comparing our screen load times with Superwall's\n\nI think any additional comments are just not needed here. we also plan to use it in our campaigns so prospects can finally see what they're missing by not using Adapty\n:popcorn:\n\n[Mike Gorokhov]: Looks good, and nice to see our Flow Builder loading faster. Could we add a few details to make sure this is a fair comparison?\n\nWas it a cold start or warm start? Was any cache involved? Were both apps using the same environment, prod vs testю Also, is SDK initialization done under similar conditions in the app code, and are both apps loading comparable content and assets?\n\nIf we have several runs with the same setup, ideally median or p95, this would make the result much stronger.\n\n[Maxim Borisik]: thanks Mike. i can say that yes, it was a fair comparison (checked with Greg before publishing)\n\n<@U08914ZA6A1> any comments here on what Mike wants to know?\n\n[Stanislav Mayorov]: <@U03DFSCP8CW> Great questions! Cold start, no cache.\n<@U08914ZA6A1> did you use a debug or prod scheme for xcode build?\n\n[Gregory Komissarov]: <@U090T4UNBUK> here is the build and deploy script\n```#!/bin/bash\nset -e\n\nDEVICE_ID=\"00008130-00080DA60C31001C\"\nPROJECT=\"$(dirname \"$0\")/Basic.xcodeproj\"\nSCHEME=\"Basic\"\nAPP_PATH=~/Library/Developer/Xcode/DerivedData/Basic-higysqwnklkibnbznjjhzcoqsmvb/Build/Products/Debug-iphoneos/Superwall-SwiftUI.app\n\necho \"Building...\"\nxcodebuild -project \"$PROJECT\" \\\n  -scheme \"$SCHEME\" \\\n  -destination \"platform=iOS,id=$DEVICE_ID\" \\\n  build\n\necho \"Installing...\"\nxcrun devicectl device install app \\\n  --device \"$DEVICE_ID\" \\\n  \"$APP_PATH\"\n\necho \"Done.\"```\n\n[Stanislav Mayorov]: <@U08914ZA6A1> I think it’s a debug scheme\n&gt; Debug-iphoneos\n\n[Gregory Komissarov]: <@U03DFSCP8CW>\n1. Cold starts\n2. Full remove before the cold start. Only CDN cache I assume b/c I was made a series of tests for both vendors.\n3. Both SDKs were initialised in the MainActor, code copied from each vendor examples from oficial repo.\n4. Both apps loading the same content: two onboarding screens with one image and the same text + 3rd paywall screen.",
+      "content": "[Maxim Borisik]: hey team!\na short reminder - why we are going to win the market with the flow builder\n\n<@U08914ZA6A1> did some good research comparing our screen load times with Superwall's\n\nI think any additional comments are just not needed here. we also plan to use it in our campaigns so prospects can finally see what they're missing by not using Adapty\n:popcorn:\n\n[Mike Gorokhov]: Looks good, and nice to see our Flow Builder loading faster. Could we add a few details to make sure this is a fair comparison?\n\nWas it a cold start or warm start? Was any cache involved? Were both apps using the same environment, prod vs testю Also, is SDK initialization done under similar conditions in the app code, and are both apps loading comparable content and assets?\n\nIf we have several runs with the same setup, ideally median or p95, this would make the result much stronger.\n\n[Maxim Borisik]: thanks Mike. i can say that yes, it was a fair comparison (checked with Greg before publishing)\n\n<@U08914ZA6A1> any comments here on what Mike wants to know?\n\n[Stanislav Mayorov]: <@U03DFSCP8CW> Great questions! Cold start, no cache.\n<@U08914ZA6A1> did you use a debug or prod scheme for xcode build?\n\n[Gregory Komissarov]: <@U090T4UNBUK> here is the build and deploy script\n```#!/bin/bash\nset -e\n\nDEVICE_ID=\"00008130-00080DA60C31001C\"\nPROJECT=\"$(dirname \"$0\")/Basic.xcodeproj\"\nSCHEME=\"Basic\"\nAPP_PATH=~/Library/Developer/Xcode/DerivedData/Basic-higysqwnklkibnbznjjhzcoqsmvb/Build/Products/Debug-iphoneos/Superwall-SwiftUI.app\n\necho \"Building...\"\nxcodebuild -project \"$PROJECT\" \\\n  -scheme \"$SCHEME\" \\\n  -destination \"platform=iOS,id=$DEVICE_ID\" \\\n  build\n\necho \"Installing...\"\nxcrun devicectl device install app \\\n  --device \"$DEVICE_ID\" \\\n  \"$APP_PATH\"\n\necho \"Done.\"```\n\n[Stanislav Mayorov]: <@U08914ZA6A1> I think it’s a debug scheme\n&gt; Debug-iphoneos\n\n[Gregory Komissarov]: <@U03DFSCP8CW>\n1. Cold starts\n2. Full remove before the cold start. Only CDN cache I assume b/c I was made a series of tests for both vendors.\n3. Both SDKs were initialised in the MainActor, code copied from each vendor examples from oficial repo.\n4. Both apps loading the same content: two onboarding screens with one image and the same text + 3rd paywall screen.\n\n[Artem Rukavishnikov]: Hey guys! I've managed to find the onboarding latency doc but not a flow builder one <https://app.notion.com/p/adapty/SDK-Onboardings-Paywalls-load-latency-comparison-2026-3961ca4355c380dd943cc41fce2602e6?pvs=26&amp;qid=1%3Ab0e272f4-6cc2-4663-8353-5c33e5c2473a%3A12|app.notion.com/p/adapty/…/SDK-Onboardings-Paywalls-load-latency-comparison-2026…?pvs=26&amp;…>\nWhere can we get the raw numbers/methodology for this research? Thanks!\n\n[Maxim Borisik]: that's flow builder Artem\n\n[Artem Rukavishnikov]: Oh okay, I would never think from the doc itself\nThe numbers make sense then, though :slightly_smiling_face:\nThank you, Maxim!",
       "matchingReplies": [
         {
           "userId": "U08EVBTE69E",
