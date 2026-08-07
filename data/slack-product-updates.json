@@ -1,7 +1,157 @@
 {
-  "syncedAt": "2026-08-06T00:38:12.595Z",
+  "syncedAt": "2026-08-07T01:20:44.146Z",
   "channel": "#product-release",
   "entries": [
+    {
+      "id": "1785855723.569869",
+      "slackUrl": "https://adapty-team.slack.com/archives/C04SY70QZ0T/p1785855723569869",
+      "name": "Apple Retention Messaging API",
+      "message": "Feature: <https://adaptyio.atlassian.net/browse/ADP-6445|Apple Retention Messaging API>\nRelease: July 30, 2026 (under feature flag)\nDependencies: None\nEffected areas: Dashboard (new section), Analytics\n\n<!subteam^S07BZPQDBUJ> <!subteam^S03KM96DV0U> <!subteam^S03KC9S1QMC> <@U05QELDHUUX> <@U06K36L6CTB>\n\nSup, team — it’s finally here (under feature flag BUT goes live this week)! :apple:\n\nWhen a subscriber taps Cancel Subscription in iOS Settings, Apple now shows _your_ message right in the cancellation sheet — a value reminder, a discount, or a plan switch — before the cancellation is confirmed. The one screen apps never owned, now addressable straight from Adapty:\n\n• on-device preview — see the message in Apple’s cancel sheet (light & dark) before it goes to review (Our benefit, only SW support)\n• AI localization — write once in English, auto translate fills every locale. (Our benefit, RC and SW doesn’t support this)\n• save-rate analytics — Shown / Saved / Save rate per message\nApple’s side is still in beta, so we’re shipping behind a feature flag purely as a safety net. Until it comes off, enable it in the browser console:\n`window.adapty_ff.set('retentionMessaging', true)` → Apple Retention Messaging appears in the left nav. Poke around and drop anything odd in this thread. <!subteam^S07BZPQDBUJ> You can provide it to your clients who are approved from Apple, most probably we’ll disable it this week and go LIVE!\n\n*Who this is for:* \nAny iOS subscription app that wants to lift retention with zero engineering - no endpoint, no SDK update. Sharpest fits: price-sensitive apps (discount at cancel intent), monthly + annual mixes (plan switch instead of churn).\n\n*What’s next:* \nAnalytics improvements (adding saved $ metric), then A/B testing if adoption is strong.\n\nDocs: <https://adapty.io/docs/retention-messaging|adapty.io/docs/retention-messaging>\n\nHuge kudos to <@U0ACSQAKJA1> <@U09AH7D2A4X> <@U0AQZG23D62> <@U0A3M160RB4> <@U08ASB4GYR4> <@U0AKC1Y09R8> :fire:",
+      "releaseDate": "2026-08-04",
+      "thread": [
+        {
+          "userId": "U07J9LKBQ5U",
+          "userName": "Yurii Kleimenov",
+          "text": "Feature: <https://adaptyio.atlassian.net/browse/ADP-6445|Apple Retention Messaging API>\nRelease: July 30, 2026 (under feature flag)\nDependencies: None\nEffected areas: Dashboard (new section), Analytics\n\n<!subteam^S07BZPQDBUJ> <!subteam^S03KM96DV0U> <!subteam^S03KC9S1QMC> <@U05QELDHUUX> <@U06K36L6CTB>\n\nSup, team — it’s finally here (under feature flag BUT goes live this week)! :apple:\n\nWhen a subscriber taps Cancel Subscription in iOS Settings, Apple now shows _your_ message right in the cancellation sheet — a value reminder, a discount, or a plan switch — before the cancellation is confirmed. The one screen apps never owned, now addressable straight from Adapty:\n\n• on-device preview — see the message in Apple’s cancel sheet (light & dark) before it goes to review (Our benefit, only SW support)\n• AI localization — write once in English, auto translate fills every locale. (Our benefit, RC and SW doesn’t support this)\n• save-rate analytics — Shown / Saved / Save rate per message\nApple’s side is still in beta, so we’re shipping behind a feature flag purely as a safety net. Until it comes off, enable it in the browser console:\n`window.adapty_ff.set('retentionMessaging', true)` → Apple Retention Messaging appears in the left nav. Poke around and drop anything odd in this thread. <!subteam^S07BZPQDBUJ> You can provide it to your clients who are approved from Apple, most probably we’ll disable it this week and go LIVE!\n\n*Who this is for:* \nAny iOS subscription app that wants to lift retention with zero engineering - no endpoint, no SDK update. Sharpest fits: price-sensitive apps (discount at cancel intent), monthly + annual mixes (plan switch instead of churn).\n\n*What’s next:* \nAnalytics improvements (adding saved $ metric), then A/B testing if adoption is strong.\n\nDocs: <https://adapty.io/docs/retention-messaging|adapty.io/docs/retention-messaging>\n\nHuge kudos to <@U0ACSQAKJA1> <@U09AH7D2A4X> <@U0AQZG23D62> <@U0A3M160RB4> <@U08ASB4GYR4> <@U0AKC1Y09R8> :fire:",
+          "date": "2026-08-04T15:02:03.569Z",
+          "images": [
+            "https://files.slack.com/files-pri/T9HDDB78Q-F0BMUPB70UV/image.png"
+          ]
+        },
+        {
+          "userId": "U090BDLA9JN",
+          "userName": "Dmitry Shestoperov",
+          "text": "if possible, I'd appreciate a short video demonstrating the confirm cancellation screen with a custom message/offer:pray:",
+          "date": "2026-08-04T15:06:00.494Z",
+          "images": []
+        },
+        {
+          "userId": "U07FKBD6QDS",
+          "userName": "Daniel Ridny",
+          "text": "<@U07J9LKBQ5U> QQ about Retention Messaging analytics from client - _No way to see this in AppStoreConnect, only API? Will we be able to observe the save rate % in Adapty?_",
+          "date": "2026-08-05T10:05:40.564Z",
+          "images": []
+        },
+        {
+          "userId": "U07J9LKBQ5U",
+          "userName": "Yurii Kleimenov",
+          "text": "Yes, we’re displaying retention rate for each message",
+          "date": "2026-08-05T10:06:24.285Z",
+          "images": []
+        },
+        {
+          "userId": "U07FKBD6QDS",
+          "userName": "Daniel Ridny",
+          "text": "thanks <@U07J9LKBQ5U> can you share on this one _- No way to see this in AppStoreConnect, only API?_",
+          "date": "2026-08-05T10:06:48.172Z",
+          "images": []
+        },
+        {
+          "userId": "U07FGPCB4D9",
+          "userName": "Vlad Konkov",
+          "text": "hey <@U07J9LKBQ5U>\ni also have a <https://adapty-team.slack.com/archives/C0A6SCL1V5W/p1785861633705719?thread_ts=1785855306.384369&amp;cid=C0A6SCL1V5W|question> from a customer.\nactually, can we somehow highlight for the customers on how to set this thing up in their APC? at least add info to our docs?\nthe reason is not so many customers actually know they can try to retain their subscribers.\ni tried to <https://developer.apple.com/documentation/retentionmessaging|read the> documentation and was expecting \"go there – click here – upload image - write text\" and that's it",
+          "date": "2026-08-05T10:17:24.208Z",
+          "images": []
+        },
+        {
+          "userId": "U07J9LKBQ5U",
+          "userName": "Yurii Kleimenov",
+          "text": "<@U07FGPCB4D9> This feature works out of the box on the Adapty side. Everything is configured, submitted, and uploaded to App Store Connect automatically. The client only needs to approve the beta from Apple’s side. We’ll have a call with the CS team, and I’ll explain everything in detail.",
+          "date": "2026-08-05T10:24:24.321Z",
+          "images": []
+        },
+        {
+          "userId": "U07J9LKBQ5U",
+          "userName": "Yurii Kleimenov",
+          "text": "<https://adapty.io/docs/retention-messaging-setup>",
+          "date": "2026-08-05T10:25:07.010Z",
+          "images": []
+        },
+        {
+          "userId": "U07J9LKBQ5U",
+          "userName": "Yurii Kleimenov",
+          "text": "IT’S LIVE FOR EVERYONE :fire:",
+          "date": "2026-08-06T13:48:49.731Z",
+          "images": []
+        },
+        {
+          "userId": "U06JP8BJFEV",
+          "userName": "Viktoriya Kirsanova",
+          "text": "<@U07J9LKBQ5U> plz check the relative thread in the sup internal",
+          "date": "2026-08-06T13:49:50.984Z",
+          "images": []
+        },
+        {
+          "userId": "U090BDLA9JN",
+          "userName": "Dmitry Shestoperov",
+          "text": "cool, shooting up some posts on socials",
+          "date": "2026-08-06T13:50:05.440Z",
+          "images": []
+        },
+        {
+          "userId": "U090BDLA9JN",
+          "userName": "Dmitry Shestoperov",
+          "text": "<https://lnkd.in/p/e9ax7vb5|lnkd.in/p/…>\n\nhit a like if you see this pls",
+          "date": "2026-08-06T13:55:50.124Z",
+          "images": []
+        },
+        {
+          "userId": "U090BDLA9JN",
+          "userName": "Dmitry Shestoperov",
+          "text": "is this behavior expected without an actual Apple’s approval?",
+          "date": "2026-08-06T14:19:10.287Z",
+          "images": [
+            "https://files.slack.com/files-pri/T9HDDB78Q-F0BPBFTN7J4/screenshot_2026-08-06_at_17.18.14.png"
+          ]
+        },
+        {
+          "userId": "U06JP8BJFEV",
+          "userName": "Viktoriya Kirsanova",
+          "text": "Doesn't seem so. One of the clients shared",
+          "date": "2026-08-06T14:25:16.250Z",
+          "images": [
+            "https://files.slack.com/files-pri/T9HDDB78Q-F0BNH75BBAN/image.png"
+          ]
+        },
+        {
+          "userId": "U06JP8BJFEV",
+          "userName": "Viktoriya Kirsanova",
+          "text": "<@U07J9LKBQ5U> Our docs say that Support can help customers request access to Apple's Retention Messaging API beta.\n\nSo am I understanding it right: we first ask the app name, then provide a link as described <https://adapty-team.slack.com/archives/C02PV5E6WAH/p1762292175188049?thread_ts=1753117401.006969&amp;cid=C02PV5E6WAH|here>(is it still relevant?) and share Apple's <https://developer.apple.com/documentation/retentionmessaging/|doc link>? Or is there smth else we should help with? Are there any specific instructions or wording we should use?",
+          "date": "2026-08-06T14:29:06.705Z",
+          "images": []
+        },
+        {
+          "userId": "U07J9LKBQ5U",
+          "userName": "Yurii Kleimenov",
+          "text": "<https://adapty-team.slack.com/archives/C04SY70QZ0T/p1786025950287839?thread_ts=1785855723.569869&amp;cid=C04SY70QZ0T|https://adapty-team.slack.com/archives/C04SY70QZ0T/p1786025950287839?thread_ts=1785855723.569869&amp;cid=C04SY70QZ0T>\n\nThis behavior is sometimes observed in completely empty apps, both in Sandbox and Production. However, if you register an app from scratch, it doesn’t occur. We’ll add an appropriate empty state later.",
+          "date": "2026-08-06T16:48:58.648Z",
+          "images": []
+        }
+      ],
+      "content": "[Yurii Kleimenov]: Feature: <https://adaptyio.atlassian.net/browse/ADP-6445|Apple Retention Messaging API>\nRelease: July 30, 2026 (under feature flag)\nDependencies: None\nEffected areas: Dashboard (new section), Analytics\n\n<!subteam^S07BZPQDBUJ> <!subteam^S03KM96DV0U> <!subteam^S03KC9S1QMC> <@U05QELDHUUX> <@U06K36L6CTB>\n\nSup, team — it’s finally here (under feature flag BUT goes live this week)! :apple:\n\nWhen a subscriber taps Cancel Subscription in iOS Settings, Apple now shows _your_ message right in the cancellation sheet — a value reminder, a discount, or a plan switch — before the cancellation is confirmed. The one screen apps never owned, now addressable straight from Adapty:\n\n• on-device preview — see the message in Apple’s cancel sheet (light & dark) before it goes to review (Our benefit, only SW support)\n• AI localization — write once in English, auto translate fills every locale. (Our benefit, RC and SW doesn’t support this)\n• save-rate analytics — Shown / Saved / Save rate per message\nApple’s side is still in beta, so we’re shipping behind a feature flag purely as a safety net. Until it comes off, enable it in the browser console:\n`window.adapty_ff.set('retentionMessaging', true)` → Apple Retention Messaging appears in the left nav. Poke around and drop anything odd in this thread. <!subteam^S07BZPQDBUJ> You can provide it to your clients who are approved from Apple, most probably we’ll disable it this week and go LIVE!\n\n*Who this is for:* \nAny iOS subscription app that wants to lift retention with zero engineering - no endpoint, no SDK update. Sharpest fits: price-sensitive apps (discount at cancel intent), monthly + annual mixes (plan switch instead of churn).\n\n*What’s next:* \nAnalytics improvements (adding saved $ metric), then A/B testing if adoption is strong.\n\nDocs: <https://adapty.io/docs/retention-messaging|adapty.io/docs/retention-messaging>\n\nHuge kudos to <@U0ACSQAKJA1> <@U09AH7D2A4X> <@U0AQZG23D62> <@U0A3M160RB4> <@U08ASB4GYR4> <@U0AKC1Y09R8> :fire:\n\n[Dmitry Shestoperov]: if possible, I'd appreciate a short video demonstrating the confirm cancellation screen with a custom message/offer:pray:\n\n[Daniel Ridny]: <@U07J9LKBQ5U> QQ about Retention Messaging analytics from client - _No way to see this in AppStoreConnect, only API? Will we be able to observe the save rate % in Adapty?_\n\n[Yurii Kleimenov]: Yes, we’re displaying retention rate for each message\n\n[Daniel Ridny]: thanks <@U07J9LKBQ5U> can you share on this one _- No way to see this in AppStoreConnect, only API?_\n\n[Vlad Konkov]: hey <@U07J9LKBQ5U>\ni also have a <https://adapty-team.slack.com/archives/C0A6SCL1V5W/p1785861633705719?thread_ts=1785855306.384369&amp;cid=C0A6SCL1V5W|question> from a customer.\nactually, can we somehow highlight for the customers on how to set this thing up in their APC? at least add info to our docs?\nthe reason is not so many customers actually know they can try to retain their subscribers.\ni tried to <https://developer.apple.com/documentation/retentionmessaging|read the> documentation and was expecting \"go there – click here – upload image - write text\" and that's it\n\n[Yurii Kleimenov]: <@U07FGPCB4D9> This feature works out of the box on the Adapty side. Everything is configured, submitted, and uploaded to App Store Connect automatically. The client only needs to approve the beta from Apple’s side. We’ll have a call with the CS team, and I’ll explain everything in detail.\n\n[Yurii Kleimenov]: <https://adapty.io/docs/retention-messaging-setup>\n\n[Yurii Kleimenov]: IT’S LIVE FOR EVERYONE :fire:\n\n[Viktoriya Kirsanova]: <@U07J9LKBQ5U> plz check the relative thread in the sup internal\n\n[Dmitry Shestoperov]: cool, shooting up some posts on socials\n\n[Dmitry Shestoperov]: <https://lnkd.in/p/e9ax7vb5|lnkd.in/p/…>\n\nhit a like if you see this pls\n\n[Dmitry Shestoperov]: is this behavior expected without an actual Apple’s approval?\n\n[Viktoriya Kirsanova]: Doesn't seem so. One of the clients shared\n\n[Viktoriya Kirsanova]: <@U07J9LKBQ5U> Our docs say that Support can help customers request access to Apple's Retention Messaging API beta.\n\nSo am I understanding it right: we first ask the app name, then provide a link as described <https://adapty-team.slack.com/archives/C02PV5E6WAH/p1762292175188049?thread_ts=1753117401.006969&amp;cid=C02PV5E6WAH|here>(is it still relevant?) and share Apple's <https://developer.apple.com/documentation/retentionmessaging/|doc link>? Or is there smth else we should help with? Are there any specific instructions or wording we should use?\n\n[Yurii Kleimenov]: <https://adapty-team.slack.com/archives/C04SY70QZ0T/p1786025950287839?thread_ts=1785855723.569869&amp;cid=C04SY70QZ0T|https://adapty-team.slack.com/archives/C04SY70QZ0T/p1786025950287839?thread_ts=1785855723.569869&amp;cid=C04SY70QZ0T>\n\nThis behavior is sometimes observed in completely empty apps, both in Sandbox and Production. However, if you register an app from scratch, it doesn’t occur. We’ll add an appropriate empty state later.",
+      "matchingReplies": [
+        {
+          "userId": "U06JP8BJFEV",
+          "userName": "Viktoriya Kirsanova",
+          "text": "<@U07J9LKBQ5U> plz check the relative thread in the sup internal",
+          "date": "2026-08-06T13:49:50.984Z",
+          "images": []
+        },
+        {
+          "userId": "U06JP8BJFEV",
+          "userName": "Viktoriya Kirsanova",
+          "text": "<@U07J9LKBQ5U> Our docs say that Support can help customers request access to Apple's Retention Messaging API beta.\n\nSo am I understanding it right: we first ask the app name, then provide a link as described <https://adapty-team.slack.com/archives/C02PV5E6WAH/p1762292175188049?thread_ts=1753117401.006969&amp;cid=C02PV5E6WAH|here>(is it still relevant?) and share Apple's <https://developer.apple.com/documentation/retentionmessaging/|doc link>? Or is there smth else we should help with? Are there any specific instructions or wording we should use?",
+          "date": "2026-08-06T14:29:06.705Z",
+          "images": []
+        }
+      ],
+      "hasTeamMention": false,
+      "images": [
+        "https://files.slack.com/files-pri/T9HDDB78Q-F0BMUPB70UV/image.png",
+        "https://files.slack.com/files-pri/T9HDDB78Q-F0BPBFTN7J4/screenshot_2026-08-06_at_17.18.14.png",
+        "https://files.slack.com/files-pri/T9HDDB78Q-F0BNH75BBAN/image.png"
+      ]
+    },
     {
       "id": "1785315192.779649",
       "slackUrl": "https://adapty-team.slack.com/archives/C04SY70QZ0T/p1785315192779649",
@@ -2496,41 +2646,6 @@
         "https://files.slack.com/files-pri/T9HDDB78Q-F0B0T8AGHNJ/image.png",
         "https://files.slack.com/files-pri/T9HDDB78Q-F0B0N11MBPH/image.png"
       ]
-    },
-    {
-      "id": "1776100427.609739",
-      "slackUrl": "https://adapty-team.slack.com/archives/C04SY70QZ0T/p1776100427609739",
-      "name": "AI-Paywall analysis feature for autopilot",
-      "message": "Feature: *<https://adaptyio.atlassian.net/browse/ADP-5670|AI-Paywall analysis feature for autopilot>*\nRelease date: Apr 13, 2026\nAffected areas: *Autopilot*",
-      "releaseDate": "2026-04-13",
-      "thread": [
-        {
-          "userId": "U080G9FHV50",
-          "userName": "Mirazim Tolipov",
-          "text": "Feature: *<https://adaptyio.atlassian.net/browse/ADP-5670|AI-Paywall analysis feature for autopilot>*\nRelease date: Apr 13, 2026\nAffected areas: *Autopilot*",
-          "date": "2026-04-13T17:13:47.609Z",
-          "images": []
-        },
-        {
-          "userId": "U08EVBTE69E",
-          "userName": "Maxim Borisik",
-          "text": "Hey team! <!subteam^S07BZPQDBUJ> <!subteam^S03KC9S1QMC> <!subteam^S03KM96DV0U> <!subteam^S02U0UTPEQM>\n*we've added the paywall analysis* in the autopilot. AI project that lived in claude now moved to autopilot and is accessible for every app\n\ni attach a short video about that\nthe idea is simple. `upload the screenshot` -&gt; `get the insights/ideas on what to test` -&gt; `launch them from autopilot`\n\n*in case you forgot what Autopilot is*\nbriefly - we are building an ai-growth manager which helps with monetisation part of an app. now we give recommendations on 1) visuals; 2) monetisation; 3) country-pricing. and we plan to make it smarter\n\n1) I've updated the main doc and made it actual (link <https://www.notion.so/adapty/Autopilot-Materials-Updated-April-2026-2fe1ca4355c3819a859cc80c14177c83|here>),\n2) attached there a new video about how it works to cover all the main parts of the autopilot, check it out\n\nalso we have a <https://adapty.io/case-studies/appdevlabs|new success case>, where we boosted a portfolio-app company MRR by 28%\n\nafter the new builder we will support paywall generation, so clients can just approve the ideas from us and launch them easily. for now, they need to apply changes themselves",
-          "date": "2026-04-14T11:28:51.125Z",
-          "images": []
-        }
-      ],
-      "content": "[Mirazim Tolipov]: Feature: *<https://adaptyio.atlassian.net/browse/ADP-5670|AI-Paywall analysis feature for autopilot>*\nRelease date: Apr 13, 2026\nAffected areas: *Autopilot*\n\n[Maxim Borisik]: Hey team! <!subteam^S07BZPQDBUJ> <!subteam^S03KC9S1QMC> <!subteam^S03KM96DV0U> <!subteam^S02U0UTPEQM>\n*we've added the paywall analysis* in the autopilot. AI project that lived in claude now moved to autopilot and is accessible for every app\n\ni attach a short video about that\nthe idea is simple. `upload the screenshot` -&gt; `get the insights/ideas on what to test` -&gt; `launch them from autopilot`\n\n*in case you forgot what Autopilot is*\nbriefly - we are building an ai-growth manager which helps with monetisation part of an app. now we give recommendations on 1) visuals; 2) monetisation; 3) country-pricing. and we plan to make it smarter\n\n1) I've updated the main doc and made it actual (link <https://www.notion.so/adapty/Autopilot-Materials-Updated-April-2026-2fe1ca4355c3819a859cc80c14177c83|here>),\n2) attached there a new video about how it works to cover all the main parts of the autopilot, check it out\n\nalso we have a <https://adapty.io/case-studies/appdevlabs|new success case>, where we boosted a portfolio-app company MRR by 28%\n\nafter the new builder we will support paywall generation, so clients can just approve the ideas from us and launch them easily. for now, they need to apply changes themselves",
-      "matchingReplies": [
-        {
-          "userId": "U08EVBTE69E",
-          "userName": "Maxim Borisik",
-          "text": "Hey team! <!subteam^S07BZPQDBUJ> <!subteam^S03KC9S1QMC> <!subteam^S03KM96DV0U> <!subteam^S02U0UTPEQM>\n*we've added the paywall analysis* in the autopilot. AI project that lived in claude now moved to autopilot and is accessible for every app\n\ni attach a short video about that\nthe idea is simple. `upload the screenshot` -&gt; `get the insights/ideas on what to test` -&gt; `launch them from autopilot`\n\n*in case you forgot what Autopilot is*\nbriefly - we are building an ai-growth manager which helps with monetisation part of an app. now we give recommendations on 1) visuals; 2) monetisation; 3) country-pricing. and we plan to make it smarter\n\n1) I've updated the main doc and made it actual (link <https://www.notion.so/adapty/Autopilot-Materials-Updated-April-2026-2fe1ca4355c3819a859cc80c14177c83|here>),\n2) attached there a new video about how it works to cover all the main parts of the autopilot, check it out\n\nalso we have a <https://adapty.io/case-studies/appdevlabs|new success case>, where we boosted a portfolio-app company MRR by 28%\n\nafter the new builder we will support paywall generation, so clients can just approve the ideas from us and launch them easily. for now, they need to apply changes themselves",
-          "date": "2026-04-14T11:28:51.125Z",
-          "images": []
-        }
-      ],
-      "hasTeamMention": true,
-      "images": []
     }
   ]
 }
