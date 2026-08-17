@@ -1,7 +1,55 @@
 {
-  "syncedAt": "2026-08-16T00:19:59.426Z",
+  "syncedAt": "2026-08-17T00:18:33.066Z",
   "channel": "#product-release",
   "entries": [
+    {
+      "id": "1786879913.137679",
+      "slackUrl": "https://adapty-team.slack.com/archives/C04SY70QZ0T/p1786879913137679",
+      "name": ":rocket: *Launching today: Search Popularity + Keyword Suggester*",
+      "message": ":rocket: *Launching today: Search Popularity + Keyword Suggester*\n\nWe are bringing the keyword discovery stage into Adapty.\n*Search Popularity* shows ranked App Store search terms for a selected market, genre, and completed period. *Keyword Suggester* expands a seed into related phrase candidates and Apple category context, then helps users build a shortlist.\nTogether, they replace an unstructured mix of intuition, spreadsheets, and external tools with a transparent workflow based on Apple-provided signals. This is useful for Apple Ads research, ASO, market expansion, and product positioning — and it creates the foundation for future recommendation and campaign-building workflows.\nImportant: popularity is a relative research signal, not search volume, conversion, or a performance forecast.\nPlease try both releases with a real use case and share feedback on relevance, clarity, and the next action you would expect after building a shortlist.\n\nFYI <@U07J9LKBQ5U>",
+      "releaseDate": "2026-08-16",
+      "thread": [
+        {
+          "userId": "U03J8UXUDPF",
+          "userName": "Mykola Martynovets",
+          "text": ":rocket: *Launching today: Search Popularity + Keyword Suggester*\n\nWe are bringing the keyword discovery stage into Adapty.\n*Search Popularity* shows ranked App Store search terms for a selected market, genre, and completed period. *Keyword Suggester* expands a seed into related phrase candidates and Apple category context, then helps users build a shortlist.\nTogether, they replace an unstructured mix of intuition, spreadsheets, and external tools with a transparent workflow based on Apple-provided signals. This is useful for Apple Ads research, ASO, market expansion, and product positioning — and it creates the foundation for future recommendation and campaign-building workflows.\nImportant: popularity is a relative research signal, not search volume, conversion, or a performance forecast.\nPlease try both releases with a real use case and share feedback on relevance, clarity, and the next action you would expect after building a shortlist.\n\nFYI <@U07J9LKBQ5U>",
+          "date": "2026-08-16T11:31:53.137Z",
+          "images": [
+            "https://files.slack.com/files-pri/T9HDDB78Q-F0BQ8N3B9PD/adapty_search_popularity.png",
+            "https://files.slack.com/files-pri/T9HDDB78Q-F0BQGT7MWBT/adapty_keyword_suggester.png"
+          ]
+        },
+        {
+          "userId": "U03J8UXUDPF",
+          "userName": "Mykola Martynovets",
+          "text": "<https://app.notion.com/p/adapty/Internal-info-Search-Popularity-and-Keyword-Suggester-3be1ca4355c3804396c4e2c4080127f7|app.notion.com/p/adapty/Internal-inf…>",
+          "date": "2026-08-16T11:32:26.050Z",
+          "images": []
+        },
+        {
+          "userId": "U0AAUD3KHT7",
+          "userName": "David",
+          "text": "Adapty is cooking !! so many cool new features released this summer",
+          "date": "2026-08-16T14:00:22.662Z",
+          "images": []
+        }
+      ],
+      "content": "[Mykola Martynovets]: :rocket: *Launching today: Search Popularity + Keyword Suggester*\n\nWe are bringing the keyword discovery stage into Adapty.\n*Search Popularity* shows ranked App Store search terms for a selected market, genre, and completed period. *Keyword Suggester* expands a seed into related phrase candidates and Apple category context, then helps users build a shortlist.\nTogether, they replace an unstructured mix of intuition, spreadsheets, and external tools with a transparent workflow based on Apple-provided signals. This is useful for Apple Ads research, ASO, market expansion, and product positioning — and it creates the foundation for future recommendation and campaign-building workflows.\nImportant: popularity is a relative research signal, not search volume, conversion, or a performance forecast.\nPlease try both releases with a real use case and share feedback on relevance, clarity, and the next action you would expect after building a shortlist.\n\nFYI <@U07J9LKBQ5U>\n\n[Mykola Martynovets]: <https://app.notion.com/p/adapty/Internal-info-Search-Popularity-and-Keyword-Suggester-3be1ca4355c3804396c4e2c4080127f7|app.notion.com/p/adapty/Internal-inf…>\n\n[David]: Adapty is cooking !! so many cool new features released this summer",
+      "matchingReplies": [
+        {
+          "userId": "U03J8UXUDPF",
+          "userName": "Mykola Martynovets",
+          "text": "<https://app.notion.com/p/adapty/Internal-info-Search-Popularity-and-Keyword-Suggester-3be1ca4355c3804396c4e2c4080127f7|app.notion.com/p/adapty/Internal-inf…>",
+          "date": "2026-08-16T11:32:26.050Z",
+          "images": []
+        }
+      ],
+      "hasTeamMention": false,
+      "images": [
+        "https://files.slack.com/files-pri/T9HDDB78Q-F0BQ8N3B9PD/adapty_search_popularity.png",
+        "https://files.slack.com/files-pri/T9HDDB78Q-F0BQGT7MWBT/adapty_keyword_suggester.png"
+      ]
+    },
     {
       "id": "1786462886.584559",
       "slackUrl": "https://adapty-team.slack.com/archives/C04SY70QZ0T/p1786462886584559",
@@ -2697,82 +2745,6 @@
         }
       ],
       "content": "[Elina Andreeva]: Feature: Spanish localization of Adapty docs\nRelease date: May 12, 2026\nAffected areas: Docs\n\n[Elina Andreeva]: Adapty docs are now available in Spanish: <https://adapty.io/docs/es/>\n\nYou can switch languages using the switcher in the header.\n\n<@U07F3ULE4MA> thank you for your help!\n\n<!subteam^S03KC9S1QMC> <!subteam^S07BZPQDBUJ> fyi",
-      "matchingReplies": [],
-      "hasTeamMention": true,
-      "images": []
-    },
-    {
-      "id": "1778082376.853549",
-      "slackUrl": "https://adapty-team.slack.com/archives/C04SY70QZ0T/p1778082376853549",
-      "name": "Aerospike profile migrations",
-      "message": "Feature: <https://adaptyio.atlassian.net/browse/INFRA-77?atlOrigin=eyJpIjoiZDIwOTUyM2NkY2MzNGVhYzk3ZTc5ODQ0YzZiNmQzNWYiLCJwIjoiaiJ9|Aerospike profile migrations>\nRelease date: May 6th, 2026 11:43 UTC\nAffected areas: Universe",
-      "releaseDate": "2026-05-06",
-      "thread": [
-        {
-          "userId": "U04B26DSWMA",
-          "userName": "Sergei Solodskikh",
-          "text": "Feature: <https://adaptyio.atlassian.net/browse/INFRA-77?atlOrigin=eyJpIjoiZDIwOTUyM2NkY2MzNGVhYzk3ZTc5ODQ0YzZiNmQzNWYiLCJwIjoiaiJ9|Aerospike profile migrations>\nRelease date: May 6th, 2026 11:43 UTC\nAffected areas: Universe",
-          "date": "2026-05-06T15:46:16.853Z",
-          "images": []
-        },
-        {
-          "userId": "U04B26DSWMA",
-          "userName": "Sergei Solodskikh",
-          "text": "We have stopped writing data to Postgres tables `adapty_analytics_profile`, `adapty_analytics_profile_installation_meta`, `adapty_analytics_profile_attribute`, `adapty_analytics_profile_attribution_unified`, `adapty_purchase_profile_purchase_state` which were previously responsible for profile state. For any research or support purposes, Aerospike is a single source of truth from now on. It can be accessed via web-interface <https://aerospike.prod.adpinfra.dev/|here>.\nFor info regrading access there, please refer to <https://adapty-team.slack.com/archives/C060EEW2FEV/p1774604905415179|this> message (I believe, everyone who is eligible for this access is a member of that channel already)\n<!subteam^S03KM96DV0U> FYI",
-          "date": "2026-05-06T15:55:44.673Z",
-          "images": []
-        },
-        {
-          "userId": "U04B26DSWMA",
-          "userName": "Sergei Solodskikh",
-          "text": "There will be several minor releases afterwards, mostly boring tech debt elimination. All moving parts are already in place, and, as usual, if something suspicious surfaces, please let us know",
-          "date": "2026-05-06T15:57:26.336Z",
-          "images": []
-        },
-        {
-          "userId": "U034A27SVHC",
-          "userName": "Artem Rukavishnikov",
-          "text": "<@U04B26DSWMA> could you add me and @ Hudson Ribeiro to that secret channel too",
-          "date": "2026-05-07T06:08:58.856Z",
-          "images": []
-        },
-        {
-          "userId": "U04B26DSWMA",
-          "userName": "Sergei Solodskikh",
-          "text": "<@U08C43RCH39> I believe, you can handle this (access to Aerospike dashboard, I mean)",
-          "date": "2026-05-07T12:07:18.225Z",
-          "images": []
-        },
-        {
-          "userId": "U04B26DSWMA",
-          "userName": "Sergei Solodskikh",
-          "text": "Just to clarify - there will never be access to Aerospike on a mass scale as it was with Postgres. This is due to infrastructure (analytic queries may impact production), as well as privacy and security concerns. We'd like to keep number of non-dev employees with an access somewhat below 10, and leave it mostly to team leads. Aside from debugging really deep client cases (L3), generally, one doesn't need to see profile data at all",
-          "date": "2026-05-07T12:55:03.398Z",
-          "images": []
-        },
-        {
-          "userId": "U08C43RCH39",
-          "userName": "Artur Beglaryan",
-          "text": "One more update here for <!subteam^S03KM96DV0U>\nWe completely drop the profile related tables from postgres. And I guess everyone have access to aerospike. let me know you if need something extra here.",
-          "date": "2026-05-13T13:29:54.980Z",
-          "images": []
-        },
-        {
-          "userId": "U09CTDGV18D",
-          "userName": "Berenay Yiğit",
-          "text": "<@U08C43RCH39> I don't have access to aerospike, could you please help with it?",
-          "date": "2026-05-13T13:31:56.035Z",
-          "images": []
-        },
-        {
-          "userId": "U08C43RCH39",
-          "userName": "Artur Beglaryan",
-          "text": "<@U09CTDGV18D> You should ask access from your team lead. We shared access to the corresponded team-leaders",
-          "date": "2026-05-13T13:33:42.105Z",
-          "images": []
-        }
-      ],
-      "content": "[Sergei Solodskikh]: Feature: <https://adaptyio.atlassian.net/browse/INFRA-77?atlOrigin=eyJpIjoiZDIwOTUyM2NkY2MzNGVhYzk3ZTc5ODQ0YzZiNmQzNWYiLCJwIjoiaiJ9|Aerospike profile migrations>\nRelease date: May 6th, 2026 11:43 UTC\nAffected areas: Universe\n\n[Sergei Solodskikh]: We have stopped writing data to Postgres tables `adapty_analytics_profile`, `adapty_analytics_profile_installation_meta`, `adapty_analytics_profile_attribute`, `adapty_analytics_profile_attribution_unified`, `adapty_purchase_profile_purchase_state` which were previously responsible for profile state. For any research or support purposes, Aerospike is a single source of truth from now on. It can be accessed via web-interface <https://aerospike.prod.adpinfra.dev/|here>.\nFor info regrading access there, please refer to <https://adapty-team.slack.com/archives/C060EEW2FEV/p1774604905415179|this> message (I believe, everyone who is eligible for this access is a member of that channel already)\n<!subteam^S03KM96DV0U> FYI\n\n[Sergei Solodskikh]: There will be several minor releases afterwards, mostly boring tech debt elimination. All moving parts are already in place, and, as usual, if something suspicious surfaces, please let us know\n\n[Artem Rukavishnikov]: <@U04B26DSWMA> could you add me and @ Hudson Ribeiro to that secret channel too\n\n[Sergei Solodskikh]: <@U08C43RCH39> I believe, you can handle this (access to Aerospike dashboard, I mean)\n\n[Sergei Solodskikh]: Just to clarify - there will never be access to Aerospike on a mass scale as it was with Postgres. This is due to infrastructure (analytic queries may impact production), as well as privacy and security concerns. We'd like to keep number of non-dev employees with an access somewhat below 10, and leave it mostly to team leads. Aside from debugging really deep client cases (L3), generally, one doesn't need to see profile data at all\n\n[Artur Beglaryan]: One more update here for <!subteam^S03KM96DV0U>\nWe completely drop the profile related tables from postgres. And I guess everyone have access to aerospike. let me know you if need something extra here.\n\n[Berenay Yiğit]: <@U08C43RCH39> I don't have access to aerospike, could you please help with it?\n\n[Artur Beglaryan]: <@U09CTDGV18D> You should ask access from your team lead. We shared access to the corresponded team-leaders",
       "matchingReplies": [],
       "hasTeamMention": true,
       "images": []
