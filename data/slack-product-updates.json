@@ -1,5 +1,5 @@
 {
-  "syncedAt": "2026-08-19T00:17:42.955Z",
+  "syncedAt": "2026-08-20T00:18:27.548Z",
   "channel": "#product-release",
   "entries": [
     {
@@ -36,9 +36,16 @@
           "text": "<@U0AGF7L13L5> pls take it for our competitor analyses",
           "date": "2026-08-18T10:34:48.645Z",
           "images": []
+        },
+        {
+          "userId": "U034A27SVHC",
+          "userName": "Artem Rukavishnikov",
+          "text": "I will take it, I am responsible for those\nOh and yes really cool update",
+          "date": "2026-08-19T04:20:50.365Z",
+          "images": []
         }
       ],
-      "content": "[Artem Sorokin]: *We've significantly upgraded our prediction model in cohorts*\n\nRelease: August 17\nAffected areas: Analytics (Cohorts)\n\nHighlights:\n• 2–3× more accurate predictions, with especially large gains for young cohorts in their first month.\n• Added predictions for lifetime subscriptions and one-time purchases, consistent with recurring subscriptions.\n• Predictions now kick in at just 30 subscriptions, down from 100.\nUnder the hood, it remains a fully interpretable model: it learns revenue and subscriber gains between consecutive day-checkpoints from the start of each cohort, with careful calibration and a few tricks in between.\n\nKudos to <@U0AJS52CDS4>\n\n[Artem Sorokin]: Heads-up for the <!subteam^S07BZPQDBUJ>: some predictions shift significantly (20%+), mostly upward.\n\nWhy predictions can shift:\n• The new model better captures conversions that don't happen close to the install date. The size of the shift strongly correlates with cohort age: younger cohorts change most, while for older cohorts the two models converge to almost zero difference.\n• Lifetime subscriptions and one-time purchases used to show actual revenue as the prediction. Now they grow the same way other products do.\nAlso FYI, first predictions are available once the install period has fully elapsed and the longest possible trial from that period has had time to convert.\n\n[Mike Gorokhov]: <!subteam^S086DJEQEUE> fyi\n\n[Marina Trypolskaya]: <@U0AGF7L13L5> pls take it for our competitor analyses",
+      "content": "[Artem Sorokin]: *We've significantly upgraded our prediction model in cohorts*\n\nRelease: August 17\nAffected areas: Analytics (Cohorts)\n\nHighlights:\n• 2–3× more accurate predictions, with especially large gains for young cohorts in their first month.\n• Added predictions for lifetime subscriptions and one-time purchases, consistent with recurring subscriptions.\n• Predictions now kick in at just 30 subscriptions, down from 100.\nUnder the hood, it remains a fully interpretable model: it learns revenue and subscriber gains between consecutive day-checkpoints from the start of each cohort, with careful calibration and a few tricks in between.\n\nKudos to <@U0AJS52CDS4>\n\n[Artem Sorokin]: Heads-up for the <!subteam^S07BZPQDBUJ>: some predictions shift significantly (20%+), mostly upward.\n\nWhy predictions can shift:\n• The new model better captures conversions that don't happen close to the install date. The size of the shift strongly correlates with cohort age: younger cohorts change most, while for older cohorts the two models converge to almost zero difference.\n• Lifetime subscriptions and one-time purchases used to show actual revenue as the prediction. Now they grow the same way other products do.\nAlso FYI, first predictions are available once the install period has fully elapsed and the longest possible trial from that period has had time to convert.\n\n[Mike Gorokhov]: <!subteam^S086DJEQEUE> fyi\n\n[Marina Trypolskaya]: <@U0AGF7L13L5> pls take it for our competitor analyses\n\n[Artem Rukavishnikov]: I will take it, I am responsible for those\nOh and yes really cool update",
       "matchingReplies": [],
       "hasTeamMention": true,
       "images": []
