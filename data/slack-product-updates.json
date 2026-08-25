@@ -1,5 +1,5 @@
 {
-  "syncedAt": "2026-08-24T00:19:15.800Z",
+  "syncedAt": "2026-08-25T00:18:34.128Z",
   "channel": "#product-release",
   "entries": [
     {
@@ -43,9 +43,51 @@
           "text": "I will take it, I am responsible for those\nOh and yes really cool update",
           "date": "2026-08-19T04:20:50.365Z",
           "images": []
+        },
+        {
+          "userId": "U0A266T9SJE",
+          "userName": "Melike Sezer",
+          "text": "Hi <@U0ABX9WPC5V> will this be the final update on cohorts/LTV predictions? Some clients are asking because last time they used Adapty for their marketing spend based on the LTV predictions, the predictions were updated and it was a difficult conversation to handle. Now they want to make sure this one is final.",
+          "date": "2026-08-24T07:31:24.321Z",
+          "images": []
+        },
+        {
+          "userId": "U0ABX9WPC5V",
+          "userName": "Artem Sorokin",
+          "text": "<@U0A266T9SJE> Hi, there are lots of small/technical updates happening all the time, and those will keep coming. As for bigger updates that could shift predictions more noticeably, we do have some preliminary plans to improve predictions for less typical cohorts and for apps without much historical data.\n\nWe only ship a big change once we see a clear improvement, so overall I'm not sure it's a good idea for a client to plan around our updates.",
+          "date": "2026-08-24T09:27:25.234Z",
+          "images": []
+        },
+        {
+          "userId": "U0A266T9SJE",
+          "userName": "Melike Sezer",
+          "text": "`I'm not sure it's a good idea for a client to plan around our updates.`\nTheir concern is that if they treat our predictions as the source of truth with ~10% deviation again, another major update could significantly change their profitability targets. This could also make it difficult for them to confidently invest in marketing based on our predictions\nWhen I asked last time, you mentioned there would be one more major update, so I assumed this was it. I completely understand that we’ll keep making smaller improvements, but the update at the beginning of summer changed predictions by 30 to 40% for some of their cohorts, which is quite significant.\nIt would be great if we could communicate that this will be the last major update for a while and that future updates should have a smaller impact. <https://adapty-team.slack.com/archives/C04355A7VTN/p1783957004833969?thread_ts=1783950976.224999&amp;cid=C04355A7VTN|https://adapty-team.slack.com/archives/C04355A7VTN/p1783957004833969?thread_ts=1783950976.224999&amp;cid=C04355A7VTN>",
+          "date": "2026-08-24T10:20:29.051Z",
+          "images": []
+        },
+        {
+          "userId": "U0ABX9WPC5V",
+          "userName": "Artem Sorokin",
+          "text": "The model meets our ambitious metric targets in general, but there's still room for improvement for some cohorts/apps, so work will definitely happen there. I'm pretty sure predictions won't change as much as with the April update, though, when we completely replaced the old model. Still, some clients may notice a difference.\n\nI agree that fluctuating predictions can be an issue, and we have some ideas on how to reduce friction there in the future.",
+          "date": "2026-08-24T13:58:44.358Z",
+          "images": []
+        },
+        {
+          "userId": "U0A266T9SJE",
+          "userName": "Melike Sezer",
+          "text": "Thank you :pray::skin-tone-3: <@U0ABX9WPC5V> it would be great if you could let us know when you’re planning a major or mid-sized update, so we can proactively inform our more cautious clients.",
+          "date": "2026-08-24T14:03:03.341Z",
+          "images": []
+        },
+        {
+          "userId": "U0ABX9WPC5V",
+          "userName": "Artem Sorokin",
+          "text": "Right now, there's an update planned for mid-to-late September. It's technical and should barely affect prediction numbers, but testing is still pending.",
+          "date": "2026-08-24T14:37:44.776Z",
+          "images": []
         }
       ],
-      "content": "[Artem Sorokin]: *We've significantly upgraded our prediction model in cohorts*\n\nRelease: August 17\nAffected areas: Analytics (Cohorts)\n\nHighlights:\n• 2–3× more accurate predictions, with especially large gains for young cohorts in their first month.\n• Added predictions for lifetime subscriptions and one-time purchases, consistent with recurring subscriptions.\n• Predictions now kick in at just 30 subscriptions, down from 100.\nUnder the hood, it remains a fully interpretable model: it learns revenue and subscriber gains between consecutive day-checkpoints from the start of each cohort, with careful calibration and a few tricks in between.\n\nKudos to <@U0AJS52CDS4>\n\n[Artem Sorokin]: Heads-up for the <!subteam^S07BZPQDBUJ>: some predictions shift significantly (20%+), mostly upward.\n\nWhy predictions can shift:\n• The new model better captures conversions that don't happen close to the install date. The size of the shift strongly correlates with cohort age: younger cohorts change most, while for older cohorts the two models converge to almost zero difference.\n• Lifetime subscriptions and one-time purchases used to show actual revenue as the prediction. Now they grow the same way other products do.\nAlso FYI, first predictions are available once the install period has fully elapsed and the longest possible trial from that period has had time to convert.\n\n[Mike Gorokhov]: <!subteam^S086DJEQEUE> fyi\n\n[Marina Trypolskaya]: <@U0AGF7L13L5> pls take it for our competitor analyses\n\n[Artem Rukavishnikov]: I will take it, I am responsible for those\nOh and yes really cool update",
+      "content": "[Artem Sorokin]: *We've significantly upgraded our prediction model in cohorts*\n\nRelease: August 17\nAffected areas: Analytics (Cohorts)\n\nHighlights:\n• 2–3× more accurate predictions, with especially large gains for young cohorts in their first month.\n• Added predictions for lifetime subscriptions and one-time purchases, consistent with recurring subscriptions.\n• Predictions now kick in at just 30 subscriptions, down from 100.\nUnder the hood, it remains a fully interpretable model: it learns revenue and subscriber gains between consecutive day-checkpoints from the start of each cohort, with careful calibration and a few tricks in between.\n\nKudos to <@U0AJS52CDS4>\n\n[Artem Sorokin]: Heads-up for the <!subteam^S07BZPQDBUJ>: some predictions shift significantly (20%+), mostly upward.\n\nWhy predictions can shift:\n• The new model better captures conversions that don't happen close to the install date. The size of the shift strongly correlates with cohort age: younger cohorts change most, while for older cohorts the two models converge to almost zero difference.\n• Lifetime subscriptions and one-time purchases used to show actual revenue as the prediction. Now they grow the same way other products do.\nAlso FYI, first predictions are available once the install period has fully elapsed and the longest possible trial from that period has had time to convert.\n\n[Mike Gorokhov]: <!subteam^S086DJEQEUE> fyi\n\n[Marina Trypolskaya]: <@U0AGF7L13L5> pls take it for our competitor analyses\n\n[Artem Rukavishnikov]: I will take it, I am responsible for those\nOh and yes really cool update\n\n[Melike Sezer]: Hi <@U0ABX9WPC5V> will this be the final update on cohorts/LTV predictions? Some clients are asking because last time they used Adapty for their marketing spend based on the LTV predictions, the predictions were updated and it was a difficult conversation to handle. Now they want to make sure this one is final.\n\n[Artem Sorokin]: <@U0A266T9SJE> Hi, there are lots of small/technical updates happening all the time, and those will keep coming. As for bigger updates that could shift predictions more noticeably, we do have some preliminary plans to improve predictions for less typical cohorts and for apps without much historical data.\n\nWe only ship a big change once we see a clear improvement, so overall I'm not sure it's a good idea for a client to plan around our updates.\n\n[Melike Sezer]: `I'm not sure it's a good idea for a client to plan around our updates.`\nTheir concern is that if they treat our predictions as the source of truth with ~10% deviation again, another major update could significantly change their profitability targets. This could also make it difficult for them to confidently invest in marketing based on our predictions\nWhen I asked last time, you mentioned there would be one more major update, so I assumed this was it. I completely understand that we’ll keep making smaller improvements, but the update at the beginning of summer changed predictions by 30 to 40% for some of their cohorts, which is quite significant.\nIt would be great if we could communicate that this will be the last major update for a while and that future updates should have a smaller impact. <https://adapty-team.slack.com/archives/C04355A7VTN/p1783957004833969?thread_ts=1783950976.224999&amp;cid=C04355A7VTN|https://adapty-team.slack.com/archives/C04355A7VTN/p1783957004833969?thread_ts=1783950976.224999&amp;cid=C04355A7VTN>\n\n[Artem Sorokin]: The model meets our ambitious metric targets in general, but there's still room for improvement for some cohorts/apps, so work will definitely happen there. I'm pretty sure predictions won't change as much as with the April update, though, when we completely replaced the old model. Still, some clients may notice a difference.\n\nI agree that fluctuating predictions can be an issue, and we have some ideas on how to reduce friction there in the future.\n\n[Melike Sezer]: Thank you :pray::skin-tone-3: <@U0ABX9WPC5V> it would be great if you could let us know when you’re planning a major or mid-sized update, so we can proactively inform our more cautious clients.\n\n[Artem Sorokin]: Right now, there's an update planned for mid-to-late September. It's technical and should barely affect prediction numbers, but testing is still pending.",
       "matchingReplies": [],
       "hasTeamMention": true,
       "images": []
