@@ -1,7 +1,111 @@
 {
-  "syncedAt": "2026-08-25T00:18:34.128Z",
+  "syncedAt": "2026-08-26T00:19:24.050Z",
   "channel": "#product-release",
   "entries": [
+    {
+      "id": "1787662847.562779",
+      "slackUrl": "https://adapty-team.slack.com/archives/C04SY70QZ0T/p1787662847562779",
+      "name": "Hey everyone! Here's what's been going on with AdaptyMail and why it's been quiet for so long:",
+      "message": "Hey everyone! Here's what's been going on with AdaptyMail and why it's been quiet for so long:\n*we stand on the Amazon review*\n\nIn July Amazon put our sending account under review. While it's open, billing is frozen and we're not onboarding new clients. If we don't clear it, they cut off sending, and without sending there's no product.\nThe main complaint was about links. A single email pulled them from four different places: some pointed at the client's domain, some at ours, some straight to the App Store, some at Amazon's own tracking addresses. To a spam filter that looks like an email assembled from parts of unclear origin. On top of that, link reputation is scored separately from sender reputation, so one client with a bad list was dragging down the link domains for everyone else.\nWe've built everything they asked for, and we're sending our response to the review team *today*.\n\nWhat we did with links\nEvery client now gets their own link subdomain, something like <http://go.theirdomain.com|go.theirdomain.com>. During setup the client adds one DNS record pointing at us, plus a second housekeeping record so the security certificate renews automatically and nobody has to touch it every three months. From there, every link in the email, all of them, runs through that subdomain.\nThen it splits. Images live in our Cloudflare storage and get served directly, no hop involved: the reader sees the client's address, the image comes from us, nobody notices anything.\n\nClicks work differently. The request reaches us, we record the event, and we send the person on to wherever they were going. The address bar stays on the client's domain the whole time, and nobody ever gets bounced through a domain of ours.\nClick tracking is ours now, not Amazon's. Their built-in tracking rewrote links to their own addresses, and those addresses were exactly the foreign element in the email. We turned it off and replaced it with our own. As a side benefit, click data now sits with us instead of in someone else's system with their format and their delay.\n\nWhat else we did\nEmail confirmation is live. When an email address shows up on a user, they get a message with a button. Until they press it, no marketing goes out. We built it so a mail provider's security scanner can't press it for them, which happens more often than you'd think and wrecks both the numbers and the point of the whole thing.\n\nWe split two things apart: whether an address is confirmed, and whether the person agreed to marketing. The first applies to all mail, service messages included. The second only to marketing, and the person ticks that box themselves in the app.\nEach client now gets stopped on their own. If complaints spike for one client, sending pauses for that client and everyone else keeps running. Before, one dirty list could taint everyone's reputation at once.\n\nNext: we wait for Amazon's answer. Once the review lifts, billing and new client onboarding unfreeze.\n\n*Another big thing: FunnelFox integration is live today!*\nFunnelFox runs the funnel that takes a user from the web into the app. Adapty Mail now handles the email at every step of it.\nLeads from FunnelFox reach us immediately, with nothing for the client to export and nothing to configure on their side. People are split by where they stalled: dropped the quiz, reached checkout and didn't buy, paid and never installed. All three used to get the same email. Now each gets their own.\nFor clients already on FunnelFox, it's running.\n<!subteam^S08KMD5J4FJ> <!subteam^S07BZPQDBUJ> <!subteam^S03KC9S1QMC> <!subteam^S03KM96DV0U> <!subteam^S02U0UTPEQM> <@U07G6KS4DEZ>",
+      "releaseDate": "2026-08-25",
+      "thread": [
+        {
+          "userId": "U03K1BGS464",
+          "userName": "Vitali Khmialnitski",
+          "text": "Hey everyone! Here's what's been going on with AdaptyMail and why it's been quiet for so long:\n*we stand on the Amazon review*\n\nIn July Amazon put our sending account under review. While it's open, billing is frozen and we're not onboarding new clients. If we don't clear it, they cut off sending, and without sending there's no product.\nThe main complaint was about links. A single email pulled them from four different places: some pointed at the client's domain, some at ours, some straight to the App Store, some at Amazon's own tracking addresses. To a spam filter that looks like an email assembled from parts of unclear origin. On top of that, link reputation is scored separately from sender reputation, so one client with a bad list was dragging down the link domains for everyone else.\nWe've built everything they asked for, and we're sending our response to the review team *today*.\n\nWhat we did with links\nEvery client now gets their own link subdomain, something like <http://go.theirdomain.com|go.theirdomain.com>. During setup the client adds one DNS record pointing at us, plus a second housekeeping record so the security certificate renews automatically and nobody has to touch it every three months. From there, every link in the email, all of them, runs through that subdomain.\nThen it splits. Images live in our Cloudflare storage and get served directly, no hop involved: the reader sees the client's address, the image comes from us, nobody notices anything.\n\nClicks work differently. The request reaches us, we record the event, and we send the person on to wherever they were going. The address bar stays on the client's domain the whole time, and nobody ever gets bounced through a domain of ours.\nClick tracking is ours now, not Amazon's. Their built-in tracking rewrote links to their own addresses, and those addresses were exactly the foreign element in the email. We turned it off and replaced it with our own. As a side benefit, click data now sits with us instead of in someone else's system with their format and their delay.\n\nWhat else we did\nEmail confirmation is live. When an email address shows up on a user, they get a message with a button. Until they press it, no marketing goes out. We built it so a mail provider's security scanner can't press it for them, which happens more often than you'd think and wrecks both the numbers and the point of the whole thing.\n\nWe split two things apart: whether an address is confirmed, and whether the person agreed to marketing. The first applies to all mail, service messages included. The second only to marketing, and the person ticks that box themselves in the app.\nEach client now gets stopped on their own. If complaints spike for one client, sending pauses for that client and everyone else keeps running. Before, one dirty list could taint everyone's reputation at once.\n\nNext: we wait for Amazon's answer. Once the review lifts, billing and new client onboarding unfreeze.\n\n*Another big thing: FunnelFox integration is live today!*\nFunnelFox runs the funnel that takes a user from the web into the app. Adapty Mail now handles the email at every step of it.\nLeads from FunnelFox reach us immediately, with nothing for the client to export and nothing to configure on their side. People are split by where they stalled: dropped the quiz, reached checkout and didn't buy, paid and never installed. All three used to get the same email. Now each gets their own.\nFor clients already on FunnelFox, it's running.\n<!subteam^S08KMD5J4FJ> <!subteam^S07BZPQDBUJ> <!subteam^S03KC9S1QMC> <!subteam^S03KM96DV0U> <!subteam^S02U0UTPEQM> <@U07G6KS4DEZ>",
+          "date": "2026-08-25T13:00:47.562Z",
+          "images": []
+        },
+        {
+          "userId": "UNWFN144R",
+          "userName": "Artem Davydov",
+          "text": "customer penetration:adapty-face-with-sunglasses:",
+          "date": "2026-08-25T13:06:57.209Z",
+          "images": []
+        },
+        {
+          "userId": "U0591R0CD2A",
+          "userName": "Huy Pham",
+          "text": "Huge congrats brother :hands:",
+          "date": "2026-08-25T13:42:26.927Z",
+          "images": []
+        },
+        {
+          "userId": "U03DFSCP8CW",
+          "userName": "Mike Gorokhov",
+          "text": "Yo!\nCan we have more details and use cases for this FF integration, please?",
+          "date": "2026-08-25T13:56:49.344Z",
+          "images": []
+        },
+        {
+          "userId": "U03K1BGS464",
+          "userName": "Vitali Khmialnitski",
+          "text": "Sure. Short version: FunnelFox pushes profiles, purchases and subscription changes into one Adapty Mail project, one way, arriving within about a minute of the funnel event. From there Adapty Mail runs the campaigns.\nWhat comes across with each profile: email, customer user ID, country, device, OS, locale, timezone, funnel ID, profile ID, session ID, experiment ID where there is one, and the email consent answer.\n\nFour triggers you can build flows on today:\n1. Never purchased. Someone gave you an email in the funnel and didn't buy. Covers both the abandoned quiz and the paywall they walked away from. Use case: objection-handling sequence at +1h, +24h, +72h etc.\n2. Renewal cancelled. Auto-renewal is off but access is still live. Use case: a save flow while the window is open.\n3. Billing issue. Declined or expired card, or a grace period after a missed renewal. Use case: your own dunning sequence, on your domain, in your voice, one tap to fix the card. Worth noting that the alternative is the PSP's own emails, which look like the PSP and land accordingly.\n4. Expired. Subscription lapsed. Use case: winback\nPost-purchase activation is on the roadmap. Paid but never installed, installed but not activated, and the pre-renewal notice aren't supported yet, and we're building toward them. Everything above covers the pre-purchase and retention side today.\n\nTwo things worth knowing around it.\nThere is no backfill, so forwarding starts the moment client save the secret key and nothing from before that point can be re-synced.\nLocale/country and experiment ID are the two fields which client could use for personalisation. Country lets you build a segment and send that segment in its native language instead of defaulting everyone to English. Experiment ID identifies the specific funnel someone came through, and a specific funnel is a specific audience. Pull it into its own segment, describe that audience in the campaign prompt, and the generated emails speak to the people who saw that funnel rather than to an average of everyone.\n\nFull setup guide is in the docs, and happy to walk through a specific funnel if that's more useful than the generic version.\n<https://funnelfox.com/docs/integrations/email-providers/adapty-mail|funnelfox.com/docs/integrations/email-providers/adapty-mail>",
+          "date": "2026-08-25T14:21:53.241Z",
+          "images": []
+        },
+        {
+          "userId": "U09EUA1N6JU",
+          "userName": "Tatiana Makarevskaia",
+          "text": "<@U03K1BGS464> Thanks!\nIf FF clients are interested in Adapty mail, should we connect them with you? <!subteam^S08KMD5J4FJ> cc",
+          "date": "2026-08-25T15:44:23.187Z",
+          "images": []
+        },
+        {
+          "userId": "U03K1BGS464",
+          "userName": "Vitali Khmialnitski",
+          "text": "Yes, do you have my link?",
+          "date": "2026-08-25T15:44:48.722Z",
+          "images": []
+        },
+        {
+          "userId": "U09EUA1N6JU",
+          "userName": "Tatiana Makarevskaia",
+          "text": "please share you calendar, no we don't have",
+          "date": "2026-08-25T15:45:14.861Z",
+          "images": []
+        },
+        {
+          "userId": "U03K1BGS464",
+          "userName": "Vitali Khmialnitski",
+          "text": "<https://calendar.app.google/pUpLDF3Xe7Q3UZ3V6|https://calendar.app.google/pUpLDF3Xe7Q3UZ3V6> ",
+          "date": "2026-08-25T15:45:59.660Z",
+          "images": []
+        },
+        {
+          "userId": "U0A266T9SJE",
+          "userName": "Melike Sezer",
+          "text": "Hi <@U03K1BGS464> client is asking\n *\"Will we be able to send emails from the Funnelfox profile without it being linked to an Adapty MTR?\"* ",
+          "date": "2026-08-25T19:27:32.243Z",
+          "images": []
+        },
+        {
+          "userId": "U03K1BGS464",
+          "userName": "Vitali Khmialnitski",
+          "text": "Sure, we released FF integration today:)",
+          "date": "2026-08-25T19:28:39.072Z",
+          "images": []
+        },
+        {
+          "userId": "U0A266T9SJE",
+          "userName": "Melike Sezer",
+          "text": "Haha sorry my bad, just wanted to make sure <@U03K1BGS464>",
+          "date": "2026-08-25T19:29:36.803Z",
+          "images": []
+        },
+        {
+          "userId": "U03K1BGS464",
+          "userName": "Vitali Khmialnitski",
+          "text": "It's okay:)",
+          "date": "2026-08-25T19:51:47.414Z",
+          "images": []
+        }
+      ],
+      "content": "[Vitali Khmialnitski]: Hey everyone! Here's what's been going on with AdaptyMail and why it's been quiet for so long:\n*we stand on the Amazon review*\n\nIn July Amazon put our sending account under review. While it's open, billing is frozen and we're not onboarding new clients. If we don't clear it, they cut off sending, and without sending there's no product.\nThe main complaint was about links. A single email pulled them from four different places: some pointed at the client's domain, some at ours, some straight to the App Store, some at Amazon's own tracking addresses. To a spam filter that looks like an email assembled from parts of unclear origin. On top of that, link reputation is scored separately from sender reputation, so one client with a bad list was dragging down the link domains for everyone else.\nWe've built everything they asked for, and we're sending our response to the review team *today*.\n\nWhat we did with links\nEvery client now gets their own link subdomain, something like <http://go.theirdomain.com|go.theirdomain.com>. During setup the client adds one DNS record pointing at us, plus a second housekeeping record so the security certificate renews automatically and nobody has to touch it every three months. From there, every link in the email, all of them, runs through that subdomain.\nThen it splits. Images live in our Cloudflare storage and get served directly, no hop involved: the reader sees the client's address, the image comes from us, nobody notices anything.\n\nClicks work differently. The request reaches us, we record the event, and we send the person on to wherever they were going. The address bar stays on the client's domain the whole time, and nobody ever gets bounced through a domain of ours.\nClick tracking is ours now, not Amazon's. Their built-in tracking rewrote links to their own addresses, and those addresses were exactly the foreign element in the email. We turned it off and replaced it with our own. As a side benefit, click data now sits with us instead of in someone else's system with their format and their delay.\n\nWhat else we did\nEmail confirmation is live. When an email address shows up on a user, they get a message with a button. Until they press it, no marketing goes out. We built it so a mail provider's security scanner can't press it for them, which happens more often than you'd think and wrecks both the numbers and the point of the whole thing.\n\nWe split two things apart: whether an address is confirmed, and whether the person agreed to marketing. The first applies to all mail, service messages included. The second only to marketing, and the person ticks that box themselves in the app.\nEach client now gets stopped on their own. If complaints spike for one client, sending pauses for that client and everyone else keeps running. Before, one dirty list could taint everyone's reputation at once.\n\nNext: we wait for Amazon's answer. Once the review lifts, billing and new client onboarding unfreeze.\n\n*Another big thing: FunnelFox integration is live today!*\nFunnelFox runs the funnel that takes a user from the web into the app. Adapty Mail now handles the email at every step of it.\nLeads from FunnelFox reach us immediately, with nothing for the client to export and nothing to configure on their side. People are split by where they stalled: dropped the quiz, reached checkout and didn't buy, paid and never installed. All three used to get the same email. Now each gets their own.\nFor clients already on FunnelFox, it's running.\n<!subteam^S08KMD5J4FJ> <!subteam^S07BZPQDBUJ> <!subteam^S03KC9S1QMC> <!subteam^S03KM96DV0U> <!subteam^S02U0UTPEQM> <@U07G6KS4DEZ>\n\n[Artem Davydov]: customer penetration:adapty-face-with-sunglasses:\n\n[Huy Pham]: Huge congrats brother :hands:\n\n[Mike Gorokhov]: Yo!\nCan we have more details and use cases for this FF integration, please?\n\n[Vitali Khmialnitski]: Sure. Short version: FunnelFox pushes profiles, purchases and subscription changes into one Adapty Mail project, one way, arriving within about a minute of the funnel event. From there Adapty Mail runs the campaigns.\nWhat comes across with each profile: email, customer user ID, country, device, OS, locale, timezone, funnel ID, profile ID, session ID, experiment ID where there is one, and the email consent answer.\n\nFour triggers you can build flows on today:\n1. Never purchased. Someone gave you an email in the funnel and didn't buy. Covers both the abandoned quiz and the paywall they walked away from. Use case: objection-handling sequence at +1h, +24h, +72h etc.\n2. Renewal cancelled. Auto-renewal is off but access is still live. Use case: a save flow while the window is open.\n3. Billing issue. Declined or expired card, or a grace period after a missed renewal. Use case: your own dunning sequence, on your domain, in your voice, one tap to fix the card. Worth noting that the alternative is the PSP's own emails, which look like the PSP and land accordingly.\n4. Expired. Subscription lapsed. Use case: winback\nPost-purchase activation is on the roadmap. Paid but never installed, installed but not activated, and the pre-renewal notice aren't supported yet, and we're building toward them. Everything above covers the pre-purchase and retention side today.\n\nTwo things worth knowing around it.\nThere is no backfill, so forwarding starts the moment client save the secret key and nothing from before that point can be re-synced.\nLocale/country and experiment ID are the two fields which client could use for personalisation. Country lets you build a segment and send that segment in its native language instead of defaulting everyone to English. Experiment ID identifies the specific funnel someone came through, and a specific funnel is a specific audience. Pull it into its own segment, describe that audience in the campaign prompt, and the generated emails speak to the people who saw that funnel rather than to an average of everyone.\n\nFull setup guide is in the docs, and happy to walk through a specific funnel if that's more useful than the generic version.\n<https://funnelfox.com/docs/integrations/email-providers/adapty-mail|funnelfox.com/docs/integrations/email-providers/adapty-mail>\n\n[Tatiana Makarevskaia]: <@U03K1BGS464> Thanks!\nIf FF clients are interested in Adapty mail, should we connect them with you? <!subteam^S08KMD5J4FJ> cc\n\n[Vitali Khmialnitski]: Yes, do you have my link?\n\n[Tatiana Makarevskaia]: please share you calendar, no we don't have\n\n[Vitali Khmialnitski]: <https://calendar.app.google/pUpLDF3Xe7Q3UZ3V6|https://calendar.app.google/pUpLDF3Xe7Q3UZ3V6> \n\n[Melike Sezer]: Hi <@U03K1BGS464> client is asking\n *\"Will we be able to send emails from the Funnelfox profile without it being linked to an Adapty MTR?\"* \n\n[Vitali Khmialnitski]: Sure, we released FF integration today:)\n\n[Melike Sezer]: Haha sorry my bad, just wanted to make sure <@U03K1BGS464>\n\n[Vitali Khmialnitski]: It's okay:)",
+      "matchingReplies": [],
+      "hasTeamMention": true,
+      "images": []
+    },
     {
       "id": "1787049185.227149",
       "slackUrl": "https://adapty-team.slack.com/archives/C04SY70QZ0T/p1787049185227149",
@@ -85,9 +189,23 @@
           "text": "Right now, there's an update planned for mid-to-late September. It's technical and should barely affect prediction numbers, but testing is still pending.",
           "date": "2026-08-24T14:37:44.776Z",
           "images": []
+        },
+        {
+          "userId": "U0ASWP97F61",
+          "userName": "Stella Zhao",
+          "text": "Hi <@U0ABX9WPC5V> Forwarding a question from a client: will this forecast update recalculate historical data, or will it only apply to new installs going forward?",
+          "date": "2026-08-25T03:20:38.050Z",
+          "images": []
+        },
+        {
+          "userId": "U0ABX9WPC5V",
+          "userName": "Artem Sorokin",
+          "text": "<@U0ASWP97F61> Hi, the latest version of the model is applied to all cohorts, regardless of age.",
+          "date": "2026-08-25T09:23:14.622Z",
+          "images": []
         }
       ],
-      "content": "[Artem Sorokin]: *We've significantly upgraded our prediction model in cohorts*\n\nRelease: August 17\nAffected areas: Analytics (Cohorts)\n\nHighlights:\n• 2–3× more accurate predictions, with especially large gains for young cohorts in their first month.\n• Added predictions for lifetime subscriptions and one-time purchases, consistent with recurring subscriptions.\n• Predictions now kick in at just 30 subscriptions, down from 100.\nUnder the hood, it remains a fully interpretable model: it learns revenue and subscriber gains between consecutive day-checkpoints from the start of each cohort, with careful calibration and a few tricks in between.\n\nKudos to <@U0AJS52CDS4>\n\n[Artem Sorokin]: Heads-up for the <!subteam^S07BZPQDBUJ>: some predictions shift significantly (20%+), mostly upward.\n\nWhy predictions can shift:\n• The new model better captures conversions that don't happen close to the install date. The size of the shift strongly correlates with cohort age: younger cohorts change most, while for older cohorts the two models converge to almost zero difference.\n• Lifetime subscriptions and one-time purchases used to show actual revenue as the prediction. Now they grow the same way other products do.\nAlso FYI, first predictions are available once the install period has fully elapsed and the longest possible trial from that period has had time to convert.\n\n[Mike Gorokhov]: <!subteam^S086DJEQEUE> fyi\n\n[Marina Trypolskaya]: <@U0AGF7L13L5> pls take it for our competitor analyses\n\n[Artem Rukavishnikov]: I will take it, I am responsible for those\nOh and yes really cool update\n\n[Melike Sezer]: Hi <@U0ABX9WPC5V> will this be the final update on cohorts/LTV predictions? Some clients are asking because last time they used Adapty for their marketing spend based on the LTV predictions, the predictions were updated and it was a difficult conversation to handle. Now they want to make sure this one is final.\n\n[Artem Sorokin]: <@U0A266T9SJE> Hi, there are lots of small/technical updates happening all the time, and those will keep coming. As for bigger updates that could shift predictions more noticeably, we do have some preliminary plans to improve predictions for less typical cohorts and for apps without much historical data.\n\nWe only ship a big change once we see a clear improvement, so overall I'm not sure it's a good idea for a client to plan around our updates.\n\n[Melike Sezer]: `I'm not sure it's a good idea for a client to plan around our updates.`\nTheir concern is that if they treat our predictions as the source of truth with ~10% deviation again, another major update could significantly change their profitability targets. This could also make it difficult for them to confidently invest in marketing based on our predictions\nWhen I asked last time, you mentioned there would be one more major update, so I assumed this was it. I completely understand that we’ll keep making smaller improvements, but the update at the beginning of summer changed predictions by 30 to 40% for some of their cohorts, which is quite significant.\nIt would be great if we could communicate that this will be the last major update for a while and that future updates should have a smaller impact. <https://adapty-team.slack.com/archives/C04355A7VTN/p1783957004833969?thread_ts=1783950976.224999&amp;cid=C04355A7VTN|https://adapty-team.slack.com/archives/C04355A7VTN/p1783957004833969?thread_ts=1783950976.224999&amp;cid=C04355A7VTN>\n\n[Artem Sorokin]: The model meets our ambitious metric targets in general, but there's still room for improvement for some cohorts/apps, so work will definitely happen there. I'm pretty sure predictions won't change as much as with the April update, though, when we completely replaced the old model. Still, some clients may notice a difference.\n\nI agree that fluctuating predictions can be an issue, and we have some ideas on how to reduce friction there in the future.\n\n[Melike Sezer]: Thank you :pray::skin-tone-3: <@U0ABX9WPC5V> it would be great if you could let us know when you’re planning a major or mid-sized update, so we can proactively inform our more cautious clients.\n\n[Artem Sorokin]: Right now, there's an update planned for mid-to-late September. It's technical and should barely affect prediction numbers, but testing is still pending.",
+      "content": "[Artem Sorokin]: *We've significantly upgraded our prediction model in cohorts*\n\nRelease: August 17\nAffected areas: Analytics (Cohorts)\n\nHighlights:\n• 2–3× more accurate predictions, with especially large gains for young cohorts in their first month.\n• Added predictions for lifetime subscriptions and one-time purchases, consistent with recurring subscriptions.\n• Predictions now kick in at just 30 subscriptions, down from 100.\nUnder the hood, it remains a fully interpretable model: it learns revenue and subscriber gains between consecutive day-checkpoints from the start of each cohort, with careful calibration and a few tricks in between.\n\nKudos to <@U0AJS52CDS4>\n\n[Artem Sorokin]: Heads-up for the <!subteam^S07BZPQDBUJ>: some predictions shift significantly (20%+), mostly upward.\n\nWhy predictions can shift:\n• The new model better captures conversions that don't happen close to the install date. The size of the shift strongly correlates with cohort age: younger cohorts change most, while for older cohorts the two models converge to almost zero difference.\n• Lifetime subscriptions and one-time purchases used to show actual revenue as the prediction. Now they grow the same way other products do.\nAlso FYI, first predictions are available once the install period has fully elapsed and the longest possible trial from that period has had time to convert.\n\n[Mike Gorokhov]: <!subteam^S086DJEQEUE> fyi\n\n[Marina Trypolskaya]: <@U0AGF7L13L5> pls take it for our competitor analyses\n\n[Artem Rukavishnikov]: I will take it, I am responsible for those\nOh and yes really cool update\n\n[Melike Sezer]: Hi <@U0ABX9WPC5V> will this be the final update on cohorts/LTV predictions? Some clients are asking because last time they used Adapty for their marketing spend based on the LTV predictions, the predictions were updated and it was a difficult conversation to handle. Now they want to make sure this one is final.\n\n[Artem Sorokin]: <@U0A266T9SJE> Hi, there are lots of small/technical updates happening all the time, and those will keep coming. As for bigger updates that could shift predictions more noticeably, we do have some preliminary plans to improve predictions for less typical cohorts and for apps without much historical data.\n\nWe only ship a big change once we see a clear improvement, so overall I'm not sure it's a good idea for a client to plan around our updates.\n\n[Melike Sezer]: `I'm not sure it's a good idea for a client to plan around our updates.`\nTheir concern is that if they treat our predictions as the source of truth with ~10% deviation again, another major update could significantly change their profitability targets. This could also make it difficult for them to confidently invest in marketing based on our predictions\nWhen I asked last time, you mentioned there would be one more major update, so I assumed this was it. I completely understand that we’ll keep making smaller improvements, but the update at the beginning of summer changed predictions by 30 to 40% for some of their cohorts, which is quite significant.\nIt would be great if we could communicate that this will be the last major update for a while and that future updates should have a smaller impact. <https://adapty-team.slack.com/archives/C04355A7VTN/p1783957004833969?thread_ts=1783950976.224999&amp;cid=C04355A7VTN|https://adapty-team.slack.com/archives/C04355A7VTN/p1783957004833969?thread_ts=1783950976.224999&amp;cid=C04355A7VTN>\n\n[Artem Sorokin]: The model meets our ambitious metric targets in general, but there's still room for improvement for some cohorts/apps, so work will definitely happen there. I'm pretty sure predictions won't change as much as with the April update, though, when we completely replaced the old model. Still, some clients may notice a difference.\n\nI agree that fluctuating predictions can be an issue, and we have some ideas on how to reduce friction there in the future.\n\n[Melike Sezer]: Thank you :pray::skin-tone-3: <@U0ABX9WPC5V> it would be great if you could let us know when you’re planning a major or mid-sized update, so we can proactively inform our more cautious clients.\n\n[Artem Sorokin]: Right now, there's an update planned for mid-to-late September. It's technical and should barely affect prediction numbers, but testing is still pending.\n\n[Stella Zhao]: Hi <@U0ABX9WPC5V> Forwarding a question from a client: will this forecast update recalculate historical data, or will it only apply to new installs going forward?\n\n[Artem Sorokin]: <@U0ASWP97F61> Hi, the latest version of the model is applied to all cohorts, regardless of age.",
       "matchingReplies": [],
       "hasTeamMention": true,
       "images": []
@@ -2568,255 +2686,6 @@
         "https://files.slack.com/files-pri/T9HDDB78Q-F0B7M407RA8/image.png",
         "https://files.slack.com/files-pri/T9HDDB78Q-F0B7NRWC6N5/image.png",
         "https://files.slack.com/files-pri/T9HDDB78Q-F0B7HT38M1B/image.png"
-      ]
-    },
-    {
-      "id": "1780304092.508929",
-      "slackUrl": "https://adapty-team.slack.com/archives/C04SY70QZ0T/p1780304092508929",
-      "name": "Флоу билдер в проде.",
-      "message": "Флоу билдер в проде. <@U9HDNS9S4>\n\nогромное спасибо команде, которая сделал это возможным в таких сложных условиях. горжусь всеми!",
-      "releaseDate": "2026-06-01",
-      "thread": [
-        {
-          "userId": "U09GNBR5ZNW",
-          "userName": "Fedar Zvalinski",
-          "text": "Флоу билдер в проде. <@U9HDNS9S4>\n\nогромное спасибо команде, которая сделал это возможным в таких сложных условиях. горжусь всеми!",
-          "date": "2026-06-01T08:54:52.508Z",
-          "images": []
-        },
-        {
-          "userId": "U9HDNS9S4",
-          "userName": "Kirill Potekhin",
-          "text": "оу е! огромное спасибо на самом деле. один из самых больших релизов за все время, lfg ",
-          "date": "2026-06-01T08:56:26.834Z",
-          "images": []
-        },
-        {
-          "userId": "U08EVBTE69E",
-          "userName": "Maxim Borisik",
-          "text": "so cool!",
-          "date": "2026-06-01T08:56:57.781Z",
-          "images": [
-            "https://files.slack.com/files-pri/T9HDDB78Q-F0B7H6N8ASY/image.png"
-          ]
-        },
-        {
-          "userId": "U07F3ULE4MA",
-          "userName": "Darina Kobzar",
-          "text": "Hello Team! Congratulations on this! Huge work done :rocket:\nDo we have documentation for clients? What we should share with clients as next steps for the usage? Any SDK update is required?",
-          "date": "2026-06-01T09:03:15.100Z",
-          "images": []
-        },
-        {
-          "userId": "U08EVBTE69E",
-          "userName": "Maxim Borisik",
-          "text": "You can find the docs here!\n<https://adapty.io/docs/adapty-flow-builder>\n\nSDK for sure - The Adapty Flow Builder currently supports iOS SDK v.4 and up. Support for other platforms and frameworks is coming soon.",
-          "date": "2026-06-01T09:04:32.595Z",
-          "images": []
-        },
-        {
-          "userId": "U07F3ULE4MA",
-          "userName": "Darina Kobzar",
-          "text": "<@U08EVBTE69E> thank you! And great to see there is already some video material :+1::skin-tone-3:",
-          "date": "2026-06-01T09:06:54.426Z",
-          "images": []
-        },
-        {
-          "userId": "U08QUJMN0UV",
-          "userName": "Elina Andreeva",
-          "text": "Hi!\n• Main docs: <https://adapty.io/docs/adapty-flow-builder>\n• Some common templates step by step: <https://adapty.io/docs/flow-builder-recipes>\n• SDK quickstart from scratch: <https://adapty.io/docs/ios-quickstart-paywalls>\n• <https://adapty.io/docs/migration-to-ios-sdk-v4> SDK migration guide\n• Video quickstart <https://youtu.be/aa-m459VIuY>",
-          "date": "2026-06-01T09:06:54.839Z",
-          "images": []
-        },
-        {
-          "userId": "U9HDNS9S4",
-          "userName": "Kirill Potekhin",
-          "text": "<!subteam^S03KC9S1QMC> <!subteam^S07BZPQDBUJ> <!subteam^S03KM96DV0U> please review the docs and video, the flow builder is live ",
-          "date": "2026-06-01T09:08:17.807Z",
-          "images": []
-        },
-        {
-          "userId": "U08917H1C5B",
-          "userName": "Vitaly Kuzmin",
-          "text": "Hi team!\nCongratulations! :fire::rocket:\nWhen will the templates be available?",
-          "date": "2026-06-01T09:13:15.098Z",
-          "images": []
-        },
-        {
-          "userId": "U09GNBR5ZNW",
-          "userName": "Fedar Zvalinski",
-          "text": "Basic template is incorporated into new flow creation. Library will be available later, 100% after mid june",
-          "date": "2026-06-01T09:15:13.894Z",
-          "images": []
-        },
-        {
-          "userId": "U07H1ESAH6K",
-          "userName": "Sofia Pikuleva",
-          "text": "<@U09GNBR5ZNW> hey! One of the clients ask:\n\n\n&gt; ok so currently *the AI translate button is missing in the builder* but it's mentioned in the documentation.\ncan we check it please?",
-          "date": "2026-06-01T09:35:54.638Z",
-          "images": []
-        },
-        {
-          "userId": "U08QUJMN0UV",
-          "userName": "Elina Andreeva",
-          "text": "Sorry, I missed that it was excluded from the current release scope; the doc fix will land in ~10 minutes",
-          "date": "2026-06-01T09:44:17.810Z",
-          "images": []
-        },
-        {
-          "userId": "U07FKBD6QDS",
-          "userName": "Daniel Ridny",
-          "text": "<@U09GNBR5ZNW> Impala is excited with this update, and now they're eager to know the ETA for Landscape orientation - can you provide any approximate timing for this critical feature release?",
-          "date": "2026-06-01T09:45:16.449Z",
-          "images": []
-        },
-        {
-          "userId": "U09GNBR5ZNW",
-          "userName": "Fedar Zvalinski",
-          "text": "Kir said that it should be ready around 15.06. We could tell if it is possible around this dates in a couple of days, ok?",
-          "date": "2026-06-01T09:55:12.376Z",
-          "images": []
-        },
-        {
-          "userId": "U09GNBR5ZNW",
-          "userName": "Fedar Zvalinski",
-          "text": "@channel btw, if you've created flows in partner's accounts it would be nice to clean up this drafts if they are not needed",
-          "date": "2026-06-01T09:57:47.138Z",
-          "images": []
-        },
-        {
-          "userId": "U0A266T9SJE",
-          "userName": "Melike Sezer",
-          "text": "Maybe a late question to ask, but if they use the flow builder, will it be necessary to use one placement both for onboarding+paywall?",
-          "date": "2026-06-01T10:06:26.545Z",
-          "images": []
-        },
-        {
-          "userId": "U090BDLA9JN",
-          "userName": "Dmitry Shestoperov",
-          "text": "<@U9HDNS9S4> are we ready to announce it on our Telegram channel?",
-          "date": "2026-06-01T10:09:34.348Z",
-          "images": []
-        },
-        {
-          "userId": "U9HDNS9S4",
-          "userName": "Kirill Potekhin",
-          "text": "telegram yes, but make sure to align it with <@U05QELDHUUX>",
-          "date": "2026-06-01T10:10:50.706Z",
-          "images": []
-        },
-        {
-          "userId": "U09GNBR5ZNW",
-          "userName": "Fedar Zvalinski",
-          "text": "&gt; Maybe a late question to ask, but if they use the flow builder, will it be necessary to use one placement both for onboarding+paywall?\none placement per flow. If the flow contains onboarding and paywall inside, then you need only one placement",
-          "date": "2026-06-01T10:13:38.560Z",
-          "images": []
-        },
-        {
-          "userId": "U9JU5J5RC",
-          "userName": "Vitaly Davydov",
-          "text": "Great job guys",
-          "date": "2026-06-01T10:58:16.863Z",
-          "images": []
-        },
-        {
-          "userId": "U08914ZA6A1",
-          "userName": "Gregory Komissarov",
-          "text": "A big thank you to the team, you overcame so many obstacles. You are lions!",
-          "date": "2026-06-01T16:06:41.171Z",
-          "images": []
-        },
-        {
-          "userId": "U0489S1AKEC",
-          "userName": "Anna Suvorova",
-          "text": "<@U08EVBTE69E> do you know when flow builder will be available for flutter? like approx which month or Q?",
-          "date": "2026-06-02T14:39:33.753Z",
-          "images": []
-        },
-        {
-          "userId": "U08EVBTE69E",
-          "userName": "Maxim Borisik",
-          "text": "hey! i'd say summer (jul-aug). let's keep it internally",
-          "date": "2026-06-02T14:40:54.545Z",
-          "images": []
-        },
-        {
-          "userId": "U0489S1AKEC",
-          "userName": "Anna Suvorova",
-          "text": "got you, thanks",
-          "date": "2026-06-02T14:41:22.120Z",
-          "images": []
-        },
-        {
-          "userId": "U08QUJMN0UV",
-          "userName": "Elina Andreeva",
-          "text": "Hi team!\nOne more doc: <https://adapty.io/docs/migrate-to-flows|https://adapty.io/docs/migrate-to-flows> \nShould be useful to those clients who already use the paywall and/or onboarding builder and consider switching to the flow builder\n\n<@U06K36L6CTB> you asked about it",
-          "date": "2026-06-04T14:20:12.167Z",
-          "images": []
-        },
-        {
-          "userId": "U07MXM412JV",
-          "userName": "Marina Trypolskaya",
-          "text": "<!subteam^S086DJEQEUE> might be super helpful for you",
-          "date": "2026-06-04T16:52:36.971Z",
-          "images": []
-        },
-        {
-          "userId": "U08EVBTE69E",
-          "userName": "Maxim Borisik",
-          "text": "also we have a channel about flow-builder: <#C08FZR5C6GY>\nexpect more updates or useful info there",
-          "date": "2026-06-04T16:56:57.804Z",
-          "images": []
-        }
-      ],
-      "content": "[Fedar Zvalinski]: Флоу билдер в проде. <@U9HDNS9S4>\n\nогромное спасибо команде, которая сделал это возможным в таких сложных условиях. горжусь всеми!\n\n[Kirill Potekhin]: оу е! огромное спасибо на самом деле. один из самых больших релизов за все время, lfg \n\n[Maxim Borisik]: so cool!\n\n[Darina Kobzar]: Hello Team! Congratulations on this! Huge work done :rocket:\nDo we have documentation for clients? What we should share with clients as next steps for the usage? Any SDK update is required?\n\n[Maxim Borisik]: You can find the docs here!\n<https://adapty.io/docs/adapty-flow-builder>\n\nSDK for sure - The Adapty Flow Builder currently supports iOS SDK v.4 and up. Support for other platforms and frameworks is coming soon.\n\n[Darina Kobzar]: <@U08EVBTE69E> thank you! And great to see there is already some video material :+1::skin-tone-3:\n\n[Elina Andreeva]: Hi!\n• Main docs: <https://adapty.io/docs/adapty-flow-builder>\n• Some common templates step by step: <https://adapty.io/docs/flow-builder-recipes>\n• SDK quickstart from scratch: <https://adapty.io/docs/ios-quickstart-paywalls>\n• <https://adapty.io/docs/migration-to-ios-sdk-v4> SDK migration guide\n• Video quickstart <https://youtu.be/aa-m459VIuY>\n\n[Kirill Potekhin]: <!subteam^S03KC9S1QMC> <!subteam^S07BZPQDBUJ> <!subteam^S03KM96DV0U> please review the docs and video, the flow builder is live \n\n[Vitaly Kuzmin]: Hi team!\nCongratulations! :fire::rocket:\nWhen will the templates be available?\n\n[Fedar Zvalinski]: Basic template is incorporated into new flow creation. Library will be available later, 100% after mid june\n\n[Sofia Pikuleva]: <@U09GNBR5ZNW> hey! One of the clients ask:\n\n\n&gt; ok so currently *the AI translate button is missing in the builder* but it's mentioned in the documentation.\ncan we check it please?\n\n[Elina Andreeva]: Sorry, I missed that it was excluded from the current release scope; the doc fix will land in ~10 minutes\n\n[Daniel Ridny]: <@U09GNBR5ZNW> Impala is excited with this update, and now they're eager to know the ETA for Landscape orientation - can you provide any approximate timing for this critical feature release?\n\n[Fedar Zvalinski]: Kir said that it should be ready around 15.06. We could tell if it is possible around this dates in a couple of days, ok?\n\n[Fedar Zvalinski]: @channel btw, if you've created flows in partner's accounts it would be nice to clean up this drafts if they are not needed\n\n[Melike Sezer]: Maybe a late question to ask, but if they use the flow builder, will it be necessary to use one placement both for onboarding+paywall?\n\n[Dmitry Shestoperov]: <@U9HDNS9S4> are we ready to announce it on our Telegram channel?\n\n[Kirill Potekhin]: telegram yes, but make sure to align it with <@U05QELDHUUX>\n\n[Fedar Zvalinski]: &gt; Maybe a late question to ask, but if they use the flow builder, will it be necessary to use one placement both for onboarding+paywall?\none placement per flow. If the flow contains onboarding and paywall inside, then you need only one placement\n\n[Vitaly Davydov]: Great job guys\n\n[Gregory Komissarov]: A big thank you to the team, you overcame so many obstacles. You are lions!\n\n[Anna Suvorova]: <@U08EVBTE69E> do you know when flow builder will be available for flutter? like approx which month or Q?\n\n[Maxim Borisik]: hey! i'd say summer (jul-aug). let's keep it internally\n\n[Anna Suvorova]: got you, thanks\n\n[Elina Andreeva]: Hi team!\nOne more doc: <https://adapty.io/docs/migrate-to-flows|https://adapty.io/docs/migrate-to-flows> \nShould be useful to those clients who already use the paywall and/or onboarding builder and consider switching to the flow builder\n\n<@U06K36L6CTB> you asked about it\n\n[Marina Trypolskaya]: <!subteam^S086DJEQEUE> might be super helpful for you\n\n[Maxim Borisik]: also we have a channel about flow-builder: <#C08FZR5C6GY>\nexpect more updates or useful info there",
-      "matchingReplies": [
-        {
-          "userId": "U9HDNS9S4",
-          "userName": "Kirill Potekhin",
-          "text": "оу е! огромное спасибо на самом деле. один из самых больших релизов за все время, lfg ",
-          "date": "2026-06-01T08:56:26.834Z",
-          "images": []
-        },
-        {
-          "userId": "U08EVBTE69E",
-          "userName": "Maxim Borisik",
-          "text": "You can find the docs here!\n<https://adapty.io/docs/adapty-flow-builder>\n\nSDK for sure - The Adapty Flow Builder currently supports iOS SDK v.4 and up. Support for other platforms and frameworks is coming soon.",
-          "date": "2026-06-01T09:04:32.595Z",
-          "images": []
-        },
-        {
-          "userId": "U9HDNS9S4",
-          "userName": "Kirill Potekhin",
-          "text": "<!subteam^S03KC9S1QMC> <!subteam^S07BZPQDBUJ> <!subteam^S03KM96DV0U> please review the docs and video, the flow builder is live ",
-          "date": "2026-06-01T09:08:17.807Z",
-          "images": []
-        },
-        {
-          "userId": "U9HDNS9S4",
-          "userName": "Kirill Potekhin",
-          "text": "telegram yes, but make sure to align it with <@U05QELDHUUX>",
-          "date": "2026-06-01T10:10:50.706Z",
-          "images": []
-        },
-        {
-          "userId": "U08EVBTE69E",
-          "userName": "Maxim Borisik",
-          "text": "hey! i'd say summer (jul-aug). let's keep it internally",
-          "date": "2026-06-02T14:40:54.545Z",
-          "images": []
-        },
-        {
-          "userId": "U08EVBTE69E",
-          "userName": "Maxim Borisik",
-          "text": "also we have a channel about flow-builder: <#C08FZR5C6GY>\nexpect more updates or useful info there",
-          "date": "2026-06-04T16:56:57.804Z",
-          "images": []
-        }
-      ],
-      "hasTeamMention": true,
-      "images": [
-        "https://files.slack.com/files-pri/T9HDDB78Q-F0B7H6N8ASY/image.png"
       ]
     }
   ]
