@@ -1,7 +1,50 @@
 {
-  "syncedAt": "2026-08-26T00:19:24.050Z",
+  "syncedAt": "2026-08-27T01:46:55.866Z",
   "channel": "#product-release",
   "entries": [
+    {
+      "id": "1787760257.118499",
+      "slackUrl": "https://adapty-team.slack.com/archives/C04SY70QZ0T/p1787760257118499",
+      "name": "Hey team! :wave:",
+      "message": "Hey team! :wave:\nto simplify the Flow &amp; Paywall Builder adoption for existing paywall builder users - we've launched a magic \"migrate to new builder\" button.\nthis button was internally available for CS team for a month already, now we open it to every client.\n\n*works just as we love: \"click one button - get the result\"* :clap:\n\nsure thing, there are sure some limitations (like custom fonts or heavy layouts), but i'd say it migrates 7/10 paywalls and the result is good. in other cases it requires some manual involvement. we have one big improvement coming, so this button will get even better next week.\nalso after each migration there is \"import review\" list, which highlights stuff you should pay attention to (screen 3)\nlearn details <https://adapty.io/docs/convert-paywall-to-flow|here >\n\nmore: today we will place banners about <https://adapty.io/docs/paywall-onboarding-builder-deprecation|deprecation> in the old builders, while clients now have several options to migrate:\n• migrate via this button\n• use our flow builder skill for CLI (we'll make a proper announcement soon)\n• use our templates library (there is 20+ already)\n• use AI chat to polish the result\n*huuge thanks to <@U0ALSG3VA30>* *<@U08JY3U9S7P> and the builder team for making this possible*, because it's like connecting two different worlds. not easy. :dart:",
+      "releaseDate": "2026-08-26",
+      "thread": [
+        {
+          "userId": "U08EVBTE69E",
+          "userName": "Maxim Borisik",
+          "text": "Hey team! :wave:\nto simplify the Flow &amp; Paywall Builder adoption for existing paywall builder users - we've launched a magic \"migrate to new builder\" button.\nthis button was internally available for CS team for a month already, now we open it to every client.\n\n*works just as we love: \"click one button - get the result\"* :clap:\n\nsure thing, there are sure some limitations (like custom fonts or heavy layouts), but i'd say it migrates 7/10 paywalls and the result is good. in other cases it requires some manual involvement. we have one big improvement coming, so this button will get even better next week.\nalso after each migration there is \"import review\" list, which highlights stuff you should pay attention to (screen 3)\nlearn details <https://adapty.io/docs/convert-paywall-to-flow|here >\n\nmore: today we will place banners about <https://adapty.io/docs/paywall-onboarding-builder-deprecation|deprecation> in the old builders, while clients now have several options to migrate:\n• migrate via this button\n• use our flow builder skill for CLI (we'll make a proper announcement soon)\n• use our templates library (there is 20+ already)\n• use AI chat to polish the result\n*huuge thanks to <@U0ALSG3VA30>* *<@U08JY3U9S7P> and the builder team for making this possible*, because it's like connecting two different worlds. not easy. :dart:",
+          "date": "2026-08-26T16:04:17.118Z",
+          "images": [
+            "https://files.slack.com/files-pri/T9HDDB78Q-F0BSQ1YKEV9/image.png",
+            "https://files.slack.com/files-pri/T9HDDB78Q-F0BSQ5CC4R1/image.png",
+            "https://files.slack.com/files-pri/T9HDDB78Q-F0BSQ3ZQBNX/image.png"
+          ]
+        },
+        {
+          "userId": "U08EVBTE69E",
+          "userName": "Maxim Borisik",
+          "text": "<!subteam^S07BZPQDBUJ> you already now but still\n<!subteam^S03KM96DV0U> fyi",
+          "date": "2026-08-26T16:07:35.786Z",
+          "images": []
+        }
+      ],
+      "content": "[Maxim Borisik]: Hey team! :wave:\nto simplify the Flow &amp; Paywall Builder adoption for existing paywall builder users - we've launched a magic \"migrate to new builder\" button.\nthis button was internally available for CS team for a month already, now we open it to every client.\n\n*works just as we love: \"click one button - get the result\"* :clap:\n\nsure thing, there are sure some limitations (like custom fonts or heavy layouts), but i'd say it migrates 7/10 paywalls and the result is good. in other cases it requires some manual involvement. we have one big improvement coming, so this button will get even better next week.\nalso after each migration there is \"import review\" list, which highlights stuff you should pay attention to (screen 3)\nlearn details <https://adapty.io/docs/convert-paywall-to-flow|here >\n\nmore: today we will place banners about <https://adapty.io/docs/paywall-onboarding-builder-deprecation|deprecation> in the old builders, while clients now have several options to migrate:\n• migrate via this button\n• use our flow builder skill for CLI (we'll make a proper announcement soon)\n• use our templates library (there is 20+ already)\n• use AI chat to polish the result\n*huuge thanks to <@U0ALSG3VA30>* *<@U08JY3U9S7P> and the builder team for making this possible*, because it's like connecting two different worlds. not easy. :dart:\n\n[Maxim Borisik]: <!subteam^S07BZPQDBUJ> you already now but still\n<!subteam^S03KM96DV0U> fyi",
+      "matchingReplies": [
+        {
+          "userId": "U08EVBTE69E",
+          "userName": "Maxim Borisik",
+          "text": "<!subteam^S07BZPQDBUJ> you already now but still\n<!subteam^S03KM96DV0U> fyi",
+          "date": "2026-08-26T16:07:35.786Z",
+          "images": []
+        }
+      ],
+      "hasTeamMention": true,
+      "images": [
+        "https://files.slack.com/files-pri/T9HDDB78Q-F0BSQ1YKEV9/image.png",
+        "https://files.slack.com/files-pri/T9HDDB78Q-F0BSQ5CC4R1/image.png",
+        "https://files.slack.com/files-pri/T9HDDB78Q-F0BSQ3ZQBNX/image.png"
+      ]
+    },
     {
       "id": "1787662847.562779",
       "slackUrl": "https://adapty-team.slack.com/archives/C04SY70QZ0T/p1787662847562779",
@@ -2426,267 +2469,6 @@
       ],
       "hasTeamMention": false,
       "images": []
-    },
-    {
-      "id": "1780332987.166339",
-      "slackUrl": "https://adapty-team.slack.com/archives/C04SY70QZ0T/p1780332987166339",
-      "name": "Yango (Yandex Plus) international app. Everyone will request templates or AI",
-      "message": "Yango (Yandex Plus) international app. Everyone will request templates or AI",
-      "releaseDate": "2026-06-01",
-      "thread": [
-        {
-          "userId": "U9JU5J5RC",
-          "userName": "Vitaly Davydov",
-          "text": "Yango (Yandex Plus) international app. Everyone will request templates or AI",
-          "date": "2026-06-01T16:56:27.166Z",
-          "images": [
-            "https://files.slack.com/files-pri/T9HDDB78Q-F0B7LSTD1FW/image.png"
-          ]
-        },
-        {
-          "userId": "U08EVBTE69E",
-          "userName": "Maxim Borisik",
-          "text": "both are in progress",
-          "date": "2026-06-01T16:57:41.509Z",
-          "images": []
-        },
-        {
-          "userId": "U9JU5J5RC",
-          "userName": "Vitaly Davydov",
-          "text": "yeap",
-          "date": "2026-06-01T16:58:26.836Z",
-          "images": []
-        },
-        {
-          "userId": "U090T4UNBUK",
-          "userName": "Stanislav Mayorov",
-          "text": "will request templates for flow builder?",
-          "date": "2026-06-01T17:03:43.521Z",
-          "images": []
-        },
-        {
-          "userId": "U9JU5J5RC",
-          "userName": "Vitaly Davydov",
-          "text": "who?",
-          "date": "2026-06-01T17:07:32.989Z",
-          "images": []
-        },
-        {
-          "userId": "U090T4UNBUK",
-          "userName": "Stanislav Mayorov",
-          "text": "will everyone request templates for flow builder?",
-          "date": "2026-06-01T17:09:13.511Z",
-          "images": []
-        },
-        {
-          "userId": "U090T4UNBUK",
-          "userName": "Stanislav Mayorov",
-          "text": "I dont get. is it about flow builder?",
-          "date": "2026-06-01T17:09:20.379Z",
-          "images": []
-        },
-        {
-          "userId": "U03DFSCP8CW",
-          "userName": "Mike Gorokhov",
-          "text": "<@U9HDNS9S4> <@U08EVBTE69E>\nDo we have an ETA on adding this stuff?\n\n\"В последних двух вариантах есть плавная анимация на раскрытие карточки.\nЧастью дизайн-системы, которую важно сохранить, являются: шрифты, цвета, свечения и градиенты.\"\n\n(fonts, gradients and colors are clear)\n\nEdit: I was able to do a glow with Drop Shadow setting",
-          "date": "2026-06-01T17:12:36.121Z",
-          "images": [
-            "https://files.slack.com/files-pri/T9HDDB78Q-F0B7M1NF7L4/telegram-cloud-photo-size-2-5255936739694550147-w.jpg"
-          ]
-        },
-        {
-          "userId": "U9JU5J5RC",
-          "userName": "Vitaly Davydov",
-          "text": "<@U090T4UNBUK> it's about Flow builder, right",
-          "date": "2026-06-01T17:13:21.342Z",
-          "images": []
-        },
-        {
-          "userId": "U9JU5J5RC",
-          "userName": "Vitaly Davydov",
-          "text": "people do request templates already",
-          "date": "2026-06-01T17:13:29.607Z",
-          "images": []
-        },
-        {
-          "userId": "U9JU5J5RC",
-          "userName": "Vitaly Davydov",
-          "text": "after the first demo Mike did today",
-          "date": "2026-06-01T17:13:35.561Z",
-          "images": []
-        },
-        {
-          "userId": "U9JU5J5RC",
-          "userName": "Vitaly Davydov",
-          "text": "that to a point of <@U05QELDHUUX> of promotion product",
-          "date": "2026-06-01T17:13:46.415Z",
-          "images": []
-        },
-        {
-          "userId": "U05QELDHUUX",
-          "userName": "Sergey Muratov",
-          "text": "Of course they do, I bet every single demo will ask for that :slightly_smiling_face:",
-          "date": "2026-06-01T17:14:30.803Z",
-          "images": []
-        },
-        {
-          "userId": "U9JU5J5RC",
-          "userName": "Vitaly Davydov",
-          "text": "exactly",
-          "date": "2026-06-01T17:14:57.699Z",
-          "images": []
-        },
-        {
-          "userId": "U090T4UNBUK",
-          "userName": "Stanislav Mayorov",
-          "text": "<@U03DFSCP8CW> custom fonts are supported in flow builder",
-          "date": "2026-06-01T17:17:58.584Z",
-          "images": []
-        },
-        {
-          "userId": "U03DFSCP8CW",
-          "userName": "Mike Gorokhov",
-          "text": "Yes, this is why I mentioned `(fonts, gradients and colors are clear)`",
-          "date": "2026-06-01T17:18:30.408Z",
-          "images": []
-        },
-        {
-          "userId": "U03DFSCP8CW",
-          "userName": "Mike Gorokhov",
-          "text": "Looks like the only thing missing is the opening/expanding animation?",
-          "date": "2026-06-01T17:18:55.615Z",
-          "images": []
-        },
-        {
-          "userId": "U090T4UNBUK",
-          "userName": "Stanislav Mayorov",
-          "text": "<@U03DFSCP8CW> I am not sure about glow effects as well. there are different kinds of them",
-          "date": "2026-06-01T17:21:29.402Z",
-          "images": []
-        },
-        {
-          "userId": "U9HDNS9S4",
-          "userName": "Kirill Potekhin",
-          "text": "yes. i'm not sure about glows too",
-          "date": "2026-06-01T17:21:35.604Z",
-          "images": []
-        },
-        {
-          "userId": "U05QELDHUUX",
-          "userName": "Sergey Muratov",
-          "text": "Everything glowing I personally see on the screenshot is either a gradient, or something like a custom animation/image.",
-          "date": "2026-06-01T17:22:36.237Z",
-          "images": []
-        },
-        {
-          "userId": "U03DFSCP8CW",
-          "userName": "Mike Gorokhov",
-          "text": "easy",
-          "date": "2026-06-01T17:22:38.548Z",
-          "images": [
-            "https://files.slack.com/files-pri/T9HDDB78Q-F0B7M407RA8/image.png"
-          ]
-        },
-        {
-          "userId": "U03DFSCP8CW",
-          "userName": "Mike Gorokhov",
-          "text": "Shadow + blur = glow",
-          "date": "2026-06-01T17:23:19.325Z",
-          "images": []
-        },
-        {
-          "userId": "U9HDNS9S4",
-          "userName": "Kirill Potekhin",
-          "text": "we have some support for animations on the sdk side already, but they can't be configured in the builder. currently, we have a prioritized backlog (templates, custom layouts and other SDKs), so most likely animations won't be live until July. <@U0APAGBPJTA> and <@U08EVBTE69E> will provide more updates once we have better ETAs, but for now animations are not supported ",
-          "date": "2026-06-01T17:24:34.967Z",
-          "images": []
-        },
-        {
-          "userId": "U03DFSCP8CW",
-          "userName": "Mike Gorokhov",
-          "text": "What about videos/gifs?",
-          "date": "2026-06-01T17:25:02.730Z",
-          "images": []
-        },
-        {
-          "userId": "U090T4UNBUK",
-          "userName": "Stanislav Mayorov",
-          "text": "<@U03DFSCP8CW> Video is supported, just as in the previous version v3 sdk",
-          "date": "2026-06-01T17:29:20.066Z",
-          "images": []
-        },
-        {
-          "userId": "U090T4UNBUK",
-          "userName": "Stanislav Mayorov",
-          "text": "<@U03DFSCP8CW> modern WebP image format is now supported (the best compression)",
-          "date": "2026-06-01T17:31:58.687Z",
-          "images": []
-        },
-        {
-          "userId": "U03DFSCP8CW",
-          "userName": "Mike Gorokhov",
-          "text": "I've been creating a paywall for 30 minutes, then this happened and all work is gone...",
-          "date": "2026-06-02T03:27:26.120Z",
-          "images": [
-            "https://files.slack.com/files-pri/T9HDDB78Q-F0B7NRWC6N5/image.png"
-          ]
-        },
-        {
-          "userId": "U03DFSCP8CW",
-          "userName": "Mike Gorokhov",
-          "text": "It crashed one hour later again.\nThis time I was smarter and kept saving.\nBut after the crash the custom fonts were gone",
-          "date": "2026-06-02T04:23:26.934Z",
-          "images": []
-        },
-        {
-          "userId": "U03DFSCP8CW",
-          "userName": "Mike Gorokhov",
-          "text": "A ruined morning and I'm done :mike:",
-          "date": "2026-06-02T04:28:25.816Z",
-          "images": [
-            "https://files.slack.com/files-pri/T9HDDB78Q-F0B7HT38M1B/image.png"
-          ]
-        },
-        {
-          "userId": "U090T4UNBUK",
-          "userName": "Stanislav Mayorov",
-          "text": "<@U03DFSCP8CW> very poor experience. thank you! we have already received similar feedback from colleagues who have lost progress. auto saving progress is intentionally not implemented, so you can easily revert changes. I will resent your message to the team\n<https://adapty-team.slack.com/archives/C04SY70QZ0T/p1780370846120619?thread_ts=1780332987.166339&cid=C04SY70QZ0T>",
-          "date": "2026-06-02T07:19:32.560Z",
-          "images": []
-        },
-        {
-          "userId": "U9HDNS9S4",
-          "userName": "Kirill Potekhin",
-          "text": "<@U03DFSCP8CW> thanks for sharing. we'll check what happened and why the fonts are not saved ",
-          "date": "2026-06-02T07:35:46.745Z",
-          "images": []
-        }
-      ],
-      "content": "[Vitaly Davydov]: Yango (Yandex Plus) international app. Everyone will request templates or AI\n\n[Maxim Borisik]: both are in progress\n\n[Vitaly Davydov]: yeap\n\n[Stanislav Mayorov]: will request templates for flow builder?\n\n[Vitaly Davydov]: who?\n\n[Stanislav Mayorov]: will everyone request templates for flow builder?\n\n[Stanislav Mayorov]: I dont get. is it about flow builder?\n\n[Mike Gorokhov]: <@U9HDNS9S4> <@U08EVBTE69E>\nDo we have an ETA on adding this stuff?\n\n\"В последних двух вариантах есть плавная анимация на раскрытие карточки.\nЧастью дизайн-системы, которую важно сохранить, являются: шрифты, цвета, свечения и градиенты.\"\n\n(fonts, gradients and colors are clear)\n\nEdit: I was able to do a glow with Drop Shadow setting\n\n[Vitaly Davydov]: <@U090T4UNBUK> it's about Flow builder, right\n\n[Vitaly Davydov]: people do request templates already\n\n[Vitaly Davydov]: after the first demo Mike did today\n\n[Vitaly Davydov]: that to a point of <@U05QELDHUUX> of promotion product\n\n[Sergey Muratov]: Of course they do, I bet every single demo will ask for that :slightly_smiling_face:\n\n[Vitaly Davydov]: exactly\n\n[Stanislav Mayorov]: <@U03DFSCP8CW> custom fonts are supported in flow builder\n\n[Mike Gorokhov]: Yes, this is why I mentioned `(fonts, gradients and colors are clear)`\n\n[Mike Gorokhov]: Looks like the only thing missing is the opening/expanding animation?\n\n[Stanislav Mayorov]: <@U03DFSCP8CW> I am not sure about glow effects as well. there are different kinds of them\n\n[Kirill Potekhin]: yes. i'm not sure about glows too\n\n[Sergey Muratov]: Everything glowing I personally see on the screenshot is either a gradient, or something like a custom animation/image.\n\n[Mike Gorokhov]: easy\n\n[Mike Gorokhov]: Shadow + blur = glow\n\n[Kirill Potekhin]: we have some support for animations on the sdk side already, but they can't be configured in the builder. currently, we have a prioritized backlog (templates, custom layouts and other SDKs), so most likely animations won't be live until July. <@U0APAGBPJTA> and <@U08EVBTE69E> will provide more updates once we have better ETAs, but for now animations are not supported \n\n[Mike Gorokhov]: What about videos/gifs?\n\n[Stanislav Mayorov]: <@U03DFSCP8CW> Video is supported, just as in the previous version v3 sdk\n\n[Stanislav Mayorov]: <@U03DFSCP8CW> modern WebP image format is now supported (the best compression)\n\n[Mike Gorokhov]: I've been creating a paywall for 30 minutes, then this happened and all work is gone...\n\n[Mike Gorokhov]: It crashed one hour later again.\nThis time I was smarter and kept saving.\nBut after the crash the custom fonts were gone\n\n[Mike Gorokhov]: A ruined morning and I'm done :mike:\n\n[Stanislav Mayorov]: <@U03DFSCP8CW> very poor experience. thank you! we have already received similar feedback from colleagues who have lost progress. auto saving progress is intentionally not implemented, so you can easily revert changes. I will resent your message to the team\n<https://adapty-team.slack.com/archives/C04SY70QZ0T/p1780370846120619?thread_ts=1780332987.166339&cid=C04SY70QZ0T>\n\n[Kirill Potekhin]: <@U03DFSCP8CW> thanks for sharing. we'll check what happened and why the fonts are not saved ",
-      "matchingReplies": [
-        {
-          "userId": "U9HDNS9S4",
-          "userName": "Kirill Potekhin",
-          "text": "we have some support for animations on the sdk side already, but they can't be configured in the builder. currently, we have a prioritized backlog (templates, custom layouts and other SDKs), so most likely animations won't be live until July. <@U0APAGBPJTA> and <@U08EVBTE69E> will provide more updates once we have better ETAs, but for now animations are not supported ",
-          "date": "2026-06-01T17:24:34.967Z",
-          "images": []
-        },
-        {
-          "userId": "U9HDNS9S4",
-          "userName": "Kirill Potekhin",
-          "text": "<@U03DFSCP8CW> thanks for sharing. we'll check what happened and why the fonts are not saved ",
-          "date": "2026-06-02T07:35:46.745Z",
-          "images": []
-        }
-      ],
-      "hasTeamMention": false,
-      "images": [
-        "https://files.slack.com/files-pri/T9HDDB78Q-F0B7LSTD1FW/image.png",
-        "https://files.slack.com/files-pri/T9HDDB78Q-F0B7M1NF7L4/telegram-cloud-photo-size-2-5255936739694550147-w.jpg",
-        "https://files.slack.com/files-pri/T9HDDB78Q-F0B7M407RA8/image.png",
-        "https://files.slack.com/files-pri/T9HDDB78Q-F0B7NRWC6N5/image.png",
-        "https://files.slack.com/files-pri/T9HDDB78Q-F0B7HT38M1B/image.png"
-      ]
     }
   ]
 }
