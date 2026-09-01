@@ -1,7 +1,49 @@
 {
-  "syncedAt": "2026-08-31T00:47:14.734Z",
+  "syncedAt": "2026-09-01T00:51:26.316Z",
   "channel": "#product-release",
   "entries": [
+    {
+      "id": "1788197089.957859",
+      "slackUrl": "https://adapty-team.slack.com/archives/C04SY70QZ0T/p1788197089957859",
+      "name": "It's not as cool as Josh's review , but we've finally passed the Amazon's review:",
+      "message": "It's not as cool as Josh's review , but we've finally passed the Amazon's review:\n```Hello,\n\nAfter an additional review of your account we have decided to end the review period in US East (N. Virginia) region. As you continue to send we ask that you keep the following best practices in mind:\n\n- Only send to addresses that have specifically requested your mail.\n- Maintain your sending list by promptly removing bouncing and complaining addresses.\n- Remove addresses from your list that have not interacted with your mail in the past 6 months.\n- Ensure you're sending high quality mail that your recipients want to receive.\n\nThank you for using Amazon Web Services.```\n",
+      "releaseDate": "2026-08-31",
+      "thread": [
+        {
+          "userId": "U03K1BGS464",
+          "userName": "Vitali Khmialnitski",
+          "text": "It's not as cool as Josh's review , but we've finally passed the Amazon's review:\n```Hello,\n\nAfter an additional review of your account we have decided to end the review period in US East (N. Virginia) region. As you continue to send we ask that you keep the following best practices in mind:\n\n- Only send to addresses that have specifically requested your mail.\n- Maintain your sending list by promptly removing bouncing and complaining addresses.\n- Remove addresses from your list that have not interacted with your mail in the past 6 months.\n- Ensure you're sending high quality mail that your recipients want to receive.\n\nThank you for using Amazon Web Services.```\n",
+          "date": "2026-08-31T17:24:49.957Z",
+          "images": []
+        },
+        {
+          "userId": "U08EVBTE69E",
+          "userName": "Maxim Borisik",
+          "text": "tell us more! what doors it opens for you and for adapty?",
+          "date": "2026-08-31T17:31:08.782Z",
+          "images": []
+        },
+        {
+          "userId": "U03K1BGS464",
+          "userName": "Vitali Khmialnitski",
+          "text": "As I wrote last Tuesday, if we don’t pass the review, our email service will be blocked by Amazon.\n\nSo this allows us to carry on working without the headache and fear of being blocked:)\n\nAdditionally, we’ve identified and fixed many issues that were preventing our emails from getting past spam filters and complying with the anti-spam policies of various providers, which should improve conversion at the top/first stage of the funnel – inbox delivery.",
+          "date": "2026-08-31T18:10:30.039Z",
+          "images": []
+        }
+      ],
+      "content": "[Vitali Khmialnitski]: It's not as cool as Josh's review , but we've finally passed the Amazon's review:\n```Hello,\n\nAfter an additional review of your account we have decided to end the review period in US East (N. Virginia) region. As you continue to send we ask that you keep the following best practices in mind:\n\n- Only send to addresses that have specifically requested your mail.\n- Maintain your sending list by promptly removing bouncing and complaining addresses.\n- Remove addresses from your list that have not interacted with your mail in the past 6 months.\n- Ensure you're sending high quality mail that your recipients want to receive.\n\nThank you for using Amazon Web Services.```\n\n\n[Maxim Borisik]: tell us more! what doors it opens for you and for adapty?\n\n[Vitali Khmialnitski]: As I wrote last Tuesday, if we don’t pass the review, our email service will be blocked by Amazon.\n\nSo this allows us to carry on working without the headache and fear of being blocked:)\n\nAdditionally, we’ve identified and fixed many issues that were preventing our emails from getting past spam filters and complying with the anti-spam policies of various providers, which should improve conversion at the top/first stage of the funnel – inbox delivery.",
+      "matchingReplies": [
+        {
+          "userId": "U08EVBTE69E",
+          "userName": "Maxim Borisik",
+          "text": "tell us more! what doors it opens for you and for adapty?",
+          "date": "2026-08-31T17:31:08.782Z",
+          "images": []
+        }
+      ],
+      "hasTeamMention": false,
+      "images": []
+    },
     {
       "id": "1787814112.885739",
       "slackUrl": "https://adapty-team.slack.com/archives/C04SY70QZ0T/p1787814112885739",
@@ -103,9 +145,33 @@
           "images": [
             "https://files.slack.com/files-pri/T9HDDB78Q-F0BT8LC2FNH/image.png"
           ]
+        },
+        {
+          "userId": "U08EVBTE69E",
+          "userName": "Maxim Borisik",
+          "text": "we can't stop this excitement from clients! because it really is exciting.\n\nwell done team :clap:",
+          "date": "2026-08-31T17:14:39.144Z",
+          "images": [
+            "https://files.slack.com/files-pri/T9HDDB78Q-F0BTTAGUQ85/image.png",
+            "https://files.slack.com/files-pri/T9HDDB78Q-F0BTXE3MWBC/image.png"
+          ]
+        },
+        {
+          "userId": "U07J9LKBQ5U",
+          "userName": "Yurii Kleimenov",
+          "text": "~Hopefully~, we’ll inherit this pattern for the core platform and move the interface to the second place. Great job guys on growing this pattern already :fire:",
+          "date": "2026-08-31T17:16:36.810Z",
+          "images": []
+        },
+        {
+          "userId": "U9JU5J5RC",
+          "userName": "Vitaly Davydov",
+          "text": "GOOD ",
+          "date": "2026-08-31T17:34:04.600Z",
+          "images": []
         }
       ],
-      "content": "[Danil Melnichuk]: hey team. last week we tinkered a lot and made a thing — a way to use the *flow builder for coding agents*.\n\nnow agents like claude code, cowork and codex can create and edit flows in adapty. and by edit i mean, you know, REAL edit — components, themes, locales, interactivity and everything else that's possible with our builder.\n\nhow it it's different from builder ai chat, and why it's important:\n• *model ability* — chat: we own model selection and pay for tokens, so user can't use the smartest yet expensive model. skill: user brings his own model, so output quality is capped only by frontier model capabilities, not by adapty economy\n• *freedom* — chat: curated selection of tools, more economical and safe, but restricted (no images, no locales, no working outside a single screen yet). skill: full freedom to the agent, whole flow config, no feature limit, better results, but more tokens burned and way less safe\n• *look to the future* — chat: good starting point for normies. skill: canvas for pioneers, and i believe we can take inspiration from our most creative skill power users to improve both builder and ai chat\n_nb_: it's powerful but risky — agents can upload broken configs (we validate + preview, but still). use and recommend with caution.\n\ngive it a shot, folks! open your code/cowork/codex and:\n1. ask to install the `flow-generator` skill using `npx skills@latest add adaptyteam/adapty-skills`; more ways <https://adapty.io/docs/flow-generator-skill#install-the-skill|here>\n2. run `/flow-generator`, ask to create some gorgeous flow\n3. share the result to the thread. go go power rangers!\nshoutout to <@U08QUJMN0UV> <@U080G9FHV50> <@U08JY3U9S7P>\n\n[Danil Melnichuk]: see more docs here: <https://adapty.io/docs/flow-generator-skill|adapty.io/docs/flow-generator-skill>\n\n[Yurii Kleimenov]: LFG :rocket:\n\n[David]: I asked the flow-generator to replicate this paywall\n\nI'm very impressed !! :slightly_smiling_face: will keep testing\n\n[David]: 2/ 2nd test\n\nTook 11 minutes to compute.\nMaybe because Opus 5 HIGH is maybe too much and thinks for too long\n\nAnyway, it's very good, and it adapted the copy from the original image to my \"Health and Fitness\" app\n\n[David]: sorry for the spam :stuck_out_tongue:\n\n[Elina Andreeva]: my record is 40 minutes, but that's fine IMO\n\ntried to optimize its speed (and will try more later), but keeping it this slow makes it more thorough\n\nmaybe we can add some effort setup later for those who don't want to wait but are ready to steer\n\n[Elina Andreeva]: (it took 40 minutes to build this one)\n<https://adapty-team.slack.com/archives/C08FZR5C6GY/p1787650148397709?thread_ts=1787552573.899129&amp;cid=C08FZR5C6GY|https://adapty-team.slack.com/archives/C08FZR5C6GY/p1787650148397709?thread_ts=1787552573.899129&amp;cid=C08FZR5C6GY>\n\n[David]: \"I made this high-performing onboarding while... at the gym\"\ntons of good hooks for devrel to use here :stuck_out_tongue:\n\n[Elina Andreeva]: <@U0AAUD3KHT7> about your gym use case — just updated the skill, so it can give you links to  flow previews in the Adapty mobile app. This way, you can update flows even directly from your phone\n\n[Maxim Borisik]: <!subteam^S07BZPQDBUJ> it's officially live! let's spread the word\n\n[Maxim Borisik]: everyone loves it! (a client's response)",
+      "content": "[Danil Melnichuk]: hey team. last week we tinkered a lot and made a thing — a way to use the *flow builder for coding agents*.\n\nnow agents like claude code, cowork and codex can create and edit flows in adapty. and by edit i mean, you know, REAL edit — components, themes, locales, interactivity and everything else that's possible with our builder.\n\nhow it it's different from builder ai chat, and why it's important:\n• *model ability* — chat: we own model selection and pay for tokens, so user can't use the smartest yet expensive model. skill: user brings his own model, so output quality is capped only by frontier model capabilities, not by adapty economy\n• *freedom* — chat: curated selection of tools, more economical and safe, but restricted (no images, no locales, no working outside a single screen yet). skill: full freedom to the agent, whole flow config, no feature limit, better results, but more tokens burned and way less safe\n• *look to the future* — chat: good starting point for normies. skill: canvas for pioneers, and i believe we can take inspiration from our most creative skill power users to improve both builder and ai chat\n_nb_: it's powerful but risky — agents can upload broken configs (we validate + preview, but still). use and recommend with caution.\n\ngive it a shot, folks! open your code/cowork/codex and:\n1. ask to install the `flow-generator` skill using `npx skills@latest add adaptyteam/adapty-skills`; more ways <https://adapty.io/docs/flow-generator-skill#install-the-skill|here>\n2. run `/flow-generator`, ask to create some gorgeous flow\n3. share the result to the thread. go go power rangers!\nshoutout to <@U08QUJMN0UV> <@U080G9FHV50> <@U08JY3U9S7P>\n\n[Danil Melnichuk]: see more docs here: <https://adapty.io/docs/flow-generator-skill|adapty.io/docs/flow-generator-skill>\n\n[Yurii Kleimenov]: LFG :rocket:\n\n[David]: I asked the flow-generator to replicate this paywall\n\nI'm very impressed !! :slightly_smiling_face: will keep testing\n\n[David]: 2/ 2nd test\n\nTook 11 minutes to compute.\nMaybe because Opus 5 HIGH is maybe too much and thinks for too long\n\nAnyway, it's very good, and it adapted the copy from the original image to my \"Health and Fitness\" app\n\n[David]: sorry for the spam :stuck_out_tongue:\n\n[Elina Andreeva]: my record is 40 minutes, but that's fine IMO\n\ntried to optimize its speed (and will try more later), but keeping it this slow makes it more thorough\n\nmaybe we can add some effort setup later for those who don't want to wait but are ready to steer\n\n[Elina Andreeva]: (it took 40 minutes to build this one)\n<https://adapty-team.slack.com/archives/C08FZR5C6GY/p1787650148397709?thread_ts=1787552573.899129&amp;cid=C08FZR5C6GY|https://adapty-team.slack.com/archives/C08FZR5C6GY/p1787650148397709?thread_ts=1787552573.899129&amp;cid=C08FZR5C6GY>\n\n[David]: \"I made this high-performing onboarding while... at the gym\"\ntons of good hooks for devrel to use here :stuck_out_tongue:\n\n[Elina Andreeva]: <@U0AAUD3KHT7> about your gym use case — just updated the skill, so it can give you links to  flow previews in the Adapty mobile app. This way, you can update flows even directly from your phone\n\n[Maxim Borisik]: <!subteam^S07BZPQDBUJ> it's officially live! let's spread the word\n\n[Maxim Borisik]: everyone loves it! (a client's response)\n\n[Maxim Borisik]: we can't stop this excitement from clients! because it really is exciting.\n\nwell done team :clap:\n\n[Yurii Kleimenov]: ~Hopefully~, we’ll inherit this pattern for the core platform and move the interface to the second place. Great job guys on growing this pattern already :fire:\n\n[Vitaly Davydov]: GOOD ",
       "matchingReplies": [
         {
           "userId": "U08EVBTE69E",
@@ -113,6 +179,16 @@
           "text": "<!subteam^S07BZPQDBUJ> it's officially live! let's spread the word",
           "date": "2026-08-27T10:02:13.254Z",
           "images": []
+        },
+        {
+          "userId": "U08EVBTE69E",
+          "userName": "Maxim Borisik",
+          "text": "we can't stop this excitement from clients! because it really is exciting.\n\nwell done team :clap:",
+          "date": "2026-08-31T17:14:39.144Z",
+          "images": [
+            "https://files.slack.com/files-pri/T9HDDB78Q-F0BTTAGUQ85/image.png",
+            "https://files.slack.com/files-pri/T9HDDB78Q-F0BTXE3MWBC/image.png"
+          ]
         }
       ],
       "hasTeamMention": true,
@@ -123,7 +199,9 @@
         "https://files.slack.com/files-pri/T9HDDB78Q-F0BT66HDMHA/image.png",
         "https://files.slack.com/files-pri/T9HDDB78Q-F0BT2HY6ZEW/image.png",
         "https://files.slack.com/files-pri/T9HDDB78Q-F0BT0LF635L/image.png",
-        "https://files.slack.com/files-pri/T9HDDB78Q-F0BT8LC2FNH/image.png"
+        "https://files.slack.com/files-pri/T9HDDB78Q-F0BT8LC2FNH/image.png",
+        "https://files.slack.com/files-pri/T9HDDB78Q-F0BTTAGUQ85/image.png",
+        "https://files.slack.com/files-pri/T9HDDB78Q-F0BTXE3MWBC/image.png"
       ]
     },
     {
@@ -2437,75 +2515,6 @@
         }
       ],
       "hasTeamMention": false,
-      "images": []
-    },
-    {
-      "id": "1780666921.025909",
-      "slackUrl": "https://adapty-team.slack.com/archives/C04SY70QZ0T/p1780666921025909",
-      "name": "*Problem*",
-      "message": "*Problem*\n\nThe <!subteam^S0ATWJA5K6Z> has identified the root cause behind our recurring incidents related to connection pool exhaustion between Odyssey and Postgres. During purchase validation, we create a lot of records (transactions, PAL, subscriptions, non-subscriptions, transaction events, and a few others). Since this operation has to be atomic, it all happens inside a single transaction / single PG connection. As a result, Postgres accumulates a lot of uncommitted row versions that stick around for quite a while, which slows the database down once the number of concurrent operations crosses a certain threshold.\n\nThere are basically two ways to address this kind of issue:\n1. Reduce the number of operations running in parallel.\n2. Reduce how long each operation takes.\n*Solution*\n\nWe’ve moved App Store and Play Store purchase event processing to a background job (similar to how Stripe and Paddle do it) and added rate-limiting on concurrent event handling (processing metrics are available <https://grafana.adpinfra.dev/d/dramatiq-workers/dramatiq-workers?orgId=1&amp;var-namespace=production&amp;var-queue=purchase_app_store&amp;var-queue=purchase_play_store&amp;var-actor=All&amp;from=now-15m&amp;to=now|here>). This smooths out event handling over time and protects us from sudden spikes coming from the stores. Nothing changes on the SDK side: we still validate purchases and grant PAL on time, no delays there.\n\nWe also did a small refactor of the core transaction validation module, which cut the time a transaction stays open by around 60%.\n\nTechnical details are in this <https://gitlab.adapty.io/adapty/adapty-dashboard-api/-/merge_requests/12810|MR>.\n\n*Risks*\n\nIf customers start complaining about delayed event delivery to their hooks (custom webhooks or raw event forwarding), or about issues with granting PAL, ping <!subteam^S09JZKWUF2N>.",
-      "releaseDate": "2026-06-05",
-      "thread": [
-        {
-          "userId": "UNWFN144R",
-          "userName": "Artem Davydov",
-          "text": "*Problem*\n\nThe <!subteam^S0ATWJA5K6Z> has identified the root cause behind our recurring incidents related to connection pool exhaustion between Odyssey and Postgres. During purchase validation, we create a lot of records (transactions, PAL, subscriptions, non-subscriptions, transaction events, and a few others). Since this operation has to be atomic, it all happens inside a single transaction / single PG connection. As a result, Postgres accumulates a lot of uncommitted row versions that stick around for quite a while, which slows the database down once the number of concurrent operations crosses a certain threshold.\n\nThere are basically two ways to address this kind of issue:\n1. Reduce the number of operations running in parallel.\n2. Reduce how long each operation takes.\n*Solution*\n\nWe’ve moved App Store and Play Store purchase event processing to a background job (similar to how Stripe and Paddle do it) and added rate-limiting on concurrent event handling (processing metrics are available <https://grafana.adpinfra.dev/d/dramatiq-workers/dramatiq-workers?orgId=1&amp;var-namespace=production&amp;var-queue=purchase_app_store&amp;var-queue=purchase_play_store&amp;var-actor=All&amp;from=now-15m&amp;to=now|here>). This smooths out event handling over time and protects us from sudden spikes coming from the stores. Nothing changes on the SDK side: we still validate purchases and grant PAL on time, no delays there.\n\nWe also did a small refactor of the core transaction validation module, which cut the time a transaction stays open by around 60%.\n\nTechnical details are in this <https://gitlab.adapty.io/adapty/adapty-dashboard-api/-/merge_requests/12810|MR>.\n\n*Risks*\n\nIf customers start complaining about delayed event delivery to their hooks (custom webhooks or raw event forwarding), or about issues with granting PAL, ping <!subteam^S09JZKWUF2N>.",
-          "date": "2026-06-05T13:42:01.025Z",
-          "images": []
-        },
-        {
-          "userId": "UNWFN144R",
-          "userName": "Artem Davydov",
-          "text": "<!subteam^S03KM96DV0U> <!subteam^S07BZPQDBUJ> fyi",
-          "date": "2026-06-05T13:43:24.851Z",
-          "images": []
-        },
-        {
-          "userId": "U03Q2R7AGLA",
-          "userName": "Amina Magomedova",
-          "text": "Thank you for a detailed explanation, especially for a Risks section, it's very useful! ",
-          "date": "2026-06-05T13:45:08.731Z",
-          "images": []
-        },
-        {
-          "userId": "U09EG3DK4US",
-          "userName": "Polina Ishimbaeva",
-          "text": "<@U0A266T9SJE> fyi about webhooks",
-          "date": "2026-06-05T13:53:55.629Z",
-          "images": []
-        },
-        {
-          "userId": "U0A266T9SJE",
-          "userName": "Melike Sezer",
-          "text": "Should we communicate anything with the clients? <@U09EG3DK4US> ",
-          "date": "2026-06-05T13:57:04.606Z",
-          "images": []
-        },
-        {
-          "userId": "U0A266T9SJE",
-          "userName": "Melike Sezer",
-          "text": "Also, <@UNWFN144R> i got confused on something. Clients have been complaining about webhooks not being sent properly, sometimes stoping for hours. But you say solution we have still have the risks, and the risk is webhooks being delayed. So for example, let’s think Superapplabs, they use webhooks to feed the Meta campaigns with subs data. If it’s delayed, it will still attect the campaign performance. Maybe I didn’t understand you fully.",
-          "date": "2026-06-05T14:00:36.694Z",
-          "images": []
-        },
-        {
-          "userId": "UNWFN144R",
-          "userName": "Artem Davydov",
-          "text": "Just to clarify: the risks I mentioned are specifically about this release. We weren’t addressing the Superapplabs event delivery delays here — that’s a separate problem. I also looked through the <https://adapty-team.slack.com/archives/C035WAT083Y/p1774359817598499|thread> on that one, and it seems their issue was already resolved.",
-          "date": "2026-06-05T14:20:23.351Z",
-          "images": []
-        },
-        {
-          "userId": "U0A266T9SJE",
-          "userName": "Melike Sezer",
-          "text": "&gt; Just to clarify: the risks I mentioned are specifically about this release.\nOh I see now, that clarified the situation for me thank you Artem :pray::skin-tone-3:",
-          "date": "2026-06-05T14:21:26.654Z",
-          "images": []
-        }
-      ],
-      "content": "[Artem Davydov]: *Problem*\n\nThe <!subteam^S0ATWJA5K6Z> has identified the root cause behind our recurring incidents related to connection pool exhaustion between Odyssey and Postgres. During purchase validation, we create a lot of records (transactions, PAL, subscriptions, non-subscriptions, transaction events, and a few others). Since this operation has to be atomic, it all happens inside a single transaction / single PG connection. As a result, Postgres accumulates a lot of uncommitted row versions that stick around for quite a while, which slows the database down once the number of concurrent operations crosses a certain threshold.\n\nThere are basically two ways to address this kind of issue:\n1. Reduce the number of operations running in parallel.\n2. Reduce how long each operation takes.\n*Solution*\n\nWe’ve moved App Store and Play Store purchase event processing to a background job (similar to how Stripe and Paddle do it) and added rate-limiting on concurrent event handling (processing metrics are available <https://grafana.adpinfra.dev/d/dramatiq-workers/dramatiq-workers?orgId=1&amp;var-namespace=production&amp;var-queue=purchase_app_store&amp;var-queue=purchase_play_store&amp;var-actor=All&amp;from=now-15m&amp;to=now|here>). This smooths out event handling over time and protects us from sudden spikes coming from the stores. Nothing changes on the SDK side: we still validate purchases and grant PAL on time, no delays there.\n\nWe also did a small refactor of the core transaction validation module, which cut the time a transaction stays open by around 60%.\n\nTechnical details are in this <https://gitlab.adapty.io/adapty/adapty-dashboard-api/-/merge_requests/12810|MR>.\n\n*Risks*\n\nIf customers start complaining about delayed event delivery to their hooks (custom webhooks or raw event forwarding), or about issues with granting PAL, ping <!subteam^S09JZKWUF2N>.\n\n[Artem Davydov]: <!subteam^S03KM96DV0U> <!subteam^S07BZPQDBUJ> fyi\n\n[Amina Magomedova]: Thank you for a detailed explanation, especially for a Risks section, it's very useful! \n\n[Polina Ishimbaeva]: <@U0A266T9SJE> fyi about webhooks\n\n[Melike Sezer]: Should we communicate anything with the clients? <@U09EG3DK4US> \n\n[Melike Sezer]: Also, <@UNWFN144R> i got confused on something. Clients have been complaining about webhooks not being sent properly, sometimes stoping for hours. But you say solution we have still have the risks, and the risk is webhooks being delayed. So for example, let’s think Superapplabs, they use webhooks to feed the Meta campaigns with subs data. If it’s delayed, it will still attect the campaign performance. Maybe I didn’t understand you fully.\n\n[Artem Davydov]: Just to clarify: the risks I mentioned are specifically about this release. We weren’t addressing the Superapplabs event delivery delays here — that’s a separate problem. I also looked through the <https://adapty-team.slack.com/archives/C035WAT083Y/p1774359817598499|thread> on that one, and it seems their issue was already resolved.\n\n[Melike Sezer]: &gt; Just to clarify: the risks I mentioned are specifically about this release.\nOh I see now, that clarified the situation for me thank you Artem :pray::skin-tone-3:",
-      "matchingReplies": [],
-      "hasTeamMention": true,
       "images": []
     }
   ]
