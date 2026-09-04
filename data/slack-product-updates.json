@@ -1,7 +1,69 @@
 {
-  "syncedAt": "2026-09-03T00:44:15.896Z",
+  "syncedAt": "2026-09-04T00:40:56.229Z",
   "channel": "#product-release",
   "entries": [
+    {
+      "id": "1788451083.869709",
+      "slackUrl": "https://adapty-team.slack.com/archives/C04SY70QZ0T/p1788451083869709",
+      "name": "Support sending Stripe/Paddle events to integrations",
+      "message": "Feature:<https://adaptyio.atlassian.net/browse/ADP-3824| Support sending Stripe/Paddle events to integrations>\nRelease: September 3, 2026\nDependencies: Adjust, Amplitude, Mixpanel and Firebase\nEffected areas: Events, Integrations\n\n<!subteam^S03KC9S1QMC> <!subteam^S07BZPQDBUJ> <!subteam^S03KM96DV0U> <@U05QELDHUUX>\n\nSup, team - Stripe and Paddle purchases just landed in Adjust, Amplitude, Mixpanel and Firebase! :credit_card: :chart_with_upwards_trend:\n\nUntil today a Paddle purchase reached only AppsFlyer, Webhooks and PostHog, and no web purchase reached Adjust at all. Now both web stores send purchase events to all seven integrations, using the buyer’s mobile origin for attribution: install from an ad, pay on the website, and the purchase shows up next to the install in Adjust or Amplitude.\n\n• Paddle now works in Amplitude, Mixpanel and Firebase the same way Stripe does, through separate Paddle keys in the integration settings\n• Adjust gets web purchases for the first time, tied to the same device and campaign as the install\n\nWho this is for: any customer with a web checkout, especially Stripe/Paddle apps on Adjust or AppsFlyer.\n\n:warning: Paddle keys are not optional - empty key, dropped event. Adjust, AppsFlyer and Firebase skip buyers who never opened the app (no device ID). Facebook and custom stores are not in this release yet.\n\nHuge kudos to: <@U0AQZG23D62> <@U0ACSQAKJA1>\n\nP.S: I believe Josh from Wave and others who asked this feature will be very happy about it, <!subteam^S07BZPQDBUJ> please let them know :heart_on_fire:",
+      "releaseDate": "2026-09-03",
+      "thread": [
+        {
+          "userId": "U07J9LKBQ5U",
+          "userName": "Yurii Kleimenov",
+          "text": "Feature:<https://adaptyio.atlassian.net/browse/ADP-3824| Support sending Stripe/Paddle events to integrations>\nRelease: September 3, 2026\nDependencies: Adjust, Amplitude, Mixpanel and Firebase\nEffected areas: Events, Integrations\n\n<!subteam^S03KC9S1QMC> <!subteam^S07BZPQDBUJ> <!subteam^S03KM96DV0U> <@U05QELDHUUX>\n\nSup, team - Stripe and Paddle purchases just landed in Adjust, Amplitude, Mixpanel and Firebase! :credit_card: :chart_with_upwards_trend:\n\nUntil today a Paddle purchase reached only AppsFlyer, Webhooks and PostHog, and no web purchase reached Adjust at all. Now both web stores send purchase events to all seven integrations, using the buyer’s mobile origin for attribution: install from an ad, pay on the website, and the purchase shows up next to the install in Adjust or Amplitude.\n\n• Paddle now works in Amplitude, Mixpanel and Firebase the same way Stripe does, through separate Paddle keys in the integration settings\n• Adjust gets web purchases for the first time, tied to the same device and campaign as the install\n\nWho this is for: any customer with a web checkout, especially Stripe/Paddle apps on Adjust or AppsFlyer.\n\n:warning: Paddle keys are not optional - empty key, dropped event. Adjust, AppsFlyer and Firebase skip buyers who never opened the app (no device ID). Facebook and custom stores are not in this release yet.\n\nHuge kudos to: <@U0AQZG23D62> <@U0ACSQAKJA1>\n\nP.S: I believe Josh from Wave and others who asked this feature will be very happy about it, <!subteam^S07BZPQDBUJ> please let them know :heart_on_fire:",
+          "date": "2026-09-03T15:58:03.869Z",
+          "images": []
+        },
+        {
+          "userId": "U03Q2R7AGLA",
+          "userName": "Amina Magomedova",
+          "text": "Nice, thank you so much!",
+          "date": "2026-09-03T16:03:30.685Z",
+          "images": []
+        },
+        {
+          "userId": "U03Q2R7AGLA",
+          "userName": "Amina Magomedova",
+          "text": "<!subteam^S08SPG466BX> I know some of your clients have been waiting for this feature, please check and inform them properly",
+          "date": "2026-09-03T16:04:23.070Z",
+          "images": []
+        },
+        {
+          "userId": "U07H1ESAH6K",
+          "userName": "Sofia Pikuleva",
+          "text": "did we already add it in the docs?",
+          "date": "2026-09-03T16:14:20.339Z",
+          "images": []
+        },
+        {
+          "userId": "U07AUQLQUJX",
+          "userName": "Aleksandr Smirnov",
+          "text": "<@U07J9LKBQ5U> hey! thank you for the info\ndo we get it right that there will be a further queue (incl FB Ads, Braze, etc. ?)",
+          "date": "2026-09-03T16:15:19.252Z",
+          "images": []
+        },
+        {
+          "userId": "U07J9LKBQ5U",
+          "userName": "Yurii Kleimenov",
+          "text": "Yep for other integrations let’s stick to Q4 \n\n<@U07H1ESAH6K> I think we didn't updated them yet but we’re in progress. ",
+          "date": "2026-09-03T16:22:43.871Z",
+          "images": []
+        },
+        {
+          "userId": "U08QUJMN0UV",
+          "userName": "Elina Andreeva",
+          "text": "<@U07H1ESAH6K> docs for Adjust: <https://adapty.io/docs/adjust#web-purchases-stripe-and-paddle|adapty.io/docs/adjust#…>\nas for the other doc updates — there are some, but no separate sections",
+          "date": "2026-09-03T18:10:47.028Z",
+          "images": []
+        }
+      ],
+      "content": "[Yurii Kleimenov]: Feature:<https://adaptyio.atlassian.net/browse/ADP-3824| Support sending Stripe/Paddle events to integrations>\nRelease: September 3, 2026\nDependencies: Adjust, Amplitude, Mixpanel and Firebase\nEffected areas: Events, Integrations\n\n<!subteam^S03KC9S1QMC> <!subteam^S07BZPQDBUJ> <!subteam^S03KM96DV0U> <@U05QELDHUUX>\n\nSup, team - Stripe and Paddle purchases just landed in Adjust, Amplitude, Mixpanel and Firebase! :credit_card: :chart_with_upwards_trend:\n\nUntil today a Paddle purchase reached only AppsFlyer, Webhooks and PostHog, and no web purchase reached Adjust at all. Now both web stores send purchase events to all seven integrations, using the buyer’s mobile origin for attribution: install from an ad, pay on the website, and the purchase shows up next to the install in Adjust or Amplitude.\n\n• Paddle now works in Amplitude, Mixpanel and Firebase the same way Stripe does, through separate Paddle keys in the integration settings\n• Adjust gets web purchases for the first time, tied to the same device and campaign as the install\n\nWho this is for: any customer with a web checkout, especially Stripe/Paddle apps on Adjust or AppsFlyer.\n\n:warning: Paddle keys are not optional - empty key, dropped event. Adjust, AppsFlyer and Firebase skip buyers who never opened the app (no device ID). Facebook and custom stores are not in this release yet.\n\nHuge kudos to: <@U0AQZG23D62> <@U0ACSQAKJA1>\n\nP.S: I believe Josh from Wave and others who asked this feature will be very happy about it, <!subteam^S07BZPQDBUJ> please let them know :heart_on_fire:\n\n[Amina Magomedova]: Nice, thank you so much!\n\n[Amina Magomedova]: <!subteam^S08SPG466BX> I know some of your clients have been waiting for this feature, please check and inform them properly\n\n[Sofia Pikuleva]: did we already add it in the docs?\n\n[Aleksandr Smirnov]: <@U07J9LKBQ5U> hey! thank you for the info\ndo we get it right that there will be a further queue (incl FB Ads, Braze, etc. ?)\n\n[Yurii Kleimenov]: Yep for other integrations let’s stick to Q4 \n\n<@U07H1ESAH6K> I think we didn't updated them yet but we’re in progress. \n\n[Elina Andreeva]: <@U07H1ESAH6K> docs for Adjust: <https://adapty.io/docs/adjust#web-purchases-stripe-and-paddle|adapty.io/docs/adjust#…>\nas for the other doc updates — there are some, but no separate sections",
+      "matchingReplies": [],
+      "hasTeamMention": true,
+      "images": []
+    },
     {
       "id": "1788335111.097629",
       "slackUrl": "https://adapty-team.slack.com/archives/C04SY70QZ0T/p1788335111097629",
@@ -778,12 +840,30 @@
           "text": "<@U0ASWP97F61> Hi, the latest version of the model is applied to all cohorts, regardless of age.",
           "date": "2026-08-25T09:23:14.622Z",
           "images": []
+        },
+        {
+          "userId": "U08917H1C5B",
+          "userName": "Vitaly Kuzmin",
+          "text": "Hey <@U0ABX9WPC5V>!\nCould you take a look to see how this is possible? Or is this expected behavior for this cohort?\nCompany `c151b4eb-cced-4ff4-99ad-9181e8422d2c`, app: `dbeb046e-4d73-4bca-bbb2-2285abd5009c` BloodPressure",
+          "date": "2026-09-03T11:59:41.635Z",
+          "images": [
+            "https://files.slack.com/files-pri/T9HDDB78Q-F0BU9PGTQ6B/image.png"
+          ]
+        },
+        {
+          "userId": "U0ABX9WPC5V",
+          "userName": "Artem Sorokin",
+          "text": "<@U08917H1C5B> hey, will do tomorrow! If I had to guess the reason for the small LTV growth, it's probably that the cohort has a very high churn rate at P2",
+          "date": "2026-09-03T12:13:22.278Z",
+          "images": []
         }
       ],
-      "content": "[Artem Sorokin]: *We've significantly upgraded our prediction model in cohorts*\n\nRelease: August 17\nAffected areas: Analytics (Cohorts)\n\nHighlights:\n• 2–3× more accurate predictions, with especially large gains for young cohorts in their first month.\n• Added predictions for lifetime subscriptions and one-time purchases, consistent with recurring subscriptions.\n• Predictions now kick in at just 30 subscriptions, down from 100.\nUnder the hood, it remains a fully interpretable model: it learns revenue and subscriber gains between consecutive day-checkpoints from the start of each cohort, with careful calibration and a few tricks in between.\n\nKudos to <@U0AJS52CDS4>\n\n[Artem Sorokin]: Heads-up for the <!subteam^S07BZPQDBUJ>: some predictions shift significantly (20%+), mostly upward.\n\nWhy predictions can shift:\n• The new model better captures conversions that don't happen close to the install date. The size of the shift strongly correlates with cohort age: younger cohorts change most, while for older cohorts the two models converge to almost zero difference.\n• Lifetime subscriptions and one-time purchases used to show actual revenue as the prediction. Now they grow the same way other products do.\nAlso FYI, first predictions are available once the install period has fully elapsed and the longest possible trial from that period has had time to convert.\n\n[Mike Gorokhov]: <!subteam^S086DJEQEUE> fyi\n\n[Marina Trypolskaya]: <@U0AGF7L13L5> pls take it for our competitor analyses\n\n[Artem Rukavishnikov]: I will take it, I am responsible for those\nOh and yes really cool update\n\n[Melike Sezer]: Hi <@U0ABX9WPC5V> will this be the final update on cohorts/LTV predictions? Some clients are asking because last time they used Adapty for their marketing spend based on the LTV predictions, the predictions were updated and it was a difficult conversation to handle. Now they want to make sure this one is final.\n\n[Artem Sorokin]: <@U0A266T9SJE> Hi, there are lots of small/technical updates happening all the time, and those will keep coming. As for bigger updates that could shift predictions more noticeably, we do have some preliminary plans to improve predictions for less typical cohorts and for apps without much historical data.\n\nWe only ship a big change once we see a clear improvement, so overall I'm not sure it's a good idea for a client to plan around our updates.\n\n[Melike Sezer]: `I'm not sure it's a good idea for a client to plan around our updates.`\nTheir concern is that if they treat our predictions as the source of truth with ~10% deviation again, another major update could significantly change their profitability targets. This could also make it difficult for them to confidently invest in marketing based on our predictions\nWhen I asked last time, you mentioned there would be one more major update, so I assumed this was it. I completely understand that we’ll keep making smaller improvements, but the update at the beginning of summer changed predictions by 30 to 40% for some of their cohorts, which is quite significant.\nIt would be great if we could communicate that this will be the last major update for a while and that future updates should have a smaller impact. <https://adapty-team.slack.com/archives/C04355A7VTN/p1783957004833969?thread_ts=1783950976.224999&amp;cid=C04355A7VTN|https://adapty-team.slack.com/archives/C04355A7VTN/p1783957004833969?thread_ts=1783950976.224999&amp;cid=C04355A7VTN>\n\n[Artem Sorokin]: The model meets our ambitious metric targets in general, but there's still room for improvement for some cohorts/apps, so work will definitely happen there. I'm pretty sure predictions won't change as much as with the April update, though, when we completely replaced the old model. Still, some clients may notice a difference.\n\nI agree that fluctuating predictions can be an issue, and we have some ideas on how to reduce friction there in the future.\n\n[Melike Sezer]: Thank you :pray::skin-tone-3: <@U0ABX9WPC5V> it would be great if you could let us know when you’re planning a major or mid-sized update, so we can proactively inform our more cautious clients.\n\n[Artem Sorokin]: Right now, there's an update planned for mid-to-late September. It's technical and should barely affect prediction numbers, but testing is still pending.\n\n[Stella Zhao]: Hi <@U0ABX9WPC5V> Forwarding a question from a client: will this forecast update recalculate historical data, or will it only apply to new installs going forward?\n\n[Artem Sorokin]: <@U0ASWP97F61> Hi, the latest version of the model is applied to all cohorts, regardless of age.",
+      "content": "[Artem Sorokin]: *We've significantly upgraded our prediction model in cohorts*\n\nRelease: August 17\nAffected areas: Analytics (Cohorts)\n\nHighlights:\n• 2–3× more accurate predictions, with especially large gains for young cohorts in their first month.\n• Added predictions for lifetime subscriptions and one-time purchases, consistent with recurring subscriptions.\n• Predictions now kick in at just 30 subscriptions, down from 100.\nUnder the hood, it remains a fully interpretable model: it learns revenue and subscriber gains between consecutive day-checkpoints from the start of each cohort, with careful calibration and a few tricks in between.\n\nKudos to <@U0AJS52CDS4>\n\n[Artem Sorokin]: Heads-up for the <!subteam^S07BZPQDBUJ>: some predictions shift significantly (20%+), mostly upward.\n\nWhy predictions can shift:\n• The new model better captures conversions that don't happen close to the install date. The size of the shift strongly correlates with cohort age: younger cohorts change most, while for older cohorts the two models converge to almost zero difference.\n• Lifetime subscriptions and one-time purchases used to show actual revenue as the prediction. Now they grow the same way other products do.\nAlso FYI, first predictions are available once the install period has fully elapsed and the longest possible trial from that period has had time to convert.\n\n[Mike Gorokhov]: <!subteam^S086DJEQEUE> fyi\n\n[Marina Trypolskaya]: <@U0AGF7L13L5> pls take it for our competitor analyses\n\n[Artem Rukavishnikov]: I will take it, I am responsible for those\nOh and yes really cool update\n\n[Melike Sezer]: Hi <@U0ABX9WPC5V> will this be the final update on cohorts/LTV predictions? Some clients are asking because last time they used Adapty for their marketing spend based on the LTV predictions, the predictions were updated and it was a difficult conversation to handle. Now they want to make sure this one is final.\n\n[Artem Sorokin]: <@U0A266T9SJE> Hi, there are lots of small/technical updates happening all the time, and those will keep coming. As for bigger updates that could shift predictions more noticeably, we do have some preliminary plans to improve predictions for less typical cohorts and for apps without much historical data.\n\nWe only ship a big change once we see a clear improvement, so overall I'm not sure it's a good idea for a client to plan around our updates.\n\n[Melike Sezer]: `I'm not sure it's a good idea for a client to plan around our updates.`\nTheir concern is that if they treat our predictions as the source of truth with ~10% deviation again, another major update could significantly change their profitability targets. This could also make it difficult for them to confidently invest in marketing based on our predictions\nWhen I asked last time, you mentioned there would be one more major update, so I assumed this was it. I completely understand that we’ll keep making smaller improvements, but the update at the beginning of summer changed predictions by 30 to 40% for some of their cohorts, which is quite significant.\nIt would be great if we could communicate that this will be the last major update for a while and that future updates should have a smaller impact. <https://adapty-team.slack.com/archives/C04355A7VTN/p1783957004833969?thread_ts=1783950976.224999&amp;cid=C04355A7VTN|https://adapty-team.slack.com/archives/C04355A7VTN/p1783957004833969?thread_ts=1783950976.224999&amp;cid=C04355A7VTN>\n\n[Artem Sorokin]: The model meets our ambitious metric targets in general, but there's still room for improvement for some cohorts/apps, so work will definitely happen there. I'm pretty sure predictions won't change as much as with the April update, though, when we completely replaced the old model. Still, some clients may notice a difference.\n\nI agree that fluctuating predictions can be an issue, and we have some ideas on how to reduce friction there in the future.\n\n[Melike Sezer]: Thank you :pray::skin-tone-3: <@U0ABX9WPC5V> it would be great if you could let us know when you’re planning a major or mid-sized update, so we can proactively inform our more cautious clients.\n\n[Artem Sorokin]: Right now, there's an update planned for mid-to-late September. It's technical and should barely affect prediction numbers, but testing is still pending.\n\n[Stella Zhao]: Hi <@U0ABX9WPC5V> Forwarding a question from a client: will this forecast update recalculate historical data, or will it only apply to new installs going forward?\n\n[Artem Sorokin]: <@U0ASWP97F61> Hi, the latest version of the model is applied to all cohorts, regardless of age.\n\n[Vitaly Kuzmin]: Hey <@U0ABX9WPC5V>!\nCould you take a look to see how this is possible? Or is this expected behavior for this cohort?\nCompany `c151b4eb-cced-4ff4-99ad-9181e8422d2c`, app: `dbeb046e-4d73-4bca-bbb2-2285abd5009c` BloodPressure\n\n[Artem Sorokin]: <@U08917H1C5B> hey, will do tomorrow! If I had to guess the reason for the small LTV growth, it's probably that the cohort has a very high churn rate at P2",
       "matchingReplies": [],
       "hasTeamMention": true,
-      "images": []
+      "images": [
+        "https://files.slack.com/files-pri/T9HDDB78Q-F0BU9PGTQ6B/image.png"
+      ]
     },
     {
       "id": "1786879913.137679",
@@ -1434,9 +1514,16 @@
           "images": [
             "https://files.slack.com/files-pri/T9HDDB78Q-F0BU1BYUZKR/image.png"
           ]
+        },
+        {
+          "userId": "U07J9LKBQ5U",
+          "userName": "Yurii Kleimenov",
+          "text": "Right on time! I just had a call with GlamAI and <@U07H1ESAH6K>, and they’ve been approved for Apple’s beta and will start using our solution! Let’s goooo! :rocket:\n\nWe all know how good they are at experimenting with paywalls, so we’ll probably see huge growth in both their GMV and ours. :crossed_fingers:\n\n<https://adapty-team.slack.com/archives/C047DLUK52B/p1788436269683429|https://adapty-team.slack.com/archives/C047DLUK52B/p1788436269683429>",
+          "date": "2026-09-03T13:59:24.649Z",
+          "images": []
         }
       ],
-      "content": "[Yurii Kleimenov]: Feature: <https://adaptyio.atlassian.net/browse/ADP-6445|Apple Retention Messaging API>\nRelease: July 30, 2026 (under feature flag)\nDependencies: None\nEffected areas: Dashboard (new section), Analytics\n\n<!subteam^S07BZPQDBUJ> <!subteam^S03KM96DV0U> <!subteam^S03KC9S1QMC> <@U05QELDHUUX> <@U06K36L6CTB>\n\nSup, team — it’s finally here (under feature flag BUT goes live this week)! :apple:\n\nWhen a subscriber taps Cancel Subscription in iOS Settings, Apple now shows _your_ message right in the cancellation sheet — a value reminder, a discount, or a plan switch — before the cancellation is confirmed. The one screen apps never owned, now addressable straight from Adapty:\n\n• on-device preview — see the message in Apple’s cancel sheet (light & dark) before it goes to review (Our benefit, only SW support)\n• AI localization — write once in English, auto translate fills every locale. (Our benefit, RC and SW doesn’t support this)\n• save-rate analytics — Shown / Saved / Save rate per message\nApple’s side is still in beta, so we’re shipping behind a feature flag purely as a safety net. Until it comes off, enable it in the browser console:\n`window.adapty_ff.set('retentionMessaging', true)` → Apple Retention Messaging appears in the left nav. Poke around and drop anything odd in this thread. <!subteam^S07BZPQDBUJ> You can provide it to your clients who are approved from Apple, most probably we’ll disable it this week and go LIVE!\n\n*Who this is for:* \nAny iOS subscription app that wants to lift retention with zero engineering - no endpoint, no SDK update. Sharpest fits: price-sensitive apps (discount at cancel intent), monthly + annual mixes (plan switch instead of churn).\n\n*What’s next:* \nAnalytics improvements (adding saved $ metric), then A/B testing if adoption is strong.\n\nDocs: <https://adapty.io/docs/retention-messaging|adapty.io/docs/retention-messaging>\n\nHuge kudos to <@U0ACSQAKJA1> <@U09AH7D2A4X> <@U0AQZG23D62> <@U0A3M160RB4> <@U08ASB4GYR4> <@U0AKC1Y09R8> :fire:\n\n[Dmitry Shestoperov]: if possible, I'd appreciate a short video demonstrating the confirm cancellation screen with a custom message/offer:pray:\n\n[Daniel Ridny]: <@U07J9LKBQ5U> QQ about Retention Messaging analytics from client - _No way to see this in AppStoreConnect, only API? Will we be able to observe the save rate % in Adapty?_\n\n[Yurii Kleimenov]: Yes, we’re displaying retention rate for each message\n\n[Daniel Ridny]: thanks <@U07J9LKBQ5U> can you share on this one _- No way to see this in AppStoreConnect, only API?_\n\n[Vlad Konkov]: hey <@U07J9LKBQ5U>\ni also have a <https://adapty-team.slack.com/archives/C0A6SCL1V5W/p1785861633705719?thread_ts=1785855306.384369&amp;cid=C0A6SCL1V5W|question> from a customer.\nactually, can we somehow highlight for the customers on how to set this thing up in their APC? at least add info to our docs?\nthe reason is not so many customers actually know they can try to retain their subscribers.\ni tried to <https://developer.apple.com/documentation/retentionmessaging|read the> documentation and was expecting \"go there – click here – upload image - write text\" and that's it\n\n[Yurii Kleimenov]: <@U07FGPCB4D9> This feature works out of the box on the Adapty side. Everything is configured, submitted, and uploaded to App Store Connect automatically. The client only needs to approve the beta from Apple’s side. We’ll have a call with the CS team, and I’ll explain everything in detail.\n\n[Yurii Kleimenov]: <https://adapty.io/docs/retention-messaging-setup>\n\n[Yurii Kleimenov]: IT’S LIVE FOR EVERYONE :fire:\n\n[Viktoriya Kirsanova]: <@U07J9LKBQ5U> plz check the relative thread in the sup internal\n\n[Dmitry Shestoperov]: cool, shooting up some posts on socials\n\n[Dmitry Shestoperov]: <https://lnkd.in/p/e9ax7vb5|lnkd.in/p/…>\n\nhit a like if you see this pls\n\n[Dmitry Shestoperov]: is this behavior expected without an actual Apple’s approval?\n\n[Viktoriya Kirsanova]: Doesn't seem so. One of the clients shared\n\n[Viktoriya Kirsanova]: <@U07J9LKBQ5U> Our docs say that Support can help customers request access to Apple's Retention Messaging API beta.\n\nSo am I understanding it right: we first ask the app name, then provide a link as described <https://adapty-team.slack.com/archives/C02PV5E6WAH/p1762292175188049?thread_ts=1753117401.006969&amp;cid=C02PV5E6WAH|here>(is it still relevant?) and share Apple's <https://developer.apple.com/documentation/retentionmessaging/|doc link>? Or is there smth else we should help with? Are there any specific instructions or wording we should use?\n\n[Yurii Kleimenov]: <https://adapty-team.slack.com/archives/C04SY70QZ0T/p1786025950287839?thread_ts=1785855723.569869&amp;cid=C04SY70QZ0T|https://adapty-team.slack.com/archives/C04SY70QZ0T/p1786025950287839?thread_ts=1785855723.569869&amp;cid=C04SY70QZ0T>\n\nThis behavior is sometimes observed in completely empty apps, both in Sandbox and Production. However, if you register an app from scratch, it doesn’t occur. We’ll add an appropriate empty state later.\n\n[Melike Sezer]: What's the steps would you suggest to follow in general <@U07J9LKBQ5U>? Should we proactively reach our clients to say give your app names if you haven't applied before and we provide URL?\nOr providing URL is irrelevant anymore?\n\n[Yurii Kleimenov]: This feature is still in beta on Apple’s side, so yes, you’ll need to provide the URLs for now - but we’ll be adding them to the dashboard soon (probably next week), so you won’t have to do it manually.\n\n[Melike Sezer]: Is there any benefit of us providing the URL? If they've requested it before from Apple?\n\n[Yurii Kleimenov]: No - if their app is already approved, they can just go to the dashboard and start the configuration. We’ll replace their URL ourselves.\n\n[Melike Sezer]: What happens if they had applied but didn't receive the approval? By applying via our URL, would it fasten the process?\n\n[Yurii Kleimenov]: I don’t think so, but they can try\n\n[Melike Sezer]: Thank you so much for the super quick answers :extreme-teamwork:\n\n[Vladislav Fediushin]: Hi there <@U07J9LKBQ5U>! Could you advise on adding Retention messaging API to apps that already have these messages on their side: will Adapty's messages replace them automatically, or the customer needs to turn off the existing messaging, then add Adapty's one?\n\n[Yurii Kleimenov]: We'll replace them automatically after clicking replace or configure button \n\n[Yurii Kleimenov]: <!subteam^S03KM96DV0U> <!subteam^S07BZPQDBUJ> Hey! We’ve released an update, and now configuring the Apple RM API URL is much easier. We check if the app hasn’t been approved for Apple’s beta yet and show this empty state with the URL. It’s also available under *App Settings → iOS SDK*.\n\n[Yurii Kleimenov]: \n\n[Dmitry Shestoperov]: that means clients don't need to request it from the support, right?\n\n[Yurii Kleimenov]: Yep\n\n[Melike Sezer]: `Poke around and drop anything odd in this thread`\nHow can I do this? I couldn't find a way to play around with it\n\n[Yurii Kleimenov]: <@U0A266T9SJE> You can add yourself to our Demo Company and play around with it in our Adapty Demo App. Here it is: <https://django-admin.adapty.io/admin/api/company/?q=a11c03ea-75e2-450f-8d42-67c3676aef7b|django-admin.adapty.io/admin/api/company?q=…>\n\n[Aleksandr Smirnov]: Hi <@U07J9LKBQ5U>!\nAre there any plans to lift the limit on the product dropdown for the RM API? It looks like only the first 10 products are shown at the moment. We’ve had feedback from Tappz about this: <https://adapty-team.slack.com/archives/C06T9TJQWNL/p1786391665279669?thread_ts=1786362185.165069&amp;cid=C06T9TJQWNL|https://adapty-team.slack.com/archives/C06T9TJQWNL/p1786391665279669?thread_ts=1786362185.165069&amp;cid=C06T9TJQWNL>\n\nI suspect the same request could apply to Virtual Currency. Showing the full list would help clients who have more than 10 products.\n\nEntering the names manually is a workable alternative, so this isn’t blocking anyone, but I wanted to pass the feedback along.\n\n[Aleksandr Smirnov]: <@U07J9LKBQ5U> trying gently again regarding :arrow_up:\n\n[Yurii Kleimenov]: Hey <@U07AUQLQUJX>, thanks for the feedback! I’ve added both tasks to backlog but without ETA for now.\n\n[Yurii Kleimenov]: 1. <https://adaptyio.atlassian.net/browse/ADP-7514|[BE] Virtual Currency - Расширить кол-во продуктов в ручке саджеста>\n2. <https://adaptyio.atlassian.net/browse/ADP-7513|[BE] Apple RM - Расширить кол-во продуктов в ручке саджеста>\n\n[Vlad Konkov]: Hey <@U07J9LKBQ5U>,\nWhen can we expect a call? Thanks\n\n[Berenay Yiğit]: One small edge case I noticed <@U07J9LKBQ5U>\nIf I search for a product by its name *without the punctuation marks*, it doesn’t return the product, even though searching for the same name with the punctuation works as expected.\n\nFor example, with the product shown in the screenshot, searching for `yearly` returns it normally, but searching for `yearly non` returns *“No options.”*\nI know this is a very small/rare edge case, but I wanted to flag it from a user-friendliness perspective — it has already caught me out, as well as an Enterprise client (Impala, `efdcd9a2-3f5c-4b6d-9864-c870eaadb5cc`).\nNot blocking, but thought it was worth dropping here while we’re poking around.\n\n[Yurii Kleimenov]: <@U09CTDGV18D> Thank you! We’ll put this in backlog and fix along with other small issues related to UI/UX in Apple RM API\n\n[Yurii Kleimenov]: <https://adaptyio.atlassian.net/browse/ADP-7724|adaptyio.atlassian.net/browse/ADP-7724>\n\n[Yurii Kleimenov]: <!subteam^S03KC9S1QMC> <!subteam^S07BZPQDBUJ> <@U9HDNS9S4> <@U9JU5J5RC> We’ve finally fixed displaying Apple RM API for our Sales Demo app.",
+      "content": "[Yurii Kleimenov]: Feature: <https://adaptyio.atlassian.net/browse/ADP-6445|Apple Retention Messaging API>\nRelease: July 30, 2026 (under feature flag)\nDependencies: None\nEffected areas: Dashboard (new section), Analytics\n\n<!subteam^S07BZPQDBUJ> <!subteam^S03KM96DV0U> <!subteam^S03KC9S1QMC> <@U05QELDHUUX> <@U06K36L6CTB>\n\nSup, team — it’s finally here (under feature flag BUT goes live this week)! :apple:\n\nWhen a subscriber taps Cancel Subscription in iOS Settings, Apple now shows _your_ message right in the cancellation sheet — a value reminder, a discount, or a plan switch — before the cancellation is confirmed. The one screen apps never owned, now addressable straight from Adapty:\n\n• on-device preview — see the message in Apple’s cancel sheet (light & dark) before it goes to review (Our benefit, only SW support)\n• AI localization — write once in English, auto translate fills every locale. (Our benefit, RC and SW doesn’t support this)\n• save-rate analytics — Shown / Saved / Save rate per message\nApple’s side is still in beta, so we’re shipping behind a feature flag purely as a safety net. Until it comes off, enable it in the browser console:\n`window.adapty_ff.set('retentionMessaging', true)` → Apple Retention Messaging appears in the left nav. Poke around and drop anything odd in this thread. <!subteam^S07BZPQDBUJ> You can provide it to your clients who are approved from Apple, most probably we’ll disable it this week and go LIVE!\n\n*Who this is for:* \nAny iOS subscription app that wants to lift retention with zero engineering - no endpoint, no SDK update. Sharpest fits: price-sensitive apps (discount at cancel intent), monthly + annual mixes (plan switch instead of churn).\n\n*What’s next:* \nAnalytics improvements (adding saved $ metric), then A/B testing if adoption is strong.\n\nDocs: <https://adapty.io/docs/retention-messaging|adapty.io/docs/retention-messaging>\n\nHuge kudos to <@U0ACSQAKJA1> <@U09AH7D2A4X> <@U0AQZG23D62> <@U0A3M160RB4> <@U08ASB4GYR4> <@U0AKC1Y09R8> :fire:\n\n[Dmitry Shestoperov]: if possible, I'd appreciate a short video demonstrating the confirm cancellation screen with a custom message/offer:pray:\n\n[Daniel Ridny]: <@U07J9LKBQ5U> QQ about Retention Messaging analytics from client - _No way to see this in AppStoreConnect, only API? Will we be able to observe the save rate % in Adapty?_\n\n[Yurii Kleimenov]: Yes, we’re displaying retention rate for each message\n\n[Daniel Ridny]: thanks <@U07J9LKBQ5U> can you share on this one _- No way to see this in AppStoreConnect, only API?_\n\n[Vlad Konkov]: hey <@U07J9LKBQ5U>\ni also have a <https://adapty-team.slack.com/archives/C0A6SCL1V5W/p1785861633705719?thread_ts=1785855306.384369&amp;cid=C0A6SCL1V5W|question> from a customer.\nactually, can we somehow highlight for the customers on how to set this thing up in their APC? at least add info to our docs?\nthe reason is not so many customers actually know they can try to retain their subscribers.\ni tried to <https://developer.apple.com/documentation/retentionmessaging|read the> documentation and was expecting \"go there – click here – upload image - write text\" and that's it\n\n[Yurii Kleimenov]: <@U07FGPCB4D9> This feature works out of the box on the Adapty side. Everything is configured, submitted, and uploaded to App Store Connect automatically. The client only needs to approve the beta from Apple’s side. We’ll have a call with the CS team, and I’ll explain everything in detail.\n\n[Yurii Kleimenov]: <https://adapty.io/docs/retention-messaging-setup>\n\n[Yurii Kleimenov]: IT’S LIVE FOR EVERYONE :fire:\n\n[Viktoriya Kirsanova]: <@U07J9LKBQ5U> plz check the relative thread in the sup internal\n\n[Dmitry Shestoperov]: cool, shooting up some posts on socials\n\n[Dmitry Shestoperov]: <https://lnkd.in/p/e9ax7vb5|lnkd.in/p/…>\n\nhit a like if you see this pls\n\n[Dmitry Shestoperov]: is this behavior expected without an actual Apple’s approval?\n\n[Viktoriya Kirsanova]: Doesn't seem so. One of the clients shared\n\n[Viktoriya Kirsanova]: <@U07J9LKBQ5U> Our docs say that Support can help customers request access to Apple's Retention Messaging API beta.\n\nSo am I understanding it right: we first ask the app name, then provide a link as described <https://adapty-team.slack.com/archives/C02PV5E6WAH/p1762292175188049?thread_ts=1753117401.006969&amp;cid=C02PV5E6WAH|here>(is it still relevant?) and share Apple's <https://developer.apple.com/documentation/retentionmessaging/|doc link>? Or is there smth else we should help with? Are there any specific instructions or wording we should use?\n\n[Yurii Kleimenov]: <https://adapty-team.slack.com/archives/C04SY70QZ0T/p1786025950287839?thread_ts=1785855723.569869&amp;cid=C04SY70QZ0T|https://adapty-team.slack.com/archives/C04SY70QZ0T/p1786025950287839?thread_ts=1785855723.569869&amp;cid=C04SY70QZ0T>\n\nThis behavior is sometimes observed in completely empty apps, both in Sandbox and Production. However, if you register an app from scratch, it doesn’t occur. We’ll add an appropriate empty state later.\n\n[Melike Sezer]: What's the steps would you suggest to follow in general <@U07J9LKBQ5U>? Should we proactively reach our clients to say give your app names if you haven't applied before and we provide URL?\nOr providing URL is irrelevant anymore?\n\n[Yurii Kleimenov]: This feature is still in beta on Apple’s side, so yes, you’ll need to provide the URLs for now - but we’ll be adding them to the dashboard soon (probably next week), so you won’t have to do it manually.\n\n[Melike Sezer]: Is there any benefit of us providing the URL? If they've requested it before from Apple?\n\n[Yurii Kleimenov]: No - if their app is already approved, they can just go to the dashboard and start the configuration. We’ll replace their URL ourselves.\n\n[Melike Sezer]: What happens if they had applied but didn't receive the approval? By applying via our URL, would it fasten the process?\n\n[Yurii Kleimenov]: I don’t think so, but they can try\n\n[Melike Sezer]: Thank you so much for the super quick answers :extreme-teamwork:\n\n[Vladislav Fediushin]: Hi there <@U07J9LKBQ5U>! Could you advise on adding Retention messaging API to apps that already have these messages on their side: will Adapty's messages replace them automatically, or the customer needs to turn off the existing messaging, then add Adapty's one?\n\n[Yurii Kleimenov]: We'll replace them automatically after clicking replace or configure button \n\n[Yurii Kleimenov]: <!subteam^S03KM96DV0U> <!subteam^S07BZPQDBUJ> Hey! We’ve released an update, and now configuring the Apple RM API URL is much easier. We check if the app hasn’t been approved for Apple’s beta yet and show this empty state with the URL. It’s also available under *App Settings → iOS SDK*.\n\n[Yurii Kleimenov]: \n\n[Dmitry Shestoperov]: that means clients don't need to request it from the support, right?\n\n[Yurii Kleimenov]: Yep\n\n[Melike Sezer]: `Poke around and drop anything odd in this thread`\nHow can I do this? I couldn't find a way to play around with it\n\n[Yurii Kleimenov]: <@U0A266T9SJE> You can add yourself to our Demo Company and play around with it in our Adapty Demo App. Here it is: <https://django-admin.adapty.io/admin/api/company/?q=a11c03ea-75e2-450f-8d42-67c3676aef7b|django-admin.adapty.io/admin/api/company?q=…>\n\n[Aleksandr Smirnov]: Hi <@U07J9LKBQ5U>!\nAre there any plans to lift the limit on the product dropdown for the RM API? It looks like only the first 10 products are shown at the moment. We’ve had feedback from Tappz about this: <https://adapty-team.slack.com/archives/C06T9TJQWNL/p1786391665279669?thread_ts=1786362185.165069&amp;cid=C06T9TJQWNL|https://adapty-team.slack.com/archives/C06T9TJQWNL/p1786391665279669?thread_ts=1786362185.165069&amp;cid=C06T9TJQWNL>\n\nI suspect the same request could apply to Virtual Currency. Showing the full list would help clients who have more than 10 products.\n\nEntering the names manually is a workable alternative, so this isn’t blocking anyone, but I wanted to pass the feedback along.\n\n[Aleksandr Smirnov]: <@U07J9LKBQ5U> trying gently again regarding :arrow_up:\n\n[Yurii Kleimenov]: Hey <@U07AUQLQUJX>, thanks for the feedback! I’ve added both tasks to backlog but without ETA for now.\n\n[Yurii Kleimenov]: 1. <https://adaptyio.atlassian.net/browse/ADP-7514|[BE] Virtual Currency - Расширить кол-во продуктов в ручке саджеста>\n2. <https://adaptyio.atlassian.net/browse/ADP-7513|[BE] Apple RM - Расширить кол-во продуктов в ручке саджеста>\n\n[Vlad Konkov]: Hey <@U07J9LKBQ5U>,\nWhen can we expect a call? Thanks\n\n[Berenay Yiğit]: One small edge case I noticed <@U07J9LKBQ5U>\nIf I search for a product by its name *without the punctuation marks*, it doesn’t return the product, even though searching for the same name with the punctuation works as expected.\n\nFor example, with the product shown in the screenshot, searching for `yearly` returns it normally, but searching for `yearly non` returns *“No options.”*\nI know this is a very small/rare edge case, but I wanted to flag it from a user-friendliness perspective — it has already caught me out, as well as an Enterprise client (Impala, `efdcd9a2-3f5c-4b6d-9864-c870eaadb5cc`).\nNot blocking, but thought it was worth dropping here while we’re poking around.\n\n[Yurii Kleimenov]: <@U09CTDGV18D> Thank you! We’ll put this in backlog and fix along with other small issues related to UI/UX in Apple RM API\n\n[Yurii Kleimenov]: <https://adaptyio.atlassian.net/browse/ADP-7724|adaptyio.atlassian.net/browse/ADP-7724>\n\n[Yurii Kleimenov]: <!subteam^S03KC9S1QMC> <!subteam^S07BZPQDBUJ> <@U9HDNS9S4> <@U9JU5J5RC> We’ve finally fixed displaying Apple RM API for our Sales Demo app.\n\n[Yurii Kleimenov]: Right on time! I just had a call with GlamAI and <@U07H1ESAH6K>, and they’ve been approved for Apple’s beta and will start using our solution! Let’s goooo! :rocket:\n\nWe all know how good they are at experimenting with paywalls, so we’ll probably see huge growth in both their GMV and ours. :crossed_fingers:\n\n<https://adapty-team.slack.com/archives/C047DLUK52B/p1788436269683429|https://adapty-team.slack.com/archives/C047DLUK52B/p1788436269683429>",
       "matchingReplies": [
         {
           "userId": "U06JP8BJFEV",
@@ -2619,152 +2706,6 @@
       ],
       "hasTeamMention": false,
       "images": []
-    },
-    {
-      "id": "1781261275.436209",
-      "slackUrl": "https://adapty-team.slack.com/archives/C04SY70QZ0T/p1781261275436209",
-      "name": ":rotating_light: shipping alert :rotating_light: our first *Apple Ads Agent* drops to prod THIS MONTH :apple::robot_face",
-      "message": ":rotating_light: shipping alert :rotating_light: our first *Apple Ads Agent* drops to prod THIS MONTH :apple::robot_face:\n\nbasically a ChatGPT/Claude/UA Manager that actually knows your Apple Ads account — campaigns, keywords, budgets, tap → sub. you ask, it just… knows. new coworker, never sleeps, never takes vacation:keep_thinkin':.\n\nscreenshot below :point_down: (numbers blurred, trade secrets and all :shushing_face:)\n\nneed your big-brain energy before launch:\n> :one: *NAME THIS THING* — it deserves better than “AI Agent”. my nominees: Adaptly, Max ~Kamenkov~ AI, AsapAI, AIkut…\n> :two: *what would YOU ask it on day 1?* you’re the client, 47 campaigns, one coffee :coffee: — what do you fire at it first?\nbest ideas ship with the product :trophy: thread’s open :thread::point_down:",
-      "releaseDate": "2026-06-12",
-      "thread": [
-        {
-          "userId": "U03J8UXUDPF",
-          "userName": "Mykola Martynovets",
-          "text": ":rotating_light: shipping alert :rotating_light: our first *Apple Ads Agent* drops to prod THIS MONTH :apple::robot_face:\n\nbasically a ChatGPT/Claude/UA Manager that actually knows your Apple Ads account — campaigns, keywords, budgets, tap → sub. you ask, it just… knows. new coworker, never sleeps, never takes vacation:keep_thinkin':.\n\nscreenshot below :point_down: (numbers blurred, trade secrets and all :shushing_face:)\n\nneed your big-brain energy before launch:\n> :one: *NAME THIS THING* — it deserves better than “AI Agent”. my nominees: Adaptly, Max ~Kamenkov~ AI, AsapAI, AIkut…\n> :two: *what would YOU ask it on day 1?* you’re the client, 47 campaigns, one coffee :coffee: — what do you fire at it first?\nbest ideas ship with the product :trophy: thread’s open :thread::point_down:",
-          "date": "2026-06-12T10:47:55.436Z",
-          "images": [
-            "https://files.slack.com/files-pri/T9HDDB78Q-F0B9YSKCLEP/image.png"
-          ]
-        },
-        {
-          "userId": "U08ASB4GYR4",
-          "userName": "Roman Miasnikov",
-          "text": "AdBuddy :eye-in-speech-bubble:",
-          "date": "2026-06-12T10:50:50.970Z",
-          "images": []
-        },
-        {
-          "userId": "U03J8UXUDPF",
-          "userName": "Mykola Martynovets",
-          "text": "<@U08ASB4GYR4> cool idea, thx!\n<https://en.wikipedia.org/wiki/Buddy_(rapper)>",
-          "date": "2026-06-12T10:52:14.744Z",
-          "images": [
-            "https://files.slack.com/files-pri/T9HDDB78Q-F0BA36E4RE2/screenshot_2026-06-12_at_1.51.32___pm.png"
-          ]
-        },
-        {
-          "userId": "U0A4F2RSMQQ",
-          "userName": "Denis Dolbilin",
-          "text": "PommeAi\nits apple from french, its silly but has some resemblance to claude, in the sense that it is also french ",
-          "date": "2026-06-12T11:04:04.019Z",
-          "images": []
-        },
-        {
-          "userId": "U07H1ESAH6K",
-          "userName": "Sofia Pikuleva",
-          "text": "I have slogan for this tool: сrunch your insights like apples",
-          "date": "2026-06-12T11:08:27.292Z",
-          "images": []
-        },
-        {
-          "userId": "U03J8UXUDPF",
-          "userName": "Mykola Martynovets",
-          "text": "quick variations :think-and-smoke:",
-          "date": "2026-06-12T11:12:04.918Z",
-          "images": [
-            "https://files.slack.com/files-pri/T9HDDB78Q-F0BA5B1B5UJ/screenshot_2026-06-12_at_2.05.20___pm.png",
-            "https://files.slack.com/files-pri/T9HDDB78Q-F0BA90XPP7W/screenshot_2026-06-12_at_2.11.21___pm.png"
-          ]
-        },
-        {
-          "userId": "U080G9FHV50",
-          "userName": "Mirazim Tolipov",
-          "text": "apple ~ads~ intelligence",
-          "date": "2026-06-12T11:14:19.869Z",
-          "images": [
-            "https://files.slack.com/files-pri/T9HDDB78Q-F0BA3AGCPHC/shot_2026-06-12-11-gahiuhgo-13.48_2x.png"
-          ]
-        },
-        {
-          "userId": "U03J8UXUDPF",
-          "userName": "Mykola Martynovets",
-          "text": "Oh, and one more thing we’re toying with :eyes:\nYou’d get to pick your agent’s personality - choose a character, and it chats with you and delivers reports in their style.\nPicture Trump-mode breaking down why your ROAS drop in Iran, or why your keywords keep getting pricier in the US. :us:",
-          "date": "2026-06-12T11:15:02.583Z",
-          "images": []
-        },
-        {
-          "userId": "U07H1ESAH6K",
-          "userName": "Sofia Pikuleva",
-          "text": "Apple Pie\nASA insights, served hot and fresh.\nWe cook ASA insights. You take the win.\n\nI need to go for lunch",
-          "date": "2026-06-12T11:35:55.091Z",
-          "images": [
-            "https://files.slack.com/files-pri/T9HDDB78Q-F0BA7B7JYMP/a-img.jpg"
-          ]
-        },
-        {
-          "userId": "U03J8UXUDPF",
-          "userName": "Mykola Martynovets",
-          "text": "Apple pie pineapple fine",
-          "date": "2026-06-12T11:48:19.364Z",
-          "images": []
-        },
-        {
-          "userId": "U9JU5J5RC",
-          "userName": "Vitaly Davydov",
-          "text": "Odopti",
-          "date": "2026-06-12T12:00:20.215Z",
-          "images": []
-        },
-        {
-          "userId": "U9JU5J5RC",
-          "userName": "Vitaly Davydov",
-          "text": "I'd ask about competitor metrics/try to hack data from our db",
-          "date": "2026-06-12T12:01:46.267Z",
-          "images": []
-        },
-        {
-          "userId": "U03J8UXUDPF",
-          "userName": "Mykola Martynovets",
-          "text": "&gt; I’d ask about competitor metrics/try to hack data from our db\nAuf, provocative!",
-          "date": "2026-06-12T12:03:01.787Z",
-          "images": []
-        }
-      ],
-      "content": "[Mykola Martynovets]: :rotating_light: shipping alert :rotating_light: our first *Apple Ads Agent* drops to prod THIS MONTH :apple::robot_face:\n\nbasically a ChatGPT/Claude/UA Manager that actually knows your Apple Ads account — campaigns, keywords, budgets, tap → sub. you ask, it just… knows. new coworker, never sleeps, never takes vacation:keep_thinkin':.\n\nscreenshot below :point_down: (numbers blurred, trade secrets and all :shushing_face:)\n\nneed your big-brain energy before launch:\n> :one: *NAME THIS THING* — it deserves better than “AI Agent”. my nominees: Adaptly, Max ~Kamenkov~ AI, AsapAI, AIkut…\n> :two: *what would YOU ask it on day 1?* you’re the client, 47 campaigns, one coffee :coffee: — what do you fire at it first?\nbest ideas ship with the product :trophy: thread’s open :thread::point_down:\n\n[Roman Miasnikov]: AdBuddy :eye-in-speech-bubble:\n\n[Mykola Martynovets]: <@U08ASB4GYR4> cool idea, thx!\n<https://en.wikipedia.org/wiki/Buddy_(rapper)>\n\n[Denis Dolbilin]: PommeAi\nits apple from french, its silly but has some resemblance to claude, in the sense that it is also french \n\n[Sofia Pikuleva]: I have slogan for this tool: сrunch your insights like apples\n\n[Mykola Martynovets]: quick variations :think-and-smoke:\n\n[Mirazim Tolipov]: apple ~ads~ intelligence\n\n[Mykola Martynovets]: Oh, and one more thing we’re toying with :eyes:\nYou’d get to pick your agent’s personality - choose a character, and it chats with you and delivers reports in their style.\nPicture Trump-mode breaking down why your ROAS drop in Iran, or why your keywords keep getting pricier in the US. :us:\n\n[Sofia Pikuleva]: Apple Pie\nASA insights, served hot and fresh.\nWe cook ASA insights. You take the win.\n\nI need to go for lunch\n\n[Mykola Martynovets]: Apple pie pineapple fine\n\n[Vitaly Davydov]: Odopti\n\n[Vitaly Davydov]: I'd ask about competitor metrics/try to hack data from our db\n\n[Mykola Martynovets]: &gt; I’d ask about competitor metrics/try to hack data from our db\nAuf, provocative!",
-      "matchingReplies": [
-        {
-          "userId": "U03J8UXUDPF",
-          "userName": "Mykola Martynovets",
-          "text": "<@U08ASB4GYR4> cool idea, thx!\n<https://en.wikipedia.org/wiki/Buddy_(rapper)>",
-          "date": "2026-06-12T10:52:14.744Z",
-          "images": [
-            "https://files.slack.com/files-pri/T9HDDB78Q-F0BA36E4RE2/screenshot_2026-06-12_at_1.51.32___pm.png"
-          ]
-        },
-        {
-          "userId": "U03J8UXUDPF",
-          "userName": "Mykola Martynovets",
-          "text": "Oh, and one more thing we’re toying with :eyes:\nYou’d get to pick your agent’s personality - choose a character, and it chats with you and delivers reports in their style.\nPicture Trump-mode breaking down why your ROAS drop in Iran, or why your keywords keep getting pricier in the US. :us:",
-          "date": "2026-06-12T11:15:02.583Z",
-          "images": []
-        },
-        {
-          "userId": "U03J8UXUDPF",
-          "userName": "Mykola Martynovets",
-          "text": "&gt; I’d ask about competitor metrics/try to hack data from our db\nAuf, provocative!",
-          "date": "2026-06-12T12:03:01.787Z",
-          "images": []
-        }
-      ],
-      "hasTeamMention": false,
-      "images": [
-        "https://files.slack.com/files-pri/T9HDDB78Q-F0B9YSKCLEP/image.png",
-        "https://files.slack.com/files-pri/T9HDDB78Q-F0BA36E4RE2/screenshot_2026-06-12_at_1.51.32___pm.png",
-        "https://files.slack.com/files-pri/T9HDDB78Q-F0BA5B1B5UJ/screenshot_2026-06-12_at_2.05.20___pm.png",
-        "https://files.slack.com/files-pri/T9HDDB78Q-F0BA90XPP7W/screenshot_2026-06-12_at_2.11.21___pm.png",
-        "https://files.slack.com/files-pri/T9HDDB78Q-F0BA3AGCPHC/shot_2026-06-12-11-gahiuhgo-13.48_2x.png",
-        "https://files.slack.com/files-pri/T9HDDB78Q-F0BA7B7JYMP/a-img.jpg"
-      ]
     }
   ]
 }
