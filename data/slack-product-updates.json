@@ -1,7 +1,109 @@
 {
-  "syncedAt": "2026-09-08T00:43:23.951Z",
+  "syncedAt": "2026-09-09T00:42:56.066Z",
   "channel": "#product-release",
   "entries": [
+    {
+      "id": "1788857193.204589",
+      "slackUrl": "https://adapty-team.slack.com/archives/C04SY70QZ0T/p1788857193204589",
+      "name": "hey team!",
+      "message": "hey team!\ncouple of Flow Builder updates. today events are connected with analytics :bar_chart:, so customers get not only screens, but data to use it for their growth :rocket:\n\nUPD: NO SDK UPDATE NEEDED!!!\n\n• *app owners can finally receive the user inputs (reading/superunlimited/mobiversite and many others requested that)*\n    ◦ now our SDK sends you the info about any input on the users' side within the flow - quiz answer, \"name\" input or even date/time picked on the date of birth\n    ◦ <https://adapty.io/docs/ios-flow-input|learn more here>\n• *app owners now receive the screen views data as well*\n    ◦ it means that now it's possible to create a funnel analytics on clients' side. we don't offer it in the dashboard yet, but for those who want - they can catch these events and store them on their own to build the funnel analytics etc. something that many clients also requested (sweatcoin for example) \n    ◦ <https://adapty.io/docs/ios-flow-screen-views|learn more here >\n• *we added grouping by flow in revenue dashboards (see screenshot). something that clients with live flows asked about*\n    ◦ now growth persons can really define which flow brought the revenue and distinguish this data to make conclusions. \n    ◦ <https://adapty.io/docs/flow-metrics#filter-analytics-by-flow|learn more>\nhuge thanks for PS team too, for highlighting some ideas. and <@U0BB5T65SF6> <@U033TEH5HSA> and QA team for making these tasks possible",
+      "releaseDate": "2026-09-08",
+      "thread": [
+        {
+          "userId": "U08EVBTE69E",
+          "userName": "Maxim Borisik",
+          "text": "hey team!\ncouple of Flow Builder updates. today events are connected with analytics :bar_chart:, so customers get not only screens, but data to use it for their growth :rocket:\n\nUPD: NO SDK UPDATE NEEDED!!!\n\n• *app owners can finally receive the user inputs (reading/superunlimited/mobiversite and many others requested that)*\n    ◦ now our SDK sends you the info about any input on the users' side within the flow - quiz answer, \"name\" input or even date/time picked on the date of birth\n    ◦ <https://adapty.io/docs/ios-flow-input|learn more here>\n• *app owners now receive the screen views data as well*\n    ◦ it means that now it's possible to create a funnel analytics on clients' side. we don't offer it in the dashboard yet, but for those who want - they can catch these events and store them on their own to build the funnel analytics etc. something that many clients also requested (sweatcoin for example) \n    ◦ <https://adapty.io/docs/ios-flow-screen-views|learn more here >\n• *we added grouping by flow in revenue dashboards (see screenshot). something that clients with live flows asked about*\n    ◦ now growth persons can really define which flow brought the revenue and distinguish this data to make conclusions. \n    ◦ <https://adapty.io/docs/flow-metrics#filter-analytics-by-flow|learn more>\nhuge thanks for PS team too, for highlighting some ideas. and <@U0BB5T65SF6> <@U033TEH5HSA> and QA team for making these tasks possible",
+          "date": "2026-09-08T08:46:33.204Z",
+          "images": [
+            "https://files.slack.com/files-pri/T9HDDB78Q-F0C04DG91LM/image.png"
+          ]
+        },
+        {
+          "userId": "U08EVBTE69E",
+          "userName": "Maxim Borisik",
+          "text": "<!subteam^S07BZPQDBUJ> <@U034A27SVHC> <@U0AGF7L13L5> fyi!\nyou for sure wanted it\n\n<!subteam^S03KM96DV0U> as well",
+          "date": "2026-09-08T08:46:54.202Z",
+          "images": []
+        },
+        {
+          "userId": "U034A27SVHC",
+          "userName": "Artem Rukavishnikov",
+          "text": "Outrageous\nWait, and it does not require an SDK update too?",
+          "date": "2026-09-08T08:49:55.356Z",
+          "images": []
+        },
+        {
+          "userId": "U09EG3DK4US",
+          "userName": "Polina Ishimbaeva",
+          "text": "Huge kudos, team!!! You are on fire! :fire:\n\n<@U08EVBTE69E> Max, quick question - do we have any ETAs for screen views on the dash? probably any possibility to incotrporate this to skill? just dropping some ideas, thank you!",
+          "date": "2026-09-08T09:10:22.611Z",
+          "images": []
+        },
+        {
+          "userId": "U08QUJMN0UV",
+          "userName": "Elina Andreeva",
+          "text": "<@U034A27SVHC> it doesn't require an SDK update, but they need to re-publish their existing flows to start sending events from them ",
+          "date": "2026-09-08T09:24:03.322Z",
+          "images": []
+        },
+        {
+          "userId": "U08EVBTE69E",
+          "userName": "Maxim Borisik",
+          "text": "no SDK update! magic.",
+          "date": "2026-09-08T09:40:55.392Z",
+          "images": []
+        },
+        {
+          "userId": "U08EVBTE69E",
+          "userName": "Maxim Borisik",
+          "text": "Hey hey Polina! well not yet, let's target q4. but i think with this new functionality clients can build analytics on their own. which is half-good already!\n\nabout skill - good idea btw, we'll think about it with Elina",
+          "date": "2026-09-08T09:42:03.817Z",
+          "images": []
+        },
+        {
+          "userId": "U0AAUD3KHT7",
+          "userName": "David",
+          "text": "*\"reading/superunlimited/mobiversite\"*\n*<@U08EVBTE69E>* What does that mean?",
+          "date": "2026-09-08T10:17:57.060Z",
+          "images": []
+        },
+        {
+          "userId": "U08EVBTE69E",
+          "userName": "Maxim Borisik",
+          "text": "clients who wanted it!",
+          "date": "2026-09-08T10:18:44.668Z",
+          "images": []
+        },
+        {
+          "userId": "U08EVBTE69E",
+          "userName": "Maxim Borisik",
+          "text": "big guys on the market",
+          "date": "2026-09-08T10:18:51.736Z",
+          "images": []
+        }
+      ],
+      "content": "[Maxim Borisik]: hey team!\ncouple of Flow Builder updates. today events are connected with analytics :bar_chart:, so customers get not only screens, but data to use it for their growth :rocket:\n\nUPD: NO SDK UPDATE NEEDED!!!\n\n• *app owners can finally receive the user inputs (reading/superunlimited/mobiversite and many others requested that)*\n    ◦ now our SDK sends you the info about any input on the users' side within the flow - quiz answer, \"name\" input or even date/time picked on the date of birth\n    ◦ <https://adapty.io/docs/ios-flow-input|learn more here>\n• *app owners now receive the screen views data as well*\n    ◦ it means that now it's possible to create a funnel analytics on clients' side. we don't offer it in the dashboard yet, but for those who want - they can catch these events and store them on their own to build the funnel analytics etc. something that many clients also requested (sweatcoin for example) \n    ◦ <https://adapty.io/docs/ios-flow-screen-views|learn more here >\n• *we added grouping by flow in revenue dashboards (see screenshot). something that clients with live flows asked about*\n    ◦ now growth persons can really define which flow brought the revenue and distinguish this data to make conclusions. \n    ◦ <https://adapty.io/docs/flow-metrics#filter-analytics-by-flow|learn more>\nhuge thanks for PS team too, for highlighting some ideas. and <@U0BB5T65SF6> <@U033TEH5HSA> and QA team for making these tasks possible\n\n[Maxim Borisik]: <!subteam^S07BZPQDBUJ> <@U034A27SVHC> <@U0AGF7L13L5> fyi!\nyou for sure wanted it\n\n<!subteam^S03KM96DV0U> as well\n\n[Artem Rukavishnikov]: Outrageous\nWait, and it does not require an SDK update too?\n\n[Polina Ishimbaeva]: Huge kudos, team!!! You are on fire! :fire:\n\n<@U08EVBTE69E> Max, quick question - do we have any ETAs for screen views on the dash? probably any possibility to incotrporate this to skill? just dropping some ideas, thank you!\n\n[Elina Andreeva]: <@U034A27SVHC> it doesn't require an SDK update, but they need to re-publish their existing flows to start sending events from them \n\n[Maxim Borisik]: no SDK update! magic.\n\n[Maxim Borisik]: Hey hey Polina! well not yet, let's target q4. but i think with this new functionality clients can build analytics on their own. which is half-good already!\n\nabout skill - good idea btw, we'll think about it with Elina\n\n[David]: *\"reading/superunlimited/mobiversite\"*\n*<@U08EVBTE69E>* What does that mean?\n\n[Maxim Borisik]: clients who wanted it!\n\n[Maxim Borisik]: big guys on the market",
+      "matchingReplies": [
+        {
+          "userId": "U08EVBTE69E",
+          "userName": "Maxim Borisik",
+          "text": "<!subteam^S07BZPQDBUJ> <@U034A27SVHC> <@U0AGF7L13L5> fyi!\nyou for sure wanted it\n\n<!subteam^S03KM96DV0U> as well",
+          "date": "2026-09-08T08:46:54.202Z",
+          "images": []
+        },
+        {
+          "userId": "U08EVBTE69E",
+          "userName": "Maxim Borisik",
+          "text": "Hey hey Polina! well not yet, let's target q4. but i think with this new functionality clients can build analytics on their own. which is half-good already!\n\nabout skill - good idea btw, we'll think about it with Elina",
+          "date": "2026-09-08T09:42:03.817Z",
+          "images": []
+        }
+      ],
+      "hasTeamMention": true,
+      "images": [
+        "https://files.slack.com/files-pri/T9HDDB78Q-F0C04DG91LM/image.png"
+      ]
+    },
     {
       "id": "1788451083.869709",
       "slackUrl": "https://adapty-team.slack.com/archives/C04SY70QZ0T/p1788451083869709",
@@ -64,9 +166,16 @@
           "text": "FINALLY YES",
           "date": "2026-09-04T07:20:30.702Z",
           "images": []
+        },
+        {
+          "userId": "U0A266T9SJE",
+          "userName": "Melike Sezer",
+          "text": "Hey <@U07J9LKBQ5U> client has asked _\"For in-app purchases, Adapty deducts the 30% store commission and sends net revenue to Adjust. What does it send for web purchases? And can we configure that?\"_",
+          "date": "2026-09-08T12:45:58.487Z",
+          "images": []
         }
       ],
-      "content": "[Yurii Kleimenov]: Feature:<https://adaptyio.atlassian.net/browse/ADP-3824| Support sending Stripe/Paddle events to integrations>\nRelease: September 3, 2026\nDependencies: Adjust, Amplitude, Mixpanel and Firebase\nEffected areas: Events, Integrations\n\n<!subteam^S03KC9S1QMC> <!subteam^S07BZPQDBUJ> <!subteam^S03KM96DV0U> <@U05QELDHUUX>\n\nSup, team - Stripe and Paddle purchases just landed in Adjust, Amplitude, Mixpanel and Firebase! :credit_card: :chart_with_upwards_trend:\n\nUntil today a Paddle purchase reached only AppsFlyer, Webhooks and PostHog, and no web purchase reached Adjust at all. Now both web stores send purchase events to all seven integrations, using the buyer’s mobile origin for attribution: install from an ad, pay on the website, and the purchase shows up next to the install in Adjust or Amplitude.\n\n• Paddle now works in Amplitude, Mixpanel and Firebase the same way Stripe does, through separate Paddle keys in the integration settings\n• Adjust gets web purchases for the first time, tied to the same device and campaign as the install\n\nWho this is for: any customer with a web checkout, especially Stripe/Paddle apps on Adjust or AppsFlyer.\n\n:warning: Paddle keys are not optional - empty key, dropped event. Adjust, AppsFlyer and Firebase skip buyers who never opened the app (no device ID). Facebook and custom stores are not in this release yet.\n\nHuge kudos to: <@U0AQZG23D62> <@U0ACSQAKJA1>\n\nP.S: I believe Josh from Wave and others who asked this feature will be very happy about it, <!subteam^S07BZPQDBUJ> please let them know :heart_on_fire:\n\n[Amina Magomedova]: Nice, thank you so much!\n\n[Amina Magomedova]: <!subteam^S08SPG466BX> I know some of your clients have been waiting for this feature, please check and inform them properly\n\n[Sofia Pikuleva]: did we already add it in the docs?\n\n[Aleksandr Smirnov]: <@U07J9LKBQ5U> hey! thank you for the info\ndo we get it right that there will be a further queue (incl FB Ads, Braze, etc. ?)\n\n[Yurii Kleimenov]: Yep for other integrations let’s stick to Q4 \n\n<@U07H1ESAH6K> I think we didn't updated them yet but we’re in progress. \n\n[Elina Andreeva]: <@U07H1ESAH6K> docs for Adjust: <https://adapty.io/docs/adjust#web-purchases-stripe-and-paddle|adapty.io/docs/adjust#…>\nas for the other doc updates — there are some, but no separate sections\n\n[Vitaly Davydov]: FINALLY YES",
+      "content": "[Yurii Kleimenov]: Feature:<https://adaptyio.atlassian.net/browse/ADP-3824| Support sending Stripe/Paddle events to integrations>\nRelease: September 3, 2026\nDependencies: Adjust, Amplitude, Mixpanel and Firebase\nEffected areas: Events, Integrations\n\n<!subteam^S03KC9S1QMC> <!subteam^S07BZPQDBUJ> <!subteam^S03KM96DV0U> <@U05QELDHUUX>\n\nSup, team - Stripe and Paddle purchases just landed in Adjust, Amplitude, Mixpanel and Firebase! :credit_card: :chart_with_upwards_trend:\n\nUntil today a Paddle purchase reached only AppsFlyer, Webhooks and PostHog, and no web purchase reached Adjust at all. Now both web stores send purchase events to all seven integrations, using the buyer’s mobile origin for attribution: install from an ad, pay on the website, and the purchase shows up next to the install in Adjust or Amplitude.\n\n• Paddle now works in Amplitude, Mixpanel and Firebase the same way Stripe does, through separate Paddle keys in the integration settings\n• Adjust gets web purchases for the first time, tied to the same device and campaign as the install\n\nWho this is for: any customer with a web checkout, especially Stripe/Paddle apps on Adjust or AppsFlyer.\n\n:warning: Paddle keys are not optional - empty key, dropped event. Adjust, AppsFlyer and Firebase skip buyers who never opened the app (no device ID). Facebook and custom stores are not in this release yet.\n\nHuge kudos to: <@U0AQZG23D62> <@U0ACSQAKJA1>\n\nP.S: I believe Josh from Wave and others who asked this feature will be very happy about it, <!subteam^S07BZPQDBUJ> please let them know :heart_on_fire:\n\n[Amina Magomedova]: Nice, thank you so much!\n\n[Amina Magomedova]: <!subteam^S08SPG466BX> I know some of your clients have been waiting for this feature, please check and inform them properly\n\n[Sofia Pikuleva]: did we already add it in the docs?\n\n[Aleksandr Smirnov]: <@U07J9LKBQ5U> hey! thank you for the info\ndo we get it right that there will be a further queue (incl FB Ads, Braze, etc. ?)\n\n[Yurii Kleimenov]: Yep for other integrations let’s stick to Q4 \n\n<@U07H1ESAH6K> I think we didn't updated them yet but we’re in progress. \n\n[Elina Andreeva]: <@U07H1ESAH6K> docs for Adjust: <https://adapty.io/docs/adjust#web-purchases-stripe-and-paddle|adapty.io/docs/adjust#…>\nas for the other doc updates — there are some, but no separate sections\n\n[Vitaly Davydov]: FINALLY YES\n\n[Melike Sezer]: Hey <@U07J9LKBQ5U> client has asked _\"For in-app purchases, Adapty deducts the 30% store commission and sends net revenue to Adjust. What does it send for web purchases? And can we configure that?\"_",
       "matchingReplies": [],
       "hasTeamMention": true,
       "images": []
@@ -2685,48 +2794,6 @@
       "images": [
         "https://files.slack.com/files-pri/T9HDDB78Q-F0BFY5LA3HB/image.png"
       ]
-    },
-    {
-      "id": "1781276508.777609",
-      "slackUrl": "https://adapty-team.slack.com/archives/C04SY70QZ0T/p1781276508777609",
-      "name": "Hi there! I suppose sometimes core-related posts will look less like a cool new feature for customers. So, this is a sto",
-      "message": "Hi there! I suppose sometimes core-related posts will look less like a cool new feature for customers. So, this is a story about an invisible defensive feature: the kind that hopefully no customer ever notices, because its whole purpose is to prevent bad things from happening in the background.\nIt was implemented and delivered a sprint ago, but I believe that late is better than never.\n\n*What's the deal?* \nThe main problem this feature revolves around is \"Forwarding event loops\".\nAdapty allows its users to forward events into third-party systems for further processing and that's perfectly fine - many customers, especially big ones use it. However, the issue is that we have no control over what our customers do in other systems in terms of event routing. And rarely, but very painfully we encountered situations where some of our customers were configuring third-party systems in a way that forwarded events further... back to Adapty.\nEasy to guess, what happened next: reforward back to them, receive again, repeat until (almost) forever (but most likely until something breaks under the load). So given that, if someone configured back-forwarding and experienced a spike of events (say a lot of transactions in a short period of time) - we're cooked, just like Spider-Man's \"no you!\" meme but on high speed. Why is it bad? Well, apart from useless load on our metal, we had already experienced a few painful downtimes of the integrations pipeline because of it.\n\n*Aha, and what you did?*\nTo prevent this, we added a small layer of event analysis on the fly for the integrations flow: before forwarding, we decompose an event in a store-based manner (separately App Store v1, v2 and Play Store), combine some of its data into `deduplication key` - like a passport for an event and store it in memory for an hour at the moment of forwarding. If an App Store / Play Store related event is about to be forwarded and its deduplication key is already present, we simply do nothing integration-wise. That's it.\nWe shipped it in two stages: for the first week, we just added a few logs/notifications around such suspicious passengers, to see if it worked at all. Surprising discoveries around it were that even at this stage there were a few really small customers with such loops. Only around 1-2 transactions per day, but still buzzing every minute or so on constant ping-ponging events back and forth. The second stage, obviously, was about transforming alerts into strict bans on forwarding.\nWe haven’t had a real forward-storm since then, which is good news, but the mechanism is already catching small misconfigurations.\n\nBig thanks go to <@U04B26DSWMA> for implementing the first version, <@U0AR243M9T9> for the initial review, and <@UNWFN144R> for the review battle that helped make this thing nice and robust.\n\n*P.S.* We’re a bit behind with this feed, but next week we’ll catch up and share a few more recent releases - about integrations, billing, and the initial work on Virtual Currencies and Apple Retention Messaging API.",
-      "releaseDate": "2026-06-12",
-      "thread": [
-        {
-          "userId": "U09L1SS03B8",
-          "userName": "Yakov Shabalkov",
-          "text": "Hi there! I suppose sometimes core-related posts will look less like a cool new feature for customers. So, this is a story about an invisible defensive feature: the kind that hopefully no customer ever notices, because its whole purpose is to prevent bad things from happening in the background.\nIt was implemented and delivered a sprint ago, but I believe that late is better than never.\n\n*What's the deal?* \nThe main problem this feature revolves around is \"Forwarding event loops\".\nAdapty allows its users to forward events into third-party systems for further processing and that's perfectly fine - many customers, especially big ones use it. However, the issue is that we have no control over what our customers do in other systems in terms of event routing. And rarely, but very painfully we encountered situations where some of our customers were configuring third-party systems in a way that forwarded events further... back to Adapty.\nEasy to guess, what happened next: reforward back to them, receive again, repeat until (almost) forever (but most likely until something breaks under the load). So given that, if someone configured back-forwarding and experienced a spike of events (say a lot of transactions in a short period of time) - we're cooked, just like Spider-Man's \"no you!\" meme but on high speed. Why is it bad? Well, apart from useless load on our metal, we had already experienced a few painful downtimes of the integrations pipeline because of it.\n\n*Aha, and what you did?*\nTo prevent this, we added a small layer of event analysis on the fly for the integrations flow: before forwarding, we decompose an event in a store-based manner (separately App Store v1, v2 and Play Store), combine some of its data into `deduplication key` - like a passport for an event and store it in memory for an hour at the moment of forwarding. If an App Store / Play Store related event is about to be forwarded and its deduplication key is already present, we simply do nothing integration-wise. That's it.\nWe shipped it in two stages: for the first week, we just added a few logs/notifications around such suspicious passengers, to see if it worked at all. Surprising discoveries around it were that even at this stage there were a few really small customers with such loops. Only around 1-2 transactions per day, but still buzzing every minute or so on constant ping-ponging events back and forth. The second stage, obviously, was about transforming alerts into strict bans on forwarding.\nWe haven’t had a real forward-storm since then, which is good news, but the mechanism is already catching small misconfigurations.\n\nBig thanks go to <@U04B26DSWMA> for implementing the first version, <@U0AR243M9T9> for the initial review, and <@UNWFN144R> for the review battle that helped make this thing nice and robust.\n\n*P.S.* We’re a bit behind with this feed, but next week we’ll catch up and share a few more recent releases - about integrations, billing, and the initial work on Virtual Currencies and Apple Retention Messaging API.",
-          "date": "2026-06-12T15:01:48.777Z",
-          "images": []
-        },
-        {
-          "userId": "U08EVBTE69E",
-          "userName": "Maxim Borisik",
-          "text": "that's so cool Yakov!! well done team",
-          "date": "2026-06-12T15:24:24.318Z",
-          "images": []
-        },
-        {
-          "userId": "U08EVBTE69E",
-          "userName": "Maxim Borisik",
-          "text": "if possible to add a visual scheme before/after that'd be super nice",
-          "date": "2026-06-12T15:25:02.619Z",
-          "images": []
-        }
-      ],
-      "content": "[Yakov Shabalkov]: Hi there! I suppose sometimes core-related posts will look less like a cool new feature for customers. So, this is a story about an invisible defensive feature: the kind that hopefully no customer ever notices, because its whole purpose is to prevent bad things from happening in the background.\nIt was implemented and delivered a sprint ago, but I believe that late is better than never.\n\n*What's the deal?* \nThe main problem this feature revolves around is \"Forwarding event loops\".\nAdapty allows its users to forward events into third-party systems for further processing and that's perfectly fine - many customers, especially big ones use it. However, the issue is that we have no control over what our customers do in other systems in terms of event routing. And rarely, but very painfully we encountered situations where some of our customers were configuring third-party systems in a way that forwarded events further... back to Adapty.\nEasy to guess, what happened next: reforward back to them, receive again, repeat until (almost) forever (but most likely until something breaks under the load). So given that, if someone configured back-forwarding and experienced a spike of events (say a lot of transactions in a short period of time) - we're cooked, just like Spider-Man's \"no you!\" meme but on high speed. Why is it bad? Well, apart from useless load on our metal, we had already experienced a few painful downtimes of the integrations pipeline because of it.\n\n*Aha, and what you did?*\nTo prevent this, we added a small layer of event analysis on the fly for the integrations flow: before forwarding, we decompose an event in a store-based manner (separately App Store v1, v2 and Play Store), combine some of its data into `deduplication key` - like a passport for an event and store it in memory for an hour at the moment of forwarding. If an App Store / Play Store related event is about to be forwarded and its deduplication key is already present, we simply do nothing integration-wise. That's it.\nWe shipped it in two stages: for the first week, we just added a few logs/notifications around such suspicious passengers, to see if it worked at all. Surprising discoveries around it were that even at this stage there were a few really small customers with such loops. Only around 1-2 transactions per day, but still buzzing every minute or so on constant ping-ponging events back and forth. The second stage, obviously, was about transforming alerts into strict bans on forwarding.\nWe haven’t had a real forward-storm since then, which is good news, but the mechanism is already catching small misconfigurations.\n\nBig thanks go to <@U04B26DSWMA> for implementing the first version, <@U0AR243M9T9> for the initial review, and <@UNWFN144R> for the review battle that helped make this thing nice and robust.\n\n*P.S.* We’re a bit behind with this feed, but next week we’ll catch up and share a few more recent releases - about integrations, billing, and the initial work on Virtual Currencies and Apple Retention Messaging API.\n\n[Maxim Borisik]: that's so cool Yakov!! well done team\n\n[Maxim Borisik]: if possible to add a visual scheme before/after that'd be super nice",
-      "matchingReplies": [
-        {
-          "userId": "U08EVBTE69E",
-          "userName": "Maxim Borisik",
-          "text": "if possible to add a visual scheme before/after that'd be super nice",
-          "date": "2026-06-12T15:25:02.619Z",
-          "images": []
-        }
-      ],
-      "hasTeamMention": false,
-      "images": []
     }
   ]
 }
