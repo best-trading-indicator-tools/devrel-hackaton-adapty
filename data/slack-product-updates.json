@@ -1,7 +1,95 @@
 {
-  "syncedAt": "2026-09-23T00:40:53.661Z",
+  "syncedAt": "2026-09-24T00:42:16.226Z",
   "channel": "#product-release",
   "entries": [
+    {
+      "id": "1790182068.691609",
+      "slackUrl": "https://adapty-team.slack.com/archives/C04SY70QZ0T/p1790182068691609",
+      "name": "hey team! :eyes:",
+      "message": "hey team! :eyes:\n\ncouple of flow builder updates:\n• *we removed \"Beta\" tag* :chefs-kiss:\n    ◦ something that we think now reflects the current state of the product\n        ▪︎ *we passed almost 1 million dollars (778k to be clear)* through the flow builder screens and plan to pass even more. also couple of success cases are coming soon.\n        ▪︎ we do have 91 company with transactions, with almost 400 flows live :rocket:\n    ◦ for transparency - we definitely still have some problems and bugs, but the good thing is that we identified most them and we are now improving the product week by week (a message above as an example). \n        ▪︎ we basically built a figma-like product in a short period of time and for sure there are million of cases to test&amp;fix. team focuses on that and I am happy with their approach\n• *we've released the cross-placement AB tests for Flow builder!* :clap:\n    ◦ something that is available in old builder for a long time, and we now added it for flow builder as well. I do know couple of names who wanted it badly \n    ◦ to get to the parity with the legacy builder - \"custom tags\" and \"different images by light/dark theme\" are coming soon too \n• *we've added the \"sliding sheet\" element as well*\n    ◦ it has the same concept as \"overlay\" in the legacy builder. background doesn't move, the content does (a short video attached)\n    ◦ it's needed for a better migration from the old builder, as well as unlocking different variations for screens building",
+      "releaseDate": "2026-09-23",
+      "thread": [
+        {
+          "userId": "U08EVBTE69E",
+          "userName": "Maxim Borisik",
+          "text": "hey team! :eyes:\n\ncouple of flow builder updates:\n• *we removed \"Beta\" tag* :chefs-kiss:\n    ◦ something that we think now reflects the current state of the product\n        ▪︎ *we passed almost 1 million dollars (778k to be clear)* through the flow builder screens and plan to pass even more. also couple of success cases are coming soon.\n        ▪︎ we do have 91 company with transactions, with almost 400 flows live :rocket:\n    ◦ for transparency - we definitely still have some problems and bugs, but the good thing is that we identified most them and we are now improving the product week by week (a message above as an example). \n        ▪︎ we basically built a figma-like product in a short period of time and for sure there are million of cases to test&amp;fix. team focuses on that and I am happy with their approach\n• *we've released the cross-placement AB tests for Flow builder!* :clap:\n    ◦ something that is available in old builder for a long time, and we now added it for flow builder as well. I do know couple of names who wanted it badly \n    ◦ to get to the parity with the legacy builder - \"custom tags\" and \"different images by light/dark theme\" are coming soon too \n• *we've added the \"sliding sheet\" element as well*\n    ◦ it has the same concept as \"overlay\" in the legacy builder. background doesn't move, the content does (a short video attached)\n    ◦ it's needed for a better migration from the old builder, as well as unlocking different variations for screens building",
+          "date": "2026-09-23T16:47:48.691Z",
+          "images": [
+            "https://files.slack.com/files-pri/T9HDDB78Q-F0C3WLBLCBG/image.png",
+            "https://files.slack.com/files-pri/T9HDDB78Q-F0C4298PD44/image.png",
+            "https://files.slack.com/files-pri/T9HDDB78Q-F0C3HD4L3U7/image.png"
+          ]
+        },
+        {
+          "userId": "U08EVBTE69E",
+          "userName": "Maxim Borisik",
+          "text": "<!subteam^S07BZPQDBUJ> <!subteam^S03KM96DV0U> fyi",
+          "date": "2026-09-23T16:47:54.879Z",
+          "images": []
+        },
+        {
+          "userId": "U03J8UXUDPF",
+          "userName": "Mykola Martynovets",
+          "text": "wow! Cool!",
+          "date": "2026-09-23T16:50:52.868Z",
+          "images": []
+        },
+        {
+          "userId": "U07F3ULE4MA",
+          "userName": "Darina Kobzar",
+          "text": "Congratulations <@U08EVBTE69E>!",
+          "date": "2026-09-23T16:51:45.932Z",
+          "images": []
+        },
+        {
+          "userId": "U07F3ULE4MA",
+          "userName": "Darina Kobzar",
+          "text": "One more question: what figures or data can we share with clients to explain that Flows is not on the Beta anymore? Can we use the ones shared here?\n        ▪︎ *we passed almost 1 million dollars* through the flow builder screens and plan to pass even more. also couple of success cases are coming soon.\n        ▪︎ we do have 91 company with transactions, with almost 400 flows live :rocket:\n",
+          "date": "2026-09-23T16:53:37.610Z",
+          "images": []
+        },
+        {
+          "userId": "U08EVBTE69E",
+          "userName": "Maxim Borisik",
+          "text": "i'd tweak the numbers a bit, and say that:\n• couple of millions $ pass via builder each month \n• almost 500 apps trust flow builder and actively make screens with it. many of them are big apps, with 100k+ MRR",
+          "date": "2026-09-23T16:55:37.233Z",
+          "images": []
+        },
+        {
+          "userId": "U090BDLA9JN",
+          "userName": "Dmitry Shestoperov",
+          "text": "&gt; almost 1 million dollars (778k to be clear)",
+          "date": "2026-09-23T17:12:22.764Z",
+          "images": [
+            "https://files.slack.com/files-pri/T9HDDB78Q-F0C3X57AF62/image.png"
+          ]
+        },
+        {
+          "userId": "U08EVBTE69E",
+          "userName": "Maxim Borisik",
+          "text": "naaah my man. trust me it will be in 5 days",
+          "date": "2026-09-23T17:14:26.506Z",
+          "images": []
+        }
+      ],
+      "content": "[Maxim Borisik]: hey team! :eyes:\n\ncouple of flow builder updates:\n• *we removed \"Beta\" tag* :chefs-kiss:\n    ◦ something that we think now reflects the current state of the product\n        ▪︎ *we passed almost 1 million dollars (778k to be clear)* through the flow builder screens and plan to pass even more. also couple of success cases are coming soon.\n        ▪︎ we do have 91 company with transactions, with almost 400 flows live :rocket:\n    ◦ for transparency - we definitely still have some problems and bugs, but the good thing is that we identified most them and we are now improving the product week by week (a message above as an example). \n        ▪︎ we basically built a figma-like product in a short period of time and for sure there are million of cases to test&amp;fix. team focuses on that and I am happy with their approach\n• *we've released the cross-placement AB tests for Flow builder!* :clap:\n    ◦ something that is available in old builder for a long time, and we now added it for flow builder as well. I do know couple of names who wanted it badly \n    ◦ to get to the parity with the legacy builder - \"custom tags\" and \"different images by light/dark theme\" are coming soon too \n• *we've added the \"sliding sheet\" element as well*\n    ◦ it has the same concept as \"overlay\" in the legacy builder. background doesn't move, the content does (a short video attached)\n    ◦ it's needed for a better migration from the old builder, as well as unlocking different variations for screens building\n\n[Maxim Borisik]: <!subteam^S07BZPQDBUJ> <!subteam^S03KM96DV0U> fyi\n\n[Mykola Martynovets]: wow! Cool!\n\n[Darina Kobzar]: Congratulations <@U08EVBTE69E>!\n\n[Darina Kobzar]: One more question: what figures or data can we share with clients to explain that Flows is not on the Beta anymore? Can we use the ones shared here?\n        ▪︎ *we passed almost 1 million dollars* through the flow builder screens and plan to pass even more. also couple of success cases are coming soon.\n        ▪︎ we do have 91 company with transactions, with almost 400 flows live :rocket:\n\n\n[Maxim Borisik]: i'd tweak the numbers a bit, and say that:\n• couple of millions $ pass via builder each month \n• almost 500 apps trust flow builder and actively make screens with it. many of them are big apps, with 100k+ MRR\n\n[Dmitry Shestoperov]: &gt; almost 1 million dollars (778k to be clear)\n\n[Maxim Borisik]: naaah my man. trust me it will be in 5 days",
+      "matchingReplies": [
+        {
+          "userId": "U08EVBTE69E",
+          "userName": "Maxim Borisik",
+          "text": "i'd tweak the numbers a bit, and say that:\n• couple of millions $ pass via builder each month \n• almost 500 apps trust flow builder and actively make screens with it. many of them are big apps, with 100k+ MRR",
+          "date": "2026-09-23T16:55:37.233Z",
+          "images": []
+        }
+      ],
+      "hasTeamMention": true,
+      "images": [
+        "https://files.slack.com/files-pri/T9HDDB78Q-F0C3WLBLCBG/image.png",
+        "https://files.slack.com/files-pri/T9HDDB78Q-F0C4298PD44/image.png",
+        "https://files.slack.com/files-pri/T9HDDB78Q-F0C3HD4L3U7/image.png",
+        "https://files.slack.com/files-pri/T9HDDB78Q-F0C3X57AF62/image.png"
+      ]
+    },
     {
       "id": "1789030917.132219",
       "slackUrl": "https://adapty-team.slack.com/archives/C04SY70QZ0T/p1789030917132219",
@@ -2481,97 +2569,6 @@
         }
       ],
       "hasTeamMention": true,
-      "images": []
-    },
-    {
-      "id": "1783952997.742879",
-      "slackUrl": "https://adapty-team.slack.com/archives/C04SY70QZ0T/p1783952997742879",
-      "name": "hey team!",
-      "message": "hey team!\na short reminder - why we are going to win the market with the flow builder\n\n<@U08914ZA6A1> did some good research comparing our screen load times with Superwall's\n\nI think any additional comments are just not needed here. we also plan to use it in our campaigns so prospects can finally see what they're missing by not using Adapty\n:popcorn:",
-      "releaseDate": "2026-07-13",
-      "thread": [
-        {
-          "userId": "U08EVBTE69E",
-          "userName": "Maxim Borisik",
-          "text": "hey team!\na short reminder - why we are going to win the market with the flow builder\n\n<@U08914ZA6A1> did some good research comparing our screen load times with Superwall's\n\nI think any additional comments are just not needed here. we also plan to use it in our campaigns so prospects can finally see what they're missing by not using Adapty\n:popcorn:",
-          "date": "2026-07-13T14:29:57.742Z",
-          "images": []
-        },
-        {
-          "userId": "U03DFSCP8CW",
-          "userName": "Mike Gorokhov",
-          "text": "Looks good, and nice to see our Flow Builder loading faster. Could we add a few details to make sure this is a fair comparison?\n\nWas it a cold start or warm start? Was any cache involved? Were both apps using the same environment, prod vs testю Also, is SDK initialization done under similar conditions in the app code, and are both apps loading comparable content and assets?\n\nIf we have several runs with the same setup, ideally median or p95, this would make the result much stronger.",
-          "date": "2026-07-14T09:01:13.761Z",
-          "images": []
-        },
-        {
-          "userId": "U08EVBTE69E",
-          "userName": "Maxim Borisik",
-          "text": "thanks Mike. i can say that yes, it was a fair comparison (checked with Greg before publishing)\n\n<@U08914ZA6A1> any comments here on what Mike wants to know?",
-          "date": "2026-07-14T09:02:27.379Z",
-          "images": []
-        },
-        {
-          "userId": "U090T4UNBUK",
-          "userName": "Stanislav Mayorov",
-          "text": "<@U03DFSCP8CW> Great questions! Cold start, no cache.\n<@U08914ZA6A1> did you use a debug or prod scheme for xcode build?",
-          "date": "2026-07-14T10:21:30.195Z",
-          "images": []
-        },
-        {
-          "userId": "U08914ZA6A1",
-          "userName": "Gregory Komissarov",
-          "text": "<@U090T4UNBUK> here is the build and deploy script\n```#!/bin/bash\nset -e\n\nDEVICE_ID=\"00008130-00080DA60C31001C\"\nPROJECT=\"$(dirname \"$0\")/Basic.xcodeproj\"\nSCHEME=\"Basic\"\nAPP_PATH=~/Library/Developer/Xcode/DerivedData/Basic-higysqwnklkibnbznjjhzcoqsmvb/Build/Products/Debug-iphoneos/Superwall-SwiftUI.app\n\necho \"Building...\"\nxcodebuild -project \"$PROJECT\" \\\n  -scheme \"$SCHEME\" \\\n  -destination \"platform=iOS,id=$DEVICE_ID\" \\\n  build\n\necho \"Installing...\"\nxcrun devicectl device install app \\\n  --device \"$DEVICE_ID\" \\\n  \"$APP_PATH\"\n\necho \"Done.\"```",
-          "date": "2026-07-14T10:38:15.817Z",
-          "images": []
-        },
-        {
-          "userId": "U090T4UNBUK",
-          "userName": "Stanislav Mayorov",
-          "text": "<@U08914ZA6A1> I think it’s a debug scheme\n&gt; Debug-iphoneos",
-          "date": "2026-07-14T10:40:44.493Z",
-          "images": []
-        },
-        {
-          "userId": "U08914ZA6A1",
-          "userName": "Gregory Komissarov",
-          "text": "<@U03DFSCP8CW>\n1. Cold starts\n2. Full remove before the cold start. Only CDN cache I assume b/c I was made a series of tests for both vendors.\n3. Both SDKs were initialised in the MainActor, code copied from each vendor examples from oficial repo.\n4. Both apps loading the same content: two onboarding screens with one image and the same text + 3rd paywall screen.",
-          "date": "2026-07-14T10:41:50.164Z",
-          "images": []
-        },
-        {
-          "userId": "U034A27SVHC",
-          "userName": "Artem Rukavishnikov",
-          "text": "Hey guys! I've managed to find the onboarding latency doc but not a flow builder one <https://app.notion.com/p/adapty/SDK-Onboardings-Paywalls-load-latency-comparison-2026-3961ca4355c380dd943cc41fce2602e6?pvs=26&amp;qid=1%3Ab0e272f4-6cc2-4663-8353-5c33e5c2473a%3A12|app.notion.com/p/adapty/…/SDK-Onboardings-Paywalls-load-latency-comparison-2026…?pvs=26&amp;…>\nWhere can we get the raw numbers/methodology for this research? Thanks!",
-          "date": "2026-07-30T04:31:17.074Z",
-          "images": []
-        },
-        {
-          "userId": "U08EVBTE69E",
-          "userName": "Maxim Borisik",
-          "text": "that's flow builder Artem",
-          "date": "2026-07-30T08:00:22.721Z",
-          "images": []
-        },
-        {
-          "userId": "U034A27SVHC",
-          "userName": "Artem Rukavishnikov",
-          "text": "Oh okay, I would never think from the doc itself\nThe numbers make sense then, though :slightly_smiling_face:\nThank you, Maxim!",
-          "date": "2026-07-30T08:15:58.982Z",
-          "images": []
-        }
-      ],
-      "content": "[Maxim Borisik]: hey team!\na short reminder - why we are going to win the market with the flow builder\n\n<@U08914ZA6A1> did some good research comparing our screen load times with Superwall's\n\nI think any additional comments are just not needed here. we also plan to use it in our campaigns so prospects can finally see what they're missing by not using Adapty\n:popcorn:\n\n[Mike Gorokhov]: Looks good, and nice to see our Flow Builder loading faster. Could we add a few details to make sure this is a fair comparison?\n\nWas it a cold start or warm start? Was any cache involved? Were both apps using the same environment, prod vs testю Also, is SDK initialization done under similar conditions in the app code, and are both apps loading comparable content and assets?\n\nIf we have several runs with the same setup, ideally median or p95, this would make the result much stronger.\n\n[Maxim Borisik]: thanks Mike. i can say that yes, it was a fair comparison (checked with Greg before publishing)\n\n<@U08914ZA6A1> any comments here on what Mike wants to know?\n\n[Stanislav Mayorov]: <@U03DFSCP8CW> Great questions! Cold start, no cache.\n<@U08914ZA6A1> did you use a debug or prod scheme for xcode build?\n\n[Gregory Komissarov]: <@U090T4UNBUK> here is the build and deploy script\n```#!/bin/bash\nset -e\n\nDEVICE_ID=\"00008130-00080DA60C31001C\"\nPROJECT=\"$(dirname \"$0\")/Basic.xcodeproj\"\nSCHEME=\"Basic\"\nAPP_PATH=~/Library/Developer/Xcode/DerivedData/Basic-higysqwnklkibnbznjjhzcoqsmvb/Build/Products/Debug-iphoneos/Superwall-SwiftUI.app\n\necho \"Building...\"\nxcodebuild -project \"$PROJECT\" \\\n  -scheme \"$SCHEME\" \\\n  -destination \"platform=iOS,id=$DEVICE_ID\" \\\n  build\n\necho \"Installing...\"\nxcrun devicectl device install app \\\n  --device \"$DEVICE_ID\" \\\n  \"$APP_PATH\"\n\necho \"Done.\"```\n\n[Stanislav Mayorov]: <@U08914ZA6A1> I think it’s a debug scheme\n&gt; Debug-iphoneos\n\n[Gregory Komissarov]: <@U03DFSCP8CW>\n1. Cold starts\n2. Full remove before the cold start. Only CDN cache I assume b/c I was made a series of tests for both vendors.\n3. Both SDKs were initialised in the MainActor, code copied from each vendor examples from oficial repo.\n4. Both apps loading the same content: two onboarding screens with one image and the same text + 3rd paywall screen.\n\n[Artem Rukavishnikov]: Hey guys! I've managed to find the onboarding latency doc but not a flow builder one <https://app.notion.com/p/adapty/SDK-Onboardings-Paywalls-load-latency-comparison-2026-3961ca4355c380dd943cc41fce2602e6?pvs=26&amp;qid=1%3Ab0e272f4-6cc2-4663-8353-5c33e5c2473a%3A12|app.notion.com/p/adapty/…/SDK-Onboardings-Paywalls-load-latency-comparison-2026…?pvs=26&amp;…>\nWhere can we get the raw numbers/methodology for this research? Thanks!\n\n[Maxim Borisik]: that's flow builder Artem\n\n[Artem Rukavishnikov]: Oh okay, I would never think from the doc itself\nThe numbers make sense then, though :slightly_smiling_face:\nThank you, Maxim!",
-      "matchingReplies": [
-        {
-          "userId": "U08EVBTE69E",
-          "userName": "Maxim Borisik",
-          "text": "thanks Mike. i can say that yes, it was a fair comparison (checked with Greg before publishing)\n\n<@U08914ZA6A1> any comments here on what Mike wants to know?",
-          "date": "2026-07-14T09:02:27.379Z",
-          "images": []
-        }
-      ],
-      "hasTeamMention": false,
       "images": []
     }
   ]
