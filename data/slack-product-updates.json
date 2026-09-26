@@ -1,5 +1,5 @@
 {
-  "syncedAt": "2026-09-25T00:42:47.316Z",
+  "syncedAt": "2026-09-26T00:42:03.470Z",
   "channel": "#product-release",
   "entries": [
     {
@@ -88,6 +88,145 @@
         "https://files.slack.com/files-pri/T9HDDB78Q-F0C4298PD44/image.png",
         "https://files.slack.com/files-pri/T9HDDB78Q-F0C3HD4L3U7/image.png",
         "https://files.slack.com/files-pri/T9HDDB78Q-F0C3X57AF62/image.png"
+      ]
+    },
+    {
+      "id": "1789574840.414459",
+      "slackUrl": "https://adapty-team.slack.com/archives/C04SY70QZ0T/p1789574840414459",
+      "name": "Add trial_active event to integrations/webhooks",
+      "message": "Feature: <https://adaptyio.atlassian.net/browse/ADP-7079|Add trial_active event to integrations/webhooks>\nRelease: September 16, 2026\nDependencies: None\nEffected areas: Events, Integrations, Webhooks, Event Feed\n\n<!subteam^S03KM96DV0U> <!subteam^S07BZPQDBUJ> <@U090BDLA9JN> <@U0ASX4X3CKZ>\n\nSup, team - we just shipped our first synthetic event. Two of them, actually :hourglass_flowing_sand: :chart_with_upwards_trend:\n\n• `trial_active` - the trial is still alive N after it started: not cancelled, not refunded, not expired\n• `subscription_active` - same thing for a paid subscription\n\n1. Sent to every integration and also visible in Event Feed\n2. N is set per integration - a toggle and a duration field right next to the other events. AppsFlyer can get one window, a webhook another. \n*Who this is for:*\nAnyone optimizing acquisition through an MMP: Meta and Google get an early, clean signal instead of every trial_started in a row.\n\n:warning: Duration is in days for now. Hours are coming very soon, already in progress.\n\nHuge kudos to <@U0AR243M9T9> <@U0A3M160RB4>\n\nP.S: Stepadev, Kichdev, 4partners, MagicSolutions and the others from <https://adaptyio.atlassian.net/browse/CR-104|CR-104> have been waiting two years for this, <!subteam^S07BZPQDBUJ> please make their day :heart_on_fire:",
+      "releaseDate": "2026-09-16",
+      "thread": [
+        {
+          "userId": "U07J9LKBQ5U",
+          "userName": "Yurii Kleimenov",
+          "text": "Feature: <https://adaptyio.atlassian.net/browse/ADP-7079|Add trial_active event to integrations/webhooks>\nRelease: September 16, 2026\nDependencies: None\nEffected areas: Events, Integrations, Webhooks, Event Feed\n\n<!subteam^S03KM96DV0U> <!subteam^S07BZPQDBUJ> <@U090BDLA9JN> <@U0ASX4X3CKZ>\n\nSup, team - we just shipped our first synthetic event. Two of them, actually :hourglass_flowing_sand: :chart_with_upwards_trend:\n\n• `trial_active` - the trial is still alive N after it started: not cancelled, not refunded, not expired\n• `subscription_active` - same thing for a paid subscription\n\n1. Sent to every integration and also visible in Event Feed\n2. N is set per integration - a toggle and a duration field right next to the other events. AppsFlyer can get one window, a webhook another. \n*Who this is for:*\nAnyone optimizing acquisition through an MMP: Meta and Google get an early, clean signal instead of every trial_started in a row.\n\n:warning: Duration is in days for now. Hours are coming very soon, already in progress.\n\nHuge kudos to <@U0AR243M9T9> <@U0A3M160RB4>\n\nP.S: Stepadev, Kichdev, 4partners, MagicSolutions and the others from <https://adaptyio.atlassian.net/browse/CR-104|CR-104> have been waiting two years for this, <!subteam^S07BZPQDBUJ> please make their day :heart_on_fire:",
+          "date": "2026-09-16T16:07:20.414Z",
+          "images": [
+            "https://files.slack.com/files-pri/T9HDDB78Q-F0C1VUWQ7PZ/image.png"
+          ]
+        },
+        {
+          "userId": "U05QELDHUUX",
+          "userName": "Sergey Muratov",
+          "text": "This will blow up our TG group. Yay!",
+          "date": "2026-09-16T16:09:28.090Z",
+          "images": []
+        },
+        {
+          "userId": "U9JU5J5RC",
+          "userName": "Vitaly Davydov",
+          "text": "yeah that's nuts!",
+          "date": "2026-09-16T16:22:03.321Z",
+          "images": []
+        },
+        {
+          "userId": "U9JU5J5RC",
+          "userName": "Vitaly Davydov",
+          "text": "but UI sucks honestly",
+          "date": "2026-09-16T16:23:00.389Z",
+          "images": [
+            "https://files.slack.com/files-pri/T9HDDB78Q-F0C35RHA58Q/image.png"
+          ]
+        },
+        {
+          "userId": "U05QELDHUUX",
+          "userName": "Sergey Muratov",
+          "text": "Integrations UI is where I'd like to come to die",
+          "date": "2026-09-16T16:23:54.924Z",
+          "images": []
+        },
+        {
+          "userId": "U07J9LKBQ5U",
+          "userName": "Yurii Kleimenov",
+          "text": "Vibecode) Yeah +1 to Sergei, I hope we’ll redesign it asap",
+          "date": "2026-09-16T16:24:25.349Z",
+          "images": []
+        },
+        {
+          "userId": "U9JU5J5RC",
+          "userName": "Vitaly Davydov",
+          "text": "yes, but if it works - it works",
+          "date": "2026-09-16T16:30:01.384Z",
+          "images": []
+        },
+        {
+          "userId": "U07FKBD6QDS",
+          "userName": "Daniel Ridny",
+          "text": "Awesome news!",
+          "date": "2026-09-16T16:38:00.807Z",
+          "images": []
+        },
+        {
+          "userId": "U09EG3DK4US",
+          "userName": "Polina Ishimbaeva",
+          "text": "long-awaited request from our clients! Thank you <@U07J9LKBQ5U> and the team for making this happen! :fire:",
+          "date": "2026-09-17T07:25:24.896Z",
+          "images": []
+        },
+        {
+          "userId": "U07H1ESAH6K",
+          "userName": "Sofia Pikuleva",
+          "text": "do we send this to Facebook directly apart from MMPs?",
+          "date": "2026-09-17T08:00:30.969Z",
+          "images": []
+        },
+        {
+          "userId": "U07J9LKBQ5U",
+          "userName": "Yurii Kleimenov",
+          "text": "&gt; do we send this to Facebook directly apart from MMPs?\nNot yet, we’ll add this next week.",
+          "date": "2026-09-17T11:51:41.587Z",
+          "images": []
+        },
+        {
+          "userId": "U0A266T9SJE",
+          "userName": "Melike Sezer",
+          "text": "&gt; Duration is in days for now. Hours are coming very soon, already in progress.\nDeepix (12k mrr) -&gt; loved it! but directly asked for hourly  :smile:",
+          "date": "2026-09-18T13:57:43.673Z",
+          "images": []
+        },
+        {
+          "userId": "U07J9LKBQ5U",
+          "userName": "Yurii Kleimenov",
+          "text": "Yeah for sure, soon will be released an update",
+          "date": "2026-09-18T13:58:33.907Z",
+          "images": []
+        },
+        {
+          "userId": "U02GSCVUPHU",
+          "userName": "Murat Menzilci",
+          "text": "<@U07J9LKBQ5U> looks like the day setting for trial active is not available for the Android GA integration. Is that expected?",
+          "date": "2026-09-23T17:59:45.987Z",
+          "images": []
+        },
+        {
+          "userId": "U02GSCVUPHU",
+          "userName": "Murat Menzilci",
+          "text": "I mean duration ",
+          "date": "2026-09-23T18:00:23.975Z",
+          "images": []
+        },
+        {
+          "userId": "U07AUQLQUJX",
+          "userName": "Aleksandr Smirnov",
+          "text": "hey <@U02GSCVUPHU>!\nYes, that’s expected according to the internal check (repo).\n\nThe duration isn’t a per-store setting. There’s one value for the whole integration, and it applies to both iOS and Android. On the Firebase/GA page it only appears in the iOS event block, so it looks like Android doesn’t have it, but whatever you set there also applies to Android transactions.\n\nWhat matters for Android is that the Trial active toggle is switched on in the Android events block, because enabling is still per store. You can’t set different durations for iOS and Android right now.\n\nAgree the UI is misleading here @ Yurii Kleimenov",
+          "date": "2026-09-23T18:07:55.975Z",
+          "images": []
+        },
+        {
+          "userId": "U07J9LKBQ5U",
+          "userName": "Yurii Kleimenov",
+          "text": "<!subteam^S07BZPQDBUJ> Hours released :tada:",
+          "date": "2026-09-25T14:43:31.985Z",
+          "images": []
+        }
+      ],
+      "content": "[Yurii Kleimenov]: Feature: <https://adaptyio.atlassian.net/browse/ADP-7079|Add trial_active event to integrations/webhooks>\nRelease: September 16, 2026\nDependencies: None\nEffected areas: Events, Integrations, Webhooks, Event Feed\n\n<!subteam^S03KM96DV0U> <!subteam^S07BZPQDBUJ> <@U090BDLA9JN> <@U0ASX4X3CKZ>\n\nSup, team - we just shipped our first synthetic event. Two of them, actually :hourglass_flowing_sand: :chart_with_upwards_trend:\n\n• `trial_active` - the trial is still alive N after it started: not cancelled, not refunded, not expired\n• `subscription_active` - same thing for a paid subscription\n\n1. Sent to every integration and also visible in Event Feed\n2. N is set per integration - a toggle and a duration field right next to the other events. AppsFlyer can get one window, a webhook another. \n*Who this is for:*\nAnyone optimizing acquisition through an MMP: Meta and Google get an early, clean signal instead of every trial_started in a row.\n\n:warning: Duration is in days for now. Hours are coming very soon, already in progress.\n\nHuge kudos to <@U0AR243M9T9> <@U0A3M160RB4>\n\nP.S: Stepadev, Kichdev, 4partners, MagicSolutions and the others from <https://adaptyio.atlassian.net/browse/CR-104|CR-104> have been waiting two years for this, <!subteam^S07BZPQDBUJ> please make their day :heart_on_fire:\n\n[Sergey Muratov]: This will blow up our TG group. Yay!\n\n[Vitaly Davydov]: yeah that's nuts!\n\n[Vitaly Davydov]: but UI sucks honestly\n\n[Sergey Muratov]: Integrations UI is where I'd like to come to die\n\n[Yurii Kleimenov]: Vibecode) Yeah +1 to Sergei, I hope we’ll redesign it asap\n\n[Vitaly Davydov]: yes, but if it works - it works\n\n[Daniel Ridny]: Awesome news!\n\n[Polina Ishimbaeva]: long-awaited request from our clients! Thank you <@U07J9LKBQ5U> and the team for making this happen! :fire:\n\n[Sofia Pikuleva]: do we send this to Facebook directly apart from MMPs?\n\n[Yurii Kleimenov]: &gt; do we send this to Facebook directly apart from MMPs?\nNot yet, we’ll add this next week.\n\n[Melike Sezer]: &gt; Duration is in days for now. Hours are coming very soon, already in progress.\nDeepix (12k mrr) -&gt; loved it! but directly asked for hourly  :smile:\n\n[Yurii Kleimenov]: Yeah for sure, soon will be released an update\n\n[Murat Menzilci]: <@U07J9LKBQ5U> looks like the day setting for trial active is not available for the Android GA integration. Is that expected?\n\n[Murat Menzilci]: I mean duration \n\n[Aleksandr Smirnov]: hey <@U02GSCVUPHU>!\nYes, that’s expected according to the internal check (repo).\n\nThe duration isn’t a per-store setting. There’s one value for the whole integration, and it applies to both iOS and Android. On the Firebase/GA page it only appears in the iOS event block, so it looks like Android doesn’t have it, but whatever you set there also applies to Android transactions.\n\nWhat matters for Android is that the Trial active toggle is switched on in the Android events block, because enabling is still per store. You can’t set different durations for iOS and Android right now.\n\nAgree the UI is misleading here @ Yurii Kleimenov\n\n[Yurii Kleimenov]: <!subteam^S07BZPQDBUJ> Hours released :tada:",
+      "matchingReplies": [],
+      "hasTeamMention": true,
+      "images": [
+        "https://files.slack.com/files-pri/T9HDDB78Q-F0C1VUWQ7PZ/image.png",
+        "https://files.slack.com/files-pri/T9HDDB78Q-F0C35RHA58Q/image.png"
       ]
     },
     {
@@ -2514,62 +2653,6 @@
         "https://files.slack.com/files-pri/T9HDDB78Q-F0BK46BT86Q/img_0415.jpg",
         "https://files.slack.com/files-pri/T9HDDB78Q-F0BJWTV3KC7/image.png"
       ]
-    },
-    {
-      "id": "1784113417.441009",
-      "slackUrl": "https://adapty-team.slack.com/archives/C04SY70QZ0T/p1784113417441009",
-      "name": "hey team!",
-      "message": "hey team!\nfor transparency - *flutter SDK version for the flow builder was released yesterday*! :tada:\n\nit means that *we have updated our key SDKs versions* = IOS/Android/RN/Flutter are now 4.0.0\nCapacitor is released too. expect Unity &amp; KMP later this summer\n\nalso - \"beta\" tags were removed from the key SDKs above. jfyi\n\nhuge thanks to Mobile team for such speed :zap:",
-      "releaseDate": "2026-07-15",
-      "thread": [
-        {
-          "userId": "U08EVBTE69E",
-          "userName": "Maxim Borisik",
-          "text": "hey team!\nfor transparency - *flutter SDK version for the flow builder was released yesterday*! :tada:\n\nit means that *we have updated our key SDKs versions* = IOS/Android/RN/Flutter are now 4.0.0\nCapacitor is released too. expect Unity &amp; KMP later this summer\n\nalso - \"beta\" tags were removed from the key SDKs above. jfyi\n\nhuge thanks to Mobile team for such speed :zap:",
-          "date": "2026-07-15T11:03:37.441Z",
-          "images": []
-        },
-        {
-          "userId": "U08EVBTE69E",
-          "userName": "Maxim Borisik",
-          "text": "<!subteam^S07BZPQDBUJ>\n<!subteam^S03KC9S1QMC>\n\nfyi",
-          "date": "2026-07-15T11:03:51.020Z",
-          "images": []
-        },
-        {
-          "userId": "U07MXM412JV",
-          "userName": "Marina Trypolskaya",
-          "text": "what a pace!",
-          "date": "2026-07-15T11:04:08.986Z",
-          "images": []
-        },
-        {
-          "userId": "U07H1ESAH6K",
-          "userName": "Sofia Pikuleva",
-          "text": "cooooool",
-          "date": "2026-07-15T11:04:20.424Z",
-          "images": []
-        },
-        {
-          "userId": "U07F3ULE4MA",
-          "userName": "Darina Kobzar",
-          "text": ":fire::rocket:",
-          "date": "2026-07-15T11:08:20.480Z",
-          "images": []
-        }
-      ],
-      "content": "[Maxim Borisik]: hey team!\nfor transparency - *flutter SDK version for the flow builder was released yesterday*! :tada:\n\nit means that *we have updated our key SDKs versions* = IOS/Android/RN/Flutter are now 4.0.0\nCapacitor is released too. expect Unity &amp; KMP later this summer\n\nalso - \"beta\" tags were removed from the key SDKs above. jfyi\n\nhuge thanks to Mobile team for such speed :zap:\n\n[Maxim Borisik]: <!subteam^S07BZPQDBUJ>\n<!subteam^S03KC9S1QMC>\n\nfyi\n\n[Marina Trypolskaya]: what a pace!\n\n[Sofia Pikuleva]: cooooool\n\n[Darina Kobzar]: :fire::rocket:",
-      "matchingReplies": [
-        {
-          "userId": "U08EVBTE69E",
-          "userName": "Maxim Borisik",
-          "text": "<!subteam^S07BZPQDBUJ>\n<!subteam^S03KC9S1QMC>\n\nfyi",
-          "date": "2026-07-15T11:03:51.020Z",
-          "images": []
-        }
-      ],
-      "hasTeamMention": true,
-      "images": []
     }
   ]
 }
