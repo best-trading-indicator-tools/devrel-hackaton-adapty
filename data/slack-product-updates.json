@@ -1,7 +1,101 @@
 {
-  "syncedAt": "2026-09-29T00:46:01.260Z",
+  "syncedAt": "2026-09-30T00:47:07.852Z",
   "channel": "#product-release",
   "entries": [
+    {
+      "id": "1790682806.194699",
+      "slackUrl": "https://adapty-team.slack.com/archives/C04SY70QZ0T/p1790682806194699",
+      "name": "Google Ads integration is live on Adapty Attribution :rocket:",
+      "message": "Google Ads integration is live on Adapty Attribution :rocket:\n\nAdapty now pulls Google Ads performance data into UA analytics and sends conversion events back to Google for attribution and campaign optimization.\n\nWhat customers can do now:\n\nSee Google Ads spend, impressions, clicks and conversions inside Adapty\nSend installs, trial starts, purchases, renewals and other subscription events back to Google\nUse Revenue Override to assign a value to trial events, so Google can optimize toward revenue and not just trial volume\nSend test conversion events to check the setup before launching campaigns\n\nDocs: <https://adapty.io/docs/ua-google-ads|adapty.io/docs/ua-google-ads>\n\ncc <!subteam^S03KC9S1QMC> <!subteam^S07BZPQDBUJ>",
+      "releaseDate": "2026-09-29",
+      "thread": [
+        {
+          "userId": "U02GSCVUPHU",
+          "userName": "Murat Menzilci",
+          "text": "Google Ads integration is live on Adapty Attribution :rocket:\n\nAdapty now pulls Google Ads performance data into UA analytics and sends conversion events back to Google for attribution and campaign optimization.\n\nWhat customers can do now:\n\nSee Google Ads spend, impressions, clicks and conversions inside Adapty\nSend installs, trial starts, purchases, renewals and other subscription events back to Google\nUse Revenue Override to assign a value to trial events, so Google can optimize toward revenue and not just trial volume\nSend test conversion events to check the setup before launching campaigns\n\nDocs: <https://adapty.io/docs/ua-google-ads|adapty.io/docs/ua-google-ads>\n\ncc <!subteam^S03KC9S1QMC> <!subteam^S07BZPQDBUJ>",
+          "date": "2026-09-29T11:53:26.194Z",
+          "images": [
+            "https://files.slack.com/files-pri/T9HDDB78Q-F0C57C5N30E/image.png"
+          ]
+        },
+        {
+          "userId": "U03DFSCP8CW",
+          "userName": "Mike Gorokhov",
+          "text": "LET'S GO",
+          "date": "2026-09-29T11:53:44.138Z",
+          "images": []
+        },
+        {
+          "userId": "U9JU5J5RC",
+          "userName": "Vitaly Davydov",
+          "text": "Good job! ",
+          "date": "2026-09-29T11:55:13.348Z",
+          "images": []
+        },
+        {
+          "userId": "U040DK8K86Q",
+          "userName": "Kseniya Simonova",
+          "text": "<!subteam^S07BZPQDBUJ> Good time to ping the clients who were waiting for it",
+          "date": "2026-09-29T11:55:20.375Z",
+          "images": []
+        },
+        {
+          "userId": "U9JU5J5RC",
+          "userName": "Vitaly Davydov",
+          "text": "<@U02GSCVUPHU> <@U08PXEX7CAK> <@U9HDNS9S4> ",
+          "date": "2026-09-29T11:55:24.571Z",
+          "images": []
+        },
+        {
+          "userId": "U090BDLA9JN",
+          "userName": "Dmitry Shestoperov",
+          "text": "congrats! big step",
+          "date": "2026-09-29T12:00:53.868Z",
+          "images": []
+        },
+        {
+          "userId": "U07FKBD6QDS",
+          "userName": "Daniel Ridny",
+          "text": "Long awaited update!\nWell done <@U08PXEX7CAK> <@U02GSCVUPHU> :raised_hands:",
+          "date": "2026-09-29T12:09:23.389Z",
+          "images": []
+        },
+        {
+          "userId": "U09L8SJ1YLU",
+          "userName": "Kristina Bilyk",
+          "text": "<!subteam^S08KMD5J4FJ> fyi",
+          "date": "2026-09-29T12:20:29.334Z",
+          "images": []
+        },
+        {
+          "userId": "U9HDNS9S4",
+          "userName": "Kirill Potekhin",
+          "text": "oh yes!! great, guys!",
+          "date": "2026-09-29T12:21:32.696Z",
+          "images": []
+        },
+        {
+          "userId": "U07H1ESAH6K",
+          "userName": "Sofia Pikuleva",
+          "text": "cool!\n\ndo clients need to update the SDK? from which SDK version does it work?",
+          "date": "2026-09-29T12:22:23.573Z",
+          "images": []
+        },
+        {
+          "userId": "U08PXEX7CAK",
+          "userName": "Timur Nurutdinov",
+          "text": "Don’t need to do anything",
+          "date": "2026-09-29T12:25:07.889Z",
+          "images": []
+        }
+      ],
+      "content": "[Murat Menzilci]: Google Ads integration is live on Adapty Attribution :rocket:\n\nAdapty now pulls Google Ads performance data into UA analytics and sends conversion events back to Google for attribution and campaign optimization.\n\nWhat customers can do now:\n\nSee Google Ads spend, impressions, clicks and conversions inside Adapty\nSend installs, trial starts, purchases, renewals and other subscription events back to Google\nUse Revenue Override to assign a value to trial events, so Google can optimize toward revenue and not just trial volume\nSend test conversion events to check the setup before launching campaigns\n\nDocs: <https://adapty.io/docs/ua-google-ads|adapty.io/docs/ua-google-ads>\n\ncc <!subteam^S03KC9S1QMC> <!subteam^S07BZPQDBUJ>\n\n[Mike Gorokhov]: LET'S GO\n\n[Vitaly Davydov]: Good job! \n\n[Kseniya Simonova]: <!subteam^S07BZPQDBUJ> Good time to ping the clients who were waiting for it\n\n[Vitaly Davydov]: <@U02GSCVUPHU> <@U08PXEX7CAK> <@U9HDNS9S4> \n\n[Dmitry Shestoperov]: congrats! big step\n\n[Daniel Ridny]: Long awaited update!\nWell done <@U08PXEX7CAK> <@U02GSCVUPHU> :raised_hands:\n\n[Kristina Bilyk]: <!subteam^S08KMD5J4FJ> fyi\n\n[Kirill Potekhin]: oh yes!! great, guys!\n\n[Sofia Pikuleva]: cool!\n\ndo clients need to update the SDK? from which SDK version does it work?\n\n[Timur Nurutdinov]: Don’t need to do anything",
+      "matchingReplies": [],
+      "hasTeamMention": true,
+      "images": [
+        "https://files.slack.com/files-pri/T9HDDB78Q-F0C57C5N30E/image.png"
+      ]
+    },
     {
       "id": "1790603488.514539",
       "slackUrl": "https://adapty-team.slack.com/archives/C04SY70QZ0T/p1790603488514539",
@@ -2106,276 +2200,6 @@
       "hasTeamMention": false,
       "images": [
         "https://files.slack.com/files-pri/T9HDDB78Q-F0BL3NZ2BQF/_______________________________2026-07-29_____10.44.15.png"
-      ]
-    },
-    {
-      "id": "1784720672.403529",
-      "slackUrl": "https://adapty-team.slack.com/archives/C04SY70QZ0T/p1784720672403529",
-      "name": "sup, team",
-      "message": "sup, team\n\nlast month we've been cooking an *ai agent* for our one and only *flow builder*. it can do (almost) everything you can do via the ui — add and edit elements, styles and copy; and since it's powered by claude, it can mimic well-known app styles, suggest layouts according to best practices, etc.\n\ntoday we're ready for an *internal release*. it was a rough ride and we're still not quite there. we're working hard on polishing, and you can help us shape the path to public release. it's easy — if you're building a new gorgeous flow and tempted to use ui buttons, just tell yourself \"oh man, it's the year 2026 and i'm doing something old-school and not burning tokens. i need to change my life and fast\"\n\nso, here is the way:\n1. open any flow on any app\n2. open the browser console and enter the command: `adapty_ff.set('FLOW_GENERATOR', true)`\n3. now instead of editing flow manually, open the chat using :sparkles: button in the left sidebar and type (or dictate) what you desire to do\n4. notice what works well, what's not, what's missing and write in down to this thread. we'll take care of it\nknown restrictions: it's not always the smartest, it works on a per-screen basis, it leaks config internals and sometimes it may crash the page :this_is_fine: . we're working on it, stay tuned.\n\nshoutout and love to <@U08EVBTE69E> <@U07PR2368G5> <@U0ALSG3VA30> <@U080G9FHV50> <@U08JY3U9S7P>",
-      "releaseDate": "2026-07-22",
-      "thread": [
-        {
-          "userId": "U07J1NQPD4P",
-          "userName": "Danil Melnichuk",
-          "text": "sup, team\n\nlast month we've been cooking an *ai agent* for our one and only *flow builder*. it can do (almost) everything you can do via the ui — add and edit elements, styles and copy; and since it's powered by claude, it can mimic well-known app styles, suggest layouts according to best practices, etc.\n\ntoday we're ready for an *internal release*. it was a rough ride and we're still not quite there. we're working hard on polishing, and you can help us shape the path to public release. it's easy — if you're building a new gorgeous flow and tempted to use ui buttons, just tell yourself \"oh man, it's the year 2026 and i'm doing something old-school and not burning tokens. i need to change my life and fast\"\n\nso, here is the way:\n1. open any flow on any app\n2. open the browser console and enter the command: `adapty_ff.set('FLOW_GENERATOR', true)`\n3. now instead of editing flow manually, open the chat using :sparkles: button in the left sidebar and type (or dictate) what you desire to do\n4. notice what works well, what's not, what's missing and write in down to this thread. we'll take care of it\nknown restrictions: it's not always the smartest, it works on a per-screen basis, it leaks config internals and sometimes it may crash the page :this_is_fine: . we're working on it, stay tuned.\n\nshoutout and love to <@U08EVBTE69E> <@U07PR2368G5> <@U0ALSG3VA30> <@U080G9FHV50> <@U08JY3U9S7P>",
-          "date": "2026-07-22T11:44:32.403Z",
-          "images": [
-            "https://files.slack.com/files-pri/T9HDDB78Q-F0BJULQMSGK/cleanshot_2026-07-22_at_18.33.25_2x.png"
-          ]
-        },
-        {
-          "userId": "U9HDNS9S4",
-          "userName": "Kirill Potekhin",
-          "text": "big deal, guys, thanks a lot! we're gonna show it to ElevenLabs today, just in time",
-          "date": "2026-07-22T11:50:42.718Z",
-          "images": []
-        },
-        {
-          "userId": "U07J1NQPD4P",
-          "userName": "Danil Melnichuk",
-          "text": "<@U080G9FHV50> don't sweat, we nailed it",
-          "date": "2026-07-22T11:52:42.837Z",
-          "images": []
-        },
-        {
-          "userId": "U03DFSCP8CW",
-          "userName": "Mike Gorokhov",
-          "text": "It works!",
-          "date": "2026-07-22T11:55:43.530Z",
-          "images": [
-            "https://files.slack.com/files-pri/T9HDDB78Q-F0BK300GWQZ/image.png"
-          ]
-        },
-        {
-          "userId": "U03DFSCP8CW",
-          "userName": "Mike Gorokhov",
-          "text": "In like 3 seconds!",
-          "date": "2026-07-22T11:56:52.494Z",
-          "images": []
-        },
-        {
-          "userId": "U03DFSCP8CW",
-          "userName": "Mike Gorokhov",
-          "text": "like 2 seconds and it is done!",
-          "date": "2026-07-22T11:57:32.381Z",
-          "images": [
-            "https://files.slack.com/files-pri/T9HDDB78Q-F0BK12N94SE/image.png"
-          ]
-        },
-        {
-          "userId": "U07J1NQPD4P",
-          "userName": "Danil Melnichuk",
-          "text": "<@U03DFSCP8CW> crazy. didn't expect such a HUGE change to happen so fast",
-          "date": "2026-07-22T11:59:24.603Z",
-          "images": []
-        },
-        {
-          "userId": "U03DFSCP8CW",
-          "userName": "Mike Gorokhov",
-          "text": "<!subteam^S086DJEQEUE>\n\nRight-click on the page, select \"Inspect\".\nYou will go to the Dev Console.\nThere, open the \"Console\" tab and paste the snippet.",
-          "date": "2026-07-22T11:59:30.138Z",
-          "images": []
-        },
-        {
-          "userId": "U03DFSCP8CW",
-          "userName": "Mike Gorokhov",
-          "text": "`@Mike crazy. didn't expect such a HUGE change to happen so fast`\n\nWell, in FF's builder this takes like 12 seconds to change a button color",
-          "date": "2026-07-22T12:01:17.827Z",
-          "images": []
-        },
-        {
-          "userId": "U07J1NQPD4P",
-          "userName": "Danil Melnichuk",
-          "text": "&gt; this takes like 12 seconds\nwe'll be there (no)",
-          "date": "2026-07-22T12:02:09.139Z",
-          "images": []
-        },
-        {
-          "userId": "U08EVBTE69E",
-          "userName": "Maxim Borisik",
-          "text": "Dan huge round of applause to that stuff!\nteam, Dan had lots of various engineering challenges while creating this chat, so respect to bypassing them! :chefs-kiss:",
-          "date": "2026-07-22T12:04:00.426Z",
-          "images": []
-        },
-        {
-          "userId": "U9HDNS9S4",
-          "userName": "Kirill Potekhin",
-          "text": "this element was added to the paywall using AI editor live during the demo, worked really cool!",
-          "date": "2026-07-22T14:55:16.394Z",
-          "images": [
-            "https://files.slack.com/files-pri/T9HDDB78Q-F0BJWB0JMB5/cleanshot_2026-07-22_at_15.53.56_2x.png"
-          ]
-        },
-        {
-          "userId": "U07MXM412JV",
-          "userName": "Marina Trypolskaya",
-          "text": "<!subteam^S086DJEQEUE> guys make sure you tested the flow and show it on the demo calls, looks really amazing!",
-          "date": "2026-07-22T14:58:56.208Z",
-          "images": []
-        },
-        {
-          "userId": "U08EVBTE69E",
-          "userName": "Maxim Borisik",
-          "text": "FYI\nwe expect 1-2 weeks to finish and polish it before relaising to public! so i think we can tell that it will be available in august",
-          "date": "2026-07-22T14:59:54.634Z",
-          "images": []
-        },
-        {
-          "userId": "U07FGPCB4D9",
-          "userName": "Vlad Konkov",
-          "text": "qq: and would it be possible in the nearest future just drop appstore link and ask to create an onboarding say just like for this app but with my branding? or just upload a photo and ask create this screen?",
-          "date": "2026-07-22T15:25:43.880Z",
-          "images": []
-        },
-        {
-          "userId": "U08EVBTE69E",
-          "userName": "Maxim Borisik",
-          "text": "figma import is the closest ones to be released. expect it in August too",
-          "date": "2026-07-22T15:28:50.276Z",
-          "images": []
-        },
-        {
-          "userId": "U0A3Y4X1XUG",
-          "userName": "Matty Friedman",
-          "text": "!!!!",
-          "date": "2026-07-22T16:10:47.691Z",
-          "images": []
-        },
-        {
-          "userId": "U08MKNGFMLN",
-          "userName": "Aliaksandra Subach",
-          "text": "love it!!",
-          "date": "2026-07-23T12:36:41.719Z",
-          "images": [
-            "https://files.slack.com/files-pri/T9HDDB78Q-F0BKELU7JMA/image.png"
-          ]
-        },
-        {
-          "userId": "U08EVBTE69E",
-          "userName": "Maxim Borisik",
-          "text": "brand new padel (or tennis) app from Sasha haha",
-          "date": "2026-07-23T12:37:15.126Z",
-          "images": []
-        },
-        {
-          "userId": "U08EVBTE69E",
-          "userName": "Maxim Borisik",
-          "text": "getting ready for BCN event on 100%",
-          "date": "2026-07-23T12:37:38.109Z",
-          "images": []
-        },
-        {
-          "userId": "U0A266T9SJE",
-          "userName": "Melike Sezer",
-          "text": "Hi team, first and foremost, thank you! It's everything we dreamed of :tada:\nSmall feedback: After I give a second prompt, it applies all the requested changes. However, if I want to revert to the previous version, the Undo button only reverts the last individual change. I asked the AI to undo the entire previous prompt and that worked, but maybe we could consider adding a UI element like *“Undo All Changes”* to revert everything made by the last AI prompt in one click.",
-          "date": "2026-07-23T13:35:38.187Z",
-          "images": []
-        },
-        {
-          "userId": "U0ALSG3VA30",
-          "userName": "Sergey Bliznetsov",
-          "text": "its done already, will be shipped today hopefully, with a bunch of ui improvements",
-          "date": "2026-07-23T13:37:06.265Z",
-          "images": []
-        },
-        {
-          "userId": "U07AUQLQUJX",
-          "userName": "Aleksandr Smirnov",
-          "text": "hey-hey!\ni’m not sure whether we can share <https://adapty-team.slack.com/archives/C07EVTD6AF4/p1784829647421379|it>, even with Josh\ncould someone confirm?",
-          "date": "2026-07-23T18:31:29.257Z",
-          "images": []
-        },
-        {
-          "userId": "U9HDNS9S4",
-          "userName": "Kirill Potekhin",
-          "text": "hey! yes, share it with him, but tell it's in alpha, so he should double check everything before pushing to prod, and also share a feedback with us ",
-          "date": "2026-07-23T18:33:52.948Z",
-          "images": []
-        },
-        {
-          "userId": "U07AUQLQUJX",
-          "userName": "Aleksandr Smirnov",
-          "text": "ok, I’ll dm him rather than reply in the thread, right?",
-          "date": "2026-07-23T18:34:58.835Z",
-          "images": []
-        },
-        {
-          "userId": "U9HDNS9S4",
-          "userName": "Kirill Potekhin",
-          "text": "up to you, it's not a top secret :) ",
-          "date": "2026-07-23T18:35:46.324Z",
-          "images": []
-        },
-        {
-          "userId": "U0ALSG3VA30",
-          "userName": "Sergey Bliznetsov",
-          "text": "Update is finally released!\nProper stop behaviour, undo/redo stack, ui polishing, bugfixes.\nlooks and feels a lot better now.",
-          "date": "2026-07-29T15:09:31.006Z",
-          "images": []
-        },
-        {
-          "userId": "U080G9FHV50",
-          "userName": "Mirazim Tolipov",
-          "text": "this is now live for everyone :chopsticks::yum:",
-          "date": "2026-08-11T13:41:34.502Z",
-          "images": []
-        }
-      ],
-      "content": "[Danil Melnichuk]: sup, team\n\nlast month we've been cooking an *ai agent* for our one and only *flow builder*. it can do (almost) everything you can do via the ui — add and edit elements, styles and copy; and since it's powered by claude, it can mimic well-known app styles, suggest layouts according to best practices, etc.\n\ntoday we're ready for an *internal release*. it was a rough ride and we're still not quite there. we're working hard on polishing, and you can help us shape the path to public release. it's easy — if you're building a new gorgeous flow and tempted to use ui buttons, just tell yourself \"oh man, it's the year 2026 and i'm doing something old-school and not burning tokens. i need to change my life and fast\"\n\nso, here is the way:\n1. open any flow on any app\n2. open the browser console and enter the command: `adapty_ff.set('FLOW_GENERATOR', true)`\n3. now instead of editing flow manually, open the chat using :sparkles: button in the left sidebar and type (or dictate) what you desire to do\n4. notice what works well, what's not, what's missing and write in down to this thread. we'll take care of it\nknown restrictions: it's not always the smartest, it works on a per-screen basis, it leaks config internals and sometimes it may crash the page :this_is_fine: . we're working on it, stay tuned.\n\nshoutout and love to <@U08EVBTE69E> <@U07PR2368G5> <@U0ALSG3VA30> <@U080G9FHV50> <@U08JY3U9S7P>\n\n[Kirill Potekhin]: big deal, guys, thanks a lot! we're gonna show it to ElevenLabs today, just in time\n\n[Danil Melnichuk]: <@U080G9FHV50> don't sweat, we nailed it\n\n[Mike Gorokhov]: It works!\n\n[Mike Gorokhov]: In like 3 seconds!\n\n[Mike Gorokhov]: like 2 seconds and it is done!\n\n[Danil Melnichuk]: <@U03DFSCP8CW> crazy. didn't expect such a HUGE change to happen so fast\n\n[Mike Gorokhov]: <!subteam^S086DJEQEUE>\n\nRight-click on the page, select \"Inspect\".\nYou will go to the Dev Console.\nThere, open the \"Console\" tab and paste the snippet.\n\n[Mike Gorokhov]: `@Mike crazy. didn't expect such a HUGE change to happen so fast`\n\nWell, in FF's builder this takes like 12 seconds to change a button color\n\n[Danil Melnichuk]: &gt; this takes like 12 seconds\nwe'll be there (no)\n\n[Maxim Borisik]: Dan huge round of applause to that stuff!\nteam, Dan had lots of various engineering challenges while creating this chat, so respect to bypassing them! :chefs-kiss:\n\n[Kirill Potekhin]: this element was added to the paywall using AI editor live during the demo, worked really cool!\n\n[Marina Trypolskaya]: <!subteam^S086DJEQEUE> guys make sure you tested the flow and show it on the demo calls, looks really amazing!\n\n[Maxim Borisik]: FYI\nwe expect 1-2 weeks to finish and polish it before relaising to public! so i think we can tell that it will be available in august\n\n[Vlad Konkov]: qq: and would it be possible in the nearest future just drop appstore link and ask to create an onboarding say just like for this app but with my branding? or just upload a photo and ask create this screen?\n\n[Maxim Borisik]: figma import is the closest ones to be released. expect it in August too\n\n[Matty Friedman]: !!!!\n\n[Aliaksandra Subach]: love it!!\n\n[Maxim Borisik]: brand new padel (or tennis) app from Sasha haha\n\n[Maxim Borisik]: getting ready for BCN event on 100%\n\n[Melike Sezer]: Hi team, first and foremost, thank you! It's everything we dreamed of :tada:\nSmall feedback: After I give a second prompt, it applies all the requested changes. However, if I want to revert to the previous version, the Undo button only reverts the last individual change. I asked the AI to undo the entire previous prompt and that worked, but maybe we could consider adding a UI element like *“Undo All Changes”* to revert everything made by the last AI prompt in one click.\n\n[Sergey Bliznetsov]: its done already, will be shipped today hopefully, with a bunch of ui improvements\n\n[Aleksandr Smirnov]: hey-hey!\ni’m not sure whether we can share <https://adapty-team.slack.com/archives/C07EVTD6AF4/p1784829647421379|it>, even with Josh\ncould someone confirm?\n\n[Kirill Potekhin]: hey! yes, share it with him, but tell it's in alpha, so he should double check everything before pushing to prod, and also share a feedback with us \n\n[Aleksandr Smirnov]: ok, I’ll dm him rather than reply in the thread, right?\n\n[Kirill Potekhin]: up to you, it's not a top secret :) \n\n[Sergey Bliznetsov]: Update is finally released!\nProper stop behaviour, undo/redo stack, ui polishing, bugfixes.\nlooks and feels a lot better now.\n\n[Mirazim Tolipov]: this is now live for everyone :chopsticks::yum:",
-      "matchingReplies": [
-        {
-          "userId": "U9HDNS9S4",
-          "userName": "Kirill Potekhin",
-          "text": "big deal, guys, thanks a lot! we're gonna show it to ElevenLabs today, just in time",
-          "date": "2026-07-22T11:50:42.718Z",
-          "images": []
-        },
-        {
-          "userId": "U08EVBTE69E",
-          "userName": "Maxim Borisik",
-          "text": "Dan huge round of applause to that stuff!\nteam, Dan had lots of various engineering challenges while creating this chat, so respect to bypassing them! :chefs-kiss:",
-          "date": "2026-07-22T12:04:00.426Z",
-          "images": []
-        },
-        {
-          "userId": "U9HDNS9S4",
-          "userName": "Kirill Potekhin",
-          "text": "this element was added to the paywall using AI editor live during the demo, worked really cool!",
-          "date": "2026-07-22T14:55:16.394Z",
-          "images": [
-            "https://files.slack.com/files-pri/T9HDDB78Q-F0BJWB0JMB5/cleanshot_2026-07-22_at_15.53.56_2x.png"
-          ]
-        },
-        {
-          "userId": "U08EVBTE69E",
-          "userName": "Maxim Borisik",
-          "text": "FYI\nwe expect 1-2 weeks to finish and polish it before relaising to public! so i think we can tell that it will be available in august",
-          "date": "2026-07-22T14:59:54.634Z",
-          "images": []
-        },
-        {
-          "userId": "U08EVBTE69E",
-          "userName": "Maxim Borisik",
-          "text": "figma import is the closest ones to be released. expect it in August too",
-          "date": "2026-07-22T15:28:50.276Z",
-          "images": []
-        },
-        {
-          "userId": "U9HDNS9S4",
-          "userName": "Kirill Potekhin",
-          "text": "hey! yes, share it with him, but tell it's in alpha, so he should double check everything before pushing to prod, and also share a feedback with us ",
-          "date": "2026-07-23T18:33:52.948Z",
-          "images": []
-        }
-      ],
-      "hasTeamMention": true,
-      "images": [
-        "https://files.slack.com/files-pri/T9HDDB78Q-F0BJULQMSGK/cleanshot_2026-07-22_at_18.33.25_2x.png",
-        "https://files.slack.com/files-pri/T9HDDB78Q-F0BK300GWQZ/image.png",
-        "https://files.slack.com/files-pri/T9HDDB78Q-F0BK12N94SE/image.png",
-        "https://files.slack.com/files-pri/T9HDDB78Q-F0BJWB0JMB5/cleanshot_2026-07-22_at_15.53.56_2x.png",
-        "https://files.slack.com/files-pri/T9HDDB78Q-F0BKELU7JMA/image.png"
       ]
     }
   ]
