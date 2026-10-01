@@ -1,5 +1,5 @@
 {
-  "syncedAt": "2026-09-30T00:47:07.852Z",
+  "syncedAt": "2026-10-01T00:53:40.752Z",
   "channel": "#product-release",
   "entries": [
     {
@@ -87,9 +87,37 @@
           "text": "Don’t need to do anything",
           "date": "2026-09-29T12:25:07.889Z",
           "images": []
+        },
+        {
+          "userId": "U040DK8K86Q",
+          "userName": "Kseniya Simonova",
+          "text": "<@U08PXEX7CAK> <@U02GSCVUPHU> hey!\n\nI read the docs. In the case of google, can we work not only with web campaigns but with app campaigns and other campaign types as well?",
+          "date": "2026-09-30T09:46:31.443Z",
+          "images": []
+        },
+        {
+          "userId": "U08PXEX7CAK",
+          "userName": "Timur Nurutdinov",
+          "text": "Yes. But App campaign (UAC) is restricted only for Android",
+          "date": "2026-09-30T09:51:15.765Z",
+          "images": []
+        },
+        {
+          "userId": "U07H1ESAH6K",
+          "userName": "Sofia Pikuleva",
+          "text": "&gt; Yes. But App campaign (UAC) is restricted only for Android\ndoes it mean they work for Android only, right? no app campaigns for iOS?",
+          "date": "2026-09-30T09:58:24.426Z",
+          "images": []
+        },
+        {
+          "userId": "U08PXEX7CAK",
+          "userName": "Timur Nurutdinov",
+          "text": "Yep",
+          "date": "2026-09-30T10:46:10.823Z",
+          "images": []
         }
       ],
-      "content": "[Murat Menzilci]: Google Ads integration is live on Adapty Attribution :rocket:\n\nAdapty now pulls Google Ads performance data into UA analytics and sends conversion events back to Google for attribution and campaign optimization.\n\nWhat customers can do now:\n\nSee Google Ads spend, impressions, clicks and conversions inside Adapty\nSend installs, trial starts, purchases, renewals and other subscription events back to Google\nUse Revenue Override to assign a value to trial events, so Google can optimize toward revenue and not just trial volume\nSend test conversion events to check the setup before launching campaigns\n\nDocs: <https://adapty.io/docs/ua-google-ads|adapty.io/docs/ua-google-ads>\n\ncc <!subteam^S03KC9S1QMC> <!subteam^S07BZPQDBUJ>\n\n[Mike Gorokhov]: LET'S GO\n\n[Vitaly Davydov]: Good job! \n\n[Kseniya Simonova]: <!subteam^S07BZPQDBUJ> Good time to ping the clients who were waiting for it\n\n[Vitaly Davydov]: <@U02GSCVUPHU> <@U08PXEX7CAK> <@U9HDNS9S4> \n\n[Dmitry Shestoperov]: congrats! big step\n\n[Daniel Ridny]: Long awaited update!\nWell done <@U08PXEX7CAK> <@U02GSCVUPHU> :raised_hands:\n\n[Kristina Bilyk]: <!subteam^S08KMD5J4FJ> fyi\n\n[Kirill Potekhin]: oh yes!! great, guys!\n\n[Sofia Pikuleva]: cool!\n\ndo clients need to update the SDK? from which SDK version does it work?\n\n[Timur Nurutdinov]: Don’t need to do anything",
+      "content": "[Murat Menzilci]: Google Ads integration is live on Adapty Attribution :rocket:\n\nAdapty now pulls Google Ads performance data into UA analytics and sends conversion events back to Google for attribution and campaign optimization.\n\nWhat customers can do now:\n\nSee Google Ads spend, impressions, clicks and conversions inside Adapty\nSend installs, trial starts, purchases, renewals and other subscription events back to Google\nUse Revenue Override to assign a value to trial events, so Google can optimize toward revenue and not just trial volume\nSend test conversion events to check the setup before launching campaigns\n\nDocs: <https://adapty.io/docs/ua-google-ads|adapty.io/docs/ua-google-ads>\n\ncc <!subteam^S03KC9S1QMC> <!subteam^S07BZPQDBUJ>\n\n[Mike Gorokhov]: LET'S GO\n\n[Vitaly Davydov]: Good job! \n\n[Kseniya Simonova]: <!subteam^S07BZPQDBUJ> Good time to ping the clients who were waiting for it\n\n[Vitaly Davydov]: <@U02GSCVUPHU> <@U08PXEX7CAK> <@U9HDNS9S4> \n\n[Dmitry Shestoperov]: congrats! big step\n\n[Daniel Ridny]: Long awaited update!\nWell done <@U08PXEX7CAK> <@U02GSCVUPHU> :raised_hands:\n\n[Kristina Bilyk]: <!subteam^S08KMD5J4FJ> fyi\n\n[Kirill Potekhin]: oh yes!! great, guys!\n\n[Sofia Pikuleva]: cool!\n\ndo clients need to update the SDK? from which SDK version does it work?\n\n[Timur Nurutdinov]: Don’t need to do anything\n\n[Kseniya Simonova]: <@U08PXEX7CAK> <@U02GSCVUPHU> hey!\n\nI read the docs. In the case of google, can we work not only with web campaigns but with app campaigns and other campaign types as well?\n\n[Timur Nurutdinov]: Yes. But App campaign (UAC) is restricted only for Android\n\n[Sofia Pikuleva]: &gt; Yes. But App campaign (UAC) is restricted only for Android\ndoes it mean they work for Android only, right? no app campaigns for iOS?\n\n[Timur Nurutdinov]: Yep",
       "matchingReplies": [],
       "hasTeamMention": true,
       "images": [
