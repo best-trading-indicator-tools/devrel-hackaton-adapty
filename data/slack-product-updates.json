@@ -1,7 +1,80 @@
 {
-  "syncedAt": "2026-10-09T00:48:27.344Z",
+  "syncedAt": "2026-10-10T00:47:08.385Z",
   "channel": "#product-release",
   "entries": [
+    {
+      "id": "1791534788.429769",
+      "slackUrl": "https://adapty-team.slack.com/archives/C04SY70QZ0T/p1791534788429769",
+      "name": "hey team! custom tags are live in flow builder :jack_o_lantern:",
+      "message": "hey team! custom tags are live in flow builder :jack_o_lantern:\n\none of the last pieces for parity with the legacy builder :crystal_ball:\n\nMaybe everyone knows what is it but anyway:\na text variable whose value comes from the app, not from the flow\nthe developer passes it by name at runtime - user name, coin balance, current plan, anything the app knows and we don't\nso the screen says \"Hi, Anna! your marathon plan is ready\" instead of \"Hi there!\" :ghost:\n\nHow it works:\ncreate a variable, tick \"Value comes from outside the app\", drop it into any text\nInitial value is what you see on the canvas\nand it's also what the user sees if the app doesn't send the tag - the line never breaks, no spooky empty spots :spider_web:\n\nWho's been waiting for it :bat:\n• Feeld - one Majestic paywall with a title and description set by entry point: \"See who liked you\" when opened from likes, \"Become Majestic\" from the account tab. they were waiting for tags to move it to flows\n• Ideawise - want to show the user's current plan price next to the offer, so the upgrade gap is obvious\n• Crsel - a social proof paywall with the real number of users on the annual plan. without tags they'd have to hardcode it for the A/B test\n• and it all started with sales asking if a paywall can show the user's coin balance :candy:\n\nlimits for now :skull:\n• text only - no conditions, alerts or URLs yet. app values in logic is the next task\n\nthanks to <@U08EVBTE69E>:spider:",
+      "releaseDate": "2026-10-09",
+      "thread": [
+        {
+          "userId": "U0903TFULQ3",
+          "userName": "Andrii Hermanov",
+          "text": "hey team! custom tags are live in flow builder :jack_o_lantern:\n\none of the last pieces for parity with the legacy builder :crystal_ball:\n\nMaybe everyone knows what is it but anyway:\na text variable whose value comes from the app, not from the flow\nthe developer passes it by name at runtime - user name, coin balance, current plan, anything the app knows and we don't\nso the screen says \"Hi, Anna! your marathon plan is ready\" instead of \"Hi there!\" :ghost:\n\nHow it works:\ncreate a variable, tick \"Value comes from outside the app\", drop it into any text\nInitial value is what you see on the canvas\nand it's also what the user sees if the app doesn't send the tag - the line never breaks, no spooky empty spots :spider_web:\n\nWho's been waiting for it :bat:\n• Feeld - one Majestic paywall with a title and description set by entry point: \"See who liked you\" when opened from likes, \"Become Majestic\" from the account tab. they were waiting for tags to move it to flows\n• Ideawise - want to show the user's current plan price next to the offer, so the upgrade gap is obvious\n• Crsel - a social proof paywall with the real number of users on the annual plan. without tags they'd have to hardcode it for the A/B test\n• and it all started with sales asking if a paywall can show the user's coin balance :candy:\n\nlimits for now :skull:\n• text only - no conditions, alerts or URLs yet. app values in logic is the next task\n\nthanks to <@U08EVBTE69E>:spider:",
+          "date": "2026-10-09T08:33:08.429Z",
+          "images": [
+            "https://files.slack.com/files-pri/T9HDDB78Q-F0C73QPJB1V/1-builder-form.png",
+            "https://files.slack.com/files-pri/T9HDDB78Q-F0C7NSNTNPN/2-builder-canvas.png",
+            "https://files.slack.com/files-pri/T9HDDB78Q-F0C8DHJREP2/3-device-tags-passed.png",
+            "https://files.slack.com/files-pri/T9HDDB78Q-F0C73QQS7BR/4-device-tags-missing.png"
+          ]
+        },
+        {
+          "userId": "U0903TFULQ3",
+          "userName": "Andrii Hermanov",
+          "text": "• Dashboard guide <https://adapty.io/docs/flow-custom-tags|adapty.io/docs/flow-custom-tags>\n• SDK guides with common use cases:\n    ◦ iOS: <https://adapty.io/docs/ios-flow-custom-tags|adapty.io/docs/ios-flow-custom-tags>\n    ◦ Android: <https://adapty.io/docs/android-flow-custom-tags|adapty.io/docs/android-flow-custom-tags>\n    ◦ Flutter: <https://adapty.io/docs/flutter-flow-custom-tags|adapty.io/docs/flutter-flow-custom-tags>\n    ◦ React Native: <https://adapty.io/docs/react-native-flow-custom-tags|adapty.io/docs/react-native-flow-custom-tags>\n    ◦ Unity: <https://adapty.io/docs/unity-flow-custom-tags|adapty.io/docs/unity-flow-custom-tags>\n    ◦ Kotlin Multiplatform: <https://adapty.io/docs/kmp-flow-custom-tags|adapty.io/docs/kmp-flow-custom-tags>\n    ◦ Capacitor: <https://adapty.io/docs/capacitor-flow-custom-tags|adapty.io/docs/capacitor-flow-custom-tags>",
+          "date": "2026-10-09T08:35:49.043Z",
+          "images": []
+        },
+        {
+          "userId": "U08EVBTE69E",
+          "userName": "Maxim Borisik",
+          "text": "<!subteam^S07BZPQDBUJ> your clients wanted it badly!\n<!subteam^S03KM96DV0U> fyi\n\n<@U034A27SVHC> you as well",
+          "date": "2026-10-09T08:36:06.184Z",
+          "images": []
+        },
+        {
+          "userId": "U03DFSCP8CW",
+          "userName": "Mike Gorokhov",
+          "text": "Hey there,\n\nThese can not be used as conditions, right?",
+          "date": "2026-10-09T15:41:26.731Z",
+          "images": []
+        },
+        {
+          "userId": "U0903TFULQ3",
+          "userName": "Andrii Hermanov",
+          "text": "Hey\nYes, not yet, Mike",
+          "date": "2026-10-09T15:42:54.788Z",
+          "images": []
+        },
+        {
+          "userId": "U03DFSCP8CW",
+          "userName": "Mike Gorokhov",
+          "text": "\"yet\" is promising",
+          "date": "2026-10-09T15:43:14.742Z",
+          "images": []
+        }
+      ],
+      "content": "[Andrii Hermanov]: hey team! custom tags are live in flow builder :jack_o_lantern:\n\none of the last pieces for parity with the legacy builder :crystal_ball:\n\nMaybe everyone knows what is it but anyway:\na text variable whose value comes from the app, not from the flow\nthe developer passes it by name at runtime - user name, coin balance, current plan, anything the app knows and we don't\nso the screen says \"Hi, Anna! your marathon plan is ready\" instead of \"Hi there!\" :ghost:\n\nHow it works:\ncreate a variable, tick \"Value comes from outside the app\", drop it into any text\nInitial value is what you see on the canvas\nand it's also what the user sees if the app doesn't send the tag - the line never breaks, no spooky empty spots :spider_web:\n\nWho's been waiting for it :bat:\n• Feeld - one Majestic paywall with a title and description set by entry point: \"See who liked you\" when opened from likes, \"Become Majestic\" from the account tab. they were waiting for tags to move it to flows\n• Ideawise - want to show the user's current plan price next to the offer, so the upgrade gap is obvious\n• Crsel - a social proof paywall with the real number of users on the annual plan. without tags they'd have to hardcode it for the A/B test\n• and it all started with sales asking if a paywall can show the user's coin balance :candy:\n\nlimits for now :skull:\n• text only - no conditions, alerts or URLs yet. app values in logic is the next task\n\nthanks to <@U08EVBTE69E>:spider:\n\n[Andrii Hermanov]: • Dashboard guide <https://adapty.io/docs/flow-custom-tags|adapty.io/docs/flow-custom-tags>\n• SDK guides with common use cases:\n    ◦ iOS: <https://adapty.io/docs/ios-flow-custom-tags|adapty.io/docs/ios-flow-custom-tags>\n    ◦ Android: <https://adapty.io/docs/android-flow-custom-tags|adapty.io/docs/android-flow-custom-tags>\n    ◦ Flutter: <https://adapty.io/docs/flutter-flow-custom-tags|adapty.io/docs/flutter-flow-custom-tags>\n    ◦ React Native: <https://adapty.io/docs/react-native-flow-custom-tags|adapty.io/docs/react-native-flow-custom-tags>\n    ◦ Unity: <https://adapty.io/docs/unity-flow-custom-tags|adapty.io/docs/unity-flow-custom-tags>\n    ◦ Kotlin Multiplatform: <https://adapty.io/docs/kmp-flow-custom-tags|adapty.io/docs/kmp-flow-custom-tags>\n    ◦ Capacitor: <https://adapty.io/docs/capacitor-flow-custom-tags|adapty.io/docs/capacitor-flow-custom-tags>\n\n[Maxim Borisik]: <!subteam^S07BZPQDBUJ> your clients wanted it badly!\n<!subteam^S03KM96DV0U> fyi\n\n<@U034A27SVHC> you as well\n\n[Mike Gorokhov]: Hey there,\n\nThese can not be used as conditions, right?\n\n[Andrii Hermanov]: Hey\nYes, not yet, Mike\n\n[Mike Gorokhov]: \"yet\" is promising",
+      "matchingReplies": [
+        {
+          "userId": "U08EVBTE69E",
+          "userName": "Maxim Borisik",
+          "text": "<!subteam^S07BZPQDBUJ> your clients wanted it badly!\n<!subteam^S03KM96DV0U> fyi\n\n<@U034A27SVHC> you as well",
+          "date": "2026-10-09T08:36:06.184Z",
+          "images": []
+        }
+      ],
+      "hasTeamMention": true,
+      "images": [
+        "https://files.slack.com/files-pri/T9HDDB78Q-F0C73QPJB1V/1-builder-form.png",
+        "https://files.slack.com/files-pri/T9HDDB78Q-F0C7NSNTNPN/2-builder-canvas.png",
+        "https://files.slack.com/files-pri/T9HDDB78Q-F0C8DHJREP2/3-device-tags-passed.png",
+        "https://files.slack.com/files-pri/T9HDDB78Q-F0C73QQS7BR/4-device-tags-missing.png"
+      ]
+    },
     {
       "id": "1790943575.026089",
       "slackUrl": "https://adapty-team.slack.com/archives/C04SY70QZ0T/p1790943575026089",
@@ -1856,359 +1929,6 @@
         "https://files.slack.com/files-pri/T9HDDB78Q-F0BN8QUQ04U/image.png",
         "https://files.slack.com/files-pri/T9HDDB78Q-F0BMZ97HBL3/image.png",
         "https://files.slack.com/files-pri/T9HDDB78Q-F0BN3GT0Z2S/image.png"
-      ]
-    },
-    {
-      "id": "1785855723.569869",
-      "slackUrl": "https://adapty-team.slack.com/archives/C04SY70QZ0T/p1785855723569869",
-      "name": "Apple Retention Messaging API",
-      "message": "Feature: <https://adaptyio.atlassian.net/browse/ADP-6445|Apple Retention Messaging API>\nRelease: July 30, 2026 (under feature flag)\nDependencies: None\nEffected areas: Dashboard (new section), Analytics\n\n<!subteam^S07BZPQDBUJ> <!subteam^S03KM96DV0U> <!subteam^S03KC9S1QMC> <@U05QELDHUUX> <@U06K36L6CTB>\n\nSup, team — it’s finally here (under feature flag BUT goes live this week)! :apple:\n\nWhen a subscriber taps Cancel Subscription in iOS Settings, Apple now shows _your_ message right in the cancellation sheet — a value reminder, a discount, or a plan switch — before the cancellation is confirmed. The one screen apps never owned, now addressable straight from Adapty:\n\n• on-device preview — see the message in Apple’s cancel sheet (light & dark) before it goes to review (Our benefit, only SW support)\n• AI localization — write once in English, auto translate fills every locale. (Our benefit, RC and SW doesn’t support this)\n• save-rate analytics — Shown / Saved / Save rate per message\nApple’s side is still in beta, so we’re shipping behind a feature flag purely as a safety net. Until it comes off, enable it in the browser console:\n`window.adapty_ff.set('retentionMessaging', true)` → Apple Retention Messaging appears in the left nav. Poke around and drop anything odd in this thread. <!subteam^S07BZPQDBUJ> You can provide it to your clients who are approved from Apple, most probably we’ll disable it this week and go LIVE!\n\n*Who this is for:* \nAny iOS subscription app that wants to lift retention with zero engineering - no endpoint, no SDK update. Sharpest fits: price-sensitive apps (discount at cancel intent), monthly + annual mixes (plan switch instead of churn).\n\n*What’s next:* \nAnalytics improvements (adding saved $ metric), then A/B testing if adoption is strong.\n\nDocs: <https://adapty.io/docs/retention-messaging|adapty.io/docs/retention-messaging>\n\nHuge kudos to <@U0ACSQAKJA1> <@U09AH7D2A4X> <@U0AQZG23D62> <@U0A3M160RB4> <@U08ASB4GYR4> <@U0AKC1Y09R8> :fire:",
-      "releaseDate": "2026-08-04",
-      "thread": [
-        {
-          "userId": "U07J9LKBQ5U",
-          "userName": "Yurii Kleimenov",
-          "text": "Feature: <https://adaptyio.atlassian.net/browse/ADP-6445|Apple Retention Messaging API>\nRelease: July 30, 2026 (under feature flag)\nDependencies: None\nEffected areas: Dashboard (new section), Analytics\n\n<!subteam^S07BZPQDBUJ> <!subteam^S03KM96DV0U> <!subteam^S03KC9S1QMC> <@U05QELDHUUX> <@U06K36L6CTB>\n\nSup, team — it’s finally here (under feature flag BUT goes live this week)! :apple:\n\nWhen a subscriber taps Cancel Subscription in iOS Settings, Apple now shows _your_ message right in the cancellation sheet — a value reminder, a discount, or a plan switch — before the cancellation is confirmed. The one screen apps never owned, now addressable straight from Adapty:\n\n• on-device preview — see the message in Apple’s cancel sheet (light & dark) before it goes to review (Our benefit, only SW support)\n• AI localization — write once in English, auto translate fills every locale. (Our benefit, RC and SW doesn’t support this)\n• save-rate analytics — Shown / Saved / Save rate per message\nApple’s side is still in beta, so we’re shipping behind a feature flag purely as a safety net. Until it comes off, enable it in the browser console:\n`window.adapty_ff.set('retentionMessaging', true)` → Apple Retention Messaging appears in the left nav. Poke around and drop anything odd in this thread. <!subteam^S07BZPQDBUJ> You can provide it to your clients who are approved from Apple, most probably we’ll disable it this week and go LIVE!\n\n*Who this is for:* \nAny iOS subscription app that wants to lift retention with zero engineering - no endpoint, no SDK update. Sharpest fits: price-sensitive apps (discount at cancel intent), monthly + annual mixes (plan switch instead of churn).\n\n*What’s next:* \nAnalytics improvements (adding saved $ metric), then A/B testing if adoption is strong.\n\nDocs: <https://adapty.io/docs/retention-messaging|adapty.io/docs/retention-messaging>\n\nHuge kudos to <@U0ACSQAKJA1> <@U09AH7D2A4X> <@U0AQZG23D62> <@U0A3M160RB4> <@U08ASB4GYR4> <@U0AKC1Y09R8> :fire:",
-          "date": "2026-08-04T15:02:03.569Z",
-          "images": [
-            "https://files.slack.com/files-pri/T9HDDB78Q-F0BMUPB70UV/image.png"
-          ]
-        },
-        {
-          "userId": "U090BDLA9JN",
-          "userName": "Dmitry Shestoperov",
-          "text": "if possible, I'd appreciate a short video demonstrating the confirm cancellation screen with a custom message/offer:pray:",
-          "date": "2026-08-04T15:06:00.494Z",
-          "images": []
-        },
-        {
-          "userId": "U07FKBD6QDS",
-          "userName": "Daniel Ridny",
-          "text": "<@U07J9LKBQ5U> QQ about Retention Messaging analytics from client - _No way to see this in AppStoreConnect, only API? Will we be able to observe the save rate % in Adapty?_",
-          "date": "2026-08-05T10:05:40.564Z",
-          "images": []
-        },
-        {
-          "userId": "U07J9LKBQ5U",
-          "userName": "Yurii Kleimenov",
-          "text": "Yes, we’re displaying retention rate for each message",
-          "date": "2026-08-05T10:06:24.285Z",
-          "images": []
-        },
-        {
-          "userId": "U07FKBD6QDS",
-          "userName": "Daniel Ridny",
-          "text": "thanks <@U07J9LKBQ5U> can you share on this one _- No way to see this in AppStoreConnect, only API?_",
-          "date": "2026-08-05T10:06:48.172Z",
-          "images": []
-        },
-        {
-          "userId": "U07FGPCB4D9",
-          "userName": "Vlad Konkov",
-          "text": "hey <@U07J9LKBQ5U>\ni also have a <https://adapty-team.slack.com/archives/C0A6SCL1V5W/p1785861633705719?thread_ts=1785855306.384369&amp;cid=C0A6SCL1V5W|question> from a customer.\nactually, can we somehow highlight for the customers on how to set this thing up in their APC? at least add info to our docs?\nthe reason is not so many customers actually know they can try to retain their subscribers.\ni tried to <https://developer.apple.com/documentation/retentionmessaging|read the> documentation and was expecting \"go there – click here – upload image - write text\" and that's it",
-          "date": "2026-08-05T10:17:24.208Z",
-          "images": []
-        },
-        {
-          "userId": "U07J9LKBQ5U",
-          "userName": "Yurii Kleimenov",
-          "text": "<@U07FGPCB4D9> This feature works out of the box on the Adapty side. Everything is configured, submitted, and uploaded to App Store Connect automatically. The client only needs to approve the beta from Apple’s side. We’ll have a call with the CS team, and I’ll explain everything in detail.",
-          "date": "2026-08-05T10:24:24.321Z",
-          "images": []
-        },
-        {
-          "userId": "U07J9LKBQ5U",
-          "userName": "Yurii Kleimenov",
-          "text": "<https://adapty.io/docs/retention-messaging-setup>",
-          "date": "2026-08-05T10:25:07.010Z",
-          "images": []
-        },
-        {
-          "userId": "U07J9LKBQ5U",
-          "userName": "Yurii Kleimenov",
-          "text": "IT’S LIVE FOR EVERYONE :fire:",
-          "date": "2026-08-06T13:48:49.731Z",
-          "images": []
-        },
-        {
-          "userId": "U06JP8BJFEV",
-          "userName": "Viktoriya Kirsanova",
-          "text": "<@U07J9LKBQ5U> plz check the relative thread in the sup internal",
-          "date": "2026-08-06T13:49:50.984Z",
-          "images": []
-        },
-        {
-          "userId": "U090BDLA9JN",
-          "userName": "Dmitry Shestoperov",
-          "text": "cool, shooting up some posts on socials",
-          "date": "2026-08-06T13:50:05.440Z",
-          "images": []
-        },
-        {
-          "userId": "U090BDLA9JN",
-          "userName": "Dmitry Shestoperov",
-          "text": "<https://lnkd.in/p/e9ax7vb5|lnkd.in/p/…>\n\nhit a like if you see this pls",
-          "date": "2026-08-06T13:55:50.124Z",
-          "images": []
-        },
-        {
-          "userId": "U090BDLA9JN",
-          "userName": "Dmitry Shestoperov",
-          "text": "is this behavior expected without an actual Apple’s approval?",
-          "date": "2026-08-06T14:19:10.287Z",
-          "images": [
-            "https://files.slack.com/files-pri/T9HDDB78Q-F0BPBFTN7J4/screenshot_2026-08-06_at_17.18.14.png"
-          ]
-        },
-        {
-          "userId": "U06JP8BJFEV",
-          "userName": "Viktoriya Kirsanova",
-          "text": "Doesn't seem so. One of the clients shared",
-          "date": "2026-08-06T14:25:16.250Z",
-          "images": [
-            "https://files.slack.com/files-pri/T9HDDB78Q-F0BNH75BBAN/image.png"
-          ]
-        },
-        {
-          "userId": "U06JP8BJFEV",
-          "userName": "Viktoriya Kirsanova",
-          "text": "<@U07J9LKBQ5U> Our docs say that Support can help customers request access to Apple's Retention Messaging API beta.\n\nSo am I understanding it right: we first ask the app name, then provide a link as described <https://adapty-team.slack.com/archives/C02PV5E6WAH/p1762292175188049?thread_ts=1753117401.006969&amp;cid=C02PV5E6WAH|here>(is it still relevant?) and share Apple's <https://developer.apple.com/documentation/retentionmessaging/|doc link>? Or is there smth else we should help with? Are there any specific instructions or wording we should use?",
-          "date": "2026-08-06T14:29:06.705Z",
-          "images": []
-        },
-        {
-          "userId": "U07J9LKBQ5U",
-          "userName": "Yurii Kleimenov",
-          "text": "<https://adapty-team.slack.com/archives/C04SY70QZ0T/p1786025950287839?thread_ts=1785855723.569869&amp;cid=C04SY70QZ0T|https://adapty-team.slack.com/archives/C04SY70QZ0T/p1786025950287839?thread_ts=1785855723.569869&amp;cid=C04SY70QZ0T>\n\nThis behavior is sometimes observed in completely empty apps, both in Sandbox and Production. However, if you register an app from scratch, it doesn’t occur. We’ll add an appropriate empty state later.",
-          "date": "2026-08-06T16:48:58.648Z",
-          "images": []
-        },
-        {
-          "userId": "U0A266T9SJE",
-          "userName": "Melike Sezer",
-          "text": "What's the steps would you suggest to follow in general <@U07J9LKBQ5U>? Should we proactively reach our clients to say give your app names if you haven't applied before and we provide URL?\nOr providing URL is irrelevant anymore?",
-          "date": "2026-08-07T07:42:45.288Z",
-          "images": []
-        },
-        {
-          "userId": "U07J9LKBQ5U",
-          "userName": "Yurii Kleimenov",
-          "text": "This feature is still in beta on Apple’s side, so yes, you’ll need to provide the URLs for now - but we’ll be adding them to the dashboard soon (probably next week), so you won’t have to do it manually.",
-          "date": "2026-08-07T07:45:10.661Z",
-          "images": []
-        },
-        {
-          "userId": "U0A266T9SJE",
-          "userName": "Melike Sezer",
-          "text": "Is there any benefit of us providing the URL? If they've requested it before from Apple?",
-          "date": "2026-08-07T07:46:03.598Z",
-          "images": []
-        },
-        {
-          "userId": "U07J9LKBQ5U",
-          "userName": "Yurii Kleimenov",
-          "text": "No - if their app is already approved, they can just go to the dashboard and start the configuration. We’ll replace their URL ourselves.",
-          "date": "2026-08-07T07:47:33.774Z",
-          "images": []
-        },
-        {
-          "userId": "U0A266T9SJE",
-          "userName": "Melike Sezer",
-          "text": "What happens if they had applied but didn't receive the approval? By applying via our URL, would it fasten the process?",
-          "date": "2026-08-07T07:48:26.818Z",
-          "images": []
-        },
-        {
-          "userId": "U07J9LKBQ5U",
-          "userName": "Yurii Kleimenov",
-          "text": "I don’t think so, but they can try",
-          "date": "2026-08-07T07:48:51.756Z",
-          "images": []
-        },
-        {
-          "userId": "U0A266T9SJE",
-          "userName": "Melike Sezer",
-          "text": "Thank you so much for the super quick answers :extreme-teamwork:",
-          "date": "2026-08-07T07:49:13.954Z",
-          "images": []
-        },
-        {
-          "userId": "U06GZ6112ES",
-          "userName": "Vladislav Fediushin",
-          "text": "Hi there <@U07J9LKBQ5U>! Could you advise on adding Retention messaging API to apps that already have these messages on their side: will Adapty's messages replace them automatically, or the customer needs to turn off the existing messaging, then add Adapty's one?",
-          "date": "2026-08-10T10:13:05.232Z",
-          "images": []
-        },
-        {
-          "userId": "U07J9LKBQ5U",
-          "userName": "Yurii Kleimenov",
-          "text": "We'll replace them automatically after clicking replace or configure button ",
-          "date": "2026-08-10T10:16:15.295Z",
-          "images": []
-        },
-        {
-          "userId": "U07J9LKBQ5U",
-          "userName": "Yurii Kleimenov",
-          "text": "<!subteam^S03KM96DV0U> <!subteam^S07BZPQDBUJ> Hey! We’ve released an update, and now configuring the Apple RM API URL is much easier. We check if the app hasn’t been approved for Apple’s beta yet and show this empty state with the URL. It’s also available under *App Settings → iOS SDK*.",
-          "date": "2026-08-10T10:46:56.744Z",
-          "images": [
-            "https://files.slack.com/files-pri/T9HDDB78Q-F0BP5UQC5L2/image.png"
-          ]
-        },
-        {
-          "userId": "U07J9LKBQ5U",
-          "userName": "Yurii Kleimenov",
-          "text": "",
-          "date": "2026-08-10T10:47:26.039Z",
-          "images": [
-            "https://files.slack.com/files-pri/T9HDDB78Q-F0BP2F3EL5B/image.png"
-          ]
-        },
-        {
-          "userId": "U090BDLA9JN",
-          "userName": "Dmitry Shestoperov",
-          "text": "that means clients don't need to request it from the support, right?",
-          "date": "2026-08-10T10:48:13.423Z",
-          "images": []
-        },
-        {
-          "userId": "U07J9LKBQ5U",
-          "userName": "Yurii Kleimenov",
-          "text": "Yep",
-          "date": "2026-08-10T10:48:26.835Z",
-          "images": []
-        },
-        {
-          "userId": "U0A266T9SJE",
-          "userName": "Melike Sezer",
-          "text": "`Poke around and drop anything odd in this thread`\nHow can I do this? I couldn't find a way to play around with it",
-          "date": "2026-08-10T14:23:31.432Z",
-          "images": []
-        },
-        {
-          "userId": "U07J9LKBQ5U",
-          "userName": "Yurii Kleimenov",
-          "text": "<@U0A266T9SJE> You can add yourself to our Demo Company and play around with it in our Adapty Demo App. Here it is: <https://django-admin.adapty.io/admin/api/company/?q=a11c03ea-75e2-450f-8d42-67c3676aef7b|django-admin.adapty.io/admin/api/company?q=…>",
-          "date": "2026-08-10T16:03:58.202Z",
-          "images": []
-        },
-        {
-          "userId": "U07AUQLQUJX",
-          "userName": "Aleksandr Smirnov",
-          "text": "Hi <@U07J9LKBQ5U>!\nAre there any plans to lift the limit on the product dropdown for the RM API? It looks like only the first 10 products are shown at the moment. We’ve had feedback from Tappz about this: <https://adapty-team.slack.com/archives/C06T9TJQWNL/p1786391665279669?thread_ts=1786362185.165069&amp;cid=C06T9TJQWNL|https://adapty-team.slack.com/archives/C06T9TJQWNL/p1786391665279669?thread_ts=1786362185.165069&amp;cid=C06T9TJQWNL>\n\nI suspect the same request could apply to Virtual Currency. Showing the full list would help clients who have more than 10 products.\n\nEntering the names manually is a workable alternative, so this isn’t blocking anyone, but I wanted to pass the feedback along.",
-          "date": "2026-08-10T21:16:56.045Z",
-          "images": []
-        },
-        {
-          "userId": "U07AUQLQUJX",
-          "userName": "Aleksandr Smirnov",
-          "text": "<@U07J9LKBQ5U> trying gently again regarding :arrow_up:",
-          "date": "2026-08-11T20:36:12.684Z",
-          "images": []
-        },
-        {
-          "userId": "U07J9LKBQ5U",
-          "userName": "Yurii Kleimenov",
-          "text": "Hey <@U07AUQLQUJX>, thanks for the feedback! I’ve added both tasks to backlog but without ETA for now.",
-          "date": "2026-08-12T09:33:07.406Z",
-          "images": []
-        },
-        {
-          "userId": "U07J9LKBQ5U",
-          "userName": "Yurii Kleimenov",
-          "text": "1. <https://adaptyio.atlassian.net/browse/ADP-7514|[BE] Virtual Currency - Расширить кол-во продуктов в ручке саджеста>\n2. <https://adaptyio.atlassian.net/browse/ADP-7513|[BE] Apple RM - Расширить кол-во продуктов в ручке саджеста>",
-          "date": "2026-08-13T10:47:35.219Z",
-          "images": []
-        },
-        {
-          "userId": "U07FGPCB4D9",
-          "userName": "Vlad Konkov",
-          "text": "Hey <@U07J9LKBQ5U>,\nWhen can we expect a call? Thanks",
-          "date": "2026-08-18T08:57:35.619Z",
-          "images": []
-        },
-        {
-          "userId": "U09CTDGV18D",
-          "userName": "Berenay Yiğit",
-          "text": "One small edge case I noticed <@U07J9LKBQ5U>\nIf I search for a product by its name *without the punctuation marks*, it doesn’t return the product, even though searching for the same name with the punctuation works as expected.\n\nFor example, with the product shown in the screenshot, searching for `yearly` returns it normally, but searching for `yearly non` returns *“No options.”*\nI know this is a very small/rare edge case, but I wanted to flag it from a user-friendliness perspective — it has already caught me out, as well as an Enterprise client (Impala, `efdcd9a2-3f5c-4b6d-9864-c870eaadb5cc`).\nNot blocking, but thought it was worth dropping here while we’re poking around.",
-          "date": "2026-08-27T07:41:07.140Z",
-          "images": [
-            "https://files.slack.com/files-pri/T9HDDB78Q-F0BT5UXS1E0/image.png",
-            "https://files.slack.com/files-pri/T9HDDB78Q-F0BT46T377B/image.png"
-          ]
-        },
-        {
-          "userId": "U07J9LKBQ5U",
-          "userName": "Yurii Kleimenov",
-          "text": "<@U09CTDGV18D> Thank you! We’ll put this in backlog and fix along with other small issues related to UI/UX in Apple RM API",
-          "date": "2026-08-27T07:51:22.279Z",
-          "images": []
-        },
-        {
-          "userId": "U07J9LKBQ5U",
-          "userName": "Yurii Kleimenov",
-          "text": "<https://adaptyio.atlassian.net/browse/ADP-7724|adaptyio.atlassian.net/browse/ADP-7724>",
-          "date": "2026-09-01T09:04:51.530Z",
-          "images": []
-        },
-        {
-          "userId": "U07J9LKBQ5U",
-          "userName": "Yurii Kleimenov",
-          "text": "<!subteam^S03KC9S1QMC> <!subteam^S07BZPQDBUJ> <@U9HDNS9S4> <@U9JU5J5RC> We’ve finally fixed displaying Apple RM API for our Sales Demo app.",
-          "date": "2026-09-02T15:19:38.178Z",
-          "images": [
-            "https://files.slack.com/files-pri/T9HDDB78Q-F0BU1BYUZKR/image.png"
-          ]
-        },
-        {
-          "userId": "U07J9LKBQ5U",
-          "userName": "Yurii Kleimenov",
-          "text": "Right on time! I just had a call with GlamAI and <@U07H1ESAH6K>, and they’ve been approved for Apple’s beta and will start using our solution! Let’s goooo! :rocket:\n\nWe all know how good they are at experimenting with paywalls, so we’ll probably see huge growth in both their GMV and ours. :crossed_fingers:\n\n<https://adapty-team.slack.com/archives/C047DLUK52B/p1788436269683429|https://adapty-team.slack.com/archives/C047DLUK52B/p1788436269683429>",
-          "date": "2026-09-03T13:59:24.649Z",
-          "images": []
-        },
-        {
-          "userId": "U07AUQLQUJX",
-          "userName": "Aleksandr Smirnov",
-          "text": "Hi @ Yurii Kleimenov!\nA signal on Retention Messaging from woowooapps (~10k/mo)\n1. A/B testing. They want to compare plain text, bullets and a promo offer, and they’re asking about an ETA for A/B. Your post puts A/B after saved $ and “if adoption is strong”, so this looks like exactly that signal. CR-658 covers only segmentation, not A/B, so I’m raising it here.\n2. Bullet points. I’ve added them to the existing <https://adaptyio.atlassian.net/browse/CR-666|CR>. \n3. headerPosition. The client also asked about it. It’s Apple’s option to place the header above the image (`ABOVE_IMAGE`) instead of the default `ABOVE_BODY` (<https://developer.apple.com/documentation/retentionmessaging/headerposition|docs>). The field is already in our Apple request model but never set. Is it planned along with bullets? It’s not a blocker for this client, since their layout uses the default.\nIf there’s even a rough timeline for A/B, please let me know. It matters to this client.",
-          "date": "2026-10-01T18:11:50.656Z",
-          "images": []
-        },
-        {
-          "userId": "U07J9LKBQ5U",
-          "userName": "Yurii Kleimenov",
-          "text": "Hey <@U07AUQLQUJX>! Everything you mentioned we’re planning to deliver in Q4",
-          "date": "2026-10-02T11:19:47.331Z",
-          "images": []
-        }
-      ],
-      "content": "[Yurii Kleimenov]: Feature: <https://adaptyio.atlassian.net/browse/ADP-6445|Apple Retention Messaging API>\nRelease: July 30, 2026 (under feature flag)\nDependencies: None\nEffected areas: Dashboard (new section), Analytics\n\n<!subteam^S07BZPQDBUJ> <!subteam^S03KM96DV0U> <!subteam^S03KC9S1QMC> <@U05QELDHUUX> <@U06K36L6CTB>\n\nSup, team — it’s finally here (under feature flag BUT goes live this week)! :apple:\n\nWhen a subscriber taps Cancel Subscription in iOS Settings, Apple now shows _your_ message right in the cancellation sheet — a value reminder, a discount, or a plan switch — before the cancellation is confirmed. The one screen apps never owned, now addressable straight from Adapty:\n\n• on-device preview — see the message in Apple’s cancel sheet (light & dark) before it goes to review (Our benefit, only SW support)\n• AI localization — write once in English, auto translate fills every locale. (Our benefit, RC and SW doesn’t support this)\n• save-rate analytics — Shown / Saved / Save rate per message\nApple’s side is still in beta, so we’re shipping behind a feature flag purely as a safety net. Until it comes off, enable it in the browser console:\n`window.adapty_ff.set('retentionMessaging', true)` → Apple Retention Messaging appears in the left nav. Poke around and drop anything odd in this thread. <!subteam^S07BZPQDBUJ> You can provide it to your clients who are approved from Apple, most probably we’ll disable it this week and go LIVE!\n\n*Who this is for:* \nAny iOS subscription app that wants to lift retention with zero engineering - no endpoint, no SDK update. Sharpest fits: price-sensitive apps (discount at cancel intent), monthly + annual mixes (plan switch instead of churn).\n\n*What’s next:* \nAnalytics improvements (adding saved $ metric), then A/B testing if adoption is strong.\n\nDocs: <https://adapty.io/docs/retention-messaging|adapty.io/docs/retention-messaging>\n\nHuge kudos to <@U0ACSQAKJA1> <@U09AH7D2A4X> <@U0AQZG23D62> <@U0A3M160RB4> <@U08ASB4GYR4> <@U0AKC1Y09R8> :fire:\n\n[Dmitry Shestoperov]: if possible, I'd appreciate a short video demonstrating the confirm cancellation screen with a custom message/offer:pray:\n\n[Daniel Ridny]: <@U07J9LKBQ5U> QQ about Retention Messaging analytics from client - _No way to see this in AppStoreConnect, only API? Will we be able to observe the save rate % in Adapty?_\n\n[Yurii Kleimenov]: Yes, we’re displaying retention rate for each message\n\n[Daniel Ridny]: thanks <@U07J9LKBQ5U> can you share on this one _- No way to see this in AppStoreConnect, only API?_\n\n[Vlad Konkov]: hey <@U07J9LKBQ5U>\ni also have a <https://adapty-team.slack.com/archives/C0A6SCL1V5W/p1785861633705719?thread_ts=1785855306.384369&amp;cid=C0A6SCL1V5W|question> from a customer.\nactually, can we somehow highlight for the customers on how to set this thing up in their APC? at least add info to our docs?\nthe reason is not so many customers actually know they can try to retain their subscribers.\ni tried to <https://developer.apple.com/documentation/retentionmessaging|read the> documentation and was expecting \"go there – click here – upload image - write text\" and that's it\n\n[Yurii Kleimenov]: <@U07FGPCB4D9> This feature works out of the box on the Adapty side. Everything is configured, submitted, and uploaded to App Store Connect automatically. The client only needs to approve the beta from Apple’s side. We’ll have a call with the CS team, and I’ll explain everything in detail.\n\n[Yurii Kleimenov]: <https://adapty.io/docs/retention-messaging-setup>\n\n[Yurii Kleimenov]: IT’S LIVE FOR EVERYONE :fire:\n\n[Viktoriya Kirsanova]: <@U07J9LKBQ5U> plz check the relative thread in the sup internal\n\n[Dmitry Shestoperov]: cool, shooting up some posts on socials\n\n[Dmitry Shestoperov]: <https://lnkd.in/p/e9ax7vb5|lnkd.in/p/…>\n\nhit a like if you see this pls\n\n[Dmitry Shestoperov]: is this behavior expected without an actual Apple’s approval?\n\n[Viktoriya Kirsanova]: Doesn't seem so. One of the clients shared\n\n[Viktoriya Kirsanova]: <@U07J9LKBQ5U> Our docs say that Support can help customers request access to Apple's Retention Messaging API beta.\n\nSo am I understanding it right: we first ask the app name, then provide a link as described <https://adapty-team.slack.com/archives/C02PV5E6WAH/p1762292175188049?thread_ts=1753117401.006969&amp;cid=C02PV5E6WAH|here>(is it still relevant?) and share Apple's <https://developer.apple.com/documentation/retentionmessaging/|doc link>? Or is there smth else we should help with? Are there any specific instructions or wording we should use?\n\n[Yurii Kleimenov]: <https://adapty-team.slack.com/archives/C04SY70QZ0T/p1786025950287839?thread_ts=1785855723.569869&amp;cid=C04SY70QZ0T|https://adapty-team.slack.com/archives/C04SY70QZ0T/p1786025950287839?thread_ts=1785855723.569869&amp;cid=C04SY70QZ0T>\n\nThis behavior is sometimes observed in completely empty apps, both in Sandbox and Production. However, if you register an app from scratch, it doesn’t occur. We’ll add an appropriate empty state later.\n\n[Melike Sezer]: What's the steps would you suggest to follow in general <@U07J9LKBQ5U>? Should we proactively reach our clients to say give your app names if you haven't applied before and we provide URL?\nOr providing URL is irrelevant anymore?\n\n[Yurii Kleimenov]: This feature is still in beta on Apple’s side, so yes, you’ll need to provide the URLs for now - but we’ll be adding them to the dashboard soon (probably next week), so you won’t have to do it manually.\n\n[Melike Sezer]: Is there any benefit of us providing the URL? If they've requested it before from Apple?\n\n[Yurii Kleimenov]: No - if their app is already approved, they can just go to the dashboard and start the configuration. We’ll replace their URL ourselves.\n\n[Melike Sezer]: What happens if they had applied but didn't receive the approval? By applying via our URL, would it fasten the process?\n\n[Yurii Kleimenov]: I don’t think so, but they can try\n\n[Melike Sezer]: Thank you so much for the super quick answers :extreme-teamwork:\n\n[Vladislav Fediushin]: Hi there <@U07J9LKBQ5U>! Could you advise on adding Retention messaging API to apps that already have these messages on their side: will Adapty's messages replace them automatically, or the customer needs to turn off the existing messaging, then add Adapty's one?\n\n[Yurii Kleimenov]: We'll replace them automatically after clicking replace or configure button \n\n[Yurii Kleimenov]: <!subteam^S03KM96DV0U> <!subteam^S07BZPQDBUJ> Hey! We’ve released an update, and now configuring the Apple RM API URL is much easier. We check if the app hasn’t been approved for Apple’s beta yet and show this empty state with the URL. It’s also available under *App Settings → iOS SDK*.\n\n[Yurii Kleimenov]: \n\n[Dmitry Shestoperov]: that means clients don't need to request it from the support, right?\n\n[Yurii Kleimenov]: Yep\n\n[Melike Sezer]: `Poke around and drop anything odd in this thread`\nHow can I do this? I couldn't find a way to play around with it\n\n[Yurii Kleimenov]: <@U0A266T9SJE> You can add yourself to our Demo Company and play around with it in our Adapty Demo App. Here it is: <https://django-admin.adapty.io/admin/api/company/?q=a11c03ea-75e2-450f-8d42-67c3676aef7b|django-admin.adapty.io/admin/api/company?q=…>\n\n[Aleksandr Smirnov]: Hi <@U07J9LKBQ5U>!\nAre there any plans to lift the limit on the product dropdown for the RM API? It looks like only the first 10 products are shown at the moment. We’ve had feedback from Tappz about this: <https://adapty-team.slack.com/archives/C06T9TJQWNL/p1786391665279669?thread_ts=1786362185.165069&amp;cid=C06T9TJQWNL|https://adapty-team.slack.com/archives/C06T9TJQWNL/p1786391665279669?thread_ts=1786362185.165069&amp;cid=C06T9TJQWNL>\n\nI suspect the same request could apply to Virtual Currency. Showing the full list would help clients who have more than 10 products.\n\nEntering the names manually is a workable alternative, so this isn’t blocking anyone, but I wanted to pass the feedback along.\n\n[Aleksandr Smirnov]: <@U07J9LKBQ5U> trying gently again regarding :arrow_up:\n\n[Yurii Kleimenov]: Hey <@U07AUQLQUJX>, thanks for the feedback! I’ve added both tasks to backlog but without ETA for now.\n\n[Yurii Kleimenov]: 1. <https://adaptyio.atlassian.net/browse/ADP-7514|[BE] Virtual Currency - Расширить кол-во продуктов в ручке саджеста>\n2. <https://adaptyio.atlassian.net/browse/ADP-7513|[BE] Apple RM - Расширить кол-во продуктов в ручке саджеста>\n\n[Vlad Konkov]: Hey <@U07J9LKBQ5U>,\nWhen can we expect a call? Thanks\n\n[Berenay Yiğit]: One small edge case I noticed <@U07J9LKBQ5U>\nIf I search for a product by its name *without the punctuation marks*, it doesn’t return the product, even though searching for the same name with the punctuation works as expected.\n\nFor example, with the product shown in the screenshot, searching for `yearly` returns it normally, but searching for `yearly non` returns *“No options.”*\nI know this is a very small/rare edge case, but I wanted to flag it from a user-friendliness perspective — it has already caught me out, as well as an Enterprise client (Impala, `efdcd9a2-3f5c-4b6d-9864-c870eaadb5cc`).\nNot blocking, but thought it was worth dropping here while we’re poking around.\n\n[Yurii Kleimenov]: <@U09CTDGV18D> Thank you! We’ll put this in backlog and fix along with other small issues related to UI/UX in Apple RM API\n\n[Yurii Kleimenov]: <https://adaptyio.atlassian.net/browse/ADP-7724|adaptyio.atlassian.net/browse/ADP-7724>\n\n[Yurii Kleimenov]: <!subteam^S03KC9S1QMC> <!subteam^S07BZPQDBUJ> <@U9HDNS9S4> <@U9JU5J5RC> We’ve finally fixed displaying Apple RM API for our Sales Demo app.\n\n[Yurii Kleimenov]: Right on time! I just had a call with GlamAI and <@U07H1ESAH6K>, and they’ve been approved for Apple’s beta and will start using our solution! Let’s goooo! :rocket:\n\nWe all know how good they are at experimenting with paywalls, so we’ll probably see huge growth in both their GMV and ours. :crossed_fingers:\n\n<https://adapty-team.slack.com/archives/C047DLUK52B/p1788436269683429|https://adapty-team.slack.com/archives/C047DLUK52B/p1788436269683429>\n\n[Aleksandr Smirnov]: Hi @ Yurii Kleimenov!\nA signal on Retention Messaging from woowooapps (~10k/mo)\n1. A/B testing. They want to compare plain text, bullets and a promo offer, and they’re asking about an ETA for A/B. Your post puts A/B after saved $ and “if adoption is strong”, so this looks like exactly that signal. CR-658 covers only segmentation, not A/B, so I’m raising it here.\n2. Bullet points. I’ve added them to the existing <https://adaptyio.atlassian.net/browse/CR-666|CR>. \n3. headerPosition. The client also asked about it. It’s Apple’s option to place the header above the image (`ABOVE_IMAGE`) instead of the default `ABOVE_BODY` (<https://developer.apple.com/documentation/retentionmessaging/headerposition|docs>). The field is already in our Apple request model but never set. Is it planned along with bullets? It’s not a blocker for this client, since their layout uses the default.\nIf there’s even a rough timeline for A/B, please let me know. It matters to this client.\n\n[Yurii Kleimenov]: Hey <@U07AUQLQUJX>! Everything you mentioned we’re planning to deliver in Q4",
-      "matchingReplies": [
-        {
-          "userId": "U06JP8BJFEV",
-          "userName": "Viktoriya Kirsanova",
-          "text": "<@U07J9LKBQ5U> plz check the relative thread in the sup internal",
-          "date": "2026-08-06T13:49:50.984Z",
-          "images": []
-        },
-        {
-          "userId": "U06JP8BJFEV",
-          "userName": "Viktoriya Kirsanova",
-          "text": "<@U07J9LKBQ5U> Our docs say that Support can help customers request access to Apple's Retention Messaging API beta.\n\nSo am I understanding it right: we first ask the app name, then provide a link as described <https://adapty-team.slack.com/archives/C02PV5E6WAH/p1762292175188049?thread_ts=1753117401.006969&amp;cid=C02PV5E6WAH|here>(is it still relevant?) and share Apple's <https://developer.apple.com/documentation/retentionmessaging/|doc link>? Or is there smth else we should help with? Are there any specific instructions or wording we should use?",
-          "date": "2026-08-06T14:29:06.705Z",
-          "images": []
-        }
-      ],
-      "hasTeamMention": true,
-      "images": [
-        "https://files.slack.com/files-pri/T9HDDB78Q-F0BMUPB70UV/image.png",
-        "https://files.slack.com/files-pri/T9HDDB78Q-F0BPBFTN7J4/screenshot_2026-08-06_at_17.18.14.png",
-        "https://files.slack.com/files-pri/T9HDDB78Q-F0BNH75BBAN/image.png",
-        "https://files.slack.com/files-pri/T9HDDB78Q-F0BP5UQC5L2/image.png",
-        "https://files.slack.com/files-pri/T9HDDB78Q-F0BP2F3EL5B/image.png",
-        "https://files.slack.com/files-pri/T9HDDB78Q-F0BT5UXS1E0/image.png",
-        "https://files.slack.com/files-pri/T9HDDB78Q-F0BT46T377B/image.png",
-        "https://files.slack.com/files-pri/T9HDDB78Q-F0BU1BYUZKR/image.png"
       ]
     }
   ]
