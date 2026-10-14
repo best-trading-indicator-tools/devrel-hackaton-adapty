@@ -1,7 +1,240 @@
 {
-  "syncedAt": "2026-10-13T00:49:17.327Z",
+  "syncedAt": "2026-10-14T00:38:32.838Z",
   "channel": "#product-release",
   "entries": [
+    {
+      "id": "1791926721.509359",
+      "slackUrl": "https://adapty-team.slack.com/archives/C04SY70QZ0T/p1791926721509359",
+      "name": "hey team!",
+      "message": "hey team!\nsince today any new app/company in adapty will see only \"Flows &amp; Paywalls\" tab in the left bar. no more mess\n\nwhy? because we did couple of adjustments:\n1. we've pushed the content of \"paywall\" tab into the \"Flows &amp; Paywalls\" :umbrella_on_ground:\n    a. now there are tabs: \"flows\" &amp; \"custom paywalls&amp;legacy\" (paywall containers, if users use their native UI via remote config + old builder)\n    b. so everything is under one umbrella, no distraction\n2. we've \"closed\" the old paywall builder :headstone:\n    a. now it's *impossible* to create a new paywall in the old builder\n        i. only <https://app.notion.com/p/adapty/Who-not-depricate-from-Builder-3ca1ca4355c380f7820ceb2f8d6470e8|several big clients> who we personally agreed with - still get this opportunity \n    b. worth mentioning that it's still possible to edit the paywalls. but NOT to create new ones\n    c. we also improved the \"migrate to flow\" script, so now it twice more powerful than it was before \n        i. Fun fact: 60% of money in Q3 came from flows which were migrated in the first place \n        ii. doc on migration here - <https://adapty.io/docs/convert-paywall-to-flow|adapty.io/docs/convert-paywall-to-flow>\n3. onboarding builder is a \"victim\" too :dart:\n    a. new apps don't see onboarding builder since july, but if you have at least 1 onboarding in the list - you still see the tab. it will remain as is\nif you have questions from clients where my paywall (custom or old builder one) go - *nothing is broken, nothing is stopped. everything remains as it was. just in a new location now* \nregarding the old builder paywalls, we were notifying that it's going to be deprecated for a long time. so i hope it won't be a surprise\n\nlearn more here - <https://adapty.io/docs/flows-and-paywalls|adapty.io/docs/flows-and-paywalls>",
+      "releaseDate": "2026-10-13",
+      "thread": [
+        {
+          "userId": "U08EVBTE69E",
+          "userName": "Maxim Borisik",
+          "text": "hey team!\nsince today any new app/company in adapty will see only \"Flows &amp; Paywalls\" tab in the left bar. no more mess\n\nwhy? because we did couple of adjustments:\n1. we've pushed the content of \"paywall\" tab into the \"Flows &amp; Paywalls\" :umbrella_on_ground:\n    a. now there are tabs: \"flows\" &amp; \"custom paywalls&amp;legacy\" (paywall containers, if users use their native UI via remote config + old builder)\n    b. so everything is under one umbrella, no distraction\n2. we've \"closed\" the old paywall builder :headstone:\n    a. now it's *impossible* to create a new paywall in the old builder\n        i. only <https://app.notion.com/p/adapty/Who-not-depricate-from-Builder-3ca1ca4355c380f7820ceb2f8d6470e8|several big clients> who we personally agreed with - still get this opportunity \n    b. worth mentioning that it's still possible to edit the paywalls. but NOT to create new ones\n    c. we also improved the \"migrate to flow\" script, so now it twice more powerful than it was before \n        i. Fun fact: 60% of money in Q3 came from flows which were migrated in the first place \n        ii. doc on migration here - <https://adapty.io/docs/convert-paywall-to-flow|adapty.io/docs/convert-paywall-to-flow>\n3. onboarding builder is a \"victim\" too :dart:\n    a. new apps don't see onboarding builder since july, but if you have at least 1 onboarding in the list - you still see the tab. it will remain as is\nif you have questions from clients where my paywall (custom or old builder one) go - *nothing is broken, nothing is stopped. everything remains as it was. just in a new location now* \nregarding the old builder paywalls, we were notifying that it's going to be deprecated for a long time. so i hope it won't be a surprise\n\nlearn more here - <https://adapty.io/docs/flows-and-paywalls|adapty.io/docs/flows-and-paywalls>",
+          "date": "2026-10-13T21:25:21.509Z",
+          "images": [
+            "https://files.slack.com/files-pri/T9HDDB78Q-F0C93ENJD1A/image.png",
+            "https://files.slack.com/files-pri/T9HDDB78Q-F0C93G1V2AY/image.png"
+          ]
+        },
+        {
+          "userId": "U08EVBTE69E",
+          "userName": "Maxim Borisik",
+          "text": "<!subteam^S07BZPQDBUJ> <!subteam^S03KM96DV0U> fyi",
+          "date": "2026-10-13T21:25:31.847Z",
+          "images": []
+        }
+      ],
+      "content": "[Maxim Borisik]: hey team!\nsince today any new app/company in adapty will see only \"Flows &amp; Paywalls\" tab in the left bar. no more mess\n\nwhy? because we did couple of adjustments:\n1. we've pushed the content of \"paywall\" tab into the \"Flows &amp; Paywalls\" :umbrella_on_ground:\n    a. now there are tabs: \"flows\" &amp; \"custom paywalls&amp;legacy\" (paywall containers, if users use their native UI via remote config + old builder)\n    b. so everything is under one umbrella, no distraction\n2. we've \"closed\" the old paywall builder :headstone:\n    a. now it's *impossible* to create a new paywall in the old builder\n        i. only <https://app.notion.com/p/adapty/Who-not-depricate-from-Builder-3ca1ca4355c380f7820ceb2f8d6470e8|several big clients> who we personally agreed with - still get this opportunity \n    b. worth mentioning that it's still possible to edit the paywalls. but NOT to create new ones\n    c. we also improved the \"migrate to flow\" script, so now it twice more powerful than it was before \n        i. Fun fact: 60% of money in Q3 came from flows which were migrated in the first place \n        ii. doc on migration here - <https://adapty.io/docs/convert-paywall-to-flow|adapty.io/docs/convert-paywall-to-flow>\n3. onboarding builder is a \"victim\" too :dart:\n    a. new apps don't see onboarding builder since july, but if you have at least 1 onboarding in the list - you still see the tab. it will remain as is\nif you have questions from clients where my paywall (custom or old builder one) go - *nothing is broken, nothing is stopped. everything remains as it was. just in a new location now* \nregarding the old builder paywalls, we were notifying that it's going to be deprecated for a long time. so i hope it won't be a surprise\n\nlearn more here - <https://adapty.io/docs/flows-and-paywalls|adapty.io/docs/flows-and-paywalls>\n\n[Maxim Borisik]: <!subteam^S07BZPQDBUJ> <!subteam^S03KM96DV0U> fyi",
+      "matchingReplies": [],
+      "hasTeamMention": true,
+      "images": [
+        "https://files.slack.com/files-pri/T9HDDB78Q-F0C93ENJD1A/image.png",
+        "https://files.slack.com/files-pri/T9HDDB78Q-F0C93G1V2AY/image.png"
+      ]
+    },
+    {
+      "id": "1791885881.738359",
+      "slackUrl": "https://adapty-team.slack.com/archives/C04SY70QZ0T/p1791885881738359",
+      "name": "RevenueCat Migrator is live :male_mage:",
+      "message": "RevenueCat Migrator is live :male_mage:\n<!subteam^S03KC9S1QMC> <!subteam^S07BZPQDBUJ> <!subteam^S03KM96DV0U> <@U0ASX4X3CKZ> <@U06K36L6CTB> <@U05QELDHUUX>\n\nDevelopers on RevenueCat can now ask their coding agent (Claude Code, Codex, Cursor) to move their app to Adapty. The agent works through the Adapty CLI, and RevenueCat keeps running until the new app version ships.\n\nHow to try it:\n1. Create a RevenueCat secret API key: V2, Read only on project configuration.\n2. Run `npm install -g adapty` and `adapty auth login` in the agent’s terminal.\n3. Tell the agent “Migrate my RevenueCat project to a new Adapty app called Acme with the Adapty CLI”. Paste the key into the Adapty page it opens and answer its mapping questions.\n4. Ask for the rest with one prompt each: paywall designs, app code, integrations, store events. Then test a sandbox purchase and release.\nDocs: <https://adapty.io/docs/migration-from-revenuecat|adapty.io/docs/migration-from-revenuecat>\n\nHow it works:\n• We read the RC catalog through their API and recreate it in Adapty: entitlements as access levels, offerings as placements with a paywall or a Flow. IDs stay the same, so `entitlements[\"premium\"]` becomes `accessLevels[\"premium\"]` and the code diff stays small.\n• Adapty receives App Store notifications and forwards them to RC. On Google Play it joins RC’s Pub/Sub topic as a second subscriber, so both backends get every renewal and refund during the switch.\n• The agent swaps the SDK and code on an `adapty-migrate` branch and lists the manual steps in ADAPTY_SETUP.md. It also rebuilds RC paywalls as Adapty Flows and finds analytics and attribution SDKs in the code.\n• Transaction history comes over through Amazon S3. Each migration gets its own bucket and an IAM role that only RevenueCat can assume, using the External ID from their export settings, and that role can only write. RC sends a daily Cloud Export there. We check for new files every hour, import only products from the migrated catalog and re-validate each transaction with the store. A week after the first file we close the migration and delete the bucket.\n• The migration runs as a state machine on our server, and the CLI only shows the next step. We can ship new steps without a CLI release. Keys go straight into the Adapty dashboard, so the agent never sees them.\nHuge thanks to <@U09L1SS03B8><@U08QUJMN0UV> <@U08ASB4GYR4> <@U0AQZG23D62> <@U0ACSQAKJA1> <@U09AH7D2A4X> <@U0AR243M9T9>",
+      "releaseDate": "2026-10-13",
+      "thread": [
+        {
+          "userId": "U07J9LKBQ5U",
+          "userName": "Yurii Kleimenov",
+          "text": "RevenueCat Migrator is live :male_mage:\n<!subteam^S03KC9S1QMC> <!subteam^S07BZPQDBUJ> <!subteam^S03KM96DV0U> <@U0ASX4X3CKZ> <@U06K36L6CTB> <@U05QELDHUUX>\n\nDevelopers on RevenueCat can now ask their coding agent (Claude Code, Codex, Cursor) to move their app to Adapty. The agent works through the Adapty CLI, and RevenueCat keeps running until the new app version ships.\n\nHow to try it:\n1. Create a RevenueCat secret API key: V2, Read only on project configuration.\n2. Run `npm install -g adapty` and `adapty auth login` in the agent’s terminal.\n3. Tell the agent “Migrate my RevenueCat project to a new Adapty app called Acme with the Adapty CLI”. Paste the key into the Adapty page it opens and answer its mapping questions.\n4. Ask for the rest with one prompt each: paywall designs, app code, integrations, store events. Then test a sandbox purchase and release.\nDocs: <https://adapty.io/docs/migration-from-revenuecat|adapty.io/docs/migration-from-revenuecat>\n\nHow it works:\n• We read the RC catalog through their API and recreate it in Adapty: entitlements as access levels, offerings as placements with a paywall or a Flow. IDs stay the same, so `entitlements[\"premium\"]` becomes `accessLevels[\"premium\"]` and the code diff stays small.\n• Adapty receives App Store notifications and forwards them to RC. On Google Play it joins RC’s Pub/Sub topic as a second subscriber, so both backends get every renewal and refund during the switch.\n• The agent swaps the SDK and code on an `adapty-migrate` branch and lists the manual steps in ADAPTY_SETUP.md. It also rebuilds RC paywalls as Adapty Flows and finds analytics and attribution SDKs in the code.\n• Transaction history comes over through Amazon S3. Each migration gets its own bucket and an IAM role that only RevenueCat can assume, using the External ID from their export settings, and that role can only write. RC sends a daily Cloud Export there. We check for new files every hour, import only products from the migrated catalog and re-validate each transaction with the store. A week after the first file we close the migration and delete the bucket.\n• The migration runs as a state machine on our server, and the CLI only shows the next step. We can ship new steps without a CLI release. Keys go straight into the Adapty dashboard, so the agent never sees them.\nHuge thanks to <@U09L1SS03B8><@U08QUJMN0UV> <@U08ASB4GYR4> <@U0AQZG23D62> <@U0ACSQAKJA1> <@U09AH7D2A4X> <@U0AR243M9T9>",
+          "date": "2026-10-13T10:04:41.738Z",
+          "images": [
+            "https://files.slack.com/files-pri/T9HDDB78Q-F0C9MTGLTQQ/ai-powered_migration_magic.png"
+          ]
+        },
+        {
+          "userId": "U08EVBTE69E",
+          "userName": "Maxim Borisik",
+          "text": "&gt; the rest with one prompt each: paywall designs\nyooo. congrats man. even flows right?",
+          "date": "2026-10-13T10:07:20.754Z",
+          "images": []
+        },
+        {
+          "userId": "U03J8UXUDPF",
+          "userName": "Mykola Martynovets",
+          "text": "magic!",
+          "date": "2026-10-13T10:09:15.463Z",
+          "images": []
+        },
+        {
+          "userId": "U0A266T9SJE",
+          "userName": "Melike Sezer",
+          "text": "wowowowowo :partying_face:  this will be a huge leverage with Teknasyon next week <@U09RF6V1YHM> <@U081E90FF3R> <@U02GSCVUPHU>",
+          "date": "2026-10-13T10:09:57.766Z",
+          "images": []
+        },
+        {
+          "userId": "U081E90FF3R",
+          "userName": "Metin Vurmaz",
+          "text": "stonks",
+          "date": "2026-10-13T10:10:34.115Z",
+          "images": []
+        },
+        {
+          "userId": "U07J9LKBQ5U",
+          "userName": "Yurii Kleimenov",
+          "text": "> yooo. congrats man. even flows right?\n<@U08EVBTE69E> Yep, but I believe we’ll need to optimize the user journey slightly so users can naturally understand what they should use for the migration - the CLI, an agent inside the dashboard, and so on.\n\nWe’ll focus on making the whole process as smooth as possible as we roll this out on real RC clients. But yeah, basically, once you create an empty flow and place it using Migrator, your agent will have all the context it needs. You’ll just need to connect via CLI, for example, and send a screenshot of your paywall from RC.",
+          "date": "2026-10-13T10:43:17.565Z",
+          "images": []
+        },
+        {
+          "userId": "U03DFSCP8CW",
+          "userName": "Mike Gorokhov",
+          "text": "```Adapty receives App Store notifications and forwards them to RC```\nBut Claude can not change your App Store settings, can it?\nYou need to manually change the endpoint there, no?",
+          "date": "2026-10-13T10:43:57.141Z",
+          "images": []
+        },
+        {
+          "userId": "U07J9LKBQ5U",
+          "userName": "Yurii Kleimenov",
+          "text": "Yes manually, but Claude will open your browser and show you where to paste them. This requires quite high-level admin permissions for the ASC API key, which I believe some leads might be hesitant to share. However, we’re open to feedback from prospects and will extend the functionality based on their needs.\n\nFor now, it’s a separate service that can be upgraded quickly and easily.",
+          "date": "2026-10-13T10:47:01.168Z",
+          "images": []
+        },
+        {
+          "userId": "U03DFSCP8CW",
+          "userName": "Mike Gorokhov",
+          "text": "Nah, I just wanted to highlight that we can adjust this wording a bit",
+          "date": "2026-10-13T10:47:57.836Z",
+          "images": []
+        },
+        {
+          "userId": "U07J9LKBQ5U",
+          "userName": "Yurii Kleimenov",
+          "text": "We can prepare a Demo for Sales team if needed",
+          "date": "2026-10-13T10:48:34.455Z",
+          "images": []
+        },
+        {
+          "userId": "U03DFSCP8CW",
+          "userName": "Mike Gorokhov",
+          "text": "Great stuff,  now we need to win someone to test this live :smile:",
+          "date": "2026-10-13T10:48:40.934Z",
+          "images": []
+        },
+        {
+          "userId": "U03DFSCP8CW",
+          "userName": "Mike Gorokhov",
+          "text": "\"We can prepare a Demo for Sales team if needed\"\n\nNeeded",
+          "date": "2026-10-13T10:48:50.129Z",
+          "images": []
+        },
+        {
+          "userId": "U0A266T9SJE",
+          "userName": "Melike Sezer",
+          "text": "Questions: How hard/easy was to build something like this? Can RC has the same migration agent soon? Or do they already have it?",
+          "date": "2026-10-13T10:48:50.298Z",
+          "images": []
+        },
+        {
+          "userId": "U04B26DSWMA",
+          "userName": "Sergei Solodskikh",
+          "text": "Great job!",
+          "date": "2026-10-13T10:50:29.281Z",
+          "images": []
+        },
+        {
+          "userId": "U07J9LKBQ5U",
+          "userName": "Yurii Kleimenov",
+          "text": "> *Questions:* How hard or easy was it to build something like this? Could RC have the same migration agent soon, or do they already have one?\n<@U0A266T9SJE>\nThat’s actually a pretty funny situation. Their API is quite comprehensive, which has allowed us to reach the point where we can export everything we need from RC and migrate it to Adapty. On our side, though, things are still more limited, so we’re safe for now due to our API limitations :old:\n\nCompetitors could definitely build something similar, but in RC’s case, I’m 100% sure this isn’t their focus (yet)",
+          "date": "2026-10-13T11:02:11.644Z",
+          "images": []
+        },
+        {
+          "userId": "U09QBBKPGMC",
+          "userName": "Elena Robakidze",
+          "text": "<@U07J9LKBQ5U> did we have anyone/do we have anyone in the plan with whom we tried/can try this migration?",
+          "date": "2026-10-13T11:06:16.671Z",
+          "images": []
+        },
+        {
+          "userId": "U090BDLA9JN",
+          "userName": "Dmitry Shestoperov",
+          "text": "Is there a possibility of them making the API _less_ comprehensive and thus making our life harder?\n\nOr are there some scenarios that make this move unlikely?",
+          "date": "2026-10-13T11:06:20.289Z",
+          "images": []
+        },
+        {
+          "userId": "U05QELDHUUX",
+          "userName": "Sergey Muratov",
+          "text": "<@U07J9LKBQ5U> Dima's question prompted this one from me: how much of the migration is done with Claude driving the browser vs. Claude using RC's API? I would assume paywalls are recreated with screenshots from the browser, right?",
+          "date": "2026-10-13T11:09:15.675Z",
+          "images": []
+        },
+        {
+          "userId": "U04B26DSWMA",
+          "userName": "Sergei Solodskikh",
+          "text": "&gt; Is there a possibility of them making the API _less_ comprehensive and thus making our life harder?\nThat's kind of suicidal move for any SaaS. API is used by major clients, whom usually cannot be forced to adopt any changes",
+          "date": "2026-10-13T11:10:45.055Z",
+          "images": []
+        },
+        {
+          "userId": "U03DFSCP8CW",
+          "userName": "Mike Gorokhov",
+          "text": "Guys, the hardest part of the migration is the code, not to copy products ids from the dashboard.\nAPI is very secondary here",
+          "date": "2026-10-13T11:13:36.882Z",
+          "images": []
+        },
+        {
+          "userId": "U05QELDHUUX",
+          "userName": "Sergey Muratov",
+          "text": "Maybe code + paywalls + targeting rules",
+          "date": "2026-10-13T11:14:33.025Z",
+          "images": []
+        },
+        {
+          "userId": "U07J9LKBQ5U",
+          "userName": "Yurii Kleimenov",
+          "text": "&gt; did we have anyone/do we have anyone in the plan with whom we tried/can try this migration?\n<@U09QBBKPGMC> We’re planning to target Hi Intent leads from ABM list with SDR first. <@U09TLDB59HU> fyi",
+          "date": "2026-10-13T11:17:15.666Z",
+          "images": []
+        },
+        {
+          "userId": "U03DFSCP8CW",
+          "userName": "Mike Gorokhov",
+          "text": "This is a tool to migrate, not a reason.\nI do not think it would happen at the SDR step, but rather during the actual sale",
+          "date": "2026-10-13T11:20:07.964Z",
+          "images": []
+        },
+        {
+          "userId": "U9HDNS9S4",
+          "userName": "Kirill Potekhin",
+          "text": "the image alone could be a reason to migrate though",
+          "date": "2026-10-13T19:36:35.908Z",
+          "images": []
+        }
+      ],
+      "content": "[Yurii Kleimenov]: RevenueCat Migrator is live :male_mage:\n<!subteam^S03KC9S1QMC> <!subteam^S07BZPQDBUJ> <!subteam^S03KM96DV0U> <@U0ASX4X3CKZ> <@U06K36L6CTB> <@U05QELDHUUX>\n\nDevelopers on RevenueCat can now ask their coding agent (Claude Code, Codex, Cursor) to move their app to Adapty. The agent works through the Adapty CLI, and RevenueCat keeps running until the new app version ships.\n\nHow to try it:\n1. Create a RevenueCat secret API key: V2, Read only on project configuration.\n2. Run `npm install -g adapty` and `adapty auth login` in the agent’s terminal.\n3. Tell the agent “Migrate my RevenueCat project to a new Adapty app called Acme with the Adapty CLI”. Paste the key into the Adapty page it opens and answer its mapping questions.\n4. Ask for the rest with one prompt each: paywall designs, app code, integrations, store events. Then test a sandbox purchase and release.\nDocs: <https://adapty.io/docs/migration-from-revenuecat|adapty.io/docs/migration-from-revenuecat>\n\nHow it works:\n• We read the RC catalog through their API and recreate it in Adapty: entitlements as access levels, offerings as placements with a paywall or a Flow. IDs stay the same, so `entitlements[\"premium\"]` becomes `accessLevels[\"premium\"]` and the code diff stays small.\n• Adapty receives App Store notifications and forwards them to RC. On Google Play it joins RC’s Pub/Sub topic as a second subscriber, so both backends get every renewal and refund during the switch.\n• The agent swaps the SDK and code on an `adapty-migrate` branch and lists the manual steps in ADAPTY_SETUP.md. It also rebuilds RC paywalls as Adapty Flows and finds analytics and attribution SDKs in the code.\n• Transaction history comes over through Amazon S3. Each migration gets its own bucket and an IAM role that only RevenueCat can assume, using the External ID from their export settings, and that role can only write. RC sends a daily Cloud Export there. We check for new files every hour, import only products from the migrated catalog and re-validate each transaction with the store. A week after the first file we close the migration and delete the bucket.\n• The migration runs as a state machine on our server, and the CLI only shows the next step. We can ship new steps without a CLI release. Keys go straight into the Adapty dashboard, so the agent never sees them.\nHuge thanks to <@U09L1SS03B8><@U08QUJMN0UV> <@U08ASB4GYR4> <@U0AQZG23D62> <@U0ACSQAKJA1> <@U09AH7D2A4X> <@U0AR243M9T9>\n\n[Maxim Borisik]: &gt; the rest with one prompt each: paywall designs\nyooo. congrats man. even flows right?\n\n[Mykola Martynovets]: magic!\n\n[Melike Sezer]: wowowowowo :partying_face:  this will be a huge leverage with Teknasyon next week <@U09RF6V1YHM> <@U081E90FF3R> <@U02GSCVUPHU>\n\n[Metin Vurmaz]: stonks\n\n[Yurii Kleimenov]: > yooo. congrats man. even flows right?\n<@U08EVBTE69E> Yep, but I believe we’ll need to optimize the user journey slightly so users can naturally understand what they should use for the migration - the CLI, an agent inside the dashboard, and so on.\n\nWe’ll focus on making the whole process as smooth as possible as we roll this out on real RC clients. But yeah, basically, once you create an empty flow and place it using Migrator, your agent will have all the context it needs. You’ll just need to connect via CLI, for example, and send a screenshot of your paywall from RC.\n\n[Mike Gorokhov]: ```Adapty receives App Store notifications and forwards them to RC```\nBut Claude can not change your App Store settings, can it?\nYou need to manually change the endpoint there, no?\n\n[Yurii Kleimenov]: Yes manually, but Claude will open your browser and show you where to paste them. This requires quite high-level admin permissions for the ASC API key, which I believe some leads might be hesitant to share. However, we’re open to feedback from prospects and will extend the functionality based on their needs.\n\nFor now, it’s a separate service that can be upgraded quickly and easily.\n\n[Mike Gorokhov]: Nah, I just wanted to highlight that we can adjust this wording a bit\n\n[Yurii Kleimenov]: We can prepare a Demo for Sales team if needed\n\n[Mike Gorokhov]: Great stuff,  now we need to win someone to test this live :smile:\n\n[Mike Gorokhov]: \"We can prepare a Demo for Sales team if needed\"\n\nNeeded\n\n[Melike Sezer]: Questions: How hard/easy was to build something like this? Can RC has the same migration agent soon? Or do they already have it?\n\n[Sergei Solodskikh]: Great job!\n\n[Yurii Kleimenov]: > *Questions:* How hard or easy was it to build something like this? Could RC have the same migration agent soon, or do they already have one?\n<@U0A266T9SJE>\nThat’s actually a pretty funny situation. Their API is quite comprehensive, which has allowed us to reach the point where we can export everything we need from RC and migrate it to Adapty. On our side, though, things are still more limited, so we’re safe for now due to our API limitations :old:\n\nCompetitors could definitely build something similar, but in RC’s case, I’m 100% sure this isn’t their focus (yet)\n\n[Elena Robakidze]: <@U07J9LKBQ5U> did we have anyone/do we have anyone in the plan with whom we tried/can try this migration?\n\n[Dmitry Shestoperov]: Is there a possibility of them making the API _less_ comprehensive and thus making our life harder?\n\nOr are there some scenarios that make this move unlikely?\n\n[Sergey Muratov]: <@U07J9LKBQ5U> Dima's question prompted this one from me: how much of the migration is done with Claude driving the browser vs. Claude using RC's API? I would assume paywalls are recreated with screenshots from the browser, right?\n\n[Sergei Solodskikh]: &gt; Is there a possibility of them making the API _less_ comprehensive and thus making our life harder?\nThat's kind of suicidal move for any SaaS. API is used by major clients, whom usually cannot be forced to adopt any changes\n\n[Mike Gorokhov]: Guys, the hardest part of the migration is the code, not to copy products ids from the dashboard.\nAPI is very secondary here\n\n[Sergey Muratov]: Maybe code + paywalls + targeting rules\n\n[Yurii Kleimenov]: &gt; did we have anyone/do we have anyone in the plan with whom we tried/can try this migration?\n<@U09QBBKPGMC> We’re planning to target Hi Intent leads from ABM list with SDR first. <@U09TLDB59HU> fyi\n\n[Mike Gorokhov]: This is a tool to migrate, not a reason.\nI do not think it would happen at the SDR step, but rather during the actual sale\n\n[Kirill Potekhin]: the image alone could be a reason to migrate though",
+      "matchingReplies": [
+        {
+          "userId": "U08EVBTE69E",
+          "userName": "Maxim Borisik",
+          "text": "&gt; the rest with one prompt each: paywall designs\nyooo. congrats man. even flows right?",
+          "date": "2026-10-13T10:07:20.754Z",
+          "images": []
+        },
+        {
+          "userId": "U9HDNS9S4",
+          "userName": "Kirill Potekhin",
+          "text": "the image alone could be a reason to migrate though",
+          "date": "2026-10-13T19:36:35.908Z",
+          "images": []
+        }
+      ],
+      "hasTeamMention": false,
+      "images": [
+        "https://files.slack.com/files-pri/T9HDDB78Q-F0C9MTGLTQQ/ai-powered_migration_magic.png"
+      ]
+    },
     {
       "id": "1791534788.429769",
       "slackUrl": "https://adapty-team.slack.com/archives/C04SY70QZ0T/p1791534788429769",
@@ -1717,218 +1950,6 @@
       "hasTeamMention": false,
       "images": [
         "https://files.slack.com/files-pri/T9HDDB78Q-F0BPDJ9R7M3/image.png"
-      ]
-    },
-    {
-      "id": "1786459534.995219",
-      "slackUrl": "https://adapty-team.slack.com/archives/C04SY70QZ0T/p1786459534995219",
-      "name": "hey team! :tada:",
-      "message": "hey team! :tada:\nwe've launched the first version of AI chat in Flow&amp;Paywall builder! (Dan announced it <https://adapty-team.slack.com/archives/C04SY70QZ0T/p1784720672403529|here>)\n\nit's one more thing (apart from templates, docs and tutorials) that should help users to get along with the screens they are building and reduce manual work with our builder\nhuge kudos to the team for building it! :rocket:\n\nwe call it v1, because for sure it has some limitations and cannot do anything you want to do (like generate images or choose products), but it's a good thing to give value and track how users will use it, to get more relative feedback\n\ntell us more, if you find something, or want something. let's do great stuff here\nread more - <https://adapty.io/docs/flow-ai-editor|adapty.io/docs/flow-ai-editor>\n\np.s. figma import is also in progress; along with a skill for editing screens within your own agent with our CLI",
-      "releaseDate": "2026-08-11",
-      "thread": [
-        {
-          "userId": "U08EVBTE69E",
-          "userName": "Maxim Borisik",
-          "text": "hey team! :tada:\nwe've launched the first version of AI chat in Flow&amp;Paywall builder! (Dan announced it <https://adapty-team.slack.com/archives/C04SY70QZ0T/p1784720672403529|here>)\n\nit's one more thing (apart from templates, docs and tutorials) that should help users to get along with the screens they are building and reduce manual work with our builder\nhuge kudos to the team for building it! :rocket:\n\nwe call it v1, because for sure it has some limitations and cannot do anything you want to do (like generate images or choose products), but it's a good thing to give value and track how users will use it, to get more relative feedback\n\ntell us more, if you find something, or want something. let's do great stuff here\nread more - <https://adapty.io/docs/flow-ai-editor|adapty.io/docs/flow-ai-editor>\n\np.s. figma import is also in progress; along with a skill for editing screens within your own agent with our CLI",
-          "date": "2026-08-11T14:45:34.995Z",
-          "images": []
-        },
-        {
-          "userId": "U0AAUD3KHT7",
-          "userName": "David",
-          "text": ":hearts:",
-          "date": "2026-08-11T15:20:38.014Z",
-          "images": []
-        },
-        {
-          "userId": "U9JU5J5RC",
-          "userName": "Vitaly Davydov",
-          "text": "when do you plan to release screenshot/Figma import?",
-          "date": "2026-08-11T19:31:19.142Z",
-          "images": []
-        },
-        {
-          "userId": "U08EVBTE69E",
-          "userName": "Maxim Borisik",
-          "text": "i hope to get figma import in august, screenshot in september ",
-          "date": "2026-08-11T20:34:23.396Z",
-          "images": []
-        }
-      ],
-      "content": "[Maxim Borisik]: hey team! :tada:\nwe've launched the first version of AI chat in Flow&amp;Paywall builder! (Dan announced it <https://adapty-team.slack.com/archives/C04SY70QZ0T/p1784720672403529|here>)\n\nit's one more thing (apart from templates, docs and tutorials) that should help users to get along with the screens they are building and reduce manual work with our builder\nhuge kudos to the team for building it! :rocket:\n\nwe call it v1, because for sure it has some limitations and cannot do anything you want to do (like generate images or choose products), but it's a good thing to give value and track how users will use it, to get more relative feedback\n\ntell us more, if you find something, or want something. let's do great stuff here\nread more - <https://adapty.io/docs/flow-ai-editor|adapty.io/docs/flow-ai-editor>\n\np.s. figma import is also in progress; along with a skill for editing screens within your own agent with our CLI\n\n[David]: :hearts:\n\n[Vitaly Davydov]: when do you plan to release screenshot/Figma import?\n\n[Maxim Borisik]: i hope to get figma import in august, screenshot in september ",
-      "matchingReplies": [
-        {
-          "userId": "U08EVBTE69E",
-          "userName": "Maxim Borisik",
-          "text": "i hope to get figma import in august, screenshot in september ",
-          "date": "2026-08-11T20:34:23.396Z",
-          "images": []
-        }
-      ],
-      "hasTeamMention": false,
-      "images": []
-    },
-    {
-      "id": "1785920032.471939",
-      "slackUrl": "https://adapty-team.slack.com/archives/C04SY70QZ0T/p1785920032471939",
-      "name": "new feedback",
-      "message": "new feedback\n\n_Hi! Yesterday I vibe-coded a new app and decided to try Adapty for subscriptions :)_\n_Shame there’s no MCP for the initial setup, so Claude could create the products and hook up the stores itself, but everything else was super easy_ :fire:",
-      "releaseDate": "2026-08-05",
-      "thread": [
-        {
-          "userId": "U9JU5J5RC",
-          "userName": "Vitaly Davydov",
-          "text": "new feedback\n\n_Hi! Yesterday I vibe-coded a new app and decided to try Adapty for subscriptions :)_\n_Shame there’s no MCP for the initial setup, so Claude could create the products and hook up the stores itself, but everything else was super easy_ :fire:",
-          "date": "2026-08-05T08:53:52.471Z",
-          "images": [
-            "https://files.slack.com/files-pri/T9HDDB78Q-F0BN8QUQ04U/image.png"
-          ]
-        },
-        {
-          "userId": "U03DFSCP8CW",
-          "userName": "Mike Gorokhov",
-          "text": "Another +1 point for us to release MCP",
-          "date": "2026-08-05T09:18:43.989Z",
-          "images": []
-        },
-        {
-          "userId": "U04B26DSWMA",
-          "userName": "Sergei Solodskikh",
-          "text": "MCPs are dead, CLI is a way to go. and we have <https://adapty.io/docs/developer-cli-reference|one>",
-          "date": "2026-08-05T09:28:27.147Z",
-          "images": []
-        },
-        {
-          "userId": "U03DFSCP8CW",
-          "userName": "Mike Gorokhov",
-          "text": "This does not resonate with our customers and prospects, we keep receiving MCP requests",
-          "date": "2026-08-05T09:29:08.933Z",
-          "images": []
-        },
-        {
-          "userId": "U04B26DSWMA",
-          "userName": "Sergei Solodskikh",
-          "text": "That's just until some influencer drops a truth bomb on them about the death of MCP",
-          "date": "2026-08-05T09:34:41.660Z",
-          "images": []
-        },
-        {
-          "userId": "U04B26DSWMA",
-          "userName": "Sergei Solodskikh",
-          "text": "But we do advise them to use CLI and our skill for agents when they ask for MCP, right?",
-          "date": "2026-08-05T09:36:38.285Z",
-          "images": []
-        },
-        {
-          "userId": "U03DFSCP8CW",
-          "userName": "Mike Gorokhov",
-          "text": "Yes, but:\n1. Our CLI is still limited\n2. People want MCP explicitly",
-          "date": "2026-08-05T09:38:00.452Z",
-          "images": []
-        },
-        {
-          "userId": "U04B26DSWMA",
-          "userName": "Sergei Solodskikh",
-          "text": "Our (hypothetical) MCP will have exactly the same limitations as CLI. And they don't want MCP, they want a way to pair their agents with our backend, which is associated with the word \"MCP\". The only use-case when MCP is strictly unavoidable is when someone wants to use it from web version of Claude, but this is not related to dev process",
-          "date": "2026-08-05T09:41:58.516Z",
-          "images": []
-        },
-        {
-          "userId": "U04B26DSWMA",
-          "userName": "Sergei Solodskikh",
-          "text": "Also, I'm not so sure that it is so strict now, actually web Claude can run stuff in a sandbox, so maybe it can even run CLI, didn't try it for quiet a while",
-          "date": "2026-08-05T09:43:50.777Z",
-          "images": []
-        },
-        {
-          "userId": "U07J9LKBQ5U",
-          "userName": "Yurii Kleimenov",
-          "text": "<@U08QUJMN0UV> fyi, please share a bit on how our CLI rules the world",
-          "date": "2026-08-05T09:48:11.652Z",
-          "images": []
-        },
-        {
-          "userId": "U9JU5J5RC",
-          "userName": "Vitaly Davydov",
-          "text": "it seems like without MCP we index worse in Claude",
-          "date": "2026-08-05T09:49:32.578Z",
-          "images": []
-        },
-        {
-          "userId": "U9JU5J5RC",
-          "userName": "Vitaly Davydov",
-          "text": "",
-          "date": "2026-08-05T09:49:46.320Z",
-          "images": [
-            "https://files.slack.com/files-pri/T9HDDB78Q-F0BMZ97HBL3/image.png",
-            "https://files.slack.com/files-pri/T9HDDB78Q-F0BN3GT0Z2S/image.png"
-          ]
-        },
-        {
-          "userId": "U04B26DSWMA",
-          "userName": "Sergei Solodskikh",
-          "text": "That sucks. Than we have to roll out our MCP before they roll out their next model",
-          "date": "2026-08-05T09:51:45.572Z",
-          "images": []
-        },
-        {
-          "userId": "U08QUJMN0UV",
-          "userName": "Elina Andreeva",
-          "text": "Coming soon: `adapty integrate` and `adapty migrate` commands for CLI. You run just one command, and your agent creates products and other entities and integrates the Adapty SDK in 10 minutes",
-          "date": "2026-08-05T09:52:11.397Z",
-          "images": []
-        },
-        {
-          "userId": "U04B26DSWMA",
-          "userName": "Sergei Solodskikh",
-          "text": "Just to be clear, having MCP != being advised by Claude. It might just suggest the bigger competitor as a default choice",
-          "date": "2026-08-05T09:54:17.721Z",
-          "images": []
-        },
-        {
-          "userId": "U07MXM412JV",
-          "userName": "Marina Trypolskaya",
-          "text": "<@U07J9LKBQ5U> hi! is it under your Core team umbrella?",
-          "date": "2026-08-07T12:03:23.231Z",
-          "images": []
-        },
-        {
-          "userId": "U07J9LKBQ5U",
-          "userName": "Yurii Kleimenov",
-          "text": "<@U07MXM412JV> I believe the correct way to put it is that it’s currently under no one’s umbrella. From the backend (Core) side, we can extend the CLI’s capabilities by adding new endpoints for it to call. However, it’s harder to say who owns MCP.\n\n<@U9HDNS9S4>, maybe you can share a few words here? As we discussed, our AI team is currently focused on the AI part of the Flow Builder. Once that’s finished, they’ll get back to working on MCP and the rest of the AI-related initiatives.",
-          "date": "2026-08-07T14:53:16.276Z",
-          "images": []
-        },
-        {
-          "userId": "U9HDNS9S4",
-          "userName": "Kirill Potekhin",
-          "text": "that's correct, they are currently on AI builder initiatives, they will take CLI/MCP and agentic experience in general in October",
-          "date": "2026-08-07T14:57:15.507Z",
-          "images": []
-        },
-        {
-          "userId": "U07MXM412JV",
-          "userName": "Marina Trypolskaya",
-          "text": "Thank you for clarifying ",
-          "date": "2026-08-07T14:58:03.928Z",
-          "images": []
-        }
-      ],
-      "content": "[Vitaly Davydov]: new feedback\n\n_Hi! Yesterday I vibe-coded a new app and decided to try Adapty for subscriptions :)_\n_Shame there’s no MCP for the initial setup, so Claude could create the products and hook up the stores itself, but everything else was super easy_ :fire:\n\n[Mike Gorokhov]: Another +1 point for us to release MCP\n\n[Sergei Solodskikh]: MCPs are dead, CLI is a way to go. and we have <https://adapty.io/docs/developer-cli-reference|one>\n\n[Mike Gorokhov]: This does not resonate with our customers and prospects, we keep receiving MCP requests\n\n[Sergei Solodskikh]: That's just until some influencer drops a truth bomb on them about the death of MCP\n\n[Sergei Solodskikh]: But we do advise them to use CLI and our skill for agents when they ask for MCP, right?\n\n[Mike Gorokhov]: Yes, but:\n1. Our CLI is still limited\n2. People want MCP explicitly\n\n[Sergei Solodskikh]: Our (hypothetical) MCP will have exactly the same limitations as CLI. And they don't want MCP, they want a way to pair their agents with our backend, which is associated with the word \"MCP\". The only use-case when MCP is strictly unavoidable is when someone wants to use it from web version of Claude, but this is not related to dev process\n\n[Sergei Solodskikh]: Also, I'm not so sure that it is so strict now, actually web Claude can run stuff in a sandbox, so maybe it can even run CLI, didn't try it for quiet a while\n\n[Yurii Kleimenov]: <@U08QUJMN0UV> fyi, please share a bit on how our CLI rules the world\n\n[Vitaly Davydov]: it seems like without MCP we index worse in Claude\n\n[Vitaly Davydov]: \n\n[Sergei Solodskikh]: That sucks. Than we have to roll out our MCP before they roll out their next model\n\n[Elina Andreeva]: Coming soon: `adapty integrate` and `adapty migrate` commands for CLI. You run just one command, and your agent creates products and other entities and integrates the Adapty SDK in 10 minutes\n\n[Sergei Solodskikh]: Just to be clear, having MCP != being advised by Claude. It might just suggest the bigger competitor as a default choice\n\n[Marina Trypolskaya]: <@U07J9LKBQ5U> hi! is it under your Core team umbrella?\n\n[Yurii Kleimenov]: <@U07MXM412JV> I believe the correct way to put it is that it’s currently under no one’s umbrella. From the backend (Core) side, we can extend the CLI’s capabilities by adding new endpoints for it to call. However, it’s harder to say who owns MCP.\n\n<@U9HDNS9S4>, maybe you can share a few words here? As we discussed, our AI team is currently focused on the AI part of the Flow Builder. Once that’s finished, they’ll get back to working on MCP and the rest of the AI-related initiatives.\n\n[Kirill Potekhin]: that's correct, they are currently on AI builder initiatives, they will take CLI/MCP and agentic experience in general in October\n\n[Marina Trypolskaya]: Thank you for clarifying ",
-      "matchingReplies": [
-        {
-          "userId": "U9HDNS9S4",
-          "userName": "Kirill Potekhin",
-          "text": "that's correct, they are currently on AI builder initiatives, they will take CLI/MCP and agentic experience in general in October",
-          "date": "2026-08-07T14:57:15.507Z",
-          "images": []
-        }
-      ],
-      "hasTeamMention": false,
-      "images": [
-        "https://files.slack.com/files-pri/T9HDDB78Q-F0BN8QUQ04U/image.png",
-        "https://files.slack.com/files-pri/T9HDDB78Q-F0BMZ97HBL3/image.png",
-        "https://files.slack.com/files-pri/T9HDDB78Q-F0BN3GT0Z2S/image.png"
       ]
     }
   ]
