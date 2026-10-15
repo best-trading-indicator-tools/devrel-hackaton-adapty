@@ -1,7 +1,112 @@
 {
-  "syncedAt": "2026-10-14T00:38:32.838Z",
+  "syncedAt": "2026-10-15T00:38:34.998Z",
   "channel": "#product-release",
   "entries": [
+    {
+      "id": "1791989521.704169",
+      "slackUrl": "https://adapty-team.slack.com/archives/C04SY70QZ0T/p1791989521704169",
+      "name": "Chinese localisation is on the way and the speed of iterations is insane. 10 minutes to translate the whole dashboard th",
+      "message": "Chinese localisation is on the way and the speed of iterations is insane. 10 minutes to translate the whole dashboard thanks to skills from Elina (or Elina’s skills). Kudos to <@U07PR2368G5> <@U09AH7D2A4X> <@U08QUJMN0UV>",
+      "releaseDate": "2026-10-14",
+      "thread": [
+        {
+          "userId": "U9HDNS9S4",
+          "userName": "Kirill Potekhin",
+          "text": "Chinese localisation is on the way and the speed of iterations is insane. 10 minutes to translate the whole dashboard thanks to skills from Elina (or Elina’s skills). Kudos to <@U07PR2368G5> <@U09AH7D2A4X> <@U08QUJMN0UV>",
+          "date": "2026-10-14T14:52:01.704Z",
+          "images": [
+            "https://files.slack.com/files-pri/T9HDDB78Q-F0C95DP5RJS/telegram-cloud-photo-size-2-5368461313731928235-y.jpg"
+          ]
+        },
+        {
+          "userId": "U03DFSCP8CW",
+          "userName": "Mike Gorokhov",
+          "text": "But are we sure that this translation is good?",
+          "date": "2026-10-14T14:54:39.923Z",
+          "images": []
+        },
+        {
+          "userId": "U9HDNS9S4",
+          "userName": "Kirill Potekhin",
+          "text": "yes, the docs was translated this was and got really positive feedback from Chinese customers ",
+          "date": "2026-10-14T14:55:12.487Z",
+          "images": []
+        },
+        {
+          "userId": "U03J8UXUDPF",
+          "userName": "Mykola Martynovets",
+          "text": "<@U9HDNS9S4> <@U08QUJMN0UV> Cool! I want to ask add the UA language too If you will have another 10min capacity :sweat_smile:",
+          "date": "2026-10-14T14:56:54.562Z",
+          "images": []
+        },
+        {
+          "userId": "U9HDNS9S4",
+          "userName": "Kirill Potekhin",
+          "text": "<@U03J8UXUDPF> if you help us proofread, let's do it  ",
+          "date": "2026-10-14T15:02:32.916Z",
+          "images": []
+        },
+        {
+          "userId": "U03J8UXUDPF",
+          "userName": "Mykola Martynovets",
+          "text": "Of course!",
+          "date": "2026-10-14T15:03:31.634Z",
+          "images": [
+            "https://files.slack.com/files-pri/T9HDDB78Q-F0C91BKQ6CT/image.png"
+          ]
+        },
+        {
+          "userId": "U9JU5J5RC",
+          "userName": "Vitaly Davydov",
+          "text": "<@U09QBBKPGMC> double check pls",
+          "date": "2026-10-14T15:05:11.572Z",
+          "images": []
+        },
+        {
+          "userId": "U0903TFULQ3",
+          "userName": "Andrii Hermanov",
+          "text": "I can also help check UA localization\nfyi",
+          "date": "2026-10-14T15:12:19.327Z",
+          "images": []
+        },
+        {
+          "userId": "U09QBBKPGMC",
+          "userName": "Elena Robakidze",
+          "text": "Hi <@U9HDNS9S4> , super good news, thank you! \n\nFor proofreading we have Ian, who can go through it to double-check, I will dm you ",
+          "date": "2026-10-14T15:56:45.683Z",
+          "images": []
+        }
+      ],
+      "content": "[Kirill Potekhin]: Chinese localisation is on the way and the speed of iterations is insane. 10 minutes to translate the whole dashboard thanks to skills from Elina (or Elina’s skills). Kudos to <@U07PR2368G5> <@U09AH7D2A4X> <@U08QUJMN0UV>\n\n[Mike Gorokhov]: But are we sure that this translation is good?\n\n[Kirill Potekhin]: yes, the docs was translated this was and got really positive feedback from Chinese customers \n\n[Mykola Martynovets]: <@U9HDNS9S4> <@U08QUJMN0UV> Cool! I want to ask add the UA language too If you will have another 10min capacity :sweat_smile:\n\n[Kirill Potekhin]: <@U03J8UXUDPF> if you help us proofread, let's do it  \n\n[Mykola Martynovets]: Of course!\n\n[Vitaly Davydov]: <@U09QBBKPGMC> double check pls\n\n[Andrii Hermanov]: I can also help check UA localization\nfyi\n\n[Elena Robakidze]: Hi <@U9HDNS9S4> , super good news, thank you! \n\nFor proofreading we have Ian, who can go through it to double-check, I will dm you ",
+      "matchingReplies": [
+        {
+          "userId": "U9HDNS9S4",
+          "userName": "Kirill Potekhin",
+          "text": "yes, the docs was translated this was and got really positive feedback from Chinese customers ",
+          "date": "2026-10-14T14:55:12.487Z",
+          "images": []
+        },
+        {
+          "userId": "U03J8UXUDPF",
+          "userName": "Mykola Martynovets",
+          "text": "<@U9HDNS9S4> <@U08QUJMN0UV> Cool! I want to ask add the UA language too If you will have another 10min capacity :sweat_smile:",
+          "date": "2026-10-14T14:56:54.562Z",
+          "images": []
+        },
+        {
+          "userId": "U9HDNS9S4",
+          "userName": "Kirill Potekhin",
+          "text": "<@U03J8UXUDPF> if you help us proofread, let's do it  ",
+          "date": "2026-10-14T15:02:32.916Z",
+          "images": []
+        }
+      ],
+      "hasTeamMention": false,
+      "images": [
+        "https://files.slack.com/files-pri/T9HDDB78Q-F0C95DP5RJS/telegram-cloud-photo-size-2-5368461313731928235-y.jpg",
+        "https://files.slack.com/files-pri/T9HDDB78Q-F0C91BKQ6CT/image.png"
+      ]
+    },
     {
       "id": "1791926721.509359",
       "slackUrl": "https://adapty-team.slack.com/archives/C04SY70QZ0T/p1791926721509359",
@@ -25,10 +130,39 @@
           "text": "<!subteam^S07BZPQDBUJ> <!subteam^S03KM96DV0U> fyi",
           "date": "2026-10-13T21:25:31.847Z",
           "images": []
+        },
+        {
+          "userId": "U09EG3DK4US",
+          "userName": "Polina Ishimbaeva",
+          "text": "New era has just started :dizzy:\nLet's smash it :boom:",
+          "date": "2026-10-14T07:51:54.935Z",
+          "images": []
+        },
+        {
+          "userId": "U0A266T9SJE",
+          "userName": "Melike Sezer",
+          "text": "&gt; worth mentioning that it's still possible to edit the paywalls. but NOT to create new ones\nwill it be this way? I taught this also wouldn't be possible",
+          "date": "2026-10-14T08:10:16.129Z",
+          "images": []
+        },
+        {
+          "userId": "U08EVBTE69E",
+          "userName": "Maxim Borisik",
+          "text": "for now yes, since some cannot update the sdk due to old packages etc. but i'd remove it in the next months",
+          "date": "2026-10-14T08:11:17.686Z",
+          "images": []
         }
       ],
-      "content": "[Maxim Borisik]: hey team!\nsince today any new app/company in adapty will see only \"Flows &amp; Paywalls\" tab in the left bar. no more mess\n\nwhy? because we did couple of adjustments:\n1. we've pushed the content of \"paywall\" tab into the \"Flows &amp; Paywalls\" :umbrella_on_ground:\n    a. now there are tabs: \"flows\" &amp; \"custom paywalls&amp;legacy\" (paywall containers, if users use their native UI via remote config + old builder)\n    b. so everything is under one umbrella, no distraction\n2. we've \"closed\" the old paywall builder :headstone:\n    a. now it's *impossible* to create a new paywall in the old builder\n        i. only <https://app.notion.com/p/adapty/Who-not-depricate-from-Builder-3ca1ca4355c380f7820ceb2f8d6470e8|several big clients> who we personally agreed with - still get this opportunity \n    b. worth mentioning that it's still possible to edit the paywalls. but NOT to create new ones\n    c. we also improved the \"migrate to flow\" script, so now it twice more powerful than it was before \n        i. Fun fact: 60% of money in Q3 came from flows which were migrated in the first place \n        ii. doc on migration here - <https://adapty.io/docs/convert-paywall-to-flow|adapty.io/docs/convert-paywall-to-flow>\n3. onboarding builder is a \"victim\" too :dart:\n    a. new apps don't see onboarding builder since july, but if you have at least 1 onboarding in the list - you still see the tab. it will remain as is\nif you have questions from clients where my paywall (custom or old builder one) go - *nothing is broken, nothing is stopped. everything remains as it was. just in a new location now* \nregarding the old builder paywalls, we were notifying that it's going to be deprecated for a long time. so i hope it won't be a surprise\n\nlearn more here - <https://adapty.io/docs/flows-and-paywalls|adapty.io/docs/flows-and-paywalls>\n\n[Maxim Borisik]: <!subteam^S07BZPQDBUJ> <!subteam^S03KM96DV0U> fyi",
-      "matchingReplies": [],
+      "content": "[Maxim Borisik]: hey team!\nsince today any new app/company in adapty will see only \"Flows &amp; Paywalls\" tab in the left bar. no more mess\n\nwhy? because we did couple of adjustments:\n1. we've pushed the content of \"paywall\" tab into the \"Flows &amp; Paywalls\" :umbrella_on_ground:\n    a. now there are tabs: \"flows\" &amp; \"custom paywalls&amp;legacy\" (paywall containers, if users use their native UI via remote config + old builder)\n    b. so everything is under one umbrella, no distraction\n2. we've \"closed\" the old paywall builder :headstone:\n    a. now it's *impossible* to create a new paywall in the old builder\n        i. only <https://app.notion.com/p/adapty/Who-not-depricate-from-Builder-3ca1ca4355c380f7820ceb2f8d6470e8|several big clients> who we personally agreed with - still get this opportunity \n    b. worth mentioning that it's still possible to edit the paywalls. but NOT to create new ones\n    c. we also improved the \"migrate to flow\" script, so now it twice more powerful than it was before \n        i. Fun fact: 60% of money in Q3 came from flows which were migrated in the first place \n        ii. doc on migration here - <https://adapty.io/docs/convert-paywall-to-flow|adapty.io/docs/convert-paywall-to-flow>\n3. onboarding builder is a \"victim\" too :dart:\n    a. new apps don't see onboarding builder since july, but if you have at least 1 onboarding in the list - you still see the tab. it will remain as is\nif you have questions from clients where my paywall (custom or old builder one) go - *nothing is broken, nothing is stopped. everything remains as it was. just in a new location now* \nregarding the old builder paywalls, we were notifying that it's going to be deprecated for a long time. so i hope it won't be a surprise\n\nlearn more here - <https://adapty.io/docs/flows-and-paywalls|adapty.io/docs/flows-and-paywalls>\n\n[Maxim Borisik]: <!subteam^S07BZPQDBUJ> <!subteam^S03KM96DV0U> fyi\n\n[Polina Ishimbaeva]: New era has just started :dizzy:\nLet's smash it :boom:\n\n[Melike Sezer]: &gt; worth mentioning that it's still possible to edit the paywalls. but NOT to create new ones\nwill it be this way? I taught this also wouldn't be possible\n\n[Maxim Borisik]: for now yes, since some cannot update the sdk due to old packages etc. but i'd remove it in the next months",
+      "matchingReplies": [
+        {
+          "userId": "U08EVBTE69E",
+          "userName": "Maxim Borisik",
+          "text": "for now yes, since some cannot update the sdk due to old packages etc. but i'd remove it in the next months",
+          "date": "2026-10-14T08:11:17.686Z",
+          "images": []
+        }
+      ],
       "hasTeamMention": true,
       "images": [
         "https://files.slack.com/files-pri/T9HDDB78Q-F0C93ENJD1A/image.png",
@@ -211,9 +345,16 @@
           "text": "the image alone could be a reason to migrate though",
           "date": "2026-10-13T19:36:35.908Z",
           "images": []
+        },
+        {
+          "userId": "U034A27SVHC",
+          "userName": "Artem Rukavishnikov",
+          "text": "Something Holywater asked about is automatically sending new products from RC to Adapty (as they run both in parallel, they'd have to maintain both).\nI would advise setting up a scheduled task that will run only this specific part of the skill and update the list, say, once a day.\nDo you have any concerns? <@U07J9LKBQ5U>\nWould be helpful for the potentical cases when we pitch Flow Builder \"separately\"",
+          "date": "2026-10-14T05:26:37.992Z",
+          "images": []
         }
       ],
-      "content": "[Yurii Kleimenov]: RevenueCat Migrator is live :male_mage:\n<!subteam^S03KC9S1QMC> <!subteam^S07BZPQDBUJ> <!subteam^S03KM96DV0U> <@U0ASX4X3CKZ> <@U06K36L6CTB> <@U05QELDHUUX>\n\nDevelopers on RevenueCat can now ask their coding agent (Claude Code, Codex, Cursor) to move their app to Adapty. The agent works through the Adapty CLI, and RevenueCat keeps running until the new app version ships.\n\nHow to try it:\n1. Create a RevenueCat secret API key: V2, Read only on project configuration.\n2. Run `npm install -g adapty` and `adapty auth login` in the agent’s terminal.\n3. Tell the agent “Migrate my RevenueCat project to a new Adapty app called Acme with the Adapty CLI”. Paste the key into the Adapty page it opens and answer its mapping questions.\n4. Ask for the rest with one prompt each: paywall designs, app code, integrations, store events. Then test a sandbox purchase and release.\nDocs: <https://adapty.io/docs/migration-from-revenuecat|adapty.io/docs/migration-from-revenuecat>\n\nHow it works:\n• We read the RC catalog through their API and recreate it in Adapty: entitlements as access levels, offerings as placements with a paywall or a Flow. IDs stay the same, so `entitlements[\"premium\"]` becomes `accessLevels[\"premium\"]` and the code diff stays small.\n• Adapty receives App Store notifications and forwards them to RC. On Google Play it joins RC’s Pub/Sub topic as a second subscriber, so both backends get every renewal and refund during the switch.\n• The agent swaps the SDK and code on an `adapty-migrate` branch and lists the manual steps in ADAPTY_SETUP.md. It also rebuilds RC paywalls as Adapty Flows and finds analytics and attribution SDKs in the code.\n• Transaction history comes over through Amazon S3. Each migration gets its own bucket and an IAM role that only RevenueCat can assume, using the External ID from their export settings, and that role can only write. RC sends a daily Cloud Export there. We check for new files every hour, import only products from the migrated catalog and re-validate each transaction with the store. A week after the first file we close the migration and delete the bucket.\n• The migration runs as a state machine on our server, and the CLI only shows the next step. We can ship new steps without a CLI release. Keys go straight into the Adapty dashboard, so the agent never sees them.\nHuge thanks to <@U09L1SS03B8><@U08QUJMN0UV> <@U08ASB4GYR4> <@U0AQZG23D62> <@U0ACSQAKJA1> <@U09AH7D2A4X> <@U0AR243M9T9>\n\n[Maxim Borisik]: &gt; the rest with one prompt each: paywall designs\nyooo. congrats man. even flows right?\n\n[Mykola Martynovets]: magic!\n\n[Melike Sezer]: wowowowowo :partying_face:  this will be a huge leverage with Teknasyon next week <@U09RF6V1YHM> <@U081E90FF3R> <@U02GSCVUPHU>\n\n[Metin Vurmaz]: stonks\n\n[Yurii Kleimenov]: > yooo. congrats man. even flows right?\n<@U08EVBTE69E> Yep, but I believe we’ll need to optimize the user journey slightly so users can naturally understand what they should use for the migration - the CLI, an agent inside the dashboard, and so on.\n\nWe’ll focus on making the whole process as smooth as possible as we roll this out on real RC clients. But yeah, basically, once you create an empty flow and place it using Migrator, your agent will have all the context it needs. You’ll just need to connect via CLI, for example, and send a screenshot of your paywall from RC.\n\n[Mike Gorokhov]: ```Adapty receives App Store notifications and forwards them to RC```\nBut Claude can not change your App Store settings, can it?\nYou need to manually change the endpoint there, no?\n\n[Yurii Kleimenov]: Yes manually, but Claude will open your browser and show you where to paste them. This requires quite high-level admin permissions for the ASC API key, which I believe some leads might be hesitant to share. However, we’re open to feedback from prospects and will extend the functionality based on their needs.\n\nFor now, it’s a separate service that can be upgraded quickly and easily.\n\n[Mike Gorokhov]: Nah, I just wanted to highlight that we can adjust this wording a bit\n\n[Yurii Kleimenov]: We can prepare a Demo for Sales team if needed\n\n[Mike Gorokhov]: Great stuff,  now we need to win someone to test this live :smile:\n\n[Mike Gorokhov]: \"We can prepare a Demo for Sales team if needed\"\n\nNeeded\n\n[Melike Sezer]: Questions: How hard/easy was to build something like this? Can RC has the same migration agent soon? Or do they already have it?\n\n[Sergei Solodskikh]: Great job!\n\n[Yurii Kleimenov]: > *Questions:* How hard or easy was it to build something like this? Could RC have the same migration agent soon, or do they already have one?\n<@U0A266T9SJE>\nThat’s actually a pretty funny situation. Their API is quite comprehensive, which has allowed us to reach the point where we can export everything we need from RC and migrate it to Adapty. On our side, though, things are still more limited, so we’re safe for now due to our API limitations :old:\n\nCompetitors could definitely build something similar, but in RC’s case, I’m 100% sure this isn’t their focus (yet)\n\n[Elena Robakidze]: <@U07J9LKBQ5U> did we have anyone/do we have anyone in the plan with whom we tried/can try this migration?\n\n[Dmitry Shestoperov]: Is there a possibility of them making the API _less_ comprehensive and thus making our life harder?\n\nOr are there some scenarios that make this move unlikely?\n\n[Sergey Muratov]: <@U07J9LKBQ5U> Dima's question prompted this one from me: how much of the migration is done with Claude driving the browser vs. Claude using RC's API? I would assume paywalls are recreated with screenshots from the browser, right?\n\n[Sergei Solodskikh]: &gt; Is there a possibility of them making the API _less_ comprehensive and thus making our life harder?\nThat's kind of suicidal move for any SaaS. API is used by major clients, whom usually cannot be forced to adopt any changes\n\n[Mike Gorokhov]: Guys, the hardest part of the migration is the code, not to copy products ids from the dashboard.\nAPI is very secondary here\n\n[Sergey Muratov]: Maybe code + paywalls + targeting rules\n\n[Yurii Kleimenov]: &gt; did we have anyone/do we have anyone in the plan with whom we tried/can try this migration?\n<@U09QBBKPGMC> We’re planning to target Hi Intent leads from ABM list with SDR first. <@U09TLDB59HU> fyi\n\n[Mike Gorokhov]: This is a tool to migrate, not a reason.\nI do not think it would happen at the SDR step, but rather during the actual sale\n\n[Kirill Potekhin]: the image alone could be a reason to migrate though",
+      "content": "[Yurii Kleimenov]: RevenueCat Migrator is live :male_mage:\n<!subteam^S03KC9S1QMC> <!subteam^S07BZPQDBUJ> <!subteam^S03KM96DV0U> <@U0ASX4X3CKZ> <@U06K36L6CTB> <@U05QELDHUUX>\n\nDevelopers on RevenueCat can now ask their coding agent (Claude Code, Codex, Cursor) to move their app to Adapty. The agent works through the Adapty CLI, and RevenueCat keeps running until the new app version ships.\n\nHow to try it:\n1. Create a RevenueCat secret API key: V2, Read only on project configuration.\n2. Run `npm install -g adapty` and `adapty auth login` in the agent’s terminal.\n3. Tell the agent “Migrate my RevenueCat project to a new Adapty app called Acme with the Adapty CLI”. Paste the key into the Adapty page it opens and answer its mapping questions.\n4. Ask for the rest with one prompt each: paywall designs, app code, integrations, store events. Then test a sandbox purchase and release.\nDocs: <https://adapty.io/docs/migration-from-revenuecat|adapty.io/docs/migration-from-revenuecat>\n\nHow it works:\n• We read the RC catalog through their API and recreate it in Adapty: entitlements as access levels, offerings as placements with a paywall or a Flow. IDs stay the same, so `entitlements[\"premium\"]` becomes `accessLevels[\"premium\"]` and the code diff stays small.\n• Adapty receives App Store notifications and forwards them to RC. On Google Play it joins RC’s Pub/Sub topic as a second subscriber, so both backends get every renewal and refund during the switch.\n• The agent swaps the SDK and code on an `adapty-migrate` branch and lists the manual steps in ADAPTY_SETUP.md. It also rebuilds RC paywalls as Adapty Flows and finds analytics and attribution SDKs in the code.\n• Transaction history comes over through Amazon S3. Each migration gets its own bucket and an IAM role that only RevenueCat can assume, using the External ID from their export settings, and that role can only write. RC sends a daily Cloud Export there. We check for new files every hour, import only products from the migrated catalog and re-validate each transaction with the store. A week after the first file we close the migration and delete the bucket.\n• The migration runs as a state machine on our server, and the CLI only shows the next step. We can ship new steps without a CLI release. Keys go straight into the Adapty dashboard, so the agent never sees them.\nHuge thanks to <@U09L1SS03B8><@U08QUJMN0UV> <@U08ASB4GYR4> <@U0AQZG23D62> <@U0ACSQAKJA1> <@U09AH7D2A4X> <@U0AR243M9T9>\n\n[Maxim Borisik]: &gt; the rest with one prompt each: paywall designs\nyooo. congrats man. even flows right?\n\n[Mykola Martynovets]: magic!\n\n[Melike Sezer]: wowowowowo :partying_face:  this will be a huge leverage with Teknasyon next week <@U09RF6V1YHM> <@U081E90FF3R> <@U02GSCVUPHU>\n\n[Metin Vurmaz]: stonks\n\n[Yurii Kleimenov]: > yooo. congrats man. even flows right?\n<@U08EVBTE69E> Yep, but I believe we’ll need to optimize the user journey slightly so users can naturally understand what they should use for the migration - the CLI, an agent inside the dashboard, and so on.\n\nWe’ll focus on making the whole process as smooth as possible as we roll this out on real RC clients. But yeah, basically, once you create an empty flow and place it using Migrator, your agent will have all the context it needs. You’ll just need to connect via CLI, for example, and send a screenshot of your paywall from RC.\n\n[Mike Gorokhov]: ```Adapty receives App Store notifications and forwards them to RC```\nBut Claude can not change your App Store settings, can it?\nYou need to manually change the endpoint there, no?\n\n[Yurii Kleimenov]: Yes manually, but Claude will open your browser and show you where to paste them. This requires quite high-level admin permissions for the ASC API key, which I believe some leads might be hesitant to share. However, we’re open to feedback from prospects and will extend the functionality based on their needs.\n\nFor now, it’s a separate service that can be upgraded quickly and easily.\n\n[Mike Gorokhov]: Nah, I just wanted to highlight that we can adjust this wording a bit\n\n[Yurii Kleimenov]: We can prepare a Demo for Sales team if needed\n\n[Mike Gorokhov]: Great stuff,  now we need to win someone to test this live :smile:\n\n[Mike Gorokhov]: \"We can prepare a Demo for Sales team if needed\"\n\nNeeded\n\n[Melike Sezer]: Questions: How hard/easy was to build something like this? Can RC has the same migration agent soon? Or do they already have it?\n\n[Sergei Solodskikh]: Great job!\n\n[Yurii Kleimenov]: > *Questions:* How hard or easy was it to build something like this? Could RC have the same migration agent soon, or do they already have one?\n<@U0A266T9SJE>\nThat’s actually a pretty funny situation. Their API is quite comprehensive, which has allowed us to reach the point where we can export everything we need from RC and migrate it to Adapty. On our side, though, things are still more limited, so we’re safe for now due to our API limitations :old:\n\nCompetitors could definitely build something similar, but in RC’s case, I’m 100% sure this isn’t their focus (yet)\n\n[Elena Robakidze]: <@U07J9LKBQ5U> did we have anyone/do we have anyone in the plan with whom we tried/can try this migration?\n\n[Dmitry Shestoperov]: Is there a possibility of them making the API _less_ comprehensive and thus making our life harder?\n\nOr are there some scenarios that make this move unlikely?\n\n[Sergey Muratov]: <@U07J9LKBQ5U> Dima's question prompted this one from me: how much of the migration is done with Claude driving the browser vs. Claude using RC's API? I would assume paywalls are recreated with screenshots from the browser, right?\n\n[Sergei Solodskikh]: &gt; Is there a possibility of them making the API _less_ comprehensive and thus making our life harder?\nThat's kind of suicidal move for any SaaS. API is used by major clients, whom usually cannot be forced to adopt any changes\n\n[Mike Gorokhov]: Guys, the hardest part of the migration is the code, not to copy products ids from the dashboard.\nAPI is very secondary here\n\n[Sergey Muratov]: Maybe code + paywalls + targeting rules\n\n[Yurii Kleimenov]: &gt; did we have anyone/do we have anyone in the plan with whom we tried/can try this migration?\n<@U09QBBKPGMC> We’re planning to target Hi Intent leads from ABM list with SDR first. <@U09TLDB59HU> fyi\n\n[Mike Gorokhov]: This is a tool to migrate, not a reason.\nI do not think it would happen at the SDR step, but rather during the actual sale\n\n[Kirill Potekhin]: the image alone could be a reason to migrate though\n\n[Artem Rukavishnikov]: Something Holywater asked about is automatically sending new products from RC to Adapty (as they run both in parallel, they'd have to maintain both).\nI would advise setting up a scheduled task that will run only this specific part of the skill and update the list, say, once a day.\nDo you have any concerns? <@U07J9LKBQ5U>\nWould be helpful for the potentical cases when we pitch Flow Builder \"separately\"",
       "matchingReplies": [
         {
           "userId": "U08EVBTE69E",
@@ -448,13 +589,23 @@
           "text": "Yep",
           "date": "2026-09-30T10:46:10.823Z",
           "images": []
+        },
+        {
+          "userId": "U034A27SVHC",
+          "userName": "Artem Rukavishnikov",
+          "text": "Hey guys. It looks like the banner is outdated now. Is it so, or are we hedging intentionally?",
+          "date": "2026-10-14T04:06:20.325Z",
+          "images": [
+            "https://files.slack.com/files-pri/T9HDDB78Q-F0C9042QD1U/image.png"
+          ]
         }
       ],
-      "content": "[Murat Menzilci]: Google Ads integration is live on Adapty Attribution :rocket:\n\nAdapty now pulls Google Ads performance data into UA analytics and sends conversion events back to Google for attribution and campaign optimization.\n\nWhat customers can do now:\n\nSee Google Ads spend, impressions, clicks and conversions inside Adapty\nSend installs, trial starts, purchases, renewals and other subscription events back to Google\nUse Revenue Override to assign a value to trial events, so Google can optimize toward revenue and not just trial volume\nSend test conversion events to check the setup before launching campaigns\n\nDocs: <https://adapty.io/docs/ua-google-ads|adapty.io/docs/ua-google-ads>\n\ncc <!subteam^S03KC9S1QMC> <!subteam^S07BZPQDBUJ>\n\n[Mike Gorokhov]: LET'S GO\n\n[Vitaly Davydov]: Good job! \n\n[Kseniya Simonova]: <!subteam^S07BZPQDBUJ> Good time to ping the clients who were waiting for it\n\n[Vitaly Davydov]: <@U02GSCVUPHU> <@U08PXEX7CAK> <@U9HDNS9S4> \n\n[Dmitry Shestoperov]: congrats! big step\n\n[Daniel Ridny]: Long awaited update!\nWell done <@U08PXEX7CAK> <@U02GSCVUPHU> :raised_hands:\n\n[Kristina Bilyk]: <!subteam^S08KMD5J4FJ> fyi\n\n[Kirill Potekhin]: oh yes!! great, guys!\n\n[Sofia Pikuleva]: cool!\n\ndo clients need to update the SDK? from which SDK version does it work?\n\n[Timur Nurutdinov]: Don’t need to do anything\n\n[Kseniya Simonova]: <@U08PXEX7CAK> <@U02GSCVUPHU> hey!\n\nI read the docs. In the case of google, can we work not only with web campaigns but with app campaigns and other campaign types as well?\n\n[Timur Nurutdinov]: Yes. But App campaign (UAC) is restricted only for Android\n\n[Sofia Pikuleva]: &gt; Yes. But App campaign (UAC) is restricted only for Android\ndoes it mean they work for Android only, right? no app campaigns for iOS?\n\n[Timur Nurutdinov]: Yep",
+      "content": "[Murat Menzilci]: Google Ads integration is live on Adapty Attribution :rocket:\n\nAdapty now pulls Google Ads performance data into UA analytics and sends conversion events back to Google for attribution and campaign optimization.\n\nWhat customers can do now:\n\nSee Google Ads spend, impressions, clicks and conversions inside Adapty\nSend installs, trial starts, purchases, renewals and other subscription events back to Google\nUse Revenue Override to assign a value to trial events, so Google can optimize toward revenue and not just trial volume\nSend test conversion events to check the setup before launching campaigns\n\nDocs: <https://adapty.io/docs/ua-google-ads|adapty.io/docs/ua-google-ads>\n\ncc <!subteam^S03KC9S1QMC> <!subteam^S07BZPQDBUJ>\n\n[Mike Gorokhov]: LET'S GO\n\n[Vitaly Davydov]: Good job! \n\n[Kseniya Simonova]: <!subteam^S07BZPQDBUJ> Good time to ping the clients who were waiting for it\n\n[Vitaly Davydov]: <@U02GSCVUPHU> <@U08PXEX7CAK> <@U9HDNS9S4> \n\n[Dmitry Shestoperov]: congrats! big step\n\n[Daniel Ridny]: Long awaited update!\nWell done <@U08PXEX7CAK> <@U02GSCVUPHU> :raised_hands:\n\n[Kristina Bilyk]: <!subteam^S08KMD5J4FJ> fyi\n\n[Kirill Potekhin]: oh yes!! great, guys!\n\n[Sofia Pikuleva]: cool!\n\ndo clients need to update the SDK? from which SDK version does it work?\n\n[Timur Nurutdinov]: Don’t need to do anything\n\n[Kseniya Simonova]: <@U08PXEX7CAK> <@U02GSCVUPHU> hey!\n\nI read the docs. In the case of google, can we work not only with web campaigns but with app campaigns and other campaign types as well?\n\n[Timur Nurutdinov]: Yes. But App campaign (UAC) is restricted only for Android\n\n[Sofia Pikuleva]: &gt; Yes. But App campaign (UAC) is restricted only for Android\ndoes it mean they work for Android only, right? no app campaigns for iOS?\n\n[Timur Nurutdinov]: Yep\n\n[Artem Rukavishnikov]: Hey guys. It looks like the banner is outdated now. Is it so, or are we hedging intentionally?",
       "matchingReplies": [],
       "hasTeamMention": true,
       "images": [
-        "https://files.slack.com/files-pri/T9HDDB78Q-F0C57C5N30E/image.png"
+        "https://files.slack.com/files-pri/T9HDDB78Q-F0C57C5N30E/image.png",
+        "https://files.slack.com/files-pri/T9HDDB78Q-F0C9042QD1U/image.png"
       ]
     },
     {
@@ -1862,94 +2013,6 @@
       "images": [
         "https://files.slack.com/files-pri/T9HDDB78Q-F0BQ8N3B9PD/adapty_search_popularity.png",
         "https://files.slack.com/files-pri/T9HDDB78Q-F0BQGT7MWBT/adapty_keyword_suggester.png"
-      ]
-    },
-    {
-      "id": "1786462886.584559",
-      "slackUrl": "https://adapty-team.slack.com/archives/C04SY70QZ0T/p1786462886584559",
-      "name": "Hey team, we’ve been working on a new feature for Adapty Attribution, and it’s now live: Qualified Trials.",
-      "message": "Hey team, we’ve been working on a new feature for Adapty Attribution, and it’s now live: Qualified Trials.\n\nWith Qualified Trials, customers can choose to send trial events to Meta and TikTok only after a user has stayed in the trial for a defined number of hours without cancelling.\n\nSo instead of sending every trial start as a signal, Adapty can send only the higher-quality trial events. This helps customers improve signal quality, reduce noise, and give ad networks better data for campaign optimization.\n\nWe can use it to talk about:\n• Better signal engineering for subscription apps\n• Higher-quality optimization events for Meta campaigns\n• Reducing noisy trial signals\n• Helping UA teams optimize for users with stronger purchase intent\nIt’s live on the dashboard. cc <!subteam^S07BZPQDBUJ>\n\nBig thanks to <@U08PXEX7CAK> for implementing this so quickly",
-      "releaseDate": "2026-08-11",
-      "thread": [
-        {
-          "userId": "U02GSCVUPHU",
-          "userName": "Murat Menzilci",
-          "text": "Hey team, we’ve been working on a new feature for Adapty Attribution, and it’s now live: Qualified Trials.\n\nWith Qualified Trials, customers can choose to send trial events to Meta and TikTok only after a user has stayed in the trial for a defined number of hours without cancelling.\n\nSo instead of sending every trial start as a signal, Adapty can send only the higher-quality trial events. This helps customers improve signal quality, reduce noise, and give ad networks better data for campaign optimization.\n\nWe can use it to talk about:\n• Better signal engineering for subscription apps\n• Higher-quality optimization events for Meta campaigns\n• Reducing noisy trial signals\n• Helping UA teams optimize for users with stronger purchase intent\nIt’s live on the dashboard. cc <!subteam^S07BZPQDBUJ>\n\nBig thanks to <@U08PXEX7CAK> for implementing this so quickly",
-          "date": "2026-08-11T15:41:26.584Z",
-          "images": [
-            "https://files.slack.com/files-pri/T9HDDB78Q-F0BPDJ9R7M3/image.png"
-          ]
-        },
-        {
-          "userId": "U9HDNS9S4",
-          "userName": "Kirill Potekhin",
-          "text": "great! can we migrate it to the core product by any chance?",
-          "date": "2026-08-11T15:47:27.624Z",
-          "images": []
-        },
-        {
-          "userId": "U02GSCVUPHU",
-          "userName": "Murat Menzilci",
-          "text": "I think it’s doable, but I don’t think it’ll perform as well for app campaigns as it does for web campaigns. What do you think <@U08PXEX7CAK> ",
-          "date": "2026-08-11T16:38:25.617Z",
-          "images": []
-        },
-        {
-          "userId": "U9JU5J5RC",
-          "userName": "Vitaly Davydov",
-          "text": "is it only for attribution product? isn't it in conflict with the main integration?",
-          "date": "2026-08-11T19:32:12.876Z",
-          "images": []
-        },
-        {
-          "userId": "U9HDNS9S4",
-          "userName": "Kirill Potekhin",
-          "text": "no, events via web (aa) and mobile (core) are not connected, so there's no conflict ",
-          "date": "2026-08-11T19:33:26.030Z",
-          "images": []
-        },
-        {
-          "userId": "U08PXEX7CAK",
-          "userName": "Timur Nurutdinov",
-          "text": "Unfortunately no, we can't migrate it into core easy.",
-          "date": "2026-08-11T19:35:15.481Z",
-          "images": []
-        },
-        {
-          "userId": "U9HDNS9S4",
-          "userName": "Kirill Potekhin",
-          "text": "still, great to have it at least somewhere! ",
-          "date": "2026-08-11T19:36:07.891Z",
-          "images": []
-        },
-        {
-          "userId": "U07J9LKBQ5U",
-          "userName": "Yurii Kleimenov",
-          "text": "BTW, we’ll support this in Q3 as well, we had this in plans.",
-          "date": "2026-08-12T10:48:36.005Z",
-          "images": []
-        }
-      ],
-      "content": "[Murat Menzilci]: Hey team, we’ve been working on a new feature for Adapty Attribution, and it’s now live: Qualified Trials.\n\nWith Qualified Trials, customers can choose to send trial events to Meta and TikTok only after a user has stayed in the trial for a defined number of hours without cancelling.\n\nSo instead of sending every trial start as a signal, Adapty can send only the higher-quality trial events. This helps customers improve signal quality, reduce noise, and give ad networks better data for campaign optimization.\n\nWe can use it to talk about:\n• Better signal engineering for subscription apps\n• Higher-quality optimization events for Meta campaigns\n• Reducing noisy trial signals\n• Helping UA teams optimize for users with stronger purchase intent\nIt’s live on the dashboard. cc <!subteam^S07BZPQDBUJ>\n\nBig thanks to <@U08PXEX7CAK> for implementing this so quickly\n\n[Kirill Potekhin]: great! can we migrate it to the core product by any chance?\n\n[Murat Menzilci]: I think it’s doable, but I don’t think it’ll perform as well for app campaigns as it does for web campaigns. What do you think <@U08PXEX7CAK> \n\n[Vitaly Davydov]: is it only for attribution product? isn't it in conflict with the main integration?\n\n[Kirill Potekhin]: no, events via web (aa) and mobile (core) are not connected, so there's no conflict \n\n[Timur Nurutdinov]: Unfortunately no, we can't migrate it into core easy.\n\n[Kirill Potekhin]: still, great to have it at least somewhere! \n\n[Yurii Kleimenov]: BTW, we’ll support this in Q3 as well, we had this in plans.",
-      "matchingReplies": [
-        {
-          "userId": "U9HDNS9S4",
-          "userName": "Kirill Potekhin",
-          "text": "great! can we migrate it to the core product by any chance?",
-          "date": "2026-08-11T15:47:27.624Z",
-          "images": []
-        },
-        {
-          "userId": "U9HDNS9S4",
-          "userName": "Kirill Potekhin",
-          "text": "no, events via web (aa) and mobile (core) are not connected, so there's no conflict ",
-          "date": "2026-08-11T19:33:26.030Z",
-          "images": []
-        }
-      ],
-      "hasTeamMention": false,
-      "images": [
-        "https://files.slack.com/files-pri/T9HDDB78Q-F0BPDJ9R7M3/image.png"
       ]
     }
   ]
