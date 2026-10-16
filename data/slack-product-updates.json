@@ -1,7 +1,70 @@
 {
-  "syncedAt": "2026-10-15T00:38:34.998Z",
+  "syncedAt": "2026-10-16T00:38:53.189Z",
   "channel": "#product-release",
   "entries": [
+    {
+      "id": "1792063309.575279",
+      "slackUrl": "https://adapty-team.slack.com/archives/C04SY70QZ0T/p1792063309575279",
+      "name": ":rocket: New in Adapty Ads Manager: *Change History!*",
+      "message": ":rocket: New in Adapty Ads Manager: *Change History!*\n\nChange History shows customers every change made in their Apple Ads account: what changed, when, who made it.\nWhat’s new:\n• A full log of changes to campaigns, ad groups, keywords, ads and other settings, with exact before-and-after values\n• Available in\n    ◦ :robot_face: Adapty for AI Agents (CLI), so an agent can answer “what changed yesterday and who did it”\n    ◦ :page_facing_up: A separate Change History page with filters\n    ◦ :chart_with_upwards_trend: Keyword detailed charts\n• It includes changes made outside Adapty: in Apple’s own dashboard, by other tools or scripts, and by Apple Support\nWhy it matters:\nWhen a metric jumps, the cause is usually someone’s action, not the market. For agencies and teams with several people and tools in one account, this answers “who changed it” without asking around.\n\n<!subteam^S07BZPQDBUJ> <!subteam^S03KC9S1QMC>\n• How it works, how to explain it to customers:<https://app.notion.com/p/adapty/Change-History-Sales-CS-Enablement-3f91ca4355c381fb8274ff25d489602f?source=copy_link|:bar_chart: Change History — Sales &amp; CS Enablement>\n• :clapper: Video (32 s): <https://youtu.be/DXlsB2A2w0s?si=Ax_2Ft-f8ANTlsZH|youtu.be/…?si=Ax_2Ft-f8ANTlsZH>\n    ◦ It has subtitles in 12 languages\n",
+      "releaseDate": "2026-10-15",
+      "thread": [
+        {
+          "userId": "U0B6GAY6P8C",
+          "userName": "Roman Kuntsevich",
+          "text": ":rocket: New in Adapty Ads Manager: *Change History!*\n\nChange History shows customers every change made in their Apple Ads account: what changed, when, who made it.\nWhat’s new:\n• A full log of changes to campaigns, ad groups, keywords, ads and other settings, with exact before-and-after values\n• Available in\n    ◦ :robot_face: Adapty for AI Agents (CLI), so an agent can answer “what changed yesterday and who did it”\n    ◦ :page_facing_up: A separate Change History page with filters\n    ◦ :chart_with_upwards_trend: Keyword detailed charts\n• It includes changes made outside Adapty: in Apple’s own dashboard, by other tools or scripts, and by Apple Support\nWhy it matters:\nWhen a metric jumps, the cause is usually someone’s action, not the market. For agencies and teams with several people and tools in one account, this answers “who changed it” without asking around.\n\n<!subteam^S07BZPQDBUJ> <!subteam^S03KC9S1QMC>\n• How it works, how to explain it to customers:<https://app.notion.com/p/adapty/Change-History-Sales-CS-Enablement-3f91ca4355c381fb8274ff25d489602f?source=copy_link|:bar_chart: Change History — Sales &amp; CS Enablement>\n• :clapper: Video (32 s): <https://youtu.be/DXlsB2A2w0s?si=Ax_2Ft-f8ANTlsZH|youtu.be/…?si=Ax_2Ft-f8ANTlsZH>\n    ◦ It has subtitles in 12 languages\n",
+          "date": "2026-10-15T11:21:49.575Z",
+          "images": []
+        },
+        {
+          "userId": "U08MKNGFMLN",
+          "userName": "Aliaksandra Subach",
+          "text": "love the video!!!",
+          "date": "2026-10-15T11:32:08.146Z",
+          "images": []
+        },
+        {
+          "userId": "U03J8UXUDPF",
+          "userName": "Mykola Martynovets",
+          "text": "Thanks for the feedback! We will make moreeeeeeee!",
+          "date": "2026-10-15T11:34:18.944Z",
+          "images": []
+        },
+        {
+          "userId": "U0A266T9SJE",
+          "userName": "Melike Sezer",
+          "text": "guys maybe it's not okay to say this here explicitly :hehehhehehe: but i love how fast you can deliver that everything took at least 6 months to do in mobileaction",
+          "date": "2026-10-15T12:04:14.240Z",
+          "images": []
+        },
+        {
+          "userId": "U03J8UXUDPF",
+          "userName": "Mykola Martynovets",
+          "text": "Thank you, Melike, appreciate feedback :raised_hands:\nHuge credit to the team, they’re professionals. And honestly, we’re just getting started.\n\nLots coming in the next couple of months, can’t wait to show you!",
+          "date": "2026-10-15T12:08:58.162Z",
+          "images": []
+        }
+      ],
+      "content": "[Roman Kuntsevich]: :rocket: New in Adapty Ads Manager: *Change History!*\n\nChange History shows customers every change made in their Apple Ads account: what changed, when, who made it.\nWhat’s new:\n• A full log of changes to campaigns, ad groups, keywords, ads and other settings, with exact before-and-after values\n• Available in\n    ◦ :robot_face: Adapty for AI Agents (CLI), so an agent can answer “what changed yesterday and who did it”\n    ◦ :page_facing_up: A separate Change History page with filters\n    ◦ :chart_with_upwards_trend: Keyword detailed charts\n• It includes changes made outside Adapty: in Apple’s own dashboard, by other tools or scripts, and by Apple Support\nWhy it matters:\nWhen a metric jumps, the cause is usually someone’s action, not the market. For agencies and teams with several people and tools in one account, this answers “who changed it” without asking around.\n\n<!subteam^S07BZPQDBUJ> <!subteam^S03KC9S1QMC>\n• How it works, how to explain it to customers:<https://app.notion.com/p/adapty/Change-History-Sales-CS-Enablement-3f91ca4355c381fb8274ff25d489602f?source=copy_link|:bar_chart: Change History — Sales &amp; CS Enablement>\n• :clapper: Video (32 s): <https://youtu.be/DXlsB2A2w0s?si=Ax_2Ft-f8ANTlsZH|youtu.be/…?si=Ax_2Ft-f8ANTlsZH>\n    ◦ It has subtitles in 12 languages\n\n\n[Aliaksandra Subach]: love the video!!!\n\n[Mykola Martynovets]: Thanks for the feedback! We will make moreeeeeeee!\n\n[Melike Sezer]: guys maybe it's not okay to say this here explicitly :hehehhehehe: but i love how fast you can deliver that everything took at least 6 months to do in mobileaction\n\n[Mykola Martynovets]: Thank you, Melike, appreciate feedback :raised_hands:\nHuge credit to the team, they’re professionals. And honestly, we’re just getting started.\n\nLots coming in the next couple of months, can’t wait to show you!",
+      "matchingReplies": [
+        {
+          "userId": "U03J8UXUDPF",
+          "userName": "Mykola Martynovets",
+          "text": "Thanks for the feedback! We will make moreeeeeeee!",
+          "date": "2026-10-15T11:34:18.944Z",
+          "images": []
+        },
+        {
+          "userId": "U03J8UXUDPF",
+          "userName": "Mykola Martynovets",
+          "text": "Thank you, Melike, appreciate feedback :raised_hands:\nHuge credit to the team, they’re professionals. And honestly, we’re just getting started.\n\nLots coming in the next couple of months, can’t wait to show you!",
+          "date": "2026-10-15T12:08:58.162Z",
+          "images": []
+        }
+      ],
+      "hasTeamMention": false,
+      "images": []
+    },
     {
       "id": "1791989521.704169",
       "slackUrl": "https://adapty-team.slack.com/archives/C04SY70QZ0T/p1791989521704169",
@@ -873,14 +936,52 @@
           "text": "<!subteam^S07BZPQDBUJ> Hours released :tada:",
           "date": "2026-09-25T14:43:31.985Z",
           "images": []
+        },
+        {
+          "userId": "U0A266T9SJE",
+          "userName": "Melike Sezer",
+          "text": "Hi <@U07J9LKBQ5U> question about the synthetic *Subscription still active* (`subscription_active`) event.\n*Context:* Deepix wants to send an early \"quality user\" signal to their integration [Adjust / Meta / ...].\n*Today:* `subscription_active` fires X days after `subscription_started` if the user still has access. Users who turned off auto-renew, have a billing issue or are in a grace period still count as active, so it doesn't tell us whether the user is going to renew.\n*What they need:* an event that fires N hours after the purchase (e.g. 1h) *only if the user has NOT turned off auto-renew* by then. In other words, a delayed \"renewal not cancelled\" event.",
+          "date": "2026-10-15T14:09:06.541Z",
+          "images": []
+        },
+        {
+          "userId": "U07J9LKBQ5U",
+          "userName": "Yurii Kleimenov",
+          "text": "<@U0A266T9SJE> This already works the way Deepix needs. `subscription_active` only fires if, at the moment it’s due (N after the purchase), the user still has access *and hasn’t turned off auto-renew*. If they switch auto-renew off within the window, the event isn’t sent. This has been live since Sep 17. Billing issue / grace period still count as active, but that practically can’t happen 1h after a purchase.\n\nFor Deepix: enable _Subscription still active_ in their Adjust / Meta integration and set the delay to 1 hour (that’s the minimum). If their flow starts with a free trial, they need _Trial still active_ instead. `subscription_active` starts only from a direct paid purchase, not from a trial conversion.",
+          "date": "2026-10-15T14:57:18.606Z",
+          "images": []
+        },
+        {
+          "userId": "U0A266T9SJE",
+          "userName": "Melike Sezer",
+          "text": "oh that's actually great!",
+          "date": "2026-10-15T15:32:05.325Z",
+          "images": []
+        },
+        {
+          "userId": "U0A266T9SJE",
+          "userName": "Melike Sezer",
+          "text": "_Sent the configured number of days after the subscription starts, if it is still active then. No store notification triggers it: when the delay is up, Adapty checks the subscription itself. Auto-renew switched off, a billing issue or a grace period all still count as active, because the customer still has access._\n\n_<@U07J9LKBQ5U>_ tooltip says auto renew switched off still counts as active.",
+          "date": "2026-10-15T15:47:42.949Z",
+          "images": []
+        },
+        {
+          "userId": "U07J9LKBQ5U",
+          "userName": "Yurii Kleimenov",
+          "text": "According to code it should be like this, let’s create post for support team in support-reports and <!subteam^S08SJ447HD4> bosses can take a deeper look.",
+          "date": "2026-10-15T16:00:20.409Z",
+          "images": [
+            "https://files.slack.com/files-pri/T9HDDB78Q-F0CADLX27B2/image.png"
+          ]
         }
       ],
-      "content": "[Yurii Kleimenov]: Feature: <https://adaptyio.atlassian.net/browse/ADP-7079|Add trial_active event to integrations/webhooks>\nRelease: September 16, 2026\nDependencies: None\nEffected areas: Events, Integrations, Webhooks, Event Feed\n\n<!subteam^S03KM96DV0U> <!subteam^S07BZPQDBUJ> <@U090BDLA9JN> <@U0ASX4X3CKZ>\n\nSup, team - we just shipped our first synthetic event. Two of them, actually :hourglass_flowing_sand: :chart_with_upwards_trend:\n\n• `trial_active` - the trial is still alive N after it started: not cancelled, not refunded, not expired\n• `subscription_active` - same thing for a paid subscription\n\n1. Sent to every integration and also visible in Event Feed\n2. N is set per integration - a toggle and a duration field right next to the other events. AppsFlyer can get one window, a webhook another. \n*Who this is for:*\nAnyone optimizing acquisition through an MMP: Meta and Google get an early, clean signal instead of every trial_started in a row.\n\n:warning: Duration is in days for now. Hours are coming very soon, already in progress.\n\nHuge kudos to <@U0AR243M9T9> <@U0A3M160RB4>\n\nP.S: Stepadev, Kichdev, 4partners, MagicSolutions and the others from <https://adaptyio.atlassian.net/browse/CR-104|CR-104> have been waiting two years for this, <!subteam^S07BZPQDBUJ> please make their day :heart_on_fire:\n\n[Sergey Muratov]: This will blow up our TG group. Yay!\n\n[Vitaly Davydov]: yeah that's nuts!\n\n[Vitaly Davydov]: but UI sucks honestly\n\n[Sergey Muratov]: Integrations UI is where I'd like to come to die\n\n[Yurii Kleimenov]: Vibecode) Yeah +1 to Sergei, I hope we’ll redesign it asap\n\n[Vitaly Davydov]: yes, but if it works - it works\n\n[Daniel Ridny]: Awesome news!\n\n[Polina Ishimbaeva]: long-awaited request from our clients! Thank you <@U07J9LKBQ5U> and the team for making this happen! :fire:\n\n[Sofia Pikuleva]: do we send this to Facebook directly apart from MMPs?\n\n[Yurii Kleimenov]: &gt; do we send this to Facebook directly apart from MMPs?\nNot yet, we’ll add this next week.\n\n[Melike Sezer]: &gt; Duration is in days for now. Hours are coming very soon, already in progress.\nDeepix (12k mrr) -&gt; loved it! but directly asked for hourly  :smile:\n\n[Yurii Kleimenov]: Yeah for sure, soon will be released an update\n\n[Murat Menzilci]: <@U07J9LKBQ5U> looks like the day setting for trial active is not available for the Android GA integration. Is that expected?\n\n[Murat Menzilci]: I mean duration \n\n[Aleksandr Smirnov]: hey <@U02GSCVUPHU>!\nYes, that’s expected according to the internal check (repo).\n\nThe duration isn’t a per-store setting. There’s one value for the whole integration, and it applies to both iOS and Android. On the Firebase/GA page it only appears in the iOS event block, so it looks like Android doesn’t have it, but whatever you set there also applies to Android transactions.\n\nWhat matters for Android is that the Trial active toggle is switched on in the Android events block, because enabling is still per store. You can’t set different durations for iOS and Android right now.\n\nAgree the UI is misleading here @ Yurii Kleimenov\n\n[Yurii Kleimenov]: <!subteam^S07BZPQDBUJ> Hours released :tada:",
+      "content": "[Yurii Kleimenov]: Feature: <https://adaptyio.atlassian.net/browse/ADP-7079|Add trial_active event to integrations/webhooks>\nRelease: September 16, 2026\nDependencies: None\nEffected areas: Events, Integrations, Webhooks, Event Feed\n\n<!subteam^S03KM96DV0U> <!subteam^S07BZPQDBUJ> <@U090BDLA9JN> <@U0ASX4X3CKZ>\n\nSup, team - we just shipped our first synthetic event. Two of them, actually :hourglass_flowing_sand: :chart_with_upwards_trend:\n\n• `trial_active` - the trial is still alive N after it started: not cancelled, not refunded, not expired\n• `subscription_active` - same thing for a paid subscription\n\n1. Sent to every integration and also visible in Event Feed\n2. N is set per integration - a toggle and a duration field right next to the other events. AppsFlyer can get one window, a webhook another. \n*Who this is for:*\nAnyone optimizing acquisition through an MMP: Meta and Google get an early, clean signal instead of every trial_started in a row.\n\n:warning: Duration is in days for now. Hours are coming very soon, already in progress.\n\nHuge kudos to <@U0AR243M9T9> <@U0A3M160RB4>\n\nP.S: Stepadev, Kichdev, 4partners, MagicSolutions and the others from <https://adaptyio.atlassian.net/browse/CR-104|CR-104> have been waiting two years for this, <!subteam^S07BZPQDBUJ> please make their day :heart_on_fire:\n\n[Sergey Muratov]: This will blow up our TG group. Yay!\n\n[Vitaly Davydov]: yeah that's nuts!\n\n[Vitaly Davydov]: but UI sucks honestly\n\n[Sergey Muratov]: Integrations UI is where I'd like to come to die\n\n[Yurii Kleimenov]: Vibecode) Yeah +1 to Sergei, I hope we’ll redesign it asap\n\n[Vitaly Davydov]: yes, but if it works - it works\n\n[Daniel Ridny]: Awesome news!\n\n[Polina Ishimbaeva]: long-awaited request from our clients! Thank you <@U07J9LKBQ5U> and the team for making this happen! :fire:\n\n[Sofia Pikuleva]: do we send this to Facebook directly apart from MMPs?\n\n[Yurii Kleimenov]: &gt; do we send this to Facebook directly apart from MMPs?\nNot yet, we’ll add this next week.\n\n[Melike Sezer]: &gt; Duration is in days for now. Hours are coming very soon, already in progress.\nDeepix (12k mrr) -&gt; loved it! but directly asked for hourly  :smile:\n\n[Yurii Kleimenov]: Yeah for sure, soon will be released an update\n\n[Murat Menzilci]: <@U07J9LKBQ5U> looks like the day setting for trial active is not available for the Android GA integration. Is that expected?\n\n[Murat Menzilci]: I mean duration \n\n[Aleksandr Smirnov]: hey <@U02GSCVUPHU>!\nYes, that’s expected according to the internal check (repo).\n\nThe duration isn’t a per-store setting. There’s one value for the whole integration, and it applies to both iOS and Android. On the Firebase/GA page it only appears in the iOS event block, so it looks like Android doesn’t have it, but whatever you set there also applies to Android transactions.\n\nWhat matters for Android is that the Trial active toggle is switched on in the Android events block, because enabling is still per store. You can’t set different durations for iOS and Android right now.\n\nAgree the UI is misleading here @ Yurii Kleimenov\n\n[Yurii Kleimenov]: <!subteam^S07BZPQDBUJ> Hours released :tada:\n\n[Melike Sezer]: Hi <@U07J9LKBQ5U> question about the synthetic *Subscription still active* (`subscription_active`) event.\n*Context:* Deepix wants to send an early \"quality user\" signal to their integration [Adjust / Meta / ...].\n*Today:* `subscription_active` fires X days after `subscription_started` if the user still has access. Users who turned off auto-renew, have a billing issue or are in a grace period still count as active, so it doesn't tell us whether the user is going to renew.\n*What they need:* an event that fires N hours after the purchase (e.g. 1h) *only if the user has NOT turned off auto-renew* by then. In other words, a delayed \"renewal not cancelled\" event.\n\n[Yurii Kleimenov]: <@U0A266T9SJE> This already works the way Deepix needs. `subscription_active` only fires if, at the moment it’s due (N after the purchase), the user still has access *and hasn’t turned off auto-renew*. If they switch auto-renew off within the window, the event isn’t sent. This has been live since Sep 17. Billing issue / grace period still count as active, but that practically can’t happen 1h after a purchase.\n\nFor Deepix: enable _Subscription still active_ in their Adjust / Meta integration and set the delay to 1 hour (that’s the minimum). If their flow starts with a free trial, they need _Trial still active_ instead. `subscription_active` starts only from a direct paid purchase, not from a trial conversion.\n\n[Melike Sezer]: oh that's actually great!\n\n[Melike Sezer]: _Sent the configured number of days after the subscription starts, if it is still active then. No store notification triggers it: when the delay is up, Adapty checks the subscription itself. Auto-renew switched off, a billing issue or a grace period all still count as active, because the customer still has access._\n\n_<@U07J9LKBQ5U>_ tooltip says auto renew switched off still counts as active.\n\n[Yurii Kleimenov]: According to code it should be like this, let’s create post for support team in support-reports and <!subteam^S08SJ447HD4> bosses can take a deeper look.",
       "matchingReplies": [],
       "hasTeamMention": true,
       "images": [
         "https://files.slack.com/files-pri/T9HDDB78Q-F0C1VUWQ7PZ/image.png",
-        "https://files.slack.com/files-pri/T9HDDB78Q-F0C35RHA58Q/image.png"
+        "https://files.slack.com/files-pri/T9HDDB78Q-F0C35RHA58Q/image.png",
+        "https://files.slack.com/files-pri/T9HDDB78Q-F0CADLX27B2/image.png"
       ]
     },
     {
@@ -1965,54 +2066,6 @@
       "hasTeamMention": true,
       "images": [
         "https://files.slack.com/files-pri/T9HDDB78Q-F0BU9PGTQ6B/image.png"
-      ]
-    },
-    {
-      "id": "1786879913.137679",
-      "slackUrl": "https://adapty-team.slack.com/archives/C04SY70QZ0T/p1786879913137679",
-      "name": ":rocket: *Launching today: Search Popularity + Keyword Suggester*",
-      "message": ":rocket: *Launching today: Search Popularity + Keyword Suggester*\n\nWe are bringing the keyword discovery stage into Adapty.\n*Search Popularity* shows ranked App Store search terms for a selected market, genre, and completed period. *Keyword Suggester* expands a seed into related phrase candidates and Apple category context, then helps users build a shortlist.\nTogether, they replace an unstructured mix of intuition, spreadsheets, and external tools with a transparent workflow based on Apple-provided signals. This is useful for Apple Ads research, ASO, market expansion, and product positioning — and it creates the foundation for future recommendation and campaign-building workflows.\nImportant: popularity is a relative research signal, not search volume, conversion, or a performance forecast.\nPlease try both releases with a real use case and share feedback on relevance, clarity, and the next action you would expect after building a shortlist.\n\nFYI <@U07J9LKBQ5U>",
-      "releaseDate": "2026-08-16",
-      "thread": [
-        {
-          "userId": "U03J8UXUDPF",
-          "userName": "Mykola Martynovets",
-          "text": ":rocket: *Launching today: Search Popularity + Keyword Suggester*\n\nWe are bringing the keyword discovery stage into Adapty.\n*Search Popularity* shows ranked App Store search terms for a selected market, genre, and completed period. *Keyword Suggester* expands a seed into related phrase candidates and Apple category context, then helps users build a shortlist.\nTogether, they replace an unstructured mix of intuition, spreadsheets, and external tools with a transparent workflow based on Apple-provided signals. This is useful for Apple Ads research, ASO, market expansion, and product positioning — and it creates the foundation for future recommendation and campaign-building workflows.\nImportant: popularity is a relative research signal, not search volume, conversion, or a performance forecast.\nPlease try both releases with a real use case and share feedback on relevance, clarity, and the next action you would expect after building a shortlist.\n\nFYI <@U07J9LKBQ5U>",
-          "date": "2026-08-16T11:31:53.137Z",
-          "images": [
-            "https://files.slack.com/files-pri/T9HDDB78Q-F0BQ8N3B9PD/adapty_search_popularity.png",
-            "https://files.slack.com/files-pri/T9HDDB78Q-F0BQGT7MWBT/adapty_keyword_suggester.png"
-          ]
-        },
-        {
-          "userId": "U03J8UXUDPF",
-          "userName": "Mykola Martynovets",
-          "text": "<https://app.notion.com/p/adapty/Internal-info-Search-Popularity-and-Keyword-Suggester-3be1ca4355c3804396c4e2c4080127f7|app.notion.com/p/adapty/Internal-inf…>",
-          "date": "2026-08-16T11:32:26.050Z",
-          "images": []
-        },
-        {
-          "userId": "U0AAUD3KHT7",
-          "userName": "David",
-          "text": "Adapty is cooking !! so many cool new features released this summer",
-          "date": "2026-08-16T14:00:22.662Z",
-          "images": []
-        }
-      ],
-      "content": "[Mykola Martynovets]: :rocket: *Launching today: Search Popularity + Keyword Suggester*\n\nWe are bringing the keyword discovery stage into Adapty.\n*Search Popularity* shows ranked App Store search terms for a selected market, genre, and completed period. *Keyword Suggester* expands a seed into related phrase candidates and Apple category context, then helps users build a shortlist.\nTogether, they replace an unstructured mix of intuition, spreadsheets, and external tools with a transparent workflow based on Apple-provided signals. This is useful for Apple Ads research, ASO, market expansion, and product positioning — and it creates the foundation for future recommendation and campaign-building workflows.\nImportant: popularity is a relative research signal, not search volume, conversion, or a performance forecast.\nPlease try both releases with a real use case and share feedback on relevance, clarity, and the next action you would expect after building a shortlist.\n\nFYI <@U07J9LKBQ5U>\n\n[Mykola Martynovets]: <https://app.notion.com/p/adapty/Internal-info-Search-Popularity-and-Keyword-Suggester-3be1ca4355c3804396c4e2c4080127f7|app.notion.com/p/adapty/Internal-inf…>\n\n[David]: Adapty is cooking !! so many cool new features released this summer",
-      "matchingReplies": [
-        {
-          "userId": "U03J8UXUDPF",
-          "userName": "Mykola Martynovets",
-          "text": "<https://app.notion.com/p/adapty/Internal-info-Search-Popularity-and-Keyword-Suggester-3be1ca4355c3804396c4e2c4080127f7|app.notion.com/p/adapty/Internal-inf…>",
-          "date": "2026-08-16T11:32:26.050Z",
-          "images": []
-        }
-      ],
-      "hasTeamMention": false,
-      "images": [
-        "https://files.slack.com/files-pri/T9HDDB78Q-F0BQ8N3B9PD/adapty_search_popularity.png",
-        "https://files.slack.com/files-pri/T9HDDB78Q-F0BQGT7MWBT/adapty_keyword_suggester.png"
       ]
     }
   ]
