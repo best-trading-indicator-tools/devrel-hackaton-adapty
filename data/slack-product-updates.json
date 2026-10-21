@@ -1,7 +1,53 @@
 {
-  "syncedAt": "2026-10-20T00:40:48.469Z",
+  "syncedAt": "2026-10-21T00:39:46.841Z",
   "channel": "#product-release",
   "entries": [
+    {
+      "id": "1792520584.397089",
+      "slackUrl": "https://adapty-team.slack.com/archives/C04SY70QZ0T/p1792520584397089",
+      "name": "*Сustom fonts in flow builder are now families*",
+      "message": "*Сustom fonts in flow builder are now families*\n\nbefore: one font = one file\nyou could pick Bold for a font with only Regular uploaded - the preview faked it, the phone showed Regular\nclients found out only after publishing\n\nnow:\n• upload all the weights at once - they group into one family by themselves\n• the weight menu shows only what you uploaded, so preview = device\n• one variable file gives every weight on iOS and Android :sparkles:",
+      "releaseDate": "2026-10-20",
+      "thread": [
+        {
+          "userId": "U0903TFULQ3",
+          "userName": "Andrii Hermanov",
+          "text": "*Сustom fonts in flow builder are now families*\n\nbefore: one font = one file\nyou could pick Bold for a font with only Regular uploaded - the preview faked it, the phone showed Regular\nclients found out only after publishing\n\nnow:\n• upload all the weights at once - they group into one family by themselves\n• the weight menu shows only what you uploaded, so preview = device\n• one variable file gives every weight on iOS and Android :sparkles:",
+          "date": "2026-10-20T18:23:04.397Z",
+          "images": [
+            "https://files.slack.com/files-pri/T9HDDB78Q-F0CAUP98VEY/image.png"
+          ]
+        },
+        {
+          "userId": "U0903TFULQ3",
+          "userName": "Andrii Hermanov",
+          "text": "limits for now:\n• most old Android names look like file names (Montserrat-SemiBold) and Android doesn't accept them - clients need to rename them to montserrat_semibold\n• some variable fonts (Inter, Roboto Flex) don't carry names for their weights - the iOS name has to be typed in by hand, otherwise publish fails",
+          "date": "2026-10-20T18:23:15.734Z",
+          "images": []
+        },
+        {
+          "userId": "U08EVBTE69E",
+          "userName": "Maxim Borisik",
+          "text": "huge job! more stability to us\n<!subteam^S03KM96DV0U> fyi ",
+          "date": "2026-10-20T20:38:55.571Z",
+          "images": []
+        }
+      ],
+      "content": "[Andrii Hermanov]: *Сustom fonts in flow builder are now families*\n\nbefore: one font = one file\nyou could pick Bold for a font with only Regular uploaded - the preview faked it, the phone showed Regular\nclients found out only after publishing\n\nnow:\n• upload all the weights at once - they group into one family by themselves\n• the weight menu shows only what you uploaded, so preview = device\n• one variable file gives every weight on iOS and Android :sparkles:\n\n[Andrii Hermanov]: limits for now:\n• most old Android names look like file names (Montserrat-SemiBold) and Android doesn't accept them - clients need to rename them to montserrat_semibold\n• some variable fonts (Inter, Roboto Flex) don't carry names for their weights - the iOS name has to be typed in by hand, otherwise publish fails\n\n[Maxim Borisik]: huge job! more stability to us\n<!subteam^S03KM96DV0U> fyi ",
+      "matchingReplies": [
+        {
+          "userId": "U08EVBTE69E",
+          "userName": "Maxim Borisik",
+          "text": "huge job! more stability to us\n<!subteam^S03KM96DV0U> fyi ",
+          "date": "2026-10-20T20:38:55.571Z",
+          "images": []
+        }
+      ],
+      "hasTeamMention": true,
+      "images": [
+        "https://files.slack.com/files-pri/T9HDDB78Q-F0CAUP98VEY/image.png"
+      ]
+    },
     {
       "id": "1792432571.486659",
       "slackUrl": "https://adapty-team.slack.com/archives/C04SY70QZ0T/p1792432571486659",
@@ -1906,49 +1952,6 @@
         "https://files.slack.com/files-pri/T9HDDB78Q-F0BTTAGUQ85/image.png",
         "https://files.slack.com/files-pri/T9HDDB78Q-F0BTXE3MWBC/image.png",
         "https://files.slack.com/files-pri/T9HDDB78Q-F0BUFBGD8E6/screenshot_2026-09-02_at_15.58.48.png"
-      ]
-    },
-    {
-      "id": "1787760257.118499",
-      "slackUrl": "https://adapty-team.slack.com/archives/C04SY70QZ0T/p1787760257118499",
-      "name": "Hey team! :wave:",
-      "message": "Hey team! :wave:\nto simplify the Flow &amp; Paywall Builder adoption for existing paywall builder users - we've launched a magic \"migrate to new builder\" button.\nthis button was internally available for CS team for a month already, now we open it to every client.\n\n*works just as we love: \"click one button - get the result\"* :clap:\n\nsure thing, there are sure some limitations (like custom fonts or heavy layouts), but i'd say it migrates 7/10 paywalls and the result is good. in other cases it requires some manual involvement. we have one big improvement coming, so this button will get even better next week.\nalso after each migration there is \"import review\" list, which highlights stuff you should pay attention to (screen 3)\nlearn details <https://adapty.io/docs/convert-paywall-to-flow|here >\n\nmore: today we will place banners about <https://adapty.io/docs/paywall-onboarding-builder-deprecation|deprecation> in the old builders, while clients now have several options to migrate:\n• migrate via this button\n• use our flow builder skill for CLI (we'll make a proper announcement soon)\n• use our templates library (there is 20+ already)\n• use AI chat to polish the result\n*huuge thanks to <@U0ALSG3VA30>* *<@U08JY3U9S7P> and the builder team for making this possible*, because it's like connecting two different worlds. not easy. :dart:",
-      "releaseDate": "2026-08-26",
-      "thread": [
-        {
-          "userId": "U08EVBTE69E",
-          "userName": "Maxim Borisik",
-          "text": "Hey team! :wave:\nto simplify the Flow &amp; Paywall Builder adoption for existing paywall builder users - we've launched a magic \"migrate to new builder\" button.\nthis button was internally available for CS team for a month already, now we open it to every client.\n\n*works just as we love: \"click one button - get the result\"* :clap:\n\nsure thing, there are sure some limitations (like custom fonts or heavy layouts), but i'd say it migrates 7/10 paywalls and the result is good. in other cases it requires some manual involvement. we have one big improvement coming, so this button will get even better next week.\nalso after each migration there is \"import review\" list, which highlights stuff you should pay attention to (screen 3)\nlearn details <https://adapty.io/docs/convert-paywall-to-flow|here >\n\nmore: today we will place banners about <https://adapty.io/docs/paywall-onboarding-builder-deprecation|deprecation> in the old builders, while clients now have several options to migrate:\n• migrate via this button\n• use our flow builder skill for CLI (we'll make a proper announcement soon)\n• use our templates library (there is 20+ already)\n• use AI chat to polish the result\n*huuge thanks to <@U0ALSG3VA30>* *<@U08JY3U9S7P> and the builder team for making this possible*, because it's like connecting two different worlds. not easy. :dart:",
-          "date": "2026-08-26T16:04:17.118Z",
-          "images": [
-            "https://files.slack.com/files-pri/T9HDDB78Q-F0BSQ1YKEV9/image.png",
-            "https://files.slack.com/files-pri/T9HDDB78Q-F0BSQ5CC4R1/image.png",
-            "https://files.slack.com/files-pri/T9HDDB78Q-F0BSQ3ZQBNX/image.png"
-          ]
-        },
-        {
-          "userId": "U08EVBTE69E",
-          "userName": "Maxim Borisik",
-          "text": "<!subteam^S07BZPQDBUJ> you already now but still\n<!subteam^S03KM96DV0U> fyi",
-          "date": "2026-08-26T16:07:35.786Z",
-          "images": []
-        }
-      ],
-      "content": "[Maxim Borisik]: Hey team! :wave:\nto simplify the Flow &amp; Paywall Builder adoption for existing paywall builder users - we've launched a magic \"migrate to new builder\" button.\nthis button was internally available for CS team for a month already, now we open it to every client.\n\n*works just as we love: \"click one button - get the result\"* :clap:\n\nsure thing, there are sure some limitations (like custom fonts or heavy layouts), but i'd say it migrates 7/10 paywalls and the result is good. in other cases it requires some manual involvement. we have one big improvement coming, so this button will get even better next week.\nalso after each migration there is \"import review\" list, which highlights stuff you should pay attention to (screen 3)\nlearn details <https://adapty.io/docs/convert-paywall-to-flow|here >\n\nmore: today we will place banners about <https://adapty.io/docs/paywall-onboarding-builder-deprecation|deprecation> in the old builders, while clients now have several options to migrate:\n• migrate via this button\n• use our flow builder skill for CLI (we'll make a proper announcement soon)\n• use our templates library (there is 20+ already)\n• use AI chat to polish the result\n*huuge thanks to <@U0ALSG3VA30>* *<@U08JY3U9S7P> and the builder team for making this possible*, because it's like connecting two different worlds. not easy. :dart:\n\n[Maxim Borisik]: <!subteam^S07BZPQDBUJ> you already now but still\n<!subteam^S03KM96DV0U> fyi",
-      "matchingReplies": [
-        {
-          "userId": "U08EVBTE69E",
-          "userName": "Maxim Borisik",
-          "text": "<!subteam^S07BZPQDBUJ> you already now but still\n<!subteam^S03KM96DV0U> fyi",
-          "date": "2026-08-26T16:07:35.786Z",
-          "images": []
-        }
-      ],
-      "hasTeamMention": true,
-      "images": [
-        "https://files.slack.com/files-pri/T9HDDB78Q-F0BSQ1YKEV9/image.png",
-        "https://files.slack.com/files-pri/T9HDDB78Q-F0BSQ5CC4R1/image.png",
-        "https://files.slack.com/files-pri/T9HDDB78Q-F0BSQ3ZQBNX/image.png"
       ]
     }
   ]
