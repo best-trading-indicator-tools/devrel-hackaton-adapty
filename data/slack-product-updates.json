@@ -1,7 +1,53 @@
 {
-  "syncedAt": "2026-10-21T00:39:46.841Z",
+  "syncedAt": "2026-10-22T00:40:21.611Z",
   "channel": "#product-release",
   "entries": [
+    {
+      "id": "1792558818.583529",
+      "slackUrl": "https://adapty-team.slack.com/archives/C04SY70QZ0T/p1792558818583529",
+      "name": "hey team! light &amp; dark themes are live in flow builder :jack_o_lantern::crescent_moon:",
+      "message": "hey team! light &amp; dark themes are live in flow builder :jack_o_lantern::crescent_moon:\n\nuntil now: dark mode in flows could swap only plain colors. images, gradients and videos stayed the same at night, so paywalls migrated from the old builder lost their dark look :skull:\n\nWhat's new:\n• color styles hold a separate stack for Light and Dark - solid, gradient, image or video, layered\n• Image and Video elements got Light / Dark tabs - drop a night file next to the day one. don't need two? one file serves both themes\n• the switcher under the canvas previews both themes, the tabs follow it\n• localizations show Light and Dark rows, so every language can have its own day and night picture :spider_web:\n• no SDK update needed - the app picks the dark file when the phone is in dark mode\n\nWho's been waiting for it :bat:\n• Impala - day/night images and gradients in styles, their footer gradient got lost after the migration\n• Jaumo - WeightBuddy funnels with different images and gradients per theme\n• Tappz - a gradient over a dark mode background\n• Weewoo - day and night assets for images and videos\nand many more!\n\nlimits for now :new_moon:\n• text color takes solid layers only - gradients and images there are skipped with a warning\n• icons and shadows stay one solid per theme, input borders one solid or gradient\n\nthanks to <@U07PR2368G5> for the design, <@U09UZ0GJYKE> for testing it inside out and <@U0A4F2RSMQQ> for the reviews and color fixes :spider:",
+      "releaseDate": "2026-10-21",
+      "thread": [
+        {
+          "userId": "U0BB5T65SF6",
+          "userName": "Kamil Lotfullin",
+          "text": "hey team! light &amp; dark themes are live in flow builder :jack_o_lantern::crescent_moon:\n\nuntil now: dark mode in flows could swap only plain colors. images, gradients and videos stayed the same at night, so paywalls migrated from the old builder lost their dark look :skull:\n\nWhat's new:\n• color styles hold a separate stack for Light and Dark - solid, gradient, image or video, layered\n• Image and Video elements got Light / Dark tabs - drop a night file next to the day one. don't need two? one file serves both themes\n• the switcher under the canvas previews both themes, the tabs follow it\n• localizations show Light and Dark rows, so every language can have its own day and night picture :spider_web:\n• no SDK update needed - the app picks the dark file when the phone is in dark mode\n\nWho's been waiting for it :bat:\n• Impala - day/night images and gradients in styles, their footer gradient got lost after the migration\n• Jaumo - WeightBuddy funnels with different images and gradients per theme\n• Tappz - a gradient over a dark mode background\n• Weewoo - day and night assets for images and videos\nand many more!\n\nlimits for now :new_moon:\n• text color takes solid layers only - gradients and images there are skipped with a warning\n• icons and shadows stay one solid per theme, input borders one solid or gradient\n\nthanks to <@U07PR2368G5> for the design, <@U09UZ0GJYKE> for testing it inside out and <@U0A4F2RSMQQ> for the reviews and color fixes :spider:",
+          "date": "2026-10-21T05:00:18.583Z",
+          "images": [
+            "https://files.slack.com/files-pri/T9HDDB78Q-F0CBQ647P16/image.png"
+          ]
+        },
+        {
+          "userId": "U08EVBTE69E",
+          "userName": "Maxim Borisik",
+          "text": "lets gooo",
+          "date": "2026-10-21T07:56:00.783Z",
+          "images": []
+        },
+        {
+          "userId": "U08EVBTE69E",
+          "userName": "Maxim Borisik",
+          "text": "<!subteam^S03KM96DV0U> <!subteam^S07BZPQDBUJ> you had many clients who wanted it badly!",
+          "date": "2026-10-21T07:56:19.946Z",
+          "images": []
+        }
+      ],
+      "content": "[Kamil Lotfullin]: hey team! light &amp; dark themes are live in flow builder :jack_o_lantern::crescent_moon:\n\nuntil now: dark mode in flows could swap only plain colors. images, gradients and videos stayed the same at night, so paywalls migrated from the old builder lost their dark look :skull:\n\nWhat's new:\n• color styles hold a separate stack for Light and Dark - solid, gradient, image or video, layered\n• Image and Video elements got Light / Dark tabs - drop a night file next to the day one. don't need two? one file serves both themes\n• the switcher under the canvas previews both themes, the tabs follow it\n• localizations show Light and Dark rows, so every language can have its own day and night picture :spider_web:\n• no SDK update needed - the app picks the dark file when the phone is in dark mode\n\nWho's been waiting for it :bat:\n• Impala - day/night images and gradients in styles, their footer gradient got lost after the migration\n• Jaumo - WeightBuddy funnels with different images and gradients per theme\n• Tappz - a gradient over a dark mode background\n• Weewoo - day and night assets for images and videos\nand many more!\n\nlimits for now :new_moon:\n• text color takes solid layers only - gradients and images there are skipped with a warning\n• icons and shadows stay one solid per theme, input borders one solid or gradient\n\nthanks to <@U07PR2368G5> for the design, <@U09UZ0GJYKE> for testing it inside out and <@U0A4F2RSMQQ> for the reviews and color fixes :spider:\n\n[Maxim Borisik]: lets gooo\n\n[Maxim Borisik]: <!subteam^S03KM96DV0U> <!subteam^S07BZPQDBUJ> you had many clients who wanted it badly!",
+      "matchingReplies": [
+        {
+          "userId": "U08EVBTE69E",
+          "userName": "Maxim Borisik",
+          "text": "<!subteam^S03KM96DV0U> <!subteam^S07BZPQDBUJ> you had many clients who wanted it badly!",
+          "date": "2026-10-21T07:56:19.946Z",
+          "images": []
+        }
+      ],
+      "hasTeamMention": true,
+      "images": [
+        "https://files.slack.com/files-pri/T9HDDB78Q-F0CBQ647P16/image.png"
+      ]
+    },
     {
       "id": "1792520584.397089",
       "slackUrl": "https://adapty-team.slack.com/archives/C04SY70QZ0T/p1792520584397089",
@@ -31,9 +77,16 @@
           "text": "huge job! more stability to us\n<!subteam^S03KM96DV0U> fyi ",
           "date": "2026-10-20T20:38:55.571Z",
           "images": []
+        },
+        {
+          "userId": "U07J9LKBQ5U",
+          "userName": "Yurii Kleimenov",
+          "text": "Good job! :fire:",
+          "date": "2026-10-21T08:17:20.905Z",
+          "images": []
         }
       ],
-      "content": "[Andrii Hermanov]: *Сustom fonts in flow builder are now families*\n\nbefore: one font = one file\nyou could pick Bold for a font with only Regular uploaded - the preview faked it, the phone showed Regular\nclients found out only after publishing\n\nnow:\n• upload all the weights at once - they group into one family by themselves\n• the weight menu shows only what you uploaded, so preview = device\n• one variable file gives every weight on iOS and Android :sparkles:\n\n[Andrii Hermanov]: limits for now:\n• most old Android names look like file names (Montserrat-SemiBold) and Android doesn't accept them - clients need to rename them to montserrat_semibold\n• some variable fonts (Inter, Roboto Flex) don't carry names for their weights - the iOS name has to be typed in by hand, otherwise publish fails\n\n[Maxim Borisik]: huge job! more stability to us\n<!subteam^S03KM96DV0U> fyi ",
+      "content": "[Andrii Hermanov]: *Сustom fonts in flow builder are now families*\n\nbefore: one font = one file\nyou could pick Bold for a font with only Regular uploaded - the preview faked it, the phone showed Regular\nclients found out only after publishing\n\nnow:\n• upload all the weights at once - they group into one family by themselves\n• the weight menu shows only what you uploaded, so preview = device\n• one variable file gives every weight on iOS and Android :sparkles:\n\n[Andrii Hermanov]: limits for now:\n• most old Android names look like file names (Montserrat-SemiBold) and Android doesn't accept them - clients need to rename them to montserrat_semibold\n• some variable fonts (Inter, Roboto Flex) don't carry names for their weights - the iOS name has to be typed in by hand, otherwise publish fails\n\n[Maxim Borisik]: huge job! more stability to us\n<!subteam^S03KM96DV0U> fyi \n\n[Yurii Kleimenov]: Good job! :fire:",
       "matchingReplies": [
         {
           "userId": "U08EVBTE69E",
@@ -1783,176 +1836,6 @@
       ],
       "hasTeamMention": false,
       "images": []
-    },
-    {
-      "id": "1787814112.885739",
-      "slackUrl": "https://adapty-team.slack.com/archives/C04SY70QZ0T/p1787814112885739",
-      "name": "hey team. last week we tinkered a lot and made a thing — a way to use the *flow builder for coding agents*.",
-      "message": "hey team. last week we tinkered a lot and made a thing — a way to use the *flow builder for coding agents*.\n\nnow agents like claude code, cowork and codex can create and edit flows in adapty. and by edit i mean, you know, REAL edit — components, themes, locales, interactivity and everything else that's possible with our builder.\n\nhow it it's different from builder ai chat, and why it's important:\n• *model ability* — chat: we own model selection and pay for tokens, so user can't use the smartest yet expensive model. skill: user brings his own model, so output quality is capped only by frontier model capabilities, not by adapty economy\n• *freedom* — chat: curated selection of tools, more economical and safe, but restricted (no images, no locales, no working outside a single screen yet). skill: full freedom to the agent, whole flow config, no feature limit, better results, but more tokens burned and way less safe\n• *look to the future* — chat: good starting point for normies. skill: canvas for pioneers, and i believe we can take inspiration from our most creative skill power users to improve both builder and ai chat\n_nb_: it's powerful but risky — agents can upload broken configs (we validate + preview, but still). use and recommend with caution.\n\ngive it a shot, folks! open your code/cowork/codex and:\n1. ask to install the `flow-generator` skill using `npx skills@latest add adaptyteam/adapty-skills`; more ways <https://adapty.io/docs/flow-generator-skill#install-the-skill|here>\n2. run `/flow-generator`, ask to create some gorgeous flow\n3. share the result to the thread. go go power rangers!\nshoutout to <@U08QUJMN0UV> <@U080G9FHV50> <@U08JY3U9S7P>",
-      "releaseDate": "2026-08-27",
-      "thread": [
-        {
-          "userId": "U07J1NQPD4P",
-          "userName": "Danil Melnichuk",
-          "text": "hey team. last week we tinkered a lot and made a thing — a way to use the *flow builder for coding agents*.\n\nnow agents like claude code, cowork and codex can create and edit flows in adapty. and by edit i mean, you know, REAL edit — components, themes, locales, interactivity and everything else that's possible with our builder.\n\nhow it it's different from builder ai chat, and why it's important:\n• *model ability* — chat: we own model selection and pay for tokens, so user can't use the smartest yet expensive model. skill: user brings his own model, so output quality is capped only by frontier model capabilities, not by adapty economy\n• *freedom* — chat: curated selection of tools, more economical and safe, but restricted (no images, no locales, no working outside a single screen yet). skill: full freedom to the agent, whole flow config, no feature limit, better results, but more tokens burned and way less safe\n• *look to the future* — chat: good starting point for normies. skill: canvas for pioneers, and i believe we can take inspiration from our most creative skill power users to improve both builder and ai chat\n_nb_: it's powerful but risky — agents can upload broken configs (we validate + preview, but still). use and recommend with caution.\n\ngive it a shot, folks! open your code/cowork/codex and:\n1. ask to install the `flow-generator` skill using `npx skills@latest add adaptyteam/adapty-skills`; more ways <https://adapty.io/docs/flow-generator-skill#install-the-skill|here>\n2. run `/flow-generator`, ask to create some gorgeous flow\n3. share the result to the thread. go go power rangers!\nshoutout to <@U08QUJMN0UV> <@U080G9FHV50> <@U08JY3U9S7P>",
-          "date": "2026-08-27T07:01:52.885Z",
-          "images": [
-            "https://files.slack.com/files-pri/T9HDDB78Q-F0BTWBYTDC0/image__2_.png",
-            "https://files.slack.com/files-pri/T9HDDB78Q-F0BTWBYM27J/image__3_.png"
-          ]
-        },
-        {
-          "userId": "U07J1NQPD4P",
-          "userName": "Danil Melnichuk",
-          "text": "see more docs here: <https://adapty.io/docs/flow-generator-skill|adapty.io/docs/flow-generator-skill>",
-          "date": "2026-08-27T07:02:13.639Z",
-          "images": []
-        },
-        {
-          "userId": "U07J9LKBQ5U",
-          "userName": "Yurii Kleimenov",
-          "text": "LFG :rocket:",
-          "date": "2026-08-27T07:56:46.854Z",
-          "images": []
-        },
-        {
-          "userId": "U0AAUD3KHT7",
-          "userName": "David",
-          "text": "I asked the flow-generator to replicate this paywall\n\nI'm very impressed !! :slightly_smiling_face: will keep testing",
-          "date": "2026-08-27T08:14:07.422Z",
-          "images": [
-            "https://files.slack.com/files-pri/T9HDDB78Q-F0BT66DEUE8/image.png",
-            "https://files.slack.com/files-pri/T9HDDB78Q-F0BT66HDMHA/image.png"
-          ]
-        },
-        {
-          "userId": "U0AAUD3KHT7",
-          "userName": "David",
-          "text": "2/ 2nd test\n\nTook 11 minutes to compute.\nMaybe because Opus 5 HIGH is maybe too much and thinks for too long\n\nAnyway, it's very good, and it adapted the copy from the original image to my \"Health and Fitness\" app",
-          "date": "2026-08-27T08:26:36.559Z",
-          "images": [
-            "https://files.slack.com/files-pri/T9HDDB78Q-F0BT2HY6ZEW/image.png",
-            "https://files.slack.com/files-pri/T9HDDB78Q-F0BT0LF635L/image.png"
-          ]
-        },
-        {
-          "userId": "U0AAUD3KHT7",
-          "userName": "David",
-          "text": "sorry for the spam :stuck_out_tongue:",
-          "date": "2026-08-27T08:27:37.498Z",
-          "images": []
-        },
-        {
-          "userId": "U08QUJMN0UV",
-          "userName": "Elina Andreeva",
-          "text": "my record is 40 minutes, but that's fine IMO\n\ntried to optimize its speed (and will try more later), but keeping it this slow makes it more thorough\n\nmaybe we can add some effort setup later for those who don't want to wait but are ready to steer",
-          "date": "2026-08-27T08:28:50.068Z",
-          "images": []
-        },
-        {
-          "userId": "U08QUJMN0UV",
-          "userName": "Elina Andreeva",
-          "text": "(it took 40 minutes to build this one)\n<https://adapty-team.slack.com/archives/C08FZR5C6GY/p1787650148397709?thread_ts=1787552573.899129&amp;cid=C08FZR5C6GY|https://adapty-team.slack.com/archives/C08FZR5C6GY/p1787650148397709?thread_ts=1787552573.899129&amp;cid=C08FZR5C6GY>",
-          "date": "2026-08-27T08:33:22.388Z",
-          "images": []
-        },
-        {
-          "userId": "U0AAUD3KHT7",
-          "userName": "David",
-          "text": "\"I made this high-performing onboarding while... at the gym\"\ntons of good hooks for devrel to use here :stuck_out_tongue:",
-          "date": "2026-08-27T08:34:31.067Z",
-          "images": []
-        },
-        {
-          "userId": "U08QUJMN0UV",
-          "userName": "Elina Andreeva",
-          "text": "<@U0AAUD3KHT7> about your gym use case — just updated the skill, so it can give you links to  flow previews in the Adapty mobile app. This way, you can update flows even directly from your phone",
-          "date": "2026-08-27T09:47:15.326Z",
-          "images": []
-        },
-        {
-          "userId": "U08EVBTE69E",
-          "userName": "Maxim Borisik",
-          "text": "<!subteam^S07BZPQDBUJ> it's officially live! let's spread the word",
-          "date": "2026-08-27T10:02:13.254Z",
-          "images": []
-        },
-        {
-          "userId": "U08EVBTE69E",
-          "userName": "Maxim Borisik",
-          "text": "everyone loves it! (a client's response)",
-          "date": "2026-08-28T10:03:20.609Z",
-          "images": [
-            "https://files.slack.com/files-pri/T9HDDB78Q-F0BT8LC2FNH/image.png"
-          ]
-        },
-        {
-          "userId": "U08EVBTE69E",
-          "userName": "Maxim Borisik",
-          "text": "we can't stop this excitement from clients! because it really is exciting.\n\nwell done team :clap:",
-          "date": "2026-08-31T17:14:39.144Z",
-          "images": [
-            "https://files.slack.com/files-pri/T9HDDB78Q-F0BTTAGUQ85/image.png",
-            "https://files.slack.com/files-pri/T9HDDB78Q-F0BTXE3MWBC/image.png"
-          ]
-        },
-        {
-          "userId": "U07J9LKBQ5U",
-          "userName": "Yurii Kleimenov",
-          "text": "~Hopefully~, we’ll inherit this pattern for the core platform and move the interface to the second place. Great job guys on growing this pattern already :fire:",
-          "date": "2026-08-31T17:16:36.810Z",
-          "images": []
-        },
-        {
-          "userId": "U9JU5J5RC",
-          "userName": "Vitaly Davydov",
-          "text": "GOOD ",
-          "date": "2026-08-31T17:34:04.600Z",
-          "images": []
-        },
-        {
-          "userId": "U0A266T9SJE",
-          "userName": "Melike Sezer",
-          "text": "\"CLI works so clean, thank you!\"",
-          "date": "2026-09-02T13:03:30.306Z",
-          "images": [
-            "https://files.slack.com/files-pri/T9HDDB78Q-F0BUFBGD8E6/screenshot_2026-09-02_at_15.58.48.png"
-          ]
-        }
-      ],
-      "content": "[Danil Melnichuk]: hey team. last week we tinkered a lot and made a thing — a way to use the *flow builder for coding agents*.\n\nnow agents like claude code, cowork and codex can create and edit flows in adapty. and by edit i mean, you know, REAL edit — components, themes, locales, interactivity and everything else that's possible with our builder.\n\nhow it it's different from builder ai chat, and why it's important:\n• *model ability* — chat: we own model selection and pay for tokens, so user can't use the smartest yet expensive model. skill: user brings his own model, so output quality is capped only by frontier model capabilities, not by adapty economy\n• *freedom* — chat: curated selection of tools, more economical and safe, but restricted (no images, no locales, no working outside a single screen yet). skill: full freedom to the agent, whole flow config, no feature limit, better results, but more tokens burned and way less safe\n• *look to the future* — chat: good starting point for normies. skill: canvas for pioneers, and i believe we can take inspiration from our most creative skill power users to improve both builder and ai chat\n_nb_: it's powerful but risky — agents can upload broken configs (we validate + preview, but still). use and recommend with caution.\n\ngive it a shot, folks! open your code/cowork/codex and:\n1. ask to install the `flow-generator` skill using `npx skills@latest add adaptyteam/adapty-skills`; more ways <https://adapty.io/docs/flow-generator-skill#install-the-skill|here>\n2. run `/flow-generator`, ask to create some gorgeous flow\n3. share the result to the thread. go go power rangers!\nshoutout to <@U08QUJMN0UV> <@U080G9FHV50> <@U08JY3U9S7P>\n\n[Danil Melnichuk]: see more docs here: <https://adapty.io/docs/flow-generator-skill|adapty.io/docs/flow-generator-skill>\n\n[Yurii Kleimenov]: LFG :rocket:\n\n[David]: I asked the flow-generator to replicate this paywall\n\nI'm very impressed !! :slightly_smiling_face: will keep testing\n\n[David]: 2/ 2nd test\n\nTook 11 minutes to compute.\nMaybe because Opus 5 HIGH is maybe too much and thinks for too long\n\nAnyway, it's very good, and it adapted the copy from the original image to my \"Health and Fitness\" app\n\n[David]: sorry for the spam :stuck_out_tongue:\n\n[Elina Andreeva]: my record is 40 minutes, but that's fine IMO\n\ntried to optimize its speed (and will try more later), but keeping it this slow makes it more thorough\n\nmaybe we can add some effort setup later for those who don't want to wait but are ready to steer\n\n[Elina Andreeva]: (it took 40 minutes to build this one)\n<https://adapty-team.slack.com/archives/C08FZR5C6GY/p1787650148397709?thread_ts=1787552573.899129&amp;cid=C08FZR5C6GY|https://adapty-team.slack.com/archives/C08FZR5C6GY/p1787650148397709?thread_ts=1787552573.899129&amp;cid=C08FZR5C6GY>\n\n[David]: \"I made this high-performing onboarding while... at the gym\"\ntons of good hooks for devrel to use here :stuck_out_tongue:\n\n[Elina Andreeva]: <@U0AAUD3KHT7> about your gym use case — just updated the skill, so it can give you links to  flow previews in the Adapty mobile app. This way, you can update flows even directly from your phone\n\n[Maxim Borisik]: <!subteam^S07BZPQDBUJ> it's officially live! let's spread the word\n\n[Maxim Borisik]: everyone loves it! (a client's response)\n\n[Maxim Borisik]: we can't stop this excitement from clients! because it really is exciting.\n\nwell done team :clap:\n\n[Yurii Kleimenov]: ~Hopefully~, we’ll inherit this pattern for the core platform and move the interface to the second place. Great job guys on growing this pattern already :fire:\n\n[Vitaly Davydov]: GOOD \n\n[Melike Sezer]: \"CLI works so clean, thank you!\"",
-      "matchingReplies": [
-        {
-          "userId": "U08EVBTE69E",
-          "userName": "Maxim Borisik",
-          "text": "<!subteam^S07BZPQDBUJ> it's officially live! let's spread the word",
-          "date": "2026-08-27T10:02:13.254Z",
-          "images": []
-        },
-        {
-          "userId": "U08EVBTE69E",
-          "userName": "Maxim Borisik",
-          "text": "we can't stop this excitement from clients! because it really is exciting.\n\nwell done team :clap:",
-          "date": "2026-08-31T17:14:39.144Z",
-          "images": [
-            "https://files.slack.com/files-pri/T9HDDB78Q-F0BTTAGUQ85/image.png",
-            "https://files.slack.com/files-pri/T9HDDB78Q-F0BTXE3MWBC/image.png"
-          ]
-        }
-      ],
-      "hasTeamMention": true,
-      "images": [
-        "https://files.slack.com/files-pri/T9HDDB78Q-F0BTWBYTDC0/image__2_.png",
-        "https://files.slack.com/files-pri/T9HDDB78Q-F0BTWBYM27J/image__3_.png",
-        "https://files.slack.com/files-pri/T9HDDB78Q-F0BT66DEUE8/image.png",
-        "https://files.slack.com/files-pri/T9HDDB78Q-F0BT66HDMHA/image.png",
-        "https://files.slack.com/files-pri/T9HDDB78Q-F0BT2HY6ZEW/image.png",
-        "https://files.slack.com/files-pri/T9HDDB78Q-F0BT0LF635L/image.png",
-        "https://files.slack.com/files-pri/T9HDDB78Q-F0BT8LC2FNH/image.png",
-        "https://files.slack.com/files-pri/T9HDDB78Q-F0BTTAGUQ85/image.png",
-        "https://files.slack.com/files-pri/T9HDDB78Q-F0BTXE3MWBC/image.png",
-        "https://files.slack.com/files-pri/T9HDDB78Q-F0BUFBGD8E6/screenshot_2026-09-02_at_15.58.48.png"
-      ]
     }
   ]
 }
