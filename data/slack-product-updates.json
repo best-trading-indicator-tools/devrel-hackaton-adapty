@@ -1,7 +1,38 @@
 {
-  "syncedAt": "2026-11-02T00:28:19.886Z",
+  "syncedAt": "2026-11-03T00:25:51.966Z",
   "channel": "#product-release",
   "entries": [
+    {
+      "id": "1793634412.358299",
+      "slackUrl": "https://adapty-team.slack.com/archives/C04SY70QZ0T/p1793634412358299",
+      "name": "Hey team",
+      "message": "Hey team\n*Offer prices in flow builder got smarter* :moneybag:\n\nWhat's new:\n• offer_price_per_day / week / month / year - the intro offer price broken down per period\n• \"first week $1.99 - only $0.29 a day\" now builds itself\n• works in text and in conditions\n\nAnd some fixes\n• offer_billing_period and offer_full_duration were empty on devices (on iOS the whole line disappeared)\n• now \"1 week free, then $79.99 a year\" shows up as it should",
+      "releaseDate": "2026-11-02",
+      "thread": [
+        {
+          "userId": "U0903TFULQ3",
+          "userName": "Andrii Hermanov",
+          "text": "Hey team\n*Offer prices in flow builder got smarter* :moneybag:\n\nWhat's new:\n• offer_price_per_day / week / month / year - the intro offer price broken down per period\n• \"first week $1.99 - only $0.29 a day\" now builds itself\n• works in text and in conditions\n\nAnd some fixes\n• offer_billing_period and offer_full_duration were empty on devices (on iOS the whole line disappeared)\n• now \"1 week free, then $79.99 a year\" shows up as it should",
+          "date": "2026-11-02T15:46:52.358Z",
+          "images": [
+            "https://files.slack.com/files-pri/T9HDDB78Q-F0CE5R7MASW/image.png"
+          ]
+        },
+        {
+          "userId": "U0903TFULQ3",
+          "userName": "Andrii Hermanov",
+          "text": "and of course flows published before the fix need a republish\n<!subteam^S03KM96DV0U> fyi",
+          "date": "2026-11-02T15:49:39.171Z",
+          "images": []
+        }
+      ],
+      "content": "[Andrii Hermanov]: Hey team\n*Offer prices in flow builder got smarter* :moneybag:\n\nWhat's new:\n• offer_price_per_day / week / month / year - the intro offer price broken down per period\n• \"first week $1.99 - only $0.29 a day\" now builds itself\n• works in text and in conditions\n\nAnd some fixes\n• offer_billing_period and offer_full_duration were empty on devices (on iOS the whole line disappeared)\n• now \"1 week free, then $79.99 a year\" shows up as it should\n\n[Andrii Hermanov]: and of course flows published before the fix need a republish\n<!subteam^S03KM96DV0U> fyi",
+      "matchingReplies": [],
+      "hasTeamMention": true,
+      "images": [
+        "https://files.slack.com/files-pri/T9HDDB78Q-F0CE5R7MASW/image.png"
+      ]
+    },
     {
       "id": "1793273802.588259",
       "slackUrl": "https://adapty-team.slack.com/archives/C04SY70QZ0T/p1793273802588259",
@@ -1563,41 +1594,6 @@
         "https://files.slack.com/files-pri/T9HDDB78Q-F0C35RHA58Q/image.png",
         "https://files.slack.com/files-pri/T9HDDB78Q-F0CADLX27B2/image.png"
       ]
-    },
-    {
-      "id": "1789030917.132219",
-      "slackUrl": "https://adapty-team.slack.com/archives/C04SY70QZ0T/p1789030917132219",
-      "name": "In light of the webinar  and I are hosting next Thursday",
-      "message": "In light of the webinar <@U08EVBTE69E> and I are hosting next Thursday\n\nI decided to recreate a flow from one of my apps using Flow & Paywall Builder's new Flow-Generator skill. In one prompt, this is what we got:",
-      "releaseDate": "2026-09-10",
-      "thread": [
-        {
-          "userId": "U0AQJB8NYHW",
-          "userName": "Freddy Fang",
-          "text": "In light of the webinar <@U08EVBTE69E> and I are hosting next Thursday\n\nI decided to recreate a flow from one of my apps using Flow & Paywall Builder's new Flow-Generator skill. In one prompt, this is what we got:",
-          "date": "2026-09-10T09:01:57.132Z",
-          "images": []
-        },
-        {
-          "userId": "U08EVBTE69E",
-          "userName": "Maxim Borisik",
-          "text": "<@U06K36L6CTB> <@U0ARACDF86L>\n\n<!subteam^S03KC9S1QMC>\nimagine preparing for a demo recreating prospects flow :money-smell:",
-          "date": "2026-09-10T09:45:12.950Z",
-          "images": []
-        }
-      ],
-      "content": "[Freddy Fang]: In light of the webinar <@U08EVBTE69E> and I are hosting next Thursday\n\nI decided to recreate a flow from one of my apps using Flow & Paywall Builder's new Flow-Generator skill. In one prompt, this is what we got:\n\n[Maxim Borisik]: <@U06K36L6CTB> <@U0ARACDF86L>\n\n<!subteam^S03KC9S1QMC>\nimagine preparing for a demo recreating prospects flow :money-smell:",
-      "matchingReplies": [
-        {
-          "userId": "U08EVBTE69E",
-          "userName": "Maxim Borisik",
-          "text": "<@U06K36L6CTB> <@U0ARACDF86L>\n\n<!subteam^S03KC9S1QMC>\nimagine preparing for a demo recreating prospects flow :money-smell:",
-          "date": "2026-09-10T09:45:12.950Z",
-          "images": []
-        }
-      ],
-      "hasTeamMention": true,
-      "images": []
     }
   ]
 }
