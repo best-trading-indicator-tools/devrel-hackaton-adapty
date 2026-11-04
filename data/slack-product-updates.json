@@ -1,5 +1,5 @@
 {
-  "syncedAt": "2026-11-03T00:25:51.966Z",
+  "syncedAt": "2026-11-04T00:25:58.899Z",
   "channel": "#product-release",
   "entries": [
     {
@@ -24,9 +24,16 @@
           "text": "and of course flows published before the fix need a republish\n<!subteam^S03KM96DV0U> fyi",
           "date": "2026-11-02T15:49:39.171Z",
           "images": []
+        },
+        {
+          "userId": "U0BB5T65SF6",
+          "userName": "Kamil Lotfullin",
+          "text": "true legend, <@U0903TFULQ3>! well done!",
+          "date": "2026-11-03T08:57:10.512Z",
+          "images": []
         }
       ],
-      "content": "[Andrii Hermanov]: Hey team\n*Offer prices in flow builder got smarter* :moneybag:\n\nWhat's new:\n• offer_price_per_day / week / month / year - the intro offer price broken down per period\n• \"first week $1.99 - only $0.29 a day\" now builds itself\n• works in text and in conditions\n\nAnd some fixes\n• offer_billing_period and offer_full_duration were empty on devices (on iOS the whole line disappeared)\n• now \"1 week free, then $79.99 a year\" shows up as it should\n\n[Andrii Hermanov]: and of course flows published before the fix need a republish\n<!subteam^S03KM96DV0U> fyi",
+      "content": "[Andrii Hermanov]: Hey team\n*Offer prices in flow builder got smarter* :moneybag:\n\nWhat's new:\n• offer_price_per_day / week / month / year - the intro offer price broken down per period\n• \"first week $1.99 - only $0.29 a day\" now builds itself\n• works in text and in conditions\n\nAnd some fixes\n• offer_billing_period and offer_full_duration were empty on devices (on iOS the whole line disappeared)\n• now \"1 week free, then $79.99 a year\" shows up as it should\n\n[Andrii Hermanov]: and of course flows published before the fix need a republish\n<!subteam^S03KM96DV0U> fyi\n\n[Kamil Lotfullin]: true legend, <@U0903TFULQ3>! well done!",
       "matchingReplies": [],
       "hasTeamMention": true,
       "images": [
