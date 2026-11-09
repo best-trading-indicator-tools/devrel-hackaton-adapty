@@ -1,5 +1,5 @@
 {
-  "syncedAt": "2026-11-08T00:28:27.994Z",
+  "syncedAt": "2026-11-09T00:28:58.233Z",
   "channel": "#product-release",
   "entries": [
     {
@@ -38,9 +38,16 @@
           "text": "Will add to my workshop",
           "date": "2026-11-06T08:12:33.905Z",
           "images": []
+        },
+        {
+          "userId": "U07F3ULE4MA",
+          "userName": "Darina Kobzar",
+          "text": "will inform future moments",
+          "date": "2026-11-08T14:54:05.916Z",
+          "images": []
         }
       ],
-      "content": "[Andrii Hermanov]: Heey team! Screen transitions are now available in Flow Builder :clapper:\n\nThe Navigate to Screen action now lets you choose how the next screen appears:\n• Push\n• Slide in\n• Slide out\n• Fade through\n• None\nFor each one you can set the direction, easing (including a soft bounce), duration, and delay. A live preview plays right in the action settings.\n\nTransitions run on iOS and Android. Back plays the same transition in reverse, with no delay.\n\n[Andrii Hermanov]: <!subteam^S03KM96DV0U> <@U0A3NG4G5E3> <@U03Q2R7AGLA> fyi\n\n[Maxim Borisik]: <!subteam^S07BZPQDBUJ> fyi!\n<@U0ASWP97F61> i think vocalbeats wanted it\n\n[Stella Zhao]: Will add to my workshop",
+      "content": "[Andrii Hermanov]: Heey team! Screen transitions are now available in Flow Builder :clapper:\n\nThe Navigate to Screen action now lets you choose how the next screen appears:\n• Push\n• Slide in\n• Slide out\n• Fade through\n• None\nFor each one you can set the direction, easing (including a soft bounce), duration, and delay. A live preview plays right in the action settings.\n\nTransitions run on iOS and Android. Back plays the same transition in reverse, with no delay.\n\n[Andrii Hermanov]: <!subteam^S03KM96DV0U> <@U0A3NG4G5E3> <@U03Q2R7AGLA> fyi\n\n[Maxim Borisik]: <!subteam^S07BZPQDBUJ> fyi!\n<@U0ASWP97F61> i think vocalbeats wanted it\n\n[Stella Zhao]: Will add to my workshop\n\n[Darina Kobzar]: will inform future moments",
       "matchingReplies": [
         {
           "userId": "U08EVBTE69E",
