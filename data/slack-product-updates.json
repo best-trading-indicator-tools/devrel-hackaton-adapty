@@ -1,7 +1,45 @@
 {
-  "syncedAt": "2026-11-09T00:28:58.233Z",
+  "syncedAt": "2026-11-10T00:25:25.491Z",
   "channel": "#product-release",
   "entries": [
+    {
+      "id": "1794251556.337579",
+      "slackUrl": "https://adapty-team.slack.com/archives/C04SY70QZ0T/p1794251556337579",
+      "name": "iPhone Duo support in the Flow Builder :iphone:",
+      "message": "iPhone Duo support in the Flow Builder :iphone:\n\n• iPhone Duo is in the device list, with a closed / open switch next to the orientation toggle - the video shows how it works\n• the preview matches the device: on a closed Duo the system band runs down the right edge, on an open one along the top, and screen content keeps clear of it\n• elements with Ignore safe area go under the band the same way they go under the status bar - covers and backgrounds reach the edge\n• time and Wi-Fi are drawn in the band like on the device, on a frosted capsule over images\n• also the iPhone 17 / 18 presets now use the real sizes\n\nhuge thanks to <@U08JY3U9S7P> for the testing and for working so closely together on this :raised_hands::skin-tone-3:",
+      "releaseDate": "2026-11-09",
+      "thread": [
+        {
+          "userId": "U0903TFULQ3",
+          "userName": "Andrii Hermanov",
+          "text": "iPhone Duo support in the Flow Builder :iphone:\n\n• iPhone Duo is in the device list, with a closed / open switch next to the orientation toggle - the video shows how it works\n• the preview matches the device: on a closed Duo the system band runs down the right edge, on an open one along the top, and screen content keeps clear of it\n• elements with Ignore safe area go under the band the same way they go under the status bar - covers and backgrounds reach the edge\n• time and Wi-Fi are drawn in the band like on the device, on a frosted capsule over images\n• also the iPhone 17 / 18 presets now use the real sizes\n\nhuge thanks to <@U08JY3U9S7P> for the testing and for working so closely together on this :raised_hands::skin-tone-3:",
+          "date": "2026-11-09T19:12:36.337Z",
+          "images": [
+            "https://files.slack.com/files-pri/T9HDDB78Q-F0CH1FECM16/image.png"
+          ]
+        },
+        {
+          "userId": "U0903TFULQ3",
+          "userName": "Andrii Hermanov",
+          "text": "coming tomorrow morning: segments :dart:\n\nDevice filter for iOS apps will list the new models right away - iPhone Duo, iPhone 18 Pro / Pro Max, the iPhone 17 line and the 2025+ iPads\n\nso you’ll be able to target Duo users from day one, without waiting for the first of them to show up",
+          "date": "2026-11-09T19:15:11.908Z",
+          "images": []
+        },
+        {
+          "userId": "U0903TFULQ3",
+          "userName": "Andrii Hermanov",
+          "text": "<!subteam^S03KM96DV0U> <@U03Q2R7AGLA>\n<@U08QUJMN0UV> <@U0A3NG4G5E3> fyi",
+          "date": "2026-11-09T19:15:51.231Z",
+          "images": []
+        }
+      ],
+      "content": "[Andrii Hermanov]: iPhone Duo support in the Flow Builder :iphone:\n\n• iPhone Duo is in the device list, with a closed / open switch next to the orientation toggle - the video shows how it works\n• the preview matches the device: on a closed Duo the system band runs down the right edge, on an open one along the top, and screen content keeps clear of it\n• elements with Ignore safe area go under the band the same way they go under the status bar - covers and backgrounds reach the edge\n• time and Wi-Fi are drawn in the band like on the device, on a frosted capsule over images\n• also the iPhone 17 / 18 presets now use the real sizes\n\nhuge thanks to <@U08JY3U9S7P> for the testing and for working so closely together on this :raised_hands::skin-tone-3:\n\n[Andrii Hermanov]: coming tomorrow morning: segments :dart:\n\nDevice filter for iOS apps will list the new models right away - iPhone Duo, iPhone 18 Pro / Pro Max, the iPhone 17 line and the 2025+ iPads\n\nso you’ll be able to target Duo users from day one, without waiting for the first of them to show up\n\n[Andrii Hermanov]: <!subteam^S03KM96DV0U> <@U03Q2R7AGLA>\n<@U08QUJMN0UV> <@U0A3NG4G5E3> fyi",
+      "matchingReplies": [],
+      "hasTeamMention": true,
+      "images": [
+        "https://files.slack.com/files-pri/T9HDDB78Q-F0CH1FECM16/image.png"
+      ]
+    },
     {
       "id": "1793923024.145299",
       "slackUrl": "https://adapty-team.slack.com/archives/C04SY70QZ0T/p1793923024145299",
@@ -299,13 +337,23 @@
           "text": "<@U07H1ESAH6K> indeed! Would be great to discuss internally/pick a real customer case and suggest an improvement to a client",
           "date": "2026-10-29T12:36:00.341Z",
           "images": []
+        },
+        {
+          "userId": "U08QUJMN0UV",
+          "userName": "Elina Andreeva",
+          "text": "Flow funnels are now available via CLI &amp; MCP!",
+          "date": "2026-11-09T11:59:15.282Z",
+          "images": [
+            "https://files.slack.com/files-pri/T9HDDB78Q-F0CGXE96JNL/image.png"
+          ]
         }
       ],
-      "content": "[Lera Eroshevich]: :rocket: *New in Flow metrics: Flow screen funnel*\nYou can now see on which screen of a flow users drop off and where they buy. Flow metrics has a new *Funnel* tab.\n*What’s inside*\n• *Summary:* how many users started the flow (Entered), how many finished it (Completed), the share that dropped off (Drop rate), and the flow’s revenue (Revenue)\n• *Step table:* how many users reached each screen, how many finished the flow there, and how many dropped off. Paywall screens also show trials, purchases and revenue\n• *Branches:* a step with several screens expands, so you can see how many users each screen got\n• *Chart:* a bar per step, conversion between steps, and drop-off under each step\n• *Filters:* date range, install date mode, Country, Store, Platform, Subscription state. You can pick any published version of the flow\n• *CSV export*\n*How Completed is counted*\nA user completes the flow when they buy or start a trial on a paywall, or reach the last screen. If the last screen is a paywall, only users who bought count. Everyone else is a drop-off on the screen where they left.\n*Good to know*\n• The funnel is built for the currently published version by default, so Entered can be lower than the views on the Metrics tab, which counts all versions\nWhere to find it: Flows → your flow → Flow metrics → *Funnel* tab\nThanks <@U033TEH5HSA> for building it :raised_hands:\nFYI <@U08EVBTE69E>\n\n[Mike Gorokhov]: Great stuff!\n\n<@U034A27SVHC> <@U07J9LKBQ5U> we should have this in our demo instance rebuild\n\n[David]: HUGE !!\nIt's available via the FLOW SKILL as well? to ask questions with LLM about it + get alerts whenever there is a drop-off vs the past 24h data\n\n[Elina Andreeva]: <@U0AAUD3KHT7> hi!\nIt's not supported in the CLI yet\nLater, when this data becomes available in the CLI, we'll support it in the skill as well. And yes — we plan to add some alert/scheduled task templates to the skills soon\n\n[Freddy Fang]: def one of the best things shipped for the builder\n\n[Maxim Borisik]: <!subteam^S07BZPQDBUJ> <!subteam^S03KM96DV0U>\n\n[Sofia Pikuleva]: fantastic\n\n[Polina Ishimbaeva]: <@U07H1ESAH6K> indeed! Would be great to discuss internally/pick a real customer case and suggest an improvement to a client",
+      "content": "[Lera Eroshevich]: :rocket: *New in Flow metrics: Flow screen funnel*\nYou can now see on which screen of a flow users drop off and where they buy. Flow metrics has a new *Funnel* tab.\n*What’s inside*\n• *Summary:* how many users started the flow (Entered), how many finished it (Completed), the share that dropped off (Drop rate), and the flow’s revenue (Revenue)\n• *Step table:* how many users reached each screen, how many finished the flow there, and how many dropped off. Paywall screens also show trials, purchases and revenue\n• *Branches:* a step with several screens expands, so you can see how many users each screen got\n• *Chart:* a bar per step, conversion between steps, and drop-off under each step\n• *Filters:* date range, install date mode, Country, Store, Platform, Subscription state. You can pick any published version of the flow\n• *CSV export*\n*How Completed is counted*\nA user completes the flow when they buy or start a trial on a paywall, or reach the last screen. If the last screen is a paywall, only users who bought count. Everyone else is a drop-off on the screen where they left.\n*Good to know*\n• The funnel is built for the currently published version by default, so Entered can be lower than the views on the Metrics tab, which counts all versions\nWhere to find it: Flows → your flow → Flow metrics → *Funnel* tab\nThanks <@U033TEH5HSA> for building it :raised_hands:\nFYI <@U08EVBTE69E>\n\n[Mike Gorokhov]: Great stuff!\n\n<@U034A27SVHC> <@U07J9LKBQ5U> we should have this in our demo instance rebuild\n\n[David]: HUGE !!\nIt's available via the FLOW SKILL as well? to ask questions with LLM about it + get alerts whenever there is a drop-off vs the past 24h data\n\n[Elina Andreeva]: <@U0AAUD3KHT7> hi!\nIt's not supported in the CLI yet\nLater, when this data becomes available in the CLI, we'll support it in the skill as well. And yes — we plan to add some alert/scheduled task templates to the skills soon\n\n[Freddy Fang]: def one of the best things shipped for the builder\n\n[Maxim Borisik]: <!subteam^S07BZPQDBUJ> <!subteam^S03KM96DV0U>\n\n[Sofia Pikuleva]: fantastic\n\n[Polina Ishimbaeva]: <@U07H1ESAH6K> indeed! Would be great to discuss internally/pick a real customer case and suggest an improvement to a client\n\n[Elina Andreeva]: Flow funnels are now available via CLI &amp; MCP!",
       "matchingReplies": [],
       "hasTeamMention": true,
       "images": [
-        "https://files.slack.com/files-pri/T9HDDB78Q-F0CCLJPK14H/image.png"
+        "https://files.slack.com/files-pri/T9HDDB78Q-F0CCLJPK14H/image.png",
+        "https://files.slack.com/files-pri/T9HDDB78Q-F0CGXE96JNL/image.png"
       ]
     },
     {
@@ -1395,94 +1443,6 @@
       "images": [
         "https://files.slack.com/files-pri/T9HDDB78Q-F0C4ZHUUE74/image.png",
         "https://files.slack.com/files-pri/T9HDDB78Q-F0C4JAX5BPH/image.png"
-      ]
-    },
-    {
-      "id": "1790182068.691609",
-      "slackUrl": "https://adapty-team.slack.com/archives/C04SY70QZ0T/p1790182068691609",
-      "name": "hey team! :eyes:",
-      "message": "hey team! :eyes:\n\ncouple of flow builder updates:\n• *we removed \"Beta\" tag* :chefs-kiss:\n    ◦ something that we think now reflects the current state of the product\n        ▪︎ *we passed almost 1 million dollars (778k to be clear)* through the flow builder screens and plan to pass even more. also couple of success cases are coming soon.\n        ▪︎ we do have 91 company with transactions, with almost 400 flows live :rocket:\n    ◦ for transparency - we definitely still have some problems and bugs, but the good thing is that we identified most them and we are now improving the product week by week (a message above as an example). \n        ▪︎ we basically built a figma-like product in a short period of time and for sure there are million of cases to test&amp;fix. team focuses on that and I am happy with their approach\n• *we've released the cross-placement AB tests for Flow builder!* :clap:\n    ◦ something that is available in old builder for a long time, and we now added it for flow builder as well. I do know couple of names who wanted it badly \n    ◦ to get to the parity with the legacy builder - \"custom tags\" and \"different images by light/dark theme\" are coming soon too \n• *we've added the \"sliding sheet\" element as well*\n    ◦ it has the same concept as \"overlay\" in the legacy builder. background doesn't move, the content does (a short video attached)\n    ◦ it's needed for a better migration from the old builder, as well as unlocking different variations for screens building",
-      "releaseDate": "2026-09-23",
-      "thread": [
-        {
-          "userId": "U08EVBTE69E",
-          "userName": "Maxim Borisik",
-          "text": "hey team! :eyes:\n\ncouple of flow builder updates:\n• *we removed \"Beta\" tag* :chefs-kiss:\n    ◦ something that we think now reflects the current state of the product\n        ▪︎ *we passed almost 1 million dollars (778k to be clear)* through the flow builder screens and plan to pass even more. also couple of success cases are coming soon.\n        ▪︎ we do have 91 company with transactions, with almost 400 flows live :rocket:\n    ◦ for transparency - we definitely still have some problems and bugs, but the good thing is that we identified most them and we are now improving the product week by week (a message above as an example). \n        ▪︎ we basically built a figma-like product in a short period of time and for sure there are million of cases to test&amp;fix. team focuses on that and I am happy with their approach\n• *we've released the cross-placement AB tests for Flow builder!* :clap:\n    ◦ something that is available in old builder for a long time, and we now added it for flow builder as well. I do know couple of names who wanted it badly \n    ◦ to get to the parity with the legacy builder - \"custom tags\" and \"different images by light/dark theme\" are coming soon too \n• *we've added the \"sliding sheet\" element as well*\n    ◦ it has the same concept as \"overlay\" in the legacy builder. background doesn't move, the content does (a short video attached)\n    ◦ it's needed for a better migration from the old builder, as well as unlocking different variations for screens building",
-          "date": "2026-09-23T16:47:48.691Z",
-          "images": [
-            "https://files.slack.com/files-pri/T9HDDB78Q-F0C3WLBLCBG/image.png",
-            "https://files.slack.com/files-pri/T9HDDB78Q-F0C4298PD44/image.png",
-            "https://files.slack.com/files-pri/T9HDDB78Q-F0C3HD4L3U7/image.png"
-          ]
-        },
-        {
-          "userId": "U08EVBTE69E",
-          "userName": "Maxim Borisik",
-          "text": "<!subteam^S07BZPQDBUJ> <!subteam^S03KM96DV0U> fyi",
-          "date": "2026-09-23T16:47:54.879Z",
-          "images": []
-        },
-        {
-          "userId": "U03J8UXUDPF",
-          "userName": "Mykola Martynovets",
-          "text": "wow! Cool!",
-          "date": "2026-09-23T16:50:52.868Z",
-          "images": []
-        },
-        {
-          "userId": "U07F3ULE4MA",
-          "userName": "Darina Kobzar",
-          "text": "Congratulations <@U08EVBTE69E>!",
-          "date": "2026-09-23T16:51:45.932Z",
-          "images": []
-        },
-        {
-          "userId": "U07F3ULE4MA",
-          "userName": "Darina Kobzar",
-          "text": "One more question: what figures or data can we share with clients to explain that Flows is not on the Beta anymore? Can we use the ones shared here?\n        ▪︎ *we passed almost 1 million dollars* through the flow builder screens and plan to pass even more. also couple of success cases are coming soon.\n        ▪︎ we do have 91 company with transactions, with almost 400 flows live :rocket:\n",
-          "date": "2026-09-23T16:53:37.610Z",
-          "images": []
-        },
-        {
-          "userId": "U08EVBTE69E",
-          "userName": "Maxim Borisik",
-          "text": "i'd tweak the numbers a bit, and say that:\n• couple of millions $ pass via builder each month \n• almost 500 apps trust flow builder and actively make screens with it. many of them are big apps, with 100k+ MRR",
-          "date": "2026-09-23T16:55:37.233Z",
-          "images": []
-        },
-        {
-          "userId": "U090BDLA9JN",
-          "userName": "Dmitry Shestoperov",
-          "text": "&gt; almost 1 million dollars (778k to be clear)",
-          "date": "2026-09-23T17:12:22.764Z",
-          "images": [
-            "https://files.slack.com/files-pri/T9HDDB78Q-F0C3X57AF62/image.png"
-          ]
-        },
-        {
-          "userId": "U08EVBTE69E",
-          "userName": "Maxim Borisik",
-          "text": "naaah my man. trust me it will be in 5 days",
-          "date": "2026-09-23T17:14:26.506Z",
-          "images": []
-        }
-      ],
-      "content": "[Maxim Borisik]: hey team! :eyes:\n\ncouple of flow builder updates:\n• *we removed \"Beta\" tag* :chefs-kiss:\n    ◦ something that we think now reflects the current state of the product\n        ▪︎ *we passed almost 1 million dollars (778k to be clear)* through the flow builder screens and plan to pass even more. also couple of success cases are coming soon.\n        ▪︎ we do have 91 company with transactions, with almost 400 flows live :rocket:\n    ◦ for transparency - we definitely still have some problems and bugs, but the good thing is that we identified most them and we are now improving the product week by week (a message above as an example). \n        ▪︎ we basically built a figma-like product in a short period of time and for sure there are million of cases to test&amp;fix. team focuses on that and I am happy with their approach\n• *we've released the cross-placement AB tests for Flow builder!* :clap:\n    ◦ something that is available in old builder for a long time, and we now added it for flow builder as well. I do know couple of names who wanted it badly \n    ◦ to get to the parity with the legacy builder - \"custom tags\" and \"different images by light/dark theme\" are coming soon too \n• *we've added the \"sliding sheet\" element as well*\n    ◦ it has the same concept as \"overlay\" in the legacy builder. background doesn't move, the content does (a short video attached)\n    ◦ it's needed for a better migration from the old builder, as well as unlocking different variations for screens building\n\n[Maxim Borisik]: <!subteam^S07BZPQDBUJ> <!subteam^S03KM96DV0U> fyi\n\n[Mykola Martynovets]: wow! Cool!\n\n[Darina Kobzar]: Congratulations <@U08EVBTE69E>!\n\n[Darina Kobzar]: One more question: what figures or data can we share with clients to explain that Flows is not on the Beta anymore? Can we use the ones shared here?\n        ▪︎ *we passed almost 1 million dollars* through the flow builder screens and plan to pass even more. also couple of success cases are coming soon.\n        ▪︎ we do have 91 company with transactions, with almost 400 flows live :rocket:\n\n\n[Maxim Borisik]: i'd tweak the numbers a bit, and say that:\n• couple of millions $ pass via builder each month \n• almost 500 apps trust flow builder and actively make screens with it. many of them are big apps, with 100k+ MRR\n\n[Dmitry Shestoperov]: &gt; almost 1 million dollars (778k to be clear)\n\n[Maxim Borisik]: naaah my man. trust me it will be in 5 days",
-      "matchingReplies": [
-        {
-          "userId": "U08EVBTE69E",
-          "userName": "Maxim Borisik",
-          "text": "i'd tweak the numbers a bit, and say that:\n• couple of millions $ pass via builder each month \n• almost 500 apps trust flow builder and actively make screens with it. many of them are big apps, with 100k+ MRR",
-          "date": "2026-09-23T16:55:37.233Z",
-          "images": []
-        }
-      ],
-      "hasTeamMention": true,
-      "images": [
-        "https://files.slack.com/files-pri/T9HDDB78Q-F0C3WLBLCBG/image.png",
-        "https://files.slack.com/files-pri/T9HDDB78Q-F0C4298PD44/image.png",
-        "https://files.slack.com/files-pri/T9HDDB78Q-F0C3HD4L3U7/image.png",
-        "https://files.slack.com/files-pri/T9HDDB78Q-F0C3X57AF62/image.png"
       ]
     }
   ]
