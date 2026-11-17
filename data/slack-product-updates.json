@@ -1,7 +1,164 @@
 {
-  "syncedAt": "2026-11-16T00:31:55.605Z",
+  "syncedAt": "2026-11-17T00:26:47.308Z",
   "channel": "#product-release",
   "entries": [
+    {
+      "id": "1794854353.190329",
+      "slackUrl": "https://adapty-team.slack.com/archives/C04SY70QZ0T/p1794854353190329",
+      "name": "*Flow Builder: conditions can now check other elements’ states*",
+      "message": "*Flow Builder: conditions can now check other elements’ states*\n\nConditions in a flow can now check the state of another element on the screen, not just variables. For example: “show a hint while the Continue button is Disabled”.\n\n*Where it works:* element visibility, another element’s state condition, conditional actions, and conditional text.\n\n*How to use it:* the condition picker has a new *States* tab. It lists the elements on the current screen that have states of their own: Disabled, Selected, Active, Invalid or custom. Pick an element, choose = or ≠, then pick the state. Preview follows the state switcher; on device, the element’s real state applies.\n\n*Use cases:*\n• Explain a disabled button, e.g. “Accept the terms to continue”, without repeating the button’s condition.\n• Keep elements in sync: a second button turns off together with the first, or a text changes with an element’s state.\n• Branch a tap by another element’s state.\n*Limitations:*\n• Only elements on the same screen, or in the same component, can be referenced.\n• Circular references are blocked in the picker. If one gets into a config anyway, publishing stops with a clear error.\n• A reference to a deleted element or state is highlighted in the builder and evaluates to false on device.\n• An element has one active state at a time. For example, Selected is false while the element is Disabled. To check whether an option is selected in a group, use the group variable.\nWorks on iOS and Android with no SDK update needed. Republish the flow for the changes to reach users.",
+      "releaseDate": "2026-11-16",
+      "thread": [
+        {
+          "userId": "U08JY3U9S7P",
+          "userName": "Lera Eroshevich",
+          "text": "*Flow Builder: conditions can now check other elements’ states*\n\nConditions in a flow can now check the state of another element on the screen, not just variables. For example: “show a hint while the Continue button is Disabled”.\n\n*Where it works:* element visibility, another element’s state condition, conditional actions, and conditional text.\n\n*How to use it:* the condition picker has a new *States* tab. It lists the elements on the current screen that have states of their own: Disabled, Selected, Active, Invalid or custom. Pick an element, choose = or ≠, then pick the state. Preview follows the state switcher; on device, the element’s real state applies.\n\n*Use cases:*\n• Explain a disabled button, e.g. “Accept the terms to continue”, without repeating the button’s condition.\n• Keep elements in sync: a second button turns off together with the first, or a text changes with an element’s state.\n• Branch a tap by another element’s state.\n*Limitations:*\n• Only elements on the same screen, or in the same component, can be referenced.\n• Circular references are blocked in the picker. If one gets into a config anyway, publishing stops with a clear error.\n• A reference to a deleted element or state is highlighted in the builder and evaluates to false on device.\n• An element has one active state at a time. For example, Selected is false while the element is Disabled. To check whether an option is selected in a group, use the group variable.\nWorks on iOS and Android with no SDK update needed. Republish the flow for the changes to reach users.",
+          "date": "2026-11-16T18:39:13.190Z",
+          "images": [
+            "https://files.slack.com/files-pri/T9HDDB78Q-F0CJ10ZEUTV/image.png"
+          ]
+        },
+        {
+          "userId": "U08JY3U9S7P",
+          "userName": "Lera Eroshevich",
+          "text": "<@U08QUJMN0UV> <@U0A3NG4G5E3> <!subteam^S07BZPQDBUJ> <!subteam^S03KM96DV0U> fyi",
+          "date": "2026-11-16T18:41:01.934Z",
+          "images": []
+        }
+      ],
+      "content": "[Lera Eroshevich]: *Flow Builder: conditions can now check other elements’ states*\n\nConditions in a flow can now check the state of another element on the screen, not just variables. For example: “show a hint while the Continue button is Disabled”.\n\n*Where it works:* element visibility, another element’s state condition, conditional actions, and conditional text.\n\n*How to use it:* the condition picker has a new *States* tab. It lists the elements on the current screen that have states of their own: Disabled, Selected, Active, Invalid or custom. Pick an element, choose = or ≠, then pick the state. Preview follows the state switcher; on device, the element’s real state applies.\n\n*Use cases:*\n• Explain a disabled button, e.g. “Accept the terms to continue”, without repeating the button’s condition.\n• Keep elements in sync: a second button turns off together with the first, or a text changes with an element’s state.\n• Branch a tap by another element’s state.\n*Limitations:*\n• Only elements on the same screen, or in the same component, can be referenced.\n• Circular references are blocked in the picker. If one gets into a config anyway, publishing stops with a clear error.\n• A reference to a deleted element or state is highlighted in the builder and evaluates to false on device.\n• An element has one active state at a time. For example, Selected is false while the element is Disabled. To check whether an option is selected in a group, use the group variable.\nWorks on iOS and Android with no SDK update needed. Republish the flow for the changes to reach users.\n\n[Lera Eroshevich]: <@U08QUJMN0UV> <@U0A3NG4G5E3> <!subteam^S07BZPQDBUJ> <!subteam^S03KM96DV0U> fyi",
+      "matchingReplies": [],
+      "hasTeamMention": true,
+      "images": [
+        "https://files.slack.com/files-pri/T9HDDB78Q-F0CJ10ZEUTV/image.png"
+      ]
+    },
+    {
+      "id": "1794836972.713309",
+      "slackUrl": "https://adapty-team.slack.com/archives/C04SY70QZ0T/p1794836972713309",
+      "name": "Custom elements are live in Flow Builder! :fire:",
+      "message": "Custom elements are live in Flow Builder! :fire:\n\nA custom element is a new block: Add element → Media → Custom element\nThe client’s app fills it with its own native view: a Lottie or Rive animation, a chart, a map, a picker, anything their devs can build in SwiftUI or UIKit\nWhatever you put inside the block in the builder is the fallback. Users see it when the app has no view for it, so nothing breaks\n\nHow to use it:\n• add the block, set its Type and ID, put the fallback inside\n• the client’s devs register a view for that Type in the app with iOS SDK 4.4.0 or later\n• publish the Flow. It’s safe to publish before the app update: until then users see the fallback\nGood to know:\n• native views (inside custom elements) work on iOS SDK 4.4.0+. Android and cross-platform SDKs show the fallback for now, Android is next\n• v1 is one-way: the view can’t trigger flow actions, and its value doesn’t go back into flow variables yet. That’s will come in v2\n• a new native view (inside custom elements) needs an app release, everything else is just a republish\nDocs: <https://adapty.io/docs/flow-custom-elements|adapty.io/docs/flow-custom-elements>",
+      "releaseDate": "2026-11-16",
+      "thread": [
+        {
+          "userId": "U0BB5T65SF6",
+          "userName": "Kamil Lotfullin",
+          "text": "Custom elements are live in Flow Builder! :fire:\n\nA custom element is a new block: Add element → Media → Custom element\nThe client’s app fills it with its own native view: a Lottie or Rive animation, a chart, a map, a picker, anything their devs can build in SwiftUI or UIKit\nWhatever you put inside the block in the builder is the fallback. Users see it when the app has no view for it, so nothing breaks\n\nHow to use it:\n• add the block, set its Type and ID, put the fallback inside\n• the client’s devs register a view for that Type in the app with iOS SDK 4.4.0 or later\n• publish the Flow. It’s safe to publish before the app update: until then users see the fallback\nGood to know:\n• native views (inside custom elements) work on iOS SDK 4.4.0+. Android and cross-platform SDKs show the fallback for now, Android is next\n• v1 is one-way: the view can’t trigger flow actions, and its value doesn’t go back into flow variables yet. That’s will come in v2\n• a new native view (inside custom elements) needs an app release, everything else is just a republish\nDocs: <https://adapty.io/docs/flow-custom-elements|adapty.io/docs/flow-custom-elements>",
+          "date": "2026-11-16T13:49:32.713Z",
+          "images": []
+        },
+        {
+          "userId": "U0BB5T65SF6",
+          "userName": "Kamil Lotfullin",
+          "text": "this video shows how flow with custom elements previews in adapty app  (fallback elements are presented since adapty app does not know what native views to display)",
+          "date": "2026-11-16T13:50:24.898Z",
+          "images": []
+        },
+        {
+          "userId": "U07J9LKBQ5U",
+          "userName": "Yurii Kleimenov",
+          "text": "Finally! <@U08QUJMN0UV>, what do you think about combining this with custom actions and our virtual currency to build use cases for AI-token apps, short-drama apps, etc.? If you need more context, we can discuss it in more detail.",
+          "date": "2026-11-16T13:54:06.201Z",
+          "images": []
+        },
+        {
+          "userId": "U08EVBTE69E",
+          "userName": "Maxim Borisik",
+          "text": "Guys, this is huge! I think it’s the main release of the quarter\n\nnow it’s hard to say that our builder CAN’T do something.\n\nusers can finally do LOTTIE / RIVE animations (and way more things). let’s make all the clients/prospects happy. now it’s IOS only, awaiting other platforms asap. i’ll ping you\n\nour skill knows about it as well\n\n<!subteam^S07BZPQDBUJ> <!subteam^S03KC9S1QMC> <!subteam^S03KM96DV0U>",
+          "date": "2026-11-16T14:15:57.635Z",
+          "images": []
+        },
+        {
+          "userId": "U0A266T9SJE",
+          "userName": "Melike Sezer",
+          "text": "yeyyy!",
+          "date": "2026-11-16T14:20:03.558Z",
+          "images": []
+        },
+        {
+          "userId": "U0A4F2RSMQQ",
+          "userName": "Denis Dolbilin",
+          "text": "v2 is where the real fun will start!",
+          "date": "2026-11-16T15:05:34.432Z",
+          "images": []
+        },
+        {
+          "userId": "U03DFSCP8CW",
+          "userName": "Mike Gorokhov",
+          "text": "<@U0A4F2RSMQQ> any spoilers?",
+          "date": "2026-11-16T15:44:16.760Z",
+          "images": []
+        }
+      ],
+      "content": "[Kamil Lotfullin]: Custom elements are live in Flow Builder! :fire:\n\nA custom element is a new block: Add element → Media → Custom element\nThe client’s app fills it with its own native view: a Lottie or Rive animation, a chart, a map, a picker, anything their devs can build in SwiftUI or UIKit\nWhatever you put inside the block in the builder is the fallback. Users see it when the app has no view for it, so nothing breaks\n\nHow to use it:\n• add the block, set its Type and ID, put the fallback inside\n• the client’s devs register a view for that Type in the app with iOS SDK 4.4.0 or later\n• publish the Flow. It’s safe to publish before the app update: until then users see the fallback\nGood to know:\n• native views (inside custom elements) work on iOS SDK 4.4.0+. Android and cross-platform SDKs show the fallback for now, Android is next\n• v1 is one-way: the view can’t trigger flow actions, and its value doesn’t go back into flow variables yet. That’s will come in v2\n• a new native view (inside custom elements) needs an app release, everything else is just a republish\nDocs: <https://adapty.io/docs/flow-custom-elements|adapty.io/docs/flow-custom-elements>\n\n[Kamil Lotfullin]: this video shows how flow with custom elements previews in adapty app  (fallback elements are presented since adapty app does not know what native views to display)\n\n[Yurii Kleimenov]: Finally! <@U08QUJMN0UV>, what do you think about combining this with custom actions and our virtual currency to build use cases for AI-token apps, short-drama apps, etc.? If you need more context, we can discuss it in more detail.\n\n[Maxim Borisik]: Guys, this is huge! I think it’s the main release of the quarter\n\nnow it’s hard to say that our builder CAN’T do something.\n\nusers can finally do LOTTIE / RIVE animations (and way more things). let’s make all the clients/prospects happy. now it’s IOS only, awaiting other platforms asap. i’ll ping you\n\nour skill knows about it as well\n\n<!subteam^S07BZPQDBUJ> <!subteam^S03KC9S1QMC> <!subteam^S03KM96DV0U>\n\n[Melike Sezer]: yeyyy!\n\n[Denis Dolbilin]: v2 is where the real fun will start!\n\n[Mike Gorokhov]: <@U0A4F2RSMQQ> any spoilers?",
+      "matchingReplies": [
+        {
+          "userId": "U08EVBTE69E",
+          "userName": "Maxim Borisik",
+          "text": "Guys, this is huge! I think it’s the main release of the quarter\n\nnow it’s hard to say that our builder CAN’T do something.\n\nusers can finally do LOTTIE / RIVE animations (and way more things). let’s make all the clients/prospects happy. now it’s IOS only, awaiting other platforms asap. i’ll ping you\n\nour skill knows about it as well\n\n<!subteam^S07BZPQDBUJ> <!subteam^S03KC9S1QMC> <!subteam^S03KM96DV0U>",
+          "date": "2026-11-16T14:15:57.635Z",
+          "images": []
+        }
+      ],
+      "hasTeamMention": true,
+      "images": []
+    },
+    {
+      "id": "1794833520.478279",
+      "slackUrl": "https://adapty-team.slack.com/archives/C04SY70QZ0T/p1794833520478279",
+      "name": "Hey team! Two more animation features in Flow Builder :sparkles:",
+      "message": "Hey team! Two more animation features in Flow Builder :sparkles:\n\n_Auto-advance to the next screen_\n• add On Screen Appear → Navigate to Screen and set a Delay - the screen moves on by itself after N seconds\n• for splash screens, “analyzing your answers” loaders and similar steps\n• if the user leaves the screen earlier or opens a sheet or alert, the auto-advance is cancelled\n\n_Show / Hide animations and delayed reveal_\n• Show element and Hide element now have an animation: Fade in, Rise, Pop or None\n• each one has duration, delay and easing; Rise also has distance, Pop has start scale\n• Hide plays the same effect in reverse, and the element keeps its place until it’s fully hidden\n• “show the close button after 3 s” is now just On Screen Appear → Show with Fade in and Delay 3000\n• a button can’t be tapped until its reveal finishes\n• close buttons with a show delay from the old Paywall Builder keep the delay and fade in after migration",
+      "releaseDate": "2026-11-16",
+      "thread": [
+        {
+          "userId": "U0903TFULQ3",
+          "userName": "Andrii Hermanov",
+          "text": "Hey team! Two more animation features in Flow Builder :sparkles:\n\n_Auto-advance to the next screen_\n• add On Screen Appear → Navigate to Screen and set a Delay - the screen moves on by itself after N seconds\n• for splash screens, “analyzing your answers” loaders and similar steps\n• if the user leaves the screen earlier or opens a sheet or alert, the auto-advance is cancelled\n\n_Show / Hide animations and delayed reveal_\n• Show element and Hide element now have an animation: Fade in, Rise, Pop or None\n• each one has duration, delay and easing; Rise also has distance, Pop has start scale\n• Hide plays the same effect in reverse, and the element keeps its place until it’s fully hidden\n• “show the close button after 3 s” is now just On Screen Appear → Show with Fade in and Delay 3000\n• a button can’t be tapped until its reveal finishes\n• close buttons with a show delay from the old Paywall Builder keep the delay and fade in after migration",
+          "date": "2026-11-16T12:52:00.478Z",
+          "images": []
+        },
+        {
+          "userId": "U0903TFULQ3",
+          "userName": "Andrii Hermanov",
+          "text": "<@U08QUJMN0UV> <@U0A3NG4G5E3> <@U03Q2R7AGLA> fyi",
+          "date": "2026-11-16T12:53:38.868Z",
+          "images": []
+        },
+        {
+          "userId": "U0A3NG4G5E3",
+          "userName": "Gene Titerman",
+          "text": "<https://adapty.io/docs/flow-show-hide-animations|adapty.io/docs/flow-show-hide-animations>\n<https://adapty.io/docs/flow-screen-transitions|adapty.io/docs/flow-screen-transitions>",
+          "date": "2026-11-16T12:56:57.610Z",
+          "images": []
+        },
+        {
+          "userId": "U08QUJMN0UV",
+          "userName": "Elina Andreeva",
+          "text": "also supported in flow-generator",
+          "date": "2026-11-16T12:57:29.737Z",
+          "images": []
+        },
+        {
+          "userId": "U08EVBTE69E",
+          "userName": "Maxim Borisik",
+          "text": "<!subteam^S07BZPQDBUJ> many clients wanted it. now they can build even sexier screens",
+          "date": "2026-11-16T13:14:00.339Z",
+          "images": []
+        }
+      ],
+      "content": "[Andrii Hermanov]: Hey team! Two more animation features in Flow Builder :sparkles:\n\n_Auto-advance to the next screen_\n• add On Screen Appear → Navigate to Screen and set a Delay - the screen moves on by itself after N seconds\n• for splash screens, “analyzing your answers” loaders and similar steps\n• if the user leaves the screen earlier or opens a sheet or alert, the auto-advance is cancelled\n\n_Show / Hide animations and delayed reveal_\n• Show element and Hide element now have an animation: Fade in, Rise, Pop or None\n• each one has duration, delay and easing; Rise also has distance, Pop has start scale\n• Hide plays the same effect in reverse, and the element keeps its place until it’s fully hidden\n• “show the close button after 3 s” is now just On Screen Appear → Show with Fade in and Delay 3000\n• a button can’t be tapped until its reveal finishes\n• close buttons with a show delay from the old Paywall Builder keep the delay and fade in after migration\n\n[Andrii Hermanov]: <@U08QUJMN0UV> <@U0A3NG4G5E3> <@U03Q2R7AGLA> fyi\n\n[Gene Titerman]: <https://adapty.io/docs/flow-show-hide-animations|adapty.io/docs/flow-show-hide-animations>\n<https://adapty.io/docs/flow-screen-transitions|adapty.io/docs/flow-screen-transitions>\n\n[Elina Andreeva]: also supported in flow-generator\n\n[Maxim Borisik]: <!subteam^S07BZPQDBUJ> many clients wanted it. now they can build even sexier screens",
+      "matchingReplies": [
+        {
+          "userId": "U08EVBTE69E",
+          "userName": "Maxim Borisik",
+          "text": "<!subteam^S07BZPQDBUJ> many clients wanted it. now they can build even sexier screens",
+          "date": "2026-11-16T13:14:00.339Z",
+          "images": []
+        }
+      ],
+      "hasTeamMention": true,
+      "images": []
+    },
     {
       "id": "1794685109.950029",
       "slackUrl": "https://adapty-team.slack.com/archives/C04SY70QZ0T/p1794685109950029",
@@ -1115,313 +1272,6 @@
         "https://files.slack.com/files-pri/T9HDDB78Q-F0C93G1V2AY/image.png",
         "https://files.slack.com/files-pri/T9HDDB78Q-F0CA2V06QE7/image.png"
       ]
-    },
-    {
-      "id": "1791885881.738359",
-      "slackUrl": "https://adapty-team.slack.com/archives/C04SY70QZ0T/p1791885881738359",
-      "name": "RevenueCat Migrator is live :male_mage:",
-      "message": "RevenueCat Migrator is live :male_mage:\n<!subteam^S03KC9S1QMC> <!subteam^S07BZPQDBUJ> <!subteam^S03KM96DV0U> <@U0ASX4X3CKZ> <@U06K36L6CTB> <@U05QELDHUUX>\n\nDevelopers on RevenueCat can now ask their coding agent (Claude Code, Codex, Cursor) to move their app to Adapty. The agent works through the Adapty CLI, and RevenueCat keeps running until the new app version ships.\n\nHow to try it:\n1. Create a RevenueCat secret API key: V2, Read only on project configuration.\n2. Run `npm install -g adapty` and `adapty auth login` in the agent’s terminal.\n3. Tell the agent “Migrate my RevenueCat project to a new Adapty app called Acme with the Adapty CLI”. Paste the key into the Adapty page it opens and answer its mapping questions.\n4. Ask for the rest with one prompt each: paywall designs, app code, integrations, store events. Then test a sandbox purchase and release.\nDocs: <https://adapty.io/docs/migration-from-revenuecat|adapty.io/docs/migration-from-revenuecat>\n\nHow it works:\n• We read the RC catalog through their API and recreate it in Adapty: entitlements as access levels, offerings as placements with a paywall or a Flow. IDs stay the same, so `entitlements[\"premium\"]` becomes `accessLevels[\"premium\"]` and the code diff stays small.\n• Adapty receives App Store notifications and forwards them to RC. On Google Play it joins RC’s Pub/Sub topic as a second subscriber, so both backends get every renewal and refund during the switch.\n• The agent swaps the SDK and code on an `adapty-migrate` branch and lists the manual steps in ADAPTY_SETUP.md. It also rebuilds RC paywalls as Adapty Flows and finds analytics and attribution SDKs in the code.\n• Transaction history comes over through Amazon S3. Each migration gets its own bucket and an IAM role that only RevenueCat can assume, using the External ID from their export settings, and that role can only write. RC sends a daily Cloud Export there. We check for new files every hour, import only products from the migrated catalog and re-validate each transaction with the store. A week after the first file we close the migration and delete the bucket.\n• The migration runs as a state machine on our server, and the CLI only shows the next step. We can ship new steps without a CLI release. Keys go straight into the Adapty dashboard, so the agent never sees them.\nHuge thanks to <@U09L1SS03B8><@U08QUJMN0UV> <@U08ASB4GYR4> <@U0AQZG23D62> <@U0ACSQAKJA1> <@U09AH7D2A4X> <@U0AR243M9T9>",
-      "releaseDate": "2026-10-13",
-      "thread": [
-        {
-          "userId": "U07J9LKBQ5U",
-          "userName": "Yurii Kleimenov",
-          "text": "RevenueCat Migrator is live :male_mage:\n<!subteam^S03KC9S1QMC> <!subteam^S07BZPQDBUJ> <!subteam^S03KM96DV0U> <@U0ASX4X3CKZ> <@U06K36L6CTB> <@U05QELDHUUX>\n\nDevelopers on RevenueCat can now ask their coding agent (Claude Code, Codex, Cursor) to move their app to Adapty. The agent works through the Adapty CLI, and RevenueCat keeps running until the new app version ships.\n\nHow to try it:\n1. Create a RevenueCat secret API key: V2, Read only on project configuration.\n2. Run `npm install -g adapty` and `adapty auth login` in the agent’s terminal.\n3. Tell the agent “Migrate my RevenueCat project to a new Adapty app called Acme with the Adapty CLI”. Paste the key into the Adapty page it opens and answer its mapping questions.\n4. Ask for the rest with one prompt each: paywall designs, app code, integrations, store events. Then test a sandbox purchase and release.\nDocs: <https://adapty.io/docs/migration-from-revenuecat|adapty.io/docs/migration-from-revenuecat>\n\nHow it works:\n• We read the RC catalog through their API and recreate it in Adapty: entitlements as access levels, offerings as placements with a paywall or a Flow. IDs stay the same, so `entitlements[\"premium\"]` becomes `accessLevels[\"premium\"]` and the code diff stays small.\n• Adapty receives App Store notifications and forwards them to RC. On Google Play it joins RC’s Pub/Sub topic as a second subscriber, so both backends get every renewal and refund during the switch.\n• The agent swaps the SDK and code on an `adapty-migrate` branch and lists the manual steps in ADAPTY_SETUP.md. It also rebuilds RC paywalls as Adapty Flows and finds analytics and attribution SDKs in the code.\n• Transaction history comes over through Amazon S3. Each migration gets its own bucket and an IAM role that only RevenueCat can assume, using the External ID from their export settings, and that role can only write. RC sends a daily Cloud Export there. We check for new files every hour, import only products from the migrated catalog and re-validate each transaction with the store. A week after the first file we close the migration and delete the bucket.\n• The migration runs as a state machine on our server, and the CLI only shows the next step. We can ship new steps without a CLI release. Keys go straight into the Adapty dashboard, so the agent never sees them.\nHuge thanks to <@U09L1SS03B8><@U08QUJMN0UV> <@U08ASB4GYR4> <@U0AQZG23D62> <@U0ACSQAKJA1> <@U09AH7D2A4X> <@U0AR243M9T9>",
-          "date": "2026-10-13T10:04:41.738Z",
-          "images": [
-            "https://files.slack.com/files-pri/T9HDDB78Q-F0C9MTGLTQQ/ai-powered_migration_magic.png"
-          ]
-        },
-        {
-          "userId": "U08EVBTE69E",
-          "userName": "Maxim Borisik",
-          "text": "&gt; the rest with one prompt each: paywall designs\nyooo. congrats man. even flows right?",
-          "date": "2026-10-13T10:07:20.754Z",
-          "images": []
-        },
-        {
-          "userId": "U03J8UXUDPF",
-          "userName": "Mykola Martynovets",
-          "text": "magic!",
-          "date": "2026-10-13T10:09:15.463Z",
-          "images": []
-        },
-        {
-          "userId": "U0A266T9SJE",
-          "userName": "Melike Sezer",
-          "text": "wowowowowo :partying_face:  this will be a huge leverage with Teknasyon next week <@U09RF6V1YHM> <@U081E90FF3R> <@U02GSCVUPHU>",
-          "date": "2026-10-13T10:09:57.766Z",
-          "images": []
-        },
-        {
-          "userId": "U081E90FF3R",
-          "userName": "Metin Vurmaz",
-          "text": "stonks",
-          "date": "2026-10-13T10:10:34.115Z",
-          "images": []
-        },
-        {
-          "userId": "U07J9LKBQ5U",
-          "userName": "Yurii Kleimenov",
-          "text": "> yooo. congrats man. even flows right?\n<@U08EVBTE69E> Yep, but I believe we’ll need to optimize the user journey slightly so users can naturally understand what they should use for the migration - the CLI, an agent inside the dashboard, and so on.\n\nWe’ll focus on making the whole process as smooth as possible as we roll this out on real RC clients. But yeah, basically, once you create an empty flow and place it using Migrator, your agent will have all the context it needs. You’ll just need to connect via CLI, for example, and send a screenshot of your paywall from RC.",
-          "date": "2026-10-13T10:43:17.565Z",
-          "images": []
-        },
-        {
-          "userId": "U03DFSCP8CW",
-          "userName": "Mike Gorokhov",
-          "text": "```Adapty receives App Store notifications and forwards them to RC```\nBut Claude can not change your App Store settings, can it?\nYou need to manually change the endpoint there, no?",
-          "date": "2026-10-13T10:43:57.141Z",
-          "images": []
-        },
-        {
-          "userId": "U07J9LKBQ5U",
-          "userName": "Yurii Kleimenov",
-          "text": "Yes manually, but Claude will open your browser and show you where to paste them. This requires quite high-level admin permissions for the ASC API key, which I believe some leads might be hesitant to share. However, we’re open to feedback from prospects and will extend the functionality based on their needs.\n\nFor now, it’s a separate service that can be upgraded quickly and easily.",
-          "date": "2026-10-13T10:47:01.168Z",
-          "images": []
-        },
-        {
-          "userId": "U03DFSCP8CW",
-          "userName": "Mike Gorokhov",
-          "text": "Nah, I just wanted to highlight that we can adjust this wording a bit",
-          "date": "2026-10-13T10:47:57.836Z",
-          "images": []
-        },
-        {
-          "userId": "U07J9LKBQ5U",
-          "userName": "Yurii Kleimenov",
-          "text": "We can prepare a Demo for Sales team if needed",
-          "date": "2026-10-13T10:48:34.455Z",
-          "images": []
-        },
-        {
-          "userId": "U03DFSCP8CW",
-          "userName": "Mike Gorokhov",
-          "text": "Great stuff,  now we need to win someone to test this live :smile:",
-          "date": "2026-10-13T10:48:40.934Z",
-          "images": []
-        },
-        {
-          "userId": "U03DFSCP8CW",
-          "userName": "Mike Gorokhov",
-          "text": "\"We can prepare a Demo for Sales team if needed\"\n\nNeeded",
-          "date": "2026-10-13T10:48:50.129Z",
-          "images": []
-        },
-        {
-          "userId": "U0A266T9SJE",
-          "userName": "Melike Sezer",
-          "text": "Questions: How hard/easy was to build something like this? Can RC has the same migration agent soon? Or do they already have it?",
-          "date": "2026-10-13T10:48:50.298Z",
-          "images": []
-        },
-        {
-          "userId": "U04B26DSWMA",
-          "userName": "Sergei Solodskikh",
-          "text": "Great job!",
-          "date": "2026-10-13T10:50:29.281Z",
-          "images": []
-        },
-        {
-          "userId": "U07J9LKBQ5U",
-          "userName": "Yurii Kleimenov",
-          "text": "> *Questions:* How hard or easy was it to build something like this? Could RC have the same migration agent soon, or do they already have one?\n<@U0A266T9SJE>\nThat’s actually a pretty funny situation. Their API is quite comprehensive, which has allowed us to reach the point where we can export everything we need from RC and migrate it to Adapty. On our side, though, things are still more limited, so we’re safe for now due to our API limitations :old:\n\nCompetitors could definitely build something similar, but in RC’s case, I’m 100% sure this isn’t their focus (yet)",
-          "date": "2026-10-13T11:02:11.644Z",
-          "images": []
-        },
-        {
-          "userId": "U09QBBKPGMC",
-          "userName": "Elena Robakidze",
-          "text": "<@U07J9LKBQ5U> did we have anyone/do we have anyone in the plan with whom we tried/can try this migration?",
-          "date": "2026-10-13T11:06:16.671Z",
-          "images": []
-        },
-        {
-          "userId": "U090BDLA9JN",
-          "userName": "Dmitry Shestoperov",
-          "text": "Is there a possibility of them making the API _less_ comprehensive and thus making our life harder?\n\nOr are there some scenarios that make this move unlikely?",
-          "date": "2026-10-13T11:06:20.289Z",
-          "images": []
-        },
-        {
-          "userId": "U05QELDHUUX",
-          "userName": "Sergey Muratov",
-          "text": "<@U07J9LKBQ5U> Dima's question prompted this one from me: how much of the migration is done with Claude driving the browser vs. Claude using RC's API? I would assume paywalls are recreated with screenshots from the browser, right?",
-          "date": "2026-10-13T11:09:15.675Z",
-          "images": []
-        },
-        {
-          "userId": "U04B26DSWMA",
-          "userName": "Sergei Solodskikh",
-          "text": "&gt; Is there a possibility of them making the API _less_ comprehensive and thus making our life harder?\nThat's kind of suicidal move for any SaaS. API is used by major clients, whom usually cannot be forced to adopt any changes",
-          "date": "2026-10-13T11:10:45.055Z",
-          "images": []
-        },
-        {
-          "userId": "U03DFSCP8CW",
-          "userName": "Mike Gorokhov",
-          "text": "Guys, the hardest part of the migration is the code, not to copy products ids from the dashboard.\nAPI is very secondary here",
-          "date": "2026-10-13T11:13:36.882Z",
-          "images": []
-        },
-        {
-          "userId": "U05QELDHUUX",
-          "userName": "Sergey Muratov",
-          "text": "Maybe code + paywalls + targeting rules",
-          "date": "2026-10-13T11:14:33.025Z",
-          "images": []
-        },
-        {
-          "userId": "U07J9LKBQ5U",
-          "userName": "Yurii Kleimenov",
-          "text": "&gt; did we have anyone/do we have anyone in the plan with whom we tried/can try this migration?\n<@U09QBBKPGMC> We’re planning to target Hi Intent leads from ABM list with SDR first. <@U09TLDB59HU> fyi",
-          "date": "2026-10-13T11:17:15.666Z",
-          "images": []
-        },
-        {
-          "userId": "U03DFSCP8CW",
-          "userName": "Mike Gorokhov",
-          "text": "This is a tool to migrate, not a reason.\nI do not think it would happen at the SDR step, but rather during the actual sale",
-          "date": "2026-10-13T11:20:07.964Z",
-          "images": []
-        },
-        {
-          "userId": "U9HDNS9S4",
-          "userName": "Kirill Potekhin",
-          "text": "the image alone could be a reason to migrate though",
-          "date": "2026-10-13T19:36:35.908Z",
-          "images": []
-        },
-        {
-          "userId": "U034A27SVHC",
-          "userName": "Artem Rukavishnikov",
-          "text": "Something Holywater asked about is automatically sending new products from RC to Adapty (as they run both in parallel, they'd have to maintain both).\nI would advise setting up a scheduled task that will run only this specific part of the skill and update the list, say, once a day.\nDo you have any concerns? <@U07J9LKBQ5U>\nWould be helpful for the potentical cases when we pitch Flow Builder \"separately\"",
-          "date": "2026-10-14T05:26:37.992Z",
-          "images": []
-        }
-      ],
-      "content": "[Yurii Kleimenov]: RevenueCat Migrator is live :male_mage:\n<!subteam^S03KC9S1QMC> <!subteam^S07BZPQDBUJ> <!subteam^S03KM96DV0U> <@U0ASX4X3CKZ> <@U06K36L6CTB> <@U05QELDHUUX>\n\nDevelopers on RevenueCat can now ask their coding agent (Claude Code, Codex, Cursor) to move their app to Adapty. The agent works through the Adapty CLI, and RevenueCat keeps running until the new app version ships.\n\nHow to try it:\n1. Create a RevenueCat secret API key: V2, Read only on project configuration.\n2. Run `npm install -g adapty` and `adapty auth login` in the agent’s terminal.\n3. Tell the agent “Migrate my RevenueCat project to a new Adapty app called Acme with the Adapty CLI”. Paste the key into the Adapty page it opens and answer its mapping questions.\n4. Ask for the rest with one prompt each: paywall designs, app code, integrations, store events. Then test a sandbox purchase and release.\nDocs: <https://adapty.io/docs/migration-from-revenuecat|adapty.io/docs/migration-from-revenuecat>\n\nHow it works:\n• We read the RC catalog through their API and recreate it in Adapty: entitlements as access levels, offerings as placements with a paywall or a Flow. IDs stay the same, so `entitlements[\"premium\"]` becomes `accessLevels[\"premium\"]` and the code diff stays small.\n• Adapty receives App Store notifications and forwards them to RC. On Google Play it joins RC’s Pub/Sub topic as a second subscriber, so both backends get every renewal and refund during the switch.\n• The agent swaps the SDK and code on an `adapty-migrate` branch and lists the manual steps in ADAPTY_SETUP.md. It also rebuilds RC paywalls as Adapty Flows and finds analytics and attribution SDKs in the code.\n• Transaction history comes over through Amazon S3. Each migration gets its own bucket and an IAM role that only RevenueCat can assume, using the External ID from their export settings, and that role can only write. RC sends a daily Cloud Export there. We check for new files every hour, import only products from the migrated catalog and re-validate each transaction with the store. A week after the first file we close the migration and delete the bucket.\n• The migration runs as a state machine on our server, and the CLI only shows the next step. We can ship new steps without a CLI release. Keys go straight into the Adapty dashboard, so the agent never sees them.\nHuge thanks to <@U09L1SS03B8><@U08QUJMN0UV> <@U08ASB4GYR4> <@U0AQZG23D62> <@U0ACSQAKJA1> <@U09AH7D2A4X> <@U0AR243M9T9>\n\n[Maxim Borisik]: &gt; the rest with one prompt each: paywall designs\nyooo. congrats man. even flows right?\n\n[Mykola Martynovets]: magic!\n\n[Melike Sezer]: wowowowowo :partying_face:  this will be a huge leverage with Teknasyon next week <@U09RF6V1YHM> <@U081E90FF3R> <@U02GSCVUPHU>\n\n[Metin Vurmaz]: stonks\n\n[Yurii Kleimenov]: > yooo. congrats man. even flows right?\n<@U08EVBTE69E> Yep, but I believe we’ll need to optimize the user journey slightly so users can naturally understand what they should use for the migration - the CLI, an agent inside the dashboard, and so on.\n\nWe’ll focus on making the whole process as smooth as possible as we roll this out on real RC clients. But yeah, basically, once you create an empty flow and place it using Migrator, your agent will have all the context it needs. You’ll just need to connect via CLI, for example, and send a screenshot of your paywall from RC.\n\n[Mike Gorokhov]: ```Adapty receives App Store notifications and forwards them to RC```\nBut Claude can not change your App Store settings, can it?\nYou need to manually change the endpoint there, no?\n\n[Yurii Kleimenov]: Yes manually, but Claude will open your browser and show you where to paste them. This requires quite high-level admin permissions for the ASC API key, which I believe some leads might be hesitant to share. However, we’re open to feedback from prospects and will extend the functionality based on their needs.\n\nFor now, it’s a separate service that can be upgraded quickly and easily.\n\n[Mike Gorokhov]: Nah, I just wanted to highlight that we can adjust this wording a bit\n\n[Yurii Kleimenov]: We can prepare a Demo for Sales team if needed\n\n[Mike Gorokhov]: Great stuff,  now we need to win someone to test this live :smile:\n\n[Mike Gorokhov]: \"We can prepare a Demo for Sales team if needed\"\n\nNeeded\n\n[Melike Sezer]: Questions: How hard/easy was to build something like this? Can RC has the same migration agent soon? Or do they already have it?\n\n[Sergei Solodskikh]: Great job!\n\n[Yurii Kleimenov]: > *Questions:* How hard or easy was it to build something like this? Could RC have the same migration agent soon, or do they already have one?\n<@U0A266T9SJE>\nThat’s actually a pretty funny situation. Their API is quite comprehensive, which has allowed us to reach the point where we can export everything we need from RC and migrate it to Adapty. On our side, though, things are still more limited, so we’re safe for now due to our API limitations :old:\n\nCompetitors could definitely build something similar, but in RC’s case, I’m 100% sure this isn’t their focus (yet)\n\n[Elena Robakidze]: <@U07J9LKBQ5U> did we have anyone/do we have anyone in the plan with whom we tried/can try this migration?\n\n[Dmitry Shestoperov]: Is there a possibility of them making the API _less_ comprehensive and thus making our life harder?\n\nOr are there some scenarios that make this move unlikely?\n\n[Sergey Muratov]: <@U07J9LKBQ5U> Dima's question prompted this one from me: how much of the migration is done with Claude driving the browser vs. Claude using RC's API? I would assume paywalls are recreated with screenshots from the browser, right?\n\n[Sergei Solodskikh]: &gt; Is there a possibility of them making the API _less_ comprehensive and thus making our life harder?\nThat's kind of suicidal move for any SaaS. API is used by major clients, whom usually cannot be forced to adopt any changes\n\n[Mike Gorokhov]: Guys, the hardest part of the migration is the code, not to copy products ids from the dashboard.\nAPI is very secondary here\n\n[Sergey Muratov]: Maybe code + paywalls + targeting rules\n\n[Yurii Kleimenov]: &gt; did we have anyone/do we have anyone in the plan with whom we tried/can try this migration?\n<@U09QBBKPGMC> We’re planning to target Hi Intent leads from ABM list with SDR first. <@U09TLDB59HU> fyi\n\n[Mike Gorokhov]: This is a tool to migrate, not a reason.\nI do not think it would happen at the SDR step, but rather during the actual sale\n\n[Kirill Potekhin]: the image alone could be a reason to migrate though\n\n[Artem Rukavishnikov]: Something Holywater asked about is automatically sending new products from RC to Adapty (as they run both in parallel, they'd have to maintain both).\nI would advise setting up a scheduled task that will run only this specific part of the skill and update the list, say, once a day.\nDo you have any concerns? <@U07J9LKBQ5U>\nWould be helpful for the potentical cases when we pitch Flow Builder \"separately\"",
-      "matchingReplies": [
-        {
-          "userId": "U08EVBTE69E",
-          "userName": "Maxim Borisik",
-          "text": "&gt; the rest with one prompt each: paywall designs\nyooo. congrats man. even flows right?",
-          "date": "2026-10-13T10:07:20.754Z",
-          "images": []
-        },
-        {
-          "userId": "U9HDNS9S4",
-          "userName": "Kirill Potekhin",
-          "text": "the image alone could be a reason to migrate though",
-          "date": "2026-10-13T19:36:35.908Z",
-          "images": []
-        }
-      ],
-      "hasTeamMention": false,
-      "images": [
-        "https://files.slack.com/files-pri/T9HDDB78Q-F0C9MTGLTQQ/ai-powered_migration_magic.png"
-      ]
-    },
-    {
-      "id": "1791534788.429769",
-      "slackUrl": "https://adapty-team.slack.com/archives/C04SY70QZ0T/p1791534788429769",
-      "name": "hey team! custom tags are live in flow builder :jack_o_lantern:",
-      "message": "hey team! custom tags are live in flow builder :jack_o_lantern:\n\none of the last pieces for parity with the legacy builder :crystal_ball:\n\nMaybe everyone knows what is it but anyway:\na text variable whose value comes from the app, not from the flow\nthe developer passes it by name at runtime - user name, coin balance, current plan, anything the app knows and we don't\nso the screen says \"Hi, Anna! your marathon plan is ready\" instead of \"Hi there!\" :ghost:\n\nHow it works:\ncreate a variable, tick \"Value comes from outside the app\", drop it into any text\nInitial value is what you see on the canvas\nand it's also what the user sees if the app doesn't send the tag - the line never breaks, no spooky empty spots :spider_web:\n\nWho's been waiting for it :bat:\n• Feeld - one Majestic paywall with a title and description set by entry point: \"See who liked you\" when opened from likes, \"Become Majestic\" from the account tab. they were waiting for tags to move it to flows\n• Ideawise - want to show the user's current plan price next to the offer, so the upgrade gap is obvious\n• Crsel - a social proof paywall with the real number of users on the annual plan. without tags they'd have to hardcode it for the A/B test\n• and it all started with sales asking if a paywall can show the user's coin balance :candy:\n\nlimits for now :skull:\n• text only - no conditions, alerts or URLs yet. app values in logic is the next task\n\nthanks to <@U08EVBTE69E>:spider:",
-      "releaseDate": "2026-10-09",
-      "thread": [
-        {
-          "userId": "U0903TFULQ3",
-          "userName": "Andrii Hermanov",
-          "text": "hey team! custom tags are live in flow builder :jack_o_lantern:\n\none of the last pieces for parity with the legacy builder :crystal_ball:\n\nMaybe everyone knows what is it but anyway:\na text variable whose value comes from the app, not from the flow\nthe developer passes it by name at runtime - user name, coin balance, current plan, anything the app knows and we don't\nso the screen says \"Hi, Anna! your marathon plan is ready\" instead of \"Hi there!\" :ghost:\n\nHow it works:\ncreate a variable, tick \"Value comes from outside the app\", drop it into any text\nInitial value is what you see on the canvas\nand it's also what the user sees if the app doesn't send the tag - the line never breaks, no spooky empty spots :spider_web:\n\nWho's been waiting for it :bat:\n• Feeld - one Majestic paywall with a title and description set by entry point: \"See who liked you\" when opened from likes, \"Become Majestic\" from the account tab. they were waiting for tags to move it to flows\n• Ideawise - want to show the user's current plan price next to the offer, so the upgrade gap is obvious\n• Crsel - a social proof paywall with the real number of users on the annual plan. without tags they'd have to hardcode it for the A/B test\n• and it all started with sales asking if a paywall can show the user's coin balance :candy:\n\nlimits for now :skull:\n• text only - no conditions, alerts or URLs yet. app values in logic is the next task\n\nthanks to <@U08EVBTE69E>:spider:",
-          "date": "2026-10-09T08:33:08.429Z",
-          "images": [
-            "https://files.slack.com/files-pri/T9HDDB78Q-F0C73QPJB1V/1-builder-form.png",
-            "https://files.slack.com/files-pri/T9HDDB78Q-F0C7NSNTNPN/2-builder-canvas.png",
-            "https://files.slack.com/files-pri/T9HDDB78Q-F0C8DHJREP2/3-device-tags-passed.png",
-            "https://files.slack.com/files-pri/T9HDDB78Q-F0C73QQS7BR/4-device-tags-missing.png"
-          ]
-        },
-        {
-          "userId": "U0903TFULQ3",
-          "userName": "Andrii Hermanov",
-          "text": "• Dashboard guide <https://adapty.io/docs/flow-custom-tags|adapty.io/docs/flow-custom-tags>\n• SDK guides with common use cases:\n    ◦ iOS: <https://adapty.io/docs/ios-flow-custom-tags|adapty.io/docs/ios-flow-custom-tags>\n    ◦ Android: <https://adapty.io/docs/android-flow-custom-tags|adapty.io/docs/android-flow-custom-tags>\n    ◦ Flutter: <https://adapty.io/docs/flutter-flow-custom-tags|adapty.io/docs/flutter-flow-custom-tags>\n    ◦ React Native: <https://adapty.io/docs/react-native-flow-custom-tags|adapty.io/docs/react-native-flow-custom-tags>\n    ◦ Unity: <https://adapty.io/docs/unity-flow-custom-tags|adapty.io/docs/unity-flow-custom-tags>\n    ◦ Kotlin Multiplatform: <https://adapty.io/docs/kmp-flow-custom-tags|adapty.io/docs/kmp-flow-custom-tags>\n    ◦ Capacitor: <https://adapty.io/docs/capacitor-flow-custom-tags|adapty.io/docs/capacitor-flow-custom-tags>",
-          "date": "2026-10-09T08:35:49.043Z",
-          "images": []
-        },
-        {
-          "userId": "U08EVBTE69E",
-          "userName": "Maxim Borisik",
-          "text": "<!subteam^S07BZPQDBUJ> your clients wanted it badly!\n<!subteam^S03KM96DV0U> fyi\n\n<@U034A27SVHC> you as well",
-          "date": "2026-10-09T08:36:06.184Z",
-          "images": []
-        },
-        {
-          "userId": "U03DFSCP8CW",
-          "userName": "Mike Gorokhov",
-          "text": "Hey there,\n\nThese can not be used as conditions, right?",
-          "date": "2026-10-09T15:41:26.731Z",
-          "images": []
-        },
-        {
-          "userId": "U0903TFULQ3",
-          "userName": "Andrii Hermanov",
-          "text": "Hey\nYes, not yet, Mike",
-          "date": "2026-10-09T15:42:54.788Z",
-          "images": []
-        },
-        {
-          "userId": "U03DFSCP8CW",
-          "userName": "Mike Gorokhov",
-          "text": "\"yet\" is promising",
-          "date": "2026-10-09T15:43:14.742Z",
-          "images": []
-        }
-      ],
-      "content": "[Andrii Hermanov]: hey team! custom tags are live in flow builder :jack_o_lantern:\n\none of the last pieces for parity with the legacy builder :crystal_ball:\n\nMaybe everyone knows what is it but anyway:\na text variable whose value comes from the app, not from the flow\nthe developer passes it by name at runtime - user name, coin balance, current plan, anything the app knows and we don't\nso the screen says \"Hi, Anna! your marathon plan is ready\" instead of \"Hi there!\" :ghost:\n\nHow it works:\ncreate a variable, tick \"Value comes from outside the app\", drop it into any text\nInitial value is what you see on the canvas\nand it's also what the user sees if the app doesn't send the tag - the line never breaks, no spooky empty spots :spider_web:\n\nWho's been waiting for it :bat:\n• Feeld - one Majestic paywall with a title and description set by entry point: \"See who liked you\" when opened from likes, \"Become Majestic\" from the account tab. they were waiting for tags to move it to flows\n• Ideawise - want to show the user's current plan price next to the offer, so the upgrade gap is obvious\n• Crsel - a social proof paywall with the real number of users on the annual plan. without tags they'd have to hardcode it for the A/B test\n• and it all started with sales asking if a paywall can show the user's coin balance :candy:\n\nlimits for now :skull:\n• text only - no conditions, alerts or URLs yet. app values in logic is the next task\n\nthanks to <@U08EVBTE69E>:spider:\n\n[Andrii Hermanov]: • Dashboard guide <https://adapty.io/docs/flow-custom-tags|adapty.io/docs/flow-custom-tags>\n• SDK guides with common use cases:\n    ◦ iOS: <https://adapty.io/docs/ios-flow-custom-tags|adapty.io/docs/ios-flow-custom-tags>\n    ◦ Android: <https://adapty.io/docs/android-flow-custom-tags|adapty.io/docs/android-flow-custom-tags>\n    ◦ Flutter: <https://adapty.io/docs/flutter-flow-custom-tags|adapty.io/docs/flutter-flow-custom-tags>\n    ◦ React Native: <https://adapty.io/docs/react-native-flow-custom-tags|adapty.io/docs/react-native-flow-custom-tags>\n    ◦ Unity: <https://adapty.io/docs/unity-flow-custom-tags|adapty.io/docs/unity-flow-custom-tags>\n    ◦ Kotlin Multiplatform: <https://adapty.io/docs/kmp-flow-custom-tags|adapty.io/docs/kmp-flow-custom-tags>\n    ◦ Capacitor: <https://adapty.io/docs/capacitor-flow-custom-tags|adapty.io/docs/capacitor-flow-custom-tags>\n\n[Maxim Borisik]: <!subteam^S07BZPQDBUJ> your clients wanted it badly!\n<!subteam^S03KM96DV0U> fyi\n\n<@U034A27SVHC> you as well\n\n[Mike Gorokhov]: Hey there,\n\nThese can not be used as conditions, right?\n\n[Andrii Hermanov]: Hey\nYes, not yet, Mike\n\n[Mike Gorokhov]: \"yet\" is promising",
-      "matchingReplies": [
-        {
-          "userId": "U08EVBTE69E",
-          "userName": "Maxim Borisik",
-          "text": "<!subteam^S07BZPQDBUJ> your clients wanted it badly!\n<!subteam^S03KM96DV0U> fyi\n\n<@U034A27SVHC> you as well",
-          "date": "2026-10-09T08:36:06.184Z",
-          "images": []
-        }
-      ],
-      "hasTeamMention": true,
-      "images": [
-        "https://files.slack.com/files-pri/T9HDDB78Q-F0C73QPJB1V/1-builder-form.png",
-        "https://files.slack.com/files-pri/T9HDDB78Q-F0C7NSNTNPN/2-builder-canvas.png",
-        "https://files.slack.com/files-pri/T9HDDB78Q-F0C8DHJREP2/3-device-tags-passed.png",
-        "https://files.slack.com/files-pri/T9HDDB78Q-F0C73QQS7BR/4-device-tags-missing.png"
-      ]
-    },
-    {
-      "id": "1790943575.026089",
-      "slackUrl": "https://adapty-team.slack.com/archives/C04SY70QZ0T/p1790943575026089",
-      "name": "hey team! two Adapty Mail updates in one video :movie_camera:",
-      "message": "hey team! two Adapty Mail updates in one video :movie_camera:\n\n1. Domain Health :stethoscope:\nEvery sending domain now has its own health page (Settings → DNS → Details). Customers can see where their mail stands before a mailbox provider tells them.\n\n- Deliverability score: one number from 0 to 100 plus a status (Healthy, Needs attention or At risk). We build it from complaints, hard bounces and inbox rate, so one bad signal can't hide behind two good ones\n- Inbox placement: inbox vs. spam for each provider (Gmail, Yahoo, iCloud...). We measure it daily on our seed mailboxes\n- Bounces: why emails bounce, hard vs. soft, and which provider bounces the most. We drop hard bounces from sending automatically\n- Send tiers: the domain's step on the warmup ladder (20 tiers, 100 to 57,000 emails a day) and today's sending limit\n\nWhy it matters: if emails land in spam, the whole channel stops working. Until now customers had to take our word that everything was fine. Now they can check it themselves and catch problems early.\n\n2. Email localization :globe_with_meridians:\nOne campaign covers every language, so nobody has to clone campaigns and segments per country anymore.\n\n- Hit Localize, pick languages (79 available), done. The translation keeps the brand voice, and the layout, buttons and links stay as they were\n- Each user gets the email in their device language. If we don't have a translation for that language, they get the English version, so the email always renders correctly\n- Works for every campaign type, transactional ones too (double opt-in, app activation)\n- You can add a language to a live campaign without relaunching it. People already in the flow keep the language they started with\n- When you edit the English email, we mark its translations as Outdated, and one click re-localizes them\n\nkudos to <@U04B26DSWMA> and <@UNWFN144R>\n\nWe also signed our first contract yesterday (with AIBY) and started to add first new revenue to our FF clients this week.",
-      "releaseDate": "2026-10-02",
-      "thread": [
-        {
-          "userId": "U03K1BGS464",
-          "userName": "Vitali Khmialnitski",
-          "text": "hey team! two Adapty Mail updates in one video :movie_camera:\n\n1. Domain Health :stethoscope:\nEvery sending domain now has its own health page (Settings → DNS → Details). Customers can see where their mail stands before a mailbox provider tells them.\n\n- Deliverability score: one number from 0 to 100 plus a status (Healthy, Needs attention or At risk). We build it from complaints, hard bounces and inbox rate, so one bad signal can't hide behind two good ones\n- Inbox placement: inbox vs. spam for each provider (Gmail, Yahoo, iCloud...). We measure it daily on our seed mailboxes\n- Bounces: why emails bounce, hard vs. soft, and which provider bounces the most. We drop hard bounces from sending automatically\n- Send tiers: the domain's step on the warmup ladder (20 tiers, 100 to 57,000 emails a day) and today's sending limit\n\nWhy it matters: if emails land in spam, the whole channel stops working. Until now customers had to take our word that everything was fine. Now they can check it themselves and catch problems early.\n\n2. Email localization :globe_with_meridians:\nOne campaign covers every language, so nobody has to clone campaigns and segments per country anymore.\n\n- Hit Localize, pick languages (79 available), done. The translation keeps the brand voice, and the layout, buttons and links stay as they were\n- Each user gets the email in their device language. If we don't have a translation for that language, they get the English version, so the email always renders correctly\n- Works for every campaign type, transactional ones too (double opt-in, app activation)\n- You can add a language to a live campaign without relaunching it. People already in the flow keep the language they started with\n- When you edit the English email, we mark its translations as Outdated, and one click re-localizes them\n\nkudos to <@U04B26DSWMA> and <@UNWFN144R>\n\nWe also signed our first contract yesterday (with AIBY) and started to add first new revenue to our FF clients this week.",
-          "date": "2026-10-02T12:19:35.026Z",
-          "images": []
-        },
-        {
-          "userId": "U03K1BGS464",
-          "userName": "Vitali Khmialnitski",
-          "text": "<!subteam^S08KMD5J4FJ> <!subteam^S07BZPQDBUJ> <!subteam^S03KM96DV0U> FYI",
-          "date": "2026-10-02T12:46:29.549Z",
-          "images": []
-        }
-      ],
-      "content": "[Vitali Khmialnitski]: hey team! two Adapty Mail updates in one video :movie_camera:\n\n1. Domain Health :stethoscope:\nEvery sending domain now has its own health page (Settings → DNS → Details). Customers can see where their mail stands before a mailbox provider tells them.\n\n- Deliverability score: one number from 0 to 100 plus a status (Healthy, Needs attention or At risk). We build it from complaints, hard bounces and inbox rate, so one bad signal can't hide behind two good ones\n- Inbox placement: inbox vs. spam for each provider (Gmail, Yahoo, iCloud...). We measure it daily on our seed mailboxes\n- Bounces: why emails bounce, hard vs. soft, and which provider bounces the most. We drop hard bounces from sending automatically\n- Send tiers: the domain's step on the warmup ladder (20 tiers, 100 to 57,000 emails a day) and today's sending limit\n\nWhy it matters: if emails land in spam, the whole channel stops working. Until now customers had to take our word that everything was fine. Now they can check it themselves and catch problems early.\n\n2. Email localization :globe_with_meridians:\nOne campaign covers every language, so nobody has to clone campaigns and segments per country anymore.\n\n- Hit Localize, pick languages (79 available), done. The translation keeps the brand voice, and the layout, buttons and links stay as they were\n- Each user gets the email in their device language. If we don't have a translation for that language, they get the English version, so the email always renders correctly\n- Works for every campaign type, transactional ones too (double opt-in, app activation)\n- You can add a language to a live campaign without relaunching it. People already in the flow keep the language they started with\n- When you edit the English email, we mark its translations as Outdated, and one click re-localizes them\n\nkudos to <@U04B26DSWMA> and <@UNWFN144R>\n\nWe also signed our first contract yesterday (with AIBY) and started to add first new revenue to our FF clients this week.\n\n[Vitali Khmialnitski]: <!subteam^S08KMD5J4FJ> <!subteam^S07BZPQDBUJ> <!subteam^S03KM96DV0U> FYI",
-      "matchingReplies": [],
-      "hasTeamMention": true,
-      "images": []
     }
   ]
 }
