@@ -1,7 +1,46 @@
 {
-  "syncedAt": "2026-11-18T00:27:03.579Z",
+  "syncedAt": "2026-11-19T00:26:45.385Z",
   "channel": "#product-release",
   "entries": [
+    {
+      "id": "1795005592.987729",
+      "slackUrl": "https://adapty-team.slack.com/archives/C04SY70QZ0T/p1795005592987729",
+      "name": "Platform conditions are live in Flow Builder!",
+      "message": "Platform conditions are live in Flow Builder!\n\nOne Flow can now behave differently on iOS and Android\nNo more duplicate Flows just because one screen is iOS-only, like an ATT explainer\nEvery condition now has a System tab with system.platform = iOS / Android\n\nHow to use it:\n• show or hide an element: Visibility → Conditional → Edit conditions → System → system.platform\n• skip a screen on one platform: add a Conditional Action to the button before it, e.g. iOS → ATT screen, otherwise → next screen. Android users never see that screen, Back included\n• check both branches in the builder: switch the preview device from iPhone to Pixel\n\nGood to know:\n• works with the current iOS and Android SDKs (4.0+): the SDK reports the platform itself, no app update needed. Just republish the Flow\n• Huawei devices count as Android\n• platform can be combined with any other condition (variables, products, element states)\n• conditions by screen size (small iPhones, foldables) aren’t supported yet, that’s a separate feature\n\nDocs: <https://adapty.io/docs/onboarding-actions#show-a-screen-on-one-platform-only|adapty.io/docs/onboarding-actions#…>\n<https://adapty.io/docs/onboarding-element-visibility#show-an-element-on-one-platform-only|adapty.io/docs/onboarding-element-visibility#…>",
+      "releaseDate": "2026-11-18",
+      "thread": [
+        {
+          "userId": "U0BB5T65SF6",
+          "userName": "Kamil Lotfullin",
+          "text": "Platform conditions are live in Flow Builder!\n\nOne Flow can now behave differently on iOS and Android\nNo more duplicate Flows just because one screen is iOS-only, like an ATT explainer\nEvery condition now has a System tab with system.platform = iOS / Android\n\nHow to use it:\n• show or hide an element: Visibility → Conditional → Edit conditions → System → system.platform\n• skip a screen on one platform: add a Conditional Action to the button before it, e.g. iOS → ATT screen, otherwise → next screen. Android users never see that screen, Back included\n• check both branches in the builder: switch the preview device from iPhone to Pixel\n\nGood to know:\n• works with the current iOS and Android SDKs (4.0+): the SDK reports the platform itself, no app update needed. Just republish the Flow\n• Huawei devices count as Android\n• platform can be combined with any other condition (variables, products, element states)\n• conditions by screen size (small iPhones, foldables) aren’t supported yet, that’s a separate feature\n\nDocs: <https://adapty.io/docs/onboarding-actions#show-a-screen-on-one-platform-only|adapty.io/docs/onboarding-actions#…>\n<https://adapty.io/docs/onboarding-element-visibility#show-an-element-on-one-platform-only|adapty.io/docs/onboarding-element-visibility#…>",
+          "date": "2026-11-18T12:39:52.987Z",
+          "images": [
+            "https://files.slack.com/files-pri/T9HDDB78Q-F0CJULWNWN6/image.png"
+          ]
+        },
+        {
+          "userId": "U08EVBTE69E",
+          "userName": "Maxim Borisik",
+          "text": "fire!\nwdyt - what do we need to do to make such routing by country or other parameter? like showing miles or kilometers on screen X based on a country",
+          "date": "2026-11-18T12:56:40.585Z",
+          "images": []
+        }
+      ],
+      "content": "[Kamil Lotfullin]: Platform conditions are live in Flow Builder!\n\nOne Flow can now behave differently on iOS and Android\nNo more duplicate Flows just because one screen is iOS-only, like an ATT explainer\nEvery condition now has a System tab with system.platform = iOS / Android\n\nHow to use it:\n• show or hide an element: Visibility → Conditional → Edit conditions → System → system.platform\n• skip a screen on one platform: add a Conditional Action to the button before it, e.g. iOS → ATT screen, otherwise → next screen. Android users never see that screen, Back included\n• check both branches in the builder: switch the preview device from iPhone to Pixel\n\nGood to know:\n• works with the current iOS and Android SDKs (4.0+): the SDK reports the platform itself, no app update needed. Just republish the Flow\n• Huawei devices count as Android\n• platform can be combined with any other condition (variables, products, element states)\n• conditions by screen size (small iPhones, foldables) aren’t supported yet, that’s a separate feature\n\nDocs: <https://adapty.io/docs/onboarding-actions#show-a-screen-on-one-platform-only|adapty.io/docs/onboarding-actions#…>\n<https://adapty.io/docs/onboarding-element-visibility#show-an-element-on-one-platform-only|adapty.io/docs/onboarding-element-visibility#…>\n\n[Maxim Borisik]: fire!\nwdyt - what do we need to do to make such routing by country or other parameter? like showing miles or kilometers on screen X based on a country",
+      "matchingReplies": [
+        {
+          "userId": "U08EVBTE69E",
+          "userName": "Maxim Borisik",
+          "text": "fire!\nwdyt - what do we need to do to make such routing by country or other parameter? like showing miles or kilometers on screen X based on a country",
+          "date": "2026-11-18T12:56:40.585Z",
+          "images": []
+        }
+      ],
+      "hasTeamMention": false,
+      "images": [
+        "https://files.slack.com/files-pri/T9HDDB78Q-F0CJULWNWN6/image.png"
+      ]
+    },
     {
       "id": "1794854353.190329",
       "slackUrl": "https://adapty-team.slack.com/archives/C04SY70QZ0T/p1794854353190329",
@@ -1206,78 +1245,6 @@
       "images": [
         "https://files.slack.com/files-pri/T9HDDB78Q-F0C95DP5RJS/telegram-cloud-photo-size-2-5368461313731928235-y.jpg",
         "https://files.slack.com/files-pri/T9HDDB78Q-F0C91BKQ6CT/image.png"
-      ]
-    },
-    {
-      "id": "1791926721.509359",
-      "slackUrl": "https://adapty-team.slack.com/archives/C04SY70QZ0T/p1791926721509359",
-      "name": "hey team!",
-      "message": "hey team!\nsince today any new app/company in adapty will see only \"Flows &amp; Paywalls\" tab in the left bar. no more mess\n\nwhy? because we did couple of adjustments:\n1. we've pushed the content of \"paywall\" tab into the \"Flows &amp; Paywalls\" :umbrella_on_ground:\n    a. now there are tabs: \"flows\" &amp; \"custom paywalls&amp;legacy\" (paywall containers, if users use their native UI via remote config + old builder)\n    b. so everything is under one umbrella, no distraction\n2. we've \"closed\" the old paywall builder :headstone:\n    a. now it's *impossible* to create a new paywall in the old builder\n        i. only <https://app.notion.com/p/adapty/Who-not-depricate-from-Builder-3ca1ca4355c380f7820ceb2f8d6470e8|several big clients> who we personally agreed with - still get this opportunity \n    b. worth mentioning that it's still possible to edit the paywalls. but NOT to create new ones\n    c. we also improved the \"migrate to flow\" script, so now it twice more powerful than it was before \n        i. Fun fact: 60% of money in Q3 came from flows which were migrated in the first place \n        ii. doc on migration here - <https://adapty.io/docs/convert-paywall-to-flow|adapty.io/docs/convert-paywall-to-flow>\n3. onboarding builder is a \"victim\" too :dart:\n    a. new apps don't see onboarding builder since july, but if you have at least 1 onboarding in the list - you still see the tab. it will remain as is\nif you have questions from clients where my paywall (custom or old builder one) go - *nothing is broken, nothing is stopped. everything remains as it was. just in a new location now* \nregarding the old builder paywalls, we were notifying that it's going to be deprecated for a long time. so i hope it won't be a surprise\n\nlearn more here - <https://adapty.io/docs/flows-and-paywalls|adapty.io/docs/flows-and-paywalls>",
-      "releaseDate": "2026-10-13",
-      "thread": [
-        {
-          "userId": "U08EVBTE69E",
-          "userName": "Maxim Borisik",
-          "text": "hey team!\nsince today any new app/company in adapty will see only \"Flows &amp; Paywalls\" tab in the left bar. no more mess\n\nwhy? because we did couple of adjustments:\n1. we've pushed the content of \"paywall\" tab into the \"Flows &amp; Paywalls\" :umbrella_on_ground:\n    a. now there are tabs: \"flows\" &amp; \"custom paywalls&amp;legacy\" (paywall containers, if users use their native UI via remote config + old builder)\n    b. so everything is under one umbrella, no distraction\n2. we've \"closed\" the old paywall builder :headstone:\n    a. now it's *impossible* to create a new paywall in the old builder\n        i. only <https://app.notion.com/p/adapty/Who-not-depricate-from-Builder-3ca1ca4355c380f7820ceb2f8d6470e8|several big clients> who we personally agreed with - still get this opportunity \n    b. worth mentioning that it's still possible to edit the paywalls. but NOT to create new ones\n    c. we also improved the \"migrate to flow\" script, so now it twice more powerful than it was before \n        i. Fun fact: 60% of money in Q3 came from flows which were migrated in the first place \n        ii. doc on migration here - <https://adapty.io/docs/convert-paywall-to-flow|adapty.io/docs/convert-paywall-to-flow>\n3. onboarding builder is a \"victim\" too :dart:\n    a. new apps don't see onboarding builder since july, but if you have at least 1 onboarding in the list - you still see the tab. it will remain as is\nif you have questions from clients where my paywall (custom or old builder one) go - *nothing is broken, nothing is stopped. everything remains as it was. just in a new location now* \nregarding the old builder paywalls, we were notifying that it's going to be deprecated for a long time. so i hope it won't be a surprise\n\nlearn more here - <https://adapty.io/docs/flows-and-paywalls|adapty.io/docs/flows-and-paywalls>",
-          "date": "2026-10-13T21:25:21.509Z",
-          "images": [
-            "https://files.slack.com/files-pri/T9HDDB78Q-F0C93ENJD1A/image.png",
-            "https://files.slack.com/files-pri/T9HDDB78Q-F0C93G1V2AY/image.png"
-          ]
-        },
-        {
-          "userId": "U08EVBTE69E",
-          "userName": "Maxim Borisik",
-          "text": "<!subteam^S07BZPQDBUJ> <!subteam^S03KM96DV0U> fyi",
-          "date": "2026-10-13T21:25:31.847Z",
-          "images": []
-        },
-        {
-          "userId": "U09EG3DK4US",
-          "userName": "Polina Ishimbaeva",
-          "text": "New era has just started :dizzy:\nLet's smash it :boom:",
-          "date": "2026-10-14T07:51:54.935Z",
-          "images": []
-        },
-        {
-          "userId": "U0A266T9SJE",
-          "userName": "Melike Sezer",
-          "text": "&gt; worth mentioning that it's still possible to edit the paywalls. but NOT to create new ones\nwill it be this way? I taught this also wouldn't be possible",
-          "date": "2026-10-14T08:10:16.129Z",
-          "images": []
-        },
-        {
-          "userId": "U08EVBTE69E",
-          "userName": "Maxim Borisik",
-          "text": "for now yes, since some cannot update the sdk due to old packages etc. but i'd remove it in the next months",
-          "date": "2026-10-14T08:11:17.686Z",
-          "images": []
-        },
-        {
-          "userId": "U0ASWP97F61",
-          "userName": "Stella Zhao",
-          "text": "<@U08EVBTE69E> Small feedback: In the onboarding checklist, the task to create a paywall still links to the custom paywall. One of my clients created a Flow paywall but no custom paywall, so the task keeps showing as incomplete.",
-          "date": "2026-10-19T07:03:10.076Z",
-          "images": [
-            "https://files.slack.com/files-pri/T9HDDB78Q-F0CA2V06QE7/image.png"
-          ]
-        }
-      ],
-      "content": "[Maxim Borisik]: hey team!\nsince today any new app/company in adapty will see only \"Flows &amp; Paywalls\" tab in the left bar. no more mess\n\nwhy? because we did couple of adjustments:\n1. we've pushed the content of \"paywall\" tab into the \"Flows &amp; Paywalls\" :umbrella_on_ground:\n    a. now there are tabs: \"flows\" &amp; \"custom paywalls&amp;legacy\" (paywall containers, if users use their native UI via remote config + old builder)\n    b. so everything is under one umbrella, no distraction\n2. we've \"closed\" the old paywall builder :headstone:\n    a. now it's *impossible* to create a new paywall in the old builder\n        i. only <https://app.notion.com/p/adapty/Who-not-depricate-from-Builder-3ca1ca4355c380f7820ceb2f8d6470e8|several big clients> who we personally agreed with - still get this opportunity \n    b. worth mentioning that it's still possible to edit the paywalls. but NOT to create new ones\n    c. we also improved the \"migrate to flow\" script, so now it twice more powerful than it was before \n        i. Fun fact: 60% of money in Q3 came from flows which were migrated in the first place \n        ii. doc on migration here - <https://adapty.io/docs/convert-paywall-to-flow|adapty.io/docs/convert-paywall-to-flow>\n3. onboarding builder is a \"victim\" too :dart:\n    a. new apps don't see onboarding builder since july, but if you have at least 1 onboarding in the list - you still see the tab. it will remain as is\nif you have questions from clients where my paywall (custom or old builder one) go - *nothing is broken, nothing is stopped. everything remains as it was. just in a new location now* \nregarding the old builder paywalls, we were notifying that it's going to be deprecated for a long time. so i hope it won't be a surprise\n\nlearn more here - <https://adapty.io/docs/flows-and-paywalls|adapty.io/docs/flows-and-paywalls>\n\n[Maxim Borisik]: <!subteam^S07BZPQDBUJ> <!subteam^S03KM96DV0U> fyi\n\n[Polina Ishimbaeva]: New era has just started :dizzy:\nLet's smash it :boom:\n\n[Melike Sezer]: &gt; worth mentioning that it's still possible to edit the paywalls. but NOT to create new ones\nwill it be this way? I taught this also wouldn't be possible\n\n[Maxim Borisik]: for now yes, since some cannot update the sdk due to old packages etc. but i'd remove it in the next months\n\n[Stella Zhao]: <@U08EVBTE69E> Small feedback: In the onboarding checklist, the task to create a paywall still links to the custom paywall. One of my clients created a Flow paywall but no custom paywall, so the task keeps showing as incomplete.",
-      "matchingReplies": [
-        {
-          "userId": "U08EVBTE69E",
-          "userName": "Maxim Borisik",
-          "text": "for now yes, since some cannot update the sdk due to old packages etc. but i'd remove it in the next months",
-          "date": "2026-10-14T08:11:17.686Z",
-          "images": []
-        }
-      ],
-      "hasTeamMention": true,
-      "images": [
-        "https://files.slack.com/files-pri/T9HDDB78Q-F0C93ENJD1A/image.png",
-        "https://files.slack.com/files-pri/T9HDDB78Q-F0C93G1V2AY/image.png",
-        "https://files.slack.com/files-pri/T9HDDB78Q-F0CA2V06QE7/image.png"
       ]
     }
   ]
