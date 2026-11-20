@@ -1,7 +1,82 @@
 {
-  "syncedAt": "2026-11-19T00:26:45.385Z",
+  "syncedAt": "2026-11-20T00:24:37.295Z",
   "channel": "#product-release",
   "entries": [
+    {
+      "id": "1795104618.501609",
+      "slackUrl": "https://adapty-team.slack.com/archives/C04SY70QZ0T/p1795104618501609",
+      "name": "*Flow Builder: Number picker is live* :ferris_wheel:",
+      "message": "*Flow Builder: Number picker is live* :ferris_wheel:\n\nA new element, *Number picker*, puts a number wheel right on the screen: weight, height, age, anything a quiz or an h&amp;f onboarding asks for.\n• Set *min*, *max*, *step*, a *unit label* (kg, cm, years) and a *default value*.\n• The chosen number goes into a flow variable, so you can show it in text, use it in conditions and branch screens on it. The app also gets it with the other user inputs.\n• Style the rows with the usual text settings: font, size, color.\nGood to know:\n• Works with the current iOS and Android SDKs (4.0+), no app update needed. Just add it and publish the Flow.\n• iOS shows the native system wheel, Android a matching custom wheel, so they look slightly different.\n• Steps and bounds go in quarters (1, 0.5, 0.25).",
+      "releaseDate": "2026-11-19",
+      "thread": [
+        {
+          "userId": "U0CEASS8Z9D",
+          "userName": "Aleksandr Sakhatskii",
+          "text": "*Flow Builder: Number picker is live* :ferris_wheel:\n\nA new element, *Number picker*, puts a number wheel right on the screen: weight, height, age, anything a quiz or an h&amp;f onboarding asks for.\n• Set *min*, *max*, *step*, a *unit label* (kg, cm, years) and a *default value*.\n• The chosen number goes into a flow variable, so you can show it in text, use it in conditions and branch screens on it. The app also gets it with the other user inputs.\n• Style the rows with the usual text settings: font, size, color.\nGood to know:\n• Works with the current iOS and Android SDKs (4.0+), no app update needed. Just add it and publish the Flow.\n• iOS shows the native system wheel, Android a matching custom wheel, so they look slightly different.\n• Steps and bounds go in quarters (1, 0.5, 0.25).",
+          "date": "2026-11-19T16:10:18.501Z",
+          "images": []
+        },
+        {
+          "userId": "U08EVBTE69E",
+          "userName": "Maxim Borisik",
+          "text": "<@U0A266T9SJE> you’d and all H&amp;F apps would be happy! (and formulas are also coming :money-smell:)\n\n<!subteam^S07BZPQDBUJ> <!subteam^S03KM96DV0U> fyi",
+          "date": "2026-11-19T16:14:37.828Z",
+          "images": []
+        }
+      ],
+      "content": "[Aleksandr Sakhatskii]: *Flow Builder: Number picker is live* :ferris_wheel:\n\nA new element, *Number picker*, puts a number wheel right on the screen: weight, height, age, anything a quiz or an h&amp;f onboarding asks for.\n• Set *min*, *max*, *step*, a *unit label* (kg, cm, years) and a *default value*.\n• The chosen number goes into a flow variable, so you can show it in text, use it in conditions and branch screens on it. The app also gets it with the other user inputs.\n• Style the rows with the usual text settings: font, size, color.\nGood to know:\n• Works with the current iOS and Android SDKs (4.0+), no app update needed. Just add it and publish the Flow.\n• iOS shows the native system wheel, Android a matching custom wheel, so they look slightly different.\n• Steps and bounds go in quarters (1, 0.5, 0.25).\n\n[Maxim Borisik]: <@U0A266T9SJE> you’d and all H&amp;F apps would be happy! (and formulas are also coming :money-smell:)\n\n<!subteam^S07BZPQDBUJ> <!subteam^S03KM96DV0U> fyi",
+      "matchingReplies": [
+        {
+          "userId": "U08EVBTE69E",
+          "userName": "Maxim Borisik",
+          "text": "<@U0A266T9SJE> you’d and all H&amp;F apps would be happy! (and formulas are also coming :money-smell:)\n\n<!subteam^S07BZPQDBUJ> <!subteam^S03KM96DV0U> fyi",
+          "date": "2026-11-19T16:14:37.828Z",
+          "images": []
+        }
+      ],
+      "hasTeamMention": true,
+      "images": []
+    },
+    {
+      "id": "1795099194.151379",
+      "slackUrl": "https://adapty-team.slack.com/archives/C04SY70QZ0T/p1795099194151379",
+      "name": "*Flow Builder: two new countdown timer modes* :timer_clock:",
+      "message": "*Flow Builder: two new countdown timer modes* :timer_clock: \n\nThe Countdown timer in the Flow Builder has two new options in *Behavior*:\n\n• *Until date.* The timer counts down to a fixed date and time that you set in the builder, for example the end of a Black Friday sale. Pick a time zone so that the sale ends at the same moment for every user. Or select *User’s local time* so that it ends at the same clock time in each user’s own time zone. If a user opens the screen after the end, the timer shows zero.\n• *Developer defined.* Your app sets the end date for each user through a *Timer ID*. Use it for personal offers or trials that end at a different time for each user. Enter the Timer ID in the builder, and your developer passes the end date for that ID through the SDK timer resolver. If the app gives no date, the timer counts down one hour.\nBoth modes also work with these features:\n\n• *On timer end* runs once each time the user opens the screen, also when the end date is already past.\n• Timers with the same Timer ID on different screens share one countdown.\n• The builder doesn’t publish a flow until each timer has a valid end date or Timer ID.\n• *Recreate as flow* keeps the Developer defined timers of legacy paywalls.\n",
+      "releaseDate": "2026-11-19",
+      "thread": [
+        {
+          "userId": "U09UZ0GJYKE",
+          "userName": "Ekaterina Surmilo",
+          "text": "*Flow Builder: two new countdown timer modes* :timer_clock: \n\nThe Countdown timer in the Flow Builder has two new options in *Behavior*:\n\n• *Until date.* The timer counts down to a fixed date and time that you set in the builder, for example the end of a Black Friday sale. Pick a time zone so that the sale ends at the same moment for every user. Or select *User’s local time* so that it ends at the same clock time in each user’s own time zone. If a user opens the screen after the end, the timer shows zero.\n• *Developer defined.* Your app sets the end date for each user through a *Timer ID*. Use it for personal offers or trials that end at a different time for each user. Enter the Timer ID in the builder, and your developer passes the end date for that ID through the SDK timer resolver. If the app gives no date, the timer counts down one hour.\nBoth modes also work with these features:\n\n• *On timer end* runs once each time the user opens the screen, also when the end date is already past.\n• Timers with the same Timer ID on different screens share one countdown.\n• The builder doesn’t publish a flow until each timer has a valid end date or Timer ID.\n• *Recreate as flow* keeps the Developer defined timers of legacy paywalls.\n",
+          "date": "2026-11-19T14:39:54.151Z",
+          "images": [
+            "https://files.slack.com/files-pri/T9HDDB78Q-F0CK7J10C0N/monosnap_adapty_2026-11-19_15-38-48.png",
+            "https://files.slack.com/files-pri/T9HDDB78Q-F0CL3U1MG6L/monosnap_adapty_2026-11-19_15-38-30.png"
+          ]
+        },
+        {
+          "userId": "U09UZ0GJYKE",
+          "userName": "Ekaterina Surmilo",
+          "text": "<@U08QUJMN0UV> <@U0A3NG4G5E3> <!subteam^S07BZPQDBUJ> <!subteam^S03KM96DV0U> fyi",
+          "date": "2026-11-19T14:40:28.231Z",
+          "images": []
+        },
+        {
+          "userId": "U08EVBTE69E",
+          "userName": "Maxim Borisik",
+          "text": "perfect upd just before the black friday",
+          "date": "2026-11-19T14:40:57.354Z",
+          "images": []
+        }
+      ],
+      "content": "[Ekaterina Surmilo]: *Flow Builder: two new countdown timer modes* :timer_clock: \n\nThe Countdown timer in the Flow Builder has two new options in *Behavior*:\n\n• *Until date.* The timer counts down to a fixed date and time that you set in the builder, for example the end of a Black Friday sale. Pick a time zone so that the sale ends at the same moment for every user. Or select *User’s local time* so that it ends at the same clock time in each user’s own time zone. If a user opens the screen after the end, the timer shows zero.\n• *Developer defined.* Your app sets the end date for each user through a *Timer ID*. Use it for personal offers or trials that end at a different time for each user. Enter the Timer ID in the builder, and your developer passes the end date for that ID through the SDK timer resolver. If the app gives no date, the timer counts down one hour.\nBoth modes also work with these features:\n\n• *On timer end* runs once each time the user opens the screen, also when the end date is already past.\n• Timers with the same Timer ID on different screens share one countdown.\n• The builder doesn’t publish a flow until each timer has a valid end date or Timer ID.\n• *Recreate as flow* keeps the Developer defined timers of legacy paywalls.\n\n\n[Ekaterina Surmilo]: <@U08QUJMN0UV> <@U0A3NG4G5E3> <!subteam^S07BZPQDBUJ> <!subteam^S03KM96DV0U> fyi\n\n[Maxim Borisik]: perfect upd just before the black friday",
+      "matchingReplies": [],
+      "hasTeamMention": true,
+      "images": [
+        "https://files.slack.com/files-pri/T9HDDB78Q-F0CK7J10C0N/monosnap_adapty_2026-11-19_15-38-48.png",
+        "https://files.slack.com/files-pri/T9HDDB78Q-F0CL3U1MG6L/monosnap_adapty_2026-11-19_15-38-30.png"
+      ]
+    },
     {
       "id": "1795005592.987729",
       "slackUrl": "https://adapty-team.slack.com/archives/C04SY70QZ0T/p1795005592987729",
@@ -24,15 +99,36 @@
           "text": "fire!\nwdyt - what do we need to do to make such routing by country or other parameter? like showing miles or kilometers on screen X based on a country",
           "date": "2026-11-18T12:56:40.585Z",
           "images": []
+        },
+        {
+          "userId": "U08EVBTE69E",
+          "userName": "Maxim Borisik",
+          "text": "maybe this\n&gt; Ветвление по выбору (kg / lbs) — сейчас нужны две формулы и Conditional text.\n",
+          "date": "2026-11-19T10:47:21.660Z",
+          "images": []
+        },
+        {
+          "userId": "U08EVBTE69E",
+          "userName": "Maxim Borisik",
+          "text": "and custom elements v2",
+          "date": "2026-11-19T10:47:28.517Z",
+          "images": []
         }
       ],
-      "content": "[Kamil Lotfullin]: Platform conditions are live in Flow Builder!\n\nOne Flow can now behave differently on iOS and Android\nNo more duplicate Flows just because one screen is iOS-only, like an ATT explainer\nEvery condition now has a System tab with system.platform = iOS / Android\n\nHow to use it:\n• show or hide an element: Visibility → Conditional → Edit conditions → System → system.platform\n• skip a screen on one platform: add a Conditional Action to the button before it, e.g. iOS → ATT screen, otherwise → next screen. Android users never see that screen, Back included\n• check both branches in the builder: switch the preview device from iPhone to Pixel\n\nGood to know:\n• works with the current iOS and Android SDKs (4.0+): the SDK reports the platform itself, no app update needed. Just republish the Flow\n• Huawei devices count as Android\n• platform can be combined with any other condition (variables, products, element states)\n• conditions by screen size (small iPhones, foldables) aren’t supported yet, that’s a separate feature\n\nDocs: <https://adapty.io/docs/onboarding-actions#show-a-screen-on-one-platform-only|adapty.io/docs/onboarding-actions#…>\n<https://adapty.io/docs/onboarding-element-visibility#show-an-element-on-one-platform-only|adapty.io/docs/onboarding-element-visibility#…>\n\n[Maxim Borisik]: fire!\nwdyt - what do we need to do to make such routing by country or other parameter? like showing miles or kilometers on screen X based on a country",
+      "content": "[Kamil Lotfullin]: Platform conditions are live in Flow Builder!\n\nOne Flow can now behave differently on iOS and Android\nNo more duplicate Flows just because one screen is iOS-only, like an ATT explainer\nEvery condition now has a System tab with system.platform = iOS / Android\n\nHow to use it:\n• show or hide an element: Visibility → Conditional → Edit conditions → System → system.platform\n• skip a screen on one platform: add a Conditional Action to the button before it, e.g. iOS → ATT screen, otherwise → next screen. Android users never see that screen, Back included\n• check both branches in the builder: switch the preview device from iPhone to Pixel\n\nGood to know:\n• works with the current iOS and Android SDKs (4.0+): the SDK reports the platform itself, no app update needed. Just republish the Flow\n• Huawei devices count as Android\n• platform can be combined with any other condition (variables, products, element states)\n• conditions by screen size (small iPhones, foldables) aren’t supported yet, that’s a separate feature\n\nDocs: <https://adapty.io/docs/onboarding-actions#show-a-screen-on-one-platform-only|adapty.io/docs/onboarding-actions#…>\n<https://adapty.io/docs/onboarding-element-visibility#show-an-element-on-one-platform-only|adapty.io/docs/onboarding-element-visibility#…>\n\n[Maxim Borisik]: fire!\nwdyt - what do we need to do to make such routing by country or other parameter? like showing miles or kilometers on screen X based on a country\n\n[Maxim Borisik]: maybe this\n&gt; Ветвление по выбору (kg / lbs) — сейчас нужны две формулы и Conditional text.\n\n\n[Maxim Borisik]: and custom elements v2",
       "matchingReplies": [
         {
           "userId": "U08EVBTE69E",
           "userName": "Maxim Borisik",
           "text": "fire!\nwdyt - what do we need to do to make such routing by country or other parameter? like showing miles or kilometers on screen X based on a country",
           "date": "2026-11-18T12:56:40.585Z",
+          "images": []
+        },
+        {
+          "userId": "U08EVBTE69E",
+          "userName": "Maxim Borisik",
+          "text": "maybe this\n&gt; Ветвление по выбору (kg / lbs) — сейчас нужны две формулы и Conditional text.\n",
+          "date": "2026-11-19T10:47:21.660Z",
           "images": []
         }
       ],
@@ -63,9 +159,16 @@
           "text": "<@U08QUJMN0UV> <@U0A3NG4G5E3> <!subteam^S07BZPQDBUJ> <!subteam^S03KM96DV0U> fyi",
           "date": "2026-11-16T18:41:01.934Z",
           "images": []
+        },
+        {
+          "userId": "U08JY3U9S7P",
+          "userName": "Lera Eroshevich",
+          "text": "*Update:* deleting an element, state or variable that conditions use now asks first and lists those conditions. A flow with a broken reference can’t be published until it’s fixed (*Can’t publish yet* → *Broken references*). Live flows aren’t affected.",
+          "date": "2026-11-19T17:18:38.506Z",
+          "images": []
         }
       ],
-      "content": "[Lera Eroshevich]: *Flow Builder: conditions can now check other elements’ states*\n\nConditions in a flow can now check the state of another element on the screen, not just variables. For example: “show a hint while the Continue button is Disabled”.\n\n*Where it works:* element visibility, another element’s state condition, conditional actions, and conditional text.\n\n*How to use it:* the condition picker has a new *States* tab. It lists the elements on the current screen that have states of their own: Disabled, Selected, Active, Invalid or custom. Pick an element, choose = or ≠, then pick the state. Preview follows the state switcher; on device, the element’s real state applies.\n\n*Use cases:*\n• Explain a disabled button, e.g. “Accept the terms to continue”, without repeating the button’s condition.\n• Keep elements in sync: a second button turns off together with the first, or a text changes with an element’s state.\n• Branch a tap by another element’s state.\n*Limitations:*\n• Only elements on the same screen, or in the same component, can be referenced.\n• Circular references are blocked in the picker. If one gets into a config anyway, publishing stops with a clear error.\n• A reference to a deleted element or state is highlighted in the builder and evaluates to false on device.\n• An element has one active state at a time. For example, Selected is false while the element is Disabled. To check whether an option is selected in a group, use the group variable.\nWorks on iOS and Android with no SDK update needed. Republish the flow for the changes to reach users.\n\n[Lera Eroshevich]: <@U08QUJMN0UV> <@U0A3NG4G5E3> <!subteam^S07BZPQDBUJ> <!subteam^S03KM96DV0U> fyi",
+      "content": "[Lera Eroshevich]: *Flow Builder: conditions can now check other elements’ states*\n\nConditions in a flow can now check the state of another element on the screen, not just variables. For example: “show a hint while the Continue button is Disabled”.\n\n*Where it works:* element visibility, another element’s state condition, conditional actions, and conditional text.\n\n*How to use it:* the condition picker has a new *States* tab. It lists the elements on the current screen that have states of their own: Disabled, Selected, Active, Invalid or custom. Pick an element, choose = or ≠, then pick the state. Preview follows the state switcher; on device, the element’s real state applies.\n\n*Use cases:*\n• Explain a disabled button, e.g. “Accept the terms to continue”, without repeating the button’s condition.\n• Keep elements in sync: a second button turns off together with the first, or a text changes with an element’s state.\n• Branch a tap by another element’s state.\n*Limitations:*\n• Only elements on the same screen, or in the same component, can be referenced.\n• Circular references are blocked in the picker. If one gets into a config anyway, publishing stops with a clear error.\n• A reference to a deleted element or state is highlighted in the builder and evaluates to false on device.\n• An element has one active state at a time. For example, Selected is false while the element is Disabled. To check whether an option is selected in a group, use the group variable.\nWorks on iOS and Android with no SDK update needed. Republish the flow for the changes to reach users.\n\n[Lera Eroshevich]: <@U08QUJMN0UV> <@U0A3NG4G5E3> <!subteam^S07BZPQDBUJ> <!subteam^S03KM96DV0U> fyi\n\n[Lera Eroshevich]: *Update:* deleting an element, state or variable that conditions use now asks first and lists those conditions. A flow with a broken reference can’t be published until it’s fixed (*Can’t publish yet* → *Broken references*). Live flows aren’t affected.",
       "matchingReplies": [],
       "hasTeamMention": true,
       "images": [
@@ -1077,174 +1180,6 @@
       "hasTeamMention": false,
       "images": [
         "https://files.slack.com/files-pri/T9HDDB78Q-F0CA5PDUFM3/image.png"
-      ]
-    },
-    {
-      "id": "1792063309.575279",
-      "slackUrl": "https://adapty-team.slack.com/archives/C04SY70QZ0T/p1792063309575279",
-      "name": ":rocket: New in Adapty Ads Manager: *Change History!*",
-      "message": ":rocket: New in Adapty Ads Manager: *Change History!*\n\nChange History shows customers every change made in their Apple Ads account: what changed, when, who made it.\nWhat’s new:\n• A full log of changes to campaigns, ad groups, keywords, ads and other settings, with exact before-and-after values\n• Available in\n    ◦ :robot_face: Adapty for AI Agents (CLI), so an agent can answer “what changed yesterday and who did it”\n    ◦ :page_facing_up: A separate Change History page with filters\n    ◦ :chart_with_upwards_trend: Keyword detailed charts\n• It includes changes made outside Adapty: in Apple’s own dashboard, by other tools or scripts, and by Apple Support\nWhy it matters:\nWhen a metric jumps, the cause is usually someone’s action, not the market. For agencies and teams with several people and tools in one account, this answers “who changed it” without asking around.\n\n<!subteam^S07BZPQDBUJ> <!subteam^S03KC9S1QMC>\n• How it works, how to explain it to customers:<https://app.notion.com/p/adapty/Change-History-Sales-CS-Enablement-3f91ca4355c381fb8274ff25d489602f?source=copy_link|:bar_chart: Change History — Sales &amp; CS Enablement>\n• :clapper: Video (32 s): <https://youtu.be/DXlsB2A2w0s?si=Ax_2Ft-f8ANTlsZH|youtu.be/…?si=Ax_2Ft-f8ANTlsZH>\n    ◦ It has subtitles in 12 languages\n",
-      "releaseDate": "2026-10-15",
-      "thread": [
-        {
-          "userId": "U0B6GAY6P8C",
-          "userName": "Roman Kuntsevich",
-          "text": ":rocket: New in Adapty Ads Manager: *Change History!*\n\nChange History shows customers every change made in their Apple Ads account: what changed, when, who made it.\nWhat’s new:\n• A full log of changes to campaigns, ad groups, keywords, ads and other settings, with exact before-and-after values\n• Available in\n    ◦ :robot_face: Adapty for AI Agents (CLI), so an agent can answer “what changed yesterday and who did it”\n    ◦ :page_facing_up: A separate Change History page with filters\n    ◦ :chart_with_upwards_trend: Keyword detailed charts\n• It includes changes made outside Adapty: in Apple’s own dashboard, by other tools or scripts, and by Apple Support\nWhy it matters:\nWhen a metric jumps, the cause is usually someone’s action, not the market. For agencies and teams with several people and tools in one account, this answers “who changed it” without asking around.\n\n<!subteam^S07BZPQDBUJ> <!subteam^S03KC9S1QMC>\n• How it works, how to explain it to customers:<https://app.notion.com/p/adapty/Change-History-Sales-CS-Enablement-3f91ca4355c381fb8274ff25d489602f?source=copy_link|:bar_chart: Change History — Sales &amp; CS Enablement>\n• :clapper: Video (32 s): <https://youtu.be/DXlsB2A2w0s?si=Ax_2Ft-f8ANTlsZH|youtu.be/…?si=Ax_2Ft-f8ANTlsZH>\n    ◦ It has subtitles in 12 languages\n",
-          "date": "2026-10-15T11:21:49.575Z",
-          "images": []
-        },
-        {
-          "userId": "U08MKNGFMLN",
-          "userName": "Aliaksandra Subach",
-          "text": "love the video!!!",
-          "date": "2026-10-15T11:32:08.146Z",
-          "images": []
-        },
-        {
-          "userId": "U03J8UXUDPF",
-          "userName": "Mykola Martynovets",
-          "text": "Thanks for the feedback! We will make moreeeeeeee!",
-          "date": "2026-10-15T11:34:18.944Z",
-          "images": []
-        },
-        {
-          "userId": "U0A266T9SJE",
-          "userName": "Melike Sezer",
-          "text": "guys maybe it's not okay to say this here explicitly :hehehhehehe: but i love how fast you can deliver that everything took at least 6 months to do in mobileaction",
-          "date": "2026-10-15T12:04:14.240Z",
-          "images": []
-        },
-        {
-          "userId": "U03J8UXUDPF",
-          "userName": "Mykola Martynovets",
-          "text": "Thank you, Melike, appreciate feedback :raised_hands:\nHuge credit to the team, they’re professionals. And honestly, we’re just getting started.\n\nLots coming in the next couple of months, can’t wait to show you!",
-          "date": "2026-10-15T12:08:58.162Z",
-          "images": []
-        }
-      ],
-      "content": "[Roman Kuntsevich]: :rocket: New in Adapty Ads Manager: *Change History!*\n\nChange History shows customers every change made in their Apple Ads account: what changed, when, who made it.\nWhat’s new:\n• A full log of changes to campaigns, ad groups, keywords, ads and other settings, with exact before-and-after values\n• Available in\n    ◦ :robot_face: Adapty for AI Agents (CLI), so an agent can answer “what changed yesterday and who did it”\n    ◦ :page_facing_up: A separate Change History page with filters\n    ◦ :chart_with_upwards_trend: Keyword detailed charts\n• It includes changes made outside Adapty: in Apple’s own dashboard, by other tools or scripts, and by Apple Support\nWhy it matters:\nWhen a metric jumps, the cause is usually someone’s action, not the market. For agencies and teams with several people and tools in one account, this answers “who changed it” without asking around.\n\n<!subteam^S07BZPQDBUJ> <!subteam^S03KC9S1QMC>\n• How it works, how to explain it to customers:<https://app.notion.com/p/adapty/Change-History-Sales-CS-Enablement-3f91ca4355c381fb8274ff25d489602f?source=copy_link|:bar_chart: Change History — Sales &amp; CS Enablement>\n• :clapper: Video (32 s): <https://youtu.be/DXlsB2A2w0s?si=Ax_2Ft-f8ANTlsZH|youtu.be/…?si=Ax_2Ft-f8ANTlsZH>\n    ◦ It has subtitles in 12 languages\n\n\n[Aliaksandra Subach]: love the video!!!\n\n[Mykola Martynovets]: Thanks for the feedback! We will make moreeeeeeee!\n\n[Melike Sezer]: guys maybe it's not okay to say this here explicitly :hehehhehehe: but i love how fast you can deliver that everything took at least 6 months to do in mobileaction\n\n[Mykola Martynovets]: Thank you, Melike, appreciate feedback :raised_hands:\nHuge credit to the team, they’re professionals. And honestly, we’re just getting started.\n\nLots coming in the next couple of months, can’t wait to show you!",
-      "matchingReplies": [
-        {
-          "userId": "U03J8UXUDPF",
-          "userName": "Mykola Martynovets",
-          "text": "Thanks for the feedback! We will make moreeeeeeee!",
-          "date": "2026-10-15T11:34:18.944Z",
-          "images": []
-        },
-        {
-          "userId": "U03J8UXUDPF",
-          "userName": "Mykola Martynovets",
-          "text": "Thank you, Melike, appreciate feedback :raised_hands:\nHuge credit to the team, they’re professionals. And honestly, we’re just getting started.\n\nLots coming in the next couple of months, can’t wait to show you!",
-          "date": "2026-10-15T12:08:58.162Z",
-          "images": []
-        }
-      ],
-      "hasTeamMention": false,
-      "images": []
-    },
-    {
-      "id": "1791989521.704169",
-      "slackUrl": "https://adapty-team.slack.com/archives/C04SY70QZ0T/p1791989521704169",
-      "name": "Chinese localisation is on the way and the speed of iterations is insane. 10 minutes to translate the whole dashboard th",
-      "message": "Chinese localisation is on the way and the speed of iterations is insane. 10 minutes to translate the whole dashboard thanks to skills from Elina (or Elina’s skills). Kudos to <@U07PR2368G5> <@U09AH7D2A4X> <@U08QUJMN0UV>",
-      "releaseDate": "2026-10-14",
-      "thread": [
-        {
-          "userId": "U9HDNS9S4",
-          "userName": "Kirill Potekhin",
-          "text": "Chinese localisation is on the way and the speed of iterations is insane. 10 minutes to translate the whole dashboard thanks to skills from Elina (or Elina’s skills). Kudos to <@U07PR2368G5> <@U09AH7D2A4X> <@U08QUJMN0UV>",
-          "date": "2026-10-14T14:52:01.704Z",
-          "images": [
-            "https://files.slack.com/files-pri/T9HDDB78Q-F0C95DP5RJS/telegram-cloud-photo-size-2-5368461313731928235-y.jpg"
-          ]
-        },
-        {
-          "userId": "U03DFSCP8CW",
-          "userName": "Mike Gorokhov",
-          "text": "But are we sure that this translation is good?",
-          "date": "2026-10-14T14:54:39.923Z",
-          "images": []
-        },
-        {
-          "userId": "U9HDNS9S4",
-          "userName": "Kirill Potekhin",
-          "text": "yes, the docs was translated this was and got really positive feedback from Chinese customers ",
-          "date": "2026-10-14T14:55:12.487Z",
-          "images": []
-        },
-        {
-          "userId": "U03J8UXUDPF",
-          "userName": "Mykola Martynovets",
-          "text": "<@U9HDNS9S4> <@U08QUJMN0UV> Cool! I want to ask add the UA language too If you will have another 10min capacity :sweat_smile:",
-          "date": "2026-10-14T14:56:54.562Z",
-          "images": []
-        },
-        {
-          "userId": "U9HDNS9S4",
-          "userName": "Kirill Potekhin",
-          "text": "<@U03J8UXUDPF> if you help us proofread, let's do it  ",
-          "date": "2026-10-14T15:02:32.916Z",
-          "images": []
-        },
-        {
-          "userId": "U03J8UXUDPF",
-          "userName": "Mykola Martynovets",
-          "text": "Of course!",
-          "date": "2026-10-14T15:03:31.634Z",
-          "images": [
-            "https://files.slack.com/files-pri/T9HDDB78Q-F0C91BKQ6CT/image.png"
-          ]
-        },
-        {
-          "userId": "U9JU5J5RC",
-          "userName": "Vitaly Davydov",
-          "text": "<@U09QBBKPGMC> double check pls",
-          "date": "2026-10-14T15:05:11.572Z",
-          "images": []
-        },
-        {
-          "userId": "U0903TFULQ3",
-          "userName": "Andrii Hermanov",
-          "text": "I can also help check UA localization\nfyi",
-          "date": "2026-10-14T15:12:19.327Z",
-          "images": []
-        },
-        {
-          "userId": "U09QBBKPGMC",
-          "userName": "Elena Robakidze",
-          "text": "Hi <@U9HDNS9S4> , super good news, thank you! \n\nFor proofreading we have Ian, who can go through it to double-check, I will dm you ",
-          "date": "2026-10-14T15:56:45.683Z",
-          "images": []
-        }
-      ],
-      "content": "[Kirill Potekhin]: Chinese localisation is on the way and the speed of iterations is insane. 10 minutes to translate the whole dashboard thanks to skills from Elina (or Elina’s skills). Kudos to <@U07PR2368G5> <@U09AH7D2A4X> <@U08QUJMN0UV>\n\n[Mike Gorokhov]: But are we sure that this translation is good?\n\n[Kirill Potekhin]: yes, the docs was translated this was and got really positive feedback from Chinese customers \n\n[Mykola Martynovets]: <@U9HDNS9S4> <@U08QUJMN0UV> Cool! I want to ask add the UA language too If you will have another 10min capacity :sweat_smile:\n\n[Kirill Potekhin]: <@U03J8UXUDPF> if you help us proofread, let's do it  \n\n[Mykola Martynovets]: Of course!\n\n[Vitaly Davydov]: <@U09QBBKPGMC> double check pls\n\n[Andrii Hermanov]: I can also help check UA localization\nfyi\n\n[Elena Robakidze]: Hi <@U9HDNS9S4> , super good news, thank you! \n\nFor proofreading we have Ian, who can go through it to double-check, I will dm you ",
-      "matchingReplies": [
-        {
-          "userId": "U9HDNS9S4",
-          "userName": "Kirill Potekhin",
-          "text": "yes, the docs was translated this was and got really positive feedback from Chinese customers ",
-          "date": "2026-10-14T14:55:12.487Z",
-          "images": []
-        },
-        {
-          "userId": "U03J8UXUDPF",
-          "userName": "Mykola Martynovets",
-          "text": "<@U9HDNS9S4> <@U08QUJMN0UV> Cool! I want to ask add the UA language too If you will have another 10min capacity :sweat_smile:",
-          "date": "2026-10-14T14:56:54.562Z",
-          "images": []
-        },
-        {
-          "userId": "U9HDNS9S4",
-          "userName": "Kirill Potekhin",
-          "text": "<@U03J8UXUDPF> if you help us proofread, let's do it  ",
-          "date": "2026-10-14T15:02:32.916Z",
-          "images": []
-        }
-      ],
-      "hasTeamMention": false,
-      "images": [
-        "https://files.slack.com/files-pri/T9HDDB78Q-F0C95DP5RJS/telegram-cloud-photo-size-2-5368461313731928235-y.jpg",
-        "https://files.slack.com/files-pri/T9HDDB78Q-F0C91BKQ6CT/image.png"
       ]
     }
   ]
