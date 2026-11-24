@@ -1,7 +1,230 @@
 {
-  "syncedAt": "2026-11-23T00:29:24.227Z",
+  "syncedAt": "2026-11-24T00:24:49.652Z",
   "channel": "#product-release",
   "entries": [
+    {
+      "id": "1795458067.205269",
+      "slackUrl": "https://adapty-team.slack.com/archives/C04SY70QZ0T/p1795458067205269",
+      "name": "Hey team!",
+      "message": "Hey team!\n\n:sparkles: _The new Adapty dashboard is live_\n\nWe’ve rebuilt the dashboard from scratch on our design system and rolled it out to all users, in both US and EU. It works with the same apps, data and settings as the current one, so nothing needs to move. Open it at <http://new-app.adapty.io|new-app.adapty.io>.\n\n_It’s not the 100% final version yet_, but it’s already better than what we had: technically, in languages (the interface is now available in English, Russian, Chinese, Spanish and Turkish) and in design. Some sections still need polishing, and we’ll keep improving them. Feedback is very welcome :pray:\n\n_How it works now:_\n• Users of the current dashboard see a one-time window inviting them to the new one, and the “Try new interface” strip on Overview stays as a permanent way in.\n• The current dashboard (<http://app.adapty.io|app.adapty.io>) is still the default. Nobody is switched over.\n• Anyone can go back to the current dashboard at any time.\n\n_Good to know:_\n• Still in the current dashboard for now: onboardings, Finance (the Finance link in the new dashboard opens it in a new tab) and promo sign-up pages.\n• We’ll switch everyone to the new dashboard by default once the look & feel is fully polished.\n\n_Please use it for your daily work_ and send anything that looks off: the page link, what you did and a screenshot.\n\nHuge thanks to <@U09AH7D2A4X> <@U09GNBR5ZNW> <@U0AKC1Y09R8> <@U08QUJMN0UV> <@U0A4F2RSMQQ> <@U9HDNS9S4> :purple_heart::adapty-diamonds:",
+      "releaseDate": "2026-11-23",
+      "thread": [
+        {
+          "userId": "U07PR2368G5",
+          "userName": "Alina Ermolaeva",
+          "text": "Hey team!\n\n:sparkles: _The new Adapty dashboard is live_\n\nWe’ve rebuilt the dashboard from scratch on our design system and rolled it out to all users, in both US and EU. It works with the same apps, data and settings as the current one, so nothing needs to move. Open it at <http://new-app.adapty.io|new-app.adapty.io>.\n\n_It’s not the 100% final version yet_, but it’s already better than what we had: technically, in languages (the interface is now available in English, Russian, Chinese, Spanish and Turkish) and in design. Some sections still need polishing, and we’ll keep improving them. Feedback is very welcome :pray:\n\n_How it works now:_\n• Users of the current dashboard see a one-time window inviting them to the new one, and the “Try new interface” strip on Overview stays as a permanent way in.\n• The current dashboard (<http://app.adapty.io|app.adapty.io>) is still the default. Nobody is switched over.\n• Anyone can go back to the current dashboard at any time.\n\n_Good to know:_\n• Still in the current dashboard for now: onboardings, Finance (the Finance link in the new dashboard opens it in a new tab) and promo sign-up pages.\n• We’ll switch everyone to the new dashboard by default once the look & feel is fully polished.\n\n_Please use it for your daily work_ and send anything that looks off: the page link, what you did and a screenshot.\n\nHuge thanks to <@U09AH7D2A4X> <@U09GNBR5ZNW> <@U0AKC1Y09R8> <@U08QUJMN0UV> <@U0A4F2RSMQQ> <@U9HDNS9S4> :purple_heart::adapty-diamonds:",
+          "date": "2026-11-23T18:21:07.205Z",
+          "images": [
+            "https://files.slack.com/files-pri/T9HDDB78Q-F0CL7V0BEG6/image.png"
+          ]
+        },
+        {
+          "userId": "U03J8UXUDPF",
+          "userName": "Mykola Martynovets",
+          "text": "Great work, team!\n<@U07PR2368G5> I recommend reusing the compare menu from <https://app.adapty.io/asa/campaigns|Ads>, worth to check it",
+          "date": "2026-11-23T18:24:22.487Z",
+          "images": [
+            "https://files.slack.com/files-pri/T9HDDB78Q-F0CL9NWJQ5Q/screenshot_2026-11-23_at_20.23.11.png",
+            "https://files.slack.com/files-pri/T9HDDB78Q-F0CL9NZPNAW/screenshot_2026-11-23_at_20.23.33.png"
+          ]
+        },
+        {
+          "userId": "U0A4F2RSMQQ",
+          "userName": "Denis Dolbilin",
+          "text": "such a colossal work from you! congrats! ",
+          "date": "2026-11-23T18:25:46.732Z",
+          "images": []
+        },
+        {
+          "userId": "U07PR2368G5",
+          "userName": "Alina Ermolaeva",
+          "text": "Thanks a lot!",
+          "date": "2026-11-23T18:26:37.935Z",
+          "images": []
+        },
+        {
+          "userId": "U9JU5J5RC",
+          "userName": "Vitaly Davydov",
+          "text": "is it a bug?",
+          "date": "2026-11-23T18:43:39.358Z",
+          "images": [
+            "https://files.slack.com/files-pri/T9HDDB78Q-F0CLDRH2M8C/image.png"
+          ]
+        },
+        {
+          "userId": "U07PR2368G5",
+          "userName": "Alina Ermolaeva",
+          "text": "Yes, I’ll fix it!",
+          "date": "2026-11-23T18:45:47.169Z",
+          "images": []
+        },
+        {
+          "userId": "U0AKC1Y09R8",
+          "userName": "Leonid Koliazin",
+          "text": "Great job Alina! :clap::skin-tone-3: ",
+          "date": "2026-11-23T18:46:43.261Z",
+          "images": []
+        },
+        {
+          "userId": "U03J8UXUDPF",
+          "userName": "Mykola Martynovets",
+          "text": "<@U07PR2368G5> I’ve looked everywhere but can’t find a dark theme :sweat_smile:",
+          "date": "2026-11-23T18:47:37.296Z",
+          "images": []
+        },
+        {
+          "userId": "U080G9FHV50",
+          "userName": "Mirazim Tolipov",
+          "text": "<@U03J8UXUDPF> I really needed an excuse to post this picture, thanks.",
+          "date": "2026-11-23T18:48:16.191Z",
+          "images": [
+            "https://files.slack.com/files-pri/T9HDDB78Q-F0CLDSU40UU/firefox_2026-11-23_23.36.49.png"
+          ]
+        },
+        {
+          "userId": "U03J8UXUDPF",
+          "userName": "Mykola Martynovets",
+          "text": "I want to post meme in subhub, help me",
+          "date": "2026-11-23T18:48:20.882Z",
+          "images": []
+        },
+        {
+          "userId": "U07PR2368G5",
+          "userName": "Alina Ermolaeva",
+          "text": "<@U03J8UXUDPF> It will be later:)",
+          "date": "2026-11-23T18:48:26.876Z",
+          "images": []
+        }
+      ],
+      "content": "[Alina Ermolaeva]: Hey team!\n\n:sparkles: _The new Adapty dashboard is live_\n\nWe’ve rebuilt the dashboard from scratch on our design system and rolled it out to all users, in both US and EU. It works with the same apps, data and settings as the current one, so nothing needs to move. Open it at <http://new-app.adapty.io|new-app.adapty.io>.\n\n_It’s not the 100% final version yet_, but it’s already better than what we had: technically, in languages (the interface is now available in English, Russian, Chinese, Spanish and Turkish) and in design. Some sections still need polishing, and we’ll keep improving them. Feedback is very welcome :pray:\n\n_How it works now:_\n• Users of the current dashboard see a one-time window inviting them to the new one, and the “Try new interface” strip on Overview stays as a permanent way in.\n• The current dashboard (<http://app.adapty.io|app.adapty.io>) is still the default. Nobody is switched over.\n• Anyone can go back to the current dashboard at any time.\n\n_Good to know:_\n• Still in the current dashboard for now: onboardings, Finance (the Finance link in the new dashboard opens it in a new tab) and promo sign-up pages.\n• We’ll switch everyone to the new dashboard by default once the look & feel is fully polished.\n\n_Please use it for your daily work_ and send anything that looks off: the page link, what you did and a screenshot.\n\nHuge thanks to <@U09AH7D2A4X> <@U09GNBR5ZNW> <@U0AKC1Y09R8> <@U08QUJMN0UV> <@U0A4F2RSMQQ> <@U9HDNS9S4> :purple_heart::adapty-diamonds:\n\n[Mykola Martynovets]: Great work, team!\n<@U07PR2368G5> I recommend reusing the compare menu from <https://app.adapty.io/asa/campaigns|Ads>, worth to check it\n\n[Denis Dolbilin]: such a colossal work from you! congrats! \n\n[Alina Ermolaeva]: Thanks a lot!\n\n[Vitaly Davydov]: is it a bug?\n\n[Alina Ermolaeva]: Yes, I’ll fix it!\n\n[Leonid Koliazin]: Great job Alina! :clap::skin-tone-3: \n\n[Mykola Martynovets]: <@U07PR2368G5> I’ve looked everywhere but can’t find a dark theme :sweat_smile:\n\n[Mirazim Tolipov]: <@U03J8UXUDPF> I really needed an excuse to post this picture, thanks.\n\n[Mykola Martynovets]: I want to post meme in subhub, help me\n\n[Alina Ermolaeva]: <@U03J8UXUDPF> It will be later:)",
+      "matchingReplies": [
+        {
+          "userId": "U03J8UXUDPF",
+          "userName": "Mykola Martynovets",
+          "text": "Great work, team!\n<@U07PR2368G5> I recommend reusing the compare menu from <https://app.adapty.io/asa/campaigns|Ads>, worth to check it",
+          "date": "2026-11-23T18:24:22.487Z",
+          "images": [
+            "https://files.slack.com/files-pri/T9HDDB78Q-F0CL9NWJQ5Q/screenshot_2026-11-23_at_20.23.11.png",
+            "https://files.slack.com/files-pri/T9HDDB78Q-F0CL9NZPNAW/screenshot_2026-11-23_at_20.23.33.png"
+          ]
+        },
+        {
+          "userId": "U03J8UXUDPF",
+          "userName": "Mykola Martynovets",
+          "text": "<@U07PR2368G5> I’ve looked everywhere but can’t find a dark theme :sweat_smile:",
+          "date": "2026-11-23T18:47:37.296Z",
+          "images": []
+        }
+      ],
+      "hasTeamMention": false,
+      "images": [
+        "https://files.slack.com/files-pri/T9HDDB78Q-F0CL7V0BEG6/image.png",
+        "https://files.slack.com/files-pri/T9HDDB78Q-F0CL9NWJQ5Q/screenshot_2026-11-23_at_20.23.11.png",
+        "https://files.slack.com/files-pri/T9HDDB78Q-F0CL9NZPNAW/screenshot_2026-11-23_at_20.23.33.png",
+        "https://files.slack.com/files-pri/T9HDDB78Q-F0CLDRH2M8C/image.png",
+        "https://files.slack.com/files-pri/T9HDDB78Q-F0CLDSU40UU/firefox_2026-11-23_23.36.49.png"
+      ]
+    },
+    {
+      "id": "1795435543.045109",
+      "slackUrl": "https://adapty-team.slack.com/archives/C04SY70QZ0T/p1795435543045109",
+      "name": "Two cool updates I forgot to share last week:",
+      "message": "Two cool updates I forgot to share last week:\n• *You can now get the paywall type via CLI/MCP.* Say a client has moved one of their 100 apps to flows. They can now compare its performance against their legacy builder or custom paywalls, and decide with real data whether to move the other 99. Huge thanks to <@U07H1ESAH6K> for the idea!\n• *The growth-advisor skill now offers to set up scheduled health checks and live A/B test reviews*, with solid templates for both. It also offers to send the reports through any connector your agent has. Setup takes one word: when the agent offers a daily app health report in Slack, you say “yes” and it handles the rest. Superwall offers something similar in their UI, but it sits apart from your own agent setup ",
+      "releaseDate": "2026-11-23",
+      "thread": [
+        {
+          "userId": "U08QUJMN0UV",
+          "userName": "Elina Andreeva",
+          "text": "Two cool updates I forgot to share last week:\n• *You can now get the paywall type via CLI/MCP.* Say a client has moved one of their 100 apps to flows. They can now compare its performance against their legacy builder or custom paywalls, and decide with real data whether to move the other 99. Huge thanks to <@U07H1ESAH6K> for the idea!\n• *The growth-advisor skill now offers to set up scheduled health checks and live A/B test reviews*, with solid templates for both. It also offers to send the reports through any connector your agent has. Setup takes one word: when the agent offers a daily app health report in Slack, you say “yes” and it handles the rest. Superwall offers something similar in their UI, but it sits apart from your own agent setup ",
+          "date": "2026-11-23T12:05:43.045Z",
+          "images": []
+        },
+        {
+          "userId": "U08EVBTE69E",
+          "userName": "Maxim Borisik",
+          "text": "i think 2nd update is way cooler than you described it!\nmaybe you have some visualisation of this beauity?",
+          "date": "2026-11-23T12:10:32.007Z",
+          "images": []
+        },
+        {
+          "userId": "U08QUJMN0UV",
+          "userName": "Elina Andreeva",
+          "text": "",
+          "date": "2026-11-23T12:30:53.491Z",
+          "images": []
+        },
+        {
+          "userId": "U08EVBTE69E",
+          "userName": "Maxim Borisik",
+          "text": "<@U07H1ESAH6K> i think smak wanted exactly this (check the video)",
+          "date": "2026-11-23T12:32:48.042Z",
+          "images": []
+        },
+        {
+          "userId": "U07H1ESAH6K",
+          "userName": "Sofia Pikuleva",
+          "text": "<!subteam^S07BZPQDBUJ> health checks are now available in our growth advisor skill <https://adapty.io/docs/export-analytics-with-ai#health-check>\n\nclients can schedule recurring checks <https://adapty.io/docs/growth-advisor-recurring-checks>",
+          "date": "2026-11-23T12:38:35.251Z",
+          "images": []
+        },
+        {
+          "userId": "U05QELDHUUX",
+          "userName": "Sergey Muratov",
+          "text": "Hey <@U08EVBTE69E> <@U08QUJMN0UV>!\n\nSo I’ve been collecting stuff on growth-advisor, trying to understand the current state — as I’m going to be reworking this <https://adapty.io/autopilot/|adapty.io/autopilot>\n\nAs I understand it, the loop is now closed (<https://adapty.io/blog/ai-agent-mobile-app-monetization/|adapty.io/blog/ai-agent-mobile-app-monetization>):\n• the agent knows your data inside-out\n• can suggest A/B tests\n• can create flows/paywalls\n• can create pricing if needed\n• can launch them and watch them\nI’m not missing anything, right?",
+          "date": "2026-11-23T16:11:38.072Z",
+          "images": []
+        },
+        {
+          "userId": "U05QELDHUUX",
+          "userName": "Sergey Muratov",
+          "text": "If I’m not, then I guess we can update the “how it works” panel in Adapty’s product too — now it says that the agent can’t touch pricing.\n\nThanks for all the releases!",
+          "date": "2026-11-23T16:12:33.957Z",
+          "images": [
+            "https://files.slack.com/files-pri/T9HDDB78Q-F0CL297DF99/cleanshot_2026-11-23_at_17.11.58_2x.png"
+          ]
+        },
+        {
+          "userId": "U08EVBTE69E",
+          "userName": "Maxim Borisik",
+          "text": "thanks for your words! and yes, pricing can be managed as well!\n\ncouple of thoughts\n1. we injected lots of great logic in the growth-advisor skill - geo-pricing via pricing index, latest benchmarks, many concepts from our PS team, best practices and wins. so it really is a smart thing  \n2. the article from me above is my “answer” to SW keynote/manifest = <https://superwall.com/blog/superwall-keynote-2026-agents-run-your-monetization|superwall.com/blog/superwall-keynote-2026-agents-run-your-monetization>\n3. human in the loop part is something very new to the market (see screen)\n    a. so everything you digged with our agent = can be added to the backlog of yours, meaning the ideas can be saved/shared between members. it’s something i want to tell the market better \n4. i think the whole growth advisor thing/idea = is the future of adapty. \n    a. because our tools; our expertise and AI-readiness = brings us (and apps) to the best future. i do pitch it on all events and will continue doing so. because i do believe that’s where the market goes \n    b. what i mean = maybe we even should push it to the main asap\n5. guy from tradingview said that he liked our AI advisor idea a lot = meaning he found current autopilot landing and liked it. and yes, he said that he wants to use adapty just for it and our data (we refused ofc)",
+          "date": "2026-11-23T16:27:33.511Z",
+          "images": [
+            "https://files.slack.com/files-pri/T9HDDB78Q-F0CL2CL2TPV/image.png"
+          ]
+        }
+      ],
+      "content": "[Elina Andreeva]: Two cool updates I forgot to share last week:\n• *You can now get the paywall type via CLI/MCP.* Say a client has moved one of their 100 apps to flows. They can now compare its performance against their legacy builder or custom paywalls, and decide with real data whether to move the other 99. Huge thanks to <@U07H1ESAH6K> for the idea!\n• *The growth-advisor skill now offers to set up scheduled health checks and live A/B test reviews*, with solid templates for both. It also offers to send the reports through any connector your agent has. Setup takes one word: when the agent offers a daily app health report in Slack, you say “yes” and it handles the rest. Superwall offers something similar in their UI, but it sits apart from your own agent setup \n\n[Maxim Borisik]: i think 2nd update is way cooler than you described it!\nmaybe you have some visualisation of this beauity?\n\n[Elina Andreeva]: \n\n[Maxim Borisik]: <@U07H1ESAH6K> i think smak wanted exactly this (check the video)\n\n[Sofia Pikuleva]: <!subteam^S07BZPQDBUJ> health checks are now available in our growth advisor skill <https://adapty.io/docs/export-analytics-with-ai#health-check>\n\nclients can schedule recurring checks <https://adapty.io/docs/growth-advisor-recurring-checks>\n\n[Sergey Muratov]: Hey <@U08EVBTE69E> <@U08QUJMN0UV>!\n\nSo I’ve been collecting stuff on growth-advisor, trying to understand the current state — as I’m going to be reworking this <https://adapty.io/autopilot/|adapty.io/autopilot>\n\nAs I understand it, the loop is now closed (<https://adapty.io/blog/ai-agent-mobile-app-monetization/|adapty.io/blog/ai-agent-mobile-app-monetization>):\n• the agent knows your data inside-out\n• can suggest A/B tests\n• can create flows/paywalls\n• can create pricing if needed\n• can launch them and watch them\nI’m not missing anything, right?\n\n[Sergey Muratov]: If I’m not, then I guess we can update the “how it works” panel in Adapty’s product too — now it says that the agent can’t touch pricing.\n\nThanks for all the releases!\n\n[Maxim Borisik]: thanks for your words! and yes, pricing can be managed as well!\n\ncouple of thoughts\n1. we injected lots of great logic in the growth-advisor skill - geo-pricing via pricing index, latest benchmarks, many concepts from our PS team, best practices and wins. so it really is a smart thing  \n2. the article from me above is my “answer” to SW keynote/manifest = <https://superwall.com/blog/superwall-keynote-2026-agents-run-your-monetization|superwall.com/blog/superwall-keynote-2026-agents-run-your-monetization>\n3. human in the loop part is something very new to the market (see screen)\n    a. so everything you digged with our agent = can be added to the backlog of yours, meaning the ideas can be saved/shared between members. it’s something i want to tell the market better \n4. i think the whole growth advisor thing/idea = is the future of adapty. \n    a. because our tools; our expertise and AI-readiness = brings us (and apps) to the best future. i do pitch it on all events and will continue doing so. because i do believe that’s where the market goes \n    b. what i mean = maybe we even should push it to the main asap\n5. guy from tradingview said that he liked our AI advisor idea a lot = meaning he found current autopilot landing and liked it. and yes, he said that he wants to use adapty just for it and our data (we refused ofc)",
+      "matchingReplies": [
+        {
+          "userId": "U08EVBTE69E",
+          "userName": "Maxim Borisik",
+          "text": "i think 2nd update is way cooler than you described it!\nmaybe you have some visualisation of this beauity?",
+          "date": "2026-11-23T12:10:32.007Z",
+          "images": []
+        },
+        {
+          "userId": "U08EVBTE69E",
+          "userName": "Maxim Borisik",
+          "text": "<@U07H1ESAH6K> i think smak wanted exactly this (check the video)",
+          "date": "2026-11-23T12:32:48.042Z",
+          "images": []
+        },
+        {
+          "userId": "U08EVBTE69E",
+          "userName": "Maxim Borisik",
+          "text": "thanks for your words! and yes, pricing can be managed as well!\n\ncouple of thoughts\n1. we injected lots of great logic in the growth-advisor skill - geo-pricing via pricing index, latest benchmarks, many concepts from our PS team, best practices and wins. so it really is a smart thing  \n2. the article from me above is my “answer” to SW keynote/manifest = <https://superwall.com/blog/superwall-keynote-2026-agents-run-your-monetization|superwall.com/blog/superwall-keynote-2026-agents-run-your-monetization>\n3. human in the loop part is something very new to the market (see screen)\n    a. so everything you digged with our agent = can be added to the backlog of yours, meaning the ideas can be saved/shared between members. it’s something i want to tell the market better \n4. i think the whole growth advisor thing/idea = is the future of adapty. \n    a. because our tools; our expertise and AI-readiness = brings us (and apps) to the best future. i do pitch it on all events and will continue doing so. because i do believe that’s where the market goes \n    b. what i mean = maybe we even should push it to the main asap\n5. guy from tradingview said that he liked our AI advisor idea a lot = meaning he found current autopilot landing and liked it. and yes, he said that he wants to use adapty just for it and our data (we refused ofc)",
+          "date": "2026-11-23T16:27:33.511Z",
+          "images": [
+            "https://files.slack.com/files-pri/T9HDDB78Q-F0CL2CL2TPV/image.png"
+          ]
+        }
+      ],
+      "hasTeamMention": true,
+      "images": [
+        "https://files.slack.com/files-pri/T9HDDB78Q-F0CL297DF99/cleanshot_2026-11-23_at_17.11.58_2x.png",
+        "https://files.slack.com/files-pri/T9HDDB78Q-F0CL2CL2TPV/image.png"
+      ]
+    },
     {
       "id": "1795169364.768979",
       "slackUrl": "https://adapty-team.slack.com/archives/C04SY70QZ0T/p1795169364768979",
@@ -1057,105 +1280,6 @@
       "hasTeamMention": true,
       "images": [
         "https://files.slack.com/files-pri/T9HDDB78Q-F0CBQ647P16/image.png"
-      ]
-    },
-    {
-      "id": "1792520584.397089",
-      "slackUrl": "https://adapty-team.slack.com/archives/C04SY70QZ0T/p1792520584397089",
-      "name": "*Сustom fonts in flow builder are now families*",
-      "message": "*Сustom fonts in flow builder are now families*\n\nbefore: one font = one file\nyou could pick Bold for a font with only Regular uploaded - the preview faked it, the phone showed Regular\nclients found out only after publishing\n\nnow:\n• upload all the weights at once - they group into one family by themselves\n• the weight menu shows only what you uploaded, so preview = device\n• one variable file gives every weight on iOS and Android :sparkles:",
-      "releaseDate": "2026-10-20",
-      "thread": [
-        {
-          "userId": "U0903TFULQ3",
-          "userName": "Andrii Hermanov",
-          "text": "*Сustom fonts in flow builder are now families*\n\nbefore: one font = one file\nyou could pick Bold for a font with only Regular uploaded - the preview faked it, the phone showed Regular\nclients found out only after publishing\n\nnow:\n• upload all the weights at once - they group into one family by themselves\n• the weight menu shows only what you uploaded, so preview = device\n• one variable file gives every weight on iOS and Android :sparkles:",
-          "date": "2026-10-20T18:23:04.397Z",
-          "images": [
-            "https://files.slack.com/files-pri/T9HDDB78Q-F0CAUP98VEY/image.png"
-          ]
-        },
-        {
-          "userId": "U0903TFULQ3",
-          "userName": "Andrii Hermanov",
-          "text": "limits for now:\n• most old Android names look like file names (Montserrat-SemiBold) and Android doesn't accept them - clients need to rename them to montserrat_semibold\n• some variable fonts (Inter, Roboto Flex) don't carry names for their weights - the iOS name has to be typed in by hand, otherwise publish fails",
-          "date": "2026-10-20T18:23:15.734Z",
-          "images": []
-        },
-        {
-          "userId": "U08EVBTE69E",
-          "userName": "Maxim Borisik",
-          "text": "huge job! more stability to us\n<!subteam^S03KM96DV0U> fyi ",
-          "date": "2026-10-20T20:38:55.571Z",
-          "images": []
-        },
-        {
-          "userId": "U07J9LKBQ5U",
-          "userName": "Yurii Kleimenov",
-          "text": "Good job! :fire:",
-          "date": "2026-10-21T08:17:20.905Z",
-          "images": []
-        }
-      ],
-      "content": "[Andrii Hermanov]: *Сustom fonts in flow builder are now families*\n\nbefore: one font = one file\nyou could pick Bold for a font with only Regular uploaded - the preview faked it, the phone showed Regular\nclients found out only after publishing\n\nnow:\n• upload all the weights at once - they group into one family by themselves\n• the weight menu shows only what you uploaded, so preview = device\n• one variable file gives every weight on iOS and Android :sparkles:\n\n[Andrii Hermanov]: limits for now:\n• most old Android names look like file names (Montserrat-SemiBold) and Android doesn't accept them - clients need to rename them to montserrat_semibold\n• some variable fonts (Inter, Roboto Flex) don't carry names for their weights - the iOS name has to be typed in by hand, otherwise publish fails\n\n[Maxim Borisik]: huge job! more stability to us\n<!subteam^S03KM96DV0U> fyi \n\n[Yurii Kleimenov]: Good job! :fire:",
-      "matchingReplies": [
-        {
-          "userId": "U08EVBTE69E",
-          "userName": "Maxim Borisik",
-          "text": "huge job! more stability to us\n<!subteam^S03KM96DV0U> fyi ",
-          "date": "2026-10-20T20:38:55.571Z",
-          "images": []
-        }
-      ],
-      "hasTeamMention": true,
-      "images": [
-        "https://files.slack.com/files-pri/T9HDDB78Q-F0CAUP98VEY/image.png"
-      ]
-    },
-    {
-      "id": "1792432571.486659",
-      "slackUrl": "https://adapty-team.slack.com/archives/C04SY70QZ0T/p1792432571486659",
-      "name": "Do you guys remember  from Tappz? Last year he was unhappy with the product - now look at these quotes from our last mon",
-      "message": "Do you guys remember <@U04BG2248JC> from Tappz? Last year he was unhappy with the product - now look at these quotes from our last monthly call:\n\nBig shoutout to the *Flow Builder* team and <@U08EVBTE69E>!",
-      "releaseDate": "2026-10-19",
-      "thread": [
-        {
-          "userId": "U07F3ULE4MA",
-          "userName": "Darina Kobzar",
-          "text": "Do you guys remember <@U04BG2248JC> from Tappz? Last year he was unhappy with the product - now look at these quotes from our last monthly call:\n\nBig shoutout to the *Flow Builder* team and <@U08EVBTE69E>!",
-          "date": "2026-10-19T17:56:11.486Z",
-          "images": [
-            "https://files.slack.com/files-pri/T9HDDB78Q-F0CAGMY5PKK/cleanshot_2026-10-19_at_19.53.17_2x.png"
-          ]
-        },
-        {
-          "userId": "U08EVBTE69E",
-          "userName": "Maxim Borisik",
-          "text": "super happy to hear that! our team is everything! great job guys :heart_on_fire:",
-          "date": "2026-10-19T17:57:15.688Z",
-          "images": []
-        },
-        {
-          "userId": "U07F3ULE4MA",
-          "userName": "Darina Kobzar",
-          "text": "They'll keep testing new ideas, and once they find a strong winner, we'll turn it into a marketing case study!",
-          "date": "2026-10-19T17:58:04.479Z",
-          "images": []
-        }
-      ],
-      "content": "[Darina Kobzar]: Do you guys remember <@U04BG2248JC> from Tappz? Last year he was unhappy with the product - now look at these quotes from our last monthly call:\n\nBig shoutout to the *Flow Builder* team and <@U08EVBTE69E>!\n\n[Maxim Borisik]: super happy to hear that! our team is everything! great job guys :heart_on_fire:\n\n[Darina Kobzar]: They'll keep testing new ideas, and once they find a strong winner, we'll turn it into a marketing case study!",
-      "matchingReplies": [
-        {
-          "userId": "U08EVBTE69E",
-          "userName": "Maxim Borisik",
-          "text": "super happy to hear that! our team is everything! great job guys :heart_on_fire:",
-          "date": "2026-10-19T17:57:15.688Z",
-          "images": []
-        }
-      ],
-      "hasTeamMention": false,
-      "images": [
-        "https://files.slack.com/files-pri/T9HDDB78Q-F0CAGMY5PKK/cleanshot_2026-10-19_at_19.53.17_2x.png"
       ]
     }
   ]
