@@ -1,7 +1,69 @@
 {
-  "syncedAt": "2026-11-24T00:24:49.652Z",
+  "syncedAt": "2026-11-25T00:27:09.416Z",
   "channel": "#product-release",
   "entries": [
+    {
+      "id": "1795539568.662009",
+      "slackUrl": "https://adapty-team.slack.com/archives/C04SY70QZ0T/p1795539568662009",
+      "name": ":ferris_wheel: _Flow Builder: start slide in Carousel_",
+      "message": ":ferris_wheel: _Flow Builder: start slide in Carousel_\n\nA carousel can now open on any slide, not just the first one. For example: start on Slide 2 so the neighbour slides peek out on both sides.\n\n_How to use it:_ select a carousel → _Carousel_ → _Start slide_ → pick a slide. The canvas and the device both open on it.\n\n_Good to know:_\n• The first visit to the screen opens on the start slide. When the user comes back, the carousel stays on the slide they left.\n• The setting follows the slide, not its number: reorder the slides and it still points to the same one. Slides that are always hidden can’t be picked.\n• Agents can set it too: the flow-generator skill and the docs are updated.\n\nWorks on iOS SDK 4.2+, Android SDK 4.3+, and Flutter, React Native and Capacitor 4.3+. Older SDKs open the carousel on Slide 1 with no errors; on Android 4.1–4.2 it then scrolls to the start slide. Republish the flow for the changes to reach users.",
+      "releaseDate": "2026-11-24",
+      "thread": [
+        {
+          "userId": "U08JY3U9S7P",
+          "userName": "Lera Eroshevich",
+          "text": ":ferris_wheel: _Flow Builder: start slide in Carousel_\n\nA carousel can now open on any slide, not just the first one. For example: start on Slide 2 so the neighbour slides peek out on both sides.\n\n_How to use it:_ select a carousel → _Carousel_ → _Start slide_ → pick a slide. The canvas and the device both open on it.\n\n_Good to know:_\n• The first visit to the screen opens on the start slide. When the user comes back, the carousel stays on the slide they left.\n• The setting follows the slide, not its number: reorder the slides and it still points to the same one. Slides that are always hidden can’t be picked.\n• Agents can set it too: the flow-generator skill and the docs are updated.\n\nWorks on iOS SDK 4.2+, Android SDK 4.3+, and Flutter, React Native and Capacitor 4.3+. Older SDKs open the carousel on Slide 1 with no errors; on Android 4.1–4.2 it then scrolls to the start slide. Republish the flow for the changes to reach users.",
+          "date": "2026-11-24T16:59:28.662Z",
+          "images": [
+            "https://files.slack.com/files-pri/T9HDDB78Q-F0CLFNPFX29/image.png"
+          ]
+        },
+        {
+          "userId": "U08JY3U9S7P",
+          "userName": "Lera Eroshevich",
+          "text": "<!subteam^S07BZPQDBUJ>",
+          "date": "2026-11-24T17:00:44.951Z",
+          "images": []
+        }
+      ],
+      "content": "[Lera Eroshevich]: :ferris_wheel: _Flow Builder: start slide in Carousel_\n\nA carousel can now open on any slide, not just the first one. For example: start on Slide 2 so the neighbour slides peek out on both sides.\n\n_How to use it:_ select a carousel → _Carousel_ → _Start slide_ → pick a slide. The canvas and the device both open on it.\n\n_Good to know:_\n• The first visit to the screen opens on the start slide. When the user comes back, the carousel stays on the slide they left.\n• The setting follows the slide, not its number: reorder the slides and it still points to the same one. Slides that are always hidden can’t be picked.\n• Agents can set it too: the flow-generator skill and the docs are updated.\n\nWorks on iOS SDK 4.2+, Android SDK 4.3+, and Flutter, React Native and Capacitor 4.3+. Older SDKs open the carousel on Slide 1 with no errors; on Android 4.1–4.2 it then scrolls to the start slide. Republish the flow for the changes to reach users.\n\n[Lera Eroshevich]: <!subteam^S07BZPQDBUJ>",
+      "matchingReplies": [],
+      "hasTeamMention": true,
+      "images": [
+        "https://files.slack.com/files-pri/T9HDDB78Q-F0CLFNPFX29/image.png"
+      ]
+    },
+    {
+      "id": "1795522881.950279",
+      "slackUrl": "https://adapty-team.slack.com/archives/C04SY70QZ0T/p1795522881950279",
+      "name": "hi guys! another day another feature in builder!",
+      "message": "hi guys! another day another feature in builder!\n*loader: ring, percentage and a finish you can use* in flow builder\n• builder: select a loader and pick type linear or radial, thickness, show percentage and autostart; loaders and spinners get show after delay. add on load complete actions, start a loader from any button with the start loader action, show the live percentage in a text with `&lt;element id&gt;.progress`, and use `&lt;element id&gt;.isFinished` in conditions, for example keep next disabled until the analysis ends.\n• note: works on the current ios and android sdks, no app update needed; a published flow gets it on its next publish. \n<@U0903TFULQ3> Andrii fully developed this feature, I just helped him release it, so all the hype should go to him!",
+      "releaseDate": "2026-11-24",
+      "thread": [
+        {
+          "userId": "U0A4F2RSMQQ",
+          "userName": "Denis Dolbilin",
+          "text": "hi guys! another day another feature in builder!\n*loader: ring, percentage and a finish you can use* in flow builder\n• builder: select a loader and pick type linear or radial, thickness, show percentage and autostart; loaders and spinners get show after delay. add on load complete actions, start a loader from any button with the start loader action, show the live percentage in a text with `&lt;element id&gt;.progress`, and use `&lt;element id&gt;.isFinished` in conditions, for example keep next disabled until the analysis ends.\n• note: works on the current ios and android sdks, no app update needed; a published flow gets it on its next publish. \n<@U0903TFULQ3> Andrii fully developed this feature, I just helped him release it, so all the hype should go to him!",
+          "date": "2026-11-24T12:21:21.950Z",
+          "images": [
+            "https://files.slack.com/files-pri/T9HDDB78Q-F0CL2LDNMN3/canvas-loader.png"
+          ]
+        },
+        {
+          "userId": "U08EVBTE69E",
+          "userName": "Maxim Borisik",
+          "text": "<!subteam^S07BZPQDBUJ> <@U0A266T9SJE> LFG!",
+          "date": "2026-11-24T12:24:15.072Z",
+          "images": []
+        }
+      ],
+      "content": "[Denis Dolbilin]: hi guys! another day another feature in builder!\n*loader: ring, percentage and a finish you can use* in flow builder\n• builder: select a loader and pick type linear or radial, thickness, show percentage and autostart; loaders and spinners get show after delay. add on load complete actions, start a loader from any button with the start loader action, show the live percentage in a text with `&lt;element id&gt;.progress`, and use `&lt;element id&gt;.isFinished` in conditions, for example keep next disabled until the analysis ends.\n• note: works on the current ios and android sdks, no app update needed; a published flow gets it on its next publish. \n<@U0903TFULQ3> Andrii fully developed this feature, I just helped him release it, so all the hype should go to him!\n\n[Maxim Borisik]: <!subteam^S07BZPQDBUJ> <@U0A266T9SJE> LFG!",
+      "matchingReplies": [],
+      "hasTeamMention": true,
+      "images": [
+        "https://files.slack.com/files-pri/T9HDDB78Q-F0CL2LDNMN3/canvas-loader.png"
+      ]
+    },
     {
       "id": "1795458067.205269",
       "slackUrl": "https://adapty-team.slack.com/archives/C04SY70QZ0T/p1795458067205269",
@@ -94,9 +156,30 @@
           "text": "<@U03J8UXUDPF> It will be later:)",
           "date": "2026-11-23T18:48:26.876Z",
           "images": []
+        },
+        {
+          "userId": "U07FKBD6QDS",
+          "userName": "Daniel Ridny",
+          "text": "<@U07PR2368G5> kudos on the massive work you’ve put into this!\nSince we will inevitably get some of clients’ feedback on the new design, including both relevant suggestions and less realistic ideas, where would you prefer us to collect it so you can review and analyze everything?",
+          "date": "2026-11-24T09:05:15.703Z",
+          "images": []
+        },
+        {
+          "userId": "U07PR2368G5",
+          "userName": "Alina Ermolaeva",
+          "text": "We’ve opened <#C0CMBJR7ARW> for bugs and inconveniences in the new dashboard (<http://new-app.adapty.io|new-app.adapty.io>).\n\nIf something is broken, confusing or just annoying, post it there with a page link and a screenshot. Small things count too. We read everything and mark each post with :eyes: when we’re on it and :white_check_mark: when the fix is live.",
+          "date": "2026-11-24T10:32:32.177Z",
+          "images": []
+        },
+        {
+          "userId": "U07FKBD6QDS",
+          "userName": "Daniel Ridny",
+          "text": "<!subteam^S07BZPQDBUJ> fyi",
+          "date": "2026-11-24T10:37:40.003Z",
+          "images": []
         }
       ],
-      "content": "[Alina Ermolaeva]: Hey team!\n\n:sparkles: _The new Adapty dashboard is live_\n\nWe’ve rebuilt the dashboard from scratch on our design system and rolled it out to all users, in both US and EU. It works with the same apps, data and settings as the current one, so nothing needs to move. Open it at <http://new-app.adapty.io|new-app.adapty.io>.\n\n_It’s not the 100% final version yet_, but it’s already better than what we had: technically, in languages (the interface is now available in English, Russian, Chinese, Spanish and Turkish) and in design. Some sections still need polishing, and we’ll keep improving them. Feedback is very welcome :pray:\n\n_How it works now:_\n• Users of the current dashboard see a one-time window inviting them to the new one, and the “Try new interface” strip on Overview stays as a permanent way in.\n• The current dashboard (<http://app.adapty.io|app.adapty.io>) is still the default. Nobody is switched over.\n• Anyone can go back to the current dashboard at any time.\n\n_Good to know:_\n• Still in the current dashboard for now: onboardings, Finance (the Finance link in the new dashboard opens it in a new tab) and promo sign-up pages.\n• We’ll switch everyone to the new dashboard by default once the look & feel is fully polished.\n\n_Please use it for your daily work_ and send anything that looks off: the page link, what you did and a screenshot.\n\nHuge thanks to <@U09AH7D2A4X> <@U09GNBR5ZNW> <@U0AKC1Y09R8> <@U08QUJMN0UV> <@U0A4F2RSMQQ> <@U9HDNS9S4> :purple_heart::adapty-diamonds:\n\n[Mykola Martynovets]: Great work, team!\n<@U07PR2368G5> I recommend reusing the compare menu from <https://app.adapty.io/asa/campaigns|Ads>, worth to check it\n\n[Denis Dolbilin]: such a colossal work from you! congrats! \n\n[Alina Ermolaeva]: Thanks a lot!\n\n[Vitaly Davydov]: is it a bug?\n\n[Alina Ermolaeva]: Yes, I’ll fix it!\n\n[Leonid Koliazin]: Great job Alina! :clap::skin-tone-3: \n\n[Mykola Martynovets]: <@U07PR2368G5> I’ve looked everywhere but can’t find a dark theme :sweat_smile:\n\n[Mirazim Tolipov]: <@U03J8UXUDPF> I really needed an excuse to post this picture, thanks.\n\n[Mykola Martynovets]: I want to post meme in subhub, help me\n\n[Alina Ermolaeva]: <@U03J8UXUDPF> It will be later:)",
+      "content": "[Alina Ermolaeva]: Hey team!\n\n:sparkles: _The new Adapty dashboard is live_\n\nWe’ve rebuilt the dashboard from scratch on our design system and rolled it out to all users, in both US and EU. It works with the same apps, data and settings as the current one, so nothing needs to move. Open it at <http://new-app.adapty.io|new-app.adapty.io>.\n\n_It’s not the 100% final version yet_, but it’s already better than what we had: technically, in languages (the interface is now available in English, Russian, Chinese, Spanish and Turkish) and in design. Some sections still need polishing, and we’ll keep improving them. Feedback is very welcome :pray:\n\n_How it works now:_\n• Users of the current dashboard see a one-time window inviting them to the new one, and the “Try new interface” strip on Overview stays as a permanent way in.\n• The current dashboard (<http://app.adapty.io|app.adapty.io>) is still the default. Nobody is switched over.\n• Anyone can go back to the current dashboard at any time.\n\n_Good to know:_\n• Still in the current dashboard for now: onboardings, Finance (the Finance link in the new dashboard opens it in a new tab) and promo sign-up pages.\n• We’ll switch everyone to the new dashboard by default once the look & feel is fully polished.\n\n_Please use it for your daily work_ and send anything that looks off: the page link, what you did and a screenshot.\n\nHuge thanks to <@U09AH7D2A4X> <@U09GNBR5ZNW> <@U0AKC1Y09R8> <@U08QUJMN0UV> <@U0A4F2RSMQQ> <@U9HDNS9S4> :purple_heart::adapty-diamonds:\n\n[Mykola Martynovets]: Great work, team!\n<@U07PR2368G5> I recommend reusing the compare menu from <https://app.adapty.io/asa/campaigns|Ads>, worth to check it\n\n[Denis Dolbilin]: such a colossal work from you! congrats! \n\n[Alina Ermolaeva]: Thanks a lot!\n\n[Vitaly Davydov]: is it a bug?\n\n[Alina Ermolaeva]: Yes, I’ll fix it!\n\n[Leonid Koliazin]: Great job Alina! :clap::skin-tone-3: \n\n[Mykola Martynovets]: <@U07PR2368G5> I’ve looked everywhere but can’t find a dark theme :sweat_smile:\n\n[Mirazim Tolipov]: <@U03J8UXUDPF> I really needed an excuse to post this picture, thanks.\n\n[Mykola Martynovets]: I want to post meme in subhub, help me\n\n[Alina Ermolaeva]: <@U03J8UXUDPF> It will be later:)\n\n[Daniel Ridny]: <@U07PR2368G5> kudos on the massive work you’ve put into this!\nSince we will inevitably get some of clients’ feedback on the new design, including both relevant suggestions and less realistic ideas, where would you prefer us to collect it so you can review and analyze everything?\n\n[Alina Ermolaeva]: We’ve opened <#C0CMBJR7ARW> for bugs and inconveniences in the new dashboard (<http://new-app.adapty.io|new-app.adapty.io>).\n\nIf something is broken, confusing or just annoying, post it there with a page link and a screenshot. Small things count too. We read everything and mark each post with :eyes: when we’re on it and :white_check_mark: when the fix is live.\n\n[Daniel Ridny]: <!subteam^S07BZPQDBUJ> fyi",
       "matchingReplies": [
         {
           "userId": "U03J8UXUDPF",
@@ -116,7 +199,7 @@
           "images": []
         }
       ],
-      "hasTeamMention": false,
+      "hasTeamMention": true,
       "images": [
         "https://files.slack.com/files-pri/T9HDDB78Q-F0CL7V0BEG6/image.png",
         "https://files.slack.com/files-pri/T9HDDB78Q-F0CL9NWJQ5Q/screenshot_2026-11-23_at_20.23.11.png",
@@ -503,9 +586,16 @@
           "text": "actually Kamil spoiled it already a little bit \n\nclient code would interact with our flow, so limitless possibilities to build really complex and ternary flows! ",
           "date": "2026-11-17T06:54:09.211Z",
           "images": []
+        },
+        {
+          "userId": "U08EVBTE69E",
+          "userName": "Maxim Borisik",
+          "text": "good news - RN &amp; Flutter sdk is live! \n",
+          "date": "2026-11-24T19:43:28.941Z",
+          "images": []
         }
       ],
-      "content": "[Kamil Lotfullin]: Custom elements are live in Flow Builder! :fire:\n\nA custom element is a new block: Add element → Media → Custom element\nThe client’s app fills it with its own native view: a Lottie or Rive animation, a chart, a map, a picker, anything their devs can build in SwiftUI or UIKit\nWhatever you put inside the block in the builder is the fallback. Users see it when the app has no view for it, so nothing breaks\n\nHow to use it:\n• add the block, set its Type and ID, put the fallback inside\n• the client’s devs register a view for that Type in the app with iOS SDK 4.4.0 or later\n• publish the Flow. It’s safe to publish before the app update: until then users see the fallback\nGood to know:\n• native views (inside custom elements) work on iOS SDK 4.4.0+. Android and cross-platform SDKs show the fallback for now, Android is next\n• v1 is one-way: the view can’t trigger flow actions, and its value doesn’t go back into flow variables yet. That’s will come in v2\n• a new native view (inside custom elements) needs an app release, everything else is just a republish\nDocs: <https://adapty.io/docs/flow-custom-elements|adapty.io/docs/flow-custom-elements>\n\n[Kamil Lotfullin]: this video shows how flow with custom elements previews in adapty app  (fallback elements are presented since adapty app does not know what native views to display)\n\n[Yurii Kleimenov]: Finally! <@U08QUJMN0UV>, what do you think about combining this with custom actions and our virtual currency to build use cases for AI-token apps, short-drama apps, etc.? If you need more context, we can discuss it in more detail.\n\n[Maxim Borisik]: Guys, this is huge! I think it’s the main release of the quarter\n\nnow it’s hard to say that our builder CAN’T do something.\n\nusers can finally do LOTTIE / RIVE animations (and way more things). let’s make all the clients/prospects happy. now it’s IOS only, awaiting other platforms asap. i’ll ping you\n\nour skill knows about it as well\n\n<!subteam^S07BZPQDBUJ> <!subteam^S03KC9S1QMC> <!subteam^S03KM96DV0U>\n\n[Melike Sezer]: yeyyy!\n\n[Denis Dolbilin]: v2 is where the real fun will start!\n\n[Mike Gorokhov]: <@U0A4F2RSMQQ> any spoilers?\n\n[Denis Dolbilin]: actually Kamil spoiled it already a little bit \n\nclient code would interact with our flow, so limitless possibilities to build really complex and ternary flows! ",
+      "content": "[Kamil Lotfullin]: Custom elements are live in Flow Builder! :fire:\n\nA custom element is a new block: Add element → Media → Custom element\nThe client’s app fills it with its own native view: a Lottie or Rive animation, a chart, a map, a picker, anything their devs can build in SwiftUI or UIKit\nWhatever you put inside the block in the builder is the fallback. Users see it when the app has no view for it, so nothing breaks\n\nHow to use it:\n• add the block, set its Type and ID, put the fallback inside\n• the client’s devs register a view for that Type in the app with iOS SDK 4.4.0 or later\n• publish the Flow. It’s safe to publish before the app update: until then users see the fallback\nGood to know:\n• native views (inside custom elements) work on iOS SDK 4.4.0+. Android and cross-platform SDKs show the fallback for now, Android is next\n• v1 is one-way: the view can’t trigger flow actions, and its value doesn’t go back into flow variables yet. That’s will come in v2\n• a new native view (inside custom elements) needs an app release, everything else is just a republish\nDocs: <https://adapty.io/docs/flow-custom-elements|adapty.io/docs/flow-custom-elements>\n\n[Kamil Lotfullin]: this video shows how flow with custom elements previews in adapty app  (fallback elements are presented since adapty app does not know what native views to display)\n\n[Yurii Kleimenov]: Finally! <@U08QUJMN0UV>, what do you think about combining this with custom actions and our virtual currency to build use cases for AI-token apps, short-drama apps, etc.? If you need more context, we can discuss it in more detail.\n\n[Maxim Borisik]: Guys, this is huge! I think it’s the main release of the quarter\n\nnow it’s hard to say that our builder CAN’T do something.\n\nusers can finally do LOTTIE / RIVE animations (and way more things). let’s make all the clients/prospects happy. now it’s IOS only, awaiting other platforms asap. i’ll ping you\n\nour skill knows about it as well\n\n<!subteam^S07BZPQDBUJ> <!subteam^S03KC9S1QMC> <!subteam^S03KM96DV0U>\n\n[Melike Sezer]: yeyyy!\n\n[Denis Dolbilin]: v2 is where the real fun will start!\n\n[Mike Gorokhov]: <@U0A4F2RSMQQ> any spoilers?\n\n[Denis Dolbilin]: actually Kamil spoiled it already a little bit \n\nclient code would interact with our flow, so limitless possibilities to build really complex and ternary flows! \n\n[Maxim Borisik]: good news - RN &amp; Flutter sdk is live! \n",
       "matchingReplies": [
         {
           "userId": "U08EVBTE69E",
@@ -1183,104 +1273,6 @@
       ],
       "hasTeamMention": false,
       "images": []
-    },
-    {
-      "id": "1792570373.486469",
-      "slackUrl": "https://adapty-team.slack.com/archives/C04SY70QZ0T/p1792570373486469",
-      "name": "Apple’s 12-month commitment plans are LIVE, finally!!! :money-smell:",
-      "message": "Apple’s 12-month commitment plans are LIVE, finally!!! :money-smell:\n\n<!subteam^S03KC9S1QMC> <!subteam^S07BZPQDBUJ>\n\niOS SDK 4.3.0 lets apps sell a yearly subscription as 12 monthly payments, priced up to 50% above upfront. A cancel only stops the next commitment: the user keeps paying until payment 12.\n\n• Custom paywalls: add the yearly product with Billing plan = Monthly. Users who can’t buy the plan (US, iOS below 26.4, older app versions) get the upfront price.\n• Analytics, webhooks and integrations report the plan as `<product_id>:monthly`. Customers who match on product ID in their backend need to update it before the first purchase.\n• No grace period: after a failed payment the user has no access until Apple recovers it.\nLimits for now: native iOS only (cross-platform SDKs target early November), and Flows can’t show the plan yet.\n\nDocs:\n• <https://adapty.io/docs/app-store-12-month-commitment|adapty.io/docs/app-store-12-month-commitment>\n• <https://adapty.io/docs/set-up-12-month-commitment|adapty.io/docs/set-up-12-month-commitment>\n\nHuge thanks to <@U09L1SS03B8> <@U09GNBR5ZNW> <@U09U18M7MJ5> <@U03LQU89VHQ> <@U03LR6FS4Q3> <@U06KGG858LD> <@U0A3M160RB4>, that was hard but we made it :hands:",
-      "releaseDate": "2026-10-21",
-      "thread": [
-        {
-          "userId": "U07J9LKBQ5U",
-          "userName": "Yurii Kleimenov",
-          "text": "Apple’s 12-month commitment plans are LIVE, finally!!! :money-smell:\n\n<!subteam^S03KC9S1QMC> <!subteam^S07BZPQDBUJ>\n\niOS SDK 4.3.0 lets apps sell a yearly subscription as 12 monthly payments, priced up to 50% above upfront. A cancel only stops the next commitment: the user keeps paying until payment 12.\n\n• Custom paywalls: add the yearly product with Billing plan = Monthly. Users who can’t buy the plan (US, iOS below 26.4, older app versions) get the upfront price.\n• Analytics, webhooks and integrations report the plan as `<product_id>:monthly`. Customers who match on product ID in their backend need to update it before the first purchase.\n• No grace period: after a failed payment the user has no access until Apple recovers it.\nLimits for now: native iOS only (cross-platform SDKs target early November), and Flows can’t show the plan yet.\n\nDocs:\n• <https://adapty.io/docs/app-store-12-month-commitment|adapty.io/docs/app-store-12-month-commitment>\n• <https://adapty.io/docs/set-up-12-month-commitment|adapty.io/docs/set-up-12-month-commitment>\n\nHuge thanks to <@U09L1SS03B8> <@U09GNBR5ZNW> <@U09U18M7MJ5> <@U03LQU89VHQ> <@U03LR6FS4Q3> <@U06KGG858LD> <@U0A3M160RB4>, that was hard but we made it :hands:",
-          "date": "2026-10-21T08:12:53.486Z",
-          "images": [
-            "https://files.slack.com/files-pri/T9HDDB78Q-F0CAZ2FEV5F/image.png"
-          ]
-        },
-        {
-          "userId": "U03J8UXUDPF",
-          "userName": "Mykola Martynovets",
-          "text": "MAJOR!",
-          "date": "2026-10-21T08:51:20.671Z",
-          "images": []
-        },
-        {
-          "userId": "U034A27SVHC",
-          "userName": "Artem Rukavishnikov",
-          "text": "Hey <@U07J9LKBQ5U>\nWe're curious how it works in observer mode, specifically in older SDK versions. Concerning <#C0BQ2D7C87K>\nI’m pretty sure the backend already handles commitment purchases that come in through server notifications, so assumming that part should be fine. What I’m not sure about is the `reportTransaction` call from the old SDK. Does it send enough for the backend to tell it’s a commitment purchase?\nIf the old SDK’s report gets there before the server notification, we could end up with a wrong record, like a plain yearly sub instead of `:monthly`. I don’t know if the notification would fix that afterwards.\ncc <@U07H1ESAH6K>",
-          "date": "2026-10-28T04:13:09.046Z",
-          "images": []
-        },
-        {
-          "userId": "U07J9LKBQ5U",
-          "userName": "Yurii Kleimenov",
-          "text": "<!subteam^S07BZPQDBUJ> <!subteam^S03KC9S1QMC> Flows support in production :hands:",
-          "date": "2026-10-28T14:24:18.688Z",
-          "images": []
-        },
-        {
-          "userId": "U07J9LKBQ5U",
-          "userName": "Yurii Kleimenov",
-          "text": "<@U034A27SVHC> Checked it: the plan is fine on any SDK, we take it from Apple and the record lands as `:monthly`. The price isn’t: the SDK reports the product’s list price (old SDKs don’t know about billing plans, so it’s the upfront one), and our backend currently uses it instead of Apple’s actual charge, so these payments show ~10× too high. The fix is on our backend (ADP-8273). Until then Holywater’s revenue for these purchases may look inflated. SDK 4.3.x mostly avoids it, since it reports the monthly plan’s price.",
-          "date": "2026-10-28T18:08:17.985Z",
-          "images": []
-        }
-      ],
-      "content": "[Yurii Kleimenov]: Apple’s 12-month commitment plans are LIVE, finally!!! :money-smell:\n\n<!subteam^S03KC9S1QMC> <!subteam^S07BZPQDBUJ>\n\niOS SDK 4.3.0 lets apps sell a yearly subscription as 12 monthly payments, priced up to 50% above upfront. A cancel only stops the next commitment: the user keeps paying until payment 12.\n\n• Custom paywalls: add the yearly product with Billing plan = Monthly. Users who can’t buy the plan (US, iOS below 26.4, older app versions) get the upfront price.\n• Analytics, webhooks and integrations report the plan as `<product_id>:monthly`. Customers who match on product ID in their backend need to update it before the first purchase.\n• No grace period: after a failed payment the user has no access until Apple recovers it.\nLimits for now: native iOS only (cross-platform SDKs target early November), and Flows can’t show the plan yet.\n\nDocs:\n• <https://adapty.io/docs/app-store-12-month-commitment|adapty.io/docs/app-store-12-month-commitment>\n• <https://adapty.io/docs/set-up-12-month-commitment|adapty.io/docs/set-up-12-month-commitment>\n\nHuge thanks to <@U09L1SS03B8> <@U09GNBR5ZNW> <@U09U18M7MJ5> <@U03LQU89VHQ> <@U03LR6FS4Q3> <@U06KGG858LD> <@U0A3M160RB4>, that was hard but we made it :hands:\n\n[Mykola Martynovets]: MAJOR!\n\n[Artem Rukavishnikov]: Hey <@U07J9LKBQ5U>\nWe're curious how it works in observer mode, specifically in older SDK versions. Concerning <#C0BQ2D7C87K>\nI’m pretty sure the backend already handles commitment purchases that come in through server notifications, so assumming that part should be fine. What I’m not sure about is the `reportTransaction` call from the old SDK. Does it send enough for the backend to tell it’s a commitment purchase?\nIf the old SDK’s report gets there before the server notification, we could end up with a wrong record, like a plain yearly sub instead of `:monthly`. I don’t know if the notification would fix that afterwards.\ncc <@U07H1ESAH6K>\n\n[Yurii Kleimenov]: <!subteam^S07BZPQDBUJ> <!subteam^S03KC9S1QMC> Flows support in production :hands:\n\n[Yurii Kleimenov]: <@U034A27SVHC> Checked it: the plan is fine on any SDK, we take it from Apple and the record lands as `:monthly`. The price isn’t: the SDK reports the product’s list price (old SDKs don’t know about billing plans, so it’s the upfront one), and our backend currently uses it instead of Apple’s actual charge, so these payments show ~10× too high. The fix is on our backend (ADP-8273). Until then Holywater’s revenue for these purchases may look inflated. SDK 4.3.x mostly avoids it, since it reports the monthly plan’s price.",
-      "matchingReplies": [],
-      "hasTeamMention": true,
-      "images": [
-        "https://files.slack.com/files-pri/T9HDDB78Q-F0CAZ2FEV5F/image.png"
-      ]
-    },
-    {
-      "id": "1792558818.583529",
-      "slackUrl": "https://adapty-team.slack.com/archives/C04SY70QZ0T/p1792558818583529",
-      "name": "hey team! light &amp; dark themes are live in flow builder :jack_o_lantern::crescent_moon:",
-      "message": "hey team! light &amp; dark themes are live in flow builder :jack_o_lantern::crescent_moon:\n\nuntil now: dark mode in flows could swap only plain colors. images, gradients and videos stayed the same at night, so paywalls migrated from the old builder lost their dark look :skull:\n\nWhat's new:\n• color styles hold a separate stack for Light and Dark - solid, gradient, image or video, layered\n• Image and Video elements got Light / Dark tabs - drop a night file next to the day one. don't need two? one file serves both themes\n• the switcher under the canvas previews both themes, the tabs follow it\n• localizations show Light and Dark rows, so every language can have its own day and night picture :spider_web:\n• no SDK update needed - the app picks the dark file when the phone is in dark mode\n\nWho's been waiting for it :bat:\n• Impala - day/night images and gradients in styles, their footer gradient got lost after the migration\n• Jaumo - WeightBuddy funnels with different images and gradients per theme\n• Tappz - a gradient over a dark mode background\n• Weewoo - day and night assets for images and videos\nand many more!\n\nlimits for now :new_moon:\n• text color takes solid layers only - gradients and images there are skipped with a warning\n• icons and shadows stay one solid per theme, input borders one solid or gradient\n\nthanks to <@U07PR2368G5> for the design, <@U09UZ0GJYKE> for testing it inside out and <@U0A4F2RSMQQ> for the reviews and color fixes :spider:",
-      "releaseDate": "2026-10-21",
-      "thread": [
-        {
-          "userId": "U0BB5T65SF6",
-          "userName": "Kamil Lotfullin",
-          "text": "hey team! light &amp; dark themes are live in flow builder :jack_o_lantern::crescent_moon:\n\nuntil now: dark mode in flows could swap only plain colors. images, gradients and videos stayed the same at night, so paywalls migrated from the old builder lost their dark look :skull:\n\nWhat's new:\n• color styles hold a separate stack for Light and Dark - solid, gradient, image or video, layered\n• Image and Video elements got Light / Dark tabs - drop a night file next to the day one. don't need two? one file serves both themes\n• the switcher under the canvas previews both themes, the tabs follow it\n• localizations show Light and Dark rows, so every language can have its own day and night picture :spider_web:\n• no SDK update needed - the app picks the dark file when the phone is in dark mode\n\nWho's been waiting for it :bat:\n• Impala - day/night images and gradients in styles, their footer gradient got lost after the migration\n• Jaumo - WeightBuddy funnels with different images and gradients per theme\n• Tappz - a gradient over a dark mode background\n• Weewoo - day and night assets for images and videos\nand many more!\n\nlimits for now :new_moon:\n• text color takes solid layers only - gradients and images there are skipped with a warning\n• icons and shadows stay one solid per theme, input borders one solid or gradient\n\nthanks to <@U07PR2368G5> for the design, <@U09UZ0GJYKE> for testing it inside out and <@U0A4F2RSMQQ> for the reviews and color fixes :spider:",
-          "date": "2026-10-21T05:00:18.583Z",
-          "images": [
-            "https://files.slack.com/files-pri/T9HDDB78Q-F0CBQ647P16/image.png"
-          ]
-        },
-        {
-          "userId": "U08EVBTE69E",
-          "userName": "Maxim Borisik",
-          "text": "lets gooo",
-          "date": "2026-10-21T07:56:00.783Z",
-          "images": []
-        },
-        {
-          "userId": "U08EVBTE69E",
-          "userName": "Maxim Borisik",
-          "text": "<!subteam^S03KM96DV0U> <!subteam^S07BZPQDBUJ> you had many clients who wanted it badly!",
-          "date": "2026-10-21T07:56:19.946Z",
-          "images": []
-        }
-      ],
-      "content": "[Kamil Lotfullin]: hey team! light &amp; dark themes are live in flow builder :jack_o_lantern::crescent_moon:\n\nuntil now: dark mode in flows could swap only plain colors. images, gradients and videos stayed the same at night, so paywalls migrated from the old builder lost their dark look :skull:\n\nWhat's new:\n• color styles hold a separate stack for Light and Dark - solid, gradient, image or video, layered\n• Image and Video elements got Light / Dark tabs - drop a night file next to the day one. don't need two? one file serves both themes\n• the switcher under the canvas previews both themes, the tabs follow it\n• localizations show Light and Dark rows, so every language can have its own day and night picture :spider_web:\n• no SDK update needed - the app picks the dark file when the phone is in dark mode\n\nWho's been waiting for it :bat:\n• Impala - day/night images and gradients in styles, their footer gradient got lost after the migration\n• Jaumo - WeightBuddy funnels with different images and gradients per theme\n• Tappz - a gradient over a dark mode background\n• Weewoo - day and night assets for images and videos\nand many more!\n\nlimits for now :new_moon:\n• text color takes solid layers only - gradients and images there are skipped with a warning\n• icons and shadows stay one solid per theme, input borders one solid or gradient\n\nthanks to <@U07PR2368G5> for the design, <@U09UZ0GJYKE> for testing it inside out and <@U0A4F2RSMQQ> for the reviews and color fixes :spider:\n\n[Maxim Borisik]: lets gooo\n\n[Maxim Borisik]: <!subteam^S03KM96DV0U> <!subteam^S07BZPQDBUJ> you had many clients who wanted it badly!",
-      "matchingReplies": [
-        {
-          "userId": "U08EVBTE69E",
-          "userName": "Maxim Borisik",
-          "text": "<!subteam^S03KM96DV0U> <!subteam^S07BZPQDBUJ> you had many clients who wanted it badly!",
-          "date": "2026-10-21T07:56:19.946Z",
-          "images": []
-        }
-      ],
-      "hasTeamMention": true,
-      "images": [
-        "https://files.slack.com/files-pri/T9HDDB78Q-F0CBQ647P16/image.png"
-      ]
     }
   ]
 }
