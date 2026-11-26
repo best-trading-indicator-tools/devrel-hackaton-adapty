@@ -1,7 +1,133 @@
 {
-  "syncedAt": "2026-11-25T00:27:09.416Z",
+  "syncedAt": "2026-11-26T00:26:14.053Z",
   "channel": "#product-release",
   "entries": [
+    {
+      "id": "1795620106.789939",
+      "slackUrl": "https://adapty-team.slack.com/archives/C04SY70QZ0T/p1795620106789939",
+      "name": "*New skill: `paywall-compliance`*",
+      "message": "*New skill: `paywall-compliance`*\n\nIt used to be part of flow-audit; now it’s a separate skill with much deeper checks and support for more paywall types (we used to support only flows, and now we can check screenshots or app code as well), since we saw strong demand for it as its own product.\nHuge thanks to <@U07H1ESAH6K>, <@U08EVBTE69E> and <@U0903TFULQ3> for the vision and ideas!\n\n*Give it:* an Adapty flow, screenshots or a design, or your app’s own paywall and onboarding code.\n*It checks:*\n1. *Store requirements:* Restore, Terms and Privacy links, a way out of the paywall. Missing any of these is a blocker.\n2. *What has drawn rejections:* a free-trial toggle, a per-week price louder than the billed amount, “Maybe later” before a permission prompt, a second offer on close, a rating ask during onboarding.\n3. *What developers report lately:* recent rejections from forums, blogs and Apple’s news.\n4. *Consumer law (US, UK, EU):* hidden renewal terms, “free” that isn’t free, fake personalization, shaming decline buttons, fake countdowns.\n5. *The app around the screens:* unneeded personal data, account deletion, AI consent, the new 18+ rating for AI companions.\n*How it works:* it asks only what it can’t see (stores, countries, billing), then reports blockers first, each with a fix and its guideline. When a rule differs by country, it can create a separate version of the flow for those countries and configure its placement for different audiences.\nIt never promises a pass and isn’t legal advice.",
+      "releaseDate": "2026-11-25",
+      "thread": [
+        {
+          "userId": "U08QUJMN0UV",
+          "userName": "Elina Andreeva",
+          "text": "*New skill: `paywall-compliance`*\n\nIt used to be part of flow-audit; now it’s a separate skill with much deeper checks and support for more paywall types (we used to support only flows, and now we can check screenshots or app code as well), since we saw strong demand for it as its own product.\nHuge thanks to <@U07H1ESAH6K>, <@U08EVBTE69E> and <@U0903TFULQ3> for the vision and ideas!\n\n*Give it:* an Adapty flow, screenshots or a design, or your app’s own paywall and onboarding code.\n*It checks:*\n1. *Store requirements:* Restore, Terms and Privacy links, a way out of the paywall. Missing any of these is a blocker.\n2. *What has drawn rejections:* a free-trial toggle, a per-week price louder than the billed amount, “Maybe later” before a permission prompt, a second offer on close, a rating ask during onboarding.\n3. *What developers report lately:* recent rejections from forums, blogs and Apple’s news.\n4. *Consumer law (US, UK, EU):* hidden renewal terms, “free” that isn’t free, fake personalization, shaming decline buttons, fake countdowns.\n5. *The app around the screens:* unneeded personal data, account deletion, AI consent, the new 18+ rating for AI companions.\n*How it works:* it asks only what it can’t see (stores, countries, billing), then reports blockers first, each with a fix and its guideline. When a rule differs by country, it can create a separate version of the flow for those countries and configure its placement for different audiences.\nIt never promises a pass and isn’t legal advice.",
+          "date": "2026-11-25T15:21:46.789Z",
+          "images": [
+            "https://files.slack.com/files-pri/T9HDDB78Q-F0CLRJH4K27/image.png"
+          ]
+        },
+        {
+          "userId": "U07H1ESAH6K",
+          "userName": "Sofia Pikuleva",
+          "text": "omg awesome!!",
+          "date": "2026-11-25T15:24:41.946Z",
+          "images": []
+        },
+        {
+          "userId": "U08EVBTE69E",
+          "userName": "Maxim Borisik",
+          "text": "thanks Elina!!\n <@U06K36L6CTB> <@U0ASX4X3CKZ> new hook and lead gen is available :star-struck: \n\n<!subteam^S03KC9S1QMC> <@U072PU947PH> fyi. applicable for events ",
+          "date": "2026-11-25T15:31:14.233Z",
+          "images": []
+        },
+        {
+          "userId": "U07MXM412JV",
+          "userName": "Marina Trypolskaya",
+          "text": "that’s amazing! we have to make a big marketing/community push of this, the topic is on fire now\n<@U06K36L6CTB> <@U08SQQGK1A7>",
+          "date": "2026-11-25T16:25:35.886Z",
+          "images": []
+        },
+        {
+          "userId": "U08SQQGK1A7",
+          "userName": "burak ilhan",
+          "text": "<https://x.com/xburak/status/2125630621292679231?a=B1hElHE79WykCBb8mF4&amp;s=20|x.com/xburak/status/2125630621292679231?a=…&amp;s=20>",
+          "date": "2026-11-25T16:41:41.608Z",
+          "images": []
+        },
+        {
+          "userId": "U09QBBKPGMC",
+          "userName": "Elena Robakidze",
+          "text": "Hi <@U08SQQGK1A7> thank you! It is a big concern for many Chinese companies now and it's a huge topic here. Could you guide: \n• what's behind it \n• How reliable it is? \n• Do we “officially” promote it under Adapty brand or it’s just for DevRel community under your X account? ",
+          "date": "2026-11-25T17:25:49.747Z",
+          "images": []
+        },
+        {
+          "userId": "U08QUJMN0UV",
+          "userName": "Elina Andreeva",
+          "text": "Hi!\nHere is the docs article: <https://adapty.io/docs/paywall-compliance-skill|https://adapty.io/docs/paywall-compliance-skill> \nIt has some details regarding the checks inside\n\nWe can't guarantee anything (and nobody can!) and we state it directly. We base our recommendations upon the official Apple &amp; Google guidelines and recent actual developers experience available in the internet \n\nAnd, for example, if someone got rejected, they also can use this skill to dig into some possible reasons",
+          "date": "2026-11-25T17:51:07.446Z",
+          "images": []
+        },
+        {
+          "userId": "U08QUJMN0UV",
+          "userName": "Elina Andreeva",
+          "text": "And yes, it is inside the official adapty-skills plugin",
+          "date": "2026-11-25T17:51:38.783Z",
+          "images": []
+        },
+        {
+          "userId": "U08SQQGK1A7",
+          "userName": "burak ilhan",
+          "text": "Yeah, I think it’s fine to distribute it under Adapty rather than a personal account, since the skill is already in Adapty’s repo.\n\nAs for how reliable it is, imo, it’s super reliable. But I think it only addresses around 10% of the reasons apps get removed. It only checks paywall compliance, while many apps get removed for other reasons, like misusing remote config, spam, or hidden features.\n\nStill, it’s gonna be super helpful when it comes to paywall compliance.",
+          "date": "2026-11-25T17:53:20.611Z",
+          "images": []
+        },
+        {
+          "userId": "U08QUJMN0UV",
+          "userName": "Elina Andreeva",
+          "text": "Btw, we can add more checks (not just paywall), so, if you have any ideas, reach out to me :)",
+          "date": "2026-11-25T17:54:37.376Z",
+          "images": []
+        },
+        {
+          "userId": "U0AAUD3KHT7",
+          "userName": "David",
+          "text": "<@U08QUJMN0UV> I was thinking about an onboarding-compliance skill too",
+          "date": "2026-11-25T18:07:36.632Z",
+          "images": []
+        },
+        {
+          "userId": "U08QUJMN0UV",
+          "userName": "Elina Andreeva",
+          "text": "<@U0AAUD3KHT7> yes, onboardings are there as well",
+          "date": "2026-11-25T18:46:12.500Z",
+          "images": []
+        },
+        {
+          "userId": "U0AAUD3KHT7",
+          "userName": "David",
+          "text": "And an aso-compliance skill (if possible?)\nJust thought about it after seeing that one <https://x.com/david_attisaas/status/2125597878655611382|x.com/david_attisaas/status/2125597878655611382>",
+          "date": "2026-11-25T18:46:14.160Z",
+          "images": []
+        },
+        {
+          "userId": "U0AAUD3KHT7",
+          "userName": "David",
+          "text": "I tested the skill on that paywall\n<https://x.com/Tania_apps/status/2125543756204269935|x.com/Tania_apps/status/2125543756204269935>\nIt’s working well <@U08QUJMN0UV>\nIt catches everything I’ve spotted wrong on that paywall",
+          "date": "2026-11-25T18:56:19.729Z",
+          "images": [
+            "https://files.slack.com/files-pri/T9HDDB78Q-F0CMUAA5L3A/image.png"
+          ]
+        }
+      ],
+      "content": "[Elina Andreeva]: *New skill: `paywall-compliance`*\n\nIt used to be part of flow-audit; now it’s a separate skill with much deeper checks and support for more paywall types (we used to support only flows, and now we can check screenshots or app code as well), since we saw strong demand for it as its own product.\nHuge thanks to <@U07H1ESAH6K>, <@U08EVBTE69E> and <@U0903TFULQ3> for the vision and ideas!\n\n*Give it:* an Adapty flow, screenshots or a design, or your app’s own paywall and onboarding code.\n*It checks:*\n1. *Store requirements:* Restore, Terms and Privacy links, a way out of the paywall. Missing any of these is a blocker.\n2. *What has drawn rejections:* a free-trial toggle, a per-week price louder than the billed amount, “Maybe later” before a permission prompt, a second offer on close, a rating ask during onboarding.\n3. *What developers report lately:* recent rejections from forums, blogs and Apple’s news.\n4. *Consumer law (US, UK, EU):* hidden renewal terms, “free” that isn’t free, fake personalization, shaming decline buttons, fake countdowns.\n5. *The app around the screens:* unneeded personal data, account deletion, AI consent, the new 18+ rating for AI companions.\n*How it works:* it asks only what it can’t see (stores, countries, billing), then reports blockers first, each with a fix and its guideline. When a rule differs by country, it can create a separate version of the flow for those countries and configure its placement for different audiences.\nIt never promises a pass and isn’t legal advice.\n\n[Sofia Pikuleva]: omg awesome!!\n\n[Maxim Borisik]: thanks Elina!!\n <@U06K36L6CTB> <@U0ASX4X3CKZ> new hook and lead gen is available :star-struck: \n\n<!subteam^S03KC9S1QMC> <@U072PU947PH> fyi. applicable for events \n\n[Marina Trypolskaya]: that’s amazing! we have to make a big marketing/community push of this, the topic is on fire now\n<@U06K36L6CTB> <@U08SQQGK1A7>\n\n[burak ilhan]: <https://x.com/xburak/status/2125630621292679231?a=B1hElHE79WykCBb8mF4&amp;s=20|x.com/xburak/status/2125630621292679231?a=…&amp;s=20>\n\n[Elena Robakidze]: Hi <@U08SQQGK1A7> thank you! It is a big concern for many Chinese companies now and it's a huge topic here. Could you guide: \n• what's behind it \n• How reliable it is? \n• Do we “officially” promote it under Adapty brand or it’s just for DevRel community under your X account? \n\n[Elina Andreeva]: Hi!\nHere is the docs article: <https://adapty.io/docs/paywall-compliance-skill|https://adapty.io/docs/paywall-compliance-skill> \nIt has some details regarding the checks inside\n\nWe can't guarantee anything (and nobody can!) and we state it directly. We base our recommendations upon the official Apple &amp; Google guidelines and recent actual developers experience available in the internet \n\nAnd, for example, if someone got rejected, they also can use this skill to dig into some possible reasons\n\n[Elina Andreeva]: And yes, it is inside the official adapty-skills plugin\n\n[burak ilhan]: Yeah, I think it’s fine to distribute it under Adapty rather than a personal account, since the skill is already in Adapty’s repo.\n\nAs for how reliable it is, imo, it’s super reliable. But I think it only addresses around 10% of the reasons apps get removed. It only checks paywall compliance, while many apps get removed for other reasons, like misusing remote config, spam, or hidden features.\n\nStill, it’s gonna be super helpful when it comes to paywall compliance.\n\n[Elina Andreeva]: Btw, we can add more checks (not just paywall), so, if you have any ideas, reach out to me :)\n\n[David]: <@U08QUJMN0UV> I was thinking about an onboarding-compliance skill too\n\n[Elina Andreeva]: <@U0AAUD3KHT7> yes, onboardings are there as well\n\n[David]: And an aso-compliance skill (if possible?)\nJust thought about it after seeing that one <https://x.com/david_attisaas/status/2125597878655611382|x.com/david_attisaas/status/2125597878655611382>\n\n[David]: I tested the skill on that paywall\n<https://x.com/Tania_apps/status/2125543756204269935|x.com/Tania_apps/status/2125543756204269935>\nIt’s working well <@U08QUJMN0UV>\nIt catches everything I’ve spotted wrong on that paywall",
+      "matchingReplies": [
+        {
+          "userId": "U08EVBTE69E",
+          "userName": "Maxim Borisik",
+          "text": "thanks Elina!!\n <@U06K36L6CTB> <@U0ASX4X3CKZ> new hook and lead gen is available :star-struck: \n\n<!subteam^S03KC9S1QMC> <@U072PU947PH> fyi. applicable for events ",
+          "date": "2026-11-25T15:31:14.233Z",
+          "images": []
+        }
+      ],
+      "hasTeamMention": true,
+      "images": [
+        "https://files.slack.com/files-pri/T9HDDB78Q-F0CLRJH4K27/image.png",
+        "https://files.slack.com/files-pri/T9HDDB78Q-F0CMUAA5L3A/image.png"
+      ]
+    },
     {
       "id": "1795539568.662009",
       "slackUrl": "https://adapty-team.slack.com/archives/C04SY70QZ0T/p1795539568662009",
@@ -1175,104 +1301,6 @@
         "https://files.slack.com/files-pri/T9HDDB78Q-F0CCLJPK14H/image.png",
         "https://files.slack.com/files-pri/T9HDDB78Q-F0CGXE96JNL/image.png"
       ]
-    },
-    {
-      "id": "1792761934.760789",
-      "slackUrl": "https://adapty-team.slack.com/archives/C04SY70QZ0T/p1792761934760789",
-      "name": "hey team! excited to share a great AI update with you :robot_face:",
-      "message": "hey team! excited to share a great AI update with you :robot_face:\nsomething we were building quietly and finally got unlocked due to <https://adapty-team.slack.com/archives/C04SY70QZ0T/p1792685168191469|CLI analytics release above>\n\ni bet you remember that we had Autopilot product. which allows users to get insights on their app - based on the benchmarks and our growth knowledge. it was born because apps want expertise and assistance from adapty, and we have it - 30k apps data\n\nmain reasons why autopilot didn't skyrocket - we generated growth ideas, but they *1) weren't that new (or crazy) for big apps*; 2) *ideas still required execution*, and based on custdevs - that was the problem. no one wants to do manual job to run hundreds of AB tests - segments, paywalls, products, analytics -> repeat\n\nwhat i am presenting to you today = *Growth advisor skill for CLI - v1* :rocket:\n\nit is an extremely smart skill with growth manager expertise and more: 1) knowledge and expertise of our PS team with thousands of AB tests (trust me there is a lot); 2) per industry benchmarks from our latest reports: and 3) understanding of the whole adapty growth setup via CLI (ABs/segments/placements/flow builder etc.)\n\n*we now will finally close the whole loop, because agents are too good now. which is mind-blowing* :chefs-kiss:\n1. *Analysis*\n    a. you ask agent with our new skill everything =  \"please audit my whole app\" or \"I have two ideas: a weekly plan OR a new placement. Which one should I test first?\"\n    b. it reads everything - your revenue/conversion by countries, placement-structure of your app, history of AB tests, your main products \n2. *Hypothesis/ideas (via skill)*\n    a. it gives you ideas on what you should focus on based on our benchmarks and expertise, but you can chat/discuss and argue (something we lacked in autopilot v1)\n3. *Preparation (via CLI)*\n    a. you can easily (!) set up any idea you like without interface! thanks to AI team and our CLI there! \n    b. you have an idea to run AB test where you localise paywall for brazilian market and compare yearly for 40$ VS 50$ \n        i. Agent will do the magic: create a segment for Brazil, generate a paywall (in flow builder) with the new prices, and create a draft of AB test\n4. *Execution*\n    a. User just reviews it, and then launches the AB. just him, claude code and adapty CLI. \nIn the end - *Adapty helps you - delegate growth to us, while focusing on other things. everything is agentic, as the market requires* :dart:\n\n*it's v1 now. to become fully agentic growth manager* - we have things coming in the nearest days:\n• AB tests analysis & set up\n• pulling and updating the prices of each product, with the pricing index of adapty included\n• hypothesis list - you can \"save\" hypothesis you like (and see them in the frontend of adapty dashboard. a piece of \"human in the loop\" (p3)\nread more and install here:\n<https://adapty.io/docs/export-analytics-with-ai|adapty.io/docs/export-analytics-with-ai>\n\nwe are entering new era now. huge thanks to <@U08QUJMN0UV> <@U080G9FHV50> <@U0AKC1Y09R8> <@U08JY3U9S7P> and AI team <@U0ALSG3VA30> <@U07J1NQPD4P>",
-      "releaseDate": "2026-10-23",
-      "thread": [
-        {
-          "userId": "U08EVBTE69E",
-          "userName": "Maxim Borisik",
-          "text": "hey team! excited to share a great AI update with you :robot_face:\nsomething we were building quietly and finally got unlocked due to <https://adapty-team.slack.com/archives/C04SY70QZ0T/p1792685168191469|CLI analytics release above>\n\ni bet you remember that we had Autopilot product. which allows users to get insights on their app - based on the benchmarks and our growth knowledge. it was born because apps want expertise and assistance from adapty, and we have it - 30k apps data\n\nmain reasons why autopilot didn't skyrocket - we generated growth ideas, but they *1) weren't that new (or crazy) for big apps*; 2) *ideas still required execution*, and based on custdevs - that was the problem. no one wants to do manual job to run hundreds of AB tests - segments, paywalls, products, analytics -> repeat\n\nwhat i am presenting to you today = *Growth advisor skill for CLI - v1* :rocket:\n\nit is an extremely smart skill with growth manager expertise and more: 1) knowledge and expertise of our PS team with thousands of AB tests (trust me there is a lot); 2) per industry benchmarks from our latest reports: and 3) understanding of the whole adapty growth setup via CLI (ABs/segments/placements/flow builder etc.)\n\n*we now will finally close the whole loop, because agents are too good now. which is mind-blowing* :chefs-kiss:\n1. *Analysis*\n    a. you ask agent with our new skill everything =  \"please audit my whole app\" or \"I have two ideas: a weekly plan OR a new placement. Which one should I test first?\"\n    b. it reads everything - your revenue/conversion by countries, placement-structure of your app, history of AB tests, your main products \n2. *Hypothesis/ideas (via skill)*\n    a. it gives you ideas on what you should focus on based on our benchmarks and expertise, but you can chat/discuss and argue (something we lacked in autopilot v1)\n3. *Preparation (via CLI)*\n    a. you can easily (!) set up any idea you like without interface! thanks to AI team and our CLI there! \n    b. you have an idea to run AB test where you localise paywall for brazilian market and compare yearly for 40$ VS 50$ \n        i. Agent will do the magic: create a segment for Brazil, generate a paywall (in flow builder) with the new prices, and create a draft of AB test\n4. *Execution*\n    a. User just reviews it, and then launches the AB. just him, claude code and adapty CLI. \nIn the end - *Adapty helps you - delegate growth to us, while focusing on other things. everything is agentic, as the market requires* :dart:\n\n*it's v1 now. to become fully agentic growth manager* - we have things coming in the nearest days:\n• AB tests analysis & set up\n• pulling and updating the prices of each product, with the pricing index of adapty included\n• hypothesis list - you can \"save\" hypothesis you like (and see them in the frontend of adapty dashboard. a piece of \"human in the loop\" (p3)\nread more and install here:\n<https://adapty.io/docs/export-analytics-with-ai|adapty.io/docs/export-analytics-with-ai>\n\nwe are entering new era now. huge thanks to <@U08QUJMN0UV> <@U080G9FHV50> <@U0AKC1Y09R8> <@U08JY3U9S7P> and AI team <@U0ALSG3VA30> <@U07J1NQPD4P>",
-          "date": "2026-10-23T13:25:34.760Z",
-          "images": []
-        },
-        {
-          "userId": "U0903TFULQ3",
-          "userName": "Andrii Hermanov",
-          "text": "I have to try it NOW :dog_dance:",
-          "date": "2026-10-23T13:29:32.673Z",
-          "images": []
-        },
-        {
-          "userId": "U040DK8K86Q",
-          "userName": "Kseniya Simonova",
-          "text": "This is cool!",
-          "date": "2026-10-23T13:47:19.757Z",
-          "images": []
-        },
-        {
-          "userId": "U07J1NQPD4P",
-          "userName": "Danil Melnichuk",
-          "text": "autopilot renaissance",
-          "date": "2026-10-23T16:03:56.065Z",
-          "images": []
-        },
-        {
-          "userId": "U0AAUD3KHT7",
-          "userName": "David",
-          "text": "Our pace of features shipping is absolutely mind-blowing \nHard to keep track of all new releases :rolling_on_the_floor_laughing:",
-          "date": "2026-10-23T16:13:22.692Z",
-          "images": []
-        },
-        {
-          "userId": "U08EVBTE69E",
-          "userName": "Maxim Borisik",
-          "text": "you just gotta remember: adapty+app+ai = money",
-          "date": "2026-10-23T16:14:28.473Z",
-          "images": []
-        },
-        {
-          "userId": "U0AAUD3KHT7",
-          "userName": "David",
-          "text": "I'll print it and stick to my fridge ",
-          "date": "2026-10-23T16:15:05.627Z",
-          "images": []
-        },
-        {
-          "userId": "U08EVBTE69E",
-          "userName": "Maxim Borisik",
-          "text": "or a tattoo",
-          "date": "2026-10-23T16:17:11.146Z",
-          "images": []
-        },
-        {
-          "userId": "U0AAUD3KHT7",
-          "userName": "David",
-          "text": "DevRel with “skin in the game”",
-          "date": "2026-10-23T16:17:45.648Z",
-          "images": []
-        },
-        {
-          "userId": "U09EG3DK4US",
-          "userName": "Polina Ishimbaeva",
-          "text": "<@U08EVBTE69E> once again, great update!\nsmall question, you said `*it's v1 now. to become fully agentic growth manager* - we have things coming in the nearest days:`\n`AB tests analysis &amp; set up`  but above you mentioned `Agent will do the magic: create a segment for Brazil, generate a paywall (in flow builder) with the new prices, and create a draft of AB test`\n So what do you mean exactly when saying AB tests analysis and set up? considering that analysis are kinda included in analytics skill?\nOr did I get it all wrong?\nThank you :raised_hands:",
-          "date": "2026-10-29T12:05:45.816Z",
-          "images": []
-        },
-        {
-          "userId": "U08EVBTE69E",
-          "userName": "Maxim Borisik",
-          "text": "now it's V1\n\nand to be fully ready = we wait for 2 things on CLI to close all the scenarios\n• get \"AB test data\" in CLI \n    ◦ now it's just management - <https://adapty-team.slack.com/archives/C04SY70QZ0T/p1793194842631309|https://adapty-team.slack.com/archives/C04SY70QZ0T/p1793194842631309> \n• work with product prices (read/update)\n    ◦ it will be done next week!\nand then yes. our skill will be able to do:\n`create a segment for Brazil, generate a paywall (in flow builder) with the new prices, and create a draft of AB test`\n\nso couple days left!",
-          "date": "2026-10-29T12:09:06.435Z",
-          "images": []
-        }
-      ],
-      "content": "[Maxim Borisik]: hey team! excited to share a great AI update with you :robot_face:\nsomething we were building quietly and finally got unlocked due to <https://adapty-team.slack.com/archives/C04SY70QZ0T/p1792685168191469|CLI analytics release above>\n\ni bet you remember that we had Autopilot product. which allows users to get insights on their app - based on the benchmarks and our growth knowledge. it was born because apps want expertise and assistance from adapty, and we have it - 30k apps data\n\nmain reasons why autopilot didn't skyrocket - we generated growth ideas, but they *1) weren't that new (or crazy) for big apps*; 2) *ideas still required execution*, and based on custdevs - that was the problem. no one wants to do manual job to run hundreds of AB tests - segments, paywalls, products, analytics -> repeat\n\nwhat i am presenting to you today = *Growth advisor skill for CLI - v1* :rocket:\n\nit is an extremely smart skill with growth manager expertise and more: 1) knowledge and expertise of our PS team with thousands of AB tests (trust me there is a lot); 2) per industry benchmarks from our latest reports: and 3) understanding of the whole adapty growth setup via CLI (ABs/segments/placements/flow builder etc.)\n\n*we now will finally close the whole loop, because agents are too good now. which is mind-blowing* :chefs-kiss:\n1. *Analysis*\n    a. you ask agent with our new skill everything =  \"please audit my whole app\" or \"I have two ideas: a weekly plan OR a new placement. Which one should I test first?\"\n    b. it reads everything - your revenue/conversion by countries, placement-structure of your app, history of AB tests, your main products \n2. *Hypothesis/ideas (via skill)*\n    a. it gives you ideas on what you should focus on based on our benchmarks and expertise, but you can chat/discuss and argue (something we lacked in autopilot v1)\n3. *Preparation (via CLI)*\n    a. you can easily (!) set up any idea you like without interface! thanks to AI team and our CLI there! \n    b. you have an idea to run AB test where you localise paywall for brazilian market and compare yearly for 40$ VS 50$ \n        i. Agent will do the magic: create a segment for Brazil, generate a paywall (in flow builder) with the new prices, and create a draft of AB test\n4. *Execution*\n    a. User just reviews it, and then launches the AB. just him, claude code and adapty CLI. \nIn the end - *Adapty helps you - delegate growth to us, while focusing on other things. everything is agentic, as the market requires* :dart:\n\n*it's v1 now. to become fully agentic growth manager* - we have things coming in the nearest days:\n• AB tests analysis & set up\n• pulling and updating the prices of each product, with the pricing index of adapty included\n• hypothesis list - you can \"save\" hypothesis you like (and see them in the frontend of adapty dashboard. a piece of \"human in the loop\" (p3)\nread more and install here:\n<https://adapty.io/docs/export-analytics-with-ai|adapty.io/docs/export-analytics-with-ai>\n\nwe are entering new era now. huge thanks to <@U08QUJMN0UV> <@U080G9FHV50> <@U0AKC1Y09R8> <@U08JY3U9S7P> and AI team <@U0ALSG3VA30> <@U07J1NQPD4P>\n\n[Andrii Hermanov]: I have to try it NOW :dog_dance:\n\n[Kseniya Simonova]: This is cool!\n\n[Danil Melnichuk]: autopilot renaissance\n\n[David]: Our pace of features shipping is absolutely mind-blowing \nHard to keep track of all new releases :rolling_on_the_floor_laughing:\n\n[Maxim Borisik]: you just gotta remember: adapty+app+ai = money\n\n[David]: I'll print it and stick to my fridge \n\n[Maxim Borisik]: or a tattoo\n\n[David]: DevRel with “skin in the game”\n\n[Polina Ishimbaeva]: <@U08EVBTE69E> once again, great update!\nsmall question, you said `*it's v1 now. to become fully agentic growth manager* - we have things coming in the nearest days:`\n`AB tests analysis &amp; set up`  but above you mentioned `Agent will do the magic: create a segment for Brazil, generate a paywall (in flow builder) with the new prices, and create a draft of AB test`\n So what do you mean exactly when saying AB tests analysis and set up? considering that analysis are kinda included in analytics skill?\nOr did I get it all wrong?\nThank you :raised_hands:\n\n[Maxim Borisik]: now it's V1\n\nand to be fully ready = we wait for 2 things on CLI to close all the scenarios\n• get \"AB test data\" in CLI \n    ◦ now it's just management - <https://adapty-team.slack.com/archives/C04SY70QZ0T/p1793194842631309|https://adapty-team.slack.com/archives/C04SY70QZ0T/p1793194842631309> \n• work with product prices (read/update)\n    ◦ it will be done next week!\nand then yes. our skill will be able to do:\n`create a segment for Brazil, generate a paywall (in flow builder) with the new prices, and create a draft of AB test`\n\nso couple days left!",
-      "matchingReplies": [
-        {
-          "userId": "U08EVBTE69E",
-          "userName": "Maxim Borisik",
-          "text": "now it's V1\n\nand to be fully ready = we wait for 2 things on CLI to close all the scenarios\n• get \"AB test data\" in CLI \n    ◦ now it's just management - <https://adapty-team.slack.com/archives/C04SY70QZ0T/p1793194842631309|https://adapty-team.slack.com/archives/C04SY70QZ0T/p1793194842631309> \n• work with product prices (read/update)\n    ◦ it will be done next week!\nand then yes. our skill will be able to do:\n`create a segment for Brazil, generate a paywall (in flow builder) with the new prices, and create a draft of AB test`\n\nso couple days left!",
-          "date": "2026-10-29T12:09:06.435Z",
-          "images": []
-        }
-      ],
-      "hasTeamMention": false,
-      "images": []
     }
   ]
 }
