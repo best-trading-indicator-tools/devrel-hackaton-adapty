@@ -1,7 +1,41 @@
 {
-  "syncedAt": "2026-11-26T00:26:14.053Z",
+  "syncedAt": "2026-11-27T00:27:14.916Z",
   "channel": "#product-release",
   "entries": [
+    {
+      "id": "1795688383.010179",
+      "slackUrl": "https://adapty-team.slack.com/archives/C04SY70QZ0T/p1795688383010179",
+      "name": "_Flow Builder: Issues panel_",
+      "message": "_Flow Builder: Issues panel_\n\nErrors and warnings of a flow are now in one list, under *Issues* in the top bar. A click on a row opens the screen, selects the layer and marks the setting to fix.\n• Blocks publishing: product errors, for example a card with a deleted product or a Buy button with no product\n• Doesn’t block: missing store IDs and a heavy flow\n• Publishing with a blocking issue now says “Fix N issues before publishing” and opens the list\n_Flow size:_ *⋮ → Show flow size* on a published flow shows what the app downloads before the first screen on iOS and Android, and what makes it heavy. Above 500 KB on Android the flow gets a warning. The size is measured at publish, so older flows show it after their next publish. It’s also in the Developer API (`config_size`, `is_heavy`).\n\nHuge thanks to <@U07PR2368G5> for the design, <@U090T4UNBUK> for the flow size idea and checking every number, and <@U08JY3U9S7P> for testing it :purple_heart:",
+      "releaseDate": "2026-11-26",
+      "thread": [
+        {
+          "userId": "U0CEASS8Z9D",
+          "userName": "Aleksandr Sakhatskii",
+          "text": "_Flow Builder: Issues panel_\n\nErrors and warnings of a flow are now in one list, under *Issues* in the top bar. A click on a row opens the screen, selects the layer and marks the setting to fix.\n• Blocks publishing: product errors, for example a card with a deleted product or a Buy button with no product\n• Doesn’t block: missing store IDs and a heavy flow\n• Publishing with a blocking issue now says “Fix N issues before publishing” and opens the list\n_Flow size:_ *⋮ → Show flow size* on a published flow shows what the app downloads before the first screen on iOS and Android, and what makes it heavy. Above 500 KB on Android the flow gets a warning. The size is measured at publish, so older flows show it after their next publish. It’s also in the Developer API (`config_size`, `is_heavy`).\n\nHuge thanks to <@U07PR2368G5> for the design, <@U090T4UNBUK> for the flow size idea and checking every number, and <@U08JY3U9S7P> for testing it :purple_heart:",
+          "date": "2026-11-26T10:19:43.010Z",
+          "images": []
+        },
+        {
+          "userId": "U090T4UNBUK",
+          "userName": "Stanislav Mayorov",
+          "text": "<!subteam^S03KM96DV0U> <!subteam^S086DHAHL8J> <@U09TA3G5JKG> Hi! It’s useful feature for checking how heavy a flow is, for example when a client’s flow loses to the native one in an A/B test.\nI think a good paywall size is about 100 kb (for one screen paywall)",
+          "date": "2026-11-26T11:24:41.218Z",
+          "images": []
+        },
+        {
+          "userId": "U0BB5T65SF6",
+          "userName": "Kamil Lotfullin",
+          "text": "amazing job, <@U0CEASS8Z9D>!",
+          "date": "2026-11-26T13:53:48.808Z",
+          "images": []
+        }
+      ],
+      "content": "[Aleksandr Sakhatskii]: _Flow Builder: Issues panel_\n\nErrors and warnings of a flow are now in one list, under *Issues* in the top bar. A click on a row opens the screen, selects the layer and marks the setting to fix.\n• Blocks publishing: product errors, for example a card with a deleted product or a Buy button with no product\n• Doesn’t block: missing store IDs and a heavy flow\n• Publishing with a blocking issue now says “Fix N issues before publishing” and opens the list\n_Flow size:_ *⋮ → Show flow size* on a published flow shows what the app downloads before the first screen on iOS and Android, and what makes it heavy. Above 500 KB on Android the flow gets a warning. The size is measured at publish, so older flows show it after their next publish. It’s also in the Developer API (`config_size`, `is_heavy`).\n\nHuge thanks to <@U07PR2368G5> for the design, <@U090T4UNBUK> for the flow size idea and checking every number, and <@U08JY3U9S7P> for testing it :purple_heart:\n\n[Stanislav Mayorov]: <!subteam^S03KM96DV0U> <!subteam^S086DHAHL8J> <@U09TA3G5JKG> Hi! It’s useful feature for checking how heavy a flow is, for example when a client’s flow loses to the native one in an A/B test.\nI think a good paywall size is about 100 kb (for one screen paywall)\n\n[Kamil Lotfullin]: amazing job, <@U0CEASS8Z9D>!",
+      "matchingReplies": [],
+      "hasTeamMention": true,
+      "images": []
+    },
     {
       "id": "1795620106.789939",
       "slackUrl": "https://adapty-team.slack.com/archives/C04SY70QZ0T/p1795620106789939",
@@ -303,9 +337,16 @@
           "text": "<!subteam^S07BZPQDBUJ> fyi",
           "date": "2026-11-24T10:37:40.003Z",
           "images": []
+        },
+        {
+          "userId": "U0ACSQAKJA1",
+          "userName": "Nikolai Proskurin",
+          "text": "huge kudos to everyone involved! as a developer with little to no experience with frontend, it’s insane how easy it is now to create a stunning looking prototype after essentially a couple of prompts and an hour of agent’s time",
+          "date": "2026-11-26T10:16:44.832Z",
+          "images": []
         }
       ],
-      "content": "[Alina Ermolaeva]: Hey team!\n\n:sparkles: _The new Adapty dashboard is live_\n\nWe’ve rebuilt the dashboard from scratch on our design system and rolled it out to all users, in both US and EU. It works with the same apps, data and settings as the current one, so nothing needs to move. Open it at <http://new-app.adapty.io|new-app.adapty.io>.\n\n_It’s not the 100% final version yet_, but it’s already better than what we had: technically, in languages (the interface is now available in English, Russian, Chinese, Spanish and Turkish) and in design. Some sections still need polishing, and we’ll keep improving them. Feedback is very welcome :pray:\n\n_How it works now:_\n• Users of the current dashboard see a one-time window inviting them to the new one, and the “Try new interface” strip on Overview stays as a permanent way in.\n• The current dashboard (<http://app.adapty.io|app.adapty.io>) is still the default. Nobody is switched over.\n• Anyone can go back to the current dashboard at any time.\n\n_Good to know:_\n• Still in the current dashboard for now: onboardings, Finance (the Finance link in the new dashboard opens it in a new tab) and promo sign-up pages.\n• We’ll switch everyone to the new dashboard by default once the look & feel is fully polished.\n\n_Please use it for your daily work_ and send anything that looks off: the page link, what you did and a screenshot.\n\nHuge thanks to <@U09AH7D2A4X> <@U09GNBR5ZNW> <@U0AKC1Y09R8> <@U08QUJMN0UV> <@U0A4F2RSMQQ> <@U9HDNS9S4> :purple_heart::adapty-diamonds:\n\n[Mykola Martynovets]: Great work, team!\n<@U07PR2368G5> I recommend reusing the compare menu from <https://app.adapty.io/asa/campaigns|Ads>, worth to check it\n\n[Denis Dolbilin]: such a colossal work from you! congrats! \n\n[Alina Ermolaeva]: Thanks a lot!\n\n[Vitaly Davydov]: is it a bug?\n\n[Alina Ermolaeva]: Yes, I’ll fix it!\n\n[Leonid Koliazin]: Great job Alina! :clap::skin-tone-3: \n\n[Mykola Martynovets]: <@U07PR2368G5> I’ve looked everywhere but can’t find a dark theme :sweat_smile:\n\n[Mirazim Tolipov]: <@U03J8UXUDPF> I really needed an excuse to post this picture, thanks.\n\n[Mykola Martynovets]: I want to post meme in subhub, help me\n\n[Alina Ermolaeva]: <@U03J8UXUDPF> It will be later:)\n\n[Daniel Ridny]: <@U07PR2368G5> kudos on the massive work you’ve put into this!\nSince we will inevitably get some of clients’ feedback on the new design, including both relevant suggestions and less realistic ideas, where would you prefer us to collect it so you can review and analyze everything?\n\n[Alina Ermolaeva]: We’ve opened <#C0CMBJR7ARW> for bugs and inconveniences in the new dashboard (<http://new-app.adapty.io|new-app.adapty.io>).\n\nIf something is broken, confusing or just annoying, post it there with a page link and a screenshot. Small things count too. We read everything and mark each post with :eyes: when we’re on it and :white_check_mark: when the fix is live.\n\n[Daniel Ridny]: <!subteam^S07BZPQDBUJ> fyi",
+      "content": "[Alina Ermolaeva]: Hey team!\n\n:sparkles: _The new Adapty dashboard is live_\n\nWe’ve rebuilt the dashboard from scratch on our design system and rolled it out to all users, in both US and EU. It works with the same apps, data and settings as the current one, so nothing needs to move. Open it at <http://new-app.adapty.io|new-app.adapty.io>.\n\n_It’s not the 100% final version yet_, but it’s already better than what we had: technically, in languages (the interface is now available in English, Russian, Chinese, Spanish and Turkish) and in design. Some sections still need polishing, and we’ll keep improving them. Feedback is very welcome :pray:\n\n_How it works now:_\n• Users of the current dashboard see a one-time window inviting them to the new one, and the “Try new interface” strip on Overview stays as a permanent way in.\n• The current dashboard (<http://app.adapty.io|app.adapty.io>) is still the default. Nobody is switched over.\n• Anyone can go back to the current dashboard at any time.\n\n_Good to know:_\n• Still in the current dashboard for now: onboardings, Finance (the Finance link in the new dashboard opens it in a new tab) and promo sign-up pages.\n• We’ll switch everyone to the new dashboard by default once the look & feel is fully polished.\n\n_Please use it for your daily work_ and send anything that looks off: the page link, what you did and a screenshot.\n\nHuge thanks to <@U09AH7D2A4X> <@U09GNBR5ZNW> <@U0AKC1Y09R8> <@U08QUJMN0UV> <@U0A4F2RSMQQ> <@U9HDNS9S4> :purple_heart::adapty-diamonds:\n\n[Mykola Martynovets]: Great work, team!\n<@U07PR2368G5> I recommend reusing the compare menu from <https://app.adapty.io/asa/campaigns|Ads>, worth to check it\n\n[Denis Dolbilin]: such a colossal work from you! congrats! \n\n[Alina Ermolaeva]: Thanks a lot!\n\n[Vitaly Davydov]: is it a bug?\n\n[Alina Ermolaeva]: Yes, I’ll fix it!\n\n[Leonid Koliazin]: Great job Alina! :clap::skin-tone-3: \n\n[Mykola Martynovets]: <@U07PR2368G5> I’ve looked everywhere but can’t find a dark theme :sweat_smile:\n\n[Mirazim Tolipov]: <@U03J8UXUDPF> I really needed an excuse to post this picture, thanks.\n\n[Mykola Martynovets]: I want to post meme in subhub, help me\n\n[Alina Ermolaeva]: <@U03J8UXUDPF> It will be later:)\n\n[Daniel Ridny]: <@U07PR2368G5> kudos on the massive work you’ve put into this!\nSince we will inevitably get some of clients’ feedback on the new design, including both relevant suggestions and less realistic ideas, where would you prefer us to collect it so you can review and analyze everything?\n\n[Alina Ermolaeva]: We’ve opened <#C0CMBJR7ARW> for bugs and inconveniences in the new dashboard (<http://new-app.adapty.io|new-app.adapty.io>).\n\nIf something is broken, confusing or just annoying, post it there with a page link and a screenshot. Small things count too. We read everything and mark each post with :eyes: when we’re on it and :white_check_mark: when the fix is live.\n\n[Daniel Ridny]: <!subteam^S07BZPQDBUJ> fyi\n\n[Nikolai Proskurin]: huge kudos to everyone involved! as a developer with little to no experience with frontend, it’s insane how easy it is now to create a stunning looking prototype after essentially a couple of prompts and an hour of agent’s time",
       "matchingReplies": [
         {
           "userId": "U03J8UXUDPF",
@@ -1217,89 +1258,6 @@
       "images": [
         "https://files.slack.com/files-pri/T9HDDB78Q-F0CCR7WNTJ7/image-1793201054420.png",
         "https://files.slack.com/files-pri/T9HDDB78Q-F0CCG3K18H5/image-1793201342597.png"
-      ]
-    },
-    {
-      "id": "1793113079.105889",
-      "slackUrl": "https://adapty-team.slack.com/archives/C04SY70QZ0T/p1793113079105889",
-      "name": ":rocket: *New in Flow metrics: Flow screen funnel*",
-      "message": ":rocket: *New in Flow metrics: Flow screen funnel*\nYou can now see on which screen of a flow users drop off and where they buy. Flow metrics has a new *Funnel* tab.\n*What’s inside*\n• *Summary:* how many users started the flow (Entered), how many finished it (Completed), the share that dropped off (Drop rate), and the flow’s revenue (Revenue)\n• *Step table:* how many users reached each screen, how many finished the flow there, and how many dropped off. Paywall screens also show trials, purchases and revenue\n• *Branches:* a step with several screens expands, so you can see how many users each screen got\n• *Chart:* a bar per step, conversion between steps, and drop-off under each step\n• *Filters:* date range, install date mode, Country, Store, Platform, Subscription state. You can pick any published version of the flow\n• *CSV export*\n*How Completed is counted*\nA user completes the flow when they buy or start a trial on a paywall, or reach the last screen. If the last screen is a paywall, only users who bought count. Everyone else is a drop-off on the screen where they left.\n*Good to know*\n• The funnel is built for the currently published version by default, so Entered can be lower than the views on the Metrics tab, which counts all versions\nWhere to find it: Flows → your flow → Flow metrics → *Funnel* tab\nThanks <@U033TEH5HSA> for building it :raised_hands:\nFYI <@U08EVBTE69E>",
-      "releaseDate": "2026-10-27",
-      "thread": [
-        {
-          "userId": "U08JY3U9S7P",
-          "userName": "Lera Eroshevich",
-          "text": ":rocket: *New in Flow metrics: Flow screen funnel*\nYou can now see on which screen of a flow users drop off and where they buy. Flow metrics has a new *Funnel* tab.\n*What’s inside*\n• *Summary:* how many users started the flow (Entered), how many finished it (Completed), the share that dropped off (Drop rate), and the flow’s revenue (Revenue)\n• *Step table:* how many users reached each screen, how many finished the flow there, and how many dropped off. Paywall screens also show trials, purchases and revenue\n• *Branches:* a step with several screens expands, so you can see how many users each screen got\n• *Chart:* a bar per step, conversion between steps, and drop-off under each step\n• *Filters:* date range, install date mode, Country, Store, Platform, Subscription state. You can pick any published version of the flow\n• *CSV export*\n*How Completed is counted*\nA user completes the flow when they buy or start a trial on a paywall, or reach the last screen. If the last screen is a paywall, only users who bought count. Everyone else is a drop-off on the screen where they left.\n*Good to know*\n• The funnel is built for the currently published version by default, so Entered can be lower than the views on the Metrics tab, which counts all versions\nWhere to find it: Flows → your flow → Flow metrics → *Funnel* tab\nThanks <@U033TEH5HSA> for building it :raised_hands:\nFYI <@U08EVBTE69E>",
-          "date": "2026-10-27T14:57:59.105Z",
-          "images": [
-            "https://files.slack.com/files-pri/T9HDDB78Q-F0CCLJPK14H/image.png"
-          ]
-        },
-        {
-          "userId": "U03DFSCP8CW",
-          "userName": "Mike Gorokhov",
-          "text": "Great stuff!\n\n<@U034A27SVHC> <@U07J9LKBQ5U> we should have this in our demo instance rebuild",
-          "date": "2026-10-27T15:01:25.707Z",
-          "images": []
-        },
-        {
-          "userId": "U0AAUD3KHT7",
-          "userName": "David",
-          "text": "HUGE !!\nIt's available via the FLOW SKILL as well? to ask questions with LLM about it + get alerts whenever there is a drop-off vs the past 24h data",
-          "date": "2026-10-27T15:16:45.322Z",
-          "images": []
-        },
-        {
-          "userId": "U08QUJMN0UV",
-          "userName": "Elina Andreeva",
-          "text": "<@U0AAUD3KHT7> hi!\nIt's not supported in the CLI yet\nLater, when this data becomes available in the CLI, we'll support it in the skill as well. And yes — we plan to add some alert/scheduled task templates to the skills soon",
-          "date": "2026-10-27T15:25:50.125Z",
-          "images": []
-        },
-        {
-          "userId": "U0AQJB8NYHW",
-          "userName": "Freddy Fang",
-          "text": "def one of the best things shipped for the builder",
-          "date": "2026-10-27T16:16:18.665Z",
-          "images": []
-        },
-        {
-          "userId": "U08EVBTE69E",
-          "userName": "Maxim Borisik",
-          "text": "<!subteam^S07BZPQDBUJ> <!subteam^S03KM96DV0U>",
-          "date": "2026-10-28T02:55:14.727Z",
-          "images": []
-        },
-        {
-          "userId": "U07H1ESAH6K",
-          "userName": "Sofia Pikuleva",
-          "text": "fantastic",
-          "date": "2026-10-28T08:28:25.434Z",
-          "images": []
-        },
-        {
-          "userId": "U09EG3DK4US",
-          "userName": "Polina Ishimbaeva",
-          "text": "<@U07H1ESAH6K> indeed! Would be great to discuss internally/pick a real customer case and suggest an improvement to a client",
-          "date": "2026-10-29T12:36:00.341Z",
-          "images": []
-        },
-        {
-          "userId": "U08QUJMN0UV",
-          "userName": "Elina Andreeva",
-          "text": "Flow funnels are now available via CLI &amp; MCP!",
-          "date": "2026-11-09T11:59:15.282Z",
-          "images": [
-            "https://files.slack.com/files-pri/T9HDDB78Q-F0CGXE96JNL/image.png"
-          ]
-        }
-      ],
-      "content": "[Lera Eroshevich]: :rocket: *New in Flow metrics: Flow screen funnel*\nYou can now see on which screen of a flow users drop off and where they buy. Flow metrics has a new *Funnel* tab.\n*What’s inside*\n• *Summary:* how many users started the flow (Entered), how many finished it (Completed), the share that dropped off (Drop rate), and the flow’s revenue (Revenue)\n• *Step table:* how many users reached each screen, how many finished the flow there, and how many dropped off. Paywall screens also show trials, purchases and revenue\n• *Branches:* a step with several screens expands, so you can see how many users each screen got\n• *Chart:* a bar per step, conversion between steps, and drop-off under each step\n• *Filters:* date range, install date mode, Country, Store, Platform, Subscription state. You can pick any published version of the flow\n• *CSV export*\n*How Completed is counted*\nA user completes the flow when they buy or start a trial on a paywall, or reach the last screen. If the last screen is a paywall, only users who bought count. Everyone else is a drop-off on the screen where they left.\n*Good to know*\n• The funnel is built for the currently published version by default, so Entered can be lower than the views on the Metrics tab, which counts all versions\nWhere to find it: Flows → your flow → Flow metrics → *Funnel* tab\nThanks <@U033TEH5HSA> for building it :raised_hands:\nFYI <@U08EVBTE69E>\n\n[Mike Gorokhov]: Great stuff!\n\n<@U034A27SVHC> <@U07J9LKBQ5U> we should have this in our demo instance rebuild\n\n[David]: HUGE !!\nIt's available via the FLOW SKILL as well? to ask questions with LLM about it + get alerts whenever there is a drop-off vs the past 24h data\n\n[Elina Andreeva]: <@U0AAUD3KHT7> hi!\nIt's not supported in the CLI yet\nLater, when this data becomes available in the CLI, we'll support it in the skill as well. And yes — we plan to add some alert/scheduled task templates to the skills soon\n\n[Freddy Fang]: def one of the best things shipped for the builder\n\n[Maxim Borisik]: <!subteam^S07BZPQDBUJ> <!subteam^S03KM96DV0U>\n\n[Sofia Pikuleva]: fantastic\n\n[Polina Ishimbaeva]: <@U07H1ESAH6K> indeed! Would be great to discuss internally/pick a real customer case and suggest an improvement to a client\n\n[Elina Andreeva]: Flow funnels are now available via CLI &amp; MCP!",
-      "matchingReplies": [],
-      "hasTeamMention": true,
-      "images": [
-        "https://files.slack.com/files-pri/T9HDDB78Q-F0CCLJPK14H/image.png",
-        "https://files.slack.com/files-pri/T9HDDB78Q-F0CGXE96JNL/image.png"
       ]
     }
   ]
