@@ -1,5 +1,5 @@
 {
-  "syncedAt": "2026-11-27T00:27:14.916Z",
+  "syncedAt": "2026-11-28T00:24:53.374Z",
   "channel": "#product-release",
   "entries": [
     {
@@ -21,7 +21,9 @@
           "userName": "Stanislav Mayorov",
           "text": "<!subteam^S03KM96DV0U> <!subteam^S086DHAHL8J> <@U09TA3G5JKG> Hi! It’s useful feature for checking how heavy a flow is, for example when a client’s flow loses to the native one in an A/B test.\nI think a good paywall size is about 100 kb (for one screen paywall)",
           "date": "2026-11-26T11:24:41.218Z",
-          "images": []
+          "images": [
+            "https://files.slack.com/files-pri/T9HDDB78Q-F0CMFREDD4H/screenshot_2026-11-27_at_10.52.23.png"
+          ]
         },
         {
           "userId": "U0BB5T65SF6",
@@ -34,7 +36,9 @@
       "content": "[Aleksandr Sakhatskii]: _Flow Builder: Issues panel_\n\nErrors and warnings of a flow are now in one list, under *Issues* in the top bar. A click on a row opens the screen, selects the layer and marks the setting to fix.\n• Blocks publishing: product errors, for example a card with a deleted product or a Buy button with no product\n• Doesn’t block: missing store IDs and a heavy flow\n• Publishing with a blocking issue now says “Fix N issues before publishing” and opens the list\n_Flow size:_ *⋮ → Show flow size* on a published flow shows what the app downloads before the first screen on iOS and Android, and what makes it heavy. Above 500 KB on Android the flow gets a warning. The size is measured at publish, so older flows show it after their next publish. It’s also in the Developer API (`config_size`, `is_heavy`).\n\nHuge thanks to <@U07PR2368G5> for the design, <@U090T4UNBUK> for the flow size idea and checking every number, and <@U08JY3U9S7P> for testing it :purple_heart:\n\n[Stanislav Mayorov]: <!subteam^S03KM96DV0U> <!subteam^S086DHAHL8J> <@U09TA3G5JKG> Hi! It’s useful feature for checking how heavy a flow is, for example when a client’s flow loses to the native one in an A/B test.\nI think a good paywall size is about 100 kb (for one screen paywall)\n\n[Kamil Lotfullin]: amazing job, <@U0CEASS8Z9D>!",
       "matchingReplies": [],
       "hasTeamMention": true,
-      "images": []
+      "images": [
+        "https://files.slack.com/files-pri/T9HDDB78Q-F0CMFREDD4H/screenshot_2026-11-27_at_10.52.23.png"
+      ]
     },
     {
       "id": "1795620106.789939",
